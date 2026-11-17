@@ -1,21 +1,21 @@
 /**
- * LLM access through an OpenAI-compatible chat API: OpenRouter (default) or NVIDIA's
- * integrate.api.nvidia.com. Server-side only; keys never reach the browser or the logs.
+ * LLM access through an OpenAI-compatible chat API: NVIDIA NIM (default), GroqCloud or OpenRouter. Server-side only; keys never reach the browser or the logs.
  * Every reply is treated as untrusted text and validated by the caller.
- *   LLM_PROVIDER=openrouter|nvidia|groq  (default: the first of OpenRouter, NVIDIA, Groq whose key is set)
+ *   LLM_PROVIDER=openrouter|nvidia|groq  (default: the first of NVIDIA, Groq, OpenRouter whose key is set,
+ *   ordered by the measured benchmark in docs/EVIDENCE.md)
  */
 import { appendFile, mkdir } from 'node:fs/promises';
 import { resolve, dirname } from 'node:path';
 import { INTERPRET_SCHEMA, EFFECT_KINDS } from './rules.ts';
 
 export const DEFAULT_FREE_MODEL = 'openrouter/free';
-export const DEFAULT_NVIDIA_MODEL = 'meta/llama-3.3-70b-instruct';
+export const DEFAULT_NVIDIA_MODEL = 'nvidia/nemotron-3.5-bolt-e4b';
 export const DEFAULT_GROQ_MODEL = 'openai/gpt-oss-120b';
 type Provider = { id: 'openrouter' | 'nvidia' | 'groq'; label: string; endpoint: string; key: string; model: string };
 export function provider(): Provider | null {
   const want = (process.env.LLM_PROVIDER || '').toLowerCase();
   const or = process.env.OPENROUTER_API_KEY, nv = process.env.NVIDIA_API_KEY, gq = process.env.GROQ_API_KEY;
-  const pick = ['nvidia', 'openrouter', 'groq'].includes(want) ? want : or ? 'openrouter' : nv ? 'nvidia' : gq ? 'groq' : null;
+  const pick = ['nvidia', 'openrouter', 'groq'].includes(want) ? want : nv ? 'nvidia' : gq ? 'groq' : or ? 'openrouter' : null;
   if (pick === 'groq' && gq) return { id: 'groq', label: 'Groq', endpoint: 'https://api.groq.com/openai/v1/chat/completions', key: gq, model: process.env.GROQ_MODEL || DEFAULT_GROQ_MODEL };
   if (pick === 'openrouter' && or) return { id: 'openrouter', label: 'OpenRouter', endpoint: 'https://openrouter.ai/api/v1/chat/completions', key: or, model: process.env.OPENROUTER_MODEL || DEFAULT_FREE_MODEL };
   if (pick === 'nvidia' && nv) {

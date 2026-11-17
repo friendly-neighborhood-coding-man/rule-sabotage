@@ -167,7 +167,7 @@ test('NVIDIA provider (mocked): OpenAI-compatible endpoint, labelled, no OpenRou
   mockFetch((b, u) => { url = u!; body = b; return reply({ status: 'ok', kind: 'haste', dir: 'none', amount: 1, note: '' }); });
   const { providerLabel, modelName } = await import('../server/openrouter.ts');
   assert.equal(providerLabel(), 'NVIDIA');
-  assert.equal(modelName(), 'meta/llama-3.3-70b-instruct');
+  assert.equal(modelName(), 'nvidia/nemotron-3.5-bolt-e4b');
   const r = await interpretRule('mock nvidia: one more move');
   assert.equal(url, 'https://integrate.api.nvidia.com/v1/chat/completions');
   assert.equal(body.reasoning, undefined);
@@ -176,6 +176,16 @@ test('NVIDIA provider (mocked): OpenAI-compatible endpoint, labelled, no OpenRou
   process.env.NVIDIA_BASE_URL = 'http://insecure.example/v1';
   assert.equal(providerLabel(), 'none', 'non-https base URL is refused');
   delete process.env.NVIDIA_API_KEY; delete process.env.NVIDIA_BASE_URL;
+});
+
+test('Default provider order follows the benchmark: NVIDIA, then Groq, then OpenRouter; LLM_PROVIDER overrides', async () => {
+  const { providerLabel } = await import('../server/openrouter.ts');
+  process.env.OPENROUTER_API_KEY = 'or-x'; process.env.GROQ_API_KEY = 'gq-x'; process.env.NVIDIA_API_KEY = 'nv-x';
+  assert.equal(providerLabel(), 'NVIDIA');
+  delete process.env.NVIDIA_API_KEY; assert.equal(providerLabel(), 'Groq');
+  delete process.env.GROQ_API_KEY; assert.equal(providerLabel(), 'OpenRouter');
+  process.env.NVIDIA_API_KEY = 'nv-x'; process.env.LLM_PROVIDER = 'openrouter'; assert.equal(providerLabel(), 'OpenRouter');
+  delete process.env.OPENROUTER_API_KEY; delete process.env.NVIDIA_API_KEY; delete process.env.LLM_PROVIDER;
 });
 
 test('Groq provider (mocked): strict JSON schema adapted, reasoning kept out of content, opponent choice limited to real options', async () => {

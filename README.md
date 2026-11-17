@@ -38,7 +38,7 @@ cp .env.example .env
 # OPENROUTER_API_KEY=sk-or-...   (server-side only; never sent to the browser)
 # OPENROUTER_MODEL=openrouter/free   (free pool; for a reliable demo pin one specific model)
 # or NVIDIA's OpenAI-compatible API instead:
-# LLM_PROVIDER=nvidia  NVIDIA_API_KEY=nvapi-...  NVIDIA_MODEL=meta/llama-3.3-70b-instruct
+# NVIDIA_API_KEY=nvapi-...   default provider; model nvidia/nemotron-3.5-bolt-e4b (best in docs/EVIDENCE.md)
 # or GroqCloud:  LLM_PROVIDER=groq  GROQ_API_KEY=gsk_...  GROQ_MODEL=openai/gpt-oss-120b
 npm i -g @testmuai/kane-cli && kane-cli login     # Kane referee
 npm start
