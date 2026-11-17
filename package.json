@@ -1,14 +1,15 @@
 {
-  "name": "rule-sabotage-v2",
+  "name": "rule-sabotage",
   "private": true,
-  "version": "0.2.0",
+  "version": "0.3.0",
   "type": "module",
-  "engines": {
-    "node": ">=22.10"
-  },
+  "engines": { "node": ">=22.10" },
   "scripts": {
-    "start": "node --env-file-if-exists=.env --experimental-strip-types server/server.ts",
-    "test": "node --experimental-strip-types --test tests/*.test.cjs tests/*.test.mjs",
-    "verify": "npm test"
+    "start": "node --env-file-if-exists=.env --experimental-strip-types --no-warnings=ExperimentalWarning server/server.ts",
+    "test": "node --experimental-strip-types --no-warnings=ExperimentalWarning --test tests/*.test.ts",
+    "test:browser": "node --experimental-strip-types --no-warnings=ExperimentalWarning tests/browser/e2e.ts",
+    "selfplay": "node --experimental-strip-types --no-warnings=ExperimentalWarning scripts/selfplay.ts",
+    "eval:openrouter": "node --env-file-if-exists=.env --experimental-strip-types --no-warnings=ExperimentalWarning scripts/eval-openrouter.ts",
+    "kane:trial": "node --env-file-if-exists=.env --experimental-strip-types --no-warnings=ExperimentalWarning scripts/kane-trial.ts"
   }
 }

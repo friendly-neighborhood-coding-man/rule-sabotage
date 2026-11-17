@@ -1,24 +1,101 @@
-<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>RULE SABOTAGE — Natural Language Judge Edition</title><link rel="stylesheet" href="style.css"></head><body>
-<div class="shell">
-<header class="head"><div><div class="eyebrow">PROOFLOOP-2 · HUMAN VS OPENROUTER</div><h1>RULE <span>SABOTAGE</span></h1><p>규칙을 말로 써라. 같은 함정에 네가 빠질 수도 있다.</p></div><div class="head-actions"><span class="version">V2 · MODEL STATUS PENDING · KANE AUDIT PENDING</span><button id="new-game" class="reset">↻ 새 게임</button></div></header>
-<section class="notice"><div class="notice-symbol">✦</div><p><strong>오늘의 규칙:</strong> 매 라운드 동일한 랜덤 도형을 받고, 그 위에 <b>자연어로 작성한 일회성 효과</b>를 설치할 수 있습니다. 밟은 칸은 발동 후 사라지며, 인간과 AI에게 똑같이 적용됩니다.</p></section>
-<main class="layout">
-<section class="arena panel"><div class="arena-top"><div><div class="caption">CURRENT ROUND</div><div class="shape-title"><span id="shape-icon">━</span><span id="shape-name">중앙 가로 한 줄</span></div><p id="shape-desc">이번 라운드는 이 도형 안에만 설치할 수 있어요.</p></div><div class="round-stat"><span>ROUND</span><strong id="round-count">01 / 32</strong></div></div>
-<div class="board-container"><div id="board" role="grid" class="board" aria-label="7×7 전략 보드"></div></div>
-<div class="legend"><span><i class="leg human"></i> 나</span><span><i class="leg ai"></i> AI</span><span><i class="leg shape"></i> 이번 도형</span><span><i class="leg hazard"></i> 활성 함정</span><span>★ 목표</span></div>
-<div class="gamefeed"><div class="caption">GAME FEED</div><div id="feed" class="feed">이동할 칸을 누르거나, 오른쪽에서 자연어 함정을 설치하세요.</div></div>
-<div class="ai-report"><div class="report-title">◈ AI 시뮬레이션 기록</div><div id="ai-report">AI는 인간의 선택을 알지 못한 상태에서 후보 전략을 평가합니다.</div></div>
-</section>
-<aside class="sidebar">
-<section class="panel sidebar-box"><div class="subheading">1 · RULE SLOTS <span>각자 최대 <select id="slots" aria-label="규칙 슬롯 개수"><option value="2">2</option><option value="3" selected>3</option><option value="4">4</option><option value="5">5</option></select></span></div>
-<div class="owner"><span class="dot human"></span> YOUR RULES <small id="human-count">0/3</small></div><div class="slots" id="human-slots"></div><div class="owner opponent"><span class="dot ai"></span> AI'S RULES <small id="ai-count">0/3</small></div><div class="slots" id="ai-slots"></div><div class="hint">내 슬롯을 누르면 해당 규칙을 교체하도록 선택합니다. 빈 슬롯은 새로운 규칙을 추가합니다.</div></section>
-<section class="panel sidebar-box composer"><div class="subheading">2 · WRITE A TRAP <span>FREE TEXT</span></div><label for="rule-input" class="input-label">이 도형 안의 칸을 밟으면 무슨 일이 일어날까?</label><textarea id="rule-input" rows="3" maxlength="180" spellcheck="false" placeholder="예: 밟으면 다음 턴 한 번 쉬게 된다."></textarea>
-<div class="examples"><span>예시:</span><button data-example="이 칸을 밟으면 이전 칸으로 돌아간다">↩ 뒤로</button><button data-example="이 칸을 밟으면 다음 턴에 한 번 쉰다">⌛ 한 턴 쉬기</button><button data-example="발을 딛으면 가던 방향으로 한 칸 더 전진한다">➜ 앞으로</button><button data-example="이 칸을 밟으면 다음 함정을 막는 보호막을 얻는다">🛡 보호막</button></div>
-<div class="interpret"><div class="caption">해석 및 공정성 검사</div><p id="preview-message">자연어를 입력하면 게임 효과를 검증합니다.</p><div class="preview-status" id="preview-status">—</div></div>
-<div class="action-row"><button id="deploy" class="primary">효과 설치 · 턴 사용</button><button id="remove" class="secondary" disabled>슬롯 제거</button></div><button id="cancel-slot" class="tertiary" disabled>슬롯 선택 취소</button>
-<div class="hint">모델은 자유로운 문장을 제한된 효과로 번역합니다. 실제 판정은 TypeScript 계약에 따른 검사기가 수행합니다. Kane 실전 검증은 별도 실행하며 자동으로 통과한 것으로 표시하지 않습니다.</div>
-</section>
-<section class="panel sidebar-box"><div class="subheading">3 · ROUND STATUS</div><div id="status-summary" class="status-summary"></div><div id="turn-help" class="hint">나와 AI가 같은 도형을 보고 각자 한 행동을 선택합니다. 행동을 제출하면 두 선택이 함께 해결됩니다.</div></section>
-</aside></main><footer>V2 PROTOTYPE · OPENROUTER OPTIONAL · KANE AUDIT PENDING · NO REAL-WORLD EFFECTS</footer>
-</div><div class="overlay" id="overlay" hidden><div class="modal"><div id="result-icon" class="result-icon">🏆</div><h2 id="result-title"></h2><p id="result-detail"></p><button id="again" class="primary">다시 한 판!</button></div></div>
-<script src="engine.js"></script><script src="guard.js"></script><script src="adapters.js"></script><script src="ui.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Rule Sabotage</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <div class="brand"><span class="logo">⚠</span><div><h1>RULE SABOTAGE</h1><p>Invent traps. Obey them too.</p></div></div>
+    <div class="meta">
+      <div class="chip" id="round-chip">Round 1 / 20</div>
+      <div class="chip" id="priority-chip">—</div>
+      <div class="chip mode" id="brain-chip" title="Who is making the AI's decisions">AI brain: …</div>
+      <div class="chip mode" id="referee-chip" title="Who approves new rules">Referee: …</div>
+      <button class="ghost" id="help-btn" type="button">How to play</button>
+    </div>
+  </header>
+
+  <section class="help" id="help" hidden>
+    <ol>
+      <li><b>Race:</b> you start on the left (column A) and win by reaching column <b>G</b>. The AI races the other way.</li>
+      <li><b>Every round</b> you secretly pick a move, and you may also invent a trap. The AI decides at the same time without seeing your choice.</li>
+      <li><b>Traps</b> may only go on this round’s highlighted <b>shape</b> (the same shape for both of you). They hit <b>whoever</b> steps on them, including their author, and each square fires once.</li>
+      <li><b>Every new rule</b> is interpreted, safety-checked, simulated in a sandbox and sent to the <b>Kane referee</b> before it can go live.</li>
+      <li>Traps happen before moves, so you can ambush the square someone is about to step on. In a dead heat, whoever moves first that round wins.</li>
+    </ol>
+  </section>
+
+  <main class="layout">
+    <aside class="side you">
+      <h2><span class="dot human"></span>YOUR RULES <small id="human-slot-count">0/3</small></h2>
+      <div class="slots" id="human-slots"></div>
+      <div class="statusline" id="human-status"></div>
+    </aside>
+
+    <section class="center">
+      <div class="shape-banner" id="shape-banner"><span id="shape-name">—</span><small>This round’s shape, the same for both players. Traps can go on the highlighted squares.</small></div>
+      <div class="board-wrap">
+        <div class="col-labels" id="col-labels"></div>
+        <div class="board-row">
+          <div class="row-labels" id="row-labels"></div>
+          <div class="board" id="board" aria-label="Game board"></div>
+        </div>
+        <div class="banner" id="banner" hidden></div>
+      </div>
+
+      <div class="referee" id="referee" hidden></div>
+      <div class="controls" id="controls">
+        <div class="trap-box">
+          <label for="rule-input">① Invent a trap <small>(optional, English or 한국어)</small></label>
+          <div class="trap-input-row">
+            <input id="rule-input" maxlength="160" autocomplete="off" placeholder="e.g. Anyone stepping here gets pushed back two spaces!">
+            <button id="interpret-btn" type="button">Interpret</button>
+          </div>
+          <div class="ideas" id="ideas"></div>
+          <div class="preview" id="preview" hidden></div>
+        </div>
+        <div class="move-box">
+          <label>② Move <small>(this locks in your turn)</small></label>
+          <div class="pad">
+            <button data-move="up" type="button" class="mv up" title="Up (W / ↑)">↑</button>
+            <button data-move="left" type="button" class="mv left" title="Left (A / ←)">←</button>
+            <button data-move="hold" type="button" class="mv hold" title="Stay put (Space)">●</button>
+            <button data-move="right" type="button" class="mv right" title="Right (D / →)">→</button>
+            <button data-move="down" type="button" class="mv down" title="Down (S / ↓)">↓</button>
+          </div>
+          <div class="ai-lock" id="ai-lock">AI is thinking…</div>
+        </div>
+      </div>
+    </section>
+
+    <aside class="side ai">
+      <h2><span class="dot ai"></span>AI RULES <small id="ai-slot-count">0/3</small></h2>
+      <div class="slots" id="ai-slots"></div>
+      <div class="statusline" id="ai-status"></div>
+      <div class="speech" id="speech" hidden></div>
+    </aside>
+  </main>
+
+  <section class="log-wrap">
+    <h3>What happened</h3>
+    <ol class="log" id="log"></ol>
+  </section>
+</div>
+
+<div class="overlay" id="gameover" hidden>
+  <div class="modal">
+    <div class="result-icon" id="go-icon">🏁</div>
+    <h2 id="go-title">Game over</h2>
+    <p id="go-reason"></p>
+    <div class="achievements" id="go-ach"></div>
+    <div class="go-stats" id="go-stats"></div>
+    <button id="rematch-btn" type="button" class="primary">Rematch <kbd>R</kbd></button>
+  </div>
+</div>
+</body>
+</html>
