@@ -35,7 +35,17 @@ export class ProviderError extends Error {
 
 export type CallStat = { at: string; provider?: string; task: string; model: string; ok: boolean; ms: number; failure?: FailureKind; detail?: string; structured: boolean };
 export const stats: CallStat[] = [];
-let cooldownUntil = 0;
+let cooldownUntil = 0, lastCallAt = 0;
+/** Milliseconds until a 429 cooldown ends (0 if none). */
+export const cooldownLeftMs = () => Math.max(0, cooldownUntil - Date.now());
+/** Optional client-side pacing (LLM_MIN_INTERVAL_MS), e.g. 1600 keeps a 40-RPM account under its limit. */
+async function pace() {
+  const gap = Number(process.env.LLM_MIN_INTERVAL_MS) || 0;
+  if (!gap) return;
+  const wait = lastCallAt + gap - Date.now();
+  lastCallAt = Math.max(Date.now(), lastCallAt + gap);
+  if (wait > 0) await new Promise(r => setTimeout(r, wait));
+}
 
 async function log(stat: CallStat) {
   stat = { provider: provider()?.id, ...stat };
@@ -63,6 +73,7 @@ export async function chatJSON(task: string, system: string, user: string, schem
   if (Date.now() < cooldownUntil) throw new ProviderError('rate_limited', `cooling down after a rate limit (${Math.ceil((cooldownUntil - Date.now()) / 1000)}s left)`);
   // First try strict structured output; if the provider rejects the parameter, retry once with plain JSON instructions.
   for (const structured of [true, false]) {
+    await pace();
     const t0 = Date.now();
     const ctrl = new AbortController(), timer = setTimeout(() => ctrl.abort(), opts.timeoutMs ?? 20_000);
     try {
