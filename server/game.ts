@@ -6,7 +6,7 @@
 import { randomUUID } from 'node:crypto';
 import {
   type State, type Placement, type Move, type GameEvent, init, applyPlacement, applyMove, endTurn, validatePlacement,
-  validateMove, publicView, cellName, legalMoves,
+  validateMove, publicView, cellName, legalMoves, activateLate,
 } from './engine.ts';
 import {
   type Player, type Interpretation, PLAYERS, offlineInterpret, parseModelInterpretation, shortLabel, guardText, policyReject, sameEffect, MAX_CELLS_PER_TURN,
@@ -18,8 +18,8 @@ import { kaneJudge, kaneConfig, type KaneResult } from './kane.ts';
 import { reactionsFor, achievementsFor, type Achievement } from './flavor.ts';
 
 export type Verdict = {
-  player: Player; ruleText: string; label: string; cells: string[]; final: 'approved' | 'rejected' | 'unverified';
-  message: string; trial: Pick<Trial, 'trialId' | 'buildMs' | 'engineChecks'> & { scenarioIds: string[] }; kane: KaneResult | null; activated: boolean;
+  reviewId: number; player: Player; ruleText: string; label: string; cells: string[]; final: 'pending' | 'approved' | 'rejected' | 'unverified';
+  message: string; proposedTurn: number; resolvedTurn: number | null; placedCells: string[]; skippedCells: string[]; trial: Pick<Trial, 'trialId' | 'buildMs' | 'engineChecks'> & { scenarioIds: string[] }; kane: KaneResult | null; activated: boolean;
 };
 export type AIDecision = {
   source: 'openrouter' | 'local-planner'; model: string | null; fallbackReason: string | null; taunt: string; rationale: string;
@@ -30,6 +30,7 @@ export type Progress = { at: number; text: string };
 export type Game = {
   id: string; state: State; busy: boolean; progress: Progress[]; interpretations: Map<string, Pending>;
   achievements: Record<Player, Achievement[]>; refereeMode: 'kane' | 'engine-only'; turnEvents: GameEvent[];
+  reviews: { verdict: Verdict; events: GameEvent[] }[]; nextReview: number;
   history: { turn: number; p: Player; events: GameEvent[]; verdicts: Verdict[]; ai?: AIDecision }[];
 };
 
@@ -63,30 +64,81 @@ export async function interpretRule(text: string): Promise<{ interpretation: Int
 }
 
 // ---------- referee: sandbox trial + Kane ----------
-async function referee(g: Game, s: State, p: Player, pl: Placement): Promise<Verdict> {
+// Kane takes about 1-5 minutes per new rule on real hardware, so its review runs in the
+// background: the game goes on, and the effect goes live only when (and if) Kane approves it.
+const QUICK_MS = 1500; // a cached or very fast verdict is applied before the request returns
+
+function engineTrial(g: Game, s: State, p: Player, pl: Placement) {
   const trial = buildTrial(s, p, pl, ++trialCounter);
   const html = renderTrialPage(trial);
   trials.set(trial.trialId, { trial, html });
   if (trials.size > 300) trials.delete(trials.keys().next().value!);
+  return { trial, html };
+}
+
+/** Starts the review of one placement. Resolves within QUICK_MS with either a final or a 'pending' verdict. */
+async function referee(g: Game, s: State, p: Player, pl: Placement): Promise<{ verdict: Verdict; events: GameEvent[] }> {
+  const { trial, html } = engineTrial(g, s, p, pl);
   const who = p === 'human' ? 'your' : 'the AI’s';
   const scenarioIds = trial.scenarioIds;
   g.progress.push({ at: Date.now(), text: `Sandbox ran ${scenarioIds.length} what-if scenarios for ${who} rule (${trial.trialId}, ${trial.buildMs} ms).` });
-  const base = { player: p, ruleText: pl.text, label: shortLabel(pl.effect), cells: pl.cells.map(cellName), trial: { trialId: trial.trialId, buildMs: trial.buildMs, engineChecks: trial.engineChecks, scenarioIds } };
+  const verdict: Verdict = {
+    reviewId: ++g.nextReview, player: p, ruleText: pl.text, label: shortLabel(pl.effect), cells: pl.cells.map(cellName), final: 'pending', message: '',
+    proposedTurn: s.turn, resolvedTurn: null, placedCells: [], skippedCells: [],
+    trial: { trialId: trial.trialId, buildMs: trial.buildMs, engineChecks: trial.engineChecks, scenarioIds }, kane: null, activated: false,
+  };
+  const rec = { verdict, events: [] as GameEvent[] };
+  g.reviews.push(rec);
+  if (g.reviews.length > 60) g.reviews.shift();
   const failed = trial.engineChecks.find(c => !c.pass);
-  if (failed) return { ...base, final: 'rejected', message: `Engine safety check failed: ${failed.text} (${failed.detail}).`, kane: null, activated: false };
-  if (g.refereeMode === 'engine-only') return { ...base, final: 'unverified', message: 'Engine checks passed. Kane referee is switched off, so this rule is NOT Kane-verified.', kane: null, activated: true };
+  if (failed) { Object.assign(verdict, { final: 'rejected', resolvedTurn: s.turn, message: `Engine safety check failed: ${failed.text} (${failed.detail}).` }); return rec; }
+  if (g.refereeMode === 'engine-only') {
+    verdict.final = 'unverified'; verdict.message = 'Engine checks passed. Kane referee is switched off, so this rule is NOT Kane-verified.';
+    activate(g, p, pl, rec);
+    return rec;
+  }
   g.progress.push({ at: Date.now(), text: `Kane is examining ${who} rule…` });
+  verdict.message = 'Kane is examining this rule. It goes live only if Kane approves it; play on meanwhile.';
   const port = Number(process.env.PORT || 3000);
-  const kane = await kaneJudge({ trialId: trial.trialId, signature: trial.signature, url: `http://127.0.0.1:${port}/trial/${trial.trialId}`, html, conditions: KANE_CONDITIONS });
+  const done = kaneJudge({ trialId: trial.trialId, signature: trial.signature, url: `http://127.0.0.1:${port}/trial/${trial.trialId}`, html, conditions: KANE_CONDITIONS })
+    .catch((e): KaneResult => ({ status: 'unverified', reason: `Kane run failed: ${(e as Error).message}`, conditionResults: [], conditionReasons: [], elapsedMs: 0, exitCode: null, evidencePath: null, mode: kaneConfig().mode, cached: false, version: null }))
+    .then(kane => finishReview(g, p, pl, rec, kane));
+  await Promise.race([done, new Promise(r => setTimeout(r, QUICK_MS))]);
+  return rec;
+}
+
+function finishReview(g: Game, p: Player, pl: Placement, rec: { verdict: Verdict; events: GameEvent[] }, kane: KaneResult) {
+  const v = rec.verdict, who = p === 'human' ? 'your' : 'the AI’s';
+  v.kane = kane; v.final = kane.status; v.message = kane.reason;
   g.progress.push({ at: Date.now(), text: kane.status === 'approved' ? `Kane approved ${who} rule${kane.cached ? ' (identical trial seen before: cached verdict)' : ` in ${(kane.elapsedMs / 1000).toFixed(1)}s`}.` : kane.status === 'rejected' ? `Kane rejected ${who} rule.` : `Kane could not verify ${who} rule.` });
-  return { ...base, final: kane.status, message: kane.reason, kane, activated: kane.status === 'approved' || (kane.status === 'unverified' && allowUnverified()) };
+  if (kane.status === 'approved' || (kane.status === 'unverified' && allowUnverified())) activate(g, p, pl, rec);
+  else v.resolvedTurn = g.state.turn;
+}
+
+/** Puts an approved effect on the board, on whichever of its cells are still eligible now. */
+function activate(g: Game, p: Player, pl: Placement, rec: { verdict: Verdict; events: GameEvent[] }) {
+  const s = g.state, v = rec.verdict;
+  v.resolvedTurn = s.turn;
+  if (s.winner) { v.message += ' The game ended before it could go live.'; return; }
+  // The board may have changed during the review: re-run the deterministic engine checks on the current board.
+  const still = pl.cells.filter(k => { const r = s.rules.find(x => x.id === s.cells[k]); return !s.pieces.some(q => !q.scored && `${q.x},${q.y}` === k) && (!r || r.owner === p); });
+  if (still.length) {
+    const recheck = buildTrial(s, p, { ...pl, cells: still }, ++trialCounter).engineChecks.find(c => !c.pass);
+    if (recheck) { v.message += ` Not placed: on the current board the engine check “${recheck.text}” fails (${recheck.detail}).`; v.skippedCells = pl.cells.map(cellName); return; }
+  }
+  const r = activateLate(s, p, { ...pl, cells: still });
+  v.placedCells = r.cells.map(cellName); v.skippedCells = pl.cells.filter(k => !r.cells.includes(k)).map(cellName);
+  v.activated = r.cells.length > 0;
+  if (v.skippedCells.length) v.message += ` ${v.skippedCells.join(', ')} ${v.skippedCells.length > 1 ? 'were' : 'was'} no longer free, so ${v.activated ? 'it went live on the rest' : 'nothing was placed'}.`;
+  rec.events = r.events;
+  if (r.events.length) g.history.push({ turn: s.turn, p, events: r.events, verdicts: [v] });
 }
 
 // ---------- sessions ----------
 export function newGame(seed?: number): Game {
   const g: Game = {
     id: randomUUID(), state: init(seed ?? (Date.now() & 0x7fffffff)), busy: false, progress: [], interpretations: new Map(),
-    achievements: { human: [], ai: [] }, refereeMode: refereeMode(), turnEvents: [], history: [],
+    achievements: { human: [], ai: [] }, refereeMode: refereeMode(), turnEvents: [], history: [], reviews: [], nextReview: 0,
   };
   games.set(g.id, g);
   if (games.size > 200) games.delete(games.keys().next().value!);
@@ -98,6 +150,7 @@ export function view(g: Game) {
   return {
     gameId: g.id, ...publicView(g.state), busy: g.busy, refereeMode: g.refereeMode, achievements: g.achievements,
     model: modelConfigured() ? modelName() : null, legal: legalMoves(g.state, 'human'), maxCells: MAX_CELLS_PER_TURN,
+    reviews: g.reviews.slice(-12).map(r => ({ ...r.verdict, events: r.events })),
   };
 }
 
@@ -131,11 +184,10 @@ export async function placeHuman(g: Game, req: { token?: string; cells?: string[
     const remove = req.remove ?? [];
     const c = validatePlacement(s, 'human', pl, remove);
     if (!c.ok) throw Object.assign(new Error(c.reason), { status: 422 });
+    const events = applyPlacement(s, 'human', null, remove); // removals now; sets the move phase
     const verdicts: Verdict[] = [];
-    if (pl) { const v = await referee(g, s, 'human', pl); verdicts.push(v); if (!v.activated) pl = null; }
-    const events = (pl || remove.length) ? applyPlacement(s, 'human', pl, remove) : [];
-    if (!pl && !remove.length) s.phase = 'move';
-    g.turnEvents.push(...events);
+    if (pl) { const r = await referee(g, s, 'human', pl); verdicts.push(r.verdict); events.push(...r.events); }
+    g.turnEvents.push(...events.filter(e => e.t === 'remove'));
     return { events, verdicts, view: view(g) };
   } finally { g.busy = false; }
 }
@@ -224,9 +276,10 @@ async function aiTurn(g: Game) {
       const i = r.interpretation;
       const pl: Placement = { text, effect: i.effect, cells: plan.placement.cells, interpretedBy: i.source, ...(i.status === 'approximate' ? { approxNote: i.note } : {}) };
       if (validatePlacement(s, 'ai', pl).ok) {
-        const v = await referee(g, s, 'ai', pl);
-        verdicts.push(v);
-        if (v.activated) { events.push(...applyPlacement(s, 'ai', pl)); placedOk = sameEffect(i.effect, plan.placement.effect); void placedOk; }
+        const r = await referee(g, s, 'ai', pl);
+        verdicts.push(r.verdict);
+        events.push(...r.events);
+        placedOk = sameEffect(i.effect, plan.placement.effect); void placedOk;
       }
     }
   }
@@ -234,9 +287,10 @@ async function aiTurn(g: Game) {
   // Re-plan moves on the real board (the placement may have been rejected or reinterpreted).
   const moves = planMoves(s, 'ai').moves;
   for (const m of moves) { if (s.winner || !validateMove(s, 'ai', m).ok) break; events.push(...applyMove(s, 'ai', m)); }
-  decision.plan.chosen = describeTurn(events.some(e => e.t === 'place') ? plan.placement : null, moves);
+  const v0 = verdicts[0];
+  decision.plan.chosen = describeTurn(v0 && v0.final !== 'rejected' && v0.final !== 'unverified' || v0?.activated ? plan.placement : null, moves) + (v0?.final === 'pending' ? ' (effect waiting for Kane)' : '');
   const endEv = s.winner ? [] : endTurn(s);
-  g.history.push({ turn: s.turn - (s.winner ? 0 : 1), p: 'ai', events: [...events, ...endEv], verdicts, ai: decision });
+  g.history.push({ turn: s.turn - (s.winner ? 0 : 1), p: 'ai', events: [...events.filter(e => e.t !== 'place'), ...endEv], verdicts, ai: decision });
   return { events, endEvents: endEv, verdicts, decision, reactions: reactionsFor(events) };
 }
 export { PLAYERS };

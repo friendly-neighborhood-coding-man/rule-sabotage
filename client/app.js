@@ -241,6 +241,7 @@ function say(text, note) { const s = $('speech'); s.hidden = false; s.innerHTML 
 function react(list) { if (list?.length) say(list[0].text, 'Reaction after the fact, not the AI’s reasoning'); }
 
 // ---------- referee ----------
+const announced = new Set();
 let progressTimer = null;
 function showReferee(working, text) {
   const r = $('referee'); r.hidden = false;
@@ -254,16 +255,39 @@ async function pollProgress() {
 }
 function showVerdicts(vs) {
   clearInterval(progressTimer);
+  markAnnounced(vs);
   if (!vs?.length) { if (!$('referee').querySelector('.verdict')) $('referee').hidden = true; return; }
   const r = $('referee'); r.hidden = false;
   r.innerHTML = '<div class="ref-title">Referee</div>' + vs.map(v => {
     const k = v.kane;
-    const title = v.final === 'approved' ? `✅ Kane approved ${v.player === 'human' ? 'your' : 'the AI’s'} rule` : v.final === 'rejected' ? `⛔ ${k ? 'Kane' : 'The engine'} rejected ${v.player === 'human' ? 'your' : 'the AI’s'} rule` : `⚠ ${v.player === 'human' ? 'Your' : 'The AI’s'} rule is NOT Kane-verified`;
+    const title = v.final === 'pending' ? `🔎 Kane is examining ${v.player === 'human' ? 'your' : 'the AI’s'} rule… keep playing` : v.final === 'approved' ? `✅ Kane approved ${v.player === 'human' ? 'your' : 'the AI’s'} rule` : v.final === 'rejected' ? `⛔ ${k ? 'Kane' : 'The engine'} rejected ${v.player === 'human' ? 'your' : 'the AI’s'} rule` : `⚠ ${v.player === 'human' ? 'Your' : 'The AI’s'} rule is NOT Kane-verified`;
     const meta = [`“${esc(v.ruleText)}” → ${esc(v.label)} on ${v.cells.join(' ')}`, `<a href="/trial/${v.trial.trialId}" target="_blank" rel="noopener">trial ${v.trial.trialId}</a> · scenarios ${v.trial.scenarioIds.join(', ')}`];
     if (k) meta.push(`Kane ${esc(k.version || '')} · ${k.cached ? 'cached verdict' : `${(k.elapsedMs / 1000).toFixed(1)} s`}${k.conditions ? ` · ${k.conditions.filter(c => c.pass).length}/${k.conditions.length} conditions passed` : ''}`);
-    meta.push(v.activated ? 'Status: live on the board' : 'Status: not placed');
+    meta.push(v.final === 'pending' ? `Proposed on turn ${v.proposedTurn}. It goes live only if Kane approves it.` : v.activated ? `Status: live on ${v.placedCells.join(' ')}${v.resolvedTurn !== v.proposedTurn ? ` (approved on turn ${v.resolvedTurn})` : ''}` : 'Status: not placed');
     return `<div class="verdict ${v.final}"><b>${title}</b><div>${esc(v.message)}</div><div class="v-meta">${meta.join('<br>')}</div></div>`;
   }).join('');
+}
+
+// ---------- background Kane reviews ----------
+function markAnnounced(vs) { for (const v of vs || []) if (v.final !== 'pending') announced.add(v.reviewId); }
+async function pollReviews() {
+  if (!view || busy || !view.reviews) return;
+  let fresh = view;
+  if (view.reviews.some(r => r.final === 'pending')) {
+    try { fresh = await api(`/api/game/${view.gameId}`); } catch { return; }
+    if (busy || !view || fresh.gameId !== view.gameId) return;
+  }
+  const done = fresh.reviews.filter(r => r.final !== 'pending' && !announced.has(r.reviewId));
+  if (!done.length) { if (fresh !== view) view = { ...view, reviews: fresh.reviews }; return; }
+  busy = true;
+  try {
+    markAnnounced(done);
+    showVerdicts(done);
+    const before = view;
+    for (const r of done) { await playEvents(r.events, before); logTurn(r.player === 'human' ? 'You' : 'AI', r.events, [r]); }
+    if (done.some(r => r.final === 'approved')) banner(done.length > 1 ? 'Kane verdicts are in' : `Kane ${done[0].final} ${done[0].player === 'human' ? 'your' : 'the AI’s'} rule`, 'msg');
+    view = fresh;
+  } finally { busy = false; render(); }
 }
 
 // ---------- log ----------
@@ -287,7 +311,10 @@ function eventText(e) {
 }
 function logTurn(by, events, verdicts = [], decision = null) {
   const lines = events.map(eventText).filter(Boolean);
-  for (const v of verdicts) if (!v.activated) lines.unshift(`rule “${v.ruleText}” was not placed (${v.final})`);
+  for (const v of verdicts) {
+    if (v.final === 'pending') lines.unshift(`rule “${v.ruleText}” sent to Kane for review (${v.cells.join(' ')})`);
+    else if (!v.activated) lines.unshift(`rule “${v.ruleText}” was not placed (${v.final})`);
+  }
   if (!lines.length) return;
   const li = document.createElement('li');
   li.innerHTML = `<b class="${by === 'You' ? 'h' : 'a'}">${by}</b> · turn ${view.turn}<ul>${lines.map(l => `<li>${esc(l)}</li>`).join('')}</ul>` + (decision ? `<div class="ai-record">${esc(decision.source === 'openrouter' ? 'OpenRouter' : 'Local planner')}: ${esc(decision.rationale)}</div>` : '');
@@ -352,6 +379,7 @@ function init() {
     if ((e.key === 'r' || e.key === 'R') && view?.winner) newGame();
   });
   loadHealth();
+  setInterval(pollReviews, 2000);
   newGame().catch(e => flash('Could not start: ' + e.message));
   window.__ruleSabotage = { get view() { return view; }, get busy() { return busy; } };
 }

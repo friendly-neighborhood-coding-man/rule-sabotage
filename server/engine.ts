@@ -158,6 +158,26 @@ export function applyPlacement(s: State, p: Player, pl: Placement | null, remove
   s.phase = 'move';
   return events;
 }
+/**
+ * Activate an effect whose referee review finished later (Kane runs in the background).
+ * Works at any moment of the game, and only on cells that are STILL eligible for its owner
+ * (no piece, no opponent effect). Returns the cells actually used and the event, if any.
+ */
+export function activateLate(s: State, p: Player, pl: Placement): { cells: string[]; skipped: string[]; events: GameEvent[] } {
+  if (s.winner || !isEffect(pl.effect)) return { cells: [], skipped: pl.cells, events: [] };
+  const ok = new Set(eligibleCells(s, p));
+  const cells = pl.cells.filter(k => validKey(k) && ok.has(k)).slice(0, MAX_CELLS_PER_TURN), skipped = pl.cells.filter(k => !cells.includes(k));
+  if (!cells.length) return { cells, skipped, events: [] };
+  const replaced = cells.filter(k => s.cells[k]);
+  for (const k of replaced) unsetCell(s, k);
+  const rule: Rule = {
+    id: s.nextId++, owner: p, text: pl.text.trim(), effect: clone(pl.effect), label: shortLabel(pl.effect), summary: describeEffect(pl.effect), icon: effectIcon(pl.effect),
+    cells: [...cells].sort(), placed: cells.length, turn: s.turn, hits: { human: 0, ai: 0 }, interpretedBy: pl.interpretedBy, ...(pl.approxNote ? { approxNote: pl.approxNote } : {}),
+  };
+  s.rules.push(rule);
+  for (const k of rule.cells) s.cells[k] = rule.id;
+  return { cells, skipped, events: [{ t: 'place', p, ruleId: rule.id, text: rule.text, label: rule.label, icon: rule.icon, cells: rule.cells, replaced }] };
+}
 function unsetCell(s: State, k: string) {
   const r = ruleAt(s, k);
   if (r) r.cells = r.cells.filter(c => c !== k);

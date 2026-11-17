@@ -7,7 +7,8 @@
  *   C  CANARY: page deliberately corrupted so the AI piece
  *      gets a different outcome + a cell fires twice          expected: rejected
  *   D  repeat of A (cache)                                    expected: cached verdict, ~0 ms
- *   E  real in-game turns: human places a rule, AI replies    expected: approved, with turn latency
+ *   E  real in-game turns: human places a rule, AI replies; Kane runs in the background
+ *      while play continues                                   expected: approved, request latency ~1.5 s
  * Only real Kane output is recorded; failures are reported as unverified.
  */
 import { writeFile, mkdir } from 'node:fs/promises';
@@ -66,9 +67,11 @@ try {
     const t1 = Date.now();
     const end = await endHumanTurn(g);
     const aiMs = Date.now() - t1;
-    for (const [vd, ms] of [...placed.verdicts.map(v => [v, humanMs] as const), ...(end.ai?.verdicts ?? []).map(v => [v, aiMs] as const)]) {
-      out.push({ label: `E in-game (seed ${seed}) ${vd.player} rule`, expected: 'approved', trialId: vd.trial.trialId, scenarioIds: vd.trial.scenarioIds, wallMs: ms, status: vd.final, activated: vd.activated, elapsedMs: vd.kane?.elapsedMs, exitCode: vd.kane?.exitCode, cached: vd.kane?.cached, reason: vd.message, evidencePath: vd.kane?.evidencePath, interpretedBy: vd.player === 'human' ? p.interpretation.source : 'see AI decision' });
-      console.log(`E seed ${seed} ${vd.player}: ${vd.final} activated=${vd.activated} step ${ms} ms, kane ${vd.kane?.elapsedMs} ms`);
+    console.log(`E seed ${seed}: place request returned in ${humanMs} ms (${placed.verdicts[0]?.final}); AI turn returned in ${aiMs} ms. Waiting for background Kane verdicts…`);
+    while (g.reviews.some(r => r.verdict.final === 'pending') && Date.now() - t0 < (kaneConfig().timeoutS * 2 + 120) * 1000) await new Promise(r => setTimeout(r, 1000));
+    for (const { verdict: vd } of g.reviews) {
+      out.push({ label: `E in-game (seed ${seed}) ${vd.player} rule`, expected: 'approved', trialId: vd.trial.trialId, scenarioIds: vd.trial.scenarioIds, wallMs: vd.player === 'human' ? humanMs : aiMs, status: vd.final, activated: vd.activated, placed: vd.placedCells, skipped: vd.skippedCells, proposedTurn: vd.proposedTurn, resolvedTurn: vd.resolvedTurn, elapsedMs: vd.kane?.elapsedMs, exitCode: vd.kane?.exitCode, cached: vd.kane?.cached, conditionResults: vd.kane?.conditionResults, reason: vd.message, evidencePath: vd.kane?.evidencePath, interpretedBy: vd.player === 'human' ? p.interpretation.source : 'see AI decision' });
+      console.log(`E seed ${seed} ${vd.player}: ${vd.final} activated=${vd.activated} on ${vd.placedCells.join(' ') || '-'} (proposed turn ${vd.proposedTurn}, resolved turn ${vd.resolvedTurn}), kane ${vd.kane?.elapsedMs} ms`);
     }
     if (!end.ai?.verdicts.length) console.log(`E seed ${seed}: the AI placed no rule this turn (${end.ai?.decision.plan.chosen})`);
   }

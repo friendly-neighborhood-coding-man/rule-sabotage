@@ -223,6 +223,33 @@ test('referee plumbing with a Kane TEST DOUBLE: approve, reject, garbage=unverif
   }
 });
 
+test('slow Kane (test double): the rule is pending, play continues, and it goes live only after approval', { skip: chrome ? false : 'no Chrome/Edge binary found for the trial page' }, async () => {
+  await new Promise<void>(r => server.listen(0, '127.0.0.1', () => r()));
+  process.env.PORT = String((server.address() as { port: number }).port);
+  process.env.KANE_REFEREE = 'on'; process.env.KANE_CLI = FAKE_KANE; process.env.KANE_CHROME = chrome!;
+  process.env.FAKE_KANE_MODE = 'approve'; process.env.FAKE_KANE_DELAY_MS = '2500';
+  try {
+    const g = newGame(777);
+    g.state.current = 'human'; g.state.phase = 'place';
+    const p = await preview(g, 'Anything entering here is shoved one square south');
+    const cells = ['3,0', '3,2', '3,4'];
+    const res = await placeHuman(g, { token: p.token!, cells });
+    assert.equal(res.verdicts[0].final, 'pending');
+    assert.equal(Object.keys(g.state.cells).length, 0, 'not live while Kane is reviewing');
+    moveHuman(g, view(g).legal[0]); // the game goes on
+    const t0 = Date.now();
+    while (g.reviews[0].verdict.final === 'pending' && Date.now() - t0 < 20000) await new Promise(r => setTimeout(r, 200));
+    const v = g.reviews[0].verdict;
+    assert.equal(v.final, 'approved', v.message);
+    assert.ok(v.activated);
+    assert.deepEqual(Object.keys(g.state.cells).sort(), [...cells].filter(k => !g.state.pieces.some(q => !q.scored && `${q.x},${q.y}` === k)).sort());
+    assert.ok(view(g).reviews.some((r: any) => r.reviewId === v.reviewId && r.events.some((e: any) => e.t === 'place')));
+  } finally {
+    process.env.KANE_REFEREE = 'off'; delete process.env.FAKE_KANE_MODE; delete process.env.FAKE_KANE_DELAY_MS; delete process.env.KANE_CHROME;
+    await new Promise(r => server.close(() => r(null)));
+  }
+});
+
 test('unverified rules do not go live in Kane mode (Kane missing)', async () => {
   process.env.KANE_REFEREE = 'on';
   process.env.KANE_CLI = join(tmp, 'no-such-kane-cli');

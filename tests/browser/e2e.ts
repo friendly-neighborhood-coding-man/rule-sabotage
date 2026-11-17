@@ -31,7 +31,8 @@ try {
   await page.waitForFunction(() => (window as any).__ruleSabotage?.view);
   assert.equal(await page.locator('.cell').count(), 49);
   assert.match(await page.locator('#brain-chip').innerText(), /local planner/);
-  assert.match(await page.locator('#referee-chip').innerText(), useDouble ? /Kane CLI 0\.0\.0-test-double/ : /engine only/);
+  await page.waitForFunction(() => !document.getElementById('referee-chip')!.textContent!.includes('…'), null, { timeout: 30000 });
+  assert.match(await page.locator('#referee-chip').innerText(), useDouble ? /Kane 0\.0\.0-test-double/ : /engine only/);
   ok('board renders 49 squares and honest mode labels');
 
   const getView = () => page.evaluate(() => structuredClone((window as any).__ruleSabotage.view));
@@ -59,6 +60,13 @@ try {
   await page.click('#place-btn');
   await idle();
   await page.waitForSelector('.verdict');
+  if (useDouble && process.env.FAKE_KANE_DELAY_MS) {
+    assert.match(await page.locator('#referee').innerText(), /Kane is examining your rule/);
+    assert.equal(Object.keys((await getView()).cells).filter(k => chosen.includes(k)).length, 0, 'not live while Kane reviews');
+    ok('slow Kane: the rule shows as pending and is not live yet');
+  }
+  if (useDouble) await page.waitForFunction(() => /Kane approved your rule/.test(document.getElementById('referee')!.innerText), null, { timeout: 60000 });
+  await idle();
   const refText = await page.locator('#referee').innerText();
   if (useDouble) assert.match(refText, /Kane approved your rule/); else assert.match(refText, /NOT Kane-verified/);
   assert.match(refText, /T\d{4}-S1/);

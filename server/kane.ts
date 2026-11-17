@@ -28,7 +28,7 @@ export const kaneConfig = () => ({
   enabled: process.env.KANE_REFEREE !== 'off',
   cli: process.env.KANE_CLI || 'kane-cli',
   mode: (process.env.KANE_MODE === 'objective' ? 'objective' : 'analyzer') as 'analyzer' | 'objective',
-  timeoutS: Math.max(20, Math.min(600, Number(process.env.KANE_TIMEOUT_S) || 150)),
+  timeoutS: Math.max(20, Math.min(600, Number(process.env.KANE_TIMEOUT_S) || 300)),
   chrome: process.env.KANE_CHROME || findChrome(),
   evidenceDir: resolve(process.env.KANE_EVIDENCE_DIR || 'evidence/kane'),
 });
@@ -61,7 +61,12 @@ function runCapture(args: string[], timeoutMs: number): Promise<{ code: number |
     let stdout = '', stderr = '', timedOut = false;
     let child: ChildProcess;
     try { child = spawnCli(args); } catch (e) { res({ code: null, stdout, stderr: String(e), ms: 0, timedOut }); return; }
-    const timer = setTimeout(() => { timedOut = true; child.kill(); }, timeoutMs);
+    const timer = setTimeout(() => {
+      timedOut = true;
+      // On Windows the .cmd shim runs under cmd.exe; killing it leaves kane-cli running and holding the pipes.
+      if (process.platform === 'win32' && child.pid) spawn('taskkill', ['/pid', String(child.pid), '/T', '/F'], { stdio: 'ignore', windowsHide: true }).on('error', () => child.kill());
+      else child.kill();
+    }, timeoutMs);
     child.stdout!.on('data', d => { stdout += d; });
     child.stderr!.on('data', d => { stderr += d; });
     child.stdin!.end();
@@ -160,14 +165,14 @@ export async function kaneJudge(opts: { trialId: string; signature: string; url:
     try {
       browser = await openChrome(opts.url);
       args = ['run', '--analyzer-only', '--agent', '--cdp-endpoint', browser.cdp, '--timeout', String(cfg.timeoutS), ...opts.conditions.flatMap(c => ['--condition', c])];
-      out = await runCapture(args, (cfg.timeoutS + 20) * 1000);
+      out = await runCapture(args, (cfg.timeoutS + 30) * 1000);
     } catch (e) {
       return { ...base, status: 'unverified', reason: `Kane run could not start: ${(e as Error).message}`, elapsedMs: Date.now() - t0, evidencePath: dir };
     } finally { await browser?.close(); }
   } else {
     const objective = `Open the page and check every statement. Pass only if ALL are true: ${opts.conditions.map((c, i) => `(${i + 1}) ${c}`).join(' ')}`;
     args = ['run', objective, '--url', opts.url, '--agent', '--headless', '--max-steps', '8', '--timeout', String(cfg.timeoutS)];
-    out = await runCapture(args, (cfg.timeoutS + 20) * 1000);
+    out = await runCapture(args, (cfg.timeoutS + 30) * 1000);
   }
   const parsed = parseKaneOutput(out.stdout, opts.conditions.length, cfg.mode);
   const elapsedMs = Date.now() - t0;

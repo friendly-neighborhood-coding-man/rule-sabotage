@@ -107,6 +107,13 @@ For every new effect definition, from either player:
 
    Identical trials reuse the cached verdict, labelled "cached".
 5. **Equal scrutiny.** Human and AI rules go through the same `referee()` with the same conditions.
+6. **Runs in the background.** On real hardware one uncached Kane review took 55–288 s (kane-cli 0.10.4, Windows, 2026-11-17). Blocking a turn on that would stop the game, so Kane reviews in the background:
+   - the request returns within about 1.5 s, either with a cached or fast verdict or with **pending**;
+   - play continues, and the UI shows "Kane is examining…";
+   - the effect goes live only when Kane approves it, on the cells that are still free at that moment. The engine checks are re-run on the board as it is then, and the verdict records the turn it was proposed and the turn it went live;
+   - a rejected or unverified rule never goes live.
+
+   This applies identically to the AI's rules.
 
 ## Board crowding (measured, no cap applied)
 
