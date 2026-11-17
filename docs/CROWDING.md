@@ -40,7 +40,7 @@ Planner vs planner, per game (separate run, same seeds):
 3. **Most triggers are on the owner's own effects.** That was 12.3 of 13.7 per planner game. The planner mostly builds things it will use itself: shoves toward its own goal, teleports and shields. Persistent beneficial effects make racing strong and keep games short. This is a balance observation and is unrelated to crowding.
 4. Placing anything at all is a big edge. Planner vs mover went 30–0 in both directions.
 
-## Options (not implemented; decision pending)
+## Options (decision 2026-11-17: no cap for now)
 
 - **No cap (current).** The cost is the rare stalled game that ends up with a nearly full board.
 - **Per-player limit on active cells (for example 12, about a quarter of the board each).** At the limit you must remove or replace your own cells before placing new ones. Nothing is cleared automatically and there is no geometric rule. Per the data above, this binds only in long games.
