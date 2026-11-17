@@ -62,6 +62,8 @@ npm run bench:llm         # same 50 cases across NVIDIA / Groq / OpenRouter mode
 npm run selfplay -- 30    # engine-only balance + board-crowding stats (bot vs bot, no LLM, no Kane)
 ```
 
+Latest measured results from these scripts (providers benchmark and real Kane verdicts) are in [docs/EVIDENCE.md](docs/EVIDENCE.md).
+
 ## How to play (30 seconds)
 
 1. **Your turn** gives you one move action per piece still on the board (3 at the start). The chip in the header counts them down.
