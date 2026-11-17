@@ -31,7 +31,7 @@ export type Trial = {
 const pieceText = (q: Piece) => (q.scored ? 'scored' : cellName(key(q.x, q.y)) + (q.frozen ? ' (frozen)' : ''));
 
 /** The board as it would be if the placement were accepted. */
-function withPlacement(s: State, proposer: Player, pl: Placement): State {
+export function withPlacement(s: State, proposer: Player, pl: Placement): State {
   const h = structuredClone(s);
   h.current = proposer; h.phase = 'place'; h.winner = null;
   applyPlacement(h, proposer, pl);
@@ -50,7 +50,7 @@ function approach(h: State, cell: string): { from: string; dir: Dir } | null {
 }
 
 /** One lone piece of `p` enters `cell`; every other piece is parked so captures cannot differ by owner. */
-function enter(h: State, p: Player, from: string, dir: Dir, ruleId: number, cell: string): { out: Outcome; secondVisitFired: boolean } {
+export function enter(h: State, p: Player, from: string, dir: Dir, ruleId: number, cell: string): { out: Outcome; secondVisitFired: boolean } {
   const s = structuredClone(h);
   s.winner = null; s.current = p; s.phase = 'move'; s.actionsLeft = 5; s.bonus = { human: 0, ai: 0 };
   const f = parseKey(from);
@@ -79,7 +79,7 @@ function enter(h: State, p: Player, from: string, dir: Dir, ruleId: number, cell
 }
 
 /** A piece that reaches its own goal column leaves the board, so its status no longer matters: compare it only when neither did. */
-const sameOutcome = (a: Outcome, b: Outcome) => {
+export const sameOutcome = (a: Outcome, b: Outcome) => {
   const core = (o: Outcome) => JSON.stringify([o.fired, o.effectSeen, o.endSquare, o.extraActions, o.chain]);
   return core(a) === core(b) && (a.reachedGoal || b.reachedGoal || (a.frozenTurns === b.frozenTurns && a.shield === b.shield));
 };
@@ -129,7 +129,12 @@ export function buildTrial(state: State, proposer: Player, pl: Placement, trialN
   add('E5', 'No player is left with no legal move for 2 of their turns in a row', longestStuck.human < 2 && longestStuck.ai < 2, `longest stuck streak: Human ${longestStuck.human}, AI ${longestStuck.ai}`);
   add('E6', 'Placing the effect moves no piece and decides nothing', h.winner === null && JSON.stringify(h.pieces) === JSON.stringify(state.pieces), 'pieces unchanged at placement');
 
-  const sigData = { proposer, effect: pl.effect, cells: [...pl.cells].sort(), pieces: state.pieces.map(q => [q.id, q.x, q.y, q.scored, q.frozen, q.shield]), cells2: state.cells, rules: state.rules.filter(r => r.cells.length).map(r => [r.id, r.effect]) };
+  // Everything the trial's observations depend on: the proposal, every piece, every live effect with its OWNER,
+  // the RNG state (teleport destinations), the turn (turn limit) and banked actions.
+  const sigData = {
+    proposer, text: pl.text, effect: pl.effect, approx: pl.approxNote ?? null, cells: [...pl.cells].sort(), rng: state.rng, turn: state.turn, maxTurns: state.maxTurns, bonus: state.bonus,
+    pieces: state.pieces.map(q => [q.id, q.x, q.y, q.scored, q.frozen, q.shield]), cells2: state.cells, rules: state.rules.filter(r => r.cells.length).map(r => [r.id, r.owner, r.effect, [...r.cells].sort()]),
+  };
   const signature = createHash('sha256').update(JSON.stringify(sigData)).digest('hex').slice(0, 16);
   return {
     trialId: id, signature, proposer, ruleText: pl.text, effect: pl.effect, effectLabel: shortLabel(pl.effect), effectSummary: describeEffect(pl.effect),

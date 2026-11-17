@@ -13,16 +13,38 @@
  */
 import { spawn, type ChildProcess } from 'node:child_process';
 import { mkdir, writeFile, mkdtemp, rm } from 'node:fs/promises';
-import { existsSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
+import { createHash } from 'node:crypto';
+import { fileURLToPath } from 'node:url';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { createServer } from 'node:net';
 
 export type KaneStatus = 'approved' | 'rejected' | 'unverified';
+/** Measured time per stage of one review (ms). null = the stage did not run. */
+export type KaneTimings = {
+  cache: 'hit' | 'miss' | 'joined-in-flight'; probeMs: number | null; evidenceWriteMs: number | null;
+  browserSpawnMs: number | null; cdpReadyMs: number | null; cdpReady: boolean | null;
+  cliMs: number | null; cliFirstOutputMs: number | null; cliRunEndMs: number | null;
+  parseMs: number | null; cleanupMs: number | null; totalMs: number;
+};
 export type KaneResult = {
   status: KaneStatus; reason: string; conditionResults: (boolean | null)[]; conditionReasons: (string | null)[];
   elapsedMs: number; exitCode: number | null; evidencePath: string | null; mode: string; cached: boolean; version: string | null;
+  /** version is whatever the CLI reported; the unit-test double reports 0.0.0-test-double. */
+  cacheKey?: string; timings?: KaneTimings;
 };
+
+// Cache scope: a verdict is reused only for the same trial content, the same conditions, the same Kane CLI
+// (path, version, mode) and the same rule-engine source. Changing engine/rules/trial/ai (the rollout uses the planner) changes ENGINE_HASH.
+const here = (f: string) => fileURLToPath(new URL(f, import.meta.url));
+export const ENGINE_HASH = createHash('sha256').update(['./engine.ts', './rules.ts', './trial.ts', './ai.ts'].map(f => { try { return readFileSync(here(f), 'utf8'); } catch { return f; } }).join('\0')).digest('hex').slice(0, 12);
+export const REFEREE_POLICY_VERSION = 'kane-conditions-v4.1';
+/** The trial page without its run-specific id and timestamps, so two identical trials hash the same. */
+export const normalizedPage = (html: string, trialId: string) => html.split(trialId).join('T????');
+export function reviewCacheKey(o: { signature: string; html: string; trialId: string; conditions: string[]; cli: string; version: string | null; mode: string }) {
+  return createHash('sha256').update(JSON.stringify({ v: REFEREE_POLICY_VERSION, engine: ENGINE_HASH, sig: o.signature, page: normalizedPage(o.html, o.trialId), conditions: o.conditions, cli: o.cli, version: o.version, mode: o.mode })).digest('hex').slice(0, 20);
+}
 
 export const kaneConfig = () => ({
   enabled: process.env.KANE_REFEREE !== 'off',
@@ -55,23 +77,27 @@ function spawnCli(args: string[]): ChildProcess {
   return spawn(cli, args, { stdio: ['pipe', 'pipe', 'pipe'] });
 }
 
-function runCapture(args: string[], timeoutMs: number): Promise<{ code: number | null; stdout: string; stderr: string; ms: number; timedOut: boolean }> {
+function runCapture(args: string[], timeoutMs: number): Promise<{ code: number | null; stdout: string; stderr: string; ms: number; timedOut: boolean; firstOutputMs: number | null; runEndMs: number | null }> {
   return new Promise(res => {
     const t0 = Date.now();
-    let stdout = '', stderr = '', timedOut = false;
+    let stdout = '', stderr = '', timedOut = false, firstOutputMs: number | null = null, runEndMs: number | null = null;
     let child: ChildProcess;
-    try { child = spawnCli(args); } catch (e) { res({ code: null, stdout, stderr: String(e), ms: 0, timedOut }); return; }
+    try { child = spawnCli(args); } catch (e) { res({ code: null, stdout, stderr: String(e), ms: 0, timedOut, firstOutputMs, runEndMs }); return; }
     const timer = setTimeout(() => {
       timedOut = true;
       // On Windows the .cmd shim runs under cmd.exe; killing it leaves kane-cli running and holding the pipes.
       if (process.platform === 'win32' && child.pid) spawn('taskkill', ['/pid', String(child.pid), '/T', '/F'], { stdio: 'ignore', windowsHide: true }).on('error', () => child.kill());
       else child.kill();
     }, timeoutMs);
-    child.stdout!.on('data', d => { stdout += d; });
-    child.stderr!.on('data', d => { stderr += d; });
+    child.stdout!.on('data', d => {
+      if (firstOutputMs === null) firstOutputMs = Date.now() - t0;
+      stdout += d;
+      if (runEndMs === null && /"type"\s*:\s*"run_end"/.test(stdout)) runEndMs = Date.now() - t0;
+    });
+    child.stderr!.on('data', d => { if (firstOutputMs === null) firstOutputMs = Date.now() - t0; stderr += d; });
     child.stdin!.end();
     child.on('error', e => { stderr += String(e); });
-    child.on('close', code => { clearTimeout(timer); res({ code, stdout, stderr, ms: Date.now() - t0, timedOut }); });
+    child.on('close', code => { clearTimeout(timer); res({ code, stdout, stderr, ms: Date.now() - t0, timedOut, firstOutputMs, runEndMs }); });
   });
 }
 
@@ -95,7 +121,8 @@ function freePort(): Promise<number> {
   return new Promise((res, rej) => { const s = createServer(); s.listen(0, '127.0.0.1', () => { const p = (s.address() as { port: number }).port; s.close(() => res(p)); }); s.on('error', rej); });
 }
 
-async function openChrome(url: string): Promise<{ cdp: string; close: () => Promise<void> }> {
+async function openChrome(url: string): Promise<{ cdp: string; spawnMs: number; readyMs: number; ready: boolean; close: () => Promise<void> }> {
+  const t0 = Date.now();
   const chrome = kaneConfig().chrome;
   if (!chrome) throw new Error('No Chrome/Chromium found for the trial page (set KANE_CHROME).');
   const port = await freePort();
@@ -104,18 +131,20 @@ async function openChrome(url: string): Promise<{ cdp: string; close: () => Prom
   // Without an 'error' listener a missing browser binary is an uncaught exception (it crashed Node on Windows).
   let spawnErr: Error | null = null;
   child.on('error', e => { spawnErr = e; });
+  const spawnMs = Date.now() - t0;
   const cdp = `http://127.0.0.1:${port}`;
+  let ready = false;
   const until = Date.now() + 15_000;
   while (Date.now() < until) {
     if (spawnErr) { await rm(profile, { recursive: true, force: true }).catch(() => {}); throw new Error(`could not start the browser at ${chrome}: ${(spawnErr as Error).message}`); }
     try {
       const r = await fetch(`${cdp}/json/list`);
       const pages = await r.json() as { url: string; type: string }[];
-      if (pages.some(p => p.type === 'page' && p.url.startsWith(url))) break;
+      if (pages.some(p => p.type === 'page' && p.url.startsWith(url))) { ready = true; break; }
     } catch { /* not up yet */ }
     await new Promise(r => setTimeout(r, 250));
   }
-  return { cdp, close: async () => { child.kill(); await new Promise(r => setTimeout(r, 300)); await rm(profile, { recursive: true, force: true }).catch(() => {}); } };
+  return { cdp, spawnMs, readyMs: Date.now() - t0 - spawnMs, ready, close: async () => { child.kill(); await new Promise(r => setTimeout(r, 300)); await rm(profile, { recursive: true, force: true }).catch(() => {}); } };
 }
 
 /** Parse kane-cli --agent NDJSON. Only a run_end with one boolean per condition counts as a verdict. */
@@ -143,38 +172,79 @@ export function parseKaneOutput(stdout: string, nConditions: number, mode: 'anal
   return { verdict: null, results: [], reasons: [], detail: `run_end status ${st || 'missing'}` };
 }
 
+/** The process is killed this long after start. KANE_KILL_AFTER_MS exists only so tests can exercise the timeout path quickly. */
+const hardTimeoutMs = (timeoutS: number) => Number(process.env.KANE_KILL_AFTER_MS) || (timeoutS + 30) * 1000;
 const cache = new Map<string, KaneResult>();
+const inflight = new Map<string, Promise<KaneResult>>();
+const CACHE_MAX = 500;
+export const kaneCacheStats = () => ({ size: cache.size, inflight: inflight.size, engineHash: ENGINE_HASH, policy: REFEREE_POLICY_VERSION });
+/** Test hook. */
+export function clearKaneCache() { cache.clear(); }
 
+/**
+ * Judges one trial page with the real kane-cli. Verdicts are cached only when Kane gave a complete
+ * verdict (approved/rejected); unverified results are never cached. Identical concurrent requests share one run.
+ */
 export async function kaneJudge(opts: { trialId: string; signature: string; url: string; html: string; conditions: string[] }): Promise<KaneResult> {
-  const cfg = kaneConfig();
-  const hit = cache.get(opts.signature);
-  if (hit) return { ...hit, cached: true, elapsedMs: 0 };
   const t0 = Date.now();
-  const base = { conditionResults: [] as (boolean | null)[], conditionReasons: [] as (string | null)[], exitCode: null as number | null, evidencePath: null as string | null, mode: cfg.mode, cached: false, version: null as string | null };
+  const cfg = kaneConfig();
+  const p0 = Date.now();
   const probe = await kaneProbe();
-  if (!probe.installed) return { ...base, status: 'unverified', reason: `Kane unavailable: ${probe.detail}`, elapsedMs: Date.now() - t0 };
-  base.version = probe.version;
+  const probeMs = Date.now() - p0;
+  const timings = (o: Partial<KaneTimings>): KaneTimings => ({ cache: 'miss', probeMs, evidenceWriteMs: null, browserSpawnMs: null, cdpReadyMs: null, cdpReady: null, cliMs: null, cliFirstOutputMs: null, cliRunEndMs: null, parseMs: null, cleanupMs: null, totalMs: Date.now() - t0, ...o });
+  const base = { conditionResults: [] as (boolean | null)[], conditionReasons: [] as (string | null)[], exitCode: null as number | null, evidencePath: null as string | null, mode: cfg.mode, cached: false, version: null as string | null };
+  if (!probe.installed) return { ...base, status: 'unverified', reason: `Kane unavailable: ${probe.detail}`, elapsedMs: Date.now() - t0, timings: timings({}) };
+  const cacheKey = reviewCacheKey({ signature: opts.signature, html: opts.html, trialId: opts.trialId, conditions: opts.conditions, cli: cfg.cli, version: probe.version, mode: cfg.mode });
+  const hit = cache.get(cacheKey);
+  if (hit) return { ...hit, cached: true, elapsedMs: 0, cacheKey, timings: timings({ cache: 'hit' }) };
+  const running = inflight.get(cacheKey);
+  if (running) {
+    const r = await running;
+    return { ...r, cached: true, cacheKey, timings: timings({ cache: 'joined-in-flight' }), reason: r.status === 'unverified' ? r.reason : `${r.reason} (shared with an identical review that was already running)` };
+  }
+  const run = runKane(opts, cfg, probe.version, cacheKey, t0, probeMs);
+  inflight.set(cacheKey, run);
+  try {
+    const result = await run;
+    if (result.status === 'approved' || result.status === 'rejected') {
+      cache.set(cacheKey, result);
+      if (cache.size > CACHE_MAX) cache.delete(cache.keys().next().value!);
+    }
+    return result;
+  } finally { inflight.delete(cacheKey); }
+}
+
+async function runKane(opts: { trialId: string; signature: string; url: string; html: string; conditions: string[] }, cfg: ReturnType<typeof kaneConfig>, version: string | null, cacheKey: string, t0: number, probeMs: number): Promise<KaneResult> {
+  const tm: KaneTimings = { cache: 'miss', probeMs, evidenceWriteMs: null, browserSpawnMs: null, cdpReadyMs: null, cdpReady: null, cliMs: null, cliFirstOutputMs: null, cliRunEndMs: null, parseMs: null, cleanupMs: null, totalMs: 0 };
+  const base = { conditionResults: [] as (boolean | null)[], conditionReasons: [] as (string | null)[], exitCode: null as number | null, evidencePath: null as string | null, mode: cfg.mode, cached: false, version, cacheKey };
+  let w0 = Date.now();
   await mkdir(cfg.evidenceDir, { recursive: true });
   const dir = join(cfg.evidenceDir, `${opts.trialId}-${opts.signature}`);
   await mkdir(dir, { recursive: true });
   await writeFile(join(dir, 'trial.html'), opts.html);
+  tm.evidenceWriteMs = Date.now() - w0;
   let out: Awaited<ReturnType<typeof runCapture>>;
   let args: string[];
   if (cfg.mode === 'analyzer') {
     let browser: Awaited<ReturnType<typeof openChrome>> | null = null;
     try {
       browser = await openChrome(opts.url);
+      tm.browserSpawnMs = browser.spawnMs; tm.cdpReadyMs = browser.readyMs; tm.cdpReady = browser.ready;
       args = ['run', '--analyzer-only', '--agent', '--cdp-endpoint', browser.cdp, '--timeout', String(cfg.timeoutS), ...opts.conditions.flatMap(c => ['--condition', c])];
-      out = await runCapture(args, (cfg.timeoutS + 30) * 1000);
+      out = await runCapture(args, hardTimeoutMs(cfg.timeoutS));
     } catch (e) {
-      return { ...base, status: 'unverified', reason: `Kane run could not start: ${(e as Error).message}`, elapsedMs: Date.now() - t0, evidencePath: dir };
-    } finally { await browser?.close(); }
+      tm.totalMs = Date.now() - t0;
+      return { ...base, status: 'unverified', reason: `Kane run could not start: ${(e as Error).message}`, elapsedMs: Date.now() - t0, evidencePath: dir, timings: tm };
+    } finally { const c0 = Date.now(); await browser?.close(); if (browser) tm.cleanupMs = Date.now() - c0; }
   } else {
     const objective = `Open the page and check every statement. Pass only if ALL are true: ${opts.conditions.map((c, i) => `(${i + 1}) ${c}`).join(' ')}`;
     args = ['run', objective, '--url', opts.url, '--agent', '--headless', '--max-steps', '8', '--timeout', String(cfg.timeoutS)];
-    out = await runCapture(args, (cfg.timeoutS + 30) * 1000);
+    out = await runCapture(args, hardTimeoutMs(cfg.timeoutS));
   }
+  tm.cliMs = out.ms; tm.cliFirstOutputMs = out.firstOutputMs; tm.cliRunEndMs = out.runEndMs;
+  const pr0 = Date.now();
   const parsed = parseKaneOutput(out.stdout, opts.conditions.length, cfg.mode);
+  tm.parseMs = Date.now() - pr0;
   const elapsedMs = Date.now() - t0;
   const failed = parsed.results.map((r, i) => (r === false ? `${opts.conditions[i]}${parsed.reasons[i] ? ` — Kane: ${parsed.reasons[i]}` : ''}` : null)).filter(Boolean);
   const result: KaneResult = {
@@ -185,9 +255,12 @@ export async function kaneJudge(opts: { trialId: string; signature: string; url:
       : parsed.verdict === 'rejected' ? `Kane flagged: ${failed[0] ?? parsed.reasons[0] ?? 'a condition failed'}`
       : out.timedOut ? `Kane timed out after ${Math.round(elapsedMs / 1000)}s (unverified).` : `Kane gave no verdict: ${parsed.detail}`.slice(0, 300),
   };
+  w0 = Date.now();
   await writeFile(join(dir, 'kane-stdout.ndjson'), out.stdout);
   await writeFile(join(dir, 'kane-stderr.txt'), out.stderr);
-  await writeFile(join(dir, 'result.json'), JSON.stringify({ ...result, args: args.map(a => (a.length > 200 ? a.slice(0, 200) + '…' : a)), trialId: opts.trialId, signature: opts.signature, at: new Date().toISOString() }, null, 2));
-  if (result.status !== 'unverified') cache.set(opts.signature, result);
+  tm.evidenceWriteMs = (tm.evidenceWriteMs ?? 0) + (Date.now() - w0);
+  tm.totalMs = Date.now() - t0;
+  result.timings = tm;
+  await writeFile(join(dir, 'result.json'), JSON.stringify({ ...result, args: args.map(a => (a.length > 200 ? a.slice(0, 200) + '…' : a)), trialId: opts.trialId, signature: opts.signature, engineHash: ENGINE_HASH, policy: REFEREE_POLICY_VERSION, at: new Date().toISOString() }, null, 2));
   return result;
 }

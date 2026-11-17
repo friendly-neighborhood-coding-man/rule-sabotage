@@ -9,27 +9,35 @@ import {
   validateMove, publicView, cellName, legalMoves, activateLate,
 } from './engine.ts';
 import {
-  type Player, type Interpretation, PLAYERS, offlineInterpret, parseModelInterpretation, shortLabel, guardText, policyReject, sameEffect, MAX_CELLS_PER_TURN,
+  type Player, type Interpretation, PLAYERS, offlineInterpret, parseModelInterpretation, shortLabel, guardText, policyReject, resolveAIRuleText, MAX_CELLS_PER_TURN,
 } from './rules.ts';
 import { planTurn, planMoves, aiPhrase, describeTurn, type Plan, type TurnPlan } from './ai.ts';
 import { chatJSON, modelConfigured, modelName, providerLabel, ProviderError, INTERPRET_SYSTEM, INTERPRET_SCHEMA, interpretUserPrompt, OPPONENT_SYSTEM, OPPONENT_SCHEMA } from './openrouter.ts';
 import { buildTrial, renderTrialPage, KANE_CONDITIONS, type Trial } from './trial.ts';
 import { kaneJudge, kaneConfig, type KaneResult } from './kane.ts';
+import { selectTier, tiersEnabled, type TierDecision } from './tiers.ts';
 import { reactionsFor, achievementsFor, type Achievement } from './flavor.ts';
 
 export type Verdict = {
-  reviewId: number; player: Player; ruleText: string; label: string; cells: string[]; final: 'pending' | 'approved' | 'rejected' | 'unverified';
+  reviewId: number; player: Player; ruleText: string; label: string; cells: string[];
+  /** 'approved' means Kane approved it. 'engine-approved' means the referee tiers let the engine decide: never shown as Kane. */
+  final: 'pending' | 'approved' | 'engine-approved' | 'rejected' | 'unverified';
+  /** Who decided: kane | engine (tier 1/2) | engine-only (Kane switched off). */
+  decidedBy: 'kane' | 'engine' | 'engine-only' | null; tier: TierDecision | null;
+  timing: { submittedAt: number; trialBuildMs: number; tierMs: number | null; resolvedAt: number | null; submitToVerdictMs: number | null };
   message: string; proposedTurn: number; resolvedTurn: number | null; placedCells: string[]; skippedCells: string[]; trial: Pick<Trial, 'trialId' | 'buildMs' | 'engineChecks'> & { scenarioIds: string[] }; kane: KaneResult | null; activated: boolean;
 };
 export type AIDecision = {
   source: 'openrouter' | 'local-planner'; provider?: string; model: string | null; fallbackReason: string | null; taunt: string; rationale: string;
   plan: { candidates: number; sims: number; ms: number; chosen: string; score: number }; ruleText: string | null; ruleInterpretation: Interpretation | null; decidedAt: string; ms: number;
+  /** The model's or planner's own sentence, and whether it was used as the rule text (only if it parses to exactly the planned effect). */
+  proseText?: string | null; ruleTextSource?: 'prose' | 'canonical'; ruleTextCheck?: string;
 };
 type Pending = { token: string; text: string; interpretation: Interpretation; at: number };
 export type Progress = { at: number; text: string };
 export type Game = {
   id: string; state: State; busy: boolean; progress: Progress[]; interpretations: Map<string, Pending>;
-  achievements: Record<Player, Achievement[]>; refereeMode: 'kane' | 'engine-only'; turnEvents: GameEvent[];
+  achievements: Record<Player, Achievement[]>; refereeMode: 'kane' | 'engine-only'; tiers: boolean; turnEvents: GameEvent[];
   reviews: { verdict: Verdict; events: GameEvent[] }[]; nextReview: number;
   history: { turn: number; p: Player; events: GameEvent[]; verdicts: Verdict[]; ai?: AIDecision }[];
 };
@@ -78,12 +86,14 @@ function engineTrial(g: Game, s: State, p: Player, pl: Placement) {
 
 /** Starts the review of one placement. Resolves within QUICK_MS with either a final or a 'pending' verdict. */
 async function referee(g: Game, s: State, p: Player, pl: Placement): Promise<{ verdict: Verdict; events: GameEvent[] }> {
+  const submittedAt = Date.now();
   const { trial, html } = engineTrial(g, s, p, pl);
   const who = p === 'human' ? 'your' : 'the AI’s';
   const scenarioIds = trial.scenarioIds;
   g.progress.push({ at: Date.now(), text: `Sandbox ran ${scenarioIds.length} what-if scenarios for ${who} rule (${trial.trialId}, ${trial.buildMs} ms).` });
   const verdict: Verdict = {
     reviewId: ++g.nextReview, player: p, ruleText: pl.text, label: shortLabel(pl.effect), cells: pl.cells.map(cellName), final: 'pending', message: '',
+    decidedBy: null, tier: null, timing: { submittedAt, trialBuildMs: trial.buildMs, tierMs: null, resolvedAt: null, submitToVerdictMs: null },
     proposedTurn: s.turn, resolvedTurn: null, placedCells: [], skippedCells: [],
     trial: { trialId: trial.trialId, buildMs: trial.buildMs, engineChecks: trial.engineChecks, scenarioIds }, kane: null, activated: false,
   };
@@ -91,9 +101,21 @@ async function referee(g: Game, s: State, p: Player, pl: Placement): Promise<{ v
   g.reviews.push(rec);
   if (g.reviews.length > 60) g.reviews.shift();
   const failed = trial.engineChecks.find(c => !c.pass);
-  if (failed) { Object.assign(verdict, { final: 'rejected', resolvedTurn: s.turn, message: `Engine safety check failed: ${failed.text} (${failed.detail}).` }); return rec; }
+  if (failed) { Object.assign(verdict, { final: 'rejected', decidedBy: 'engine', resolvedTurn: s.turn, message: `Engine safety check failed: ${failed.text} (${failed.detail}).` }); stamp(verdict); return rec; }
+  if (g.tiers) {
+    const t = selectTier(s, p, pl, trial);
+    verdict.tier = t; verdict.timing.tierMs = t.ms;
+    g.progress.push({ at: Date.now(), text: `Referee tier ${t.tier} for ${who} rule: ${t.reasons.join('; ')}.` });
+    if (t.tier < 3) {
+      Object.assign(verdict, { final: 'engine-approved', decidedBy: 'engine', message: `Engine-approved (tier ${t.tier}${t.tier === 2 ? `, ${t.extraScenarios} extra simulated entries` : ''}). Not reviewed by Kane: ${t.reasons.join('; ')}.` });
+      stamp(verdict);
+      activate(g, p, pl, rec);
+      return rec;
+    }
+  }
   if (g.refereeMode === 'engine-only') {
-    verdict.final = 'unverified'; verdict.message = 'Engine checks passed. Kane referee is switched off, so this rule is NOT Kane-verified.';
+    verdict.final = 'unverified'; verdict.decidedBy = 'engine-only'; verdict.message = 'Engine checks passed. Kane referee is switched off, so this rule is NOT Kane-verified.';
+    stamp(verdict);
     activate(g, p, pl, rec);
     return rec;
   }
@@ -109,11 +131,14 @@ async function referee(g: Game, s: State, p: Player, pl: Placement): Promise<{ v
 
 function finishReview(g: Game, p: Player, pl: Placement, rec: { verdict: Verdict; events: GameEvent[] }, kane: KaneResult) {
   const v = rec.verdict, who = p === 'human' ? 'your' : 'the AI’s';
-  v.kane = kane; v.final = kane.status; v.message = kane.reason;
+  v.kane = kane; v.final = kane.status; v.message = kane.reason; v.decidedBy = 'kane';
+  stamp(v);
   g.progress.push({ at: Date.now(), text: kane.status === 'approved' ? `Kane approved ${who} rule${kane.cached ? ' (identical trial seen before: cached verdict)' : ` in ${(kane.elapsedMs / 1000).toFixed(1)}s`}.` : kane.status === 'rejected' ? `Kane rejected ${who} rule.` : `Kane could not verify ${who} rule.` });
   if (kane.status === 'approved' || (kane.status === 'unverified' && allowUnverified())) activate(g, p, pl, rec);
   else v.resolvedTurn = g.state.turn;
 }
+
+function stamp(v: Verdict) { v.timing.resolvedAt = Date.now(); v.timing.submitToVerdictMs = v.timing.resolvedAt - v.timing.submittedAt; }
 
 /** Puts an approved effect on the board, on whichever of its cells are still eligible now. */
 function activate(g: Game, p: Player, pl: Placement, rec: { verdict: Verdict; events: GameEvent[] }) {
@@ -138,7 +163,7 @@ function activate(g: Game, p: Player, pl: Placement, rec: { verdict: Verdict; ev
 export function newGame(seed?: number): Game {
   const g: Game = {
     id: randomUUID(), state: init(seed ?? (Date.now() & 0x7fffffff)), busy: false, progress: [], interpretations: new Map(),
-    achievements: { human: [], ai: [] }, refereeMode: refereeMode(), turnEvents: [], history: [], reviews: [], nextReview: 0,
+    achievements: { human: [], ai: [] }, refereeMode: refereeMode(), tiers: tiersEnabled(), turnEvents: [], history: [], reviews: [], nextReview: 0,
   };
   games.set(g.id, g);
   if (games.size > 200) games.delete(games.keys().next().value!);
@@ -148,7 +173,7 @@ export const getGame = (id: string) => games.get(id);
 
 export function view(g: Game) {
   return {
-    gameId: g.id, ...publicView(g.state), busy: g.busy, refereeMode: g.refereeMode, achievements: g.achievements,
+    gameId: g.id, ...publicView(g.state), busy: g.busy, refereeMode: g.refereeMode, refereeTiers: g.tiers, achievements: g.achievements,
     model: modelConfigured() ? modelName() : null, provider: modelConfigured() ? providerLabel() : null, legal: legalMoves(g.state, 'human'), maxCells: MAX_CELLS_PER_TURN,
     reviews: g.reviews.slice(-12).map(r => ({ ...r.verdict, events: r.events })),
   };
@@ -268,20 +293,18 @@ async function aiTurn(g: Game) {
   const s = g.state;
   const { decision, plan, text } = await decideAI(structuredClone(s));
   const events: GameEvent[] = [], verdicts: Verdict[] = [];
-  let placedOk = false;
-  if (plan.placement && text) {
-    // The AI's own words go through the same interpreter and referee as the human's.
-    const r = await interpretRule(text);
-    decision.ruleText = text; decision.ruleInterpretation = r.interpretation;
-    if (r.interpretation.status !== 'reject') {
-      const i = r.interpretation;
-      const pl: Placement = { text, effect: i.effect, cells: plan.placement.cells, interpretedBy: i.source, ...(i.status === 'approximate' ? { approxNote: i.note } : {}) };
-      if (validatePlacement(s, 'ai', pl).ok) {
-        const r = await referee(g, s, 'ai', pl);
-        verdicts.push(r.verdict);
-        events.push(...r.events);
-        placedOk = sameEffect(i.effect, plan.placement.effect); void placedOk;
-      }
+  if (plan.placement) {
+    // The planner's typed effect is what gets installed. Model prose is only used as the rule text when the
+    // deterministic parser reads it as exactly that effect; otherwise the engine's canonical sentence is used.
+    const planned = plan.placement.effect;
+    const rt = resolveAIRuleText(planned, text);
+    Object.assign(decision, { proseText: text, ruleText: rt.text, ruleTextSource: rt.source, ruleTextCheck: rt.check, ruleInterpretation: rt.parsed });
+    const pl: Placement = { text: rt.text, effect: planned, cells: plan.placement.cells, interpretedBy: rt.source === 'prose' ? `${decision.source} sentence, checked by the offline parser` : 'engine canonical text' };
+    // Same validation and referee pipeline as a human placement.
+    if (validatePlacement(s, 'ai', pl).ok) {
+      const r = await referee(g, s, 'ai', pl);
+      verdicts.push(r.verdict);
+      events.push(...r.events);
     }
   }
   if (s.phase === 'place') s.phase = 'move';
@@ -289,7 +312,7 @@ async function aiTurn(g: Game) {
   const moves = planMoves(s, 'ai').moves;
   for (const m of moves) { if (s.winner || !validateMove(s, 'ai', m).ok) break; events.push(...applyMove(s, 'ai', m)); }
   const v0 = verdicts[0];
-  decision.plan.chosen = describeTurn(v0 && v0.final !== 'rejected' && v0.final !== 'unverified' || v0?.activated ? plan.placement : null, moves) + (v0?.final === 'pending' ? ' (effect waiting for Kane)' : '');
+  decision.plan.chosen = describeTurn(v0 && (v0.final === 'pending' || v0.activated) ? plan.placement : null, moves) + (v0?.final === 'pending' ? ' (effect waiting for Kane)' : '');
   const endEv = s.winner ? [] : endTurn(s);
   g.history.push({ turn: s.turn - (s.winner ? 0 : 1), p: 'ai', events: [...events.filter(e => e.t !== 'place'), ...endEv], verdicts, ai: decision });
   return { events, endEvents: endEv, verdicts, decision, reactions: reactionsFor(events) };

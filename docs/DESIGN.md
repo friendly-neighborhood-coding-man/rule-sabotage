@@ -106,7 +106,7 @@ For every new effect definition, from either player:
    - a result JSON with the verdict, per-condition results, elapsed time, exit code, CLI version and args
 
    Identical trials reuse the cached verdict, labelled "cached".
-5. **Equal scrutiny.** Human and AI rules go through the same `referee()` with the same conditions.
+5. **Equal scrutiny.** Human and AI rules go through the same `referee()` with the same conditions. The AI always installs the effect its planner chose; its sentence is used as the rule text only if the deterministic parser reads it as exactly that effect, otherwise the engine's canonical sentence is used.
 6. **Runs in the background.** On real hardware one uncached Kane review took 55–288 s (kane-cli 0.10.4, Windows, 2026-11-17). Blocking a turn on that would stop the game, so Kane reviews in the background:
    - the request returns within about 1.5 s, either with a cached or fast verdict or with **pending**;
    - play continues, and the UI shows "Kane is examining…";
@@ -114,6 +114,8 @@ For every new effect definition, from either player:
    - a rejected or unverified rule never goes live.
 
    This applies identically to the AI's rules.
+7. **Referee tiers (optional, `REFEREE_TIERS=on`).** Tier 1 (engine checks) and tier 2 (every side of every new cell simulated for both players) decide simple rules at once and label them engine-approved. Everything uncertain goes to Kane as before. Details and measurements: [OPTIMIZATION.md](OPTIMIZATION.md).
+8. **Cache.** The key covers the trial's full state (pieces, effects and their owners, RNG, turn), the page, the conditions, the Kane CLI path/version/mode and a hash of the engine source. Only complete verdicts are cached; identical concurrent reviews share one Kane run.
 
 ## Board crowding (measured, no cap applied)
 

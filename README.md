@@ -50,6 +50,7 @@ The header chips always show what is actually running: `AI brain: OpenRouter · 
 |---|---|
 | `KANE_REFEREE=on` (default) | Rules are reviewed by kane-cli. If Kane fails or times out the rule is **unverified and does not go live** (unless `ALLOW_UNVERIFIED_RULES=1`). |
 | `KANE_REFEREE=off` | Engine checks only; rules go live labelled “NOT Kane-verified”. Good for quick offline play. |
+| `REFEREE_TIERS=on` (default off) | Simple or fully simulable rules are decided by the engine (tier 1/2) and shown as **engine-approved, not reviewed by Kane**. Approximated, untestable or borderline rules still go to Kane and stay off the board until Kane approves. See [docs/OPTIMIZATION.md](docs/OPTIMIZATION.md). |
 | `KANE_MODE=analyzer` (default) | `kane-cli run --analyzer-only --condition … --cdp-endpoint` on the trial page (no browser actions, one verdict per condition). |
 | `KANE_MODE=objective` | `kane-cli run "<objective>" --url <trial page>` (Kane drives a browser; slower). |
 
@@ -59,6 +60,7 @@ The header chips always show what is actually running: `AI brain: OpenRouter · 
 npm run eval:openrouter   # 20 Korean + 10 English + 10 must-reject rules + 10 AI turns → evidence/openrouter/
 npm run kane:trial        # real Kane verdicts on normal, AI-authored and deliberately corrupted trials + in-game turns → evidence/kane/
 npm run bench:llm         # same 50 cases across NVIDIA / Groq / OpenRouter models → evidence/llm-bench/
+npm run tiers:routing -- 30  # engine-only: how many rules would still need Kane with REFEREE_TIERS=on
 npm run selfplay -- 30    # engine-only balance + board-crowding stats (bot vs bot, no LLM, no Kane)
 ```
 

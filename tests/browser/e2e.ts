@@ -1,6 +1,7 @@
 /**
  * Real-browser end-to-end test (Playwright + Chromium). Plays complete games through the UI.
- * Run: npm run test:browser   (optionally KANE_DOUBLE=1 to exercise the referee UI with the Kane TEST DOUBLE)
+ * Run: npm run test:browser   (optionally KANE_DOUBLE=1 to exercise the referee UI with the Kane TEST DOUBLE,
+ *      and REFEREE_TIERS=on to check that simple rules are engine-approved and labelled as such)
  */
 import { createRequire } from 'node:module';
 import { spawn } from 'node:child_process';
@@ -15,6 +16,8 @@ const shots = process.env.SHOTS_DIR || `${root}evidence/browser`;
 mkdirSync(shots, { recursive: true });
 const port = 3200 + Math.floor(Math.random() * 500);
 const useDouble = process.env.KANE_DOUBLE === '1';
+const useTiers = process.env.REFEREE_TIERS === 'on';
+const timings: string[] = [];
 const env = { ...process.env, PORT: String(port), OPENROUTER_API_KEY: '', NVIDIA_API_KEY: '', KANE_REFEREE: useDouble ? 'on' : 'off', KANE_CLI: `${root}tests/fixtures/fake-kane.mjs`, KANE_CHROME: process.env.KANE_CHROME || '/opt/pw-browsers/chromium', KANE_EVIDENCE_DIR: '/tmp/rs-e2e-kane' };
 const srv = spawn(process.execPath, ['--experimental-strip-types', '--no-warnings=ExperimentalWarning', 'server/server.ts'], { cwd: root, env, stdio: ['ignore', 'pipe', 'pipe'] });
 await new Promise<void>((res, rej) => { srv.stdout.on('data', (d: Buffer) => { if (String(d).includes('Rule Sabotage on')) res(); }); setTimeout(() => rej(new Error('server did not start')), 15000); });
@@ -33,6 +36,7 @@ try {
   assert.match(await page.locator('#brain-chip').innerText(), /local planner/);
   await page.waitForFunction(() => !document.getElementById('referee-chip')!.textContent!.includes('…'), null, { timeout: 30000 });
   assert.match(await page.locator('#referee-chip').innerText(), useDouble ? /Kane 0\.0\.0-test-double/ : /engine only/);
+  if (useTiers) assert.match(await page.locator('#referee-chip').innerText(), /\+ engine tiers/);
   ok('board renders 49 squares and honest mode labels');
 
   const getView = () => page.evaluate(() => structuredClone((window as any).__ruleSabotage.view));
@@ -57,6 +61,7 @@ try {
   assert.equal(await page.locator('.cell.picked').count(), 3);
   assert.equal(await page.locator('#place-btn').isDisabled(), true, 'cannot place before accepting the approximation');
   await page.check('#pv-approx');
+  const placeAt = Date.now();
   await page.click('#place-btn');
   await idle();
   await page.waitForSelector('.verdict');
@@ -66,6 +71,8 @@ try {
     ok('slow Kane: the rule shows as pending and is not live yet');
   }
   if (useDouble) await page.waitForFunction(() => /Kane approved your rule/.test(document.getElementById('referee')!.innerText), null, { timeout: 60000 });
+  else await page.waitForFunction(() => /NOT Kane-verified/.test(document.getElementById('referee')!.innerText), null, { timeout: 60000 });
+  timings.push(`approximated rule (always Kane-tier): click → visible final verdict ${Date.now() - placeAt} ms`);
   await idle();
   const refText = await page.locator('#referee').innerText();
   if (useDouble) assert.match(refText, /Kane approved your rule/); else assert.match(refText, /NOT Kane-verified/);
@@ -137,6 +144,24 @@ try {
   assert.equal(await page.locator('#gameover').isHidden(), true);
   ok('rematch with R starts a fresh game');
 
+  if (useTiers) {
+    await idle();
+    await page.fill('#rule-input', 'Whoever lands here is frozen for a turn');
+    await page.click('#interpret-btn');
+    await page.waitForSelector('.pv-head:not(.reject)');
+    const vt = await getView();
+    const far = vt.eligible.find((k: string) => { const [x, y] = k.split(',').map(Number); return x >= 2 && x <= 4 && !Object.keys(vt.cells).some(c => { const [cx, cy] = c.split(',').map(Number); return Math.abs(cx - x) + Math.abs(cy - y) <= 4; }); }) ?? vt.eligible.find((k: string) => k.startsWith('3,'));
+    await page.click(`[data-cell="${far}"]`);
+    const t0 = Date.now();
+    await page.click('#place-btn');
+    await page.waitForFunction(() => /Engine approved your rule \(tier [12], not reviewed by Kane\)/.test(document.getElementById('referee')!.innerText), null, { timeout: 30000 });
+    timings.push(`simple rule with tiers on: click → visible engine verdict ${Date.now() - t0} ms`);
+    const rt = await page.locator('#referee').innerText();
+    assert.ok(!/Kane approved your rule/.test(rt), 'engine approval is never shown as Kane approval');
+    assert.ok((await getView()).cells[far], 'live at once');
+    ok('referee tiers: a simple rule is engine-approved at once and labelled “not reviewed by Kane”');
+  }
+
   const phone = await browser.newPage({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2 });
   phone.on('pageerror', (e: Error) => errors.push(String(e)));
   await phone.goto(`http://127.0.0.1:${port}/`);
@@ -155,4 +180,5 @@ try {
   await browser.close();
   srv.kill();
 }
+for (const t of timings) console.log(`TIMING ${t}`);
 console.log(`\n${results.length} browser checks passed`);

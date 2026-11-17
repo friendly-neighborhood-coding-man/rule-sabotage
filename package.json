@@ -13,6 +13,7 @@
     "selfplay": "node --experimental-strip-types --no-warnings=ExperimentalWarning scripts/selfplay.ts",
     "eval:openrouter": "node --env-file-if-exists=.env --experimental-strip-types --no-warnings=ExperimentalWarning scripts/eval-openrouter.ts",
     "kane:trial": "node --env-file-if-exists=.env --experimental-strip-types --no-warnings=ExperimentalWarning scripts/kane-trial.ts",
-    "bench:llm": "node --env-file-if-exists=.env --experimental-strip-types --no-warnings=ExperimentalWarning scripts/bench-llm.ts"
+    "bench:llm": "node --env-file-if-exists=.env --experimental-strip-types --no-warnings=ExperimentalWarning scripts/bench-llm.ts",
+    "tiers:routing": "node --experimental-strip-types --no-warnings=ExperimentalWarning scripts/tier-routing.ts"
   }
 }

@@ -3,9 +3,10 @@ import { createServer, type IncomingMessage, type ServerResponse } from 'node:ht
 import { readFile } from 'node:fs/promises';
 import { resolve, extname, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { tiersEnabled } from './tiers.ts';
 import { startGame, getGame, view, preview, placeHuman, moveHuman, endHumanTurn, trials, refereeMode } from './game.ts';
 import { modelConfigured, modelName, providerLabel, stats } from './openrouter.ts';
-import { kaneProbe, kaneConfig } from './kane.ts';
+import { kaneProbe, kaneConfig, kaneCacheStats } from './kane.ts';
 
 const HOST = process.env.HOST || '127.0.0.1', PORT = Number(process.env.PORT || 3000);
 const ROOT = resolve(fileURLToPath(new URL('../client/', import.meta.url)));
@@ -37,7 +38,7 @@ async function api(req: IncomingMessage, res: ServerResponse, path: string) {
     const recent = stats.slice(-50);
     return json(res, 200, {
       openrouter: { configured: modelConfigured(), provider: modelConfigured() ? providerLabel() : null, model: modelConfigured() ? modelName() : null, recentCalls: recent.length, recentFailures: recent.filter(s => !s.ok).length },
-      referee: { mode: refereeMode(), kane: k, kaneMode: kaneConfig().mode, timeoutS: kaneConfig().timeoutS, allowUnverified: process.env.ALLOW_UNVERIFIED_RULES === '1' },
+      referee: { mode: refereeMode(), kane: k, kaneMode: kaneConfig().mode, timeoutS: kaneConfig().timeoutS, allowUnverified: process.env.ALLOW_UNVERIFIED_RULES === '1', tiers: tiersEnabled(), cache: kaneCacheStats() },
       authority: 'server',
     });
   }
@@ -111,6 +112,6 @@ if (process.env.RULE_SABOTAGE_NO_LISTEN !== '1') {
     const k = await kaneProbe();
     console.log(`Rule Sabotage on http://${HOST}:${PORT}`);
     console.log(`  LLM:        ${modelConfigured() ? `${providerLabel()} (${modelName()})` : 'NOT configured -> offline parser + local planner (labelled in UI)'}`);
-    console.log(`  Referee:    ${refereeMode() === 'kane' ? `Kane (${k.detail})` : 'engine-only (KANE_REFEREE=off)'}`);
+    console.log(`  Referee:    ${refereeMode() === 'kane' ? `Kane (${k.detail})` : 'engine-only (KANE_REFEREE=off)'}${tiersEnabled() ? ' + referee tiers ON (simple rules decided by the engine, labelled engine-approved)' : ''}`);
   });
 }

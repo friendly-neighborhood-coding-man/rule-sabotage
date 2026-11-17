@@ -89,7 +89,7 @@ test('an AI rule goes through the same interpreter and referee as a human rule',
   if (g.state.current === 'human') await endHumanTurn(g);
   const last = g.history.filter(h => h.p === 'ai').pop()!;
   for (const v of last.verdicts) { assert.equal(v.player, 'ai'); assert.ok(v.trial.scenarioIds.length >= 1); assert.equal(v.final, 'unverified', 'engine-only mode is labelled unverified'); }
-  if (last.ai?.ruleText) assert.ok(last.ai.ruleInterpretation, 'AI text was re-interpreted');
+  if (last.verdicts.length) { assert.ok(last.ai?.ruleTextSource, 'AI rule text was checked against the planned effect'); assert.equal(last.verdicts[0].ruleText, last.ai!.ruleText); }
 });
 
 test('trial: symmetric outcome for a human and an AI piece, no re-fire, no softlock', () => {

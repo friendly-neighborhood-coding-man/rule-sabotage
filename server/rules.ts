@@ -63,6 +63,34 @@ export function makeEffect(kind: EffectKind, dir?: ShoveDir, amount?: number): E
 }
 export const sameEffect = (a: Effect, b: Effect) => JSON.stringify(a) === JSON.stringify(b);
 
+/** Canonical rule sentence written by the engine from the typed effect. Round-trips through offlineInterpret (tested). */
+export function canonicalRuleText(e: Effect): string {
+  if (e.kind === 'shove') return `Any piece entering this cell is shoved ${e.amount} square${e.amount > 1 ? 's' : ''} ${e.dir}.`;
+  return ({
+    freeze: 'Any piece entering this cell is frozen for one turn.',
+    home: 'Any piece entering this cell is sent back to its starting square.',
+    teleport: 'Any piece entering this cell is teleported to a random empty square.',
+    shield: 'Any piece entering this cell gets a shield against the next trap.',
+    haste: 'Whoever steps on this cell gets an extra move action.',
+  } as const)[e.kind];
+}
+
+/**
+ * The AI's rule text for a planned effect. The installed effect is ALWAYS the planned one; the
+ * model's (or planner's) sentence is used as the rule text only if the deterministic parser reads
+ * it as exactly that effect. Otherwise the canonical sentence is used and the reason is recorded.
+ */
+export function resolveAIRuleText(planned: Effect, prose: string | null): { text: string; source: 'prose' | 'canonical'; check: string; parsed: Interpretation | null } {
+  const canonical = canonicalRuleText(planned);
+  if (!prose || !prose.trim()) return { text: canonical, source: 'canonical', check: 'no sentence given', parsed: null };
+  const t = prose.trim();
+  const parsed = offlineInterpret(t);
+  if (parsed.status === 'reject') return { text: canonical, source: 'canonical', check: `sentence rejected: ${parsed.reason}`, parsed };
+  if (parsed.status !== 'ok') return { text: canonical, source: 'canonical', check: `sentence is only an approximation (${parsed.note})`, parsed };
+  if (!sameEffect(parsed.effect, planned)) return { text: canonical, source: 'canonical', check: `sentence means “${shortLabel(parsed.effect)}”, but the planned effect is “${shortLabel(planned)}”`, parsed };
+  return { text: t, source: 'prose', check: 'sentence matches the planned effect', parsed };
+}
+
 /** Result of interpreting a natural-language rule. Never silently differs from the request. */
 export type InterpretSource = 'openrouter' | 'offline-parser' | 'input-guard';
 export type Interpretation =

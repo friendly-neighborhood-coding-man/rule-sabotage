@@ -6,6 +6,7 @@ const mode = process.env.FAKE_KANE_MODE || 'approve';
 if (args[0] === '--version') { console.log('0.0.0-test-double'); process.exit(0); }
 if (args[0] === 'whoami') { console.log(mode === 'logged-out' ? '⚠ Not logged in' : 'Logged in as test-double'); process.exit(0); }
 if (args[0] === 'run') {
+  if (process.env.FAKE_KANE_COUNT_FILE) (await import('node:fs')).appendFileSync(process.env.FAKE_KANE_COUNT_FILE, 'run\n');
   const n = args.filter(a => a === '--condition').length;
   const cdp = args[args.indexOf('--cdp-endpoint') + 1];
   (async () => {
