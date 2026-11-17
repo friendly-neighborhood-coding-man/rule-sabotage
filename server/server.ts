@@ -4,7 +4,7 @@ import { readFile } from 'node:fs/promises';
 import { resolve, extname, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { startGame, getGame, view, preview, placeHuman, moveHuman, endHumanTurn, trials, refereeMode } from './game.ts';
-import { modelConfigured, modelName, stats } from './openrouter.ts';
+import { modelConfigured, modelName, providerLabel, stats } from './openrouter.ts';
 import { kaneProbe, kaneConfig } from './kane.ts';
 
 const HOST = process.env.HOST || '127.0.0.1', PORT = Number(process.env.PORT || 3000);
@@ -36,7 +36,7 @@ async function api(req: IncomingMessage, res: ServerResponse, path: string) {
     const k = await kaneProbe();
     const recent = stats.slice(-50);
     return json(res, 200, {
-      openrouter: { configured: modelConfigured(), model: modelConfigured() ? modelName() : null, recentCalls: recent.length, recentFailures: recent.filter(s => !s.ok).length },
+      openrouter: { configured: modelConfigured(), provider: modelConfigured() ? providerLabel() : null, model: modelConfigured() ? modelName() : null, recentCalls: recent.length, recentFailures: recent.filter(s => !s.ok).length },
       referee: { mode: refereeMode(), kane: k, kaneMode: kaneConfig().mode, timeoutS: kaneConfig().timeoutS, allowUnverified: process.env.ALLOW_UNVERIFIED_RULES === '1' },
       authority: 'server',
     });
@@ -110,7 +110,7 @@ if (process.env.RULE_SABOTAGE_NO_LISTEN !== '1') {
   server.listen(PORT, HOST, async () => {
     const k = await kaneProbe();
     console.log(`Rule Sabotage on http://${HOST}:${PORT}`);
-    console.log(`  OpenRouter: ${modelConfigured() ? `configured (${modelName()})` : 'NOT configured -> offline parser + local planner (labelled in UI)'}`);
+    console.log(`  LLM:        ${modelConfigured() ? `${providerLabel()} (${modelName()})` : 'NOT configured -> offline parser + local planner (labelled in UI)'}`);
     console.log(`  Referee:    ${refereeMode() === 'kane' ? `Kane (${k.detail})` : 'engine-only (KANE_REFEREE=off)'}`);
   });
 }

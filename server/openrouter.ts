@@ -1,15 +1,31 @@
 /**
- * OpenRouter access (server-side only; the key never reaches the browser).
+ * LLM access through an OpenAI-compatible chat API: OpenRouter (default) or NVIDIA's
+ * integrate.api.nvidia.com. Server-side only; keys never reach the browser or the logs.
  * Every reply is treated as untrusted text and validated by the caller.
+ *   LLM_PROVIDER=openrouter|nvidia  (default: openrouter if OPENROUTER_API_KEY is set, else nvidia if NVIDIA_API_KEY is set)
  */
 import { appendFile, mkdir } from 'node:fs/promises';
 import { resolve, dirname } from 'node:path';
 import { INTERPRET_SCHEMA, EFFECT_KINDS } from './rules.ts';
 
-const ENDPOINT = 'https://openrouter.ai/api/v1/chat/completions';
 export const DEFAULT_FREE_MODEL = 'openrouter/free';
-export const modelName = () => process.env.OPENROUTER_MODEL || DEFAULT_FREE_MODEL;
-export const modelConfigured = () => Boolean(process.env.OPENROUTER_API_KEY);
+export const DEFAULT_NVIDIA_MODEL = 'meta/llama-3.3-70b-instruct';
+type Provider = { id: 'openrouter' | 'nvidia'; label: string; endpoint: string; key: string; model: string };
+export function provider(): Provider | null {
+  const want = (process.env.LLM_PROVIDER || '').toLowerCase();
+  const or = process.env.OPENROUTER_API_KEY, nv = process.env.NVIDIA_API_KEY;
+  const pick = want === 'nvidia' || want === 'openrouter' ? want : or ? 'openrouter' : nv ? 'nvidia' : null;
+  if (pick === 'openrouter' && or) return { id: 'openrouter', label: 'OpenRouter', endpoint: 'https://openrouter.ai/api/v1/chat/completions', key: or, model: process.env.OPENROUTER_MODEL || DEFAULT_FREE_MODEL };
+  if (pick === 'nvidia' && nv) {
+    const base = (process.env.NVIDIA_BASE_URL || 'https://integrate.api.nvidia.com/v1').replace(/\/+$/, '');
+    if (!/^https:\/\//.test(base)) return null;
+    return { id: 'nvidia', label: 'NVIDIA', endpoint: `${base}/chat/completions`, key: nv, model: process.env.NVIDIA_MODEL || DEFAULT_NVIDIA_MODEL };
+  }
+  return null;
+}
+export const modelName = () => provider()?.model ?? DEFAULT_FREE_MODEL;
+export const modelConfigured = () => provider() !== null;
+export const providerLabel = () => provider()?.label ?? 'none';
 
 export type FailureKind = 'not_configured' | 'timeout' | 'rate_limited' | 'http_error' | 'network' | 'invalid_json' | 'invalid_reply';
 export class ProviderError extends Error {
@@ -17,11 +33,12 @@ export class ProviderError extends Error {
   constructor(kind: FailureKind, message: string) { super(message); this.name = 'ProviderError'; this.kind = kind; }
 }
 
-export type CallStat = { at: string; task: string; model: string; ok: boolean; ms: number; failure?: FailureKind; detail?: string; structured: boolean };
+export type CallStat = { at: string; provider?: string; task: string; model: string; ok: boolean; ms: number; failure?: FailureKind; detail?: string; structured: boolean };
 export const stats: CallStat[] = [];
 let cooldownUntil = 0;
 
 async function log(stat: CallStat) {
+  stat = { provider: provider()?.id, ...stat };
   stats.push(stat); if (stats.length > 500) stats.shift();
   const file = resolve(process.env.OPENROUTER_LOG || 'evidence/openrouter/calls.ndjson');
   try { await mkdir(dirname(file), { recursive: true }); await appendFile(file, JSON.stringify(stat) + '\n'); } catch { /* logging must never break play */ }
@@ -40,8 +57,9 @@ function extractJSON(content: string): unknown {
 }
 
 export async function chatJSON(task: string, system: string, user: string, schema: object, opts: { temperature?: number; maxTokens?: number; timeoutMs?: number } = {}): Promise<unknown> {
-  const key = process.env.OPENROUTER_API_KEY, model = modelName();
-  if (!key) throw new ProviderError('not_configured', 'OPENROUTER_API_KEY is not set');
+  const prov = provider();
+  if (!prov) throw new ProviderError('not_configured', 'no LLM provider key is set');
+  const { key, model } = prov;
   if (Date.now() < cooldownUntil) throw new ProviderError('rate_limited', `cooling down after a rate limit (${Math.ceil((cooldownUntil - Date.now()) / 1000)}s left)`);
   // First try strict structured output; if the provider rejects the parameter, retry once with plain JSON instructions.
   for (const structured of [true, false]) {
@@ -51,11 +69,12 @@ export async function chatJSON(task: string, system: string, user: string, schem
       const body: Record<string, unknown> = {
         // Free routes often land on reasoning models, which spend the whole token budget thinking and
         // return empty content. Keep reasoning short and leave room for it.
-        model, temperature: opts.temperature ?? 0, max_tokens: Math.max(opts.maxTokens ?? 300, 1500), reasoning: { effort: 'low', exclude: true },
+        model, temperature: opts.temperature ?? 0, max_tokens: Math.max(opts.maxTokens ?? 300, 1500),
         messages: [{ role: 'system', content: structured ? system : `${system}\nReply with ONLY a JSON object matching this JSON Schema, no prose:\n${JSON.stringify(schema)}` }, { role: 'user', content: user }],
       };
+      if (prov.id === 'openrouter') body.reasoning = { effort: 'low', exclude: true };
       if (structured) body.response_format = { type: 'json_schema', json_schema: { name: task.replace(/\W/g, '_'), strict: true, schema } };
-      const res = await fetchImpl(ENDPOINT, {
+      const res = await fetchImpl(prov.endpoint, {
         method: 'POST', signal: ctrl.signal,
         headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json', 'X-Title': 'Rule Sabotage (local game)' },
         body: JSON.stringify(body),
@@ -67,8 +86,8 @@ export async function chatJSON(task: string, system: string, user: string, schem
       }
       if (!res.ok) {
         const text = (await res.text().catch(() => '')).slice(0, 300);
-        if (structured && (res.status === 400 || res.status === 404 || res.status === 422) && /response_format|json_schema|structured|support/i.test(text)) {
-          await log({ at: new Date().toISOString(), task, model, ok: false, ms: Date.now() - t0, failure: 'http_error', detail: `structured output unsupported: HTTP ${res.status}`, structured });
+        if (structured && (res.status === 400 || res.status === 422 || (res.status === 404 && /response_format|json_schema|structured|support/i.test(text)))) {
+          await log({ at: new Date().toISOString(), task, model, ok: false, ms: Date.now() - t0, failure: 'http_error', detail: `structured output refused: HTTP ${res.status}: ${text.slice(0, 120)}`, structured });
           continue;
         }
         throw new ProviderError('http_error', `HTTP ${res.status}: ${text.slice(0, 160)}`);

@@ -15,7 +15,7 @@ const shots = process.env.SHOTS_DIR || `${root}evidence/browser`;
 mkdirSync(shots, { recursive: true });
 const port = 3200 + Math.floor(Math.random() * 500);
 const useDouble = process.env.KANE_DOUBLE === '1';
-const env = { ...process.env, PORT: String(port), OPENROUTER_API_KEY: '', KANE_REFEREE: useDouble ? 'on' : 'off', KANE_CLI: `${root}tests/fixtures/fake-kane.mjs`, KANE_CHROME: process.env.KANE_CHROME || '/opt/pw-browsers/chromium', KANE_EVIDENCE_DIR: '/tmp/rs-e2e-kane' };
+const env = { ...process.env, PORT: String(port), OPENROUTER_API_KEY: '', NVIDIA_API_KEY: '', KANE_REFEREE: useDouble ? 'on' : 'off', KANE_CLI: `${root}tests/fixtures/fake-kane.mjs`, KANE_CHROME: process.env.KANE_CHROME || '/opt/pw-browsers/chromium', KANE_EVIDENCE_DIR: '/tmp/rs-e2e-kane' };
 const srv = spawn(process.execPath, ['--experimental-strip-types', '--no-warnings=ExperimentalWarning', 'server/server.ts'], { cwd: root, env, stdio: ['ignore', 'pipe', 'pipe'] });
 await new Promise<void>((res, rej) => { srv.stdout.on('data', (d: Buffer) => { if (String(d).includes('Rule Sabotage on')) res(); }); setTimeout(() => rej(new Error('server did not start')), 15000); });
 

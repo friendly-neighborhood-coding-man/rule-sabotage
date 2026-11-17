@@ -12,7 +12,7 @@ import {
   type Player, type Interpretation, PLAYERS, offlineInterpret, parseModelInterpretation, shortLabel, guardText, policyReject, sameEffect, MAX_CELLS_PER_TURN,
 } from './rules.ts';
 import { planTurn, planMoves, aiPhrase, describeTurn, type Plan, type TurnPlan } from './ai.ts';
-import { chatJSON, modelConfigured, modelName, ProviderError, INTERPRET_SYSTEM, INTERPRET_SCHEMA, interpretUserPrompt, OPPONENT_SYSTEM, OPPONENT_SCHEMA } from './openrouter.ts';
+import { chatJSON, modelConfigured, modelName, providerLabel, ProviderError, INTERPRET_SYSTEM, INTERPRET_SCHEMA, interpretUserPrompt, OPPONENT_SYSTEM, OPPONENT_SCHEMA } from './openrouter.ts';
 import { buildTrial, renderTrialPage, KANE_CONDITIONS, type Trial } from './trial.ts';
 import { kaneJudge, kaneConfig, type KaneResult } from './kane.ts';
 import { reactionsFor, achievementsFor, type Achievement } from './flavor.ts';
@@ -22,7 +22,7 @@ export type Verdict = {
   message: string; proposedTurn: number; resolvedTurn: number | null; placedCells: string[]; skippedCells: string[]; trial: Pick<Trial, 'trialId' | 'buildMs' | 'engineChecks'> & { scenarioIds: string[] }; kane: KaneResult | null; activated: boolean;
 };
 export type AIDecision = {
-  source: 'openrouter' | 'local-planner'; model: string | null; fallbackReason: string | null; taunt: string; rationale: string;
+  source: 'openrouter' | 'local-planner'; provider?: string; model: string | null; fallbackReason: string | null; taunt: string; rationale: string;
   plan: { candidates: number; sims: number; ms: number; chosen: string; score: number }; ruleText: string | null; ruleInterpretation: Interpretation | null; decidedAt: string; ms: number;
 };
 type Pending = { token: string; text: string; interpretation: Interpretation; at: number };
@@ -51,7 +51,7 @@ export async function interpretRule(text: string): Promise<{ interpretation: Int
   const k = text.trim().toLowerCase();
   const hit = interpCache.get(k);
   if (hit) return { interpretation: hit, fallback: null, ms: 0 };
-  if (!modelConfigured()) return { interpretation: offlineInterpret(text), fallback: 'OpenRouter not configured: offline parser used', ms: Date.now() - t0 };
+  if (!modelConfigured()) return { interpretation: offlineInterpret(text), fallback: 'no LLM provider configured: offline parser used', ms: Date.now() - t0 };
   try {
     const raw = await chatJSON('interpret_rule', INTERPRET_SYSTEM, interpretUserPrompt(text.trim()), INTERPRET_SCHEMA, { temperature: 0, maxTokens: 200, timeoutMs: 15_000 });
     const interpretation = parseModelInterpretation(raw, text);
@@ -59,7 +59,7 @@ export async function interpretRule(text: string): Promise<{ interpretation: Int
     return { interpretation, fallback: null, ms: Date.now() - t0 };
   } catch (e) {
     const why = e instanceof ProviderError ? `${e.kind}: ${e.message}` : `invalid model output: ${(e as Error).message}`;
-    return { interpretation: offlineInterpret(text), fallback: `OpenRouter failed (${why}); offline parser used`, ms: Date.now() - t0 };
+    return { interpretation: offlineInterpret(text), fallback: `${providerLabel()} failed (${why}); offline parser used`, ms: Date.now() - t0 };
   }
 }
 
@@ -149,7 +149,7 @@ export const getGame = (id: string) => games.get(id);
 export function view(g: Game) {
   return {
     gameId: g.id, ...publicView(g.state), busy: g.busy, refereeMode: g.refereeMode, achievements: g.achievements,
-    model: modelConfigured() ? modelName() : null, legal: legalMoves(g.state, 'human'), maxCells: MAX_CELLS_PER_TURN,
+    model: modelConfigured() ? modelName() : null, provider: modelConfigured() ? providerLabel() : null, legal: legalMoves(g.state, 'human'), maxCells: MAX_CELLS_PER_TURN,
     reviews: g.reviews.slice(-12).map(r => ({ ...r.verdict, events: r.events })),
   };
 }
@@ -239,7 +239,7 @@ export async function decideAI(s: State): Promise<{ decision: AIDecision; plan: 
       decision: { source: 'local-planner' as const, model: null, fallbackReason: reason, taunt: localTaunt(c, s), rationale: `Simulated ${plan.candidates} turn plans (${plan.sims} engine runs, including your best reply); chose “${c.summary}”.`, plan: meta(c), ruleText: null, ruleInterpretation: null, decidedAt: new Date().toISOString(), ms: Date.now() - t0 },
     };
   };
-  if (!modelConfigured()) return local('OpenRouter not configured');
+  if (!modelConfigured()) return local('no LLM provider configured');
   const options = plan.ranked.slice(0, 6);
   const pieceView = (p: Player) => s.pieces.filter(q => q.owner === p).map(q => (q.scored ? 'scored' : cellName(`${q.x},${q.y}`) + (q.frozen ? ' (frozen)' : '')));
   const payload = {
@@ -253,9 +253,9 @@ export async function decideAI(s: State): Promise<{ decision: AIDecision; plan: 
     const chosen = options.find(c => c.id === raw?.choice);
     if (!chosen) throw new ProviderError('invalid_reply', `unknown option ${String(raw?.choice).slice(0, 20)}`);
     const text = chosen.placement ? (typeof raw.ruleText === 'string' && raw.ruleText.trim() ? raw.ruleText.trim().slice(0, 160) : aiPhrase(chosen.placement.effect, s.turn)) : null;
-    return { plan: chosen, text, decision: { source: 'openrouter', model: modelName(), fallbackReason: null, taunt: typeof raw.taunt === 'string' ? raw.taunt.slice(0, 90) : '', rationale: typeof raw.rationale === 'string' ? raw.rationale.slice(0, 240) : '', plan: meta(chosen), ruleText: text, ruleInterpretation: null, decidedAt: new Date().toISOString(), ms: Date.now() - t0 } };
+    return { plan: chosen, text, decision: { source: 'openrouter', provider: providerLabel(), model: modelName(), fallbackReason: null, taunt: typeof raw.taunt === 'string' ? raw.taunt.slice(0, 90) : '', rationale: typeof raw.rationale === 'string' ? raw.rationale.slice(0, 240) : '', plan: meta(chosen), ruleText: text, ruleInterpretation: null, decidedAt: new Date().toISOString(), ms: Date.now() - t0 } };
   } catch (e) {
-    return local(`OpenRouter failed (${e instanceof ProviderError ? `${e.kind}: ${e.message}` : (e as Error).message})`);
+    return local(`${providerLabel()} failed (${e instanceof ProviderError ? `${e.kind}: ${e.message}` : (e as Error).message})`);
   }
 }
 function localTaunt(c: TurnPlan, s: State): string {

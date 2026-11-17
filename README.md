@@ -37,6 +37,8 @@ With no configuration the game runs fully offline: an offline parser reads rules
 cp .env.example .env
 # OPENROUTER_API_KEY=sk-or-...   (server-side only; never sent to the browser)
 # OPENROUTER_MODEL=openrouter/free   (free pool; for a reliable demo pin one specific model)
+# or NVIDIA's OpenAI-compatible API instead:
+# LLM_PROVIDER=nvidia  NVIDIA_API_KEY=nvapi-...  NVIDIA_MODEL=meta/llama-3.3-70b-instruct
 npm i -g @testmuai/kane-cli && kane-cli login     # Kane referee
 npm start
 ```

@@ -9,10 +9,10 @@ process.env.RULE_SABOTAGE_NO_LISTEN = '1';
 process.env.KANE_REFEREE = 'off';
 const { interpretRule, decideAI } = await import('../server/game.ts');
 const { planTurn } = await import('../server/ai.ts');
-const { modelConfigured, modelName, stats } = await import('../server/openrouter.ts');
+const { modelConfigured, modelName, providerLabel, stats } = await import('../server/openrouter.ts');
 const { init, applyPlacement, applyMove, endTurn } = await import('../server/engine.ts');
 
-if (!modelConfigured()) { console.log('NOT_RUN: OPENROUTER_API_KEY not set'); process.exit(0); }
+if (!modelConfigured()) { console.log('NOT_RUN: no LLM provider key set (OPENROUTER_API_KEY or NVIDIA_API_KEY)'); process.exit(0); }
 type Case = { text: string; expect: string };
 const KO: Case[] = [
   ['밟으면 두 칸 뒤로 밀려난다', 'shove-back-2'], ['이 칸에 들어온 말은 한 칸 뒤로 튕겨 나간다', 'shove-back-1'], ['밟으면 북쪽으로 두 칸 밀려난다', 'shove-north-2'],
@@ -71,11 +71,11 @@ for (let i = 0; i < 10; i++) {
 void init;
 const sum = (set: string) => { const r = rows.filter(x => x.set === set); return { n: r.length, pass: r.filter(x => x.pass).length, live: r.filter(x => x.live).length, fallback: r.filter(x => x.fallback).length, medianMs: r.map(x => x.ms).sort((a, b) => a - b)[Math.floor(r.length / 2)] }; };
 const calls = stats.length, failures = stats.filter(s => !s.ok);
-const report = { at: new Date().toISOString(), model: modelName(), summary: { ko: sum('ko'), en: sum('en'), reject: sum('reject'), ai: { n: ai.length, openrouter: ai.filter(a => a.source === 'openrouter').length, medianMs: ai.map(a => a.ms).sort((a, b) => a - b)[Math.floor(ai.length / 2)] } }, calls, failures: failures.map(f => ({ task: f.task, kind: f.failure, detail: f.detail })), rows, ai };
+const report = { at: new Date().toISOString(), provider: providerLabel(), model: modelName(), summary: { ko: sum('ko'), en: sum('en'), reject: sum('reject'), ai: { n: ai.length, openrouter: ai.filter(a => a.source === 'openrouter').length, medianMs: ai.map(a => a.ms).sort((a, b) => a - b)[Math.floor(ai.length / 2)] } }, calls, failures: failures.map(f => ({ task: f.task, kind: f.failure, detail: f.detail })), rows, ai };
 await mkdir('evidence/openrouter', { recursive: true });
 const stamp = report.at.replace(/[:.]/g, '-');
 await writeFile(`evidence/openrouter/eval-${stamp}.json`, JSON.stringify(report, null, 2));
-const md = [`# Live OpenRouter evaluation ${report.at}`, '', `Model: \`${report.model}\` · API calls: ${calls} · failed calls: ${failures.length}`, '',
+const md = [`# Live LLM evaluation ${report.at}`, '', `Provider: ${report.provider} · Model: \`${report.model}\` · API calls: ${calls} · failed calls: ${failures.length}`, '',
   '| Set | Cases | Correct | Answered by model | Fell back | Median latency |', '|---|---|---|---|---|---|',
   ...(['ko', 'en', 'reject'] as const).map(k => { const s = report.summary[k]; return `| ${k} | ${s.n} | ${s.pass} | ${s.live} | ${s.fallback} | ${s.medianMs} ms |`; }),
   `| AI turns | ${ai.length} | n/a | ${report.summary.ai.openrouter} | ${ai.length - report.summary.ai.openrouter} | ${report.summary.ai.medianMs} ms |`, '',

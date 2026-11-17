@@ -17,6 +17,8 @@ process.env.KANE_EVIDENCE_DIR = join(tmp, 'kane');
 process.env.OPENROUTER_LOG = join(tmp, 'or.ndjson');
 process.env.KANE_REFEREE = 'off';
 delete process.env.OPENROUTER_API_KEY;
+delete process.env.NVIDIA_API_KEY;
+delete process.env.LLM_PROVIDER;
 
 const { newGame, startGame, preview, placeHuman, moveHuman, endHumanTurn, interpretRule, view, decideAI } = await import('../server/game.ts');
 const { setFetch } = await import('../server/openrouter.ts');
@@ -27,10 +29,10 @@ const { server } = await import('../server/server.ts');
 const { buildTrial, renderTrialPage, KANE_CONDITIONS } = await import('../server/trial.ts');
 const { makeEffect } = await import('../server/rules.ts');
 
-const mockFetch = (handler: (body: any) => { status?: number; json?: unknown; text?: string; headers?: Record<string, string> } | 'hang') =>
+const mockFetch = (handler: (body: any, url?: string) => { status?: number; json?: unknown; text?: string; headers?: Record<string, string> } | 'hang') =>
   setFetch((async (_url: unknown, init?: { body?: string; signal?: AbortSignal }) => {
     const body = JSON.parse(String(init?.body ?? '{}'));
-    const r = handler(body);
+    const r = handler(body, String(_url));
     if (r === 'hang') return new Promise((_, rej) => init?.signal?.addEventListener('abort', () => rej(Object.assign(new Error('aborted'), { name: 'AbortError' }))));
     return new Response(r.text ?? JSON.stringify(r.json ?? {}), { status: r.status ?? 200, headers: r.headers });
   }) as typeof fetch);
@@ -155,6 +157,24 @@ test('OpenRouter (mocked): structured-output rejection or an empty reply retries
   assert.equal(calls, 2);
   assert.equal(r2.interpretation.source, 'openrouter');
   delete process.env.OPENROUTER_API_KEY;
+});
+
+test('NVIDIA provider (mocked): OpenAI-compatible endpoint, labelled, no OpenRouter-only parameters, key never in the body', async () => {
+  process.env.NVIDIA_API_KEY = 'nv-test-key-not-real';
+  process.env.NVIDIA_BASE_URL = 'https://integrate.api.nvidia.com/v1';
+  let url = '', body: any = null;
+  mockFetch((b, u) => { url = u!; body = b; return reply({ status: 'ok', kind: 'haste', dir: 'none', amount: 1, note: '' }); });
+  const { providerLabel, modelName } = await import('../server/openrouter.ts');
+  assert.equal(providerLabel(), 'NVIDIA');
+  assert.equal(modelName(), 'meta/llama-3.3-70b-instruct');
+  const r = await interpretRule('mock nvidia: one more move');
+  assert.equal(url, 'https://integrate.api.nvidia.com/v1/chat/completions');
+  assert.equal(body.reasoning, undefined);
+  assert.ok(!JSON.stringify(body).includes('nv-test-key'));
+  assert.equal(r.interpretation.source, 'openrouter');
+  process.env.NVIDIA_BASE_URL = 'http://insecure.example/v1';
+  assert.equal(providerLabel(), 'none', 'non-https base URL is refused');
+  delete process.env.NVIDIA_API_KEY; delete process.env.NVIDIA_BASE_URL;
 });
 
 test('OpenRouter (mocked) opponent: unknown option ids are refused and the local planner takes over', async () => {

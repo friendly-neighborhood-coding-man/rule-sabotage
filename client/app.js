@@ -120,7 +120,7 @@ async function interpret() {
   try {
     const r = await api(`/api/game/${view.gameId}/preview`, { text });
     const i = r.interpretation;
-    const src = i.source === 'openrouter' ? `Interpreted by OpenRouter (${r.ms} ms)` : i.source === 'input-guard' ? 'Blocked by the input guard' : 'Interpreted by the offline parser' + (r.fallback ? ` (${r.fallback})` : '');
+    const src = i.source === 'openrouter' ? `Interpreted by ${view.provider || 'the model'} · ${view.model} (${r.ms} ms)` : i.source === 'input-guard' ? 'Blocked by the input guard' : 'Interpreted by the offline parser' + (r.fallback ? ` (${r.fallback})` : '');
     if (i.status === 'reject') {
       pending = null; picked.clear();
       pv.innerHTML = `<div class="pv-head reject"><span class="pv-icon">⛔</span><div><b>Not allowed</b><p>${esc(i.reason)}</p></div></div><div class="pv-src">${esc(src)}</div>`;
@@ -204,7 +204,7 @@ async function applyAI(ai, finalView) {
   view = finalView;
   logTurn('AI', ai.events.concat(ai.endEvents || []), ai.verdicts, d);
   react(ai.reactions);
-  $('ai-record').innerHTML = `<b>${d.source === 'openrouter' ? `OpenRouter (${esc(d.model)})` : 'Local planner'}</b> chose: ${esc(d.plan.chosen)}<br><small>${esc(d.rationale)}${d.fallbackReason ? ` · fallback: ${esc(d.fallbackReason)}` : ''}</small>`;
+  $('ai-record').innerHTML = `<b>${d.source === 'openrouter' ? `${esc(d.provider || 'LLM')} (${esc(d.model)})` : 'Local planner'}</b> chose: ${esc(d.plan.chosen)}<br><small>${esc(d.rationale)}${d.fallbackReason ? ` · fallback: ${esc(d.fallbackReason)}` : ''}</small>`;
   $('ai-lock').textContent = '';
 }
 
@@ -317,7 +317,7 @@ function logTurn(by, events, verdicts = [], decision = null) {
   }
   if (!lines.length) return;
   const li = document.createElement('li');
-  li.innerHTML = `<b class="${by === 'You' ? 'h' : 'a'}">${by}</b> · turn ${view.turn}<ul>${lines.map(l => `<li>${esc(l)}</li>`).join('')}</ul>` + (decision ? `<div class="ai-record">${esc(decision.source === 'openrouter' ? 'OpenRouter' : 'Local planner')}: ${esc(decision.rationale)}</div>` : '');
+  li.innerHTML = `<b class="${by === 'You' ? 'h' : 'a'}">${by}</b> · turn ${view.turn}<ul>${lines.map(l => `<li>${esc(l)}</li>`).join('')}</ul>` + (decision ? `<div class="ai-record">${esc(decision.source === 'openrouter' ? (decision.provider || 'LLM') : 'Local planner')}: ${esc(decision.rationale)}</div>` : '');
   $('log').prepend(li);
 }
 
@@ -352,7 +352,7 @@ async function loadHealth() {
   try {
     const h = await api('/api/health');
     const b = $('brain-chip'), r = $('referee-chip');
-    b.textContent = h.openrouter.configured ? `AI brain: OpenRouter (${h.openrouter.model})` : 'AI brain: local planner (OpenRouter off)';
+    b.textContent = h.openrouter.configured ? `AI brain: ${h.openrouter.provider} (${h.openrouter.model})` : 'AI brain: local planner (no LLM key)';
     b.classList.add(h.openrouter.configured ? 'on' : 'off');
     const k = h.referee.kane;
     r.textContent = h.referee.mode === 'kane' ? (k.installed && k.loggedIn !== false ? `Referee: Kane ${k.version || ''}` : 'Referee: Kane (unavailable, rules stay unverified)') : 'Referee: engine only (NOT Kane-verified)';
