@@ -1,0 +1,14 @@
+{
+  "name": "rule-sabotage-v2",
+  "private": true,
+  "version": "0.2.0",
+  "type": "module",
+  "engines": {
+    "node": ">=22.10"
+  },
+  "scripts": {
+    "start": "node --env-file-if-exists=.env --experimental-strip-types server/server.ts",
+    "test": "node --experimental-strip-types --test tests/*.test.cjs tests/*.test.mjs",
+    "verify": "npm test"
+  }
+}

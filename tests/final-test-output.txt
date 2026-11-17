@@ -1,0 +1,190 @@
+
+> rule-sabotage-v2@0.2.0 test
+> node --experimental-strip-types --test tests/*.test.cjs tests/*.test.mjs
+
+TAP version 13
+# (node:2813) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: V1 deterministic baseline mechanics retained
+ok 1 - V1 deterministic baseline mechanics retained
+  ---
+  duration_ms: 0.986277
+  type: 'test'
+  ...
+# Subtest: TypeScript effect contract rejects unknown kinds and malformed decisions
+ok 2 - TypeScript effect contract rejects unknown kinds and malformed decisions
+  ---
+  duration_ms: 0.440775
+  type: 'test'
+  ...
+# Subtest: same freeze effect is allowed for both players on a line
+ok 3 - same freeze effect is allowed for both players on a line
+  ---
+  duration_ms: 1.829089
+  type: 'test'
+  ...
+# Subtest: 3x3 freeze is rejected symmetrically as too strong
+ok 4 - 3x3 freeze is rejected symmetrically as too strong
+  ---
+  duration_ms: 0.591903
+  type: 'test'
+  ...
+# Subtest: 3x3 backward is allowed, preserves one-shot and both directions
+ok 5 - 3x3 backward is allowed, preserves one-shot and both directions
+  ---
+  duration_ms: 1.06774
+  type: 'test'
+  ...
+# Subtest: judge never claims actual Kane verification
+ok 6 - judge never claims actual Kane verification
+  ---
+  duration_ms: 0.288455
+  type: 'test'
+  ...
+# Subtest: unlimited, malicious, and multi-effect rule texts are not executable
+ok 7 - unlimited, malicious, and multi-effect rule texts are not executable
+  ---
+  duration_ms: 0.291249
+  type: 'test'
+  ...
+# Subtest: public state rejected if the common geometry is forged
+ok 8 - public state rejected if the common geometry is forged
+  ---
+  duration_ms: 0.361435
+  type: 'test'
+  ...
+# Subtest: public snapshot cannot smuggle a hidden move through model prompt fields
+ok 9 - public snapshot cannot smuggle a hidden move through model prompt fields
+  ---
+  duration_ms: 0.639745
+  type: 'test'
+  ...
+# Subtest: offline mode does not fabricate an OpenRouter response
+ok 10 - offline mode does not fabricate an OpenRouter response
+  ---
+  duration_ms: 1.154692
+  type: 'test'
+  ...
+# Subtest: browser and server deterministic engines are in sync
+ok 11 - browser and server deterministic engines are in sync
+  ---
+  duration_ms: 10.633006
+  type: 'test'
+  ...
+# Subtest: model API key never shipped in browser files
+ok 12 - model API key never shipped in browser files
+  ---
+  duration_ms: 1.907817
+  type: 'test'
+  ...
+# Subtest: parses four semantic variants from natural Korean
+ok 13 - parses four semantic variants from natural Korean
+  ---
+  duration_ms: 1.948198
+  type: 'test'
+  ...
+# Subtest: alternative Korean phrasing for freeze works
+ok 14 - alternative Korean phrasing for freeze works
+  ---
+  duration_ms: 0.303698
+  type: 'test'
+  ...
+# Subtest: unlimited, biased or oversized effects rejected
+ok 15 - unlimited, biased or oversized effects rejected
+  ---
+  duration_ms: 0.194733
+  type: 'test'
+  ...
+# Subtest: ambiguous double effect is rejected
+ok 16 - ambiguous double effect is rejected
+  ---
+  duration_ms: 0.09974
+  type: 'test'
+  ...
+# Subtest: unsafe model outputs rejected even with benign source text
+ok 17 - unsafe model outputs rejected even with benign source text
+  ---
+  duration_ms: 0.111478
+  type: 'test'
+  ...
+# Subtest: shared shapes are rotationally symmetric & never place on start / goal
+ok 18 - shared shapes are rotationally symmetric & never place on start / goal
+  ---
+  duration_ms: 0.847148
+  type: 'test'
+  ...
+# Subtest: same shape for both competitors across each simultaneous round
+ok 19 - same shape for both competitors across each simultaneous round
+  ---
+  duration_ms: 0.703271
+  type: 'test'
+  ...
+# Subtest: new trap placed by one side can hit either side, then consumed per tile
+ok 20 - new trap placed by one side can hit either side, then consumed per tile
+  ---
+  duration_ms: 0.320073
+  type: 'test'
+  ...
+# Subtest: human can trigger own trap without second trigger cascade
+ok 21 - human can trigger own trap without second trigger cascade
+  ---
+  duration_ms: 0.457339
+  type: 'test'
+  ...
+# Subtest: freeze consumes next player action only and then clears
+ok 22 - freeze consumes next player action only and then clears
+  ---
+  duration_ms: 0.462928
+  type: 'test'
+  ...
+# Subtest: new shape placement overwrites intersections and deletes depleted zones
+ok 23 - new shape placement overwrites intersections and deletes depleted zones
+  ---
+  duration_ms: 0.420645
+  type: 'test'
+  ...
+# Subtest: max slots only permits replacement or removal, not new deployment
+ok 24 - max slots only permits replacement or removal, not new deployment
+  ---
+  duration_ms: 0.187553
+  type: 'test'
+  ...
+# Subtest: AI considers candidate human responses and chooses legal action
+ok 25 - AI considers candidate human responses and chooses legal action
+  ---
+  duration_ms: 29.661866
+  type: 'test'
+  ...
+# Subtest: deterministic AI and random shape generation with fixed seed
+ok 26 - deterministic AI and random shape generation with fixed seed
+  ---
+  duration_ms: 22.335226
+  type: 'test'
+  ...
+# Subtest: both players reach goal same round means draw
+ok 27 - both players reach goal same round means draw
+  ---
+  duration_ms: 0.153672
+  type: 'test'
+  ...
+# Subtest: AI and human play 25 rounds without crashing
+ok 28 - AI and human play 25 rounds without crashing
+  ---
+  duration_ms: 59.688893
+  type: 'test'
+  ...
+# Subtest: simultaneous stale slot operations remain safe after trap overwrite
+ok 29 - simultaneous stale slot operations remain safe after trap overwrite
+  ---
+  duration_ms: 0.227383
+  type: 'test'
+  ...
+1..29
+# tests 29
+# suites 0
+# pass 29
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 174.063581
