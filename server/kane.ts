@@ -96,9 +96,13 @@ async function openChrome(url: string): Promise<{ cdp: string; close: () => Prom
   const port = await freePort();
   const profile = await mkdtemp(join(tmpdir(), 'rs-kane-'));
   const child = spawn(chrome, ['--headless=new', `--remote-debugging-port=${port}`, `--user-data-dir=${profile}`, '--no-first-run', '--no-default-browser-check', '--disable-gpu', ...(process.platform === 'linux' ? ['--no-sandbox'] : []), url], { stdio: 'ignore', windowsHide: true });
+  // Without an 'error' listener a missing browser binary is an uncaught exception (it crashed Node on Windows).
+  let spawnErr: Error | null = null;
+  child.on('error', e => { spawnErr = e; });
   const cdp = `http://127.0.0.1:${port}`;
   const until = Date.now() + 15_000;
   while (Date.now() < until) {
+    if (spawnErr) { await rm(profile, { recursive: true, force: true }).catch(() => {}); throw new Error(`could not start the browser at ${chrome}: ${(spawnErr as Error).message}`); }
     try {
       const r = await fetch(`${cdp}/json/list`);
       const pages = await r.json() as { url: string; type: string }[];

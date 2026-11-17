@@ -1,361 +1,336 @@
-/* Rule Sabotage client: renders server state and animates the server's event log.
-   The browser holds no authority: every rule, move and outcome comes from the server. */
+/* Rule Sabotage client. Renders server state; never decides game outcomes itself. */
 (() => {
 'use strict';
 const $ = id => document.getElementById(id);
 const SIZE = 7, COLS = 'ABCDEFG';
-const cellName = k => { const [x, y] = k.split(',').map(Number); return COLS[x] + (y + 1); };
-const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const name = k => { const [x, y] = k.split(',').map(Number); return COLS[x] + (y + 1); };
 const who = p => (p === 'human' ? 'You' : 'AI');
 const sleep = ms => new Promise(r => setTimeout(r, ms));
-const ICON = { push: '⏪', skip: '💤', reverse: '🔄', teleport: '🌀', swap: '🔀', shield: '🛡️' };
-const IDEAS = [
-  'Anyone stepping here gets pushed back two spaces!',
-  'Whoever lands here loses their next turn.',
-  'Step here and your next move is reversed.',
-  'Swap places with your rival!',
-  '밟으면 한 칸 뒤로 밀려난다',
-  '여기 밟으면 무작위 칸으로 순간이동',
-];
+const IDEAS = ['Anything entering here is shoved 2 squares north', 'Step here and get pushed back 2', 'Frozen for a turn', 'Sent back to the start', 'Gives a shield against the next trap', '+1 extra move', '밟으면 남쪽으로 두 칸 밀려난다', '이 칸에 들어오면 한 턴 얼어붙는다'];
 
-let view = null, health = null, busy = false, sel = null, rejectInfo = null, removeSlot = null, pollTimer = null, animating = false;
-let visual = null; // { pos:{human,ai}, traps: Map(cell -> {owner, icon}) } used during animation
+let view = null, busy = false, selected = null, pending = null, picked = new Set(), removing = new Set(), anim = null, lastAI = null;
 
 async function api(path, body) {
-  const res = await fetch(path, body === undefined ? {} : { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
-  const data = await res.json().catch(() => ({}));
-  if (!res.ok) throw Object.assign(new Error(data.reason || data.error || `HTTP ${res.status}`), { status: res.status });
-  return data;
+  const r = await fetch(path, body === undefined ? {} : { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(j.reason || j.error || `HTTP ${r.status}`);
+  return j;
 }
 
-// ---------------- rendering ----------------
+// ---------- board ----------
 function buildBoard() {
-  const board = $('board'); board.replaceChildren();
   $('col-labels').replaceChildren(...[...COLS].map(c => Object.assign(document.createElement('span'), { textContent: c })));
   $('row-labels').replaceChildren(...Array.from({ length: SIZE }, (_, i) => Object.assign(document.createElement('span'), { textContent: i + 1 })));
+  const b = $('board');
   for (let y = 0; y < SIZE; y++) for (let x = 0; x < SIZE; x++) {
     const c = document.createElement('button');
     c.type = 'button'; c.className = 'cell'; c.dataset.cell = `${x},${y}`;
-    if (x === 0) c.classList.add('home-human'); if (x === SIZE - 1) c.classList.add('home-ai');
-    if (x === 6) c.classList.add('goal-human'); if (x === 0) c.classList.add('goal-ai');
-    c.addEventListener('click', () => onCellClick(c.dataset.cell));
-    board.appendChild(c);
-  }
-  for (const p of ['human', 'ai']) {
-    const t = document.createElement('div'); t.className = `token ${p}`; t.id = `token-${p}`; t.textContent = p === 'human' ? 'YOU' : '🤖';
-    board.appendChild(t);
+    c.addEventListener('click', () => onCell(c.dataset.cell));
+    b.appendChild(c);
   }
 }
-const cellEl = k => $('board').querySelector(`[data-cell="${k}"]`);
-
-function trapsFromView(v) {
-  const m = new Map();
-  for (const p of ['human', 'ai']) for (const r of v.rules[p]) for (const c of r.cells) m.set(c, { owner: p, icon: r.icon, label: r.label, ruleId: r.id });
-  return m;
-}
-
-function placeToken(p, pos, how) {
-  const t = $(`token-${p}`), board = $('board');
-  const cell = cellEl(`${pos.x},${pos.y}`); if (!cell) return;
-  const other = p === 'human' ? visual?.pos.ai ?? view.positions.ai : visual?.pos.human ?? view.positions.human;
-  const shared = other && other.x === pos.x && other.y === pos.y;
-  const dx = shared ? (p === 'human' ? -8 : 8) : 0;
-  t.classList.toggle('teleport', how === 'teleport');
-  t.style.transform = `translate(${cell.offsetLeft + dx}px, ${cell.offsetTop}px)`;
-  t.style.width = cell.offsetWidth + 'px'; t.style.height = cell.offsetHeight + 'px';
-  void board;
-}
+const ruleById = id => view.rules.find(r => r.id === id);
+const myTurn = () => view && !busy && !view.winner && view.current === 'human';
+const placing = () => myTurn() && view.phase === 'place';
 
 function renderBoard() {
-  const v = view, traps = visual ? visual.traps : trapsFromView(v);
-  const shape = new Set(v.shape.cells), elig = new Set(v.eligible);
+  if (!view) return;
+  const pieces = anim ? anim.pieces : view.pieces, cells = anim ? anim.cells : view.cells;
+  const eligible = new Set(placing() && pending ? view.eligible : []);
+  const targets = new Set();
+  if (myTurn() && selected) for (const m of view.legal) if (m.from === selected) targets.add(neighbour(m.from, m.dir));
   for (const c of $('board').querySelectorAll('.cell')) {
-    const k = c.dataset.cell, t = traps.get(k);
-    c.className = 'cell' + (k.startsWith('0,') ? ' goal-ai' : '') + (k.startsWith('6,') ? ' goal-human' : '');
-    if (shape.has(k) && !v.winner) c.classList.add('shape');
-    if (elig.has(k) && sel && !busy) c.classList.add('pickable');
-    if (sel?.cells.has(k)) c.classList.add('picked');
-    if (t) c.classList.add('trap', `trap-${t.owner}`);
-    c.innerHTML = t ? `<span class="ticon">${t.icon}</span>` : sel?.cells.has(k) ? `<span class="ticon ghost">${ICON[sel.effect.kind]}</span>` : '';
-    c.title = `${cellName(k)}${t ? ` — ${who(t.owner)}r trap: ${t.label}` : ''}${elig.has(k) ? ' (trap allowed this round)' : ''}`;
-    c.disabled = !(sel && elig.has(k) && !busy);
-  }
-  const pos = visual ? visual.pos : v.positions;
-  placeToken('human', pos.human); placeToken('ai', pos.ai);
-}
-
-function slotCard(p, r, i) {
-  const el = document.createElement('div');
-  el.className = `slot ${p}` + (r ? ' filled' : '') + (p === 'human' && removeSlot === i ? ' removing' : '') + (p === 'human' && sel?.slot === i ? ' replacing' : '');
-  if (!r) { el.innerHTML = `<div class="empty">Empty slot</div>`; return el; }
-  const hits = `${r.hits.human ? `hit you ×${r.hits.human}` : ''}${r.hits.human && r.hits.ai ? ', ' : ''}${r.hits.ai ? `hit AI ×${r.hits.ai}` : ''}`;
-  el.innerHTML = `<div class="slot-head"><span class="sicon">${r.icon}</span><b>${esc(r.label)}</b><small>${r.cells.length}/${r.placedCells} live</small></div>
-    <q>${esc(r.text)}</q>
-    <div class="slot-foot"><small>${r.cells.map(cellName).join(' ')}${hits ? ` · ${hits}` : ''}</small>${r.approxNote ? `<small class="approx">≈ ${esc(r.approxNote)}</small>` : ''}</div>`;
-  if (p === 'human' && !busy && !view.winner) {
-    const bar = document.createElement('div'); bar.className = 'slot-actions';
-    const rm = document.createElement('button'); rm.type = 'button'; rm.textContent = removeSlot === i ? 'Keep' : 'Remove';
-    rm.addEventListener('click', () => { removeSlot = removeSlot === i ? null : i; if (removeSlot !== null && sel) sel.slot = undefined; render(); });
-    bar.appendChild(rm);
-    if (sel && view.rules.human.length >= view.slots) {
-      const rp = document.createElement('button'); rp.type = 'button'; rp.textContent = sel.slot === i ? 'Replacing ✓' : 'Replace with new trap';
-      rp.addEventListener('click', () => { sel.slot = i; removeSlot = null; render(); });
-      bar.appendChild(rp);
+    const k = c.dataset.cell, [x] = k.split(',').map(Number);
+    const rid = cells[k], rule = rid ? (anim ? anim.rules.get(rid) : ruleById(rid)) : null;
+    c.className = 'cell' + (x === 6 ? ' goal-human' : x === 0 ? ' goal-ai' : '') + (rule ? ` trap-${rule.owner}` : '')
+      + (eligible.has(k) ? ' pickable' : '') + (picked.has(k) ? ' picked' : '') + (removing.has(k) ? ' removing' : '')
+      + (selected === k ? ' selected' : '') + (targets.has(k) ? ' target' : '') + (anim?.flash?.has(k) ? ' boom' : '');
+    const here = pieces.filter(q => !q.scored && `${q.x},${q.y}` === k);
+    let html = rule ? `<span class="ticon" title="${esc(rule.label)}">${esc(rule.icon)}</span>` : '';
+    for (const owner of ['human', 'ai']) {
+      const mine = here.filter(q => q.owner === owner);
+      if (!mine.length) continue;
+      const frozen = mine.filter(q => q.frozen).length, shield = mine.some(q => q.shield);
+      html += `<span class="token ${owner}${frozen ? ' frozen' : ''}">${mine.length > 1 ? '×' + mine.length : ''}${shield ? '<i>🛡</i>' : ''}${frozen ? '<i>🧊</i>' : ''}</span>`;
     }
-    el.appendChild(bar);
+    c.innerHTML = html;
+    const label = `${name(k)}${rule ? `, ${rule.owner === 'human' ? 'your' : 'AI'} effect ${rule.label}` : ''}${here.length ? `, ${here.map(q => q.owner === 'human' ? 'your piece' : 'AI piece').join(', ')}` : ''}`;
+    c.setAttribute('aria-label', label);
   }
-  return el;
 }
+function neighbour(k, dir) { const [x, y] = k.split(',').map(Number); const d = { up: [0, -1], down: [0, 1], left: [-1, 0], right: [1, 0] }[dir]; return `${x + d[0]},${y + d[1]}`; }
 
-function statusText(p) {
-  const st = view.status[p], bits = [];
-  if (st.skip) bits.push('💤 skips next turn');
-  if (st.reverse) bits.push('🔄 next move reversed');
-  if (st.shield) bits.push('🛡️ shielded');
-  const left = Math.abs(view.goalX[p] - view.positions[p].x);
-  return `${left} column${left === 1 ? '' : 's'} to go · sabotage hits ${view.sabotage[p]}${bits.length ? ' · ' + bits.join(' · ') : ''}`;
+// ---------- side panels ----------
+function renderSides() {
+  for (const p of ['human', 'ai']) {
+    const rules = view.rules.filter(r => r.owner === p && r.cells.length);
+    $(`${p}-score`).textContent = `${view.scored[p]}/3 across`;
+    $(`${p}-count`).textContent = `${view.active[p]} cell${view.active[p] === 1 ? '' : 's'}`;
+    $(`${p}-rules`).replaceChildren(...(rules.length ? rules.map(r => {
+      const d = document.createElement('div');
+      d.className = `slot filled ${p}`;
+      d.innerHTML = `<div class="slot-head"><span>${esc(r.icon)}</span><b>${esc(r.label)}</b><small>turn ${r.turn}</small></div><q>${esc(r.text)}</q>`
+        + (r.approxNote ? `<small class="approx">≈ ${esc(r.approxNote)}</small>` : '') + `<div class="cells"></div>`;
+      for (const k of r.cells) {
+        const b = document.createElement(p === 'human' ? 'button' : 'span');
+        b.className = 'cellchip' + (removing.has(k) ? ' on' : ''); b.textContent = name(k);
+        if (p === 'human') { b.type = 'button'; b.disabled = !placing(); b.title = 'Mark for removal'; b.addEventListener('click', () => toggleRemove(k)); }
+        d.querySelector('.cells').appendChild(b);
+      }
+      return d;
+    }) : [Object.assign(document.createElement('div'), { className: 'slot empty', textContent: 'No effects on the board.' })]));
+  }
+  $('remove-hint').hidden = !placing() || !view.active.human;
 }
 
 function render() {
   if (!view) return;
-  $('round-chip').textContent = `Round ${Math.min(view.round, view.maxRounds)} / ${view.maxRounds}`;
-  $('priority-chip').textContent = view.winner ? 'Game over' : view.priority === 'human' ? 'You move first this round' : 'AI moves first this round';
-  $('priority-chip').className = 'chip ' + (view.priority === 'human' ? 'pri-human' : 'pri-ai');
-  $('shape-name').textContent = view.winner ? 'Game over' : `${view.shape.name}${view.shape.mirrorOf ? ' (mirror of last round)' : ''}`;
-  for (const p of ['human', 'ai']) {
-    $(`${p}-slots`).replaceChildren(...Array.from({ length: view.slots }, (_, i) => slotCard(p, view.rules[p][i], i)));
-    $(`${p}-slot-count`).textContent = `${view.rules[p].length}/${view.slots}`;
-    $(`${p}-status`).textContent = statusText(p);
-  }
-  renderBoard();
-  const frozen = view.status.human.skip;
-  for (const b of document.querySelectorAll('.mv')) b.disabled = busy || !!view.winner || (frozen && b.dataset.move !== 'hold');
-  $('rule-input').disabled = $('interpret-btn').disabled = busy || !!view.winner || frozen;
-  $('ai-lock').textContent = view.winner ? '' : view.aiReady ? '🔒 AI has locked in its move (it can’t see yours)' : '🤔 AI is choosing (without seeing your move)…';
-  $('ai-lock').className = 'ai-lock' + (view.aiReady ? ' ready' : '');
-  if (frozen && !busy && !view.winner) $('ai-lock').textContent = '💤 You lose this turn. Press ● to continue.';
-  renderPreview();
+  $('turn-chip').textContent = `Turn ${view.turn} / ${view.maxTurns}`;
+  const ac = $('actions-chip');
+  ac.textContent = view.winner ? 'Game over' : view.current === 'human' ? `Your turn · ${view.actionsLeft} action${view.actionsLeft === 1 ? '' : 's'} left` : 'AI’s turn';
+  ac.className = 'chip ' + (view.current === 'human' ? 'pri-human' : 'pri-ai');
+  $('phase-banner').textContent = view.winner ? 'Game over' : busy ? 'Working…' : view.current !== 'human' ? 'AI is playing' : view.phase === 'place' ? 'Place an effect (optional), then move' : 'Move your pieces';
+  const canWrite = placing();
+  $('rule-input').disabled = !canWrite; $('interpret-btn').disabled = !canWrite;
+  for (const b of document.querySelectorAll('.idea')) b.disabled = !canWrite;
+  const pb = $('place-btn');
+  pb.hidden = !canWrite || (!pending && !removing.size);
+  const needsConsent = pending?.approx && picked.size && !$('pv-approx')?.checked;
+  pb.disabled = Boolean(needsConsent) || ((pending && !picked.size) && !removing.size);
+  pb.textContent = pending && picked.size ? `Place on ${picked.size} cell${picked.size > 1 ? 's' : ''}${removing.size ? ` and remove ${removing.size}` : ''} → referee`
+    : pending ? 'Pick cells on the board' : `Remove ${removing.size} effect cell${removing.size > 1 ? 's' : ''}`;
+  $('end-btn').disabled = !myTurn();
+  const stackHere = selected && view.pieces.filter(q => !q.scored && q.owner === 'human' && `${q.x},${q.y}` === selected).length > 1;
+  $('single-mode').disabled = !stackHere;
+  renderSides(); renderBoard(); renderPreviewPick();
+}
+function renderPreviewPick() {
+  const n = $('preview').querySelector('.pick-count');
+  if (n) n.textContent = `${picked.size} / ${view.maxCells} cells picked`;
 }
 
-function renderPreview() {
-  const box = $('preview');
-  if (!sel && rejectInfo) { showPreviewReject(rejectInfo.reason, rejectInfo.source, rejectInfo.fallback); return; }
-  if (!sel) { box.hidden = true; return; }
-  box.hidden = false;
-  const i = sel.interpretation;
-  const src = i.source === 'openrouter' ? `Interpreted by OpenRouter (${esc(view.model || 'model')})` : i.source === 'offline-parser' ? 'Interpreted by the offline parser (OpenRouter not used)' : 'Input guard';
-  const fullNote = view.rules.human.length >= view.slots ? (sel.slot === undefined ? '<div class="warn">All 3 slots are full. Pick a rule on the left to replace.</div>' : `<div class="ok">Will replace slot ${sel.slot + 1}.</div>`) : '';
-  box.innerHTML = `<div class="pv-head"><span class="pv-icon">${ICON[i.effect.kind]}</span><div><b>${esc(sel.label)}</b><p>${esc(i.summary)}</p></div><button type="button" id="pv-clear" class="ghost">✕</button></div>
-    ${i.status === 'approximate' ? `<label class="approx-box"><input type="checkbox" id="pv-approx" ${sel.approxOk ? 'checked' : ''}> <span>≈ Not exactly what you wrote: ${esc(i.note)} Use it anyway?</span></label>` : ''}
-    <div class="pv-meta">Power: ${sel.cost} per square · budget ${sel.budget} → up to <b>${sel.max}</b> square${sel.max === 1 ? '' : 's'}. <b>${sel.cells.size}/${sel.max}</b> picked. Click highlighted squares on the board.</div>
-    ${fullNote}<div class="pv-src">${src}${sel.fallback ? ` · ${esc(sel.fallback)}` : ''}</div>`;
-  $('pv-clear').addEventListener('click', () => { sel = null; rejectInfo = null; render(); });
-  $('pv-approx')?.addEventListener('change', e => { sel.approxOk = e.target.checked; });
-}
-
-// ---------------- interaction ----------------
-function onCellClick(k) {
-  if (!sel || busy) return;
-  if (sel.cells.has(k)) sel.cells.delete(k);
-  else if (sel.cells.size < sel.max) sel.cells.add(k);
-  else { flashMsg(`Max ${sel.max} square${sel.max === 1 ? '' : 's'} for this trap.`); return; }
-  render();
-}
-
+// ---------- placement ----------
 async function interpret() {
+  if (!placing()) return;
   const text = $('rule-input').value.trim();
-  if (!text || busy) return;
-  $('interpret-btn').disabled = true; $('interpret-btn').textContent = 'Reading…';
+  if (!text) return;
+  const pv = $('preview');
+  pv.hidden = false; pv.innerHTML = '<span class="muted">Interpreting…</span>';
   try {
     const r = await api(`/api/game/${view.gameId}/preview`, { text });
-    if (r.interpretation.status === 'reject') {
-      sel = null; rejectInfo = { reason: r.interpretation.reason, source: r.interpretation.source, fallback: r.fallback }; render();
+    const i = r.interpretation;
+    const src = i.source === 'openrouter' ? `Interpreted by OpenRouter (${r.ms} ms)` : i.source === 'input-guard' ? 'Blocked by the input guard' : 'Interpreted by the offline parser' + (r.fallback ? ` (${r.fallback})` : '');
+    if (i.status === 'reject') {
+      pending = null; picked.clear();
+      pv.innerHTML = `<div class="pv-head reject"><span class="pv-icon">⛔</span><div><b>Not allowed</b><p>${esc(i.reason)}</p></div></div><div class="pv-src">${esc(src)}</div>`;
     } else {
-      sel = { token: r.token, interpretation: r.interpretation, effect: r.interpretation.effect, label: r.label, cost: r.costPerSquare, max: r.maxSquares, budget: r.budget, cells: new Set(), slot: undefined, approxOk: false, fallback: r.fallback };
-      removeSlot = null; rejectInfo = null; render();
+      pending = { token: r.token, label: r.label, approx: i.status === 'approximate' };
+      pv.innerHTML = `<div class="pv-head"><span class="pv-icon">✅</span><div><b>${esc(r.label)}</b><p>${esc(i.summary)}</p></div></div>`
+        + (i.status === 'approximate' ? `<label class="approx-box"><input type="checkbox" id="pv-approx"> <span>≈ Approximated: ${esc(i.note)} Tick to accept the approximation.</span></label>` : '')
+        + `<div class="pv-meta">Now click up to <b>${view.maxCells}</b> highlighted cells. <span class="pick-count"></span></div><div class="pv-src">${esc(src)}</div>`;
     }
-  } catch (e) { flashMsg(e.message); }
-  finally { $('interpret-btn').textContent = 'Interpret'; render(); }
+  } catch (e) { pv.innerHTML = `<span class="warn">${esc(e.message)}</span>`; }
+  $('pv-approx')?.addEventListener('change', render);
+  render();
 }
-function showPreviewReject(reason, source, fallback) {
-  const box = $('preview'); box.hidden = false;
-  box.innerHTML = `<div class="pv-head reject"><span class="pv-icon">🚫</span><div><b>Can’t use that rule</b><p>${esc(reason)}</p></div></div><div class="pv-src">${source === 'openrouter' ? 'OpenRouter interpreter' : source === 'input-guard' ? 'Engine safety rules' : 'Offline parser'}${fallback ? ` · ${esc(fallback)}` : ''}</div>`;
+function toggleRemove(k) { if (!placing()) return; removing.has(k) ? removing.delete(k) : removing.add(k); picked.delete(k); render(); }
+
+async function place() {
+  if (!placing()) return;
+  const body = { remove: [...removing] };
+  if (pending && picked.size) { body.token = pending.token; body.cells = [...picked]; }
+  await withBusy(async () => {
+    showReferee(true, pending && picked.size ? 'Kane is examining your rule…' : 'Removing…');
+    const r = await api(`/api/game/${view.gameId}/place`, body);
+    view = r.view; pending = null; picked.clear(); removing.clear();
+    $('preview').hidden = true; $('rule-input').value = '';
+    showVerdicts(r.verdicts);
+    logTurn('You', r.events, r.verdicts);
+    await playEvents(r.events);
+  });
 }
 
-async function commit(move) {
-  if (busy || !view || view.winner) return;
-  let rule = { op: 'none' };
-  if (removeSlot !== null) rule = { op: 'remove', slot: removeSlot };
-  else if (sel) {
-    if (sel.cells.size === 0) { flashMsg('Pick at least one highlighted square for your trap, or clear it with ✕.'); return; }
-    if (sel.interpretation.status === 'approximate' && !sel.approxOk) { flashMsg('Tick the box to accept the approximation, or rewrite the rule.'); return; }
-    if (view.rules.human.length >= view.slots && sel.slot === undefined) { flashMsg('All slots are full: choose a rule to replace.'); return; }
-    rule = { op: 'place', token: sel.token, cells: [...sel.cells], ...(sel.slot !== undefined ? { slot: sel.slot } : {}) };
+// ---------- moving ----------
+function onCell(k) {
+  if (!myTurn()) return;
+  if (placing() && pending && view.eligible.includes(k)) {
+    if (picked.has(k)) picked.delete(k); else if (picked.size < view.maxCells) picked.add(k);
+    return render();
   }
-  busy = true; render();
-  const ref = $('referee'); ref.hidden = false;
-  ref.innerHTML = `<div class="ref-title">${rule.op === 'place' ? '⚖️ Your rule goes to the referee…' : '⏳ Resolving the round…'}</div><ul id="ref-lines"></ul>`;
-  const seen = new Set();
-  const poll = setInterval(async () => {
-    try {
-      const pr = await api(`/api/game/${view.gameId}/progress`);
-      for (const line of pr.progress) { const key = line.at + line.text; if (seen.has(key)) continue; seen.add(key); const li = document.createElement('li'); li.textContent = line.text; if (/Kane is examining/.test(line.text)) li.className = 'kane-working'; $('ref-lines')?.appendChild(li); }
-    } catch { /* ignore */ }
-  }, 500);
-  try {
-    const r = await api(`/api/game/${view.gameId}/turn`, { move, rule });
-    clearInterval(poll);
-    sel = null; removeSlot = null; rejectInfo = null; $('rule-input').value = '';
-    await showVerdicts(r.result.verdicts);
-    await animate(r.result, r.view);
-    view = r.view; visual = null; busy = false; render();
-    logRound(r.result);
-    if (view.winner) showGameOver(r.result);
-  } catch (e) {
-    clearInterval(poll); busy = false; ref.hidden = true; render(); flashMsg(e.message);
+  if (view.legal.some(m => m.from === k)) { selected = selected === k ? null : k; return render(); }
+  if (selected) {
+    const m = view.legal.find(m => m.from === selected && neighbour(m.from, m.dir) === k);
+    if (m) move(m.dir);
   }
 }
-
-async function showVerdicts(verdicts) {
-  const ref = $('referee');
-  if (!verdicts.length) { ref.hidden = true; return; }
-  const html = verdicts.map(v => {
-    const k = v.kane;
-    const icon = v.final === 'approved' ? '✅' : v.final === 'rejected' ? '❌' : '⚠️';
-    const head = v.final === 'approved' ? `Rule approved by Kane.${v.player === 'human' ? ' Proceed at your own risk.' : ''}`
-      : v.final === 'rejected' ? 'Rule rejected.' : v.activated ? 'Not Kane-verified (engine checks only). Rule is live.' : 'Not verified, so the rule did NOT go live.';
-    const detail = k ? `Kane ${esc(k.version || '')} · ${k.cached ? 'cached verdict from an identical trial' : `${(k.elapsedMs / 1000).toFixed(1)}s`} · ${k.conditionResults.filter(x => x === true).length}/${k.conditionResults.length || 7} conditions true` : 'Kane did not run';
-    return `<div class="verdict ${v.final}"><div class="v-head">${icon} <b>${v.player === 'human' ? 'Your' : 'AI’s'} rule “${esc(v.ruleText)}”</b> (${esc(v.label)} on ${v.cells.join(' ')})</div>
-      <div>${head} ${esc(v.message)}</div>
-      <div class="v-meta">${v.trial.scenarioIds.length} what-if scenarios (${v.trial.scenarioIds[0]}…) · ${detail} · <a href="/trial/${v.trial.trialId}" target="_blank" rel="noopener">see trial ${v.trial.trialId}</a></div></div>`;
-  }).join('');
-  ref.hidden = false; ref.innerHTML = `<div class="ref-title">⚖️ Referee</div>${html}`;
-  await sleep(1400);
+async function move(dir) {
+  if (!myTurn() || !selected) return;
+  const mode = $('single-mode').checked ? 'single' : 'stack';
+  const m = view.legal.find(x => x.from === selected && x.dir === dir && x.mode === mode) || view.legal.find(x => x.from === selected && x.dir === dir);
+  if (!m) return flash('That move is not possible.');
+  await withBusy(async () => {
+    const r = await api(`/api/game/${view.gameId}/move`, m);
+    const before = view;
+    await playEvents(r.events, before);
+    view = r.view;
+    logTurn('You', r.events);
+    react(r.reactions);
+    const dest = r.events.find(e => e.t === 'move')?.to;
+    selected = dest && view.legal.some(x => x.from === dest) ? dest : null;
+  });
+  if (view.winner) return gameOver();
+  if (myTurn() && (view.actionsLeft <= 0 || !view.legal.length)) { await sleep(350); endTurn(); }
+}
+async function endTurn() {
+  if (!myTurn()) return;
+  selected = null; pending = null; picked.clear(); removing.clear(); $('preview').hidden = true;
+  await withBusy(async () => {
+    $('ai-lock').textContent = 'AI is planning its turn…';
+    const r = await api(`/api/game/${view.gameId}/end`, {});
+    await applyAI(r.ai, r.view);
+  });
+  if (view.winner) gameOver();
+}
+async function applyAI(ai, finalView) {
+  if (!ai) { view = finalView; return; }
+  lastAI = ai;
+  const d = ai.decision;
+  if (d.taunt) say(d.taunt, 'Said before its move');
+  showVerdicts(ai.verdicts);
+  const before = view;
+  view = { ...finalView, pieces: before?.pieces ?? finalView.pieces };
+  await playEvents(ai.events, before);
+  view = finalView;
+  logTurn('AI', ai.events.concat(ai.endEvents || []), ai.verdicts, d);
+  react(ai.reactions);
+  $('ai-record').innerHTML = `<b>${d.source === 'openrouter' ? `OpenRouter (${esc(d.model)})` : 'Local planner'}</b> chose: ${esc(d.plan.chosen)}<br><small>${esc(d.rationale)}${d.fallbackReason ? ` · fallback: ${esc(d.fallbackReason)}` : ''}</small>`;
+  $('ai-lock').textContent = '';
 }
 
+// ---------- animation: replay engine events on a local copy ----------
+async function playEvents(events, before = view) {
+  if (!events?.length || !before) return;
+  anim = { pieces: structuredClone(before.pieces), cells: { ...before.cells }, rules: new Map(before.rules.map(r => [r.id, r])), flash: new Set() };
+  const byId = id => anim.pieces.find(q => q.id === id);
+  for (const e of events) {
+    let wait = 0;
+    if (e.t === 'place') { anim.rules.set(e.ruleId, { id: e.ruleId, owner: e.p, label: e.label, icon: e.icon }); for (const k of e.cells) anim.cells[k] = e.ruleId; anim.flash = new Set(e.cells); wait = 450; }
+    else if (e.t === 'remove') { for (const k of e.cells) delete anim.cells[k]; wait = 200; }
+    else if (e.t === 'move') { const [x, y] = e.to.split(',').map(Number); for (const id of e.pieces) Object.assign(byId(id), { x, y }); wait = 260; }
+    else if (e.t === 'trigger') { delete anim.cells[e.cell]; anim.flash = new Set([e.cell]); floatText(e.cell, `${e.label}${e.self ? ' (own!)' : ''}`, e.self ? 'self' : 'bad'); if (e.self && e.kind !== 'shield' && e.kind !== 'haste') banner(`${who(e.p)} stepped on ${e.p === 'human' ? 'your' : 'its'} own effect!`, 'self'); wait = 520; }
+    else if (e.t === 'shielded') { delete anim.cells[e.cell]; floatText(e.cell, 'Shielded', 'good'); wait = 350; }
+    else if (e.t === 'forced') { const dest = e.to.split('|'); e.pieces.forEach((id, i) => { const [x, y] = (dest[i] || dest[0]).split(',').map(Number); Object.assign(byId(id), { x, y }); }); wait = 380; }
+    else if (e.t === 'status') { for (const id of e.pieces) { const q = byId(id); if (e.status === 'freeze') q.frozen = 1; else q.shield = true; } wait = 200; }
+    else if (e.t === 'capture') { for (const id of e.pieces) { const q = byId(id); Object.assign(q, { x: q.home.x, y: q.home.y, frozen: 0, shield: false }); } floatText(e.cell, 'Captured!', 'clash'); wait = 420; }
+    else if (e.t === 'score') { for (const id of e.pieces) byId(id).scored = true; floatText(e.cell, `Across! (${e.total}/3)`, 'good'); wait = 380; }
+    if (wait) { renderBoard(); await sleep(wait); anim.flash = new Set(); }
+  }
+  anim = null; renderBoard();
+}
 function floatText(k, text, cls) {
-  const c = cellEl(k); if (!c) return;
-  const f = document.createElement('div'); f.className = `float ${cls || ''}`; f.textContent = text;
-  f.style.transform = `translate(${c.offsetLeft}px, ${c.offsetTop}px)`; f.style.width = c.offsetWidth + 'px';
+  const cell = $('board').querySelector(`[data-cell="${k}"]`); if (!cell) return;
+  const f = document.createElement('div'); f.className = `float ${cls}`; f.textContent = text;
+  const b = $('board').getBoundingClientRect(), c = cell.getBoundingClientRect();
+  f.style.left = `${c.left - b.left + c.width / 2}px`; f.style.top = `${c.top - b.top}px`;
   $('board').appendChild(f); setTimeout(() => f.remove(), 1500);
 }
-function banner(text, cls) {
-  const b = $('banner'); b.textContent = text; b.className = `banner ${cls || ''}`; b.hidden = false;
-  clearTimeout(banner.t); banner.t = setTimeout(() => { b.hidden = true; }, 1700);
-}
-const posKey = p => `${p.x},${p.y}`;
+function banner(text, cls = '') { const b = $('banner'); b.className = 'banner ' + cls; b.textContent = text; b.hidden = false; clearTimeout(banner.t); banner.t = setTimeout(() => { b.hidden = true; }, 1600); }
+const flash = t => banner(t, 'msg');
+function say(text, note) { const s = $('speech'); s.hidden = false; s.innerHTML = `<div class="bubble">${esc(text)}</div><small>${esc(note)}</small>`; }
+function react(list) { if (list?.length) say(list[0].text, 'Reaction after the fact, not the AI’s reasoning'); }
 
-async function animate(result, next) {
-  visual = { pos: structuredClone(view.positions), traps: trapsFromView(view) };
-  const ruleMeta = new Map();
-  for (const p of ['human', 'ai']) for (const r of [...view.rules[p], ...next.rules[p]]) ruleMeta.set(r.id, r);
-  if (result.ai.taunt) speech(result.ai.taunt, 'said before the reveal');
-  for (const e of result.events) {
-    switch (e.t) {
-      case 'sitout': floatText(posKey(visual.pos[e.p]), '💤 skipped', 'bad'); await sleep(600); break;
-      case 'remove': for (const [k, t] of visual.traps) if (t.ruleId === e.ruleId) visual.traps.delete(k); renderBoard(); await sleep(300); break;
-      case 'clash': for (const k of e.cells) floatText(k, '💥 CLASH', 'clash'); banner('💥 Trap clash! Both claimed the same square.', 'clash'); await sleep(700); break;
-      case 'fizzle': break;
-      case 'overwrite': break;
-      case 'place': {
-        const meta = ruleMeta.get(e.ruleId);
-        for (const k of e.cells) { visual.traps.set(k, { owner: e.p, icon: meta?.icon || '⚠', label: e.label, ruleId: e.ruleId }); }
-        renderBoard();
-        for (const k of e.cells) cellEl(k)?.classList.add('just-placed');
-        await sleep(550); break;
-      }
-      case 'move': {
-        if (e.dir === 'hold') { await sleep(150); break; }
-        visual.pos[e.p] = e.to; renderBoard();
-        if (e.reversed) floatText(posKey(e.to), '🔄 reversed!', 'bad');
-        await sleep(330); break;
-      }
-      case 'trigger': {
-        const c = cellEl(e.cell); c?.classList.add('boom');
-        visual.traps.delete(e.cell); renderBoard(); cellEl(e.cell)?.classList.add('boom');
-        const selfHarm = e.self && e.kind !== 'shield';
-        floatText(e.cell, `${e.label}!`, selfHarm ? 'self' : e.kind === 'shield' ? 'good' : 'bad');
-        if (selfHarm) banner(`SELF-SABOTAGE! ${who(e.p)} stepped on ${e.p === 'human' ? 'your' : 'its'} own trap.`, 'self');
-        else if (e.chain > 1) banner(`CHAIN REACTION ×${e.chain}!`, 'clash');
-        await sleep(selfHarm ? 1100 : 650); break;
-      }
-      case 'shielded': floatText(e.cell, '🛡️ blocked', 'good'); visual.traps.delete(e.cell); renderBoard(); await sleep(500); break;
-      case 'displace': visual.pos[e.p] = e.to; renderBoard(); placeToken(e.p, e.to, e.how); await sleep(e.how === 'teleport' ? 600 : 420); break;
-      case 'status': floatText(posKey(visual.pos[e.p]), e.resisted ? 'resisted (just recovered)' : e.status === 'skip' ? '💤 loses next turn' : e.status === 'reverse' ? '🔄 next move reversed' : '🛡️ shield', e.status === 'shield' ? 'good' : 'bad'); await sleep(450); break;
-      case 'win': break;
-    }
-  }
-  const reaction = result.reactions?.[0];
-  if (reaction) speech(reaction.text, 'commentary after the round');
+// ---------- referee ----------
+let progressTimer = null;
+function showReferee(working, text) {
+  const r = $('referee'); r.hidden = false;
+  r.innerHTML = `<div class="ref-title">Referee</div><div class="kane-working">${esc(text)}</div><ul id="ref-progress"></ul>`;
+  clearInterval(progressTimer);
+  if (working) progressTimer = setInterval(pollProgress, 600);
+}
+async function pollProgress() {
+  if (!view || !busy) return clearInterval(progressTimer);
+  try { const p = await api(`/api/game/${view.gameId}/progress`); const ul = $('ref-progress'); if (ul) ul.innerHTML = p.progress.map(x => `<li>${esc(x.text)}</li>`).join(''); } catch { /* ignore */ }
+}
+function showVerdicts(vs) {
+  clearInterval(progressTimer);
+  if (!vs?.length) { if (!$('referee').querySelector('.verdict')) $('referee').hidden = true; return; }
+  const r = $('referee'); r.hidden = false;
+  r.innerHTML = '<div class="ref-title">Referee</div>' + vs.map(v => {
+    const k = v.kane;
+    const title = v.final === 'approved' ? `✅ Kane approved ${v.player === 'human' ? 'your' : 'the AI’s'} rule` : v.final === 'rejected' ? `⛔ ${k ? 'Kane' : 'The engine'} rejected ${v.player === 'human' ? 'your' : 'the AI’s'} rule` : `⚠ ${v.player === 'human' ? 'Your' : 'The AI’s'} rule is NOT Kane-verified`;
+    const meta = [`“${esc(v.ruleText)}” → ${esc(v.label)} on ${v.cells.join(' ')}`, `<a href="/trial/${v.trial.trialId}" target="_blank" rel="noopener">trial ${v.trial.trialId}</a> · scenarios ${v.trial.scenarioIds.join(', ')}`];
+    if (k) meta.push(`Kane ${esc(k.version || '')} · ${k.cached ? 'cached verdict' : `${(k.elapsedMs / 1000).toFixed(1)} s`}${k.conditions ? ` · ${k.conditions.filter(c => c.pass).length}/${k.conditions.length} conditions passed` : ''}`);
+    meta.push(v.activated ? 'Status: live on the board' : 'Status: not placed');
+    return `<div class="verdict ${v.final}"><b>${title}</b><div>${esc(v.message)}</div><div class="v-meta">${meta.join('<br>')}</div></div>`;
+  }).join('');
 }
 
-function speech(text, tag) {
-  const s = $('speech'); s.hidden = false;
-  s.innerHTML = `<div class="bubble">${esc(text)}</div><small>${esc(tag)}</small>`;
-}
-
-function describeEvent(e) {
+// ---------- log ----------
+function eventText(e) {
   switch (e.t) {
-    case 'sitout': return `${who(e.p)} sat out (lost turn).`;
-    case 'remove': return `${who(e.p)} removed “${e.text}”.`;
-    case 'place': return `${who(e.p)} placed “${e.text}” (${e.label}) on ${e.cells.map(cellName).join(' ')}${e.replaced ? ', replacing an old rule' : ''}.`;
-    case 'overwrite': return `${who(e.p)} built over ${e.victimOwner === e.p ? 'their own' : who(e.victimOwner) + '’s'} trap on ${e.cells.map(cellName).join(' ')}.`;
-    case 'clash': return `Clash on ${e.cells.map(cellName).join(' ')}: both claimed it, nobody gets it.`;
-    case 'fizzle': return `${who(e.p)}’s trap fizzled (all its squares clashed).`;
-    case 'move': return e.dir === 'hold' ? `${who(e.p)} stayed put.` : `${who(e.p)} moved ${cellName(posKey(e.from))} → ${cellName(posKey(e.to))}${e.reversed ? ' (reversed!)' : ''}.`;
-    case 'trigger': return `${who(e.p)} stepped on ${e.self ? (e.p === 'human' ? 'YOUR OWN' : 'ITS OWN') : (e.owner === 'human' ? 'your' : 'the AI’s')} trap at ${cellName(e.cell)}: “${e.text}” → ${e.label}${e.chain > 1 ? ` (chain ×${e.chain})` : ''}.`;
-    case 'shielded': return `${who(e.p)}’s shield blocked a trap at ${cellName(e.cell)}.`;
-    case 'displace': return e.from.x === e.to.x && e.from.y === e.to.y ? `${who(e.p)} couldn’t be moved (${e.how} blocked).` : `${who(e.p)} ${e.how === 'push' ? 'was pushed' : e.how === 'teleport' ? 'teleported' : 'swapped'} ${cellName(posKey(e.from))} → ${cellName(posKey(e.to))}.`;
-    case 'status': return e.resisted ? `${who(e.p)} resisted the skip (just recovered from one).` : `${who(e.p)}: ${e.status === 'skip' ? 'loses next turn' : e.status === 'reverse' ? 'next move reversed' : 'gained a shield'}.`;
-    case 'chain-limit': return 'Chain stopped at the 3-trap limit.';
-    case 'win': return e.winner === 'draw' ? `Draw. ${e.reason}` : `${who(e.winner)} won! ${e.reason}`;
+    case 'remove': return `removed effects on ${e.cells.map(name).join(' ')}`;
+    case 'place': return `placed ${e.icon} “${e.label}” on ${e.cells.map(name).join(' ')}${e.replaced.length ? ` (replacing ${e.replaced.map(name).join(' ')})` : ''}`;
+    case 'move': return `moved ${e.pieces.length > 1 ? `a stack of ${e.pieces.length}` : 'a piece'} ${name(e.from)} → ${name(e.to)}`;
+    case 'trigger': return `${e.pieces.length > 1 ? 'pieces' : 'piece'} entered ${e.owner === e.p ? 'its own' : e.owner === 'human' ? 'your' : 'the AI’s'} “${e.label}” at ${name(e.cell)}${e.chain > 1 ? ` (chain ×${e.chain})` : ''}`;
+    case 'shielded': return `shield absorbed the effect at ${name(e.cell)}`;
+    case 'forced': return e.how === 'home' ? 'sent back to the start' : `${e.how === 'teleport' ? 'teleported' : 'shoved'} ${name(e.from)} → ${name(e.to)}`;
+    case 'status': return e.status === 'freeze' ? 'frozen for a turn' : 'gained a shield';
+    case 'haste': return `+1 action ${e.now ? 'right now' : 'next turn'}`;
+    case 'capture': return `captured ${e.pieces.length} piece${e.pieces.length > 1 ? 's' : ''} at ${name(e.cell)}`;
+    case 'stack': return `stacked ${e.pieces.length} pieces at ${name(e.cell)}`;
+    case 'score': return `got a piece across (${e.total}/3)`;
+    case 'chain-limit': return `chain reaction stopped at ${name(e.cell)} (limit)`;
+    case 'win': return e.reason;
+    default: return '';
   }
-  return '';
 }
-
-function logRound(result) {
+function logTurn(by, events, verdicts = [], decision = null) {
+  const lines = events.map(eventText).filter(Boolean);
+  for (const v of verdicts) if (!v.activated) lines.unshift(`rule “${v.ruleText}” was not placed (${v.final})`);
+  if (!lines.length) return;
   const li = document.createElement('li');
-  const ai = result.ai;
-  const aiLine = `<div class="ai-record"><b>AI’s recorded decision</b> (locked in ${new Date(ai.decidedAt).toLocaleTimeString()}, before your move was revealed; ${ai.source === 'openrouter' ? `chosen by ${esc(ai.model)}` : 'local planner'}${ai.fallbackReason ? ` · fallback: ${esc(ai.fallbackReason)}` : ''}): ${esc(ai.action)}. <i>${esc(ai.rationale)}</i> <small>(simulated ${ai.plan.candidates} options × ${ai.plan.scenarios} replies in ${ai.plan.ms} ms)</small></div>`;
-  li.innerHTML = `<b>Round ${result.round}</b><ul>${result.events.map(e => `<li>${esc(describeEvent(e))}</li>`).join('')}</ul>${aiLine}`;
+  li.innerHTML = `<b class="${by === 'You' ? 'h' : 'a'}">${by}</b> · turn ${view.turn}<ul>${lines.map(l => `<li>${esc(l)}</li>`).join('')}</ul>` + (decision ? `<div class="ai-record">${esc(decision.source === 'openrouter' ? 'OpenRouter' : 'Local planner')}: ${esc(decision.rationale)}</div>` : '');
   $('log').prepend(li);
 }
 
-function showGameOver(result) {
+// ---------- game ----------
+async function withBusy(fn) {
+  if (busy) return; busy = true; render();
+  try { await fn(); } catch (e) { flash(e.message); try { view = await api(`/api/game/${view.gameId}`); } catch { /* ignore */ } } finally { busy = false; render(); }
+}
+async function newGame() {
+  $('gameover').hidden = true; $('log').replaceChildren(); $('referee').hidden = true; $('speech').hidden = true; $('ai-record').textContent = '';
+  selected = null; pending = null; picked.clear(); removing.clear(); $('preview').hidden = true; $('rule-input').value = '';
+  busy = true; $('phase-banner').textContent = 'Flipping a coin…';
+  try {
+    const r = await api('/api/game', {});
+    const { ai, ...v } = r;
+    view = v;
+    flash(v.firstPlayer === 'human' ? 'Coin flip: you go first.' : 'Coin flip: the AI goes first.');
+    if (ai) { const start = structuredClone(v); start.pieces = start.pieces.map(q => ({ ...q, x: q.home.x, y: q.home.y })); start.cells = {}; view = start; await applyAI(ai, v); }
+  } finally { busy = false; render(); }
+}
+function gameOver() {
   const w = view.winner;
   $('go-icon').textContent = w === 'human' ? '🏆' : w === 'ai' ? '🤖' : '🤝';
-  $('go-title').textContent = w === 'human' ? 'YOU WIN!' : w === 'ai' ? 'THE AI WINS' : 'DRAW';
+  $('go-title').textContent = w === 'human' ? 'You win!' : w === 'ai' ? 'The AI wins' : 'Draw';
   $('go-reason').textContent = view.winReason;
-  const ach = [...(view.achievements.human || []).map(a => ({ ...a, p: 'You' })), ...(view.achievements.ai || []).map(a => ({ ...a, p: 'AI' }))];
-  $('go-ach').innerHTML = ach.length ? ach.map(a => `<div class="ach"><b>🏅 ${esc(a.title)}</b> <small>${a.p} · round ${a.round}</small><p>${esc(a.detail)}</p></div>`).join('') : '<p class="muted">No achievements this time.</p>';
-  $('go-stats').textContent = `Rounds: ${result.round} · Sabotage hits: you ${view.sabotage.human}, AI ${view.sabotage.ai}`;
-  $('gameover').hidden = false;
-  $('rematch-btn').focus();
+  const ach = view.achievements;
+  $('go-ach').innerHTML = ['human', 'ai'].flatMap(p => ach[p].map(a => `<div class="ach"><b>${esc(a.title)}</b> <small>${p === 'human' ? 'you' : 'AI'}</small><p>${esc(a.detail)}</p></div>`)).join('') || '<p class="muted">No achievements this time.</p>';
+  $('go-stats').textContent = `Turns: ${view.turn}. Across: you ${view.scored.human}, AI ${view.scored.ai}.`;
+  setTimeout(() => { $('gameover').hidden = false; }, 500);
 }
-
-function flashMsg(text) { banner(text, 'msg'); }
-
-async function newGame() {
-  $('gameover').hidden = true; $('log').replaceChildren(); $('speech').hidden = true; $('referee').hidden = true;
-  sel = null; removeSlot = null; rejectInfo = null; busy = false; visual = null;
-  view = await api('/api/game', {});
-  render();
-}
-
-async function refreshLock() {
-  if (!view || busy || view.aiReady || view.winner) return;
-  try { const pr = await api(`/api/game/${view.gameId}/progress`); if (pr.aiReady && !busy) { view.aiReady = true; render(); } } catch { /* ignore */ }
-}
-
 async function loadHealth() {
   try {
-    health = await api('/api/health');
-    const o = health.openrouter, k = health.referee;
-    $('brain-chip').textContent = o.configured ? `AI brain: OpenRouter · ${o.model}` : 'AI brain: local planner (OpenRouter off)';
-    $('brain-chip').className = 'chip mode ' + (o.configured ? 'on' : 'off');
-    $('referee-chip').textContent = k.mode === 'engine-only' ? 'Referee: engine only (Kane off)' : k.kane.installed && k.kane.loggedIn ? `Referee: Kane CLI ${k.kane.version}` : `Referee: Kane unavailable (${k.kane.detail})`;
-    $('referee-chip').className = 'chip mode ' + (k.mode === 'kane' && k.kane.installed && k.kane.loggedIn ? 'on' : 'off');
-    $('referee-chip').title = k.mode === 'kane' ? `Every new rule is simulated, then judged by kane-cli (${k.kaneMode} mode, timeout ${k.timeoutS}s). ${k.allowUnverified ? 'Unverified rules still go live (labelled).' : 'Unverified rules do not go live.'}` : 'Kane referee switched off: rules only pass engine checks.';
+    const h = await api('/api/health');
+    const b = $('brain-chip'), r = $('referee-chip');
+    b.textContent = h.openrouter.configured ? `AI brain: OpenRouter (${h.openrouter.model})` : 'AI brain: local planner (OpenRouter off)';
+    b.classList.add(h.openrouter.configured ? 'on' : 'off');
+    const k = h.referee.kane;
+    r.textContent = h.referee.mode === 'kane' ? (k.installed && k.loggedIn !== false ? `Referee: Kane ${k.version || ''}` : 'Referee: Kane (unavailable, rules stay unverified)') : 'Referee: engine only (NOT Kane-verified)';
+    r.classList.add(h.referee.mode === 'kane' && k.installed && k.loggedIn !== false ? 'on' : 'off');
+    r.title = k.detail || '';
   } catch { /* ignore */ }
 }
 
@@ -364,19 +339,20 @@ function init() {
   $('ideas').replaceChildren(...IDEAS.map(t => { const b = document.createElement('button'); b.type = 'button'; b.className = 'idea'; b.textContent = t; b.addEventListener('click', () => { $('rule-input').value = t; interpret(); }); return b; }));
   $('interpret-btn').addEventListener('click', interpret);
   $('rule-input').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); interpret(); } });
-  for (const b of document.querySelectorAll('.mv')) b.addEventListener('click', () => commit(b.dataset.move));
+  $('place-btn').addEventListener('click', place);
+  $('end-btn').addEventListener('click', endTurn);
+  $('single-mode').addEventListener('change', render);
   $('rematch-btn').addEventListener('click', newGame);
   $('help-btn').addEventListener('click', () => { $('help').hidden = !$('help').hidden; });
   document.addEventListener('keydown', e => {
-    if (e.target instanceof HTMLInputElement) return;
-    const map = { ArrowUp: 'up', w: 'up', ArrowDown: 'down', s: 'down', ArrowLeft: 'left', a: 'left', ArrowRight: 'right', d: 'right', ' ': 'hold' };
-    if (map[e.key]) { e.preventDefault(); commit(map[e.key]); }
+    if (e.target instanceof HTMLInputElement && e.target.type === 'text') return;
+    const map = { ArrowUp: 'up', w: 'up', ArrowDown: 'down', s: 'down', ArrowLeft: 'left', a: 'left', ArrowRight: 'right', d: 'right' };
+    if (map[e.key] && selected) { e.preventDefault(); move(map[e.key]); }
+    if (e.key === 'e' || e.key === 'E') endTurn();
     if ((e.key === 'r' || e.key === 'R') && view?.winner) newGame();
   });
-  window.addEventListener('resize', () => renderBoard());
-  setInterval(refreshLock, 700);
   loadHealth();
-  newGame().catch(e => flashMsg('Could not start: ' + e.message));
+  newGame().catch(e => flash('Could not start: ' + e.message));
   window.__ruleSabotage = { get view() { return view; }, get busy() { return busy; } };
 }
 document.addEventListener('DOMContentLoaded', init);

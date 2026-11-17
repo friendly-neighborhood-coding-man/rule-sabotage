@@ -1,152 +1,135 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { init, resolveRound, validateAction, eligibleCells, type State, type Action, type RuleAction, key, NO_ACTION, sabotageScore, priorityOf } from '../server/engine.ts';
-import { normalizeEffect, type Effect, type Player } from '../server/rules.ts';
+import { init, applyPlacement, applyMove, endTurn, validatePlacement, eligibleCells, legalMoves, key, activeEffects, type State, type Placement, type GameEvent } from '../server/engine.ts';
+import { makeEffect, type Effect, type Player } from '../server/rules.ts';
 
-const hold: Action = NO_ACTION;
-const mv = (move: Action['move'], rule: RuleAction = { op: 'none' }): Action => ({ rule, move });
-const place = (effect: Effect, cells: string[], slot?: number): RuleAction => ({ op: 'place', text: 'test rule', effect, cells, interpretedBy: 'test', ...(slot !== undefined ? { slot } : {}) });
-/** A state with an arbitrary shape for tests. */
-function S(shapeCells: string[], seed = 5): State { const s = init(seed); s.shape = { kind: 'column', name: 'test', cells: shapeCells }; s.firstPriority = 'human'; return s; }
-const run = (s: State, h: Action, a: Action) => resolveRound(s, { human: h, ai: a });
+const pl = (effect: Effect, cells: string[]): Placement => ({ text: 'test rule', effect, cells, interpretedBy: 'test' });
+/** Fresh state where `p` is to play, with pieces placed explicitly (others parked at home). */
+function S(p: Player = 'human', seed = 5): State { const s = init(seed); s.current = p; s.phase = 'place'; s.actionsLeft = 3; return s; }
+const put = (s: State, id: string, x: number, y: number) => Object.assign(s.pieces.find(q => q.id === id)!, { x, y });
+const at = (s: State, id: string) => { const q = s.pieces.find(q => q.id === id)!; return key(q.x, q.y); };
+const kinds = (ev: GameEvent[]) => ev.map(e => e.t);
 
-test('a trap fires for whoever steps on it, with identical mechanics for both players', () => {
-  for (const owner of ['human', 'ai'] as Player[]) {
-    let s = S(['2,3', '4,3']);
-    s.positions = { human: { x: 1, y: 3 }, ai: { x: 5, y: 3 } };
-    const acts = { human: hold, ai: hold }; acts[owner] = mv('hold', place(normalizeEffect('push', 2), ['2,3', '4,3']));
-    s = resolveRound(s, acts).state;
-    const r = run(s, mv('right'), mv('left'));
-    const trig = r.events.filter(e => e.t === 'trigger');
-    assert.equal(trig.length, 2, 'both triggered');
-    assert.deepEqual(r.state.positions.human, { x: 0, y: 3 }, 'human pushed 2 toward own start');
-    assert.deepEqual(r.state.positions.ai, { x: 6, y: 3 }, 'ai pushed 2 toward own start');
-    assert.equal(trig.filter(e => e.t === 'trigger' && e.self).length, 1, 'owner hit by own trap');
+test('setup: 3 pieces each, coin flip decides who starts, actions = pieces on board', () => {
+  const firsts = new Set<string>();
+  for (let seed = 1; seed < 40; seed++) {
+    const s = init(seed);
+    assert.equal(s.pieces.filter(q => q.owner === 'human').length, 3);
+    assert.equal(s.pieces.filter(q => q.owner === 'ai').length, 3);
+    assert.equal(s.actionsLeft, 3);
+    firsts.add(s.firstPlayer);
   }
+  assert.deepEqual([...firsts].sort(), ['ai', 'human']);
 });
 
-test('each trapped square fires exactly once', () => {
-  let s = S(['2,3', '2,4']);
-  s.positions = { human: { x: 1, y: 3 }, ai: { x: 6, y: 0 } };
-  s = run(s, mv('hold', place(normalizeEffect('reverse'), ['2,3', '2,4'])), hold).state;
-  let r = run(s, mv('right'), hold);
-  assert.equal(r.events.filter(e => e.t === 'trigger').length, 1);
-  assert.deepEqual(r.state.rules.human[0].cells, ['2,4'], 'only that square burnt');
-  // step off (reverse makes "right" go left... so press left to go right is NOT needed: step down then up)
-  r = run(r.state, mv('left'), hold); // reversed -> moves right to 3,3
-  assert.deepEqual(r.state.positions.human, { x: 3, y: 3 });
-  r = run(r.state, mv('left'), hold); // back onto 2,3 (burnt)
-  assert.equal(r.events.filter(e => e.t === 'trigger').length, 0, 'burnt square does not fire again');
+test('placement: up to 3 cells anywhere eligible, no geometric shape required', () => {
+  const s = S();
+  assert.ok(validatePlacement(s, 'human', pl(makeEffect('freeze'), ['0,0', '6,6', '3,2'])).ok, 'far-apart cells are fine');
+  assert.equal(validatePlacement(s, 'human', pl(makeEffect('freeze'), ['0,0', '6,6', '3,2', '4,4'])).ok, false, '4 cells is too many');
+  assert.equal(validatePlacement(s, 'human', pl(makeEffect('freeze'), ['0,1'])).ok, false, 'cell with a piece');
+  applyPlacement(s, 'human', pl(makeEffect('freeze'), ['2,2']));
+  assert.equal(s.phase, 'move');
+  assert.equal(validatePlacement(s, 'human', pl(makeEffect('freeze'), ['2,3'])).ok, false, 'only before the first move');
 });
 
-test('skip: the player sits out exactly one round and cannot be skip-locked', () => {
-  let s = S(['2,3', '3,3']);
-  s.positions = { human: { x: 1, y: 3 }, ai: { x: 6, y: 0 } };
-  s = run(s, mv('hold', place(normalizeEffect('skip'), ['2,3', '3,3'])), hold).state;
-  s = run(s, mv('right'), hold).state;
-  assert.equal(s.status.human.skip, true);
-  assert.equal(validateAction(s, 'human', mv('right')).ok, false, 'must hold while skipping');
-  const r = run(s, hold, hold);
-  assert.ok(r.events.some(e => e.t === 'sitout' && e.p === 'human'));
-  // right after sitting out, stepping on another skip square is resisted
-  const r2 = run(r.state, mv('right'), hold);
-  assert.ok(r2.events.some(e => e.t === 'status' && e.resisted));
-  assert.equal(r2.state.status.human.skip, false);
+test('effects persist across turns, cannot be overwritten by the opponent, and can be removed or replaced by their owner', () => {
+  const s = S('human');
+  applyPlacement(s, 'human', pl(makeEffect('freeze'), ['2,2', '3,3']));
+  endTurn(s); // AI's turn
+  assert.equal(activeEffects(s), 2, 'still there next turn');
+  assert.ok(!eligibleCells(s, 'ai').includes('2,2'), 'AI cannot place on my effect');
+  assert.equal(validatePlacement(s, 'ai', pl(makeEffect('haste'), ['2,2'])).ok, false);
+  assert.equal(validatePlacement(s, 'ai', null, ['2,2']).ok, false, 'AI cannot remove my effect');
+  endTurn(s); // my turn again
+  const ev = applyPlacement(s, 'human', pl(makeEffect('shove', 'north', 1), ['3,3', '4,4']), ['2,2']);
+  assert.deepEqual(kinds(ev), ['remove', 'place']);
+  const place = ev.find(e => e.t === 'place')!;
+  assert.ok(place.t === 'place' && place.replaced.includes('3,3'), 'replacing my own cell counts toward the 3');
+  assert.equal(s.cells['2,2'], undefined);
+  assert.equal(activeEffects(s, 'human'), 2);
 });
 
-test('budget, shape and slot limits are enforced by the engine for both players', () => {
-  const s = S(['1,1', '2,1', '3,1', '4,1', '5,1', '0,1', '6,1']);
+test('an effect does exactly the same to a human piece and an AI piece (absolute direction)', () => {
   for (const p of ['human', 'ai'] as Player[]) {
-    assert.equal(validateAction(s, p, mv('hold', place(normalizeEffect('skip'), ['1,1', '2,1', '3,1']))).ok, false, 'over budget');
-    assert.equal(validateAction(s, p, mv('hold', place(normalizeEffect('skip'), ['1,1', '2,1']))).ok, true);
-    assert.equal(validateAction(s, p, mv('hold', place(normalizeEffect('push', 1), ['0,1']))).ok, false, 'home columns are off limits');
-    assert.equal(validateAction(s, p, mv('hold', place(normalizeEffect('push', 1), ['3,3']))).ok, false, 'outside shape');
-    assert.equal(validateAction(s, p, mv('hold', place(normalizeEffect('push', 1), ['1,1', '1,1']))).ok, false, 'duplicates');
+    const s = S(p);
+    const id = p === 'human' ? 'h1' : 'a1';
+    put(s, id, 2, 3);
+    applyPlacement(s, p, pl(makeEffect('shove', 'north', 2), ['3,3']));
+    applyMove(s, p, { from: '2,3', dir: 'right', mode: 'single' });
+    assert.equal(at(s, id), '3,1', `${p} forced 2 north`);
+    assert.equal(s.cells['3,3'], undefined, 'triggered cell is consumed');
   }
-  assert.ok(!eligibleCells(s).includes('0,1') && !eligibleCells(s).includes('6,1'));
 });
 
-test('rule replacement and removal use the slot the player saw at the start of the round', () => {
-  let s = S(['1,0', '2,0', '3,0', '4,0', '5,0']); s.slots = 2;
-  s = run(s, mv('hold', place(normalizeEffect('push', 1), ['1,0'])), hold).state;
-  s.shape = { kind: 'row', name: 't', cells: ['1,0', '2,0', '3,0', '4,0', '5,0'] };
-  s = run(s, mv('hold', place(normalizeEffect('reverse'), ['2,0'])), hold).state;
-  s.shape = { kind: 'row', name: 't', cells: ['1,0', '2,0', '3,0', '4,0', '5,0'] };
-  assert.equal(validateAction(s, 'human', mv('hold', place(normalizeEffect('skip'), ['3,0']))).ok, false, 'slots full');
-  s = run(s, mv('hold', place(normalizeEffect('skip'), ['3,0'], 0)), hold).state;
-  assert.deepEqual(s.rules.human.map(r => r.effect.kind), ['reverse', 'skip'], 'slot 0 replaced');
-  const r = run(s, mv('hold', { op: 'remove', slot: 1 }), hold);
-  assert.deepEqual(r.state.rules.human.map(x => x.effect.kind), ['reverse']);
-  assert.ok(r.events.some(e => e.t === 'remove'));
+test('back/forward are relative to the entry direction, not to ownership', () => {
+  const s = S('human');
+  put(s, 'h1', 3, 2);
+  applyPlacement(s, 'human', pl(makeEffect('shove', 'back', 2), ['3,3']));
+  applyMove(s, 'human', { from: '3,2', dir: 'down', mode: 'single' });
+  assert.equal(at(s, 'h1'), '3,1', 'entered moving down, bounced 2 up');
 });
 
-test('simultaneous claims on the same square clash and nobody gets it', () => {
-  const s = S(['3,1', '3,2']);
-  const r = run(s, mv('hold', place(normalizeEffect('push', 1), ['3,1', '3,2'])), mv('hold', place(normalizeEffect('skip'), ['3,2'])));
-  assert.ok(r.events.some(e => e.t === 'clash'));
-  assert.deepEqual(r.state.rules.human[0].cells, ['3,1']);
-  assert.equal(r.state.rules.ai.length, 0, 'AI rule fizzled: all its squares clashed');
+test('only the triggered cell is consumed; the rest of the rule stays', () => {
+  const s = S('human');
+  put(s, 'h1', 1, 2);
+  applyPlacement(s, 'human', pl(makeEffect('freeze'), ['2,2', '4,4', '5,5']));
+  applyMove(s, 'human', { from: '1,2', dir: 'right', mode: 'single' });
+  assert.deepEqual(Object.keys(s.cells).sort(), ['4,4', '5,5']);
 });
 
-test('chains are bounded and swap never drops anyone into a home column', () => {
-  let s = S(['1,3', '2,3', '3,3', '4,3', '5,3']);
-  s.positions = { human: { x: 4, y: 2 }, ai: { x: 6, y: 0 } };
-  s = run(s, mv('hold', place(normalizeEffect('push', 1), ['1,3', '2,3', '3,3', '4,3'])), hold).state;
-  const r = run(s, mv('down'), hold);
-  const chain = r.events.filter(e => e.t === 'trigger').length;
-  assert.ok(chain <= 3, `chain ${chain}`);
-  assert.ok(r.events.some(e => e.t === 'chain-limit'));
-  let t = S(['3,3']);
-  t.positions = { human: { x: 2, y: 3 }, ai: { x: 6, y: 3 } };
-  t = run(t, mv('hold', place(normalizeEffect('swap'), ['3,3'])), hold).state;
-  const r2 = run(t, mv('right'), hold);
-  assert.deepEqual(r2.state.positions.human, { x: 3, y: 3 }, 'swap blocked: AI is in its home column');
-  assert.equal(r2.state.winner, null);
+test('friendly pieces stack and move together; enemies are captured and sent home', () => {
+  const s = S('human');
+  s.phase = 'move';
+  put(s, 'h1', 2, 3); put(s, 'h2', 3, 3); put(s, 'a1', 4, 3);
+  let ev = applyMove(s, 'human', { from: '2,3', dir: 'right', mode: 'stack' });
+  assert.ok(kinds(ev).includes('stack'));
+  ev = applyMove(s, 'human', { from: '3,3', dir: 'right', mode: 'stack' });
+  assert.ok(kinds(ev).includes('capture'));
+  assert.equal(at(s, 'h1'), '4,3'); assert.equal(at(s, 'h2'), '4,3');
+  assert.equal(at(s, 'a1'), '6,1', 'captured AI piece back on its start');
+  assert.ok(legalMoves(s, 'human').some(m => m.from === '4,3' && m.mode === 'single'), 'a stack can split');
 });
 
-test('victory: first player on their goal column wins; priority decides a dead heat', () => {
-  const s = S(['3,3']);
-  s.positions = { human: { x: 5, y: 3 }, ai: { x: 1, y: 3 } };
-  s.round = 1; // human priority
-  assert.equal(priorityOf(s), 'human');
-  assert.equal(run(s, mv('right'), mv('left')).state.winner, 'human');
-  s.round = 2;
-  assert.equal(run(s, mv('right'), mv('left')).state.winner, 'ai');
+test('forced movement can chain into further effects, capped by the engine', () => {
+  const s = S('human');
+  put(s, 'h1', 1, 3);
+  applyPlacement(s, 'human', pl(makeEffect('shove', 'east', 1), ['2,3', '3,3', '4,3']));
+  const ev = applyMove(s, 'human', { from: '1,3', dir: 'right', mode: 'single' });
+  const trig = ev.filter(e => e.t === 'trigger');
+  assert.equal(trig.length, 3, 'three effects in a row');
+  assert.equal(at(s, 'h1'), '5,3');
 });
 
-test('round limit: fewer columns left wins, then sabotage score, then draw', () => {
-  const s = S(['3,3']); s.round = s.maxRounds;
-  s.positions = { human: { x: 3, y: 3 }, ai: { x: 3, y: 0 } };
-  const r = run(s, hold, hold);
-  assert.equal(r.state.winner, 'draw');
-  assert.match(r.state.winReason, /Round limit/);
-  s.positions.human = { x: 4, y: 3 };
-  assert.equal(run(s, hold, hold).state.winner, 'human');
-  assert.equal(sabotageScore(s, 'human'), 0);
-});
-
-test('impossible moves are rejected; reverse flips the actual move', () => {
-  const s = S(['3,3']);
-  s.positions = { human: { x: 0, y: 0 }, ai: { x: 6, y: 6 } };
-  assert.equal(validateAction(s, 'human', mv('up')).ok, false);
-  assert.equal(validateAction(s, 'human', mv('left')).ok, false);
-  s.status.human.reverse = true;
-  assert.equal(validateAction(s, 'human', mv('right')).ok, false, 'reversed right = left = off board');
-  assert.equal(run(s, mv('left'), hold).state.positions.human.x, 1);
-});
-
-test('determinism: same seed and same actions give the same game', () => {
-  const play = () => { let s = init(777); const log: string[] = []; for (let i = 0; i < 6; i++) { const r = resolveRound(s, { human: mv('right'), ai: mv('left') }); s = r.state; log.push(JSON.stringify(r.events) + s.shape.name); if (s.winner) break; } return log.join('|'); };
-  assert.equal(play(), play());
-});
-
-test('shapes come in mirrored pairs so neither side is favoured by the draw', () => {
-  let s = init(99);
-  for (let i = 0; i < 6; i++) {
-    const odd = s.shape;
-    s = resolveRound(s, { human: hold, ai: hold }).state;
-    const even = s.shape;
-    assert.deepEqual([...even.cells].sort(), odd.cells.map(k => { const [x, y] = k.split(',').map(Number); return key(6 - x, y); }).sort());
-    s = resolveRound(s, { human: hold, ai: hold }).state;
+test('freeze, home, shield and haste behave identically regardless of who owns the piece', () => {
+  for (const p of ['human', 'ai'] as Player[]) {
+    const id = p === 'human' ? 'h1' : 'a1';
+    const s = S(p);
+    put(s, id, 3, 0);
+    applyPlacement(s, p, pl(makeEffect('haste'), ['3,1']));
+    const before = s.actionsLeft;
+    applyMove(s, p, { from: '3,0', dir: 'down', mode: 'single' });
+    assert.equal(s.actionsLeft, before, `${p}: haste refunds the action`);
+    const s2 = S(p);
+    put(s2, id, 3, 0);
+    applyPlacement(s2, p, pl(makeEffect('home'), ['3,1']));
+    applyMove(s2, p, { from: '3,0', dir: 'down', mode: 'single' });
+    const q = s2.pieces.find(x => x.id === id)!;
+    assert.deepEqual([q.x, q.y], [q.home.x, q.home.y], `${p}: sent to own start`);
   }
+});
+
+test('all three pieces across wins; the turn limit has a deterministic tiebreak', () => {
+  const s = S('human');
+  s.phase = 'move';
+  put(s, 'h1', 5, 1); put(s, 'h2', 5, 3); put(s, 'h3', 5, 5);
+  for (const y of [1, 3, 5]) applyMove(s, 'human', { from: `5,${y}`, dir: 'right', mode: 'single' });
+  assert.equal(s.winner, 'human');
+  const t = S('human'); t.turn = t.maxTurns; put(t, 'h1', 5, 1);
+  endTurn(t);
+  assert.equal(t.winner, 'human', 'less distance left wins at the limit');
+});
+
+test('same seed + same actions = same result (teleport uses the seeded RNG)', () => {
+  const run = () => { const s = S('human', 77); put(s, 'h1', 2, 2); applyPlacement(s, 'human', pl(makeEffect('teleport'), ['3,2'])); applyMove(s, 'human', { from: '2,2', dir: 'right', mode: 'single' }); return at(s, 'h1'); };
+  assert.equal(run(), run());
 });

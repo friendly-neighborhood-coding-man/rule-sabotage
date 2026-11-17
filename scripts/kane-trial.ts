@@ -2,11 +2,12 @@
  * Live Kane referee measurement (REAL kane-cli, no doubles).
  *   npm run kane:trial            -> runs the scenarios below, writes evidence/kane/live-<ts>.json + .md
  * Scenarios:
- *   A  normal human rule (push back 2 on 2 squares)          expected: approved
+ *   A  human rule: shove north 2 on 3 scattered cells         expected: approved
  *   B  same rule proposed by the AI (equal scrutiny)          expected: approved
- *   C  CANARY: page deliberately corrupted to show a square
- *      firing twice + a 2-turn lock (simulated engine bug)    expected: rejected
+ *   C  CANARY: page deliberately corrupted so the AI piece
+ *      gets a different outcome + a cell fires twice          expected: rejected
  *   D  repeat of A (cache)                                    expected: cached verdict, ~0 ms
+ *   E  real in-game turns: human places a rule, AI replies    expected: approved, with turn latency
  * Only real Kane output is recorded; failures are reported as unverified.
  */
 import { writeFile, mkdir } from 'node:fs/promises';
@@ -17,7 +18,7 @@ const { trials } = await import('../server/game.ts');
 const { buildTrial, renderTrialPage, KANE_CONDITIONS } = await import('../server/trial.ts');
 const { kaneJudge, kaneProbe, kaneConfig } = await import('../server/kane.ts');
 const { init } = await import('../server/engine.ts');
-const { normalizeEffect } = await import('../server/rules.ts');
+const { makeEffect } = await import('../server/rules.ts');
 
 await new Promise<void>(r => server.listen(0, '127.0.0.1', () => r()));
 const port = (server.address() as { port: number }).port;
@@ -29,22 +30,21 @@ const out: Record<string, unknown>[] = [];
 const balanceBefore = probe.installed ? balance() : null;
 try {
   if (!probe.installed || !probe.loggedIn) throw new Error(`Kane not ready: ${probe.detail}`);
-  const s = init(2024);
-  s.positions = { human: { x: 2, y: 3 }, ai: { x: 5, y: 3 } };
-  s.shape = { kind: 'column', name: 'Column D', cells: ['3,0', '3,1', '3,2', '3,3', '3,4', '3,5', '3,6'] };
-  const rule = { op: 'place' as const, text: 'Anyone stepping here gets pushed backward two spaces!', effect: normalizeEffect('push', 2), cells: ['3,3', '3,4'], interpretedBy: 'live-trial' };
+  const s = init(2024); s.current = 'human'; s.phase = 'place';
+  const rule = { text: 'Anything entering here is shoved two squares north!', effect: makeEffect('shove', 'north', 2), cells: ['3,3', '2,5', '4,1'], interpretedBy: 'live-trial' };
   const runOne = async (label: string, expected: string, proposer: 'human' | 'ai', corrupt = false, n: number) => {
-    const t = buildTrial(s, proposer, { ...rule, text: proposer === 'ai' ? 'Step here and you get pushed back 2 spaces. Nothing personal.' : rule.text }, n);
+    const st = structuredClone(s); st.current = proposer;
+    const t = buildTrial(st, proposer, { ...rule, text: proposer === 'ai' ? 'Step here and you are pushed 2 squares north. Nothing personal.' : rule.text }, n);
     if (corrupt) {
-      t.triggers[0].secondVisitFired = true;
-      t.rollout.maxConsecutiveTurnsLost.human = 2;
+      t.symmetry[0].ai = { ...t.symmetry[0].ai, endSquare: 'D6', effectSeen: 'Shove south 2' };
+      t.symmetry[0].secondVisitFired.human = true;
       t.signature = 'canary-' + t.signature;
     }
     const html = renderTrialPage(t);
     trials.set(t.trialId, { trial: t, html });
     const t0 = Date.now();
     const k = await kaneJudge({ trialId: t.trialId, signature: t.signature, url: `http://127.0.0.1:${port}/trial/${t.trialId}`, html, conditions: KANE_CONDITIONS });
-    const row = { label, expected, trialId: t.trialId, scenarioIds: [...t.triggers.map(x => x.scenarioId), t.rollout.scenarioId], wallMs: Date.now() - t0, ...k };
+    const row = { label, expected, trialId: t.trialId, scenarioIds: t.scenarioIds, wallMs: Date.now() - t0, ...k };
     console.log(`${label}: ${k.status} (${k.elapsedMs} ms, exit ${k.exitCode}, cached ${k.cached}) ${k.reason}`);
     out.push(row);
   };
@@ -52,20 +52,25 @@ try {
   await runOne('B same rule from AI', 'approved', 'ai', false, 9102);
   await runOne('C canary corrupted page', 'rejected', 'human', true, 9103);
   await runOne('D repeat of A', 'approved (cached)', 'human', false, 9104);
-  // E: the real in-game pipeline (human rule + whatever the AI does), end-to-end turn latency.
+  // E: the real in-game pipeline (human rule, then the AI's whole turn), end-to-end latency.
   process.env.PORT = String(port);
-  const { newGame, preview, playTurn, view } = await import('../server/game.ts');
+  const { newGame, preview, placeHuman, endHumanTurn, view } = await import('../server/game.ts');
   for (const seed of [11, 12]) {
     const g = newGame(seed);
-    const v = view(g);
-    const p = await preview(g, '밟으면 다음 턴을 쉰다');
+    g.state.current = 'human'; g.state.phase = 'place'; g.state.actionsLeft = 3;
+    const p = await preview(g, '밟으면 남쪽으로 두 칸 밀려난다');
+    const cells = view(g).eligible.filter((k: string) => /^[2-4],/.test(k)).slice(0, 3);
     const t0 = Date.now();
-    const res = await playTurn(g, { move: 'right', rule: { op: 'place', token: p.token!, cells: v.eligible.slice(0, 1) } });
-    const ms = Date.now() - t0;
-    for (const vd of res.result.verdicts) {
-      out.push({ label: `E in-game turn (seed ${seed}) ${vd.player} rule`, expected: 'approved', trialId: vd.trial.trialId, scenarioIds: vd.trial.scenarioIds, wallMs: ms, status: vd.final, activated: vd.activated, elapsedMs: vd.kane?.elapsedMs, exitCode: vd.kane?.exitCode, cached: vd.kane?.cached, reason: vd.message, evidencePath: vd.kane?.evidencePath, interpretedBy: p.interpretation.source });
-      console.log(`E seed ${seed} ${vd.player}: ${vd.final} activated=${vd.activated} turn ${ms} ms, kane ${vd.kane?.elapsedMs} ms`);
+    const placed = await placeHuman(g, { token: p.token!, cells });
+    const humanMs = Date.now() - t0;
+    const t1 = Date.now();
+    const end = await endHumanTurn(g);
+    const aiMs = Date.now() - t1;
+    for (const [vd, ms] of [...placed.verdicts.map(v => [v, humanMs] as const), ...(end.ai?.verdicts ?? []).map(v => [v, aiMs] as const)]) {
+      out.push({ label: `E in-game (seed ${seed}) ${vd.player} rule`, expected: 'approved', trialId: vd.trial.trialId, scenarioIds: vd.trial.scenarioIds, wallMs: ms, status: vd.final, activated: vd.activated, elapsedMs: vd.kane?.elapsedMs, exitCode: vd.kane?.exitCode, cached: vd.kane?.cached, reason: vd.message, evidencePath: vd.kane?.evidencePath, interpretedBy: vd.player === 'human' ? p.interpretation.source : 'see AI decision' });
+      console.log(`E seed ${seed} ${vd.player}: ${vd.final} activated=${vd.activated} step ${ms} ms, kane ${vd.kane?.elapsedMs} ms`);
     }
+    if (!end.ai?.verdicts.length) console.log(`E seed ${seed}: the AI placed no rule this turn (${end.ai?.decision.plan.chosen})`);
   }
 } catch (e) {
   console.log('NOT RUN:', (e as Error).message);

@@ -1,47 +1,50 @@
-/** Self-play balance check: planner vs planner (and planner vs move-only bot). Prints real measured stats. */
-import { init, resolveRound, type Action, type State } from '../server/engine.ts';
-import { planAI } from '../server/ai.ts';
-type Bot = (s: State, me: 'human' | 'ai') => Action;
-const planner: Bot = (s, me) => planAI(s, { me }).chosen.action;
-const moveOnly: Bot = (s, me) => { const a = planAI(s, { me, temperature: 0 }); const m = a.ranked.find(c => c.action.rule.op === 'none'); return m ? m.action : { rule: { op: 'none' }, move: 'hold' }; };
-import { eligibleCells, validateAction } from '../server/engine.ts';
-import { pathCost } from '../server/ai.ts';
-import { normalizeEffect, maxCells } from '../server/rules.ts';
+/**
+ * Self-play balance + board-crowding measurement (engine only, no LLM, no Kane).
+ *   npm run selfplay -- [games=20]
+ * Bots: "planner" (the AI's simulation planner), "casual" (walks the cheapest path,
+ * sometimes drops a random effect on random cells), "mover" (planner that never places).
+ */
+import { init, applyPlacement, applyMove, endTurn, legalMoves, eligibleCells, activeEffects, type State, type Placement } from '../server/engine.ts';
+import { planTurn, planMoves, CANDIDATE_EFFECTS } from '../server/ai.ts';
+import { type Player } from '../server/rules.ts';
+
+type Bot = (s: State, me: Player) => void;
 let r0 = 7; const rnd = () => { r0 = (r0 * 1103515245 + 12345) & 0x7fffffff; return r0 / 0x7fffffff; };
-/** A casual human: walks the cheapest-looking path, sometimes drops a random trap on random squares. */
+const planner: Bot = (s, me) => { const p = planTurn(s, { me }).chosen; if (p.placement) applyPlacement(s, me, p.placement); for (const m of planMoves(s, me).moves) applyMove(s, me, m); };
+const mover: Bot = (s, me) => { for (const m of planMoves(s, me).moves) applyMove(s, me, m); };
 const casual: Bot = (s, me) => {
-  if (s.status[me].skip) return { rule: { op: 'none' }, move: 'hold' };
-  let best: Action = { rule: { op: 'none' }, move: 'hold' }, bc = Infinity;
-  for (const m of ['left', 'right', 'up', 'down', 'hold'] as const) {
-    const a: Action = { rule: { op: 'none' }, move: m }; if (!validateAction(s, me, a).ok) continue;
-    const n = resolveRound(s, me === 'human' ? { human: a, ai: { rule: { op: 'none' }, move: 'hold' } } : { ai: a, human: { rule: { op: 'none' }, move: 'hold' } }).state;
-    const c = n.winner === me ? -9 : pathCost(n, me) + rnd() * 0.3; if (c < bc) { bc = c; best = a; }
+  if (rnd() < 0.5) {
+    const el = eligibleCells(s, me).filter(k => !s.cells[k]);
+    const e = CANDIDATE_EFFECTS[Math.floor(rnd() * CANDIDATE_EFFECTS.length)];
+    const cells = [...el].sort(() => rnd() - 0.5).slice(0, 1 + Math.floor(rnd() * 3));
+    const pl: Placement = { text: 'casual', effect: e, cells, interpretedBy: 'bot' };
+    if (cells.length) applyPlacement(s, me, pl);
   }
-  const el = eligibleCells(s);
-  if (rnd() < 0.45 && el.length && s.rules[me].length < s.slots) {
-    const kinds = [normalizeEffect('push', 2), normalizeEffect('skip'), normalizeEffect('push', 1), normalizeEffect('reverse'), normalizeEffect('swap'), normalizeEffect('teleport')];
-    const e = kinds[Math.floor(rnd() * kinds.length)];
-    const cells = [...el].sort(() => rnd() - 0.5).slice(0, maxCells(e));
-    const a: Action = { rule: { op: 'place', text: 'casual', effect: e, cells, interpretedBy: 'bot' }, move: best.move };
-    if (validateAction(s, me, a).ok) return a;
-  }
-  return best;
+  for (const m of planMoves(s, me, 1.5, rnd).moves) applyMove(s, me, m);
 };
 function play(seed: number, human: Bot, ai: Bot) {
-  let s = init(seed); let traps = 0, places = 0, self = 0; let ms = 0;
+  const s = init(seed);
+  let triggers = 0, self = 0, captures = 0, places = 0, cellsPlaced = 0, chains = 0, maxActive = 0;
   while (!s.winner) {
-    const t = performance.now();
-    const acts = { human: human(s, 'human'), ai: ai(s, 'ai') };
-    ms = Math.max(ms, performance.now() - t);
-    const r = resolveRound(s, acts); s = r.state;
-    for (const e of r.events) { if (e.t === 'trigger') { traps++; if (e.self) self++; } if (e.t === 'place') places++; }
+    const before = s.log.length;
+    (s.current === 'human' ? human : ai)(s, s.current);
+    void before;
+    if (!s.winner) endTurn(s);
+    maxActive = Math.max(maxActive, activeEffects(s));
   }
-  return { winner: s.winner, rounds: s.round - 1, traps, places, self, ms };
+  // events are not stored in s.log by the bots; recount from rules
+  for (const r of s.rules) { triggers += r.hits.human + r.hits.ai; self += r.hits[r.owner]; places++; cellsPlaced += r.placed; }
+  void captures; void chains; void legalMoves;
+  const act = s.stats.activePerTurn;
+  return { winner: s.winner, turns: s.turn, triggers, self, places, cellsPlaced, maxActive, avgActive: act.reduce((a, b) => a + b, 0) / Math.max(1, act.length), lateActive: act.slice(-6).reduce((a, b) => a + b, 0) / Math.max(1, Math.min(6, act.length)), first: s.firstPlayer };
 }
-const N = Number(process.argv[2] ?? 30);
-for (const [name, h, a] of [['casual human vs planner ai', casual, planner], ['casual human vs casual ai', casual, casual], ['planner vs planner', planner, planner], ['move-only(human) vs planner(ai)', moveOnly, planner], ['planner(human) vs move-only(ai)', planner, moveOnly]] as const) {
-  const res = Array.from({ length: N }, (_, i) => play(1000 + i, h, a));
-  const w = { human: 0, ai: 0, draw: 0 } as Record<string, number>; res.forEach(r => w[r.winner!]++);
-  const avg = (f: (r: typeof res[0]) => number) => (res.reduce((x, r) => x + f(r), 0) / N).toFixed(2);
-  console.log(`${name}: n=${N} wins human=${w.human} ai=${w.ai} draw=${w.draw} | rounds ${avg(r => r.rounds)} | placements ${avg(r => r.places)} | triggers ${avg(r => r.traps)} | self-triggers ${avg(r => r.self)} | max plan ms ${Math.max(...res.map(r => r.ms)).toFixed(0)}`);
+const N = Number(process.argv[2] ?? 20);
+const matchups: [string, Bot, Bot][] = [['planner vs planner', planner, planner], ['casual(human) vs planner(ai)', casual, planner], ['casual vs casual', casual, casual], ['mover(human) vs planner(ai)', mover, planner], ['planner(human) vs mover(ai)', planner, mover]];
+for (const [name, h, a] of matchups) {
+  const t0 = performance.now();
+  const res = Array.from({ length: N }, (_, i) => play(2000 + i, h, a));
+  const w: Record<string, number> = { human: 0, ai: 0, draw: 0 }; res.forEach(r => w[r.winner!]++);
+  const firstWins = res.filter(r => r.winner === r.first).length;
+  const avg = (f: (r: typeof res[0]) => number) => (res.reduce((x, r) => x + f(r), 0) / N).toFixed(1);
+  console.log(`${name}: n=${N} wins human=${w.human} ai=${w.ai} draw=${w.draw} first-player-wins=${firstWins} | turns ${avg(r => r.turns)} | rules placed ${avg(r => r.places)} (${avg(r => r.cellsPlaced)} cells) | triggers ${avg(r => r.triggers)} (self ${avg(r => r.self)}) | active effects avg ${avg(r => r.avgActive)} last6 ${avg(r => r.lateActive)} max ${Math.max(...res.map(r => r.maxActive))} | ${((performance.now() - t0) / N / 1000).toFixed(2)}s/game`);
 }
