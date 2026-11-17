@@ -52,6 +52,21 @@ try {
   await runOne('B same rule from AI', 'approved', 'ai', false, 9102);
   await runOne('C canary corrupted page', 'rejected', 'human', true, 9103);
   await runOne('D repeat of A', 'approved (cached)', 'human', false, 9104);
+  // E: the real in-game pipeline (human rule + whatever the AI does), end-to-end turn latency.
+  process.env.PORT = String(port);
+  const { newGame, preview, playTurn, view } = await import('../server/game.ts');
+  for (const seed of [11, 12]) {
+    const g = newGame(seed);
+    const v = view(g);
+    const p = await preview(g, '밟으면 다음 턴을 쉰다');
+    const t0 = Date.now();
+    const res = await playTurn(g, { move: 'right', rule: { op: 'place', token: p.token!, cells: v.eligible.slice(0, 1) } });
+    const ms = Date.now() - t0;
+    for (const vd of res.result.verdicts) {
+      out.push({ label: `E in-game turn (seed ${seed}) ${vd.player} rule`, expected: 'approved', trialId: vd.trial.trialId, scenarioIds: vd.trial.scenarioIds, wallMs: ms, status: vd.final, activated: vd.activated, elapsedMs: vd.kane?.elapsedMs, exitCode: vd.kane?.exitCode, cached: vd.kane?.cached, reason: vd.message, evidencePath: vd.kane?.evidencePath, interpretedBy: p.interpretation.source });
+      console.log(`E seed ${seed} ${vd.player}: ${vd.final} activated=${vd.activated} turn ${ms} ms, kane ${vd.kane?.elapsedMs} ms`);
+    }
+  }
 } catch (e) {
   console.log('NOT RUN:', (e as Error).message);
   out.push({ label: 'NOT_RUN', reason: (e as Error).message, probe });
