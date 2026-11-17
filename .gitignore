@@ -3,3 +3,5 @@ node_modules/
 *.log
 .kane/
 .evidence/
+evidence/openrouter/calls.ndjson
+evidence/kane/T*/
