@@ -249,7 +249,8 @@ export async function decideAI(s: State): Promise<{ decision: AIDecision; plan: 
     options: options.map(c => ({ id: c.id, plan: c.summary, score: Number(c.score.toFixed(2)) })),
   };
   try {
-    const raw = await chatJSON('opponent', OPPONENT_SYSTEM, JSON.stringify(payload), OPPONENT_SCHEMA, { temperature: 0.7, maxTokens: 350, timeoutMs: 20_000 }) as Record<string, unknown>;
+    const schema = { ...OPPONENT_SCHEMA, properties: { ...OPPONENT_SCHEMA.properties, choice: { type: 'string', enum: options.map(c => c.id) } } };
+    const raw = await chatJSON('opponent', OPPONENT_SYSTEM, JSON.stringify(payload), schema, { temperature: 0.7, maxTokens: 350, timeoutMs: Number(process.env.LLM_OPPONENT_TIMEOUT_MS) || 20_000 }) as Record<string, unknown>;
     const chosen = options.find(c => c.id === raw?.choice);
     if (!chosen) throw new ProviderError('invalid_reply', `unknown option ${String(raw?.choice).slice(0, 20)}`);
     const text = chosen.placement ? (typeof raw.ruleText === 'string' && raw.ruleText.trim() ? raw.ruleText.trim().slice(0, 160) : aiPhrase(chosen.placement.effect, s.turn)) : null;

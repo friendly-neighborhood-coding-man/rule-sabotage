@@ -18,6 +18,7 @@ process.env.OPENROUTER_LOG = join(tmp, 'or.ndjson');
 process.env.KANE_REFEREE = 'off';
 delete process.env.OPENROUTER_API_KEY;
 delete process.env.NVIDIA_API_KEY;
+delete process.env.GROQ_API_KEY;
 delete process.env.LLM_PROVIDER;
 
 const { newGame, startGame, preview, placeHuman, moveHuman, endHumanTurn, interpretRule, view, decideAI } = await import('../server/game.ts');
@@ -175,6 +176,38 @@ test('NVIDIA provider (mocked): OpenAI-compatible endpoint, labelled, no OpenRou
   process.env.NVIDIA_BASE_URL = 'http://insecure.example/v1';
   assert.equal(providerLabel(), 'none', 'non-https base URL is refused');
   delete process.env.NVIDIA_API_KEY; delete process.env.NVIDIA_BASE_URL;
+});
+
+test('Groq provider (mocked): strict JSON schema adapted, reasoning kept out of content, opponent choice limited to real options', async () => {
+  process.env.GROQ_API_KEY = 'gq-test-key-not-real';
+  process.env.LLM_PROVIDER = 'groq';
+  process.env.GROQ_MODEL = 'openai/gpt-oss-20b';
+  const bodies: any[] = []; let url = '';
+  mockFetch((b, u) => {
+    url = u!; bodies.push(b);
+    if (b.messages[0].content.includes('You are the AI player')) return reply({ choice: b.response_format.json_schema.schema.properties.choice.enum[0], ruleText: '', taunt: 't', rationale: 'r' });
+    return reply({ status: 'ok', kind: 'shove', dir: 'west', amount: 2, note: '' });
+  });
+  const { providerLabel } = await import('../server/openrouter.ts');
+  assert.equal(providerLabel(), 'Groq');
+  const r = await interpretRule('mock groq: blown west 2 squares');
+  assert.equal(url, 'https://api.groq.com/openai/v1/chat/completions');
+  const b = bodies[0];
+  assert.equal(b.reasoning_effort, 'low'); assert.equal(b.include_reasoning, false); assert.equal(b.reasoning, undefined);
+  const sch = b.response_format.json_schema;
+  assert.equal(sch.strict, true);
+  assert.equal(sch.schema.additionalProperties, false);
+  assert.deepEqual([...sch.schema.required].sort(), Object.keys(sch.schema.properties).sort());
+  assert.equal(sch.schema.properties.amount.enum, undefined, 'integer enum removed for Groq strict mode');
+  assert.ok(!JSON.stringify(bodies).includes('gq-test-key'));
+  assert.equal(r.interpretation.status, 'ok');
+  if (r.interpretation.status === 'ok') assert.deepEqual(r.interpretation.effect, { kind: 'shove', dir: 'west', amount: 2 });
+  const s = init(42); s.current = 'ai';
+  const d = await decideAI(s);
+  assert.equal(d.decision.source, 'openrouter'); assert.equal(d.decision.provider, 'Groq');
+  const opp = bodies.find(x => x.messages[0].content.includes('You are the AI player'));
+  assert.ok(opp.response_format.json_schema.schema.properties.choice.enum.length >= 1, 'choice is an enum of real option ids');
+  delete process.env.GROQ_API_KEY; delete process.env.LLM_PROVIDER; delete process.env.GROQ_MODEL;
 });
 
 test('OpenRouter (mocked) opponent: unknown option ids are refused and the local planner takes over', async () => {

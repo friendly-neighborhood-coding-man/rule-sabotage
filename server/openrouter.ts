@@ -2,7 +2,7 @@
  * LLM access through an OpenAI-compatible chat API: OpenRouter (default) or NVIDIA's
  * integrate.api.nvidia.com. Server-side only; keys never reach the browser or the logs.
  * Every reply is treated as untrusted text and validated by the caller.
- *   LLM_PROVIDER=openrouter|nvidia  (default: openrouter if OPENROUTER_API_KEY is set, else nvidia if NVIDIA_API_KEY is set)
+ *   LLM_PROVIDER=openrouter|nvidia|groq  (default: the first of OpenRouter, NVIDIA, Groq whose key is set)
  */
 import { appendFile, mkdir } from 'node:fs/promises';
 import { resolve, dirname } from 'node:path';
@@ -10,11 +10,13 @@ import { INTERPRET_SCHEMA, EFFECT_KINDS } from './rules.ts';
 
 export const DEFAULT_FREE_MODEL = 'openrouter/free';
 export const DEFAULT_NVIDIA_MODEL = 'meta/llama-3.3-70b-instruct';
-type Provider = { id: 'openrouter' | 'nvidia'; label: string; endpoint: string; key: string; model: string };
+export const DEFAULT_GROQ_MODEL = 'openai/gpt-oss-120b';
+type Provider = { id: 'openrouter' | 'nvidia' | 'groq'; label: string; endpoint: string; key: string; model: string };
 export function provider(): Provider | null {
   const want = (process.env.LLM_PROVIDER || '').toLowerCase();
-  const or = process.env.OPENROUTER_API_KEY, nv = process.env.NVIDIA_API_KEY;
-  const pick = want === 'nvidia' || want === 'openrouter' ? want : or ? 'openrouter' : nv ? 'nvidia' : null;
+  const or = process.env.OPENROUTER_API_KEY, nv = process.env.NVIDIA_API_KEY, gq = process.env.GROQ_API_KEY;
+  const pick = ['nvidia', 'openrouter', 'groq'].includes(want) ? want : or ? 'openrouter' : nv ? 'nvidia' : gq ? 'groq' : null;
+  if (pick === 'groq' && gq) return { id: 'groq', label: 'Groq', endpoint: 'https://api.groq.com/openai/v1/chat/completions', key: gq, model: process.env.GROQ_MODEL || DEFAULT_GROQ_MODEL };
   if (pick === 'openrouter' && or) return { id: 'openrouter', label: 'OpenRouter', endpoint: 'https://openrouter.ai/api/v1/chat/completions', key: or, model: process.env.OPENROUTER_MODEL || DEFAULT_FREE_MODEL };
   if (pick === 'nvidia' && nv) {
     const base = (process.env.NVIDIA_BASE_URL || 'https://integrate.api.nvidia.com/v1').replace(/\/+$/, '');
@@ -84,7 +86,8 @@ export async function chatJSON(task: string, system: string, user: string, schem
         messages: [{ role: 'system', content: structured ? system : `${system}\nReply with ONLY a JSON object matching this JSON Schema, no prose:\n${JSON.stringify(schema)}` }, { role: 'user', content: user }],
       };
       if (prov.id === 'openrouter') body.reasoning = { effort: 'low', exclude: true };
-      if (structured) body.response_format = { type: 'json_schema', json_schema: { name: task.replace(/\W/g, '_'), strict: true, schema } };
+      if (prov.id === 'groq') Object.assign(body, groqExtras(model));
+      if (structured) body.response_format = { type: 'json_schema', json_schema: { name: task.replace(/\W/g, '_'), strict: true, schema: prov.id === 'groq' ? groqStrictSchema(schema) : schema } };
       const res = await fetchImpl(prov.endpoint, {
         method: 'POST', signal: ctrl.signal,
         headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json', 'X-Title': 'Rule Sabotage (local game)' },
@@ -125,6 +128,30 @@ export async function chatJSON(task: string, system: string, user: string, schem
     } finally { clearTimeout(timer); }
   }
   throw new ProviderError('invalid_reply', 'no usable reply');
+}
+
+/** Groq reasoning models: keep thinking short and out of the content (documented Groq parameters). */
+function groqExtras(model: string): Record<string, unknown> {
+  if (/^openai\/gpt-oss/.test(model)) return { reasoning_effort: 'low', include_reasoning: false };
+  if (/qwen/i.test(model)) return { reasoning_format: 'hidden' };
+  return {};
+}
+/**
+ * Groq strict mode accepts a JSON Schema subset: every object needs additionalProperties:false and every
+ * property listed in required (ours already are). Integer enums are not reliably accepted, so they are
+ * dropped here; the range is still enforced by our own validator after the reply.
+ */
+export function groqStrictSchema(schema: object): object {
+  const walk = (n: any): any => {
+    if (Array.isArray(n)) return n.map(walk);
+    if (!n || typeof n !== 'object') return n;
+    const out: any = {};
+    for (const [k, v] of Object.entries(n)) out[k] = walk(v);
+    if (out.type === 'integer' && Array.isArray(out.enum)) delete out.enum;
+    if (out.type === 'object' && out.properties) { out.additionalProperties = false; out.required = Object.keys(out.properties); }
+    return out;
+  };
+  return walk(schema);
 }
 
 export const INTERPRET_SYSTEM = `You translate a player's effect idea for a small grid racing game into ONE supported effect.

@@ -39,6 +39,7 @@ cp .env.example .env
 # OPENROUTER_MODEL=openrouter/free   (free pool; for a reliable demo pin one specific model)
 # or NVIDIA's OpenAI-compatible API instead:
 # LLM_PROVIDER=nvidia  NVIDIA_API_KEY=nvapi-...  NVIDIA_MODEL=meta/llama-3.3-70b-instruct
+# or GroqCloud:  LLM_PROVIDER=groq  GROQ_API_KEY=gsk_...  GROQ_MODEL=openai/gpt-oss-120b
 npm i -g @testmuai/kane-cli && kane-cli login     # Kane referee
 npm start
 ```
@@ -57,6 +58,7 @@ The header chips always show what is actually running: `AI brain: OpenRouter · 
 ```bash
 npm run eval:openrouter   # 20 Korean + 10 English + 10 must-reject rules + 10 AI turns → evidence/openrouter/
 npm run kane:trial        # real Kane verdicts on normal, AI-authored and deliberately corrupted trials + in-game turns → evidence/kane/
+npm run bench:llm         # same 50 cases across NVIDIA / Groq / OpenRouter models → evidence/llm-bench/
 npm run selfplay -- 30    # engine-only balance + board-crowding stats (bot vs bot, no LLM, no Kane)
 ```
 
