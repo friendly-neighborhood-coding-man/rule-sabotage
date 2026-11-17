@@ -131,17 +131,52 @@ The 14 new tests cover:
 - stage timings being recorded;
 - delayed approval on a changed board.
 
-## 6. Real Kane evidence status
+## 6. Real Kane evidence (operator's PC)
 
-No real Kane run has been made since these changes. One controlled run would measure the real stage breakdown:
+**Run setup.**
+- One approved run: `REFEREE_TIERS=on npm run kane:trial` at commit b36204e on 2026-11-17.
+- kane-cli 0.10.4 in analyzer mode, on Windows.
+- LLM keys were removed from the process, so the AI used the local planner.
 
-```
-REFEREE_TIERS=on npm run kane:trial
-```
+**Results.**
 
-- **What it covers:** runs A–C miss the cache, D hits it, and the in-game E rows show the tier routing.
-- **Expected cost:** about 3 to 5 uncached reviews, which is roughly 25–40 credits at the last run's rate.
-- **Status:** it will not be started without the operator's go-ahead.
+| Run | Expected | Result | Kane time | Cache |
+|---|---|---|---|---|
+| A human rule | approved | approved | 106.0 s | miss |
+| B same rule from the AI | approved | **unverified (timeout)** | 374.1 s | miss |
+| C canary: corrupted page | rejected | rejected (C1 false) | 155.3 s | miss |
+| D repeat of A | approved | approved | 0 s | hit |
+| E seed 11/12, human rules | approved | engine-approved, tier 1 | 205–238 ms | no Kane |
+| E seed 11/12, AI rules | approved | engine-approved, tier 2 | 161–162 ms | no Kane |
+
+**Time per stage, in ms.**
+
+| Run | Probe | Browser spawn | CDP ready | CLI total | CLI first output | CLI run_end | Parse | Cleanup | Evidence write | Total |
+|---|---|---|---|---|---|---|---|---|---|---|
+| A | 0 | 45 | 764 | 104452 | 1655 | 101746 | 9 | 672 | 191 | 106137 |
+| B | 0 | 635 | 2219 | 369946 | 1488 | none | 0 | 1012 | 1104 | 374920 |
+| C | 19815 | 276 | 4835 | 129715 | 14791 | 128406 | 0 | 616 | 10 | 155317 |
+
+**What the timings show.**
+- **The bottleneck is kane-cli's own analysis, not the browser.**
+  - In run A, starting the browser and waiting for it to be ready took 0.8 s, and cleanup 0.7 s.
+  - The CLI produced its first output at 1.7 s and its verdict at 101.7 s.
+  - That leaves about 100 s, or 95%, inside Kane. That stretch can only be made shorter by sending fewer Kane calls.
+- **Run C** shows two more costs:
+  - a cold probe of 19.8 s, because the 5-minute probe cache had expired by then;
+  - a slow CLI start of 14.8 s.
+- **Run B stalled inside kane-cli.**
+  - Its stdout holds only 4 start-up events from the first 1.3 s: `stream_start`, `recording_state`, `update_available` (0.10.4 → 0.10.5) and `skill_update_available`. No `run_end` ever came.
+  - The process was killed at the hard limit, and the result was recorded as **unverified** with exit code 1.
+  - It was not cached and would not have gone live. The fail-closed path behaved as designed.
+  - The same trial content was approved in about 98–109 s on earlier runs.
+- **Tiers removed every Kane call in the in-game scenario.**
+  - The four in-game rules were decided in 161–238 ms, against 82–115 s for an uncached Kane review in the baseline.
+  - A placement request returned in 413–467 ms. A full AI turn took 913–1067 ms.
+- **Credits:** about 24.4 for this run (10701.78 → 10677.40).
+- **Evidence:** `evidence/kane/live-2026-11-17T19-31-37-787Z.md` and `.json`, plus `T9102-4a8d78461ae504dc` and `T9103-canary-9e6a1fb6c37c0d62`, all on the PC.
+
+**Note.** kane-cli 0.10.5 is available and has not been installed. Whether it fixes the stall in run B is untested.
 
 ## Risks
 
