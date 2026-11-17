@@ -1,15 +1,20 @@
 # Rule Sabotage
 
-**Invent traps in plain English (or Korean). Then obey them too.**
+**Write effects in plain English (or Korean), scatter them over the board, then survive your own inventions.**
 
-A small human-vs-AI racing game on a 7×7 board. You race left→right, the AI races right→left. Every round you may invent a trap ("Anyone stepping here gets pushed back two spaces!"), but traps hit **whoever** steps on them, including the person who made them. The AI genuinely tries to win: it simulates its options against your possible replies with the real game engine. Sometimes it walks into its own trap anyway.
+A small human-vs-AI strategy race on a 7×7 board. You move 3 pieces from column A to column G; the AI moves 3 pieces the other way. Players take turns, and a coin flip decides who starts.
 
-Every new rule, yours or the AI's, goes through the same pipeline before it can go live:
+On your turn you may write one effect, for example "Anything entering here is shoved two squares north". You place it on up to 3 cells anywhere that has no piece and no enemy effect. Effects stay on the board until something enters them, and they work the same on **any** piece, yours included. Then you spend one move action per piece you have on the board.
+
+The board keeps growing into a minefield both of you built. The AI genuinely tries to win: it simulates its placements and move sequences, plus your best reply, with the real engine.
+
+Every new effect, yours or the AI's, goes through the same pipeline before it can go live:
 
 ```
-natural language ──► OpenRouter interpreter ──► engine safety rules ──► sandbox what-if trial ──► Kane CLI referee ──► live on the board
- (EN / 한국어)        (or labelled offline       (budget, shape,         (both players trigger it,   (kane-cli judges the
-                       parser)                    no instant wins…)        chains, 8-round softlock)   trial page: approve/reject)
+natural language ──► OpenRouter interpreter ──► engine checks ──► sandbox what-if trial ──► Kane CLI referee ──► live on the board
+ (EN / 한국어)        (or labelled offline       (≤3 eligible    (a Human piece and an AI    (kane-cli judges the
+                       parser)                    cells, legal)   piece must get identical    trial page: approve/reject)
+                                                                  outcomes; chains; softlock)
 ```
 
 The TypeScript engine (`server/engine.ts`) is the only thing that changes game state. LLM output is never executed: it can only pick from a small typed effect list that the engine validates.
@@ -31,7 +36,10 @@ With no configuration the game runs fully offline: an offline parser reads rules
 ```bash
 cp .env.example .env
 # OPENROUTER_API_KEY=sk-or-...   (server-side only; never sent to the browser)
-# OPENROUTER_MODEL=openrouter/free   (or any :free model)
+# OPENROUTER_MODEL=openrouter/free   (free pool; for a reliable demo pin one specific model)
+# or NVIDIA's OpenAI-compatible API instead:
+# NVIDIA_API_KEY=nvapi-...   default provider; model nvidia/nemotron-3.5-bolt-e4b (best in docs/EVIDENCE.md)
+# or GroqCloud:  LLM_PROVIDER=groq  GROQ_API_KEY=gsk_...  GROQ_MODEL=openai/gpt-oss-120b
 npm i -g @testmuai/kane-cli && kane-cli login     # Kane referee
 npm start
 ```
@@ -42,6 +50,7 @@ The header chips always show what is actually running: `AI brain: OpenRouter · 
 |---|---|
 | `KANE_REFEREE=on` (default) | Rules are reviewed by kane-cli. If Kane fails or times out the rule is **unverified and does not go live** (unless `ALLOW_UNVERIFIED_RULES=1`). |
 | `KANE_REFEREE=off` | Engine checks only; rules go live labelled “NOT Kane-verified”. Good for quick offline play. |
+| `REFEREE_TIERS=on` (default off) | Simple or fully simulable rules are decided by the engine (tier 1/2) and shown as **engine-approved, not reviewed by Kane**. Approximated, untestable or borderline rules still go to Kane and stay off the board until Kane approves. See [docs/OPTIMIZATION.md](docs/OPTIMIZATION.md). |
 | `KANE_MODE=analyzer` (default) | `kane-cli run --analyzer-only --condition … --cdp-endpoint` on the trial page (no browser actions, one verdict per condition). |
 | `KANE_MODE=objective` | `kane-cli run "<objective>" --url <trial page>` (Kane drives a browser; slower). |
 
@@ -49,26 +58,36 @@ The header chips always show what is actually running: `AI brain: OpenRouter · 
 
 ```bash
 npm run eval:openrouter   # 20 Korean + 10 English + 10 must-reject rules + 10 AI turns → evidence/openrouter/
-npm run kane:trial        # real Kane verdicts on normal, AI-authored and deliberately corrupted trials → evidence/kane/
-npm run selfplay          # engine-only balance stats (bot vs bot)
+npm run kane:trial        # real Kane verdicts on normal, AI-authored and deliberately corrupted trials + in-game turns → evidence/kane/
+npm run bench:llm         # same 50 cases across NVIDIA / Groq / OpenRouter models → evidence/llm-bench/
+npm run tiers:routing -- 30  # engine-only: how many rules would still need Kane with REFEREE_TIERS=on
+npm run selfplay -- 30    # engine-only balance + board-crowding stats (bot vs bot, no LLM, no Kane)
 ```
+
+Latest measured results from these scripts (providers benchmark and real Kane verdicts) are in [docs/EVIDENCE.md](docs/EVIDENCE.md).
 
 ## How to play (30 seconds)
 
-1. Each round a **shape** is highlighted (a row, column, diagonal or 3×3 square). It is the same shape for both players; even rounds mirror the previous one.
-2. Optionally type a trap and click **Interpret**. The card shows exactly what the engine will run, its power cost, and how many squares you may paint (power × squares ≤ 4). Click squares on the shape.
-3. Press a direction (arrows/WASD) to lock in your turn. The AI already locked in its move from the same public board and never sees yours.
-4. Traps resolve before moves, so you can ambush the square someone is about to step on. First to reach the far column wins. In a dead heat, whoever moves first that round wins (this alternates, and round 1 is a coin flip).
+1. **Your turn** gives you one move action per piece still on the board (3 at the start). The chip in the header counts them down.
+2. **Optional, before your first move:** type an effect and click **Interpret**. The card shows exactly what the engine will run; over-limit requests are approximated only if you tick the box. Click up to **3** highlighted cells anywhere, then press **Place**. The referee reviews it (Kane, if enabled) and it goes live.
+3. **Your own effects** can be removed for free: click their cell chips under "Your effects" before moving. Placing on top of your own effect replaces it, and that counts toward the 3 cells. Enemy effects can't be touched; you'll have to walk around them, or through them.
+4. **Move:** click a piece, then a neighbouring square (or use the arrow keys).
+   - A stack of your pieces moves together. Tick "Move only one piece" to split it.
+   - Landing on an enemy piece captures it and sends it back to its start.
+   - Entering an effect fires it and uses up that cell. Forced movement can set off more effects.
+5. **Win** by getting all 3 pieces across. **End turn** with `E`; your turn also ends automatically when you're out of actions.
 
-More: [docs/DESIGN.md](docs/DESIGN.md) · [docs/DEMO_SCRIPT.md](docs/DEMO_SCRIPT.md) · [docs/STATUS.md](docs/STATUS.md)
+Effects: shove 1–3 squares north / south / east / west / back (the way it came) / forward (onward), freeze one turn, send home, random teleport, shield, +1 action.
+
+More: [docs/DESIGN.md](docs/DESIGN.md) · [docs/DEMO_SCRIPT.md](docs/DEMO_SCRIPT.md)
 
 ## Layout
 
 ```
-server/engine.ts    authoritative deterministic engine (rules of play, traps, win/tie)
-server/rules.ts     typed effect DSL, power budget, input/policy guards, offline EN/KO parser
-server/ai.ts        simulation planner (opponent), shortlist for the LLM
-server/game.ts      server-authoritative sessions, AI pre-commit, referee pipeline
+server/engine.ts    authoritative deterministic engine (turns, actions, stacks, captures, effects, chains, win)
+server/rules.ts     typed effect DSL, input/policy guards, offline EN/KO parser
+server/ai.ts        turn planner (placement + move sequence + your reply), shortlist for the LLM
+server/game.ts      server-authoritative sessions, turn API, referee pipeline
 server/trial.ts     sandboxed what-if trials + the page Kane inspects
 server/kane.ts      real kane-cli adapter (analyzer/objective modes, evidence, cache)
 server/openrouter.ts  OpenRouter calls: structured output, fallbacks, rate-limit cooldown

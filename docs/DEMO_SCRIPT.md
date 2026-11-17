@@ -5,38 +5,36 @@
 ---
 
 **0:00 Hook (one sentence)**
-> "This is a race where you get to invent the rules in plain English. The catch: every trap you invent works on you too."
+> "Three pieces each, a 7×7 board, and you write the traps in plain English. The catch: every effect works on everybody, including the person who built it."
 
 **0:15 The board**
-Point at the two tokens, the goal columns and the yellow shape.
-> "This round, traps can only go on this yellow column, for both of us. The AI already locked in its move. See the lock? It decided from the same board I see, without seeing my move."
+Point at the three teal pieces in column A, the three pink AI pieces in column G, and the action chip ("Your turn · 3 actions left").
+> "One action per piece I still have on the board. Stack pieces and they move together. Land on an enemy and it goes back home."
 
-**0:35 Invent a trap (the wow moment)**
-Type: `Anyone stepping here gets pushed backward two spaces!` → **Interpret**.
-> "OpenRouter turns my sentence into one of a few safe effects. The card shows exactly what will run: push back 2, costs 2 power per square, so I get two squares."
-Click the two squares right in front of the AI. Press **→**.
+**0:35 Write an effect (the wow moment)**
+Type: `Anything entering here is shoved two squares north` → **Interpret**.
+> "OpenRouter turns my sentence into one of a few safe effects. The card shows exactly what the engine will run."
+Click three cells anywhere: two in front of the AI's pieces and one far away. Press **Place**.
 
 **0:55 Kane the referee**
-The referee panel appears: *"Kane is examining your rule…"*, then *"Sandbox ran 5 what-if scenarios"*, then *"Rule approved by Kane. Proceed at your own risk."*
-> "Before any rule goes live, the engine replays it in a sandbox: both players stepping on it, chain reactions, an 8-round softlock check. Kane CLI then inspects that trial page and gives a verdict. If Kane can't verify a rule, it doesn't go live."
-Click **see trial** to flash the trial page. (Say the real seconds shown on the card. Don't round them down.)
+The referee panel shows *"Sandbox ran 4 what-if scenarios"*, then *"Kane is examining your rule…"*, then *"Kane approved your rule"* with the trial ID and scenario IDs.
+> "Before any effect goes live, the engine replays it in a sandbox. A human piece and an AI piece walk into each cell the same way, and they must get the identical outcome. Then Kane CLI inspects that trial page and gives the verdict. If Kane can't verify it, it doesn't go live."
+Click the **trial** link to flash the page. Read out the real seconds shown on the card, not a rounded number.
 
-**1:30 Let the AI play back**
-Make two or three quick moves. Point out the AI's trap colour (pink) vs yours (teal), the speech bubble ("said before the reveal"), and the log line *"AI's recorded decision … simulated 45 options × 15 replies"*.
-> "The AI isn't scripted to lose. It simulates its options against my likely replies, and you can see what it decided before the reveal."
+**1:30 Move, then let the AI play**
+Click a piece, then a square, a couple of times, and press **E**. The AI's turn animates: its own effect lands (pink), its pieces move, and the log shows *"Local planner / OpenRouter: …"* with its rationale.
+> "It simulated every effect it could place plus its move sequence, and then my best reply, all with the real engine."
 
 **2:00 Show a rejection**
-Type: `Only the AI loses all its turns forever`.
-> "Unfair rules get a reason, not silence: traps hit everyone, and nothing is permanent."
-Optional: `Push back 5 squares` shows an approximation that I have to accept explicitly.
+Type: `Only the AI is frozen forever`. Then `Pushed toward your own side`.
+> "Unfair rules get a reason, not silence. Effects can't care whose piece it is."
+Optional: `Shoved 5 squares north` shows an approximation that I must accept explicitly.
 
 **2:20 The punchline**
-Keep racing. The usual comedy: someone gets pushed back onto their own trap, then **SELF-SABOTAGE!** and *"That was not part of my plan."* If it doesn't happen naturally, say:
-> "It doesn't always happen, and I can't make it happen. Every funny moment here comes from rules the players wrote."
+Keep playing. Effects pile up, and sooner or later someone gets shoved onto their own trap: **"You stepped on your own effect!"** and *"That was not part of my plan."* If it hasn't happened, remove one of your own effects (click its cell chip) to show you can clean up your own mess. Point out that you can't touch the AI's.
 
 **2:40 Game over + rematch**
-Show the result card, achievements (Self-Sabotage, Uno Reverse, Calculated Disaster…) and press **R**.
-> "Lose, laugh, press R. Ten seconds to the next game."
+Show the result card and achievements (Self-Sabotage, Uno Reverse, Bowling Ball, Architect…), then press **R**.
 
 **2:55 Close**
 > "OpenRouter for language and strategy, a TypeScript engine as the only source of truth, and Kane CLI as a referee that really runs on every new rule."

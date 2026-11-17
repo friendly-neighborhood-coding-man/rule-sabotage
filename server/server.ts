@@ -3,9 +3,10 @@ import { createServer, type IncomingMessage, type ServerResponse } from 'node:ht
 import { readFile } from 'node:fs/promises';
 import { resolve, extname, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { newGame, getGame, view, preview, playTurn, trials, refereeMode, type HumanTurn } from './game.ts';
-import { modelConfigured, modelName, stats } from './openrouter.ts';
-import { kaneProbe, kaneConfig } from './kane.ts';
+import { tiersEnabled } from './tiers.ts';
+import { startGame, getGame, view, preview, placeHuman, moveHuman, endHumanTurn, trials, refereeMode } from './game.ts';
+import { modelConfigured, modelName, providerLabel, stats } from './openrouter.ts';
+import { kaneProbe, kaneConfig, kaneCacheStats } from './kane.ts';
 
 const HOST = process.env.HOST || '127.0.0.1', PORT = Number(process.env.PORT || 3000);
 const ROOT = resolve(fileURLToPath(new URL('../client/', import.meta.url)));
@@ -36,8 +37,8 @@ async function api(req: IncomingMessage, res: ServerResponse, path: string) {
     const k = await kaneProbe();
     const recent = stats.slice(-50);
     return json(res, 200, {
-      openrouter: { configured: modelConfigured(), model: modelConfigured() ? modelName() : null, recentCalls: recent.length, recentFailures: recent.filter(s => !s.ok).length },
-      referee: { mode: refereeMode(), kane: k, kaneMode: kaneConfig().mode, timeoutS: kaneConfig().timeoutS, allowUnverified: process.env.ALLOW_UNVERIFIED_RULES === '1' },
+      openrouter: { configured: modelConfigured(), provider: modelConfigured() ? providerLabel() : null, model: modelConfigured() ? modelName() : null, recentCalls: recent.length, recentFailures: recent.filter(s => !s.ok).length },
+      referee: { mode: refereeMode(), kane: k, kaneMode: kaneConfig().mode, timeoutS: kaneConfig().timeoutS, allowUnverified: process.env.ALLOW_UNVERIFIED_RULES === '1', tiers: tiersEnabled(), cache: kaneCacheStats() },
       authority: 'server',
     });
   }
@@ -47,28 +48,33 @@ async function api(req: IncomingMessage, res: ServerResponse, path: string) {
   if (path === '/api/game' && req.method === 'POST') {
     let b: any = {}; try { b = await body(req); } catch { return json(res, 400, { error: 'bad_json' }); }
     const seed = Number.isInteger(b?.seed) ? b.seed : undefined;
-    return json(res, 200, view(newGame(seed)));
+    const { g, ai } = await startGame(seed);
+    return json(res, 200, { ...view(g), ai });
   }
-  m = path.match(/^\/api\/game\/([0-9a-f-]{36})(\/(preview|turn|progress))?$/);
+  m = path.match(/^\/api\/game\/([0-9a-f-]{36})(\/(preview|place|move|end|progress))?$/);
   if (!m) return json(res, 404, { error: 'not_found' });
   const g = getGame(m[1]);
   if (!g) return json(res, 404, { error: 'no_such_game' });
   const action = m[3];
   if (!action && req.method === 'GET') return json(res, 200, view(g));
-  if (action === 'progress' && req.method === 'GET') return json(res, 200, { busy: g.busy, aiReady: g.aiReady, progress: g.progress });
+  if (action === 'progress' && req.method === 'GET') return json(res, 200, { busy: g.busy, progress: g.progress });
   if (req.method !== 'POST') return json(res, 405, { error: 'method_not_allowed' });
   let b: any; try { b = await body(req); } catch { return json(res, 400, { error: 'bad_json' }); }
+  const cellList = (v: unknown) => v === undefined || (Array.isArray(v) && v.length <= 49 && v.every(c => typeof c === 'string' && /^[0-6],[0-6]$/.test(c)));
   try {
     if (action === 'preview') {
       if (typeof b?.text !== 'string' || b.text.length > 400) return json(res, 400, { error: 'invalid_text' });
       return json(res, 200, await preview(g, b.text));
     }
-    if (action === 'turn') {
-      const t = b as HumanTurn;
-      if (!t || typeof t !== 'object' || typeof t.move !== 'string' || (t.rule && typeof t.rule !== 'object')) return json(res, 400, { error: 'invalid_turn' });
-      if (t.rule?.op === 'place' && (!Array.isArray(t.rule.cells) || t.rule.cells.some(c => typeof c !== 'string' || !/^[0-6],[0-6]$/.test(c)))) return json(res, 400, { error: 'invalid_cells' });
-      return json(res, 200, await playTurn(g, { move: t.move, rule: t.rule ?? { op: 'none' } }));
+    if (action === 'place') {
+      if (!b || typeof b !== 'object' || (b.token !== undefined && typeof b.token !== 'string') || !cellList(b.cells) || !cellList(b.remove)) return json(res, 400, { error: 'invalid_placement' });
+      return json(res, 200, await placeHuman(g, { token: b.token, cells: b.cells, remove: b.remove }));
     }
+    if (action === 'move') {
+      if (!b || typeof b.from !== 'string' || typeof b.dir !== 'string') return json(res, 400, { error: 'invalid_move' });
+      return json(res, 200, moveHuman(g, { from: b.from, dir: b.dir, mode: b.mode === 'single' ? 'single' : 'stack' }));
+    }
+    if (action === 'end') return json(res, 200, await endHumanTurn(g));
   } catch (e) {
     const err = e as Error & { status?: number };
     return json(res, err.status ?? 409, { error: 'rejected', reason: err.message.slice(0, 300) });
@@ -105,7 +111,7 @@ if (process.env.RULE_SABOTAGE_NO_LISTEN !== '1') {
   server.listen(PORT, HOST, async () => {
     const k = await kaneProbe();
     console.log(`Rule Sabotage on http://${HOST}:${PORT}`);
-    console.log(`  OpenRouter: ${modelConfigured() ? `configured (${modelName()})` : 'NOT configured -> offline parser + local planner (labelled in UI)'}`);
-    console.log(`  Referee:    ${refereeMode() === 'kane' ? `Kane (${k.detail})` : 'engine-only (KANE_REFEREE=off)'}`);
+    console.log(`  LLM:        ${modelConfigured() ? `${providerLabel()} (${modelName()})` : 'NOT configured -> offline parser + local planner (labelled in UI)'}`);
+    console.log(`  Referee:    ${refereeMode() === 'kane' ? `Kane (${k.detail})` : 'engine-only (KANE_REFEREE=off)'}${tiersEnabled() ? ' + referee tiers ON (simple rules decided by the engine, labelled engine-approved)' : ''}`);
   });
 }

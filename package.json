@@ -3,13 +3,17 @@
   "private": true,
   "version": "0.3.0",
   "type": "module",
-  "engines": { "node": ">=22.10" },
+  "engines": {
+    "node": ">=22.10"
+  },
   "scripts": {
     "start": "node --env-file-if-exists=.env --experimental-strip-types --no-warnings=ExperimentalWarning server/server.ts",
     "test": "node --experimental-strip-types --no-warnings=ExperimentalWarning --test tests/*.test.ts",
     "test:browser": "node --experimental-strip-types --no-warnings=ExperimentalWarning tests/browser/e2e.ts",
     "selfplay": "node --experimental-strip-types --no-warnings=ExperimentalWarning scripts/selfplay.ts",
     "eval:openrouter": "node --env-file-if-exists=.env --experimental-strip-types --no-warnings=ExperimentalWarning scripts/eval-openrouter.ts",
-    "kane:trial": "node --env-file-if-exists=.env --experimental-strip-types --no-warnings=ExperimentalWarning scripts/kane-trial.ts"
+    "kane:trial": "node --env-file-if-exists=.env --experimental-strip-types --no-warnings=ExperimentalWarning scripts/kane-trial.ts",
+    "bench:llm": "node --env-file-if-exists=.env --experimental-strip-types --no-warnings=ExperimentalWarning scripts/bench-llm.ts",
+    "tiers:routing": "node --experimental-strip-types --no-warnings=ExperimentalWarning scripts/tier-routing.ts"
   }
 }
