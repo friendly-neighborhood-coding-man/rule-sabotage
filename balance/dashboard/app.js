@@ -49,3 +49,18 @@ async function tick() {
   try { const r = await fetch('/api/status', { cache: 'no-store' }); if (r.ok) render(await r.json()); } catch { $('meta').textContent = 'loop process not reachable (finished?)'; }
 }
 tick(); setInterval(tick, 1000);
+
+// ?follow=1 (used by the recorder): keep the panel of the active stage in view, so a fixed-size capture shows every step.
+if (new URLSearchParams(location.search).get('follow') === '1') {
+  const panelFor = { baseline: 'p-wrong', detect: 'p-wrong', kane: 'p-kane', propose: 'p-change', evaluate: 'p-improve', decide: 'p-improve', journal: 'p-improve' };
+  let last = '';
+  setInterval(async () => {
+    try {
+      const st = await (await fetch('/api/status', { cache: 'no-store' })).json();
+      const cy = st.cycles[st.cycles.length - 1]; if (!cy) return;
+      const active = cy.stages.find(s => s.state === 'running') || [...cy.stages].reverse().find(s => s.state !== 'pending');
+      const id = active ? panelFor[active.key] : 'p-wrong';
+      if (id !== last) { document.getElementById(id).scrollIntoView({ behavior: 'smooth', block: 'start' }); last = id; }
+    } catch { /* loop finished */ }
+  }, 1500);
+}

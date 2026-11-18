@@ -84,7 +84,7 @@ const kept: { file: string; t: number }[] = [];
 if (chrome && dashboard) {
   const port = await freePort();
   const prof = join(tmpdir(), `rs-rec-prof-${stamp}`);
-  browser = spawn(chrome, ['--headless=new', `--remote-debugging-port=${port}`, `--user-data-dir=${prof}`, `--window-size=${W},${H}`, '--no-first-run', '--no-default-browser-check', '--hide-scrollbars', '--force-device-scale-factor=1', ...(process.platform === 'linux' ? ['--no-sandbox'] : []), dashboard], { stdio: 'ignore' });
+  browser = spawn(chrome, ['--headless=new', `--remote-debugging-port=${port}`, `--user-data-dir=${prof}`, `--window-size=${W},${H}`, '--no-first-run', '--no-default-browser-check', '--hide-scrollbars', '--force-device-scale-factor=1', ...(process.platform === 'linux' ? ['--no-sandbox'] : []), dashboard + '?follow=1'], { stdio: 'ignore' });
   browser.on('error', e => note(`browser failed: ${e.message}`));
   let wsUrl: string | null = null;
   for (let i = 0; i < 60 && !wsUrl; i++) {
