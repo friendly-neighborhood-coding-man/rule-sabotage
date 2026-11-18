@@ -1,0 +1,206 @@
+{
+  "generatedAt": "2026-11-18T14:39:34.317Z",
+  "note": "sha256 of every evidence file in this run directory (status.json changes until the run ends; recordings are added by the recorder).",
+  "files": [
+    {
+      "path": "REPORT.md",
+      "bytes": 15450,
+      "sha256": "dcffda4442ea401a6762f16e3e5a0d19d94f5309e96dee7e94df42136e97d64a"
+    },
+    {
+      "path": "cycle-1/anomalies.json",
+      "bytes": 13353,
+      "sha256": "18008128f51cd2a9dc46c7106b6475bf6d6265213ba844eb3e5ba9850222de20"
+    },
+    {
+      "path": "cycle-1/baseline-heldout-games.ndjson",
+      "bytes": 132885,
+      "sha256": "8dc18b686d3fdfdc7f3da852e3c552f4b258d760c71f685a3593ca2f1803a770"
+    },
+    {
+      "path": "cycle-1/baseline-heldout-metrics.json",
+      "bytes": 6747,
+      "sha256": "2c7962fb118443fcb720f35062e6ea96b7cb997ccce151e9afee06cb8b34117d"
+    },
+    {
+      "path": "cycle-1/baseline-training-games.ndjson",
+      "bytes": 120986,
+      "sha256": "6d1f600e5ad61b43f47b8f7e0e9b32a4e0ab918f029e50b09a6a112b19872303"
+    },
+    {
+      "path": "cycle-1/baseline-training-metrics.json",
+      "bytes": 6749,
+      "sha256": "437b4599fa4f8f0d49a394c30a42771b797080c71313df527184a95db26d1b57"
+    },
+    {
+      "path": "cycle-1/candidate-C1-heldout-games.ndjson",
+      "bytes": 128677,
+      "sha256": "44ccf24bd694558421c26bd5b9541cb89d5cb14b9678e6c9e6b622aeee8cfeb3"
+    },
+    {
+      "path": "cycle-1/candidate-C1-heldout-metrics.json",
+      "bytes": 6745,
+      "sha256": "6870970ddc9147c02c133353818eb37fa0031e7fdb3737341ce4143495a37fae"
+    },
+    {
+      "path": "cycle-1/candidate-C1.weights.json",
+      "bytes": 2477,
+      "sha256": "9a034c4df4f471df0ffaa63b4bea43d11beba293b47fb17d564aead7704d69e5"
+    },
+    {
+      "path": "cycle-1/candidate-C2-heldout-games.ndjson",
+      "bytes": 130693,
+      "sha256": "83ee2402cb1ca9d5cdcdc27475663efafff85fe87522e092de680b15f50724f7"
+    },
+    {
+      "path": "cycle-1/candidate-C2-heldout-metrics.json",
+      "bytes": 6752,
+      "sha256": "71bf4d66b1a4547c6fe388cb309242e2af41c705e2f1991941d3a5fc33e1bfc4"
+    },
+    {
+      "path": "cycle-1/candidate-C2.weights.json",
+      "bytes": 2469,
+      "sha256": "7eb62c1c852c00047078703c4e4f3d8908edc57b7c887962aea392110514be8d"
+    },
+    {
+      "path": "cycle-1/candidate-C3-heldout-games.ndjson",
+      "bytes": 130098,
+      "sha256": "c5eabf63669e02021abe3efbe021542d9ef19ba5a04a0f1d8febb2d71d0b6f1e"
+    },
+    {
+      "path": "cycle-1/candidate-C3-heldout-metrics.json",
+      "bytes": 6828,
+      "sha256": "d50212beb27f83fc521dc323413437d2b3710cafef77040a66740df3c4fb4175"
+    },
+    {
+      "path": "cycle-1/candidate-C3.weights.json",
+      "bytes": 2477,
+      "sha256": "e4f1685100270291d8f43a3e775780e6ce3ed8a51472e8f2c4ea4e82a36c84c7"
+    },
+    {
+      "path": "cycle-1/candidate-C4-heldout-games.ndjson",
+      "bytes": 130691,
+      "sha256": "6974ee7dc527798170fb5d947669b18d6c6cce86ccf7fa0ff0fabed03c3bc4ed"
+    },
+    {
+      "path": "cycle-1/candidate-C4-heldout-metrics.json",
+      "bytes": 6765,
+      "sha256": "47b00fb0e182e871d2f5b6d1274f3ec162d3ab99446152491f3562250937a6b9"
+    },
+    {
+      "path": "cycle-1/candidate-C4.weights.json",
+      "bytes": 2469,
+      "sha256": "917e55c26c4bc76f3ce8af20966037d8cd264eef9b429cd9c9a67cc490329376"
+    },
+    {
+      "path": "cycle-1/candidate-C5-heldout-games.ndjson",
+      "bytes": 128911,
+      "sha256": "4f126c2f6791e6126319086617a91cb8c3250083003e450286aac5be9905b721"
+    },
+    {
+      "path": "cycle-1/candidate-C5-heldout-metrics.json",
+      "bytes": 6511,
+      "sha256": "eef87c64173e12df32cc95c37aa8dc2c30000899c894c5af763845e67eb9ecbc"
+    },
+    {
+      "path": "cycle-1/candidate-C5.weights.json",
+      "bytes": 2545,
+      "sha256": "42d473a54e151a61e12837d549311d38e39885eae98ef6bc9673c134e226c80c"
+    },
+    {
+      "path": "cycle-1/cycle.json",
+      "bytes": 110078,
+      "sha256": "e4810bda05c3110c1b0208ba335053ae086de7d4fd10a84dc557370d9611d22a"
+    },
+    {
+      "path": "cycle-1/findings.json",
+      "bytes": 18725,
+      "sha256": "2465266b5cc70ac97ec399730c0f600759782e075bb160325b871f2647ae766d"
+    },
+    {
+      "path": "cycle-1/kane-A1/kane-result.json",
+      "bytes": 2962,
+      "sha256": "906fee9dc53be82ec8222d2cdafbd936b1a900dbb0e79ed4739b0733390e0296"
+    },
+    {
+      "path": "cycle-1/kane-A1/kane-stderr.txt",
+      "bytes": 211,
+      "sha256": "a2ec3ae66b2c68241e92fdbdee6ce28a291c58b44c732a12a68da075ae69bb0e"
+    },
+    {
+      "path": "cycle-1/kane-A1/kane-stdout.ndjson",
+      "bytes": 2969,
+      "sha256": "b0931fbd87590b883fb1e7bb651a1fbbbc9192a549a74b1cd74d4e29490b6881"
+    },
+    {
+      "path": "cycle-1/kane-A4/kane-result.json",
+      "bytes": 2363,
+      "sha256": "71e2e06c3ebcbb909c4826c49189a27a1b0f916c62355e7d79bbd9bb170aa649"
+    },
+    {
+      "path": "cycle-1/kane-A4/kane-stderr.txt",
+      "bytes": 211,
+      "sha256": "a2ec3ae66b2c68241e92fdbdee6ce28a291c58b44c732a12a68da075ae69bb0e"
+    },
+    {
+      "path": "cycle-1/kane-A4/kane-stdout.ndjson",
+      "bytes": 2300,
+      "sha256": "b68ff32c525f122176fd630c233478923266b084cf6879ade918cfada59be6dd"
+    },
+    {
+      "path": "cycle-1/unit-tests.txt",
+      "bytes": 63,
+      "sha256": "9384c617d695adad6ce975bc4b44b67837e71b518224f7cfa53644b79c70d206"
+    },
+    {
+      "path": "cycle-1-A1-evidence.html",
+      "bytes": 8240,
+      "sha256": "27a95cc61e1b8426a59d6b0eab50ed61cbd9c738729eee7182c2aeeacefa9f0b"
+    },
+    {
+      "path": "cycle-1-A4-evidence.html",
+      "bytes": 2936,
+      "sha256": "e59b211b1e2fbc3a2d45039c9f77f04d825b40d5ce3e6e02ebbcc4c49d9dcef9"
+    },
+    {
+      "path": "journal-snapshot.ndjson",
+      "bytes": 36964,
+      "sha256": "ea649ba569060e38116d143bdcec42cb26ea026c542ed073d8c5d068035464ee"
+    },
+    {
+      "path": "loop.log",
+      "bytes": 5230,
+      "sha256": "e5ad34919a094519530b7a49b774fe8d561887bb5ae8d01270f15818aa8d7535"
+    },
+    {
+      "path": "recording/VIDEO-LOCATION.txt",
+      "bytes": 140,
+      "sha256": "7f229f08f9981e69164fd220ef0f13d1f13358ca6087e1222c0745f24a7f3667"
+    },
+    {
+      "path": "recording/recorder.log",
+      "bytes": 446,
+      "sha256": "0f0e65b2a95f9d4d18d642584cf27b5e033c12da35f6a6439522c9a1c95b3dde"
+    },
+    {
+      "path": "recording/recording-manifest.json",
+      "bytes": 1205,
+      "sha256": "a8f12ade4f8d3f038f27c5bd41e915c96f71d84d5e30e95ad46e96e32372c570"
+    },
+    {
+      "path": "recording/terminal.cast",
+      "bytes": 6858,
+      "sha256": "220a96069008ecd388f1d1f440508779bf4ad2f749e386c6b3f613366f5eb787"
+    },
+    {
+      "path": "recording/terminal.log",
+      "bytes": 5566,
+      "sha256": "c0f829dae231790731b20ed1d64bab184b401c54ac5fd8346db1d2de33b41d8d"
+    },
+    {
+      "path": "status.json",
+      "bytes": 134164,
+      "sha256": "273b3685d1056357704eac2339469ef3ce4f6814d9838e333a64e70ad06d5a37"
+    }
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "status": "complete",
+  "conditionResults": [
+    true,
+    true,
+    false
+  ],
+  "conditionReasons": [
+    "Counting data rows in the Evidence rows table: value: '13' -> '13'; equals '13' -> PASS",
+    "Checking the majority of won results in the Evidence rows table: value: 'true' -> 'true'; equals 'true' -> PASS",
+    "Checking the maximum share of won results in the Evidence rows table: value: 'false' -> 'false'; equals 'true' -> FAIL"
+  ],
+  "detail": "Kane returned 3 condition results.",
+  "exitCode": 0,
+  "timedOut": false,
+  "version": "0.10.4",
+  "isTestDouble": false,
+  "cli": "kane-cli",
+  "mode": "analyzer",
+  "args": [
+    "run",
+    "--analyzer-only",
+    "--agent",
+    "--cdp-endpoint",
+    "http://127.0.0.1:57507",
+    "--timeout",
+    "300",
+    "--condition",
+    "The table titled 'Evidence rows' has exactly 13 data rows below its header row.",
+    "--condition",
+    "In the 'Evidence rows' table, more than half of the data rows are rows where the 'Result for this side' column says 'won'.",
+    "--condition",
+    "In the 'Evidence rows' table, at most half of the data rows are rows where the 'Result for this side' column says 'won'."
+  ],
+  "startedAt": "2026-11-18T14:24:58.224Z",
+  "finishedAt": "2026-11-18T14:25:51.074Z",
+  "elapsedMs": 52850,
+  "timings": {
+    "browserSpawnMs": 25,
+    "cdpReadyMs": 2090,
+    "cdpReady": true,
+    "cliMs": 49798,
+    "cliFirstOutputMs": 6324,
+    "cliRunEndMs": 48364
+  },
+  "files": {
+    "stdout": "D:\\Rule_Sabotage\\rule-sabotage-live\\evidence\\balance\\runs\\2026-11-18T14-21-47Z-kane\\cycle-1\\kane-A4\\kane-stdout.ndjson",
+    "stderr": "D:\\Rule_Sabotage\\rule-sabotage-live\\evidence\\balance\\runs\\2026-11-18T14-21-47Z-kane\\cycle-1\\kane-A4\\kane-stderr.txt",
+    "result": "D:\\Rule_Sabotage\\rule-sabotage-live\\evidence\\balance\\runs\\2026-11-18T14-21-47Z-kane\\cycle-1\\kane-A4\\kane-result.json"
+  },
+  "conditions": [
+    "The table titled 'Evidence rows' has exactly 13 data rows below its header row.",
+    "In the 'Evidence rows' table, more than half of the data rows are rows where the 'Result for this side' column says 'won'.",
+    "In the 'Evidence rows' table, at most half of the data rows are rows where the 'Result for this side' column says 'won'."
+  ],
+  "url": "http://127.0.0.1:4100/evidence/2026-11-18T14-21-47Z-kane/cycle-1-A4-evidence.html"
+}

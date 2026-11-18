@@ -8,6 +8,7 @@ import {
   applyPlacement, applyMove, endTurn, legalMoves, eligibleCells, ruleAt, onBoard, scored, validatePlacement,
 } from './engine.ts';
 import { type Player, type Effect, other, makeEffect, shortLabel, MAX_CELLS_PER_TURN } from './rules.ts';
+import { type Weights, DEFAULT_WEIGHTS, effectUpkeep, plannerEffects, activationUtility } from './weights.ts';
 
 export type TurnPlan = { placement: Placement | null; moves: Move[]; score: number; afterReply: number; summary: string; id: string };
 export type Plan = { chosen: TurnPlan; ranked: TurnPlan[]; candidates: number; sims: number; ms: number };
@@ -16,9 +17,14 @@ const dist = (p: Player, x: number) => Math.abs(GOAL_X[p] - x);
 const towardGoal = (p: Player) => (GOAL_X[p] > 0 ? DIRS.right : DIRS.left);
 
 /** Turn-equivalent cost for a piece of `p` entering cell k (assuming it travels toward its goal). */
-export function cellPenalty(s: State, p: Player, k: string, e?: Effect): number {
+export function cellPenalty(s: State, p: Player, k: string, e?: Effect, w: Weights = DEFAULT_WEIGHTS): number {
   const eff = e ?? ruleAt(s, k)?.effect;
   if (!eff) return 0;
+  void w; // the planner's path costs use the engine's own geometry; weights act through the placement overlay below
+  return basePenalty(p, k, eff);
+}
+/** Unweighted geometric estimate from the engine's own geometry (no balance weight applied). */
+export function basePenalty(p: Player, k: string, eff: Effect): number {
   const c = parseKey(k), here = dist(p, c.x);
   switch (eff.kind) {
     case 'shove': {
@@ -37,7 +43,7 @@ export function cellPenalty(s: State, p: Player, k: string, e?: Effect): number 
 }
 
 /** Dijkstra: estimated actions for piece q to reach its goal column, traps priced in. */
-export function pieceCost(s: State, q: Piece): number {
+export function pieceCost(s: State, q: Piece, w: Weights = DEFAULT_WEIGHTS): number {
   if (q.scored) return 0;
   const p = q.owner;
   const best = new Map<string, number>([[key(q.x, q.y), 0]]);
@@ -53,7 +59,7 @@ export function pieceCost(s: State, q: Piece): number {
       const nx = x + d.x, ny = y + d.y;
       if (!inside(nx, ny)) continue;
       const nk = key(nx, ny);
-      let pen = cellPenalty(s, p, nk);
+      let pen = cellPenalty(s, p, nk, undefined, w);
       if (q.shield && pen > 0) pen = 0;
       const nd = b + Math.max(0.1, 1 + pen);
       if (nd < (best.get(nk) ?? Infinity)) best.set(nk, nd);
@@ -62,17 +68,17 @@ export function pieceCost(s: State, q: Piece): number {
 }
 
 /** Positive = good for `me`. */
-export function evaluate(s: State, me: Player): number {
+export function evaluate(s: State, me: Player, w: Weights = DEFAULT_WEIGHTS): number {
   const opp = other(me);
   if (s.winner === me) return 1000;
   if (s.winner === opp) return -1000;
   if (s.winner === 'draw') return 0;
-  const cost = (p: Player) => onBoard(s, p).reduce((a, q) => a + pieceCost(s, q), 0);
-  return cost(opp) - cost(me) + 6 * (scored(s, me) - scored(s, opp)) + (s.current === me ? 0 : 0);
+  const cost = (p: Player) => onBoard(s, p).reduce((a, q) => a + pieceCost(s, q, w), 0);
+  return cost(opp) - cost(me) + w.planner.scoredBonus * (scored(s, me) - scored(s, opp));
 }
 
 /** Per-cell value of placing `e` for player p: expected harm to the opponent minus harm to self. */
-export function bestCells(s: State, p: Player, e: Effect): string[] {
+export function bestCells(s: State, p: Player, e: Effect, w: Weights = DEFAULT_WEIGHTS): string[] {
   const pieces = s.pieces.filter(q => !q.scored);
   const scoredCells = eligibleCells(s, p).filter(k => !ruleAt(s, k)).map(k => {
     const c = parseKey(k);
@@ -81,9 +87,9 @@ export function bestCells(s: State, p: Player, e: Effect): string[] {
       const ahead = (GOAL_X[q.owner] - q.x) * (GOAL_X[q.owner] - c.x) >= 0 ? 1 : 0.3; // cells still in front of the piece
       const d = Math.abs(q.x - c.x) + Math.abs(q.y - c.y);
       const lateral = Math.abs(q.y - c.y);
-      const w = ahead / (1 + 0.6 * d + 0.8 * lateral);
-      const pen = cellPenalty(s, q.owner, k, e);
-      v += (q.owner === p ? -1.15 : 1) * w * pen;
+      const wt = ahead / (1 + 0.6 * d + 0.8 * lateral);
+      const pen = cellPenalty(s, q.owner, k, e, w);
+      v += (q.owner === p ? -w.planner.selfHarmFactor : 1) * wt * pen;
     }
     return { k, v };
   }).filter(o => o.v > 0.05).sort((a, b) => b.v - a.v || a.k.localeCompare(b.k));
@@ -99,16 +105,16 @@ export const CANDIDATE_EFFECTS: Effect[] = [
 function rng(seed: number) { let x = seed >>> 0 || 1; return () => { x ^= x << 13; x >>>= 0; x ^= x >>> 17; x ^= x << 5; x >>>= 0; return x / 0x100000000; }; }
 
 /** Greedy move sequence with the engine as simulator. Stops early if every move makes things worse. */
-export function planMoves(s0: State, p: Player, noise = 0, rnd = Math.random): { moves: Move[]; state: State; sims: number } {
+export function planMoves(s0: State, p: Player, noise = 0, rnd = Math.random, w: Weights = DEFAULT_WEIGHTS): { moves: Move[]; state: State; sims: number } {
   let s = structuredClone(s0), sims = 0;
   const moves: Move[] = [];
   while (s.current === p && !s.winner && s.actionsLeft > 0) {
-    const base = evaluate(s, p);
+    const base = evaluate(s, p, w);
     let best: { m: Move; v: number; st: State } | null = null;
     for (const m of legalMoves(s, p)) {
       const t = structuredClone(s);
       applyMove(t, p, m); sims++;
-      const v = evaluate(t, p) + (noise ? (rnd() - 0.5) * noise : 0);
+      const v = evaluate(t, p, w) + (noise ? (rnd() - 0.5) * noise : 0);
       if (!best || v > best.v) best = { m, v, st: t };
     }
     if (!best || best.v < base - 0.25) break;
@@ -124,14 +130,35 @@ export function describeTurn(pl: Placement | null, moves: Move[]): string {
   return parts.join(', then ');
 }
 
+/** Rule Space V0.3 §11: how much entering `pl`'s cells is expected to be worth to `p`, using signed activator utilities. */
+function riskExposure(s: State, p: Player, x: number, y: number): number {
+  let prob = 0;
+  for (const q of s.pieces) {
+    if (q.owner !== p || q.scored) continue;
+    if ((GOAL_X[p] - q.x) * (GOAL_X[p] - x) < 0) continue;
+    prob += 1 / (1 + 0.6 * Math.abs(q.x - x) + 0.8 * Math.abs(q.y - y));
+  }
+  return prob;
+}
+export function placementValue(s: State, p: Player, pl: Placement, w: Weights): number {
+  let v = 0;
+  for (const k of pl.cells) {
+    const { x, y } = parseKey(k);
+    v += -activationUtility(pl.effect, other(p), w) * riskExposure(s, other(p), x, y);
+    v += activationUtility(pl.effect, p, w) * riskExposure(s, p, x, y);
+  }
+  return v;
+}
+
 /** Plan a whole turn for `me` (default AI). */
-export function planTurn(s: State, opts: { me?: Player; temperature?: number } = {}): Plan {
+export function planTurn(s: State, opts: { me?: Player; temperature?: number; weights?: Weights } = {}): Plan {
   const t0 = performance.now();
-  const me = opts.me ?? 'ai', opp = other(me), temperature = opts.temperature ?? 0.6;
+  const w = opts.weights ?? DEFAULT_WEIGHTS;
+  const me = opts.me ?? 'ai', opp = other(me), temperature = opts.temperature ?? w.planner.temperature;
   const r = rng((s.seed ^ Math.imul(s.turn + 7, 0x9e3779b1)) >>> 0);
   const placements: (Placement | null)[] = [null];
-  for (const e of CANDIDATE_EFFECTS) {
-    const cells = bestCells(s, me, e);
+  for (const e of plannerEffects(w)) {
+    const cells = bestCells(s, me, e, w);
     if (!cells.length) continue;
     const pl: Placement = { text: 'planner', effect: e, cells, interpretedBy: 'planner' };
     if (validatePlacement(s, me, pl).ok) placements.push(pl);
@@ -141,16 +168,17 @@ export function planTurn(s: State, opts: { me?: Player; temperature?: number } =
   for (const pl of placements) {
     const st = structuredClone(s);
     if (pl) applyPlacement(st, me, pl);
-    const mv = planMoves(st, me, 0.02, r); sims += mv.sims;
+    const mv = planMoves(st, me, 0.02, r, w); sims += mv.sims;
     const afterMine = mv.state;
-    let afterReply = evaluate(afterMine, me);
+    let afterReply = evaluate(afterMine, me, w);
     if (!afterMine.winner) {
       const rep = structuredClone(afterMine);
       endTurn(rep);
-      if (!rep.winner && rep.current === opp) { const reply = planMoves(rep, opp); sims += reply.sims; afterReply = evaluate(reply.state, me); }
+      if (!rep.winner && rep.current === opp) { const reply = planMoves(rep, opp, 0, Math.random, w); sims += reply.sims; afterReply = evaluate(reply.state, me, w); }
     }
-    const upkeep = pl ? 0.15 : 0;
-    ranked.push({ id: '', placement: pl, moves: mv.moves, score: evaluate(afterMine, me) * 0.4 + afterReply * 0.6 - upkeep, afterReply, summary: describeTurn(pl, mv.moves) });
+    const upkeep = pl ? effectUpkeep(w, pl.effect) : 0;
+    const overlay = pl && w.weightMix ? w.weightMix * placementValue(s, me, pl, w) : 0;
+    ranked.push({ id: '', placement: pl, moves: mv.moves, score: evaluate(afterMine, me, w) * w.planner.immediateWeight + afterReply * w.planner.replyWeight - upkeep + overlay, afterReply, summary: describeTurn(pl, mv.moves) });
   }
   ranked.sort((a, b) => b.score - a.score || a.summary.localeCompare(b.summary));
   ranked.forEach((c, i) => { c.id = 'p' + (i + 1); });

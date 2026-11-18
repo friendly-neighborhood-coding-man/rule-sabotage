@@ -17,6 +17,7 @@ import { buildTrial, renderTrialPage, KANE_CONDITIONS, type Trial } from './tria
 import { kaneJudge, kaneConfig, type KaneResult } from './kane.ts';
 import { selectTier, tiersEnabled, type TierDecision } from './tiers.ts';
 import { reactionsFor, achievementsFor, type Achievement } from './flavor.ts';
+import { loadWeights, type FrozenWeights } from './weights.ts';
 
 export type Verdict = {
   reviewId: number; player: Player; ruleText: string; label: string; cells: string[];
@@ -40,6 +41,8 @@ export type Game = {
   achievements: Record<Player, Achievement[]>; refereeMode: 'kane' | 'engine-only'; tiers: boolean; turnEvents: GameEvent[];
   reviews: { verdict: Verdict; events: GameEvent[] }[]; nextReview: number;
   history: { turn: number; p: Player; events: GameEvent[]; verdicts: Verdict[]; ai?: AIDecision }[];
+  /** Balance weights frozen for this whole game (the promoted version at game start). Balance learning never runs here. */
+  weights: FrozenWeights;
 };
 
 const games = new Map<string, Game>();
@@ -163,7 +166,7 @@ function activate(g: Game, p: Player, pl: Placement, rec: { verdict: Verdict; ev
 export function newGame(seed?: number): Game {
   const g: Game = {
     id: randomUUID(), state: init(seed ?? (Date.now() & 0x7fffffff)), busy: false, progress: [], interpretations: new Map(),
-    achievements: { human: [], ai: [] }, refereeMode: refereeMode(), tiers: tiersEnabled(), turnEvents: [], history: [], reviews: [], nextReview: 0,
+    achievements: { human: [], ai: [] }, refereeMode: refereeMode(), tiers: tiersEnabled(), turnEvents: [], history: [], reviews: [], nextReview: 0, weights: loadWeights(),
   };
   games.set(g.id, g);
   if (games.size > 200) games.delete(games.keys().next().value!);
@@ -176,6 +179,7 @@ export function view(g: Game) {
     gameId: g.id, ...publicView(g.state), busy: g.busy, refereeMode: g.refereeMode, refereeTiers: g.tiers, achievements: g.achievements,
     model: modelConfigured() ? modelName() : null, provider: modelConfigured() ? providerLabel() : null, legal: legalMoves(g.state, 'human'), maxCells: MAX_CELLS_PER_TURN,
     reviews: g.reviews.slice(-12).map(r => ({ ...r.verdict, events: r.events })),
+    balance: { version: g.weights.version, hash: g.weights.hash },
   };
 }
 
@@ -253,9 +257,9 @@ export async function startGame(seed?: number) {
 }
 
 // ---------- the AI's turn ----------
-export async function decideAI(s: State): Promise<{ decision: AIDecision; plan: TurnPlan; text: string | null }> {
+export async function decideAI(s: State, weights?: FrozenWeights): Promise<{ decision: AIDecision; plan: TurnPlan; text: string | null }> {
   const t0 = Date.now();
-  const plan: Plan = planTurn(s);
+  const plan: Plan = planTurn(s, { weights });
   const meta = (c: TurnPlan) => ({ candidates: plan.candidates, sims: plan.sims, ms: plan.ms, chosen: c.summary, score: Number(c.score.toFixed(2)) });
   const local = (reason: string | null) => {
     const c = plan.chosen;
@@ -291,7 +295,7 @@ function localTaunt(c: TurnPlan, s: State): string {
 
 async function aiTurn(g: Game) {
   const s = g.state;
-  const { decision, plan, text } = await decideAI(structuredClone(s));
+  const { decision, plan, text } = await decideAI(structuredClone(s), g.weights);
   const events: GameEvent[] = [], verdicts: Verdict[] = [];
   if (plan.placement) {
     // The planner's typed effect is what gets installed. Model prose is only used as the rule text when the
@@ -309,7 +313,7 @@ async function aiTurn(g: Game) {
   }
   if (s.phase === 'place') s.phase = 'move';
   // Re-plan moves on the real board (the placement may have been rejected or reinterpreted).
-  const moves = planMoves(s, 'ai').moves;
+  const moves = planMoves(s, 'ai', 0, Math.random, g.weights).moves;
   for (const m of moves) { if (s.winner || !validateMove(s, 'ai', m).ok) break; events.push(...applyMove(s, 'ai', m)); }
   const v0 = verdicts[0];
   decision.plan.chosen = describeTurn(v0 && (v0.final === 'pending' || v0.activated) ? plan.placement : null, moves) + (v0?.final === 'pending' ? ' (effect waiting for Kane)' : '');

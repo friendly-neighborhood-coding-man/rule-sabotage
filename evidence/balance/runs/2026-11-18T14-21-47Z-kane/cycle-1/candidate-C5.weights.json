@@ -1,0 +1,85 @@
+{
+  "schema": "rule-sabotage/balance-weights@2",
+  "version": "0.3.0+v03-candidate",
+  "label": "V0.3 bundle candidate heuristic-proposal-v1-NOT-KANE (freeze -1.7, home -3.1, haste 2.2, shoveBack -0.8)",
+  "parent": "0.3.0",
+  "createdAt": "2026-11-18T00:00:00Z",
+  "ruleSpaceVersion": "0.3",
+  "actorPerspective": "activator",
+  "origin": "heuristic-proposal-v1-NOT-KANE candidate (balance/v0.3-bundle)",
+  "featureUtilityToActivator": {
+    "shovePerSquare": 0.9,
+    "shoveBackPerSquare": -0.8,
+    "shoveForwardPerSquare": 0.9,
+    "shoveLateralPerSquare": -0.15,
+    "freeze": -1.7,
+    "home": -3.1,
+    "teleport": -0.8,
+    "shield": 1.4,
+    "haste": 2.2
+  },
+  "weightMix": 0.3,
+  "placementUpkeep": {
+    "shove:back:2": 0.15,
+    "shove:back:3": 0.15,
+    "shove:west:2": 0.15,
+    "shove:east:2": 0.15,
+    "shove:north:2": 0.15,
+    "shove:south:2": 0.15,
+    "freeze": 0.15,
+    "home": 0.15,
+    "teleport": 0.15,
+    "haste": 0.15,
+    "shield": 0.15,
+    "shove:forward:2": 0.15
+  },
+  "planner": {
+    "selfHarmFactor": 1.15,
+    "immediateWeight": 0.4,
+    "replyWeight": 0.6,
+    "temperature": 0.6,
+    "scoredBonus": 6
+  },
+  "unsupported": {
+    "reset_all_activator_unscored": {
+      "utility": -7.5,
+      "status": "UNSUPPORTED",
+      "note": "Moves all own unscored pieces home; needs stack/shield contract"
+    },
+    "reset_all_opposing_unscored": {
+      "utility": 7.5,
+      "status": "UNSUPPORTED",
+      "note": "Huge benefit to the stepping side, even if the opponent installed the tile"
+    },
+    "reduce_next_turn_actions(1)": {
+      "utility": -1.25,
+      "status": "UNSUPPORTED",
+      "note": "Must reserve real future action debt"
+    },
+    "skip_next_turn": {
+      "utility": -3.5,
+      "status": "UNSUPPORTED",
+      "note": "Unacceptable as sole price if activation can immediately end the game"
+    },
+    "reset_activator_leading_piece": {
+      "utility": -3,
+      "status": "UNSUPPORTED",
+      "note": "Immediately due, deterministic tie-break"
+    },
+    "consume_activator_shield": {
+      "utility": -0.8,
+      "status": "UNSUPPORTED",
+      "note": "Conditional if none held"
+    },
+    "random_extra_same_effect_cell": {
+      "utility": null,
+      "status": "UNSUPPORTED",
+      "note": "No additive scalar; increases exposure; max 3 placements, no recursion"
+    },
+    "no_install_within_chebyshev_1": {
+      "utility": null,
+      "status": "UNSUPPORTED",
+      "note": "No additive scalar; placement-rule ablation (the bundle --ban8 filter), not an engine rule"
+    }
+  }
+}

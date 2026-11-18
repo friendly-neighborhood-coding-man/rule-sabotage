@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "actorPerspective": "activator",
+  "baseline": {
+    "version": "human-prior-v0",
+    "featureUtilityToActivator": {
+      "shovePerSquare": 0.9,
+      "shoveBackPerSquare": -0.9,
+      "shoveForwardPerSquare": 0.9,
+      "shoveLateralPerSquare": -0.15,
+      "freeze": -2.2,
+      "home": -3.8,
+      "teleport": -0.8,
+      "shield": 1.4,
+      "haste": 1.8
+    },
+    "weightMix": 0.3
+  },
+  "candidate": {
+    "version": "heuristic-proposal-v1-NOT-KANE",
+    "featureUtilityToActivator": {
+      "shovePerSquare": 0.9,
+      "shoveBackPerSquare": -0.8,
+      "shoveForwardPerSquare": 0.9,
+      "shoveLateralPerSquare": -0.15,
+      "freeze": -1.7,
+      "home": -3.1,
+      "teleport": -0.8,
+      "shield": 1.4,
+      "haste": 2.2
+    },
+    "weightMix": 0.3
+  }
+}

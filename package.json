@@ -14,6 +14,11 @@
     "eval:openrouter": "node --env-file-if-exists=.env --experimental-strip-types --no-warnings=ExperimentalWarning scripts/eval-openrouter.ts",
     "kane:trial": "node --env-file-if-exists=.env --experimental-strip-types --no-warnings=ExperimentalWarning scripts/kane-trial.ts",
     "bench:llm": "node --env-file-if-exists=.env --experimental-strip-types --no-warnings=ExperimentalWarning scripts/bench-llm.ts",
-    "tiers:routing": "node --experimental-strip-types --no-warnings=ExperimentalWarning scripts/tier-routing.ts"
+    "tiers:routing": "node --experimental-strip-types --no-warnings=ExperimentalWarning scripts/tier-routing.ts",
+    "balance:loop": "node --experimental-strip-types --no-warnings=ExperimentalWarning scripts/balance-loop.ts loop",
+    "balance:replay": "node --experimental-strip-types --no-warnings=ExperimentalWarning scripts/balance-loop.ts replay",
+    "balance:verify-journal": "node --experimental-strip-types --no-warnings=ExperimentalWarning scripts/balance-loop.ts verify-journal",
+    "balance:record": "node --experimental-strip-types --no-warnings=ExperimentalWarning scripts/record-cycle.ts",
+    "test:balance-e2e": "node --experimental-strip-types --no-warnings=ExperimentalWarning tests/balance-loop.e2e.ts"
   }
 }

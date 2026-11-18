@@ -75,7 +75,8 @@ export function rand(s: State): number {
   s.rng = x || 0x9e3779b9; return s.rng;
 }
 
-export function init(seed: number = Date.now()): State {
+/** `first` forces who starts (paired self-play uses it to mirror a seed); omitted = seeded coin flip, as before. */
+export function init(seed: number = Date.now(), opts: { first?: Player } = {}): State {
   const pieces: Piece[] = [];
   for (const p of PLAYERS) START_ROWS.forEach((y, i) => pieces.push({ id: `${p === 'human' ? 'h' : 'a'}${i + 1}`, owner: p, x: START_X[p], y, home: { x: START_X[p], y }, scored: false, frozen: 0, shield: false }));
   const s: State = {
@@ -85,6 +86,7 @@ export function init(seed: number = Date.now()): State {
   };
   for (let i = 0; i < 3; i++) rand(s);
   s.firstPlayer = s.current = rand(s) % 2 === 0 ? 'human' : 'ai';
+  if (opts.first) s.firstPlayer = s.current = opts.first;
   startTurn(s, []);
   return s;
 }

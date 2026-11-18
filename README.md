@@ -66,6 +66,16 @@ npm run selfplay -- 30    # engine-only balance + board-crowding stats (bot vs b
 
 Latest measured results from these scripts (providers benchmark and real Kane verdicts) are in [docs/EVIDENCE.md](docs/EVIDENCE.md).
 
+### Living Balance Loop (AI self-play → anomalies → Kane → weights → promote or roll back)
+
+```bash
+npm run balance:loop                    # one bounded cycle, DRY-RUN (no Kane, nothing promoted)
+npm run balance:loop -- --run-kane      # real kane-cli verification (uses credits)
+npm run balance:record -- --run-kane    # the same, recorded: terminal cast + dashboard video
+```
+
+The AI planner reads `balance/balance.weights.json` (frozen per game). The loop runs in its own process and never blocks play. See [docs/BALANCE_LOOP.md](docs/BALANCE_LOOP.md).
+
 ## How to play (30 seconds)
 
 1. **Your turn** gives you one move action per piece still on the board (3 at the start). The chip in the header counts them down.
