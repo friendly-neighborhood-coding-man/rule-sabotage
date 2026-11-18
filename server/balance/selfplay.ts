@@ -1,0 +1,269 @@
+/**
+ * Reproducible AI-vs-AI self-play with the REAL engine and the REAL planner for both players.
+ * Every game: fixed seed, forced first player (paired: each seed is played once with each side
+ * starting), weights frozen per player for the whole game. Consequences of every effect trigger
+ * are measured from engine events, not estimated.
+ */
+import { availableParallelism } from 'node:os';
+import { Worker } from 'node:worker_threads';
+import {
+  type State, type GameEvent, type Placement, init, applyPlacement, applyMove, endTurn, validatePlacement, validateMove,
+  legalMoves, onBoard, parseKey, GOAL_X, ruleById, scored as scoredN, distanceLeft,
+} from '../engine.ts';
+import { planTurn, planMoves, basePenalty } from '../ai.ts';
+import { type Player, type Effect, PLAYERS, other } from '../rules.ts';
+import { type Weights, type FrozenWeights, effectId, activationUtility, freezeWeights, weightsHash } from '../weights.ts';
+
+export type TriggerRec = {
+  turn: number; mover: Player; owner: Player; self: boolean; effect: string; kind: Effect['kind']; cell: string; pieces: number; chain: number;
+  /** Measured cost to the entering piece's owner, in actions (positive = harm, negative = help). null = not resolved by game end. */
+  realized: number | null; how: string;
+  /** What the placer's weights predicted (weighted) and the unweighted geometric estimate. */
+  predicted: number; base: number;
+};
+export type PlacementRec = { turn: number; p: Player; effect: string; cells: string[] };
+export type GameRec = {
+  seed: number; first: Player; weights: Record<Player, { version: string; hash: string }>;
+  winner: Player | 'draw'; reason: string; turns: number; turnLimit: boolean;
+  placements: PlacementRec[]; triggers: TriggerRec[]; unusedCells: Record<string, number>; placedCells: Record<string, number>;
+  unusedActions: Record<Player, number>; illegal: string[]; errors: string[]; softlock: boolean; longestStuck: Record<Player, number>;
+  signature: Record<Player, string>; ms: number;
+  /** Counterplay: how often the lead (pieces across, then squares left) changed hands, and whether the winner ever trailed after turn 4. */
+  leadChanges: number; trailed: Record<Player, boolean>;
+  /** Board before/after the move that set off the trigger asked for in opts.capture (replays only). */
+  captured?: Captured;
+};
+export type BoardSnap = { pieces: { id: string; owner: Player; x: number; y: number; scored: boolean; frozen: number }[]; cells: { cell: string; label: string; owner: Player }[] };
+export type Captured = { turn: number; cell: string; mover: Player; move: string; before: BoardSnap; after: BoardSnap; events: GameEvent[] };
+
+const dist = (p: Player, x: number) => Math.abs(GOAL_X[p] - x);
+
+type Pending = { rec: TriggerRec; owner: Player; nPieces: number; kind: 'freeze' | 'haste-now' | 'haste-later'; dueTurnsOf: Player; seen: number };
+
+/** Play one complete game. Weights are frozen copies; nothing here can change the engine. */
+export function playGame(seed: number, first: Player, weights: Record<Player, FrozenWeights>, opts: { maxMs?: number; capture?: { turn: number; cell: string } } = {}): GameRec {
+  const t0 = Date.now();
+  const s: State = init(seed, { first });
+  const rec: GameRec = {
+    seed, first, weights: { human: { version: weights.human.version, hash: weights.human.hash }, ai: { version: weights.ai.version, hash: weights.ai.hash } },
+    winner: 'draw', reason: '', turns: 0, turnLimit: false, placements: [], triggers: [], unusedCells: {}, placedCells: {},
+    unusedActions: { human: 0, ai: 0 }, illegal: [], errors: [], softlock: false, longestStuck: { human: 0, ai: 0 }, signature: { human: '', ai: '' }, ms: 0,
+    leadChanges: 0, trailed: { human: false, ai: false },
+  };
+  let lastLead = 0;
+  const pending: Pending[] = [];
+  const shields = new Map<string, TriggerRec>(); // piece id -> the shield trigger that gave it
+  const stuck = { human: 0, ai: 0 };
+  const placedBy: Record<Player, string[]> = { human: [], ai: [] };
+
+  const handle = (events: GameEvent[], cellEffect: Map<string, { effect: Effect; owner: Player }>) => {
+    for (let i = 0; i < events.length; i++) {
+      const e = events[i];
+      if (e.t === 'shielded') {
+        const snap = cellEffect.get(e.cell);
+        for (const id of e.pieces) {
+          const tr = shields.get(id); shields.delete(id);
+          if (tr && snap) { const q = s.pieces.find(x => x.id === id)!; tr.realized = (tr.realized ?? 0) - Math.max(0, basePenalty(q.owner, e.cell, snap.effect)); tr.how = 'blocked a trap'; }
+        }
+      }
+      if (e.t !== 'trigger') continue;
+      const rule = ruleById(s, e.ruleId)!;
+      const eff = rule.effect, id = effectId(eff);
+      const base = basePenalty(e.p, e.cell, eff);
+      const tr: TriggerRec = { turn: s.turn, mover: e.p, owner: e.owner, self: e.self, effect: id, kind: eff.kind, cell: e.cell, pieces: e.pieces.length, chain: e.chain, realized: null, how: '', predicted: -activationUtility(eff, e.p, weights[e.owner]) * e.pieces.length, base: base * e.pieces.length };
+      rec.triggers.push(tr);
+      if (eff.kind === 'shove' || eff.kind === 'home' || eff.kind === 'teleport') {
+        let forced: Extract<GameEvent, { t: 'forced' }> | null = null;
+        for (let j = i + 1; j < events.length; j++) { const f = events[j]; if (f.t === 'trigger') break; if (f.t === 'forced') { forced = f; break; } }
+        if (!forced) { tr.realized = 0; tr.how = 'no movement (no free square)'; continue; }
+        const fx = parseKey(forced.from).x;
+        tr.realized = forced.to.split('|').reduce((a, k) => a + dist(e.p, parseKey(k).x) - dist(e.p, fx), 0) * (forced.to.includes('|') ? 1 : e.pieces.length);
+        tr.how = `moved ${forced.from}→${forced.to}`;
+      } else if (eff.kind === 'freeze') {
+        tr.realized = 0; tr.how = 'pending: next own turn';
+        pending.push({ rec: tr, owner: e.p, nPieces: e.pieces.length, kind: 'freeze', dueTurnsOf: e.p, seen: s.current === e.p ? 0 : 0 });
+      } else if (eff.kind === 'haste') {
+        tr.realized = 0; tr.how = 'pending';
+        pending.push({ rec: tr, owner: e.p, nPieces: 1, kind: s.current === e.p ? 'haste-now' : 'haste-later', dueTurnsOf: e.p, seen: 0 });
+      } else if (eff.kind === 'shield') {
+        tr.realized = 0; tr.how = 'shield never used';
+        for (const id2 of e.pieces) shields.set(id2, tr);
+      }
+    }
+  };
+  const board = (): BoardSnap => ({ pieces: s.pieces.map(q => ({ id: q.id, owner: q.owner, x: q.x, y: q.y, scored: q.scored, frozen: q.frozen })), cells: Object.entries(s.cells).map(([k, id]) => { const r = ruleById(s, id)!; return { cell: k, label: r.label, owner: r.owner }; }) });
+  const snapshot = () => new Map(Object.entries(s.cells).map(([k, id]) => { const r = ruleById(s, id)!; return [k, { effect: r.effect, owner: r.owner }]; }));
+
+  let guard = 0;
+  while (!s.winner && guard++ < 400) {
+    if (opts.maxMs && Date.now() - t0 > opts.maxMs) { rec.errors.push(`game exceeded ${opts.maxMs} ms`); break; }
+    const p = s.current, w = weights[p];
+    const turnNo = s.turn;
+    const lm = legalMoves(s, p).length;
+    if (onBoard(s, p).length && lm === 0) { stuck[p]++; rec.longestStuck[p] = Math.max(rec.longestStuck[p], stuck[p]); } else stuck[p] = 0;
+    try {
+      const plan = planTurn(s, { me: p, weights: w }).chosen;
+      if (plan.placement) {
+        const pl: Placement = plan.placement;
+        const c = validatePlacement(s, p, pl);
+        if (!c.ok) rec.illegal.push(`turn ${turnNo} ${p} placement: ${c.reason}`);
+        else { applyPlacement(s, p, pl); rec.placements.push({ turn: turnNo, p, effect: effectId(pl.effect), cells: pl.cells }); placedBy[p].push(effectId(pl.effect)); }
+      }
+      if (s.phase === 'place') s.phase = 'move';
+      const moves = planMoves(s, p, 0, Math.random, w).moves;
+      for (const m of moves) {
+        if (s.winner || s.current !== p) break;
+        const c = validateMove(s, p, m);
+        if (!c.ok) { rec.illegal.push(`turn ${turnNo} ${p} move ${m.from} ${m.dir}: ${c.reason}`); break; }
+        const snap = snapshot();
+        const before = opts.capture && !rec.captured && turnNo === opts.capture.turn ? board() : null;
+        const ev = applyMove(s, p, m);
+        if (before && ev.some(e => e.t === 'trigger' && e.cell === opts.capture!.cell)) rec.captured = { turn: turnNo, cell: opts.capture!.cell, mover: p, move: `${m.from} ${m.dir}`, before, after: board(), events: ev };
+        handle(ev, snap);
+      }
+    } catch (e) { rec.errors.push(`turn ${turnNo} ${p}: ${(e as Error).message}`); break; }
+    if (s.winner) break;
+    // resolve freeze / haste consequences at the end of the affected player's turn
+    const unused = s.actionsLeft;
+    rec.unusedActions[p] += unused;
+    for (const pd of [...pending]) {
+      if (pd.dueTurnsOf !== p) continue;
+      if (pd.kind === 'haste-now' && pd.rec.turn === turnNo) { pd.rec.realized = unused === 0 ? -1 : 0; pd.rec.how = unused === 0 ? 'extra action used' : 'extra action wasted'; pending.splice(pending.indexOf(pd), 1); continue; }
+      if (pd.rec.turn === turnNo) continue; // the trigger happened during this same turn: wait for the next one
+      if (pd.kind === 'freeze') { pd.rec.realized = Math.min(pd.nPieces, unused); pd.rec.how = `${Math.min(pd.nPieces, unused)} action(s) lost in the next own turn`; }
+      else { pd.rec.realized = unused === 0 ? -1 : 0; pd.rec.how = unused === 0 ? 'banked action used' : 'banked action wasted'; }
+      pending.splice(pending.indexOf(pd), 1);
+    }
+    endTurn(s);
+    const lead = Math.sign((scoredN(s, 'human') - scoredN(s, 'ai')) * 100 + (distanceLeft(s, 'ai') - distanceLeft(s, 'human')));
+    if (lead !== 0 && lastLead !== 0 && lead !== lastLead) rec.leadChanges++;
+    if (lead !== 0) lastLead = lead;
+    if (s.turn > 4 && lead !== 0) rec.trailed[lead > 0 ? 'ai' : 'human'] = true;
+  }
+  for (const pd of pending) { pd.rec.realized = null; pd.rec.how = 'game ended before it resolved'; }
+  rec.winner = s.winner ?? 'draw'; rec.reason = s.winReason || 'aborted'; rec.turns = s.turn; rec.turnLimit = /Turn limit/.test(s.winReason);
+  rec.softlock = rec.longestStuck.human >= 2 || rec.longestStuck.ai >= 2 || (!s.winner);
+  for (const r of s.rules) {
+    const id = effectId(r.effect), hits = r.hits.human + r.hits.ai;
+    rec.placedCells[id] = (rec.placedCells[id] ?? 0) + r.placed;
+    rec.unusedCells[id] = (rec.unusedCells[id] ?? 0) + Math.max(0, r.placed - hits);
+  }
+  for (const p of PLAYERS) rec.signature[p] = [...placedBy[p].slice(0, 3)].join('>') || '(none)';
+  rec.ms = Date.now() - t0;
+  return rec;
+}
+
+export type Job = { seed: number; first: Player; weights: Record<Player, Weights> };
+export function pairedJobs(seeds: number[], weights: Weights | Record<Player, Weights>): Job[] {
+  const w = 'schema' in weights ? { human: weights as Weights, ai: weights as Weights } : weights as Record<Player, Weights>;
+  return seeds.flatMap(seed => PLAYERS.map(first => ({ seed, first, weights: w })));
+}
+
+/** Runs jobs in worker threads (bounded pool). Results come back in job order, so batches are reproducible. */
+export async function runJobs(jobs: Job[], opts: { workers?: number; onGame?: (done: number, total: number, r: GameRec) => void; maxMs?: number } = {}): Promise<GameRec[]> {
+  const n = Math.max(1, Math.min(jobs.length, opts.workers ?? (Number(process.env.BALANCE_WORKERS) || Math.max(1, Math.floor(availableParallelism() / 2)))));
+  if (n === 1 || process.env.BALANCE_NO_WORKERS === '1') {
+    const out: GameRec[] = [];
+    for (const j of jobs) { const r = playGame(j.seed, j.first, { human: freezeWeights(j.weights.human), ai: freezeWeights(j.weights.ai) }, { maxMs: opts.maxMs }); out.push(r); opts.onGame?.(out.length, jobs.length, r); }
+    return out;
+  }
+  const out: GameRec[] = new Array(jobs.length);
+  let next = 0, done = 0;
+  await Promise.all(Array.from({ length: n }, () => new Promise<void>((resolve, reject) => {
+    const wk = new Worker(new URL('./worker.ts', import.meta.url));
+    const feed = () => { if (next >= jobs.length) { wk.terminate(); resolve(); return; } const i = next++; wk.postMessage({ i, job: jobs[i], maxMs: opts.maxMs }); };
+    wk.on('message', (m: { i: number; rec?: GameRec; error?: string }) => {
+      if (m.error) { reject(new Error(m.error)); wk.terminate(); return; }
+      out[m.i] = m.rec!; done++; opts.onGame?.(done, jobs.length, m.rec!); feed();
+    });
+    wk.on('error', reject);
+    feed();
+  })));
+  return out;
+}
+
+// ---------------------------------------------------------------- aggregation
+const mean = (a: number[]) => (a.length ? a.reduce((x, y) => x + y, 0) / a.length : 0);
+const quant = (a: number[], q: number) => { if (!a.length) return 0; const b = [...a].sort((x, y) => x - y); return b[Math.min(b.length - 1, Math.floor(q * b.length))]; };
+const entropy = (counts: number[]) => { const t = counts.reduce((a, b) => a + b, 0); return t ? -counts.filter(Boolean).reduce((a, c) => a + (c / t) * Math.log2(c / t), 0) : 0; };
+const r3 = (x: number) => Math.round(x * 1000) / 1000;
+
+export type EffectStats = {
+  placements: number; share: number; cells: number; unusedCells: number; unusedRate: number;
+  triggers: number; selfTriggerRate: number; resolved: number; realizedMean: number; predictedMean: number; baseMean: number;
+  /** realized / predicted (1 = the weight matches what actually happens). null if too few or the prediction is ~0. */
+  realization: number | null; harmfulRate: number; winRateWhenUsed: number | null; gamesUsed: number;
+};
+export type Metrics = {
+  games: number; seeds: number[]; weights: string[]; wins: { human: number; ai: number; draw: number };
+  firstPlayerWinRate: number; humanSideWinRate: number; decisiveGames: number; drawRate: number; turnLimitRate: number;
+  pairsSweptByFirst: number; pairs: number;
+  turns: { mean: number; median: number; p10: number; p90: number };
+  effects: Record<string, EffectStats>; noPlacementTurnsShare: number;
+  diversity: { effectEntropy: number; effectEntropyNorm: number; distinctEffectsUsed: number; distinctOpenings: number; topOpening: string; topOpeningShare: number };
+  topCombo: { combo: string; games: number; winRate: number } | null;
+  /** Every effect pair used by one player in one game at least 3 times, with that player's win rate. */
+  combos: Record<string, { games: number; winRate: number }>;
+  safety: { illegal: number; errors: number; softlocks: number; examples: string[] };
+  unusedActionsPerGame: number;
+  counterplay: { leadChangesPerGame: number; comebackRate: number };
+};
+
+export function aggregate(recs: GameRec[]): Metrics {
+  const games = recs.length;
+  const wins = { human: 0, ai: 0, draw: 0 };
+  recs.forEach(r => wins[r.winner]++);
+  const decisive = recs.filter(r => r.winner !== 'draw');
+  const pairs = new Map<number, GameRec[]>(); recs.forEach(r => pairs.set(r.seed, [...(pairs.get(r.seed) ?? []), r]));
+  const effects: Record<string, EffectStats> = {};
+  const allPl = recs.flatMap(r => r.placements);
+  const ids = [...new Set([...allPl.map(p => p.effect), ...recs.flatMap(r => r.triggers.map(t => t.effect))])].sort();
+  for (const id of ids) {
+    const pl = allPl.filter(p => p.effect === id);
+    const tr = recs.flatMap(r => r.triggers.filter(t => t.effect === id));
+    const res = tr.filter(t => t.realized !== null);
+    const cells = recs.reduce((a, r) => a + (r.placedCells[id] ?? 0), 0), unused = recs.reduce((a, r) => a + (r.unusedCells[id] ?? 0), 0);
+    const realizedMean = mean(res.map(t => t.realized!)), predictedMean = mean(res.map(t => t.predicted));
+    const used = recs.flatMap(r => PLAYERS.filter(p => r.placements.some(x => x.p === p && x.effect === id)).map(p => ({ r, p })));
+    const usedDecisive = used.filter(u => u.r.winner !== 'draw');
+    effects[id] = {
+      placements: pl.length, share: allPl.length ? r3(pl.length / allPl.length) : 0, cells, unusedCells: unused, unusedRate: cells ? r3(unused / cells) : 0,
+      triggers: tr.length, selfTriggerRate: tr.length ? r3(tr.filter(t => t.self).length / tr.length) : 0, resolved: res.length,
+      realizedMean: r3(realizedMean), predictedMean: r3(predictedMean), baseMean: r3(mean(res.map(t => t.base))),
+      realization: res.length >= 3 && Math.abs(predictedMean) > 0.05 ? r3(realizedMean / predictedMean) : null,
+      harmfulRate: res.length ? r3(res.filter(t => t.realized! > 0).length / res.length) : 0,
+      winRateWhenUsed: usedDecisive.length ? r3(usedDecisive.filter(u => u.r.winner === u.p).length / usedDecisive.length) : null, gamesUsed: used.length,
+    };
+  }
+  const turnsPerPlayerGame = recs.reduce((a, r) => a + r.turns, 0);
+  const openings = recs.flatMap(r => PLAYERS.map(p => r.signature[p]));
+  const oc = new Map<string, number>(); openings.forEach(o => oc.set(o, (oc.get(o) ?? 0) + 1));
+  const top = [...oc.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))[0] ?? ['(none)', 0];
+  // most common pair of distinct effects used by the same player in one game, with that player's win rate
+  const combos = new Map<string, { n: number; w: number }>();
+  for (const r of recs) for (const p of PLAYERS) {
+    const used = [...new Set(r.placements.filter(x => x.p === p).map(x => x.effect))].sort();
+    for (let i = 0; i < used.length; i++) for (let j = i + 1; j < used.length; j++) {
+      const k = `${used[i]} + ${used[j]}`, c = combos.get(k) ?? { n: 0, w: 0 }; c.n++; if (r.winner === p) c.w++; combos.set(k, c);
+    }
+  }
+  const tc = [...combos.entries()].sort((a, b) => b[1].n - a[1].n || a[0].localeCompare(b[0]))[0];
+  const counts = ids.map(id => effects[id].placements);
+  const ent = entropy(counts);
+  return {
+    games, seeds: [...pairs.keys()].sort((a, b) => a - b), weights: [...new Set(recs.flatMap(r => [`${r.weights.human.version}#${r.weights.human.hash}`, `${r.weights.ai.version}#${r.weights.ai.hash}`]))],
+    wins, firstPlayerWinRate: decisive.length ? r3(decisive.filter(r => r.winner === r.first).length / decisive.length) : 0.5,
+    humanSideWinRate: decisive.length ? r3(wins.human / decisive.length) : 0.5, decisiveGames: decisive.length, drawRate: games ? r3(wins.draw / games) : 0,
+    turnLimitRate: games ? r3(recs.filter(r => r.turnLimit).length / games) : 0,
+    pairsSweptByFirst: [...pairs.values()].filter(g => g.length === 2 && g.every(r => r.winner === r.first)).length, pairs: [...pairs.values()].filter(g => g.length === 2).length,
+    turns: { mean: r3(mean(recs.map(r => r.turns))), median: quant(recs.map(r => r.turns), 0.5), p10: quant(recs.map(r => r.turns), 0.1), p90: quant(recs.map(r => r.turns), 0.9) },
+    effects, noPlacementTurnsShare: turnsPerPlayerGame ? r3(1 - allPl.length / turnsPerPlayerGame) : 0,
+    diversity: { effectEntropy: r3(ent), effectEntropyNorm: ids.length > 1 ? r3(ent / Math.log2(ids.length)) : 0, distinctEffectsUsed: ids.filter(id => effects[id].placements > 0).length, distinctOpenings: oc.size, topOpening: top[0], topOpeningShare: openings.length ? r3(top[1] / openings.length) : 0 },
+    topCombo: tc ? { combo: tc[0], games: tc[1].n, winRate: r3(tc[1].w / tc[1].n) } : null,
+    combos: Object.fromEntries([...combos.entries()].filter(([, c]) => c.n >= 3).sort((a, b) => a[0].localeCompare(b[0])).map(([k, c]) => [k, { games: c.n, winRate: r3(c.w / c.n) }])),
+    safety: { illegal: recs.reduce((a, r) => a + r.illegal.length, 0), errors: recs.reduce((a, r) => a + r.errors.length, 0), softlocks: recs.filter(r => r.softlock).length, examples: recs.flatMap(r => [...r.illegal, ...r.errors].map(x => `seed ${r.seed}/${r.first}: ${x}`)).slice(0, 10) },
+    counterplay: { leadChangesPerGame: games ? r3(mean(recs.map(r => r.leadChanges))) : 0, comebackRate: decisive.length ? r3(decisive.filter(r => r.trailed[r.winner as Player]).length / decisive.length) : 0 },
+    unusedActionsPerGame: games ? r3(recs.reduce((a, r) => a + r.unusedActions.human + r.unusedActions.ai, 0) / games) : 0,
+  };
+}
+export { other, weightsHash };

@@ -77,7 +77,7 @@ function spawnCli(args: string[]): ChildProcess {
   return spawn(cli, args, { stdio: ['pipe', 'pipe', 'pipe'] });
 }
 
-function runCapture(args: string[], timeoutMs: number): Promise<{ code: number | null; stdout: string; stderr: string; ms: number; timedOut: boolean; firstOutputMs: number | null; runEndMs: number | null }> {
+function runCapture(args: string[], timeoutMs: number, onLine?: (line: string) => void): Promise<{ code: number | null; stdout: string; stderr: string; ms: number; timedOut: boolean; firstOutputMs: number | null; runEndMs: number | null }> {
   return new Promise(res => {
     const t0 = Date.now();
     let stdout = '', stderr = '', timedOut = false, firstOutputMs: number | null = null, runEndMs: number | null = null;
@@ -92,6 +92,7 @@ function runCapture(args: string[], timeoutMs: number): Promise<{ code: number |
     child.stdout!.on('data', d => {
       if (firstOutputMs === null) firstOutputMs = Date.now() - t0;
       stdout += d;
+      if (onLine) for (const l of String(d).split(/\r?\n/)) if (l.trim()) onLine(l.trim());
       if (runEndMs === null && /"type"\s*:\s*"run_end"/.test(stdout)) runEndMs = Date.now() - t0;
     });
     child.stderr!.on('data', d => { if (firstOutputMs === null) firstOutputMs = Date.now() - t0; stderr += d; });
@@ -263,4 +264,66 @@ async function runKane(opts: { trialId: string; signature: string; url: string; 
   result.timings = tm;
   await writeFile(join(dir, 'result.json'), JSON.stringify({ ...result, args: args.map(a => (a.length > 200 ? a.slice(0, 200) + '…' : a)), trialId: opts.trialId, signature: opts.signature, engineHash: ENGINE_HASH, policy: REFEREE_POLICY_VERSION, at: new Date().toISOString() }, null, 2));
   return result;
+}
+
+// ---------------------------------------------------------------- balance-loop verification
+export type KaneVerifyResult = {
+  /** complete = Kane returned one boolean per condition. Anything else is UNVERIFIED. */
+  status: 'complete' | 'incomplete' | 'timeout' | 'unavailable' | 'error';
+  conditionResults: (boolean | null)[]; conditionReasons: (string | null)[]; detail: string;
+  exitCode: number | null; timedOut: boolean; version: string | null; isTestDouble: boolean; cli: string; mode: 'analyzer';
+  args: string[]; startedAt: string; finishedAt: string; elapsedMs: number;
+  timings: { browserSpawnMs: number | null; cdpReadyMs: number | null; cdpReady: boolean | null; cliMs: number | null; cliFirstOutputMs: number | null; cliRunEndMs: number | null };
+  files: { stdout: string | null; stderr: string | null; result: string | null };
+};
+export const TEST_DOUBLE_VERSION = '0.0.0-test-double';
+/**
+ * Runs the REAL kane-cli (analyzer mode, one verdict per condition) on a page served at `url`.
+ * No cache, no retries, no fallback: whatever kane-cli prints is stored verbatim in `dir`.
+ */
+export async function kaneVerify(opts: { url: string; conditions: string[]; dir: string; timeoutS?: number; onLine?: (line: string) => void }): Promise<KaneVerifyResult> {
+  const cfg = kaneConfig(), t0 = Date.now(), startedAt = new Date().toISOString();
+  const timeoutS = Math.max(20, Math.min(600, opts.timeoutS ?? cfg.timeoutS));
+  const probe = await kaneProbe();
+  const r: KaneVerifyResult = {
+    status: 'unavailable', conditionResults: [], conditionReasons: [], detail: '', exitCode: null, timedOut: false, version: probe.version, isTestDouble: probe.version === TEST_DOUBLE_VERSION,
+    cli: cfg.cli, mode: 'analyzer', args: [], startedAt, finishedAt: '', elapsedMs: 0,
+    timings: { browserSpawnMs: null, cdpReadyMs: null, cdpReady: null, cliMs: null, cliFirstOutputMs: null, cliRunEndMs: null }, files: { stdout: null, stderr: null, result: null },
+  };
+  await mkdir(opts.dir, { recursive: true });
+  const done = async () => {
+    r.finishedAt = new Date().toISOString(); r.elapsedMs = Date.now() - t0;
+    r.files.result = join(opts.dir, 'kane-result.json');
+    await writeFile(r.files.result, JSON.stringify({ ...r, conditions: opts.conditions, url: opts.url }, null, 2));
+    return r;
+  };
+  if (!probe.installed || probe.loggedIn === false) { r.detail = `Kane unavailable: ${probe.detail}`; return done(); }
+  let browser: Awaited<ReturnType<typeof openChrome>> | null = null;
+  let out: Awaited<ReturnType<typeof runCapture>>;
+  try {
+    browser = await openChrome(opts.url);
+    Object.assign(r.timings, { browserSpawnMs: browser.spawnMs, cdpReadyMs: browser.readyMs, cdpReady: browser.ready });
+    r.args = ['run', '--analyzer-only', '--agent', '--cdp-endpoint', browser.cdp, '--timeout', String(timeoutS), ...opts.conditions.flatMap(c => ['--condition', c])];
+    out = await runCapture(r.args, Number(process.env.KANE_KILL_AFTER_MS) || (timeoutS + 30) * 1000, opts.onLine);
+  } catch (e) { r.status = 'error'; r.detail = `Kane run could not start: ${(e as Error).message}`; return done(); }
+  finally { await browser?.close(); }
+  Object.assign(r.timings, { cliMs: out.ms, cliFirstOutputMs: out.firstOutputMs, cliRunEndMs: out.runEndMs });
+  r.exitCode = out.code; r.timedOut = out.timedOut;
+  r.files.stdout = join(opts.dir, 'kane-stdout.ndjson'); r.files.stderr = join(opts.dir, 'kane-stderr.txt');
+  await writeFile(r.files.stdout, out.stdout); await writeFile(r.files.stderr, out.stderr);
+  const parsed = parseKaneOutput(out.stdout, opts.conditions.length, 'analyzer');
+  r.conditionResults = parsed.results; r.conditionReasons = parsed.reasons;
+  r.status = parsed.verdict ? 'complete' : out.timedOut ? 'timeout' : 'incomplete';
+  r.detail = parsed.verdict ? `Kane returned ${opts.conditions.length} condition results.` : out.timedOut ? `kane-cli timed out after ${Math.round(out.ms / 1000)} s` : parsed.detail;
+  return done();
+}
+
+/** `kane-cli balance` as printed (credits), or null. */
+export async function kaneCredits(): Promise<{ raw: string; credits: number | null } | null> {
+  const probe = await kaneProbe();
+  if (!probe.installed) return null;
+  const o = await runCapture(['balance'], 30_000);
+  const raw = (o.stdout || o.stderr).replace(/\x1b\[[0-9;]*m/g, '').trim().slice(0, 400);
+  const m = /([0-9][0-9,]*\.?[0-9]*)/.exec(raw.split(/credits?/i).pop() ?? raw);
+  return { raw, credits: m ? Number(m[1].replace(/,/g, '')) : null };
 }

@@ -1,0 +1,48 @@
+{
+  "status": "REJECTED_AS_BALANCE_EVIDENCE",
+  "sanity_gate": "FAIL",
+  "kane_executed": false,
+  "ban_radius": 1,
+  "seed_start": 41000,
+  "summary": {
+    "baseline_selfplay": {
+      "games": 32,
+      "wins": {
+        "1": 16,
+        "0": 16
+      },
+      "mean_turns": 14,
+      "mean_triggers": 20,
+      "mean_self_triggers": 17,
+      "mean_placements": 42,
+      "candidate_win_rate": null,
+      "first_player_win_rate": 0
+    },
+    "candidate_vs_baseline_A": {
+      "games": 32,
+      "wins": {
+        "1": 16,
+        "0": 16
+      },
+      "mean_turns": 14,
+      "mean_triggers": 20,
+      "mean_self_triggers": 17,
+      "mean_placements": 42,
+      "candidate_win_rate": 0.5,
+      "first_player_win_rate": 0
+    },
+    "candidate_vs_baseline_B": {
+      "games": 32,
+      "wins": {
+        "1": 16,
+        "0": 16
+      },
+      "mean_turns": 14,
+      "mean_triggers": 20,
+      "mean_self_triggers": 17,
+      "mean_placements": 42,
+      "candidate_win_rate": 0.5,
+      "first_player_win_rate": 0
+    }
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "schema": "rule-sabotage/balance-loop-config@1",
+  "seeds": {
+    "training": [1000, 1001, 1002, 1003, 1004, 1005, 1006, 1007, 1008, 1009, 1010, 1011],
+    "heldOut": [5000, 5001, 5002, 5003, 5004, 5005, 5006, 5007, 5008, 5009, 5010, 5011],
+    "note": "Each seed is played twice (Human side starts, then AI side starts). Training and held-out seeds never overlap; the loop refuses a config where they do."
+  },
+  "thresholds": {
+    "minTriggers": 8,
+    "minGamesUsed": 6,
+    "firstPlayerWinRate": 0.68,
+    "sideWinRate": 0.68,
+    "dominantShare": 0.2,
+    "dominantWinRate": 0.62,
+    "costHarmfulRateBelow": 0.5,
+    "costMinPredicted": 0.3,
+    "valueRealizationAbove": 1.4,
+    "rarelySelectedShare": 0.02,
+    "wastedUnusedRate": 0.7,
+    "wastedMinCells": 15,
+    "comboMinGames": 8,
+    "comboWinRate": 0.75,
+    "openingShare": 0.3
+  },
+  "kane": {
+    "maxCallsPerCycle": 2,
+    "maxCallsTotal": 4,
+    "maxCreditsTotal": 60,
+    "maxConcurrent": 1,
+    "timeoutS": 300,
+    "maxEvidenceRows": 13
+  },
+  "optimizer": {
+    "maxCandidates": 4,
+    "maxRelativeStep": 0.3,
+    "scoreSteps": [0.15, 0.3],
+    "upkeepSteps": [0.1, 0.2]
+  },
+  "promotion": {
+    "requireKaneConfirmed": true,
+    "targetImprovementMin": 0.05,
+    "maxFirstPlayerDeviationIncrease": 0.08,
+    "maxDiversityDrop": 0.1,
+    "maxMedianTurnsChange": 0.3,
+    "maxDrawRateIncrease": 0.1,
+    "maxTurnLimitRate": 0.15,
+    "safety": "zero illegal actions, zero engine errors, zero softlocks on held-out games; engine invariants test suite passes; engine source hash unchanged"
+  },
+  "budget": {
+    "maxCycles": 3,
+    "maxGamesPerCycle": 200,
+    "maxWallMinutes": 60
+  }
+}
