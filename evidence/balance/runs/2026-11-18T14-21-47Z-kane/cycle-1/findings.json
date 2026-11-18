@@ -1,0 +1,367 @@
+{
+  "findings": [
+    {
+      "anomalyId": "A1",
+      "fingerprint": "d1aeba608fac",
+      "status": "CONFIRMED",
+      "verifier": "kane-cli",
+      "reason": "Kane: the hypothesis statement is true and its negated control is false.",
+      "conditions": [
+        {
+          "id": "K1",
+          "role": "integrity",
+          "text": "The table titled 'Evidence rows' has exactly 13 data rows below its header row.",
+          "kane": true,
+          "kaneReason": "Counting data rows in the Evidence rows table: value: '13' -> '13'; equals '13' -> PASS",
+          "expectedIfHypothesis": true
+        },
+        {
+          "id": "K2",
+          "role": "hypothesis",
+          "text": "In the 'Evidence rows' table, fewer than half of the data rows are rows where the 'Squares to goal after' number is greater than the 'Squares to goal before' number.",
+          "kane": true,
+          "kaneReason": "Checking the proportion of Evidence rows with increased squares to goal: value: 'true' -> 'true'; equals 'true' -> PASS",
+          "expectedIfHypothesis": true
+        },
+        {
+          "id": "K3",
+          "role": "negated control",
+          "text": "In the 'Evidence rows' table, at least half of the data rows are rows where the 'Squares to goal after' number is greater than the 'Squares to goal before' number.",
+          "kane": false,
+          "kaneReason": "Checking the proportion of Evidence rows with increased squares to goal: value: 'false' -> 'false'; equals 'true' -> FAIL",
+          "expectedIfHypothesis": false
+        },
+        {
+          "id": "K4",
+          "role": "replay consistency",
+          "text": "In the 'Replay R1' section, the 'After' board shows a Human piece on the square named in the 'Ended on' line of that section.",
+          "kane": true,
+          "kaneReason": "Checking the Human piece position on the Replay R1 After board: value: 'true' -> 'true'; equals 'true' -> PASS",
+          "expectedIfHypothesis": true
+        }
+      ],
+      "ownAnswer": true,
+      "kaneAgreesWithOwnData": true
+    },
+    {
+      "anomalyId": "A4",
+      "fingerprint": "a548aca5eb72",
+      "status": "CONFIRMED",
+      "verifier": "kane-cli",
+      "reason": "Kane: the hypothesis statement is true and its negated control is false.",
+      "conditions": [
+        {
+          "id": "K1",
+          "role": "integrity",
+          "text": "The table titled 'Evidence rows' has exactly 13 data rows below its header row.",
+          "kane": true,
+          "kaneReason": "Counting data rows in the Evidence rows table: value: '13' -> '13'; equals '13' -> PASS",
+          "expectedIfHypothesis": true
+        },
+        {
+          "id": "K2",
+          "role": "hypothesis",
+          "text": "In the 'Evidence rows' table, more than half of the data rows are rows where the 'Result for this side' column says 'won'.",
+          "kane": true,
+          "kaneReason": "Checking the majority of won results in the Evidence rows table: value: 'true' -> 'true'; equals 'true' -> PASS",
+          "expectedIfHypothesis": true
+        },
+        {
+          "id": "K3",
+          "role": "negated control",
+          "text": "In the 'Evidence rows' table, at most half of the data rows are rows where the 'Result for this side' column says 'won'.",
+          "kane": false,
+          "kaneReason": "Checking the maximum share of won results in the Evidence rows table: value: 'false' -> 'false'; equals 'true' -> FAIL",
+          "expectedIfHypothesis": false
+        }
+      ],
+      "ownAnswer": true,
+      "kaneAgreesWithOwnData": true
+    }
+  ],
+  "kane": [
+    {
+      "anomalyId": "A1",
+      "title": "“Teleport” is priced as a penalty (0.80 actions/trigger) but hurts in only 10% of 58 triggers",
+      "state": "done",
+      "url": "http://127.0.0.1:4100/evidence/2026-11-18T14-21-47Z-kane/cycle-1-A1-evidence.html",
+      "page": "cycle-1-A1-evidence.html",
+      "conditions": [
+        {
+          "id": "K1",
+          "role": "integrity",
+          "text": "The table titled 'Evidence rows' has exactly 13 data rows below its header row.",
+          "kane": null,
+          "kaneReason": null,
+          "expectedIfHypothesis": true
+        },
+        {
+          "id": "K2",
+          "role": "hypothesis",
+          "text": "In the 'Evidence rows' table, fewer than half of the data rows are rows where the 'Squares to goal after' number is greater than the 'Squares to goal before' number.",
+          "kane": null,
+          "kaneReason": null,
+          "expectedIfHypothesis": true
+        },
+        {
+          "id": "K3",
+          "role": "negated control",
+          "text": "In the 'Evidence rows' table, at least half of the data rows are rows where the 'Squares to goal after' number is greater than the 'Squares to goal before' number.",
+          "kane": null,
+          "kaneReason": null,
+          "expectedIfHypothesis": false
+        },
+        {
+          "id": "K4",
+          "role": "replay consistency",
+          "text": "In the 'Replay R1' section, the 'After' board shows a Human piece on the square named in the 'Ended on' line of that section.",
+          "kane": null,
+          "kaneReason": null,
+          "expectedIfHypothesis": true
+        }
+      ],
+      "result": {
+        "status": "complete",
+        "conditionResults": [
+          true,
+          true,
+          false,
+          true
+        ],
+        "conditionReasons": [
+          "Counting data rows in the Evidence rows table: value: '13' -> '13'; equals '13' -> PASS",
+          "Checking the proportion of Evidence rows with increased squares to goal: value: 'true' -> 'true'; equals 'true' -> PASS",
+          "Checking the proportion of Evidence rows with increased squares to goal: value: 'false' -> 'false'; equals 'true' -> FAIL",
+          "Checking the Human piece position on the Replay R1 After board: value: 'true' -> 'true'; equals 'true' -> PASS"
+        ],
+        "detail": "Kane returned 4 condition results.",
+        "exitCode": 0,
+        "timedOut": false,
+        "version": "0.10.4",
+        "isTestDouble": false,
+        "cli": "kane-cli",
+        "mode": "analyzer",
+        "args": [
+          "run",
+          "--analyzer-only",
+          "--agent",
+          "--cdp-endpoint",
+          "http://127.0.0.1:54080",
+          "--timeout",
+          "300",
+          "--condition",
+          "The table titled 'Evidence rows' has exactly 13 data rows below its header row.",
+          "--condition",
+          "In the 'Evidence rows' table, fewer than half of the data rows are rows where the 'Squares to goal after' number is greater than the 'Squares to goal before' number.",
+          "--condition",
+          "In the 'Evidence rows' table, at least half of the data rows are rows where the 'Squares to goal after' number is greater than the 'Squares to goal before' number.",
+          "--condition",
+          "In the 'Replay R1' section, the 'After' board shows a Human piece on the square named in the 'Ended on' line of that section."
+        ],
+        "startedAt": "2026-11-18T14:22:25.562Z",
+        "finishedAt": "2026-11-18T14:24:55.916Z",
+        "elapsedMs": 150354,
+        "timings": {
+          "browserSpawnMs": 53,
+          "cdpReadyMs": 1630,
+          "cdpReady": true,
+          "cliMs": 148071,
+          "cliFirstOutputMs": 4578,
+          "cliRunEndMs": 146719
+        },
+        "files": {
+          "stdout": "D:\\Rule_Sabotage\\rule-sabotage-live\\evidence\\balance\\runs\\2026-11-18T14-21-47Z-kane\\cycle-1\\kane-A1\\kane-stdout.ndjson",
+          "stderr": "D:\\Rule_Sabotage\\rule-sabotage-live\\evidence\\balance\\runs\\2026-11-18T14-21-47Z-kane\\cycle-1\\kane-A1\\kane-stderr.txt",
+          "result": "D:\\Rule_Sabotage\\rule-sabotage-live\\evidence\\balance\\runs\\2026-11-18T14-21-47Z-kane\\cycle-1\\kane-A1\\kane-result.json"
+        }
+      },
+      "finding": {
+        "anomalyId": "A1",
+        "fingerprint": "d1aeba608fac",
+        "status": "CONFIRMED",
+        "verifier": "kane-cli",
+        "reason": "Kane: the hypothesis statement is true and its negated control is false.",
+        "conditions": [
+          {
+            "id": "K1",
+            "role": "integrity",
+            "text": "The table titled 'Evidence rows' has exactly 13 data rows below its header row.",
+            "kane": true,
+            "kaneReason": "Counting data rows in the Evidence rows table: value: '13' -> '13'; equals '13' -> PASS",
+            "expectedIfHypothesis": true
+          },
+          {
+            "id": "K2",
+            "role": "hypothesis",
+            "text": "In the 'Evidence rows' table, fewer than half of the data rows are rows where the 'Squares to goal after' number is greater than the 'Squares to goal before' number.",
+            "kane": true,
+            "kaneReason": "Checking the proportion of Evidence rows with increased squares to goal: value: 'true' -> 'true'; equals 'true' -> PASS",
+            "expectedIfHypothesis": true
+          },
+          {
+            "id": "K3",
+            "role": "negated control",
+            "text": "In the 'Evidence rows' table, at least half of the data rows are rows where the 'Squares to goal after' number is greater than the 'Squares to goal before' number.",
+            "kane": false,
+            "kaneReason": "Checking the proportion of Evidence rows with increased squares to goal: value: 'false' -> 'false'; equals 'true' -> FAIL",
+            "expectedIfHypothesis": false
+          },
+          {
+            "id": "K4",
+            "role": "replay consistency",
+            "text": "In the 'Replay R1' section, the 'After' board shows a Human piece on the square named in the 'Ended on' line of that section.",
+            "kane": true,
+            "kaneReason": "Checking the Human piece position on the Replay R1 After board: value: 'true' -> 'true'; equals 'true' -> PASS",
+            "expectedIfHypothesis": true
+          }
+        ],
+        "ownAnswer": true,
+        "kaneAgreesWithOwnData": true
+      },
+      "startedAt": "2026-11-18T14:22:25.548Z",
+      "elapsedMs": 150354,
+      "liveLines": [
+        "{\"type\":\"stream_start\",\"cli_version\":\"0.10.4\",\"surface\":\"run\",\"pid\":49232,\"v\":1,\"ts\":\"2026-11-18T14:22:31.806Z\"}",
+        "{\"type\":\"recording_state\",\"enabled\":true,\"session_id\":\"6e46fd01-ca87-41ea-83a6-85032b28b639\",\"persist\":false,\"v\":1,\"ts\":\"2026-11-18T14:22:32.259Z\"}",
+        "{\"type\":\"update_available\",\"current\":\"0.10.4\",\"latest\":\"0.10.5\",\"severity\":\"patch\",\"v\":1,\"ts\":\"2026-11-18T14:22:34.798Z\"}",
+        "{\"type\":\"skill_update_available\",\"current\":null,\"latest\":\"0.1.4\",\"install_cmd\":\"kane-cli install skill\",\"v\":1,\"ts\":\"2026-11-18T14:22:34.819Z\"}",
+        "{\"step\":1,\"status\":\"done\",\"remark\":\"Counting data rows in the Evidence rows table: value: '13' -> '13'; equals '13' -> PASS\",\"v\":1,\"ts\":\"2026-11-18T14:24:53.441Z\"}",
+        "{\"step\":2,\"status\":\"done\",\"remark\":\"Checking the proportion of Evidence rows with increased squares to goal: value: 'true' -> 'true'; equals 'true' -> PASS\",\"v\":1,\"ts\":\"2026-11-18T14:24:53.444Z\"}",
+        "{\"step\":3,\"status\":\"done\",\"remark\":\"Checking the proportion of Evidence rows with increased squares to goal: value: 'false' -> 'false'; equals 'true' -> FAIL\",\"v\":1,\"ts\":\"2026-11-18T14:24:53.445Z\"}",
+        "{\"step\":4,\"status\":\"done\",\"remark\":\"Checking the Human piece position on the Replay R1 After board: value: 'true' -> 'true'; equals 'true' -> PASS\",\"v\":1,\"ts\":\"2026-11-18T14:24:53.446Z\"}",
+        "{\"type\":\"run_end\",\"status\":\"passed\",\"run_id\":\"run-0\",\"duration\":22.73,\"condition_results\":[true,true,false,true],\"condition_reasons\":[\"Counting data rows in the Evidence rows table: value: '13' -> '13'; equals '13' -> PASS\",\"Checking the proportion of Evidence rows with increased squares to goal: va"
+      ]
+    },
+    {
+      "anomalyId": "A4",
+      "title": "“Shove west 2” is 31% of all placements and its users win 63%",
+      "state": "done",
+      "url": "http://127.0.0.1:4100/evidence/2026-11-18T14-21-47Z-kane/cycle-1-A4-evidence.html",
+      "page": "cycle-1-A4-evidence.html",
+      "conditions": [
+        {
+          "id": "K1",
+          "role": "integrity",
+          "text": "The table titled 'Evidence rows' has exactly 13 data rows below its header row.",
+          "kane": null,
+          "kaneReason": null,
+          "expectedIfHypothesis": true
+        },
+        {
+          "id": "K2",
+          "role": "hypothesis",
+          "text": "In the 'Evidence rows' table, more than half of the data rows are rows where the 'Result for this side' column says 'won'.",
+          "kane": null,
+          "kaneReason": null,
+          "expectedIfHypothesis": true
+        },
+        {
+          "id": "K3",
+          "role": "negated control",
+          "text": "In the 'Evidence rows' table, at most half of the data rows are rows where the 'Result for this side' column says 'won'.",
+          "kane": null,
+          "kaneReason": null,
+          "expectedIfHypothesis": false
+        }
+      ],
+      "result": {
+        "status": "complete",
+        "conditionResults": [
+          true,
+          true,
+          false
+        ],
+        "conditionReasons": [
+          "Counting data rows in the Evidence rows table: value: '13' -> '13'; equals '13' -> PASS",
+          "Checking the majority of won results in the Evidence rows table: value: 'true' -> 'true'; equals 'true' -> PASS",
+          "Checking the maximum share of won results in the Evidence rows table: value: 'false' -> 'false'; equals 'true' -> FAIL"
+        ],
+        "detail": "Kane returned 3 condition results.",
+        "exitCode": 0,
+        "timedOut": false,
+        "version": "0.10.4",
+        "isTestDouble": false,
+        "cli": "kane-cli",
+        "mode": "analyzer",
+        "args": [
+          "run",
+          "--analyzer-only",
+          "--agent",
+          "--cdp-endpoint",
+          "http://127.0.0.1:57507",
+          "--timeout",
+          "300",
+          "--condition",
+          "The table titled 'Evidence rows' has exactly 13 data rows below its header row.",
+          "--condition",
+          "In the 'Evidence rows' table, more than half of the data rows are rows where the 'Result for this side' column says 'won'.",
+          "--condition",
+          "In the 'Evidence rows' table, at most half of the data rows are rows where the 'Result for this side' column says 'won'."
+        ],
+        "startedAt": "2026-11-18T14:24:58.224Z",
+        "finishedAt": "2026-11-18T14:25:51.074Z",
+        "elapsedMs": 52850,
+        "timings": {
+          "browserSpawnMs": 25,
+          "cdpReadyMs": 2090,
+          "cdpReady": true,
+          "cliMs": 49798,
+          "cliFirstOutputMs": 6324,
+          "cliRunEndMs": 48364
+        },
+        "files": {
+          "stdout": "D:\\Rule_Sabotage\\rule-sabotage-live\\evidence\\balance\\runs\\2026-11-18T14-21-47Z-kane\\cycle-1\\kane-A4\\kane-stdout.ndjson",
+          "stderr": "D:\\Rule_Sabotage\\rule-sabotage-live\\evidence\\balance\\runs\\2026-11-18T14-21-47Z-kane\\cycle-1\\kane-A4\\kane-stderr.txt",
+          "result": "D:\\Rule_Sabotage\\rule-sabotage-live\\evidence\\balance\\runs\\2026-11-18T14-21-47Z-kane\\cycle-1\\kane-A4\\kane-result.json"
+        }
+      },
+      "finding": {
+        "anomalyId": "A4",
+        "fingerprint": "a548aca5eb72",
+        "status": "CONFIRMED",
+        "verifier": "kane-cli",
+        "reason": "Kane: the hypothesis statement is true and its negated control is false.",
+        "conditions": [
+          {
+            "id": "K1",
+            "role": "integrity",
+            "text": "The table titled 'Evidence rows' has exactly 13 data rows below its header row.",
+            "kane": true,
+            "kaneReason": "Counting data rows in the Evidence rows table: value: '13' -> '13'; equals '13' -> PASS",
+            "expectedIfHypothesis": true
+          },
+          {
+            "id": "K2",
+            "role": "hypothesis",
+            "text": "In the 'Evidence rows' table, more than half of the data rows are rows where the 'Result for this side' column says 'won'.",
+            "kane": true,
+            "kaneReason": "Checking the majority of won results in the Evidence rows table: value: 'true' -> 'true'; equals 'true' -> PASS",
+            "expectedIfHypothesis": true
+          },
+          {
+            "id": "K3",
+            "role": "negated control",
+            "text": "In the 'Evidence rows' table, at most half of the data rows are rows where the 'Result for this side' column says 'won'.",
+            "kane": false,
+            "kaneReason": "Checking the maximum share of won results in the Evidence rows table: value: 'false' -> 'false'; equals 'true' -> FAIL",
+            "expectedIfHypothesis": false
+          }
+        ],
+        "ownAnswer": true,
+        "kaneAgreesWithOwnData": true
+      },
+      "startedAt": "2026-11-18T14:24:58.216Z",
+      "elapsedMs": 52850,
+      "liveLines": [
+        "{\"type\":\"stream_start\",\"cli_version\":\"0.10.4\",\"surface\":\"run\",\"pid\":29124,\"v\":1,\"ts\":\"2026-11-18T14:25:06.651Z\"}",
+        "{\"type\":\"recording_state\",\"enabled\":true,\"session_id\":\"1d6ed935-2a35-4972-946a-4604b2f6d52a\",\"persist\":false,\"v\":1,\"ts\":\"2026-11-18T14:25:07.062Z\"}",
+        "{\"type\":\"update_available\",\"current\":\"0.10.4\",\"latest\":\"0.10.5\",\"severity\":\"patch\",\"v\":1,\"ts\":\"2026-11-18T14:25:07.985Z\"}",
+        "{\"type\":\"skill_update_available\",\"current\":null,\"latest\":\"0.1.4\",\"install_cmd\":\"kane-cli install skill\",\"v\":1,\"ts\":\"2026-11-18T14:25:08.069Z\"}",
+        "{\"step\":1,\"status\":\"done\",\"remark\":\"Counting data rows in the Evidence rows table: value: '13' -> '13'; equals '13' -> PASS\",\"v\":1,\"ts\":\"2026-11-18T14:25:48.232Z\"}",
+        "{\"step\":2,\"status\":\"done\",\"remark\":\"Checking the majority of won results in the Evidence rows table: value: 'true' -> 'true'; equals 'true' -> PASS\",\"v\":1,\"ts\":\"2026-11-18T14:25:48.234Z\"}",
+        "{\"step\":3,\"status\":\"done\",\"remark\":\"Checking the maximum share of won results in the Evidence rows table: value: 'false' -> 'false'; equals 'true' -> FAIL\",\"v\":1,\"ts\":\"2026-11-18T14:25:48.239Z\"}",
+        "{\"type\":\"run_end\",\"status\":\"passed\",\"run_id\":\"run-0\",\"duration\":12.03,\"condition_results\":[true,true,false],\"condition_reasons\":[\"Counting data rows in the Evidence rows table: value: '13' -> '13'; equals '13' -> PASS\",\"Checking the majority of won results in the Evidence rows table: value: 'true' -"
+      ]
+    }
+  ]
+}

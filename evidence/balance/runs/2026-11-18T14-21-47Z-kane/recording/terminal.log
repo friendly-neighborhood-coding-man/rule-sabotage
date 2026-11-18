@@ -1,0 +1,59 @@
+$ npm run balance:loop -- --run-kane --keep-open --port 4100
+.env not found. Continuing without it.
+REAL KANE RUN: at most 2 kane-cli call(s) (2/cycle), credit cap 60, timeout 300s each, 1 at a time.
+[14:21:47] Balance loop 2026-11-18T14-21-47Z-kane (RUN-KANE) · dashboard http://127.0.0.1:4100/ · commit d1fe2d784a · engine 0c9d5055ebaba086
+[14:21:47] Unsupported future effects in the weights file (never simulated): reset_all_activator_unscored, reset_all_opposing_unscored, reduce_next_turn_actions(1), skip_next_turn, reset_activator_leading_piece, consume_activator_shield, random_extra_same_effect_cell, no_install_within_chebyshev_1
+[14:21:52] kane-cli: kane-cli ready (version 0.10.4)
+[14:21:56] Kane credits before: Available credits: 10677.397
+[14:21:56] ── cycle 1 · Baseline AI-vs-AI self-play (training seeds)
+[14:22:20]    DONE: 24 games · wins H 9 / AI 15 / draw 0 · first-player win 46% · median 11 turns · entropy 0.743 · safety 0/0/0
+[14:22:20] ── cycle 1 · Statistical anomaly detection
+[14:22:20]    A1 [cost-not-realized] “Teleport” is priced as a penalty (0.80 actions/trigger) but hurts in only 10% of 58 triggers · severity 1.794
+[14:22:20]    A2 [never-selected] “Shove north 2” is almost never worth selecting (0.0% of placements) · severity 0.6 · no Kane template
+[14:22:20]    A3 [never-selected] “Shove south 2” is almost never worth selecting (0.0% of placements) · severity 0.6 · no Kane template
+[14:22:20]    A4 [dominant-effect] “Shove west 2” is 31% of all placements and its users win 63% · severity 0.558
+[14:22:20]    A5 [never-selected] “Shove forward 2” is almost never worth selecting (0.4% of placements) · severity 0.48 · no Kane template
+[14:22:20]    A6 [wasted-placements] 99% of “Send home” cells are never entered · severity 0.477 · no Kane template
+[14:22:20]    A7 [never-selected] “Freeze” is almost never worth selecting (0.7% of placements) · severity 0.39 · no Kane template
+[14:22:20]    A8 [wasted-placements] 83% of “Shove back 2” cells are never entered · severity 0.222 · no Kane template
+[14:22:20]    A9 [wasted-placements] 74% of “Shove back 3” cells are never entered · severity 0.068 · no Kane template
+[14:22:20]    DONE: 9 anomalies (hypotheses, not proof)
+[14:22:20] ── cycle 1 · Kane browser verification
+[14:22:20]    selected for Kane: A1, A4 (max 2/cycle; weight-tunable first)
+[14:22:25]    A1: replayed seed 1000/human on the real engine: identical result (reproducible)
+[14:22:25]    A1: kane-cli run --analyzer-only on http://127.0.0.1:4100/evidence/2026-11-18T14-21-47Z-kane/cycle-1-A1-evidence.html (4 conditions, timeout 300s)
+[14:24:58]    A1: Kane complete in 150.4 s (exit 0) · conditions TTFT → CONFIRMED · credits used so far 6.463
+[14:24:58]    A4: kane-cli run --analyzer-only on http://127.0.0.1:4100/evidence/2026-11-18T14-21-47Z-kane/cycle-1-A4-evidence.html (3 conditions, timeout 300s)
+[14:25:59]    A4: Kane complete in 52.9 s (exit 0) · conditions TTF → CONFIRMED · credits used so far 11.841
+[14:25:59]    DONE: findings: A1 CONFIRMED, A4 CONFIRMED
+[14:25:59] ── cycle 1 · Deterministic candidate weights
+[14:25:59]    C1 featureUtilityToActivator.teleport -0.8→-0.68 · based on A1, CONFIRMED by kane-cli
+[14:25:59]    C2 placementUpkeep.shove:west:2 0.15→0.25 · based on A4, CONFIRMED by kane-cli
+[14:25:59]    C3 featureUtilityToActivator.teleport -0.8→-0.56 · based on A1, CONFIRMED by kane-cli
+[14:25:59]    C4 placementUpkeep.shove:west:2 0.15→0.35 · based on A4, CONFIRMED by kane-cli
+[14:25:59]    C5 featureUtilityToActivator.shoveBackPerSquare -0.9→-0.8, featureUtilityToActivator.freeze -2.2→-1.7, featureUtilityToActivator.home -3.8→-3.1, featureUtilityToActivator.haste 1.8→2.2 · V0.3 bundle proposal (NOT Kane-derived): evaluated for the record, cannot be promoted
+[14:25:59]    DONE: 5 candidate(s); 4 eligible for promotion
+[14:25:59] ── cycle 1 · Held-out AI-vs-AI comparison
+[14:28:17]    C1: first-player win 39% · median 13 turns · entropy 0.792
+[14:29:17]    C2: first-player win 46% · median 13 turns · entropy 0.78
+[14:29:56]    C3: first-player win 48% · median 13 turns · entropy 0.796
+[14:31:46]    C4: first-player win 42% · median 13 turns · entropy 0.788
+[14:32:17]    C5: first-player win 46% · median 10 turns · entropy 0.743
+[14:32:17]    DONE: baseline + 5 candidate(s) on 12 held-out seeds ×2
+[14:32:17] ── cycle 1 · Promotion or rollback
+[14:33:35]    engine invariant suite: PASS (36 trials) · engine source unchanged
+[14:33:35]    running unit test suite (npm test) as a hard safety gate…
+[14:36:39]    unit tests: PASS (ℹ tests 70, ℹ pass 70, ℹ fail 0)
+[14:36:39]    C1: rejected (1 gate(s) failed) · score -0.041
+[14:36:39]    C2: rejected (1 gate(s) failed) · score -0.111
+[14:36:39]    C3: rejected (1 gate(s) failed) · score 0.042
+[14:36:39]    C4: rejected (1 gate(s) failed) · score -0.563
+[14:36:39]    C5: rejected (2 gate(s) failed) · score 0.005
+[14:36:40]    DONE: ROLLBACK: kept 0.3.0 (0/5 candidates passed every gate)
+[14:36:40] ── cycle 1 · Journal + evidence manifest
+[14:36:40]    DONE: journal balance\journal.ndjson (5 entries, chain verified)
+[14:37:28] Kane credits after: n/a
+[14:37:28] Report: evidence\balance\runs\2026-11-18T14-21-47Z-kane\REPORT.md
+[14:37:28] Dashboard stays open at http://127.0.0.1:4100/ (Ctrl+C to stop)
+
+Run 2026-11-18T14-21-47Z-kane finished. Evidence: D:\Rule_Sabotage\rule-sabotage-live\evidence\balance\runs\2026-11-18T14-21-47Z-kane

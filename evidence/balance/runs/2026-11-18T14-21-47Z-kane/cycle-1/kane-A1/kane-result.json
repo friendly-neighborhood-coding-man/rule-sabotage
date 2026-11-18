@@ -1,0 +1,62 @@
+{
+  "status": "complete",
+  "conditionResults": [
+    true,
+    true,
+    false,
+    true
+  ],
+  "conditionReasons": [
+    "Counting data rows in the Evidence rows table: value: '13' -> '13'; equals '13' -> PASS",
+    "Checking the proportion of Evidence rows with increased squares to goal: value: 'true' -> 'true'; equals 'true' -> PASS",
+    "Checking the proportion of Evidence rows with increased squares to goal: value: 'false' -> 'false'; equals 'true' -> FAIL",
+    "Checking the Human piece position on the Replay R1 After board: value: 'true' -> 'true'; equals 'true' -> PASS"
+  ],
+  "detail": "Kane returned 4 condition results.",
+  "exitCode": 0,
+  "timedOut": false,
+  "version": "0.10.4",
+  "isTestDouble": false,
+  "cli": "kane-cli",
+  "mode": "analyzer",
+  "args": [
+    "run",
+    "--analyzer-only",
+    "--agent",
+    "--cdp-endpoint",
+    "http://127.0.0.1:54080",
+    "--timeout",
+    "300",
+    "--condition",
+    "The table titled 'Evidence rows' has exactly 13 data rows below its header row.",
+    "--condition",
+    "In the 'Evidence rows' table, fewer than half of the data rows are rows where the 'Squares to goal after' number is greater than the 'Squares to goal before' number.",
+    "--condition",
+    "In the 'Evidence rows' table, at least half of the data rows are rows where the 'Squares to goal after' number is greater than the 'Squares to goal before' number.",
+    "--condition",
+    "In the 'Replay R1' section, the 'After' board shows a Human piece on the square named in the 'Ended on' line of that section."
+  ],
+  "startedAt": "2026-11-18T14:22:25.562Z",
+  "finishedAt": "2026-11-18T14:24:55.916Z",
+  "elapsedMs": 150354,
+  "timings": {
+    "browserSpawnMs": 53,
+    "cdpReadyMs": 1630,
+    "cdpReady": true,
+    "cliMs": 148071,
+    "cliFirstOutputMs": 4578,
+    "cliRunEndMs": 146719
+  },
+  "files": {
+    "stdout": "D:\\Rule_Sabotage\\rule-sabotage-live\\evidence\\balance\\runs\\2026-11-18T14-21-47Z-kane\\cycle-1\\kane-A1\\kane-stdout.ndjson",
+    "stderr": "D:\\Rule_Sabotage\\rule-sabotage-live\\evidence\\balance\\runs\\2026-11-18T14-21-47Z-kane\\cycle-1\\kane-A1\\kane-stderr.txt",
+    "result": "D:\\Rule_Sabotage\\rule-sabotage-live\\evidence\\balance\\runs\\2026-11-18T14-21-47Z-kane\\cycle-1\\kane-A1\\kane-result.json"
+  },
+  "conditions": [
+    "The table titled 'Evidence rows' has exactly 13 data rows below its header row.",
+    "In the 'Evidence rows' table, fewer than half of the data rows are rows where the 'Squares to goal after' number is greater than the 'Squares to goal before' number.",
+    "In the 'Evidence rows' table, at least half of the data rows are rows where the 'Squares to goal after' number is greater than the 'Squares to goal before' number.",
+    "In the 'Replay R1' section, the 'After' board shows a Human piece on the square named in the 'Ended on' line of that section."
+  ],
+  "url": "http://127.0.0.1:4100/evidence/2026-11-18T14-21-47Z-kane/cycle-1-A1-evidence.html"
+}

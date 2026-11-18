@@ -1,0 +1,321 @@
+{
+  "games": 24,
+  "seeds": [
+    5000,
+    5001,
+    5002,
+    5003,
+    5004,
+    5005,
+    5006,
+    5007,
+    5008,
+    5009,
+    5010,
+    5011
+  ],
+  "weights": [
+    "0.3.0#ddcf941c285bd537"
+  ],
+  "wins": {
+    "human": 9,
+    "ai": 14,
+    "draw": 1
+  },
+  "firstPlayerWinRate": 0.435,
+  "humanSideWinRate": 0.391,
+  "decisiveGames": 23,
+  "drawRate": 0.042,
+  "turnLimitRate": 0.083,
+  "pairsSweptByFirst": 1,
+  "pairs": 12,
+  "turns": {
+    "mean": 15.958,
+    "median": 13,
+    "p10": 8,
+    "p90": 19
+  },
+  "effects": {
+    "freeze": {
+      "placements": 9,
+      "share": 0.029,
+      "cells": 27,
+      "unusedCells": 25,
+      "unusedRate": 0.926,
+      "triggers": 2,
+      "selfTriggerRate": 0,
+      "resolved": 2,
+      "realizedMean": 1,
+      "predictedMean": 2.2,
+      "baseMean": 1.2,
+      "realization": null,
+      "harmfulRate": 1,
+      "winRateWhenUsed": 0.333,
+      "gamesUsed": 9
+    },
+    "haste": {
+      "placements": 17,
+      "share": 0.055,
+      "cells": 49,
+      "unusedCells": 17,
+      "unusedRate": 0.347,
+      "triggers": 32,
+      "selfTriggerRate": 1,
+      "resolved": 17,
+      "realizedMean": -1,
+      "predictedMean": -1.8,
+      "baseMean": -0.8,
+      "realization": 0.556,
+      "harmfulRate": 0,
+      "winRateWhenUsed": 0.467,
+      "gamesUsed": 16
+    },
+    "home": {
+      "placements": 35,
+      "share": 0.113,
+      "cells": 105,
+      "unusedCells": 99,
+      "unusedRate": 0.943,
+      "triggers": 4,
+      "selfTriggerRate": 0,
+      "resolved": 4,
+      "realizedMean": 5,
+      "predictedMean": 3.8,
+      "baseMean": 5,
+      "realization": 1.316,
+      "harmfulRate": 1,
+      "winRateWhenUsed": 0.579,
+      "gamesUsed": 21
+    },
+    "shield": {
+      "placements": 13,
+      "share": 0.042,
+      "cells": 37,
+      "unusedCells": 24,
+      "unusedRate": 0.649,
+      "triggers": 13,
+      "selfTriggerRate": 1,
+      "resolved": 13,
+      "realizedMean": -1.615,
+      "predictedMean": -1.4,
+      "baseMean": -0.3,
+      "realization": 1.154,
+      "harmfulRate": 0,
+      "winRateWhenUsed": 0.5,
+      "gamesUsed": 12
+    },
+    "shove:back:2": {
+      "placements": 2,
+      "share": 0.006,
+      "cells": 6,
+      "unusedCells": 5,
+      "unusedRate": 0.833,
+      "triggers": 1,
+      "selfTriggerRate": 1,
+      "resolved": 1,
+      "realizedMean": 0,
+      "predictedMean": 1.8,
+      "baseMean": 0,
+      "realization": null,
+      "harmfulRate": 0,
+      "winRateWhenUsed": 0.5,
+      "gamesUsed": 2
+    },
+    "shove:back:3": {
+      "placements": 10,
+      "share": 0.032,
+      "cells": 30,
+      "unusedCells": 24,
+      "unusedRate": 0.8,
+      "triggers": 6,
+      "selfTriggerRate": 0.333,
+      "resolved": 6,
+      "realizedMean": 1,
+      "predictedMean": 2.7,
+      "baseMean": 2.667,
+      "realization": 0.37,
+      "harmfulRate": 0.667,
+      "winRateWhenUsed": 0.625,
+      "gamesUsed": 10
+    },
+    "shove:east:2": {
+      "placements": 100,
+      "share": 0.323,
+      "cells": 299,
+      "unusedCells": 94,
+      "unusedRate": 0.314,
+      "triggers": 205,
+      "selfTriggerRate": 0.863,
+      "resolved": 205,
+      "realizedMean": -1.454,
+      "predictedMean": -1.308,
+      "baseMean": -1.454,
+      "realization": 1.111,
+      "harmfulRate": 0.137,
+      "winRateWhenUsed": 0.391,
+      "gamesUsed": 24
+    },
+    "shove:forward:2": {
+      "placements": 2,
+      "share": 0.006,
+      "cells": 6,
+      "unusedCells": 5,
+      "unusedRate": 0.833,
+      "triggers": 1,
+      "selfTriggerRate": 1,
+      "resolved": 1,
+      "realizedMean": -2,
+      "predictedMean": -1.8,
+      "baseMean": -2,
+      "realization": null,
+      "harmfulRate": 0,
+      "winRateWhenUsed": 0.5,
+      "gamesUsed": 2
+    },
+    "shove:west:2": {
+      "placements": 83,
+      "share": 0.268,
+      "cells": 247,
+      "unusedCells": 86,
+      "unusedRate": 0.348,
+      "triggers": 161,
+      "selfTriggerRate": 0.932,
+      "resolved": 161,
+      "realizedMean": -1.727,
+      "predictedMean": -1.554,
+      "baseMean": -1.727,
+      "realization": 1.111,
+      "harmfulRate": 0.068,
+      "winRateWhenUsed": 0.609,
+      "gamesUsed": 24
+    },
+    "teleport": {
+      "placements": 39,
+      "share": 0.126,
+      "cells": 117,
+      "unusedCells": 46,
+      "unusedRate": 0.393,
+      "triggers": 68,
+      "selfTriggerRate": 0.779,
+      "resolved": 68,
+      "realizedMean": -2.838,
+      "predictedMean": 0.8,
+      "baseMean": -1.676,
+      "realization": -3.548,
+      "harmfulRate": 0.176,
+      "winRateWhenUsed": 0.5,
+      "gamesUsed": 24
+    }
+  },
+  "noPlacementTurnsShare": 0.191,
+  "diversity": {
+    "effectEntropy": 2.591,
+    "effectEntropyNorm": 0.78,
+    "distinctEffectsUsed": 10,
+    "distinctOpenings": 17,
+    "topOpening": "shove:east:2>shove:east:2>shove:east:2",
+    "topOpeningShare": 0.292
+  },
+  "topCombo": {
+    "combo": "home + teleport",
+    "games": 17,
+    "winRate": 0.529
+  },
+  "combos": {
+    "freeze + haste": {
+      "games": 6,
+      "winRate": 0.333
+    },
+    "freeze + shield": {
+      "games": 3,
+      "winRate": 0.333
+    },
+    "freeze + shove:east:2": {
+      "games": 5,
+      "winRate": 0.4
+    },
+    "freeze + shove:west:2": {
+      "games": 4,
+      "winRate": 0.25
+    },
+    "haste + home": {
+      "games": 7,
+      "winRate": 0.571
+    },
+    "haste + shove:east:2": {
+      "games": 6,
+      "winRate": 0.333
+    },
+    "haste + shove:west:2": {
+      "games": 10,
+      "winRate": 0.5
+    },
+    "haste + teleport": {
+      "games": 5,
+      "winRate": 0.6
+    },
+    "home + shield": {
+      "games": 9,
+      "winRate": 0.556
+    },
+    "home + shove:back:3": {
+      "games": 7,
+      "winRate": 0.571
+    },
+    "home + shove:east:2": {
+      "games": 9,
+      "winRate": 0.222
+    },
+    "home + shove:west:2": {
+      "games": 12,
+      "winRate": 0.75
+    },
+    "home + teleport": {
+      "games": 17,
+      "winRate": 0.529
+    },
+    "shield + shove:back:3": {
+      "games": 4,
+      "winRate": 0.5
+    },
+    "shield + shove:east:2": {
+      "games": 7,
+      "winRate": 0.143
+    },
+    "shield + shove:west:2": {
+      "games": 5,
+      "winRate": 0.8
+    },
+    "shield + teleport": {
+      "games": 10,
+      "winRate": 0.5
+    },
+    "shove:back:3 + shove:west:2": {
+      "games": 9,
+      "winRate": 0.556
+    },
+    "shove:back:3 + teleport": {
+      "games": 7,
+      "winRate": 0.571
+    },
+    "shove:east:2 + teleport": {
+      "games": 12,
+      "winRate": 0.25
+    },
+    "shove:west:2 + teleport": {
+      "games": 12,
+      "winRate": 0.667
+    }
+  },
+  "safety": {
+    "illegal": 0,
+    "errors": 0,
+    "softlocks": 0,
+    "examples": []
+  },
+  "counterplay": {
+    "leadChangesPerGame": 5.125,
+    "comebackRate": 0.739
+  },
+  "unusedActionsPerGame": 3.667
+}

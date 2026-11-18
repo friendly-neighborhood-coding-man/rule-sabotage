@@ -1,0 +1,3861 @@
+{
+  "n": 1,
+  "baselineVersion": "0.3.0",
+  "baselineHash": "ddcf941c285bd537",
+  "stages": [
+    {
+      "key": "baseline",
+      "title": "Baseline AI-vs-AI self-play (training seeds)",
+      "state": "done",
+      "startedAt": "2026-11-18T14:21:56.512Z",
+      "endedAt": "2026-11-18T14:22:20.242Z",
+      "summary": "24 games · wins H 9 / AI 15 / draw 0 · first-player win 46% · median 11 turns · entropy 0.743 · safety 0/0/0"
+    },
+    {
+      "key": "detect",
+      "title": "Statistical anomaly detection",
+      "state": "done",
+      "startedAt": "2026-11-18T14:22:20.252Z",
+      "endedAt": "2026-11-18T14:22:20.327Z",
+      "summary": "9 anomalies (hypotheses, not proof)"
+    },
+    {
+      "key": "kane",
+      "title": "Kane browser verification",
+      "state": "done",
+      "startedAt": "2026-11-18T14:22:20.334Z",
+      "endedAt": "2026-11-18T14:25:59.891Z",
+      "summary": "findings: A1 CONFIRMED, A4 CONFIRMED"
+    },
+    {
+      "key": "propose",
+      "title": "Deterministic candidate weights",
+      "state": "done",
+      "startedAt": "2026-11-18T14:25:59.909Z",
+      "endedAt": "2026-11-18T14:25:59.980Z",
+      "summary": "5 candidate(s); 4 eligible for promotion"
+    },
+    {
+      "key": "evaluate",
+      "title": "Held-out AI-vs-AI comparison",
+      "state": "done",
+      "startedAt": "2026-11-18T14:25:59.987Z",
+      "endedAt": "2026-11-18T14:32:17.243Z",
+      "summary": "baseline + 5 candidate(s) on 12 held-out seeds ×2"
+    },
+    {
+      "key": "decide",
+      "title": "Promotion or rollback",
+      "state": "done",
+      "startedAt": "2026-11-18T14:32:17.250Z",
+      "endedAt": "2026-11-18T14:36:40.083Z",
+      "summary": "ROLLBACK: kept 0.3.0 (0/5 candidates passed every gate)"
+    },
+    {
+      "key": "journal",
+      "title": "Journal + evidence manifest",
+      "state": "running",
+      "startedAt": "2026-11-18T14:36:40.114Z",
+      "endedAt": null,
+      "summary": ""
+    }
+  ],
+  "progress": null,
+  "baseline": {
+    "games": 24,
+    "seeds": [
+      1000,
+      1001,
+      1002,
+      1003,
+      1004,
+      1005,
+      1006,
+      1007,
+      1008,
+      1009,
+      1010,
+      1011
+    ],
+    "weights": [
+      "0.3.0#ddcf941c285bd537"
+    ],
+    "wins": {
+      "human": 9,
+      "ai": 15,
+      "draw": 0
+    },
+    "firstPlayerWinRate": 0.458,
+    "humanSideWinRate": 0.375,
+    "decisiveGames": 24,
+    "drawRate": 0,
+    "turnLimitRate": 0,
+    "pairsSweptByFirst": 4,
+    "pairs": 12,
+    "turns": {
+      "mean": 11.458,
+      "median": 11,
+      "p10": 7,
+      "p90": 16
+    },
+    "effects": {
+      "freeze": {
+        "placements": 2,
+        "share": 0.007,
+        "cells": 6,
+        "unusedCells": 6,
+        "unusedRate": 1,
+        "triggers": 0,
+        "selfTriggerRate": 0,
+        "resolved": 0,
+        "realizedMean": 0,
+        "predictedMean": 0,
+        "baseMean": 0,
+        "realization": null,
+        "harmfulRate": 0,
+        "winRateWhenUsed": 1,
+        "gamesUsed": 2
+      },
+      "haste": {
+        "placements": 13,
+        "share": 0.047,
+        "cells": 39,
+        "unusedCells": 24,
+        "unusedRate": 0.615,
+        "triggers": 15,
+        "selfTriggerRate": 0.933,
+        "resolved": 9,
+        "realizedMean": -1,
+        "predictedMean": -1.8,
+        "baseMean": -0.8,
+        "realization": 0.556,
+        "harmfulRate": 0,
+        "winRateWhenUsed": 0.385,
+        "gamesUsed": 13
+      },
+      "home": {
+        "placements": 23,
+        "share": 0.084,
+        "cells": 69,
+        "unusedCells": 68,
+        "unusedRate": 0.986,
+        "triggers": 0,
+        "selfTriggerRate": 0,
+        "resolved": 0,
+        "realizedMean": 0,
+        "predictedMean": 0,
+        "baseMean": 0,
+        "realization": null,
+        "harmfulRate": 0,
+        "winRateWhenUsed": 0.619,
+        "gamesUsed": 21
+      },
+      "shield": {
+        "placements": 10,
+        "share": 0.036,
+        "cells": 30,
+        "unusedCells": 16,
+        "unusedRate": 0.533,
+        "triggers": 13,
+        "selfTriggerRate": 0.923,
+        "resolved": 13,
+        "realizedMean": -1.538,
+        "predictedMean": -1.4,
+        "baseMean": -0.3,
+        "realization": 1.099,
+        "harmfulRate": 0,
+        "winRateWhenUsed": 0.3,
+        "gamesUsed": 10
+      },
+      "shove:back:2": {
+        "placements": 6,
+        "share": 0.022,
+        "cells": 18,
+        "unusedCells": 15,
+        "unusedRate": 0.833,
+        "triggers": 3,
+        "selfTriggerRate": 0,
+        "resolved": 3,
+        "realizedMean": 2,
+        "predictedMean": 1.8,
+        "baseMean": 2,
+        "realization": 1.111,
+        "harmfulRate": 1,
+        "winRateWhenUsed": 0.333,
+        "gamesUsed": 6
+      },
+      "shove:back:3": {
+        "placements": 9,
+        "share": 0.033,
+        "cells": 27,
+        "unusedCells": 20,
+        "unusedRate": 0.741,
+        "triggers": 7,
+        "selfTriggerRate": 0.143,
+        "resolved": 7,
+        "realizedMean": 0.429,
+        "predictedMean": 2.7,
+        "baseMean": 2.857,
+        "realization": 0.159,
+        "harmfulRate": 0.429,
+        "winRateWhenUsed": 0.5,
+        "gamesUsed": 8
+      },
+      "shove:east:2": {
+        "placements": 92,
+        "share": 0.336,
+        "cells": 276,
+        "unusedCells": 92,
+        "unusedRate": 0.333,
+        "triggers": 184,
+        "selfTriggerRate": 0.897,
+        "resolved": 184,
+        "realizedMean": -1.587,
+        "predictedMean": -1.428,
+        "baseMean": -1.587,
+        "realization": 1.111,
+        "harmfulRate": 0.103,
+        "winRateWhenUsed": 0.348,
+        "gamesUsed": 23
+      },
+      "shove:forward:2": {
+        "placements": 1,
+        "share": 0.004,
+        "cells": 3,
+        "unusedCells": 2,
+        "unusedRate": 0.667,
+        "triggers": 1,
+        "selfTriggerRate": 1,
+        "resolved": 1,
+        "realizedMean": -2,
+        "predictedMean": -1.8,
+        "baseMean": -2,
+        "realization": null,
+        "harmfulRate": 0,
+        "winRateWhenUsed": 0,
+        "gamesUsed": 1
+      },
+      "shove:west:2": {
+        "placements": 85,
+        "share": 0.31,
+        "cells": 255,
+        "unusedCells": 90,
+        "unusedRate": 0.353,
+        "triggers": 164,
+        "selfTriggerRate": 0.872,
+        "resolved": 164,
+        "realizedMean": -1.488,
+        "predictedMean": -1.339,
+        "baseMean": -1.488,
+        "realization": 1.111,
+        "harmfulRate": 0.128,
+        "winRateWhenUsed": 0.625,
+        "gamesUsed": 24
+      },
+      "teleport": {
+        "placements": 33,
+        "share": 0.12,
+        "cells": 99,
+        "unusedCells": 37,
+        "unusedRate": 0.374,
+        "triggers": 58,
+        "selfTriggerRate": 0.879,
+        "resolved": 58,
+        "realizedMean": -3.414,
+        "predictedMean": 0.8,
+        "baseMean": -2.293,
+        "realization": -4.267,
+        "harmfulRate": 0.103,
+        "winRateWhenUsed": 0.52,
+        "gamesUsed": 25
+      }
+    },
+    "noPlacementTurnsShare": 0.004,
+    "diversity": {
+      "effectEntropy": 2.467,
+      "effectEntropyNorm": 0.743,
+      "distinctEffectsUsed": 10,
+      "distinctOpenings": 19,
+      "topOpening": "shove:east:2>shove:east:2>shove:east:2",
+      "topOpeningShare": 0.271
+    },
+    "topCombo": {
+      "combo": "shove:west:2 + teleport",
+      "games": 17,
+      "winRate": 0.588
+    },
+    "combos": {
+      "haste + home": {
+        "games": 4,
+        "winRate": 0.5
+      },
+      "haste + shove:east:2": {
+        "games": 5,
+        "winRate": 0.2
+      },
+      "haste + shove:west:2": {
+        "games": 7,
+        "winRate": 0.429
+      },
+      "haste + teleport": {
+        "games": 9,
+        "winRate": 0.444
+      },
+      "home + shield": {
+        "games": 7,
+        "winRate": 0.429
+      },
+      "home + shove:back:2": {
+        "games": 4,
+        "winRate": 0.5
+      },
+      "home + shove:back:3": {
+        "games": 6,
+        "winRate": 0.5
+      },
+      "home + shove:east:2": {
+        "games": 9,
+        "winRate": 0.556
+      },
+      "home + shove:west:2": {
+        "games": 12,
+        "winRate": 0.667
+      },
+      "home + teleport": {
+        "games": 10,
+        "winRate": 0.6
+      },
+      "shield + shove:back:2": {
+        "games": 3,
+        "winRate": 0.333
+      },
+      "shield + shove:back:3": {
+        "games": 5,
+        "winRate": 0.4
+      },
+      "shield + shove:east:2": {
+        "games": 5,
+        "winRate": 0.2
+      },
+      "shield + shove:west:2": {
+        "games": 5,
+        "winRate": 0.4
+      },
+      "shield + teleport": {
+        "games": 5,
+        "winRate": 0.2
+      },
+      "shove:back:2 + shove:east:2": {
+        "games": 6,
+        "winRate": 0.333
+      },
+      "shove:back:3 + shove:east:2": {
+        "games": 4,
+        "winRate": 0.5
+      },
+      "shove:back:3 + shove:west:2": {
+        "games": 4,
+        "winRate": 0.5
+      },
+      "shove:back:3 + teleport": {
+        "games": 4,
+        "winRate": 0
+      },
+      "shove:east:2 + teleport": {
+        "games": 7,
+        "winRate": 0.286
+      },
+      "shove:west:2 + teleport": {
+        "games": 17,
+        "winRate": 0.588
+      }
+    },
+    "safety": {
+      "illegal": 0,
+      "errors": 0,
+      "softlocks": 0,
+      "examples": []
+    },
+    "counterplay": {
+      "leadChangesPerGame": 4.542,
+      "comebackRate": 0.792
+    },
+    "unusedActionsPerGame": 0.292
+  },
+  "anomalies": [
+    {
+      "type": "cost-not-realized",
+      "subject": "teleport",
+      "title": "“Teleport” is priced as a penalty (0.80 actions/trigger) but hurts in only 10% of 58 triggers",
+      "hypothesis": "The penalty of “Teleport” rarely materializes; the planner over-values it.",
+      "metric": "harmfulRate",
+      "value": 0.103,
+      "threshold": 0.5,
+      "severity": 1.794,
+      "samples": 58,
+      "knob": {
+        "kind": "utility",
+        "feature": "teleport",
+        "effect": "teleport",
+        "direction": "toward-zero"
+      },
+      "kaneCheckable": true,
+      "check": {
+        "table": "triggers",
+        "columns": [
+          "Game (seed)",
+          "Turn",
+          "Piece side",
+          "Effect owner",
+          "Cell",
+          "Effect",
+          "Column before",
+          "Column after",
+          "Goal column",
+          "Squares to goal before",
+          "Squares to goal after",
+          "Actions lost next own turn"
+        ],
+        "rows": [
+          [
+            "1000/H first",
+            11,
+            "Human",
+            "Human",
+            "A1",
+            "Teleport",
+            "A",
+            "D",
+            "G",
+            6,
+            3,
+            "-"
+          ],
+          [
+            "1000/A first",
+            2,
+            "Human",
+            "Human",
+            "A5",
+            "Teleport",
+            "A",
+            "F",
+            "G",
+            6,
+            1,
+            "-"
+          ],
+          [
+            "1001/H first",
+            1,
+            "Human",
+            "Human",
+            "A3",
+            "Teleport",
+            "A",
+            "D",
+            "G",
+            6,
+            3,
+            "-"
+          ],
+          [
+            "1001/A first",
+            1,
+            "AI",
+            "AI",
+            "G1",
+            "Teleport",
+            "G",
+            "B",
+            "A",
+            6,
+            1,
+            "-"
+          ],
+          [
+            "1002/A first",
+            1,
+            "AI",
+            "AI",
+            "G1",
+            "Teleport",
+            "G",
+            "E",
+            "A",
+            6,
+            4,
+            "-"
+          ],
+          [
+            "1003/H first",
+            21,
+            "Human",
+            "AI",
+            "F1",
+            "Teleport",
+            "F",
+            "F",
+            "G",
+            1,
+            1,
+            "-"
+          ],
+          [
+            "1003/A first",
+            5,
+            "AI",
+            "AI",
+            "G5",
+            "Teleport",
+            "G",
+            "B",
+            "A",
+            6,
+            1,
+            "-"
+          ],
+          [
+            "1004/A first",
+            2,
+            "Human",
+            "Human",
+            "A5",
+            "Teleport",
+            "A",
+            "F",
+            "G",
+            6,
+            1,
+            "-"
+          ],
+          [
+            "1005/H first",
+            3,
+            "Human",
+            "Human",
+            "A5",
+            "Teleport",
+            "A",
+            "F",
+            "G",
+            6,
+            1,
+            "-"
+          ],
+          [
+            "1006/A first",
+            1,
+            "AI",
+            "AI",
+            "G1",
+            "Teleport",
+            "G",
+            "C",
+            "A",
+            6,
+            2,
+            "-"
+          ],
+          [
+            "1008/H first",
+            6,
+            "AI",
+            "AI",
+            "G5",
+            "Teleport",
+            "G",
+            "B",
+            "A",
+            6,
+            1,
+            "-"
+          ],
+          [
+            "1009/A first",
+            7,
+            "AI",
+            "AI",
+            "G1",
+            "Teleport",
+            "G",
+            "B",
+            "A",
+            6,
+            1,
+            "-"
+          ],
+          [
+            "1010/A first",
+            1,
+            "AI",
+            "AI",
+            "G1",
+            "Teleport",
+            "G",
+            "C",
+            "A",
+            6,
+            2,
+            "-"
+          ]
+        ],
+        "predicateText": "the 'Squares to goal after' number is greater than the 'Squares to goal before' number",
+        "predicate": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "direction": "below",
+        "fraction": 0.5,
+        "fractionText": "half",
+        "replay": [
+          {
+            "seed": 1000,
+            "first": "human",
+            "turn": 11,
+            "cell": "0,0",
+            "mover": "human"
+          },
+          {
+            "seed": 1000,
+            "first": "ai",
+            "turn": 2,
+            "cell": "0,4",
+            "mover": "human"
+          },
+          {
+            "seed": 1001,
+            "first": "human",
+            "turn": 1,
+            "cell": "0,2",
+            "mover": "human"
+          },
+          {
+            "seed": 1001,
+            "first": "ai",
+            "turn": 1,
+            "cell": "6,0",
+            "mover": "ai"
+          },
+          {
+            "seed": 1002,
+            "first": "ai",
+            "turn": 1,
+            "cell": "6,0",
+            "mover": "ai"
+          },
+          {
+            "seed": 1003,
+            "first": "human",
+            "turn": 21,
+            "cell": "5,0",
+            "mover": "human"
+          },
+          {
+            "seed": 1003,
+            "first": "ai",
+            "turn": 5,
+            "cell": "6,4",
+            "mover": "ai"
+          },
+          {
+            "seed": 1004,
+            "first": "ai",
+            "turn": 2,
+            "cell": "0,4",
+            "mover": "human"
+          },
+          {
+            "seed": 1005,
+            "first": "human",
+            "turn": 3,
+            "cell": "0,4",
+            "mover": "human"
+          },
+          {
+            "seed": 1006,
+            "first": "ai",
+            "turn": 1,
+            "cell": "6,0",
+            "mover": "ai"
+          },
+          {
+            "seed": 1008,
+            "first": "human",
+            "turn": 6,
+            "cell": "6,4",
+            "mover": "ai"
+          },
+          {
+            "seed": 1009,
+            "first": "ai",
+            "turn": 7,
+            "cell": "6,0",
+            "mover": "ai"
+          },
+          {
+            "seed": 1010,
+            "first": "ai",
+            "turn": 1,
+            "cell": "6,0",
+            "mover": "ai"
+          }
+        ]
+      },
+      "id": "A1",
+      "fingerprint": "d1aeba608fac",
+      "pageKey": "62f90f1a6d1f9e0d03a23eaa85e459b81d4ae9e9b3c4a7993c895ec20e934014"
+    },
+    {
+      "type": "never-selected",
+      "subject": "shove:north:2",
+      "title": "“Shove north 2” is almost never worth selecting (0.0% of placements)",
+      "hypothesis": "The planner under-values “Shove north 2”, or it is genuinely weak.",
+      "metric": "share",
+      "value": 0,
+      "threshold": 0.02,
+      "severity": 0.6,
+      "samples": 24,
+      "knob": {
+        "kind": "upkeep",
+        "effect": "shove:north:2",
+        "direction": "down"
+      },
+      "kaneCheckable": false,
+      "check": null,
+      "note": "Absence of use cannot be shown as evidence rows; recorded only.",
+      "id": "A2",
+      "fingerprint": "de23476a0ff4"
+    },
+    {
+      "type": "never-selected",
+      "subject": "shove:south:2",
+      "title": "“Shove south 2” is almost never worth selecting (0.0% of placements)",
+      "hypothesis": "The planner under-values “Shove south 2”, or it is genuinely weak.",
+      "metric": "share",
+      "value": 0,
+      "threshold": 0.02,
+      "severity": 0.6,
+      "samples": 24,
+      "knob": {
+        "kind": "upkeep",
+        "effect": "shove:south:2",
+        "direction": "down"
+      },
+      "kaneCheckable": false,
+      "check": null,
+      "note": "Absence of use cannot be shown as evidence rows; recorded only.",
+      "id": "A3",
+      "fingerprint": "ec35b0f2643e"
+    },
+    {
+      "type": "dominant-effect",
+      "subject": "shove:west:2",
+      "title": "“Shove west 2” is 31% of all placements and its users win 63%",
+      "hypothesis": "“Shove west 2” is over-valued by the planner and dominates play.",
+      "metric": "share×winRateWhenUsed",
+      "value": 0.31,
+      "threshold": 0.2,
+      "severity": 0.558,
+      "samples": 24,
+      "knob": {
+        "kind": "upkeep",
+        "effect": "shove:west:2",
+        "direction": "up"
+      },
+      "kaneCheckable": true,
+      "check": {
+        "table": "games",
+        "columns": [
+          "Game (seed)",
+          "Side",
+          "First mover",
+          "Placed “Shove west 2”",
+          "Result for this side",
+          "Turns"
+        ],
+        "rows": [
+          [
+            "1000/H first",
+            "AI",
+            "Human",
+            "yes",
+            "won",
+            16
+          ],
+          [
+            "1000/A first",
+            "AI",
+            "AI",
+            "yes",
+            "won",
+            5
+          ],
+          [
+            "1001/A first",
+            "AI",
+            "AI",
+            "yes",
+            "won",
+            7
+          ],
+          [
+            "1002/A first",
+            "AI",
+            "AI",
+            "yes",
+            "won",
+            9
+          ],
+          [
+            "1003/A first",
+            "AI",
+            "AI",
+            "yes",
+            "won",
+            7
+          ],
+          [
+            "1004/A first",
+            "AI",
+            "AI",
+            "yes",
+            "lost",
+            4
+          ],
+          [
+            "1005/A first",
+            "AI",
+            "AI",
+            "yes",
+            "won",
+            11
+          ],
+          [
+            "1006/H first",
+            "AI",
+            "Human",
+            "yes",
+            "won",
+            10
+          ],
+          [
+            "1007/H first",
+            "AI",
+            "Human",
+            "yes",
+            "won",
+            12
+          ],
+          [
+            "1008/H first",
+            "AI",
+            "Human",
+            "yes",
+            "won",
+            12
+          ],
+          [
+            "1009/H first",
+            "AI",
+            "Human",
+            "yes",
+            "won",
+            12
+          ],
+          [
+            "1010/H first",
+            "AI",
+            "Human",
+            "yes",
+            "lost",
+            15
+          ],
+          [
+            "1011/H first",
+            "AI",
+            "Human",
+            "yes",
+            "won",
+            10
+          ]
+        ],
+        "predicateText": "the 'Result for this side' column says 'won'",
+        "predicate": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          false,
+          true,
+          true,
+          true,
+          true,
+          true,
+          false,
+          true
+        ],
+        "direction": "above",
+        "fraction": 0.5,
+        "fractionText": "half"
+      },
+      "id": "A4",
+      "fingerprint": "a548aca5eb72",
+      "pageKey": "60fc0254cc55d6513798979967db802ad17650ecdddb91e56bd830264e41fcbe"
+    },
+    {
+      "type": "never-selected",
+      "subject": "shove:forward:2",
+      "title": "“Shove forward 2” is almost never worth selecting (0.4% of placements)",
+      "hypothesis": "The planner under-values “Shove forward 2”, or it is genuinely weak.",
+      "metric": "share",
+      "value": 0.004,
+      "threshold": 0.02,
+      "severity": 0.48,
+      "samples": 24,
+      "knob": {
+        "kind": "upkeep",
+        "effect": "shove:forward:2",
+        "direction": "down"
+      },
+      "kaneCheckable": false,
+      "check": null,
+      "note": "Absence of use cannot be shown as evidence rows; recorded only.",
+      "id": "A5",
+      "fingerprint": "75b995577b49"
+    },
+    {
+      "type": "wasted-placements",
+      "subject": "home",
+      "title": "99% of “Send home” cells are never entered",
+      "hypothesis": "The planner pays to place “Send home” where nobody steps (an unused cost).",
+      "metric": "unusedRate",
+      "value": 0.986,
+      "threshold": 0.7,
+      "severity": 0.477,
+      "samples": 69,
+      "knob": {
+        "kind": "upkeep",
+        "effect": "home",
+        "direction": "up"
+      },
+      "kaneCheckable": false,
+      "check": null,
+      "note": "Engine counters (placed − hits); recorded as supporting evidence.",
+      "id": "A6",
+      "fingerprint": "ebb3b63b2d9f"
+    },
+    {
+      "type": "never-selected",
+      "subject": "freeze",
+      "title": "“Freeze” is almost never worth selecting (0.7% of placements)",
+      "hypothesis": "The planner under-values “Freeze”, or it is genuinely weak.",
+      "metric": "share",
+      "value": 0.007,
+      "threshold": 0.02,
+      "severity": 0.39,
+      "samples": 24,
+      "knob": {
+        "kind": "upkeep",
+        "effect": "freeze",
+        "direction": "down"
+      },
+      "kaneCheckable": false,
+      "check": null,
+      "note": "Absence of use cannot be shown as evidence rows; recorded only.",
+      "id": "A7",
+      "fingerprint": "4f81fe393f87"
+    },
+    {
+      "type": "wasted-placements",
+      "subject": "shove:back:2",
+      "title": "83% of “Shove back 2” cells are never entered",
+      "hypothesis": "The planner pays to place “Shove back 2” where nobody steps (an unused cost).",
+      "metric": "unusedRate",
+      "value": 0.833,
+      "threshold": 0.7,
+      "severity": 0.222,
+      "samples": 18,
+      "knob": {
+        "kind": "upkeep",
+        "effect": "shove:back:2",
+        "direction": "up"
+      },
+      "kaneCheckable": false,
+      "check": null,
+      "note": "Engine counters (placed − hits); recorded as supporting evidence.",
+      "id": "A8",
+      "fingerprint": "a245406b32aa"
+    },
+    {
+      "type": "wasted-placements",
+      "subject": "shove:back:3",
+      "title": "74% of “Shove back 3” cells are never entered",
+      "hypothesis": "The planner pays to place “Shove back 3” where nobody steps (an unused cost).",
+      "metric": "unusedRate",
+      "value": 0.741,
+      "threshold": 0.7,
+      "severity": 0.068,
+      "samples": 27,
+      "knob": {
+        "kind": "upkeep",
+        "effect": "shove:back:3",
+        "direction": "up"
+      },
+      "kaneCheckable": false,
+      "check": null,
+      "note": "Engine counters (placed − hits); recorded as supporting evidence.",
+      "id": "A9",
+      "fingerprint": "56b3f854962c"
+    }
+  ],
+  "selected": [
+    "A1",
+    "A4"
+  ],
+  "kane": [
+    {
+      "anomalyId": "A1",
+      "title": "“Teleport” is priced as a penalty (0.80 actions/trigger) but hurts in only 10% of 58 triggers",
+      "state": "done",
+      "url": "http://127.0.0.1:4100/evidence/2026-11-18T14-21-47Z-kane/cycle-1-A1-evidence.html",
+      "page": "cycle-1-A1-evidence.html",
+      "conditions": [
+        {
+          "id": "K1",
+          "role": "integrity",
+          "text": "The table titled 'Evidence rows' has exactly 13 data rows below its header row.",
+          "kane": null,
+          "kaneReason": null,
+          "expectedIfHypothesis": true
+        },
+        {
+          "id": "K2",
+          "role": "hypothesis",
+          "text": "In the 'Evidence rows' table, fewer than half of the data rows are rows where the 'Squares to goal after' number is greater than the 'Squares to goal before' number.",
+          "kane": null,
+          "kaneReason": null,
+          "expectedIfHypothesis": true
+        },
+        {
+          "id": "K3",
+          "role": "negated control",
+          "text": "In the 'Evidence rows' table, at least half of the data rows are rows where the 'Squares to goal after' number is greater than the 'Squares to goal before' number.",
+          "kane": null,
+          "kaneReason": null,
+          "expectedIfHypothesis": false
+        },
+        {
+          "id": "K4",
+          "role": "replay consistency",
+          "text": "In the 'Replay R1' section, the 'After' board shows a Human piece on the square named in the 'Ended on' line of that section.",
+          "kane": null,
+          "kaneReason": null,
+          "expectedIfHypothesis": true
+        }
+      ],
+      "result": {
+        "status": "complete",
+        "conditionResults": [
+          true,
+          true,
+          false,
+          true
+        ],
+        "conditionReasons": [
+          "Counting data rows in the Evidence rows table: value: '13' -> '13'; equals '13' -> PASS",
+          "Checking the proportion of Evidence rows with increased squares to goal: value: 'true' -> 'true'; equals 'true' -> PASS",
+          "Checking the proportion of Evidence rows with increased squares to goal: value: 'false' -> 'false'; equals 'true' -> FAIL",
+          "Checking the Human piece position on the Replay R1 After board: value: 'true' -> 'true'; equals 'true' -> PASS"
+        ],
+        "detail": "Kane returned 4 condition results.",
+        "exitCode": 0,
+        "timedOut": false,
+        "version": "0.10.4",
+        "isTestDouble": false,
+        "cli": "kane-cli",
+        "mode": "analyzer",
+        "args": [
+          "run",
+          "--analyzer-only",
+          "--agent",
+          "--cdp-endpoint",
+          "http://127.0.0.1:54080",
+          "--timeout",
+          "300",
+          "--condition",
+          "The table titled 'Evidence rows' has exactly 13 data rows below its header row.",
+          "--condition",
+          "In the 'Evidence rows' table, fewer than half of the data rows are rows where the 'Squares to goal after' number is greater than the 'Squares to goal before' number.",
+          "--condition",
+          "In the 'Evidence rows' table, at least half of the data rows are rows where the 'Squares to goal after' number is greater than the 'Squares to goal before' number.",
+          "--condition",
+          "In the 'Replay R1' section, the 'After' board shows a Human piece on the square named in the 'Ended on' line of that section."
+        ],
+        "startedAt": "2026-11-18T14:22:25.562Z",
+        "finishedAt": "2026-11-18T14:24:55.916Z",
+        "elapsedMs": 150354,
+        "timings": {
+          "browserSpawnMs": 53,
+          "cdpReadyMs": 1630,
+          "cdpReady": true,
+          "cliMs": 148071,
+          "cliFirstOutputMs": 4578,
+          "cliRunEndMs": 146719
+        },
+        "files": {
+          "stdout": "D:\\Rule_Sabotage\\rule-sabotage-live\\evidence\\balance\\runs\\2026-11-18T14-21-47Z-kane\\cycle-1\\kane-A1\\kane-stdout.ndjson",
+          "stderr": "D:\\Rule_Sabotage\\rule-sabotage-live\\evidence\\balance\\runs\\2026-11-18T14-21-47Z-kane\\cycle-1\\kane-A1\\kane-stderr.txt",
+          "result": "D:\\Rule_Sabotage\\rule-sabotage-live\\evidence\\balance\\runs\\2026-11-18T14-21-47Z-kane\\cycle-1\\kane-A1\\kane-result.json"
+        }
+      },
+      "finding": {
+        "anomalyId": "A1",
+        "fingerprint": "d1aeba608fac",
+        "status": "CONFIRMED",
+        "verifier": "kane-cli",
+        "reason": "Kane: the hypothesis statement is true and its negated control is false.",
+        "conditions": [
+          {
+            "id": "K1",
+            "role": "integrity",
+            "text": "The table titled 'Evidence rows' has exactly 13 data rows below its header row.",
+            "kane": true,
+            "kaneReason": "Counting data rows in the Evidence rows table: value: '13' -> '13'; equals '13' -> PASS",
+            "expectedIfHypothesis": true
+          },
+          {
+            "id": "K2",
+            "role": "hypothesis",
+            "text": "In the 'Evidence rows' table, fewer than half of the data rows are rows where the 'Squares to goal after' number is greater than the 'Squares to goal before' number.",
+            "kane": true,
+            "kaneReason": "Checking the proportion of Evidence rows with increased squares to goal: value: 'true' -> 'true'; equals 'true' -> PASS",
+            "expectedIfHypothesis": true
+          },
+          {
+            "id": "K3",
+            "role": "negated control",
+            "text": "In the 'Evidence rows' table, at least half of the data rows are rows where the 'Squares to goal after' number is greater than the 'Squares to goal before' number.",
+            "kane": false,
+            "kaneReason": "Checking the proportion of Evidence rows with increased squares to goal: value: 'false' -> 'false'; equals 'true' -> FAIL",
+            "expectedIfHypothesis": false
+          },
+          {
+            "id": "K4",
+            "role": "replay consistency",
+            "text": "In the 'Replay R1' section, the 'After' board shows a Human piece on the square named in the 'Ended on' line of that section.",
+            "kane": true,
+            "kaneReason": "Checking the Human piece position on the Replay R1 After board: value: 'true' -> 'true'; equals 'true' -> PASS",
+            "expectedIfHypothesis": true
+          }
+        ],
+        "ownAnswer": true,
+        "kaneAgreesWithOwnData": true
+      },
+      "startedAt": "2026-11-18T14:22:25.548Z",
+      "elapsedMs": 150354,
+      "liveLines": [
+        "{\"type\":\"stream_start\",\"cli_version\":\"0.10.4\",\"surface\":\"run\",\"pid\":49232,\"v\":1,\"ts\":\"2026-11-18T14:22:31.806Z\"}",
+        "{\"type\":\"recording_state\",\"enabled\":true,\"session_id\":\"6e46fd01-ca87-41ea-83a6-85032b28b639\",\"persist\":false,\"v\":1,\"ts\":\"2026-11-18T14:22:32.259Z\"}",
+        "{\"type\":\"update_available\",\"current\":\"0.10.4\",\"latest\":\"0.10.5\",\"severity\":\"patch\",\"v\":1,\"ts\":\"2026-11-18T14:22:34.798Z\"}",
+        "{\"type\":\"skill_update_available\",\"current\":null,\"latest\":\"0.1.4\",\"install_cmd\":\"kane-cli install skill\",\"v\":1,\"ts\":\"2026-11-18T14:22:34.819Z\"}",
+        "{\"step\":1,\"status\":\"done\",\"remark\":\"Counting data rows in the Evidence rows table: value: '13' -> '13'; equals '13' -> PASS\",\"v\":1,\"ts\":\"2026-11-18T14:24:53.441Z\"}",
+        "{\"step\":2,\"status\":\"done\",\"remark\":\"Checking the proportion of Evidence rows with increased squares to goal: value: 'true' -> 'true'; equals 'true' -> PASS\",\"v\":1,\"ts\":\"2026-11-18T14:24:53.444Z\"}",
+        "{\"step\":3,\"status\":\"done\",\"remark\":\"Checking the proportion of Evidence rows with increased squares to goal: value: 'false' -> 'false'; equals 'true' -> FAIL\",\"v\":1,\"ts\":\"2026-11-18T14:24:53.445Z\"}",
+        "{\"step\":4,\"status\":\"done\",\"remark\":\"Checking the Human piece position on the Replay R1 After board: value: 'true' -> 'true'; equals 'true' -> PASS\",\"v\":1,\"ts\":\"2026-11-18T14:24:53.446Z\"}",
+        "{\"type\":\"run_end\",\"status\":\"passed\",\"run_id\":\"run-0\",\"duration\":22.73,\"condition_results\":[true,true,false,true],\"condition_reasons\":[\"Counting data rows in the Evidence rows table: value: '13' -> '13'; equals '13' -> PASS\",\"Checking the proportion of Evidence rows with increased squares to goal: va"
+      ]
+    },
+    {
+      "anomalyId": "A4",
+      "title": "“Shove west 2” is 31% of all placements and its users win 63%",
+      "state": "done",
+      "url": "http://127.0.0.1:4100/evidence/2026-11-18T14-21-47Z-kane/cycle-1-A4-evidence.html",
+      "page": "cycle-1-A4-evidence.html",
+      "conditions": [
+        {
+          "id": "K1",
+          "role": "integrity",
+          "text": "The table titled 'Evidence rows' has exactly 13 data rows below its header row.",
+          "kane": null,
+          "kaneReason": null,
+          "expectedIfHypothesis": true
+        },
+        {
+          "id": "K2",
+          "role": "hypothesis",
+          "text": "In the 'Evidence rows' table, more than half of the data rows are rows where the 'Result for this side' column says 'won'.",
+          "kane": null,
+          "kaneReason": null,
+          "expectedIfHypothesis": true
+        },
+        {
+          "id": "K3",
+          "role": "negated control",
+          "text": "In the 'Evidence rows' table, at most half of the data rows are rows where the 'Result for this side' column says 'won'.",
+          "kane": null,
+          "kaneReason": null,
+          "expectedIfHypothesis": false
+        }
+      ],
+      "result": {
+        "status": "complete",
+        "conditionResults": [
+          true,
+          true,
+          false
+        ],
+        "conditionReasons": [
+          "Counting data rows in the Evidence rows table: value: '13' -> '13'; equals '13' -> PASS",
+          "Checking the majority of won results in the Evidence rows table: value: 'true' -> 'true'; equals 'true' -> PASS",
+          "Checking the maximum share of won results in the Evidence rows table: value: 'false' -> 'false'; equals 'true' -> FAIL"
+        ],
+        "detail": "Kane returned 3 condition results.",
+        "exitCode": 0,
+        "timedOut": false,
+        "version": "0.10.4",
+        "isTestDouble": false,
+        "cli": "kane-cli",
+        "mode": "analyzer",
+        "args": [
+          "run",
+          "--analyzer-only",
+          "--agent",
+          "--cdp-endpoint",
+          "http://127.0.0.1:57507",
+          "--timeout",
+          "300",
+          "--condition",
+          "The table titled 'Evidence rows' has exactly 13 data rows below its header row.",
+          "--condition",
+          "In the 'Evidence rows' table, more than half of the data rows are rows where the 'Result for this side' column says 'won'.",
+          "--condition",
+          "In the 'Evidence rows' table, at most half of the data rows are rows where the 'Result for this side' column says 'won'."
+        ],
+        "startedAt": "2026-11-18T14:24:58.224Z",
+        "finishedAt": "2026-11-18T14:25:51.074Z",
+        "elapsedMs": 52850,
+        "timings": {
+          "browserSpawnMs": 25,
+          "cdpReadyMs": 2090,
+          "cdpReady": true,
+          "cliMs": 49798,
+          "cliFirstOutputMs": 6324,
+          "cliRunEndMs": 48364
+        },
+        "files": {
+          "stdout": "D:\\Rule_Sabotage\\rule-sabotage-live\\evidence\\balance\\runs\\2026-11-18T14-21-47Z-kane\\cycle-1\\kane-A4\\kane-stdout.ndjson",
+          "stderr": "D:\\Rule_Sabotage\\rule-sabotage-live\\evidence\\balance\\runs\\2026-11-18T14-21-47Z-kane\\cycle-1\\kane-A4\\kane-stderr.txt",
+          "result": "D:\\Rule_Sabotage\\rule-sabotage-live\\evidence\\balance\\runs\\2026-11-18T14-21-47Z-kane\\cycle-1\\kane-A4\\kane-result.json"
+        }
+      },
+      "finding": {
+        "anomalyId": "A4",
+        "fingerprint": "a548aca5eb72",
+        "status": "CONFIRMED",
+        "verifier": "kane-cli",
+        "reason": "Kane: the hypothesis statement is true and its negated control is false.",
+        "conditions": [
+          {
+            "id": "K1",
+            "role": "integrity",
+            "text": "The table titled 'Evidence rows' has exactly 13 data rows below its header row.",
+            "kane": true,
+            "kaneReason": "Counting data rows in the Evidence rows table: value: '13' -> '13'; equals '13' -> PASS",
+            "expectedIfHypothesis": true
+          },
+          {
+            "id": "K2",
+            "role": "hypothesis",
+            "text": "In the 'Evidence rows' table, more than half of the data rows are rows where the 'Result for this side' column says 'won'.",
+            "kane": true,
+            "kaneReason": "Checking the majority of won results in the Evidence rows table: value: 'true' -> 'true'; equals 'true' -> PASS",
+            "expectedIfHypothesis": true
+          },
+          {
+            "id": "K3",
+            "role": "negated control",
+            "text": "In the 'Evidence rows' table, at most half of the data rows are rows where the 'Result for this side' column says 'won'.",
+            "kane": false,
+            "kaneReason": "Checking the maximum share of won results in the Evidence rows table: value: 'false' -> 'false'; equals 'true' -> FAIL",
+            "expectedIfHypothesis": false
+          }
+        ],
+        "ownAnswer": true,
+        "kaneAgreesWithOwnData": true
+      },
+      "startedAt": "2026-11-18T14:24:58.216Z",
+      "elapsedMs": 52850,
+      "liveLines": [
+        "{\"type\":\"stream_start\",\"cli_version\":\"0.10.4\",\"surface\":\"run\",\"pid\":29124,\"v\":1,\"ts\":\"2026-11-18T14:25:06.651Z\"}",
+        "{\"type\":\"recording_state\",\"enabled\":true,\"session_id\":\"1d6ed935-2a35-4972-946a-4604b2f6d52a\",\"persist\":false,\"v\":1,\"ts\":\"2026-11-18T14:25:07.062Z\"}",
+        "{\"type\":\"update_available\",\"current\":\"0.10.4\",\"latest\":\"0.10.5\",\"severity\":\"patch\",\"v\":1,\"ts\":\"2026-11-18T14:25:07.985Z\"}",
+        "{\"type\":\"skill_update_available\",\"current\":null,\"latest\":\"0.1.4\",\"install_cmd\":\"kane-cli install skill\",\"v\":1,\"ts\":\"2026-11-18T14:25:08.069Z\"}",
+        "{\"step\":1,\"status\":\"done\",\"remark\":\"Counting data rows in the Evidence rows table: value: '13' -> '13'; equals '13' -> PASS\",\"v\":1,\"ts\":\"2026-11-18T14:25:48.232Z\"}",
+        "{\"step\":2,\"status\":\"done\",\"remark\":\"Checking the majority of won results in the Evidence rows table: value: 'true' -> 'true'; equals 'true' -> PASS\",\"v\":1,\"ts\":\"2026-11-18T14:25:48.234Z\"}",
+        "{\"step\":3,\"status\":\"done\",\"remark\":\"Checking the maximum share of won results in the Evidence rows table: value: 'false' -> 'false'; equals 'true' -> FAIL\",\"v\":1,\"ts\":\"2026-11-18T14:25:48.239Z\"}",
+        "{\"type\":\"run_end\",\"status\":\"passed\",\"run_id\":\"run-0\",\"duration\":12.03,\"condition_results\":[true,true,false],\"condition_reasons\":[\"Counting data rows in the Evidence rows table: value: '13' -> '13'; equals '13' -> PASS\",\"Checking the majority of won results in the Evidence rows table: value: 'true' -"
+      ]
+    }
+  ],
+  "findings": [
+    {
+      "anomalyId": "A1",
+      "fingerprint": "d1aeba608fac",
+      "status": "CONFIRMED",
+      "verifier": "kane-cli",
+      "reason": "Kane: the hypothesis statement is true and its negated control is false.",
+      "conditions": [
+        {
+          "id": "K1",
+          "role": "integrity",
+          "text": "The table titled 'Evidence rows' has exactly 13 data rows below its header row.",
+          "kane": true,
+          "kaneReason": "Counting data rows in the Evidence rows table: value: '13' -> '13'; equals '13' -> PASS",
+          "expectedIfHypothesis": true
+        },
+        {
+          "id": "K2",
+          "role": "hypothesis",
+          "text": "In the 'Evidence rows' table, fewer than half of the data rows are rows where the 'Squares to goal after' number is greater than the 'Squares to goal before' number.",
+          "kane": true,
+          "kaneReason": "Checking the proportion of Evidence rows with increased squares to goal: value: 'true' -> 'true'; equals 'true' -> PASS",
+          "expectedIfHypothesis": true
+        },
+        {
+          "id": "K3",
+          "role": "negated control",
+          "text": "In the 'Evidence rows' table, at least half of the data rows are rows where the 'Squares to goal after' number is greater than the 'Squares to goal before' number.",
+          "kane": false,
+          "kaneReason": "Checking the proportion of Evidence rows with increased squares to goal: value: 'false' -> 'false'; equals 'true' -> FAIL",
+          "expectedIfHypothesis": false
+        },
+        {
+          "id": "K4",
+          "role": "replay consistency",
+          "text": "In the 'Replay R1' section, the 'After' board shows a Human piece on the square named in the 'Ended on' line of that section.",
+          "kane": true,
+          "kaneReason": "Checking the Human piece position on the Replay R1 After board: value: 'true' -> 'true'; equals 'true' -> PASS",
+          "expectedIfHypothesis": true
+        }
+      ],
+      "ownAnswer": true,
+      "kaneAgreesWithOwnData": true
+    },
+    {
+      "anomalyId": "A4",
+      "fingerprint": "a548aca5eb72",
+      "status": "CONFIRMED",
+      "verifier": "kane-cli",
+      "reason": "Kane: the hypothesis statement is true and its negated control is false.",
+      "conditions": [
+        {
+          "id": "K1",
+          "role": "integrity",
+          "text": "The table titled 'Evidence rows' has exactly 13 data rows below its header row.",
+          "kane": true,
+          "kaneReason": "Counting data rows in the Evidence rows table: value: '13' -> '13'; equals '13' -> PASS",
+          "expectedIfHypothesis": true
+        },
+        {
+          "id": "K2",
+          "role": "hypothesis",
+          "text": "In the 'Evidence rows' table, more than half of the data rows are rows where the 'Result for this side' column says 'won'.",
+          "kane": true,
+          "kaneReason": "Checking the majority of won results in the Evidence rows table: value: 'true' -> 'true'; equals 'true' -> PASS",
+          "expectedIfHypothesis": true
+        },
+        {
+          "id": "K3",
+          "role": "negated control",
+          "text": "In the 'Evidence rows' table, at most half of the data rows are rows where the 'Result for this side' column says 'won'.",
+          "kane": false,
+          "kaneReason": "Checking the maximum share of won results in the Evidence rows table: value: 'false' -> 'false'; equals 'true' -> FAIL",
+          "expectedIfHypothesis": false
+        }
+      ],
+      "ownAnswer": true,
+      "kaneAgreesWithOwnData": true
+    }
+  ],
+  "candidates": [
+    {
+      "id": "C1",
+      "version": "0.3.0+c1.1",
+      "parent": "0.3.0",
+      "changes": [
+        {
+          "path": "featureUtilityToActivator.teleport",
+          "target": "teleport",
+          "field": "utility",
+          "old": -0.8,
+          "proposed": -0.68,
+          "reason": "cost-not-realized: move the V0.3 activator utility teleport (prices teleport) 15% toward 0, because the measured consequence is smaller than the prior (harmfulRate 0.103 vs threshold 0.5)",
+          "anomalyId": "A1",
+          "anomalyFingerprint": "d1aeba608fac",
+          "findingStatus": "CONFIRMED"
+        }
+      ],
+      "eligible": true,
+      "source": "optimizer",
+      "eligibilityReason": "based on A1, CONFIRMED by kane-cli"
+    },
+    {
+      "id": "C2",
+      "version": "0.3.0+c1.2",
+      "parent": "0.3.0",
+      "changes": [
+        {
+          "path": "placementUpkeep.shove:west:2",
+          "target": "shove:west:2",
+          "field": "upkeep",
+          "old": 0.15,
+          "proposed": 0.25,
+          "reason": "dominant-effect: raise the placement upkeep of shove:west:2 by 0.1 (share×winRateWhenUsed 0.31 vs threshold 0.2)",
+          "anomalyId": "A4",
+          "anomalyFingerprint": "a548aca5eb72",
+          "findingStatus": "CONFIRMED"
+        }
+      ],
+      "eligible": true,
+      "source": "optimizer",
+      "eligibilityReason": "based on A4, CONFIRMED by kane-cli"
+    },
+    {
+      "id": "C3",
+      "version": "0.3.0+c1.3",
+      "parent": "0.3.0",
+      "changes": [
+        {
+          "path": "featureUtilityToActivator.teleport",
+          "target": "teleport",
+          "field": "utility",
+          "old": -0.8,
+          "proposed": -0.56,
+          "reason": "cost-not-realized: move the V0.3 activator utility teleport (prices teleport) 30% toward 0, because the measured consequence is smaller than the prior (harmfulRate 0.103 vs threshold 0.5)",
+          "anomalyId": "A1",
+          "anomalyFingerprint": "d1aeba608fac",
+          "findingStatus": "CONFIRMED"
+        }
+      ],
+      "eligible": true,
+      "source": "optimizer",
+      "eligibilityReason": "based on A1, CONFIRMED by kane-cli"
+    },
+    {
+      "id": "C4",
+      "version": "0.3.0+c1.4",
+      "parent": "0.3.0",
+      "changes": [
+        {
+          "path": "placementUpkeep.shove:west:2",
+          "target": "shove:west:2",
+          "field": "upkeep",
+          "old": 0.15,
+          "proposed": 0.35,
+          "reason": "dominant-effect: raise the placement upkeep of shove:west:2 by 0.2 (share×winRateWhenUsed 0.31 vs threshold 0.2)",
+          "anomalyId": "A4",
+          "anomalyFingerprint": "a548aca5eb72",
+          "findingStatus": "CONFIRMED"
+        }
+      ],
+      "eligible": true,
+      "source": "optimizer",
+      "eligibilityReason": "based on A4, CONFIRMED by kane-cli"
+    },
+    {
+      "id": "C5",
+      "version": "0.3.0+v03-candidate",
+      "parent": "0.3.0",
+      "changes": [
+        {
+          "path": "featureUtilityToActivator.shoveBackPerSquare",
+          "target": "shoveBackPerSquare",
+          "field": "utility",
+          "old": -0.9,
+          "proposed": -0.8,
+          "reason": "V0.3 bundle heuristic-proposal-v1-NOT-KANE (human-authored, not derived from this run)",
+          "anomalyId": "-",
+          "anomalyFingerprint": "-",
+          "findingStatus": "UNVERIFIED"
+        },
+        {
+          "path": "featureUtilityToActivator.freeze",
+          "target": "freeze",
+          "field": "utility",
+          "old": -2.2,
+          "proposed": -1.7,
+          "reason": "V0.3 bundle heuristic-proposal-v1-NOT-KANE (human-authored, not derived from this run)",
+          "anomalyId": "-",
+          "anomalyFingerprint": "-",
+          "findingStatus": "UNVERIFIED"
+        },
+        {
+          "path": "featureUtilityToActivator.home",
+          "target": "home",
+          "field": "utility",
+          "old": -3.8,
+          "proposed": -3.1,
+          "reason": "V0.3 bundle heuristic-proposal-v1-NOT-KANE (human-authored, not derived from this run)",
+          "anomalyId": "-",
+          "anomalyFingerprint": "-",
+          "findingStatus": "UNVERIFIED"
+        },
+        {
+          "path": "featureUtilityToActivator.haste",
+          "target": "haste",
+          "field": "utility",
+          "old": 1.8,
+          "proposed": 2.2,
+          "reason": "V0.3 bundle heuristic-proposal-v1-NOT-KANE (human-authored, not derived from this run)",
+          "anomalyId": "-",
+          "anomalyFingerprint": "-",
+          "findingStatus": "UNVERIFIED"
+        }
+      ],
+      "eligible": false,
+      "source": "v0.3-bundle",
+      "eligibilityReason": "V0.3 bundle proposal (NOT Kane-derived): evaluated for the record, cannot be promoted"
+    }
+  ],
+  "heldOutBaseline": {
+    "games": 24,
+    "seeds": [
+      5000,
+      5001,
+      5002,
+      5003,
+      5004,
+      5005,
+      5006,
+      5007,
+      5008,
+      5009,
+      5010,
+      5011
+    ],
+    "weights": [
+      "0.3.0#ddcf941c285bd537"
+    ],
+    "wins": {
+      "human": 9,
+      "ai": 14,
+      "draw": 1
+    },
+    "firstPlayerWinRate": 0.435,
+    "humanSideWinRate": 0.391,
+    "decisiveGames": 23,
+    "drawRate": 0.042,
+    "turnLimitRate": 0.083,
+    "pairsSweptByFirst": 1,
+    "pairs": 12,
+    "turns": {
+      "mean": 15.958,
+      "median": 13,
+      "p10": 8,
+      "p90": 19
+    },
+    "effects": {
+      "freeze": {
+        "placements": 9,
+        "share": 0.029,
+        "cells": 27,
+        "unusedCells": 25,
+        "unusedRate": 0.926,
+        "triggers": 2,
+        "selfTriggerRate": 0,
+        "resolved": 2,
+        "realizedMean": 1,
+        "predictedMean": 2.2,
+        "baseMean": 1.2,
+        "realization": null,
+        "harmfulRate": 1,
+        "winRateWhenUsed": 0.333,
+        "gamesUsed": 9
+      },
+      "haste": {
+        "placements": 17,
+        "share": 0.055,
+        "cells": 49,
+        "unusedCells": 17,
+        "unusedRate": 0.347,
+        "triggers": 32,
+        "selfTriggerRate": 1,
+        "resolved": 17,
+        "realizedMean": -1,
+        "predictedMean": -1.8,
+        "baseMean": -0.8,
+        "realization": 0.556,
+        "harmfulRate": 0,
+        "winRateWhenUsed": 0.467,
+        "gamesUsed": 16
+      },
+      "home": {
+        "placements": 35,
+        "share": 0.113,
+        "cells": 105,
+        "unusedCells": 99,
+        "unusedRate": 0.943,
+        "triggers": 4,
+        "selfTriggerRate": 0,
+        "resolved": 4,
+        "realizedMean": 5,
+        "predictedMean": 3.8,
+        "baseMean": 5,
+        "realization": 1.316,
+        "harmfulRate": 1,
+        "winRateWhenUsed": 0.579,
+        "gamesUsed": 21
+      },
+      "shield": {
+        "placements": 13,
+        "share": 0.042,
+        "cells": 37,
+        "unusedCells": 24,
+        "unusedRate": 0.649,
+        "triggers": 13,
+        "selfTriggerRate": 1,
+        "resolved": 13,
+        "realizedMean": -1.615,
+        "predictedMean": -1.4,
+        "baseMean": -0.3,
+        "realization": 1.154,
+        "harmfulRate": 0,
+        "winRateWhenUsed": 0.5,
+        "gamesUsed": 12
+      },
+      "shove:back:2": {
+        "placements": 2,
+        "share": 0.006,
+        "cells": 6,
+        "unusedCells": 5,
+        "unusedRate": 0.833,
+        "triggers": 1,
+        "selfTriggerRate": 1,
+        "resolved": 1,
+        "realizedMean": 0,
+        "predictedMean": 1.8,
+        "baseMean": 0,
+        "realization": null,
+        "harmfulRate": 0,
+        "winRateWhenUsed": 0.5,
+        "gamesUsed": 2
+      },
+      "shove:back:3": {
+        "placements": 10,
+        "share": 0.032,
+        "cells": 30,
+        "unusedCells": 24,
+        "unusedRate": 0.8,
+        "triggers": 6,
+        "selfTriggerRate": 0.333,
+        "resolved": 6,
+        "realizedMean": 1,
+        "predictedMean": 2.7,
+        "baseMean": 2.667,
+        "realization": 0.37,
+        "harmfulRate": 0.667,
+        "winRateWhenUsed": 0.625,
+        "gamesUsed": 10
+      },
+      "shove:east:2": {
+        "placements": 100,
+        "share": 0.323,
+        "cells": 299,
+        "unusedCells": 94,
+        "unusedRate": 0.314,
+        "triggers": 205,
+        "selfTriggerRate": 0.863,
+        "resolved": 205,
+        "realizedMean": -1.454,
+        "predictedMean": -1.308,
+        "baseMean": -1.454,
+        "realization": 1.111,
+        "harmfulRate": 0.137,
+        "winRateWhenUsed": 0.391,
+        "gamesUsed": 24
+      },
+      "shove:forward:2": {
+        "placements": 2,
+        "share": 0.006,
+        "cells": 6,
+        "unusedCells": 5,
+        "unusedRate": 0.833,
+        "triggers": 1,
+        "selfTriggerRate": 1,
+        "resolved": 1,
+        "realizedMean": -2,
+        "predictedMean": -1.8,
+        "baseMean": -2,
+        "realization": null,
+        "harmfulRate": 0,
+        "winRateWhenUsed": 0.5,
+        "gamesUsed": 2
+      },
+      "shove:west:2": {
+        "placements": 83,
+        "share": 0.268,
+        "cells": 247,
+        "unusedCells": 86,
+        "unusedRate": 0.348,
+        "triggers": 161,
+        "selfTriggerRate": 0.932,
+        "resolved": 161,
+        "realizedMean": -1.727,
+        "predictedMean": -1.554,
+        "baseMean": -1.727,
+        "realization": 1.111,
+        "harmfulRate": 0.068,
+        "winRateWhenUsed": 0.609,
+        "gamesUsed": 24
+      },
+      "teleport": {
+        "placements": 39,
+        "share": 0.126,
+        "cells": 117,
+        "unusedCells": 46,
+        "unusedRate": 0.393,
+        "triggers": 68,
+        "selfTriggerRate": 0.779,
+        "resolved": 68,
+        "realizedMean": -2.838,
+        "predictedMean": 0.8,
+        "baseMean": -1.676,
+        "realization": -3.548,
+        "harmfulRate": 0.176,
+        "winRateWhenUsed": 0.5,
+        "gamesUsed": 24
+      }
+    },
+    "noPlacementTurnsShare": 0.191,
+    "diversity": {
+      "effectEntropy": 2.591,
+      "effectEntropyNorm": 0.78,
+      "distinctEffectsUsed": 10,
+      "distinctOpenings": 17,
+      "topOpening": "shove:east:2>shove:east:2>shove:east:2",
+      "topOpeningShare": 0.292
+    },
+    "topCombo": {
+      "combo": "home + teleport",
+      "games": 17,
+      "winRate": 0.529
+    },
+    "combos": {
+      "freeze + haste": {
+        "games": 6,
+        "winRate": 0.333
+      },
+      "freeze + shield": {
+        "games": 3,
+        "winRate": 0.333
+      },
+      "freeze + shove:east:2": {
+        "games": 5,
+        "winRate": 0.4
+      },
+      "freeze + shove:west:2": {
+        "games": 4,
+        "winRate": 0.25
+      },
+      "haste + home": {
+        "games": 7,
+        "winRate": 0.571
+      },
+      "haste + shove:east:2": {
+        "games": 6,
+        "winRate": 0.333
+      },
+      "haste + shove:west:2": {
+        "games": 10,
+        "winRate": 0.5
+      },
+      "haste + teleport": {
+        "games": 5,
+        "winRate": 0.6
+      },
+      "home + shield": {
+        "games": 9,
+        "winRate": 0.556
+      },
+      "home + shove:back:3": {
+        "games": 7,
+        "winRate": 0.571
+      },
+      "home + shove:east:2": {
+        "games": 9,
+        "winRate": 0.222
+      },
+      "home + shove:west:2": {
+        "games": 12,
+        "winRate": 0.75
+      },
+      "home + teleport": {
+        "games": 17,
+        "winRate": 0.529
+      },
+      "shield + shove:back:3": {
+        "games": 4,
+        "winRate": 0.5
+      },
+      "shield + shove:east:2": {
+        "games": 7,
+        "winRate": 0.143
+      },
+      "shield + shove:west:2": {
+        "games": 5,
+        "winRate": 0.8
+      },
+      "shield + teleport": {
+        "games": 10,
+        "winRate": 0.5
+      },
+      "shove:back:3 + shove:west:2": {
+        "games": 9,
+        "winRate": 0.556
+      },
+      "shove:back:3 + teleport": {
+        "games": 7,
+        "winRate": 0.571
+      },
+      "shove:east:2 + teleport": {
+        "games": 12,
+        "winRate": 0.25
+      },
+      "shove:west:2 + teleport": {
+        "games": 12,
+        "winRate": 0.667
+      }
+    },
+    "safety": {
+      "illegal": 0,
+      "errors": 0,
+      "softlocks": 0,
+      "examples": []
+    },
+    "counterplay": {
+      "leadChangesPerGame": 5.125,
+      "comebackRate": 0.739
+    },
+    "unusedActionsPerGame": 3.667
+  },
+  "heldOut": {
+    "C1": {
+      "games": 24,
+      "seeds": [
+        5000,
+        5001,
+        5002,
+        5003,
+        5004,
+        5005,
+        5006,
+        5007,
+        5008,
+        5009,
+        5010,
+        5011
+      ],
+      "weights": [
+        "0.3.0+c1.1#a3dcd0560142c22a"
+      ],
+      "wins": {
+        "human": 10,
+        "ai": 13,
+        "draw": 1
+      },
+      "firstPlayerWinRate": 0.391,
+      "humanSideWinRate": 0.435,
+      "decisiveGames": 23,
+      "drawRate": 0.042,
+      "turnLimitRate": 0.042,
+      "pairsSweptByFirst": 1,
+      "pairs": 12,
+      "turns": {
+        "mean": 13.792,
+        "median": 13,
+        "p10": 8,
+        "p90": 19
+      },
+      "effects": {
+        "freeze": {
+          "placements": 8,
+          "share": 0.027,
+          "cells": 24,
+          "unusedCells": 22,
+          "unusedRate": 0.917,
+          "triggers": 2,
+          "selfTriggerRate": 0,
+          "resolved": 2,
+          "realizedMean": 1,
+          "predictedMean": 2.2,
+          "baseMean": 1.2,
+          "realization": null,
+          "harmfulRate": 1,
+          "winRateWhenUsed": 0.25,
+          "gamesUsed": 8
+        },
+        "haste": {
+          "placements": 17,
+          "share": 0.057,
+          "cells": 49,
+          "unusedCells": 20,
+          "unusedRate": 0.408,
+          "triggers": 29,
+          "selfTriggerRate": 1,
+          "resolved": 17,
+          "realizedMean": -1,
+          "predictedMean": -1.8,
+          "baseMean": -0.8,
+          "realization": 0.556,
+          "harmfulRate": 0,
+          "winRateWhenUsed": 0.4,
+          "gamesUsed": 16
+        },
+        "home": {
+          "placements": 35,
+          "share": 0.118,
+          "cells": 105,
+          "unusedCells": 100,
+          "unusedRate": 0.952,
+          "triggers": 4,
+          "selfTriggerRate": 0,
+          "resolved": 4,
+          "realizedMean": 5,
+          "predictedMean": 3.8,
+          "baseMean": 5,
+          "realization": 1.316,
+          "harmfulRate": 1,
+          "winRateWhenUsed": 0.579,
+          "gamesUsed": 21
+        },
+        "shield": {
+          "placements": 12,
+          "share": 0.041,
+          "cells": 32,
+          "unusedCells": 20,
+          "unusedRate": 0.625,
+          "triggers": 12,
+          "selfTriggerRate": 1,
+          "resolved": 12,
+          "realizedMean": -1.25,
+          "predictedMean": -1.4,
+          "baseMean": -0.3,
+          "realization": 0.893,
+          "harmfulRate": 0,
+          "winRateWhenUsed": 0.4,
+          "gamesUsed": 12
+        },
+        "shove:back:2": {
+          "placements": 3,
+          "share": 0.01,
+          "cells": 9,
+          "unusedCells": 8,
+          "unusedRate": 0.889,
+          "triggers": 1,
+          "selfTriggerRate": 1,
+          "resolved": 1,
+          "realizedMean": 0,
+          "predictedMean": 1.8,
+          "baseMean": 0,
+          "realization": null,
+          "harmfulRate": 0,
+          "winRateWhenUsed": 0.333,
+          "gamesUsed": 3
+        },
+        "shove:back:3": {
+          "placements": 9,
+          "share": 0.03,
+          "cells": 27,
+          "unusedCells": 23,
+          "unusedRate": 0.852,
+          "triggers": 4,
+          "selfTriggerRate": 0.5,
+          "resolved": 4,
+          "realizedMean": 0,
+          "predictedMean": 2.7,
+          "baseMean": 2.5,
+          "realization": 0,
+          "harmfulRate": 0.5,
+          "winRateWhenUsed": 0.571,
+          "gamesUsed": 9
+        },
+        "shove:east:2": {
+          "placements": 94,
+          "share": 0.318,
+          "cells": 282,
+          "unusedCells": 84,
+          "unusedRate": 0.298,
+          "triggers": 198,
+          "selfTriggerRate": 0.859,
+          "resolved": 198,
+          "realizedMean": -1.434,
+          "predictedMean": -1.291,
+          "baseMean": -1.434,
+          "realization": 1.111,
+          "harmfulRate": 0.141,
+          "winRateWhenUsed": 0.435,
+          "gamesUsed": 24
+        },
+        "shove:forward:2": {
+          "placements": 3,
+          "share": 0.01,
+          "cells": 9,
+          "unusedCells": 6,
+          "unusedRate": 0.667,
+          "triggers": 3,
+          "selfTriggerRate": 1,
+          "resolved": 3,
+          "realizedMean": -2,
+          "predictedMean": -1.8,
+          "baseMean": -2,
+          "realization": 1.111,
+          "harmfulRate": 0,
+          "winRateWhenUsed": 0.333,
+          "gamesUsed": 3
+        },
+        "shove:west:2": {
+          "placements": 76,
+          "share": 0.257,
+          "cells": 228,
+          "unusedCells": 72,
+          "unusedRate": 0.316,
+          "triggers": 156,
+          "selfTriggerRate": 0.936,
+          "resolved": 156,
+          "realizedMean": -1.744,
+          "predictedMean": -1.569,
+          "baseMean": -1.744,
+          "realization": 1.111,
+          "harmfulRate": 0.064,
+          "winRateWhenUsed": 0.591,
+          "gamesUsed": 23
+        },
+        "teleport": {
+          "placements": 39,
+          "share": 0.132,
+          "cells": 117,
+          "unusedCells": 48,
+          "unusedRate": 0.41,
+          "triggers": 66,
+          "selfTriggerRate": 0.803,
+          "resolved": 66,
+          "realizedMean": -2.97,
+          "predictedMean": 0.68,
+          "baseMean": -1.773,
+          "realization": -4.367,
+          "harmfulRate": 0.152,
+          "winRateWhenUsed": 0.478,
+          "gamesUsed": 25
+        }
+      },
+      "noPlacementTurnsShare": 0.106,
+      "diversity": {
+        "effectEntropy": 2.631,
+        "effectEntropyNorm": 0.792,
+        "distinctEffectsUsed": 10,
+        "distinctOpenings": 17,
+        "topOpening": "shove:east:2>shove:east:2>shove:east:2",
+        "topOpeningShare": 0.292
+      },
+      "topCombo": {
+        "combo": "home + teleport",
+        "games": 17,
+        "winRate": 0.529
+      },
+      "combos": {
+        "freeze + haste": {
+          "games": 5,
+          "winRate": 0.2
+        },
+        "freeze + shield": {
+          "games": 3,
+          "winRate": 0.333
+        },
+        "freeze + shove:east:2": {
+          "games": 4,
+          "winRate": 0.25
+        },
+        "freeze + shove:west:2": {
+          "games": 4,
+          "winRate": 0.25
+        },
+        "haste + home": {
+          "games": 7,
+          "winRate": 0.571
+        },
+        "haste + shove:east:2": {
+          "games": 5,
+          "winRate": 0.2
+        },
+        "haste + shove:west:2": {
+          "games": 11,
+          "winRate": 0.455
+        },
+        "haste + teleport": {
+          "games": 6,
+          "winRate": 0.5
+        },
+        "home + shield": {
+          "games": 9,
+          "winRate": 0.444
+        },
+        "home + shove:back:3": {
+          "games": 7,
+          "winRate": 0.429
+        },
+        "home + shove:east:2": {
+          "games": 9,
+          "winRate": 0.333
+        },
+        "home + shove:west:2": {
+          "games": 11,
+          "winRate": 0.727
+        },
+        "home + teleport": {
+          "games": 17,
+          "winRate": 0.529
+        },
+        "shield + shove:back:3": {
+          "games": 4,
+          "winRate": 0.25
+        },
+        "shield + shove:east:2": {
+          "games": 6,
+          "winRate": 0.167
+        },
+        "shield + shove:west:2": {
+          "games": 5,
+          "winRate": 0.6
+        },
+        "shield + teleport": {
+          "games": 10,
+          "winRate": 0.4
+        },
+        "shove:back:3 + shove:west:2": {
+          "games": 7,
+          "winRate": 0.571
+        },
+        "shove:back:3 + teleport": {
+          "games": 7,
+          "winRate": 0.429
+        },
+        "shove:east:2 + teleport": {
+          "games": 12,
+          "winRate": 0.333
+        },
+        "shove:west:2 + teleport": {
+          "games": 12,
+          "winRate": 0.583
+        }
+      },
+      "safety": {
+        "illegal": 0,
+        "errors": 0,
+        "softlocks": 0,
+        "examples": []
+      },
+      "counterplay": {
+        "leadChangesPerGame": 5.083,
+        "comebackRate": 0.783
+      },
+      "unusedActionsPerGame": 1.75
+    },
+    "C2": {
+      "games": 24,
+      "seeds": [
+        5000,
+        5001,
+        5002,
+        5003,
+        5004,
+        5005,
+        5006,
+        5007,
+        5008,
+        5009,
+        5010,
+        5011
+      ],
+      "weights": [
+        "0.3.0+c1.2#a343fd59b62b3576"
+      ],
+      "wins": {
+        "human": 9,
+        "ai": 15,
+        "draw": 0
+      },
+      "firstPlayerWinRate": 0.458,
+      "humanSideWinRate": 0.375,
+      "decisiveGames": 24,
+      "drawRate": 0,
+      "turnLimitRate": 0.083,
+      "pairsSweptByFirst": 2,
+      "pairs": 12,
+      "turns": {
+        "mean": 16,
+        "median": 13,
+        "p10": 8,
+        "p90": 19
+      },
+      "effects": {
+        "freeze": {
+          "placements": 9,
+          "share": 0.029,
+          "cells": 27,
+          "unusedCells": 25,
+          "unusedRate": 0.926,
+          "triggers": 2,
+          "selfTriggerRate": 0,
+          "resolved": 2,
+          "realizedMean": 1,
+          "predictedMean": 2.2,
+          "baseMean": 1.2,
+          "realization": null,
+          "harmfulRate": 1,
+          "winRateWhenUsed": 0.333,
+          "gamesUsed": 9
+        },
+        "haste": {
+          "placements": 20,
+          "share": 0.065,
+          "cells": 58,
+          "unusedCells": 25,
+          "unusedRate": 0.431,
+          "triggers": 33,
+          "selfTriggerRate": 1,
+          "resolved": 17,
+          "realizedMean": -1,
+          "predictedMean": -1.8,
+          "baseMean": -0.8,
+          "realization": 0.556,
+          "harmfulRate": 0,
+          "winRateWhenUsed": 0.471,
+          "gamesUsed": 17
+        },
+        "home": {
+          "placements": 30,
+          "share": 0.098,
+          "cells": 90,
+          "unusedCells": 86,
+          "unusedRate": 0.956,
+          "triggers": 3,
+          "selfTriggerRate": 0,
+          "resolved": 3,
+          "realizedMean": 5.333,
+          "predictedMean": 3.8,
+          "baseMean": 5.333,
+          "realization": 1.404,
+          "harmfulRate": 1,
+          "winRateWhenUsed": 0.6,
+          "gamesUsed": 20
+        },
+        "shield": {
+          "placements": 11,
+          "share": 0.036,
+          "cells": 32,
+          "unusedCells": 22,
+          "unusedRate": 0.688,
+          "triggers": 10,
+          "selfTriggerRate": 1,
+          "resolved": 10,
+          "realizedMean": -1.2,
+          "predictedMean": -1.4,
+          "baseMean": -0.3,
+          "realization": 0.857,
+          "harmfulRate": 0,
+          "winRateWhenUsed": 0.455,
+          "gamesUsed": 11
+        },
+        "shove:back:2": {
+          "placements": 2,
+          "share": 0.007,
+          "cells": 4,
+          "unusedCells": 3,
+          "unusedRate": 0.75,
+          "triggers": 1,
+          "selfTriggerRate": 1,
+          "resolved": 1,
+          "realizedMean": 0,
+          "predictedMean": 1.8,
+          "baseMean": 0,
+          "realization": null,
+          "harmfulRate": 0,
+          "winRateWhenUsed": 0.5,
+          "gamesUsed": 2
+        },
+        "shove:back:3": {
+          "placements": 13,
+          "share": 0.042,
+          "cells": 39,
+          "unusedCells": 32,
+          "unusedRate": 0.821,
+          "triggers": 7,
+          "selfTriggerRate": 0.286,
+          "resolved": 7,
+          "realizedMean": 0.429,
+          "predictedMean": 2.7,
+          "baseMean": 2.714,
+          "realization": 0.159,
+          "harmfulRate": 0.429,
+          "winRateWhenUsed": 0.545,
+          "gamesUsed": 11
+        },
+        "shove:east:2": {
+          "placements": 103,
+          "share": 0.337,
+          "cells": 309,
+          "unusedCells": 105,
+          "unusedRate": 0.34,
+          "triggers": 204,
+          "selfTriggerRate": 0.873,
+          "resolved": 204,
+          "realizedMean": -1.49,
+          "predictedMean": -1.341,
+          "baseMean": -1.49,
+          "realization": 1.111,
+          "harmfulRate": 0.127,
+          "winRateWhenUsed": 0.375,
+          "gamesUsed": 24
+        },
+        "shove:forward:2": {
+          "placements": 2,
+          "share": 0.007,
+          "cells": 6,
+          "unusedCells": 5,
+          "unusedRate": 0.833,
+          "triggers": 1,
+          "selfTriggerRate": 1,
+          "resolved": 1,
+          "realizedMean": -2,
+          "predictedMean": -1.8,
+          "baseMean": -2,
+          "realization": null,
+          "harmfulRate": 0,
+          "winRateWhenUsed": 0.5,
+          "gamesUsed": 2
+        },
+        "shove:west:2": {
+          "placements": 81,
+          "share": 0.265,
+          "cells": 243,
+          "unusedCells": 81,
+          "unusedRate": 0.333,
+          "triggers": 162,
+          "selfTriggerRate": 0.932,
+          "resolved": 162,
+          "realizedMean": -1.728,
+          "predictedMean": -1.556,
+          "baseMean": -1.728,
+          "realization": 1.111,
+          "harmfulRate": 0.068,
+          "winRateWhenUsed": 0.625,
+          "gamesUsed": 24
+        },
+        "teleport": {
+          "placements": 35,
+          "share": 0.114,
+          "cells": 105,
+          "unusedCells": 45,
+          "unusedRate": 0.429,
+          "triggers": 58,
+          "selfTriggerRate": 0.81,
+          "resolved": 58,
+          "realizedMean": -3.052,
+          "predictedMean": 0.8,
+          "baseMean": -1.879,
+          "realization": -3.815,
+          "harmfulRate": 0.138,
+          "winRateWhenUsed": 0.5,
+          "gamesUsed": 22
+        }
+      },
+      "noPlacementTurnsShare": 0.203,
+      "diversity": {
+        "effectEntropy": 2.59,
+        "effectEntropyNorm": 0.78,
+        "distinctEffectsUsed": 10,
+        "distinctOpenings": 17,
+        "topOpening": "shove:east:2>shove:east:2>shove:east:2",
+        "topOpeningShare": 0.313
+      },
+      "topCombo": {
+        "combo": "home + teleport",
+        "games": 14,
+        "winRate": 0.643
+      },
+      "combos": {
+        "freeze + haste": {
+          "games": 6,
+          "winRate": 0.333
+        },
+        "freeze + shield": {
+          "games": 3,
+          "winRate": 0.333
+        },
+        "freeze + shove:east:2": {
+          "games": 5,
+          "winRate": 0.4
+        },
+        "freeze + shove:west:2": {
+          "games": 4,
+          "winRate": 0.25
+        },
+        "haste + home": {
+          "games": 8,
+          "winRate": 0.625
+        },
+        "haste + shove:east:2": {
+          "games": 6,
+          "winRate": 0.333
+        },
+        "haste + shove:west:2": {
+          "games": 11,
+          "winRate": 0.545
+        },
+        "haste + teleport": {
+          "games": 6,
+          "winRate": 0.667
+        },
+        "home + shield": {
+          "games": 8,
+          "winRate": 0.625
+        },
+        "home + shove:back:3": {
+          "games": 7,
+          "winRate": 0.714
+        },
+        "home + shove:east:2": {
+          "games": 8,
+          "winRate": 0.25
+        },
+        "home + shove:west:2": {
+          "games": 12,
+          "winRate": 0.833
+        },
+        "home + teleport": {
+          "games": 14,
+          "winRate": 0.643
+        },
+        "shield + shove:back:3": {
+          "games": 4,
+          "winRate": 0.75
+        },
+        "shield + shove:east:2": {
+          "games": 6,
+          "winRate": 0.167
+        },
+        "shield + shove:west:2": {
+          "games": 5,
+          "winRate": 0.8
+        },
+        "shield + teleport": {
+          "games": 7,
+          "winRate": 0.571
+        },
+        "shove:back:3 + shove:west:2": {
+          "games": 9,
+          "winRate": 0.556
+        },
+        "shove:back:3 + teleport": {
+          "games": 5,
+          "winRate": 0.8
+        },
+        "shove:east:2 + teleport": {
+          "games": 10,
+          "winRate": 0.2
+        },
+        "shove:west:2 + teleport": {
+          "games": 12,
+          "winRate": 0.75
+        }
+      },
+      "safety": {
+        "illegal": 0,
+        "errors": 0,
+        "softlocks": 0,
+        "examples": []
+      },
+      "counterplay": {
+        "leadChangesPerGame": 5.042,
+        "comebackRate": 0.75
+      },
+      "unusedActionsPerGame": 4.083
+    },
+    "C3": {
+      "games": 24,
+      "seeds": [
+        5000,
+        5001,
+        5002,
+        5003,
+        5004,
+        5005,
+        5006,
+        5007,
+        5008,
+        5009,
+        5010,
+        5011
+      ],
+      "weights": [
+        "0.3.0+c1.3#fd086d9cfb0ad166"
+      ],
+      "wins": {
+        "human": 10,
+        "ai": 13,
+        "draw": 1
+      },
+      "firstPlayerWinRate": 0.478,
+      "humanSideWinRate": 0.435,
+      "decisiveGames": 23,
+      "drawRate": 0.042,
+      "turnLimitRate": 0.042,
+      "pairsSweptByFirst": 1,
+      "pairs": 12,
+      "turns": {
+        "mean": 14.042,
+        "median": 13,
+        "p10": 8,
+        "p90": 19
+      },
+      "effects": {
+        "freeze": {
+          "placements": 8,
+          "share": 0.026,
+          "cells": 24,
+          "unusedCells": 22,
+          "unusedRate": 0.917,
+          "triggers": 2,
+          "selfTriggerRate": 0,
+          "resolved": 2,
+          "realizedMean": 1,
+          "predictedMean": 2.2,
+          "baseMean": 1.2,
+          "realization": null,
+          "harmfulRate": 1,
+          "winRateWhenUsed": 0.375,
+          "gamesUsed": 8
+        },
+        "haste": {
+          "placements": 18,
+          "share": 0.06,
+          "cells": 52,
+          "unusedCells": 21,
+          "unusedRate": 0.404,
+          "triggers": 31,
+          "selfTriggerRate": 1,
+          "resolved": 17,
+          "realizedMean": -1,
+          "predictedMean": -1.8,
+          "baseMean": -0.8,
+          "realization": 0.556,
+          "harmfulRate": 0,
+          "winRateWhenUsed": 0.467,
+          "gamesUsed": 16
+        },
+        "home": {
+          "placements": 36,
+          "share": 0.119,
+          "cells": 108,
+          "unusedCells": 102,
+          "unusedRate": 0.944,
+          "triggers": 4,
+          "selfTriggerRate": 0,
+          "resolved": 4,
+          "realizedMean": 5,
+          "predictedMean": 3.8,
+          "baseMean": 5,
+          "realization": 1.316,
+          "harmfulRate": 1,
+          "winRateWhenUsed": 0.526,
+          "gamesUsed": 21
+        },
+        "shield": {
+          "placements": 12,
+          "share": 0.04,
+          "cells": 31,
+          "unusedCells": 19,
+          "unusedRate": 0.613,
+          "triggers": 12,
+          "selfTriggerRate": 1,
+          "resolved": 12,
+          "realizedMean": -1.5,
+          "predictedMean": -1.4,
+          "baseMean": -0.3,
+          "realization": 1.071,
+          "harmfulRate": 0,
+          "winRateWhenUsed": 0.4,
+          "gamesUsed": 12
+        },
+        "shove:back:2": {
+          "placements": 3,
+          "share": 0.01,
+          "cells": 9,
+          "unusedCells": 8,
+          "unusedRate": 0.889,
+          "triggers": 1,
+          "selfTriggerRate": 1,
+          "resolved": 1,
+          "realizedMean": 0,
+          "predictedMean": 1.8,
+          "baseMean": 0,
+          "realization": null,
+          "harmfulRate": 0,
+          "winRateWhenUsed": 0.333,
+          "gamesUsed": 3
+        },
+        "shove:back:3": {
+          "placements": 11,
+          "share": 0.036,
+          "cells": 33,
+          "unusedCells": 26,
+          "unusedRate": 0.788,
+          "triggers": 7,
+          "selfTriggerRate": 0.286,
+          "resolved": 7,
+          "realizedMean": 0.429,
+          "predictedMean": 2.7,
+          "baseMean": 2.714,
+          "realization": 0.159,
+          "harmfulRate": 0.429,
+          "winRateWhenUsed": 0.5,
+          "gamesUsed": 10
+        },
+        "shove:east:2": {
+          "placements": 96,
+          "share": 0.318,
+          "cells": 288,
+          "unusedCells": 89,
+          "unusedRate": 0.309,
+          "triggers": 199,
+          "selfTriggerRate": 0.859,
+          "resolved": 199,
+          "realizedMean": -1.437,
+          "predictedMean": -1.293,
+          "baseMean": -1.437,
+          "realization": 1.111,
+          "harmfulRate": 0.141,
+          "winRateWhenUsed": 0.435,
+          "gamesUsed": 24
+        },
+        "shove:forward:2": {
+          "placements": 3,
+          "share": 0.01,
+          "cells": 9,
+          "unusedCells": 6,
+          "unusedRate": 0.667,
+          "triggers": 3,
+          "selfTriggerRate": 1,
+          "resolved": 3,
+          "realizedMean": -2,
+          "predictedMean": -1.8,
+          "baseMean": -2,
+          "realization": 1.111,
+          "harmfulRate": 0,
+          "winRateWhenUsed": 0,
+          "gamesUsed": 3
+        },
+        "shove:west:2": {
+          "placements": 77,
+          "share": 0.255,
+          "cells": 231,
+          "unusedCells": 74,
+          "unusedRate": 0.32,
+          "triggers": 157,
+          "selfTriggerRate": 0.936,
+          "resolved": 157,
+          "realizedMean": -1.745,
+          "predictedMean": -1.571,
+          "baseMean": -1.745,
+          "realization": 1.111,
+          "harmfulRate": 0.064,
+          "winRateWhenUsed": 0.591,
+          "gamesUsed": 23
+        },
+        "teleport": {
+          "placements": 38,
+          "share": 0.126,
+          "cells": 114,
+          "unusedCells": 48,
+          "unusedRate": 0.421,
+          "triggers": 64,
+          "selfTriggerRate": 0.828,
+          "resolved": 64,
+          "realizedMean": -3.109,
+          "predictedMean": 0.56,
+          "baseMean": -1.906,
+          "realization": -5.552,
+          "harmfulRate": 0.125,
+          "winRateWhenUsed": 0.478,
+          "gamesUsed": 25
+        }
+      },
+      "noPlacementTurnsShare": 0.104,
+      "diversity": {
+        "effectEntropy": 2.643,
+        "effectEntropyNorm": 0.796,
+        "distinctEffectsUsed": 10,
+        "distinctOpenings": 17,
+        "topOpening": "shove:east:2>shove:east:2>shove:east:2",
+        "topOpeningShare": 0.292
+      },
+      "topCombo": {
+        "combo": "home + teleport",
+        "games": 17,
+        "winRate": 0.471
+      },
+      "combos": {
+        "freeze + haste": {
+          "games": 4,
+          "winRate": 0.25
+        },
+        "freeze + shield": {
+          "games": 4,
+          "winRate": 0.5
+        },
+        "freeze + shove:east:2": {
+          "games": 5,
+          "winRate": 0.4
+        },
+        "freeze + shove:west:2": {
+          "games": 3,
+          "winRate": 0.333
+        },
+        "haste + home": {
+          "games": 7,
+          "winRate": 0.571
+        },
+        "haste + shove:back:3": {
+          "games": 3,
+          "winRate": 0.667
+        },
+        "haste + shove:east:2": {
+          "games": 5,
+          "winRate": 0.2
+        },
+        "haste + shove:west:2": {
+          "games": 11,
+          "winRate": 0.545
+        },
+        "haste + teleport": {
+          "games": 6,
+          "winRate": 0.5
+        },
+        "home + shield": {
+          "games": 9,
+          "winRate": 0.333
+        },
+        "home + shove:back:3": {
+          "games": 7,
+          "winRate": 0.286
+        },
+        "home + shove:east:2": {
+          "games": 9,
+          "winRate": 0.333
+        },
+        "home + shove:west:2": {
+          "games": 11,
+          "winRate": 0.636
+        },
+        "home + teleport": {
+          "games": 17,
+          "winRate": 0.471
+        },
+        "shield + shove:back:3": {
+          "games": 4,
+          "winRate": 0
+        },
+        "shield + shove:east:2": {
+          "games": 6,
+          "winRate": 0.333
+        },
+        "shield + shove:west:2": {
+          "games": 5,
+          "winRate": 0.4
+        },
+        "shield + teleport": {
+          "games": 10,
+          "winRate": 0.4
+        },
+        "shove:back:3 + shove:west:2": {
+          "games": 8,
+          "winRate": 0.5
+        },
+        "shove:back:3 + teleport": {
+          "games": 7,
+          "winRate": 0.286
+        },
+        "shove:east:2 + teleport": {
+          "games": 12,
+          "winRate": 0.417
+        },
+        "shove:west:2 + teleport": {
+          "games": 12,
+          "winRate": 0.5
+        }
+      },
+      "safety": {
+        "illegal": 0,
+        "errors": 0,
+        "softlocks": 0,
+        "examples": []
+      },
+      "counterplay": {
+        "leadChangesPerGame": 5.083,
+        "comebackRate": 0.826
+      },
+      "unusedActionsPerGame": 1.792
+    },
+    "C4": {
+      "games": 24,
+      "seeds": [
+        5000,
+        5001,
+        5002,
+        5003,
+        5004,
+        5005,
+        5006,
+        5007,
+        5008,
+        5009,
+        5010,
+        5011
+      ],
+      "weights": [
+        "0.3.0+c1.4#ad0cd3199120c140"
+      ],
+      "wins": {
+        "human": 8,
+        "ai": 16,
+        "draw": 0
+      },
+      "firstPlayerWinRate": 0.417,
+      "humanSideWinRate": 0.333,
+      "decisiveGames": 24,
+      "drawRate": 0,
+      "turnLimitRate": 0.042,
+      "pairsSweptByFirst": 1,
+      "pairs": 12,
+      "turns": {
+        "mean": 14.875,
+        "median": 13,
+        "p10": 8,
+        "p90": 19
+      },
+      "effects": {
+        "freeze": {
+          "placements": 8,
+          "share": 0.026,
+          "cells": 24,
+          "unusedCells": 22,
+          "unusedRate": 0.917,
+          "triggers": 2,
+          "selfTriggerRate": 0,
+          "resolved": 2,
+          "realizedMean": 1,
+          "predictedMean": 2.2,
+          "baseMean": 1.2,
+          "realization": null,
+          "harmfulRate": 1,
+          "winRateWhenUsed": 0.25,
+          "gamesUsed": 8
+        },
+        "haste": {
+          "placements": 20,
+          "share": 0.065,
+          "cells": 58,
+          "unusedCells": 26,
+          "unusedRate": 0.448,
+          "triggers": 32,
+          "selfTriggerRate": 0.969,
+          "resolved": 19,
+          "realizedMean": -1,
+          "predictedMean": -1.8,
+          "baseMean": -0.8,
+          "realization": 0.556,
+          "harmfulRate": 0,
+          "winRateWhenUsed": 0.444,
+          "gamesUsed": 18
+        },
+        "home": {
+          "placements": 30,
+          "share": 0.097,
+          "cells": 89,
+          "unusedCells": 84,
+          "unusedRate": 0.944,
+          "triggers": 4,
+          "selfTriggerRate": 0,
+          "resolved": 4,
+          "realizedMean": 5,
+          "predictedMean": 3.8,
+          "baseMean": 5,
+          "realization": 1.316,
+          "harmfulRate": 1,
+          "winRateWhenUsed": 0.6,
+          "gamesUsed": 20
+        },
+        "shield": {
+          "placements": 11,
+          "share": 0.035,
+          "cells": 32,
+          "unusedCells": 19,
+          "unusedRate": 0.594,
+          "triggers": 12,
+          "selfTriggerRate": 0.917,
+          "resolved": 12,
+          "realizedMean": -1,
+          "predictedMean": -1.4,
+          "baseMean": -0.3,
+          "realization": 0.714,
+          "harmfulRate": 0,
+          "winRateWhenUsed": 0.455,
+          "gamesUsed": 11
+        },
+        "shove:back:2": {
+          "placements": 4,
+          "share": 0.013,
+          "cells": 10,
+          "unusedCells": 8,
+          "unusedRate": 0.8,
+          "triggers": 2,
+          "selfTriggerRate": 0.5,
+          "resolved": 2,
+          "realizedMean": 1,
+          "predictedMean": 1.8,
+          "baseMean": 1,
+          "realization": null,
+          "harmfulRate": 0.5,
+          "winRateWhenUsed": 0.333,
+          "gamesUsed": 3
+        },
+        "shove:back:3": {
+          "placements": 13,
+          "share": 0.042,
+          "cells": 39,
+          "unusedCells": 32,
+          "unusedRate": 0.821,
+          "triggers": 7,
+          "selfTriggerRate": 0.429,
+          "resolved": 7,
+          "realizedMean": -0.429,
+          "predictedMean": 2.7,
+          "baseMean": 2.286,
+          "realization": -0.159,
+          "harmfulRate": 0.286,
+          "winRateWhenUsed": 0.7,
+          "gamesUsed": 10
+        },
+        "shove:east:2": {
+          "placements": 100,
+          "share": 0.323,
+          "cells": 300,
+          "unusedCells": 100,
+          "unusedRate": 0.333,
+          "triggers": 199,
+          "selfTriggerRate": 0.869,
+          "resolved": 199,
+          "realizedMean": -1.477,
+          "predictedMean": -1.33,
+          "baseMean": -1.477,
+          "realization": 1.111,
+          "harmfulRate": 0.131,
+          "winRateWhenUsed": 0.333,
+          "gamesUsed": 24
+        },
+        "shove:forward:2": {
+          "placements": 2,
+          "share": 0.006,
+          "cells": 6,
+          "unusedCells": 5,
+          "unusedRate": 0.833,
+          "triggers": 1,
+          "selfTriggerRate": 1,
+          "resolved": 1,
+          "realizedMean": -2,
+          "predictedMean": -1.8,
+          "baseMean": -2,
+          "realization": null,
+          "harmfulRate": 0,
+          "winRateWhenUsed": 0.5,
+          "gamesUsed": 2
+        },
+        "shove:west:2": {
+          "placements": 84,
+          "share": 0.271,
+          "cells": 250,
+          "unusedCells": 87,
+          "unusedRate": 0.348,
+          "triggers": 163,
+          "selfTriggerRate": 0.92,
+          "resolved": 163,
+          "realizedMean": -1.687,
+          "predictedMean": -1.513,
+          "baseMean": -1.687,
+          "realization": 1.115,
+          "harmfulRate": 0.08,
+          "winRateWhenUsed": 0.667,
+          "gamesUsed": 24
+        },
+        "teleport": {
+          "placements": 38,
+          "share": 0.123,
+          "cells": 110,
+          "unusedCells": 50,
+          "unusedRate": 0.455,
+          "triggers": 58,
+          "selfTriggerRate": 0.828,
+          "resolved": 58,
+          "realizedMean": -3.121,
+          "predictedMean": 0.8,
+          "baseMean": -1.966,
+          "realization": -3.901,
+          "harmfulRate": 0.121,
+          "winRateWhenUsed": 0.542,
+          "gamesUsed": 24
+        }
+      },
+      "noPlacementTurnsShare": 0.132,
+      "diversity": {
+        "effectEntropy": 2.616,
+        "effectEntropyNorm": 0.788,
+        "distinctEffectsUsed": 10,
+        "distinctOpenings": 17,
+        "topOpening": "shove:east:2>shove:east:2>shove:east:2",
+        "topOpeningShare": 0.313
+      },
+      "topCombo": {
+        "combo": "home + teleport",
+        "games": 15,
+        "winRate": 0.667
+      },
+      "combos": {
+        "freeze + haste": {
+          "games": 5,
+          "winRate": 0.2
+        },
+        "freeze + shield": {
+          "games": 3,
+          "winRate": 0.333
+        },
+        "freeze + shove:east:2": {
+          "games": 4,
+          "winRate": 0.25
+        },
+        "freeze + shove:west:2": {
+          "games": 4,
+          "winRate": 0.25
+        },
+        "haste + home": {
+          "games": 8,
+          "winRate": 0.625
+        },
+        "haste + shove:east:2": {
+          "games": 6,
+          "winRate": 0.167
+        },
+        "haste + shove:west:2": {
+          "games": 12,
+          "winRate": 0.583
+        },
+        "haste + teleport": {
+          "games": 7,
+          "winRate": 0.714
+        },
+        "home + shield": {
+          "games": 8,
+          "winRate": 0.625
+        },
+        "home + shove:back:3": {
+          "games": 7,
+          "winRate": 0.857
+        },
+        "home + shove:east:2": {
+          "games": 8,
+          "winRate": 0.25
+        },
+        "home + shove:west:2": {
+          "games": 12,
+          "winRate": 0.833
+        },
+        "home + teleport": {
+          "games": 15,
+          "winRate": 0.667
+        },
+        "shield + shove:back:3": {
+          "games": 3,
+          "winRate": 1
+        },
+        "shield + shove:east:2": {
+          "games": 6,
+          "winRate": 0.167
+        },
+        "shield + shove:west:2": {
+          "games": 5,
+          "winRate": 0.8
+        },
+        "shield + teleport": {
+          "games": 8,
+          "winRate": 0.625
+        },
+        "shove:back:3 + shove:west:2": {
+          "games": 8,
+          "winRate": 0.75
+        },
+        "shove:back:3 + teleport": {
+          "games": 7,
+          "winRate": 0.857
+        },
+        "shove:east:2 + teleport": {
+          "games": 11,
+          "winRate": 0.273
+        },
+        "shove:west:2 + teleport": {
+          "games": 13,
+          "winRate": 0.769
+        }
+      },
+      "safety": {
+        "illegal": 0,
+        "errors": 0,
+        "softlocks": 0,
+        "examples": []
+      },
+      "counterplay": {
+        "leadChangesPerGame": 5.125,
+        "comebackRate": 0.792
+      },
+      "unusedActionsPerGame": 2.792
+    },
+    "C5": {
+      "games": 24,
+      "seeds": [
+        5000,
+        5001,
+        5002,
+        5003,
+        5004,
+        5005,
+        5006,
+        5007,
+        5008,
+        5009,
+        5010,
+        5011
+      ],
+      "weights": [
+        "0.3.0+v03-candidate#da1c1589c0362cbb"
+      ],
+      "wins": {
+        "human": 11,
+        "ai": 13,
+        "draw": 0
+      },
+      "firstPlayerWinRate": 0.458,
+      "humanSideWinRate": 0.458,
+      "decisiveGames": 24,
+      "drawRate": 0,
+      "turnLimitRate": 0.083,
+      "pairsSweptByFirst": 2,
+      "pairs": 12,
+      "turns": {
+        "mean": 15.167,
+        "median": 10,
+        "p10": 8,
+        "p90": 19
+      },
+      "effects": {
+        "freeze": {
+          "placements": 6,
+          "share": 0.021,
+          "cells": 18,
+          "unusedCells": 18,
+          "unusedRate": 1,
+          "triggers": 0,
+          "selfTriggerRate": 0,
+          "resolved": 0,
+          "realizedMean": 0,
+          "predictedMean": 0,
+          "baseMean": 0,
+          "realization": null,
+          "harmfulRate": 0,
+          "winRateWhenUsed": 0.333,
+          "gamesUsed": 6
+        },
+        "haste": {
+          "placements": 23,
+          "share": 0.08,
+          "cells": 69,
+          "unusedCells": 34,
+          "unusedRate": 0.493,
+          "triggers": 35,
+          "selfTriggerRate": 1,
+          "resolved": 19,
+          "realizedMean": -1,
+          "predictedMean": -2.2,
+          "baseMean": -0.8,
+          "realization": 0.455,
+          "harmfulRate": 0,
+          "winRateWhenUsed": 0.524,
+          "gamesUsed": 21
+        },
+        "home": {
+          "placements": 22,
+          "share": 0.076,
+          "cells": 66,
+          "unusedCells": 61,
+          "unusedRate": 0.924,
+          "triggers": 3,
+          "selfTriggerRate": 0,
+          "resolved": 3,
+          "realizedMean": 5.333,
+          "predictedMean": 3.1,
+          "baseMean": 5.333,
+          "realization": 1.72,
+          "harmfulRate": 1,
+          "winRateWhenUsed": 0.529,
+          "gamesUsed": 17
+        },
+        "shield": {
+          "placements": 10,
+          "share": 0.035,
+          "cells": 29,
+          "unusedCells": 20,
+          "unusedRate": 0.69,
+          "triggers": 9,
+          "selfTriggerRate": 1,
+          "resolved": 9,
+          "realizedMean": -1.667,
+          "predictedMean": -1.4,
+          "baseMean": -0.3,
+          "realization": 1.19,
+          "harmfulRate": 0,
+          "winRateWhenUsed": 0.429,
+          "gamesUsed": 7
+        },
+        "shove:back:2": {
+          "placements": 1,
+          "share": 0.003,
+          "cells": 3,
+          "unusedCells": 2,
+          "unusedRate": 0.667,
+          "triggers": 1,
+          "selfTriggerRate": 1,
+          "resolved": 1,
+          "realizedMean": 0,
+          "predictedMean": 1.6,
+          "baseMean": 0,
+          "realization": null,
+          "harmfulRate": 0,
+          "winRateWhenUsed": 1,
+          "gamesUsed": 1
+        },
+        "shove:back:3": {
+          "placements": 8,
+          "share": 0.028,
+          "cells": 24,
+          "unusedCells": 17,
+          "unusedRate": 0.708,
+          "triggers": 7,
+          "selfTriggerRate": 0.286,
+          "resolved": 7,
+          "realizedMean": 0.857,
+          "predictedMean": 2.4,
+          "baseMean": 2.714,
+          "realization": 0.357,
+          "harmfulRate": 0.571,
+          "winRateWhenUsed": 0.625,
+          "gamesUsed": 8
+        },
+        "shove:east:2": {
+          "placements": 95,
+          "share": 0.33,
+          "cells": 284,
+          "unusedCells": 85,
+          "unusedRate": 0.299,
+          "triggers": 199,
+          "selfTriggerRate": 0.879,
+          "resolved": 199,
+          "realizedMean": -1.518,
+          "predictedMean": -1.366,
+          "baseMean": -1.518,
+          "realization": 1.111,
+          "harmfulRate": 0.121,
+          "winRateWhenUsed": 0.458,
+          "gamesUsed": 24
+        },
+        "shove:forward:2": {
+          "placements": 1,
+          "share": 0.003,
+          "cells": 3,
+          "unusedCells": 2,
+          "unusedRate": 0.667,
+          "triggers": 1,
+          "selfTriggerRate": 1,
+          "resolved": 1,
+          "realizedMean": 0,
+          "predictedMean": -1.8,
+          "baseMean": -2,
+          "realization": null,
+          "harmfulRate": 0,
+          "winRateWhenUsed": 1,
+          "gamesUsed": 1
+        },
+        "shove:west:2": {
+          "placements": 89,
+          "share": 0.309,
+          "cells": 265,
+          "unusedCells": 101,
+          "unusedRate": 0.381,
+          "triggers": 164,
+          "selfTriggerRate": 0.927,
+          "resolved": 164,
+          "realizedMean": -1.707,
+          "predictedMean": -1.537,
+          "baseMean": -1.707,
+          "realization": 1.111,
+          "harmfulRate": 0.073,
+          "winRateWhenUsed": 0.542,
+          "gamesUsed": 24
+        },
+        "teleport": {
+          "placements": 33,
+          "share": 0.115,
+          "cells": 99,
+          "unusedCells": 40,
+          "unusedRate": 0.404,
+          "triggers": 58,
+          "selfTriggerRate": 0.845,
+          "resolved": 58,
+          "realizedMean": -3.241,
+          "predictedMean": 0.8,
+          "baseMean": -2.086,
+          "realization": -4.052,
+          "harmfulRate": 0.103,
+          "winRateWhenUsed": 0.591,
+          "gamesUsed": 22
+        }
+      },
+      "noPlacementTurnsShare": 0.209,
+      "diversity": {
+        "effectEntropy": 2.469,
+        "effectEntropyNorm": 0.743,
+        "distinctEffectsUsed": 10,
+        "distinctOpenings": 18,
+        "topOpening": "shove:east:2>shove:east:2>shove:east:2",
+        "topOpeningShare": 0.292
+      },
+      "topCombo": {
+        "combo": "haste + shove:east:2",
+        "games": 12,
+        "winRate": 0.5
+      },
+      "combos": {
+        "freeze + haste": {
+          "games": 5,
+          "winRate": 0.4
+        },
+        "freeze + shove:west:2": {
+          "games": 4,
+          "winRate": 0
+        },
+        "haste + home": {
+          "games": 5,
+          "winRate": 0.8
+        },
+        "haste + shove:east:2": {
+          "games": 12,
+          "winRate": 0.5
+        },
+        "haste + shove:west:2": {
+          "games": 9,
+          "winRate": 0.556
+        },
+        "haste + teleport": {
+          "games": 8,
+          "winRate": 0.75
+        },
+        "home + shield": {
+          "games": 5,
+          "winRate": 0.6
+        },
+        "home + shove:back:3": {
+          "games": 4,
+          "winRate": 1
+        },
+        "home + shove:east:2": {
+          "games": 8,
+          "winRate": 0.375
+        },
+        "home + shove:west:2": {
+          "games": 9,
+          "winRate": 0.667
+        },
+        "home + teleport": {
+          "games": 12,
+          "winRate": 0.667
+        },
+        "shield + shove:east:2": {
+          "games": 4,
+          "winRate": 0.5
+        },
+        "shield + shove:west:2": {
+          "games": 3,
+          "winRate": 0.333
+        },
+        "shield + teleport": {
+          "games": 5,
+          "winRate": 0.6
+        },
+        "shove:back:3 + shove:west:2": {
+          "games": 6,
+          "winRate": 0.667
+        },
+        "shove:back:3 + teleport": {
+          "games": 4,
+          "winRate": 1
+        },
+        "shove:east:2 + teleport": {
+          "games": 11,
+          "winRate": 0.455
+        },
+        "shove:west:2 + teleport": {
+          "games": 11,
+          "winRate": 0.727
+        }
+      },
+      "safety": {
+        "illegal": 0,
+        "errors": 0,
+        "softlocks": 0,
+        "examples": []
+      },
+      "counterplay": {
+        "leadChangesPerGame": 4.917,
+        "comebackRate": 0.75
+      },
+      "unusedActionsPerGame": 3.75
+    }
+  },
+  "comparisons": [
+    {
+      "candidate": "C1",
+      "target": [
+        {
+          "metric": "calibration error |predicted − realized| per trigger of teleport",
+          "baseline": 3.638,
+          "candidate": 3.65,
+          "improvement": -0.003
+        }
+      ],
+      "gates": [
+        {
+          "name": "safety: no illegal actions, engine errors or softlocks on held-out games",
+          "pass": true,
+          "detail": "illegal 0, errors 0, softlocks 0",
+          "hard": true
+        },
+        {
+          "name": "safety: engine invariant suite passes (symmetry, fire-once, chain cap, softlock, legality) and engine source unchanged",
+          "pass": true,
+          "detail": "invariants pass; unit tests ℹ tests 70, ℹ pass 70, ℹ fail 0; engine source 0c9d5055ebaba086",
+          "hard": true
+        },
+        {
+          "name": "evidence: based on a Kane-CONFIRMED finding (real kane-cli)",
+          "pass": true,
+          "detail": "based on A1, CONFIRMED by kane-cli",
+          "hard": true
+        },
+        {
+          "name": "target: the anomaly metric improves by at least 5% on held-out seeds",
+          "pass": false,
+          "detail": "calibration error |predicted − realized| per trigger of teleport: 3.638 → 3.65 (-0.3%)",
+          "hard": false
+        },
+        {
+          "name": "fairness: first-player deviation from 50% grows by at most 0.08",
+          "pass": true,
+          "detail": "first-player win rate 0.435 → 0.391",
+          "hard": false
+        },
+        {
+          "name": "diversity: normalised effect entropy drops by at most 0.1",
+          "pass": true,
+          "detail": "0.78 → 0.792; distinct openings 17 → 17",
+          "hard": false
+        },
+        {
+          "name": "game length: median turns changes by at most 30%",
+          "pass": true,
+          "detail": "median 13 → 13",
+          "hard": false
+        },
+        {
+          "name": "draws: draw rate grows by at most 0.1",
+          "pass": true,
+          "detail": "0.042 → 0.042",
+          "hard": false
+        },
+        {
+          "name": "stalling: at most 15% of games hit the turn limit",
+          "pass": true,
+          "detail": "0.042",
+          "hard": false
+        },
+        {
+          "name": "counterplay: lead changes per game do not fall by more than 30%",
+          "pass": true,
+          "detail": "lead changes/game 5.125 → 5.083; comeback rate 0.739 → 0.783",
+          "hard": false
+        }
+      ],
+      "pass": false,
+      "score": -0.041,
+      "rejectReasons": [
+        "target: the anomaly metric improves by at least 5% on held-out seeds: calibration error |predicted − realized| per trigger of teleport: 3.638 → 3.65 (-0.3%)"
+      ]
+    },
+    {
+      "candidate": "C2",
+      "target": [
+        {
+          "metric": "placement share of shove:west:2 × (win rate when used − 0.5)",
+          "baseline": 0.029,
+          "candidate": 0.033,
+          "improvement": -0.134
+        }
+      ],
+      "gates": [
+        {
+          "name": "safety: no illegal actions, engine errors or softlocks on held-out games",
+          "pass": true,
+          "detail": "illegal 0, errors 0, softlocks 0",
+          "hard": true
+        },
+        {
+          "name": "safety: engine invariant suite passes (symmetry, fire-once, chain cap, softlock, legality) and engine source unchanged",
+          "pass": true,
+          "detail": "invariants pass; unit tests ℹ tests 70, ℹ pass 70, ℹ fail 0; engine source 0c9d5055ebaba086",
+          "hard": true
+        },
+        {
+          "name": "evidence: based on a Kane-CONFIRMED finding (real kane-cli)",
+          "pass": true,
+          "detail": "based on A4, CONFIRMED by kane-cli",
+          "hard": true
+        },
+        {
+          "name": "target: the anomaly metric improves by at least 5% on held-out seeds",
+          "pass": false,
+          "detail": "placement share of shove:west:2 × (win rate when used − 0.5): 0.029 → 0.033 (-13.4%)",
+          "hard": false
+        },
+        {
+          "name": "fairness: first-player deviation from 50% grows by at most 0.08",
+          "pass": true,
+          "detail": "first-player win rate 0.435 → 0.458",
+          "hard": false
+        },
+        {
+          "name": "diversity: normalised effect entropy drops by at most 0.1",
+          "pass": true,
+          "detail": "0.78 → 0.78; distinct openings 17 → 17",
+          "hard": false
+        },
+        {
+          "name": "game length: median turns changes by at most 30%",
+          "pass": true,
+          "detail": "median 13 → 13",
+          "hard": false
+        },
+        {
+          "name": "draws: draw rate grows by at most 0.1",
+          "pass": true,
+          "detail": "0.042 → 0",
+          "hard": false
+        },
+        {
+          "name": "stalling: at most 15% of games hit the turn limit",
+          "pass": true,
+          "detail": "0.083",
+          "hard": false
+        },
+        {
+          "name": "counterplay: lead changes per game do not fall by more than 30%",
+          "pass": true,
+          "detail": "lead changes/game 5.125 → 5.042; comeback rate 0.739 → 0.75",
+          "hard": false
+        }
+      ],
+      "pass": false,
+      "score": -0.111,
+      "rejectReasons": [
+        "target: the anomaly metric improves by at least 5% on held-out seeds: placement share of shove:west:2 × (win rate when used − 0.5): 0.029 → 0.033 (-13.4%)"
+      ]
+    },
+    {
+      "candidate": "C3",
+      "target": [
+        {
+          "metric": "calibration error |predicted − realized| per trigger of teleport",
+          "baseline": 3.638,
+          "candidate": 3.669,
+          "improvement": -0.009
+        }
+      ],
+      "gates": [
+        {
+          "name": "safety: no illegal actions, engine errors or softlocks on held-out games",
+          "pass": true,
+          "detail": "illegal 0, errors 0, softlocks 0",
+          "hard": true
+        },
+        {
+          "name": "safety: engine invariant suite passes (symmetry, fire-once, chain cap, softlock, legality) and engine source unchanged",
+          "pass": true,
+          "detail": "invariants pass; unit tests ℹ tests 70, ℹ pass 70, ℹ fail 0; engine source 0c9d5055ebaba086",
+          "hard": true
+        },
+        {
+          "name": "evidence: based on a Kane-CONFIRMED finding (real kane-cli)",
+          "pass": true,
+          "detail": "based on A1, CONFIRMED by kane-cli",
+          "hard": true
+        },
+        {
+          "name": "target: the anomaly metric improves by at least 5% on held-out seeds",
+          "pass": false,
+          "detail": "calibration error |predicted − realized| per trigger of teleport: 3.638 → 3.669 (-0.9%)",
+          "hard": false
+        },
+        {
+          "name": "fairness: first-player deviation from 50% grows by at most 0.08",
+          "pass": true,
+          "detail": "first-player win rate 0.435 → 0.478",
+          "hard": false
+        },
+        {
+          "name": "diversity: normalised effect entropy drops by at most 0.1",
+          "pass": true,
+          "detail": "0.78 → 0.796; distinct openings 17 → 17",
+          "hard": false
+        },
+        {
+          "name": "game length: median turns changes by at most 30%",
+          "pass": true,
+          "detail": "median 13 → 13",
+          "hard": false
+        },
+        {
+          "name": "draws: draw rate grows by at most 0.1",
+          "pass": true,
+          "detail": "0.042 → 0.042",
+          "hard": false
+        },
+        {
+          "name": "stalling: at most 15% of games hit the turn limit",
+          "pass": true,
+          "detail": "0.042",
+          "hard": false
+        },
+        {
+          "name": "counterplay: lead changes per game do not fall by more than 30%",
+          "pass": true,
+          "detail": "lead changes/game 5.125 → 5.083; comeback rate 0.739 → 0.826",
+          "hard": false
+        }
+      ],
+      "pass": false,
+      "score": 0.042,
+      "rejectReasons": [
+        "target: the anomaly metric improves by at least 5% on held-out seeds: calibration error |predicted − realized| per trigger of teleport: 3.638 → 3.669 (-0.9%)"
+      ]
+    },
+    {
+      "candidate": "C4",
+      "target": [
+        {
+          "metric": "placement share of shove:west:2 × (win rate when used − 0.5)",
+          "baseline": 0.029,
+          "candidate": 0.045,
+          "improvement": -0.549
+        }
+      ],
+      "gates": [
+        {
+          "name": "safety: no illegal actions, engine errors or softlocks on held-out games",
+          "pass": true,
+          "detail": "illegal 0, errors 0, softlocks 0",
+          "hard": true
+        },
+        {
+          "name": "safety: engine invariant suite passes (symmetry, fire-once, chain cap, softlock, legality) and engine source unchanged",
+          "pass": true,
+          "detail": "invariants pass; unit tests ℹ tests 70, ℹ pass 70, ℹ fail 0; engine source 0c9d5055ebaba086",
+          "hard": true
+        },
+        {
+          "name": "evidence: based on a Kane-CONFIRMED finding (real kane-cli)",
+          "pass": true,
+          "detail": "based on A4, CONFIRMED by kane-cli",
+          "hard": true
+        },
+        {
+          "name": "target: the anomaly metric improves by at least 5% on held-out seeds",
+          "pass": false,
+          "detail": "placement share of shove:west:2 × (win rate when used − 0.5): 0.029 → 0.045 (-54.9%)",
+          "hard": false
+        },
+        {
+          "name": "fairness: first-player deviation from 50% grows by at most 0.08",
+          "pass": true,
+          "detail": "first-player win rate 0.435 → 0.417",
+          "hard": false
+        },
+        {
+          "name": "diversity: normalised effect entropy drops by at most 0.1",
+          "pass": true,
+          "detail": "0.78 → 0.788; distinct openings 17 → 17",
+          "hard": false
+        },
+        {
+          "name": "game length: median turns changes by at most 30%",
+          "pass": true,
+          "detail": "median 13 → 13",
+          "hard": false
+        },
+        {
+          "name": "draws: draw rate grows by at most 0.1",
+          "pass": true,
+          "detail": "0.042 → 0",
+          "hard": false
+        },
+        {
+          "name": "stalling: at most 15% of games hit the turn limit",
+          "pass": true,
+          "detail": "0.042",
+          "hard": false
+        },
+        {
+          "name": "counterplay: lead changes per game do not fall by more than 30%",
+          "pass": true,
+          "detail": "lead changes/game 5.125 → 5.125; comeback rate 0.739 → 0.792",
+          "hard": false
+        }
+      ],
+      "pass": false,
+      "score": -0.563,
+      "rejectReasons": [
+        "target: the anomaly metric improves by at least 5% on held-out seeds: placement share of shove:west:2 × (win rate when used − 0.5): 0.029 → 0.045 (-54.9%)"
+      ]
+    },
+    {
+      "candidate": "C5",
+      "target": [],
+      "gates": [
+        {
+          "name": "safety: no illegal actions, engine errors or softlocks on held-out games",
+          "pass": true,
+          "detail": "illegal 0, errors 0, softlocks 0",
+          "hard": true
+        },
+        {
+          "name": "safety: engine invariant suite passes (symmetry, fire-once, chain cap, softlock, legality) and engine source unchanged",
+          "pass": true,
+          "detail": "invariants pass; unit tests ℹ tests 70, ℹ pass 70, ℹ fail 0; engine source 0c9d5055ebaba086",
+          "hard": true
+        },
+        {
+          "name": "evidence: based on a Kane-CONFIRMED finding (real kane-cli)",
+          "pass": false,
+          "detail": "V0.3 bundle proposal (NOT Kane-derived): evaluated for the record, cannot be promoted",
+          "hard": true
+        },
+        {
+          "name": "target: the anomaly metric improves by at least 5% on held-out seeds",
+          "pass": false,
+          "detail": "no measurable target",
+          "hard": false
+        },
+        {
+          "name": "fairness: first-player deviation from 50% grows by at most 0.08",
+          "pass": true,
+          "detail": "first-player win rate 0.435 → 0.458",
+          "hard": false
+        },
+        {
+          "name": "diversity: normalised effect entropy drops by at most 0.1",
+          "pass": true,
+          "detail": "0.78 → 0.743; distinct openings 17 → 18",
+          "hard": false
+        },
+        {
+          "name": "game length: median turns changes by at most 30%",
+          "pass": true,
+          "detail": "median 13 → 10",
+          "hard": false
+        },
+        {
+          "name": "draws: draw rate grows by at most 0.1",
+          "pass": true,
+          "detail": "0.042 → 0",
+          "hard": false
+        },
+        {
+          "name": "stalling: at most 15% of games hit the turn limit",
+          "pass": true,
+          "detail": "0.083",
+          "hard": false
+        },
+        {
+          "name": "counterplay: lead changes per game do not fall by more than 30%",
+          "pass": true,
+          "detail": "lead changes/game 5.125 → 4.917; comeback rate 0.739 → 0.75",
+          "hard": false
+        }
+      ],
+      "pass": false,
+      "score": 0.005,
+      "rejectReasons": [
+        "evidence: based on a Kane-CONFIRMED finding (real kane-cli): V0.3 bundle proposal (NOT Kane-derived): evaluated for the record, cannot be promoted",
+        "target: the anomaly metric improves by at least 5% on held-out seeds: no measurable target"
+      ]
+    }
+  ],
+  "invariants": {
+    "pass": true,
+    "checked": 36,
+    "failures": []
+  },
+  "unitTests": {
+    "pass": true,
+    "summary": "ℹ tests 70, ℹ pass 70, ℹ fail 0"
+  },
+  "decision": {
+    "action": "rollback",
+    "candidate": null,
+    "fromVersion": "0.3.0",
+    "toVersion": "0.3.0",
+    "reasons": [
+      "C1: target: the anomaly metric improves by at least 5% on held-out seeds: calibration error |predicted − realized| per trigger of teleport: 3.638 → 3.65 (-0.3%)",
+      "C2: target: the anomaly metric improves by at least 5% on held-out seeds: placement share of shove:west:2 × (win rate when used − 0.5): 0.029 → 0.033 (-13.4%)",
+      "C3: target: the anomaly metric improves by at least 5% on held-out seeds: calibration error |predicted − realized| per trigger of teleport: 3.638 → 3.669 (-0.9%)",
+      "C4: target: the anomaly metric improves by at least 5% on held-out seeds: placement share of shove:west:2 × (win rate when used − 0.5): 0.029 → 0.045 (-54.9%)",
+      "C5: evidence: based on a Kane-CONFIRMED finding (real kane-cli): V0.3 bundle proposal (NOT Kane-derived): evaluated for the record, cannot be promoted | target: the anomaly metric improves by at least 5% on held-out seeds: no measurable target"
+    ]
+  }
+}
