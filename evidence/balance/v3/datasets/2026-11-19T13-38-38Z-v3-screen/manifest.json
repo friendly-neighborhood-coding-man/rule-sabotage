@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-19T13:58:00.578Z",
+  "generatedAt": "2026-11-19T15:08:34.071Z",
   "note": "sha256 of every file in this dataset directory.",
   "files": [
     {
@@ -44,8 +44,8 @@
     },
     {
       "path": "dossier/notebook.html",
-      "bytes": 9233,
-      "sha256": "1a99de75daca7a070027b468a6ace9cba33a64df8a5913f873e17a1f7b584b92"
+      "bytes": 12387,
+      "sha256": "debf90e742826473e2d39fc99656f896813fc49d28cd8755869ed2545d48106a"
     },
     {
       "path": "dossier/patterns.html",

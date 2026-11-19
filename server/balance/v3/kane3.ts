@@ -69,23 +69,23 @@ export async function serveDossier(datasetDir: string, s: V3Session, port: numbe
     const p = resolve(root, '.' + decodeURIComponent(u.pathname === '/' ? '/dossier/index.html' : u.pathname));
     if (!(p === root || p.startsWith(root + sep)) || !existsSync(p) || /sealed|kane-/.test(p)) { res.writeHead(404); res.end('not found'); return; }
     let b = readFileSync(p);
-    if (p.endsWith(`${sep}notebook.html`)) b = Buffer.from(b.toString('utf8').replace(/name="nonce" value="[^"]*"/, `name="nonce" value="${s.nonce}"`).replace(/action="[^"]*"/, 'action="/notebook"'));
+    if (p.endsWith(`${sep}notebook.html`)) b = Buffer.from(b.toString('utf8').replace(/name="nonce" value="[^"]*"/g, `name="nonce" value="${s.nonce}"`).replace(/<form method="post" action="[^"]*"/g, '<form method="post" action="/notebook"'));
     res.writeHead(200, { 'content-type': TYPES[extname(p)] ?? 'application/octet-stream' }); res.end(b);
   });
   await new Promise<void>((r, j) => { server.once('error', j); server.listen(port, '127.0.0.1', () => r()); });
   return { server, url: `http://127.0.0.1:${port}/dossier/index.html` };
 }
 
-/** The objective given to kane-cli. It asks questions; it states no conclusion. */
+/** The objective given to kane-cli. It asks questions; it states no conclusion. Written for a step budget. */
 export function objectiveV3(maxEntries = 5) {
-  return `You are a game-balance researcher. The site you are on is a research dossier of 100 games of a board game played by a local computer planner against itself under five different starting conditions. Read the overview, the condition comparison, the trajectories, the patterns, the counterexamples and the limitations, and open at least four individual game replays. Then answer these questions in your own words: ${QUESTIONS.map((q, i) => `(${i + 1}) ${q}`).join(' ')} For every competing explanation you consider, submit one hypothesis entry in the Notebook page (title, cause, explanation, the game ids that show it, at least one prediction with a minimum size, an intervention from the catalog to test it, side effects, a competing explanation, a counterexample game, an acceptance test, what would disprove it). Submit at most ${maxEntries - 1} hypotheses and then exactly one final conclusion entry. Concluding that no change is justified is allowed. Do not invent game ids; use only ids that appear on the site.`;
+  return `You are a game-balance researcher with a limited number of browser steps, so work efficiently. The site is a research dossier of 100 games of a board game, played by one local computer planner against itself under five starting conditions (different piece counts for the first and second mover). Suggested route: the overview (this page), Conditions, Counterexamples, then open at least three individual game replays you choose, then the Notebook page. Then answer in your own words: ${QUESTIONS.map((q, i) => `(${i + 1}) ${q}`).join(' ')} Record your answers in the Notebook page using the QUICK ENTRY text box (fill the lines after each colon, one submission per entry): one entry per competing explanation you consider, at most ${maxEntries - 1}, each with title, cause, explanation, the game ids that show it, at least one prediction (metric direction size), an intervention id from the catalog with a value, side effects, a competing explanation, a counterexample game, an acceptance test and what would disprove it; then exactly one final entry with entry: conclusion and a verdict. Concluding that no change is justified is allowed. Use only game ids that appear on the site. Reserve enough steps to submit your entries.`;
 }
 export const KANE_V3_PLAN = {
-  status: 'PREPARED_NOT_RUN',
-  calls: [{ id: 'KX3', role: 'exploration + experiment design (kane-cli objective mode)', maxSteps: 40, timeoutS: 900, estimatedCredits: 55, note: 'V2 objective call with 25 steps used 40.1 credits; 40 steps on a larger dossier is estimated at about 55.' }],
-  optional: [{ id: 'KC3', role: 'analyzer challenge of the registered hypotheses against raw rows', estimatedCredits: 10 }],
-  ceilingCredits: 80, maxCalls: 2,
-  approval: 'Needs Eric’s explicit go-ahead naming the calls and the credit ceiling. Not authorised in the V3 screening phase.',
+  status: 'AUTHORISED_ONCE',
+  authorisation: 'Eric, 2026-11-19 15:01 UTC: ONE real objective-mode call on the existing 100-game dossier, 80-credit operating ceiling with a conservative pre-call check, no retries, no analyzer calls.',
+  calls: [{ id: 'KX3', role: 'exploration + experiment design (kane-cli objective mode)', maxSteps: 35, timeoutS: 900, estimatedCredits: 56, note: 'V2 objective call with 25 max steps used 40.1 credits (about 1.6 per step); 35 steps is estimated at about 56. A single call is not hard-capped by credits: the step limit and timeout bound it.' }],
+  optional: [],
+  ceilingCredits: 80, maxCalls: 1, creditPerStepEstimate: 1.6,
 };
 
 export type Approval = { approvedBy: string; approvedAt: string; runId: string; maxCredits: number; maxCalls: number };

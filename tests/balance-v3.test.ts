@@ -293,7 +293,7 @@ test('Kane V3 is prepared but cannot run without an approval record and the matc
   assert.throws(() => K3.assertKaneApproved(null, 'r1'), /PREPARED, not authorised/);
   delete process.env.KANE_V3_APPROVED;
   assert.throws(() => K3.assertKaneApproved({ approvedBy: 'x', approvedAt: 'now', runId: 'r1', maxCredits: 80, maxCalls: 1 }, 'r1'), /KANE_V3_APPROVED/);
-  assert.equal(K3.KANE_V3_PLAN.status, 'PREPARED_NOT_RUN');
+  assert.equal(K3.KANE_V3_PLAN.maxCalls, 1); assert.ok(K3.KANE_V3_PLAN.calls[0].estimatedCredits <= K3.KANE_V3_PLAN.ceilingCredits);
   assert.ok(!/first mover (has|holds) an advantage|is imbalanced/i.test(K3.objectiveV3()), 'the objective asks questions and states no conclusion');
 });
 

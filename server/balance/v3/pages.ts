@@ -199,7 +199,17 @@ export function dossierPages(a: Analysis, o: { runId: string; datasetHash: strin
 export function notebookForm(action: string, nonce: string) {
   const opt = (m: Record<string, string>) => Object.entries(m).map(([k, v]) => `<option value="${esc(k)}">${esc(v)}</option>`).join('');
   const interventions = Object.fromEntries([['none', 'No intervention (observation only, or no change justified)'], ...Object.entries(CATALOG).map(([id, c]) => [id, `${id}: ${c.description}`])]);
-  return `<h1>Investigation notebook</h1><div class="box"><p>Submit <b>one form per competing hypothesis</b> (up to 4), then one with <b>Entry type = final conclusion</b>. Your text is stored verbatim as your own work and is never executed. Fields marked * are needed for a hypothesis to be testable.</p>
+  const template = ['entry: hypothesis', 'title: ', 'cause: ', 'explanation: ', 'evidence: ', 'prediction1: ', 'prediction2: ', 'intervention: ', 'value: ', 'sideEffects: ', 'competing: ', 'counterexample: ', 'acceptance: ', 'disproof: ', 'verdict: '].join('\n');
+  const quick = `<h2 id="quick">Quick entry (recommended: one text box per entry)</h2><div class="box"><p>Fill in the lines after each colon and submit. One submission per competing hypothesis (up to 4), then one with <code>entry: conclusion</code> and a <code>verdict</code>. Your text is stored verbatim and never executed.</p>
+<ul><li><b>cause</b>: ${Object.keys(CAUSES).map(k => `<code>${esc(k)}</code>`).join(' · ')}</li>
+<li><b>evidence</b>, <b>counterexample</b>: game ids exactly as on the site, e.g. <code>C4-62002-ai</code></li>
+<li><b>prediction1 / prediction2</b>: <code>metric direction size</code>, e.g. <code>first_mover_win_rate decrease 0.15</code> or <code>mean_turns no-change 3</code>. Metrics: ${Object.entries(PROPOSAL_METRICS).map(([k, v]) => `<code>${esc(k)}</code> (${esc(v)})`).join('; ')}</li>
+<li><b>intervention</b> + <b>value</b>: a catalog id and a value inside its bounds, or <code>none</code>: ${Object.entries(CATALOG).map(([k, c]) => `<code>${esc(k)}</code> = ${esc(c.bounds)}`).join('; ')}. See the <a href="catalog.html">catalog</a>.</li>
+<li><b>verdict</b> (conclusion only): <code>change-justified</code> · <code>no-change-justified</code> · <code>more-evidence-needed</code></li></ul>
+<form method="post" action="${esc(action)}"><input type="hidden" name="nonce" value="${esc(nonce)}">
+<label for="structured">Entry</label><textarea id="structured" name="structured" rows="16">${esc(template)}</textarea>
+<p><button type="submit">Submit quick entry</button></p></form></div>`;
+  return `<h1>Investigation notebook</h1>${quick}<h2>Long form (same content, one field each)</h2><div class="box"><p>Submit <b>one form per competing hypothesis</b> (up to 4), then one with <b>Entry type = final conclusion</b>. Your text is stored verbatim as your own work and is never executed. Fields marked * are needed for a hypothesis to be testable.</p>
 <form method="post" action="${esc(action)}"><input type="hidden" name="nonce" value="${esc(nonce)}">
 <label for="entry">Entry type</label><select id="entry" name="entry"><option value="hypothesis">hypothesis</option><option value="conclusion">final conclusion</option></select>
 <label for="title">Short title *</label><input type="text" id="title" name="title">

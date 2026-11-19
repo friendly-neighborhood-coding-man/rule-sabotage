@@ -49,6 +49,24 @@ if (cmd === 'screen') {
   e.status = 'quarantined'; e.reason = reason; writeFileSync(S.V3_REGISTRY, JSON.stringify(reg, null, 2) + '\n');
   appendJournal(S.V3_JOURNAL, 'quarantine', id, null, { reason });
   console.log(`quarantined ${id}: ${reason}`);
+} else if (cmd === 'kane-preflight') {
+  const R = await import('../server/balance/v3/kanerun.ts');
+  const dir = resolve(pos()!);
+  const out = resolve(val('out') ?? join(dir, '..', '..', 'kane', `preflight-${new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19)}Z`));
+  const r = await R.kanePreflight(dir, out, { fakeCli: resolve('tests/fixtures/fake-kane.mjs') });
+  for (const c of r.checks) console.log(`${c.pass ? 'PASS' : 'FAIL'}  ${c.check}: ${c.detail}`);
+  console.log(`credits used: 0 · ${out}`);
+  process.exit(r.pass ? 0 : 1);
+} else if (cmd === 'kane-call') {
+  // ONE real call, only with the approval record AND KANE_V3_APPROVED=<runId>. Never retried.
+  const R = await import('../server/balance/v3/kanerun.ts');
+  const r = await R.runKaneV3Call(resolve(pos()!), resolve(val('approval') ?? 'balance/v3/kane-approval.json'));
+  console.log(JSON.stringify(r.summary, null, 2));
+} else if (cmd === 'kane-register') {
+  const R = await import('../server/balance/v3/kanerun.ts');
+  const r = R.registerKaneEntries(resolve(pos()!));
+  for (const e of r.entries) console.log(`${e.noteId}: ${e.registered ? 'REGISTERED' : 'not registered'} ${e.proposal.kind} "${e.proposal.title}"${e.problems.length ? ` problems: ${e.problems.join('; ')}` : ''}`);
+  console.log(`journal #${r.journal} · raw notes sha256 matches the call record: ${r.sameSha}`);
 } else if (cmd === 'kane-plan') {
   const K = await import('../server/balance/v3/kane3.ts');
   console.log(JSON.stringify({ ...K.KANE_V3_PLAN, objective: K.objectiveV3(), dossier: pos() ? join(resolve(pos()!), 'dossier', 'index.html') : null }, null, 2));

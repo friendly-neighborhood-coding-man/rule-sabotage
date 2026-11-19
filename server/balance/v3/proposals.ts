@@ -57,8 +57,34 @@ export const proposalHash = (p: Proposal) => createHash('sha256').update(JSON.st
  * Turn one notebook form body (urlencoded) into a proposal. Returns the problems that make it untestable; a
  * proposal with problems is kept as raw evidence but cannot be registered.
  */
+/**
+ * The compact notebook (one textarea, `key: value` lines) is expanded into the same fields as the long form, by
+ * fixed rules: known keys only, one line each (a line without a known key continues the previous value);
+ * `prediction1` / `prediction2` are "metric direction size". Nothing in the text is evaluated or executed.
+ */
+export const STRUCTURED_KEYS = ['entry', 'title', 'cause', 'explanation', 'evidence', 'prediction1', 'prediction2', 'intervention', 'value', 'sideEffects', 'competing', 'counterexample', 'acceptance', 'disproof', 'verdict'] as const;
+export function expandStructured(text: string): Record<string, string> {
+  const out: Record<string, string> = {}; let last: string | null = null;
+  const keys = new Map(STRUCTURED_KEYS.map(k => [k.toLowerCase().replace(/[^a-z0-9]/g, ''), k]));
+  for (const raw of String(text).replace(/\r/g, '').split('\n')) {
+    const m = /^\s*([A-Za-z][\w ]{0,20}?)\s*[:=]\s*(.*)$/.exec(raw);
+    const k = m ? keys.get(m[1].toLowerCase().replace(/[^a-z0-9]/g, '')) : undefined;
+    if (k) { out[k] = m![2].trim(); last = k; } else if (last && raw.trim()) out[last] = `${out[last]} ${raw.trim()}`.trim();
+  }
+  for (const i of ['1', '2']) {
+    const p = out[`prediction${i}`]; delete out[`prediction${i}`];
+    if (!p) continue;
+    const m = /^\s*([a-z0-9_]+)\s+(increase|decrease|no-change|no change)\s+(-?[\d.]+)/i.exec(p);
+    if (m) { out[`p${i}metric`] = m[1].toLowerCase(); out[`p${i}dir`] = m[2].toLowerCase().replace(' ', '-'); out[`p${i}size`] = m[3]; } else out[`p${i}metric`] = `UNPARSEABLE:${p.slice(0, 30)}`;
+  }
+  for (const k of Object.keys(out)) if (/^\(.*\)$/.test(out[k]) || out[k] === '') delete out[k]; // untouched template hints
+  return out;
+}
+
 export function parseNotebookEntry(body: string, o: { id: string; provenance: Provenance; gameIds: Set<string>; datasetHash: string }): { proposal: Proposal; problems: string[] } {
-  const f = new URLSearchParams(body), g = (k: string, n = 1500) => clip(f.get(k), n).trim();
+  const f0 = new URLSearchParams(body);
+  const f = f0.get('structured') ? new URLSearchParams({ ...Object.fromEntries(f0), ...expandStructured(f0.get('structured')!) }) : f0;
+  const g = (k: string, n = 1500) => clip(f.get(k), n).trim();
   const problems: string[] = [];
   const kind = g('entry', 20) === 'conclusion' ? 'conclusion' : 'hypothesis';
   const ids = (s: string) => s.split(/[\s,;]+/).filter(Boolean).slice(0, 20);

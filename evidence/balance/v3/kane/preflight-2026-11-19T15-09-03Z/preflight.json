@@ -1,0 +1,94 @@
+{
+  "at": "2026-11-19T15:09:11.128Z",
+  "credits": 0,
+  "dataset": "2026-11-19T13-38-38Z-v3-screen",
+  "manifestSha256": "4f27e62a65111f23",
+  "route": [
+    {
+      "url": "/dossier/index.html",
+      "bytes": 4697,
+      "textChars": 2460,
+      "links": 11
+    },
+    {
+      "url": "/dossier/conditions.html",
+      "bytes": 22140,
+      "textChars": 3836,
+      "links": 10
+    },
+    {
+      "url": "/dossier/counterexamples.html",
+      "bytes": 8746,
+      "textChars": 2574,
+      "links": 115
+    },
+    {
+      "url": "/replays/C0-62001-human.html",
+      "bytes": 42512,
+      "textChars": 11732,
+      "links": 3
+    },
+    {
+      "url": "/replays/C0-62002-human.html",
+      "bytes": 36126,
+      "textChars": 10667,
+      "links": 3
+    },
+    {
+      "url": "/replays/C0-62003-ai.html",
+      "bytes": 22530,
+      "textChars": 6658,
+      "links": 3
+    },
+    {
+      "url": "/dossier/notebook.html",
+      "bytes": 12380,
+      "textChars": 5814,
+      "links": 11
+    }
+  ],
+  "steps": 22,
+  "checks": [
+    {
+      "check": "route pages load",
+      "pass": true,
+      "detail": "7 pages, largest 42512 bytes"
+    },
+    {
+      "check": "notebook carries the session nonce in every form",
+      "pass": true,
+      "detail": "quick + long form"
+    },
+    {
+      "check": "quick hypothesis entry parsed with no problems",
+      "pass": true,
+      "detail": "ok"
+    },
+    {
+      "check": "quick conclusion entry parsed with no problems",
+      "pass": true,
+      "detail": "ok"
+    },
+    {
+      "check": "suggested route + 5 entries fits the step limit",
+      "pass": true,
+      "detail": "about 22 of 35 steps"
+    },
+    {
+      "check": "test-double objective call completes through the real code path",
+      "pass": true,
+      "detail": "COMPLETE, version 0.0.0-test-double"
+    },
+    {
+      "check": "test-double entries captured and labelled kane-test-double",
+      "pass": true,
+      "detail": "2 entries"
+    },
+    {
+      "check": "objective states no conclusion and names no prewritten hypothesis",
+      "pass": true,
+      "detail": "objective text checked"
+    }
+  ],
+  "pass": true
+}
