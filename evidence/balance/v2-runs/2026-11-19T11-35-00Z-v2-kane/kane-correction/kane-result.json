@@ -1,0 +1,52 @@
+{
+  "status": "complete",
+  "conditionResults": [
+    true,
+    true
+  ],
+  "conditionReasons": [
+    "Checking the lower-intervention majority in the Per-seed values table: value: 'true' -> 'true'; equals 'true' -> PASS",
+    "Comparing Mover = installer yes shares between the sample tables: value: 'true' -> 'true'; equals 'true' -> PASS"
+  ],
+  "detail": "Kane returned 2 condition results.",
+  "exitCode": 0,
+  "timedOut": false,
+  "version": "0.10.4",
+  "isTestDouble": false,
+  "cli": "D:\\Tools\\npm-global\\kane-cli.cmd",
+  "mode": "analyzer",
+  "args": [
+    "run",
+    "--analyzer-only",
+    "--agent",
+    "--cdp-endpoint",
+    "http://127.0.0.1:64954",
+    "--timeout",
+    "300",
+    "--condition",
+    "In the section titled 'Section K1', in the 'Per-seed values' table, more than half of the data rows have an 'Intervention value' number that is lower than the 'Control value' number in the same row.",
+    "--condition",
+    "In the section titled 'Section K1', the share of data rows whose 'Mover = installer' value is 'yes' is lower in the 'Intervention sample' table than in the 'Control sample' table."
+  ],
+  "startedAt": "2026-11-19T11:50:18.941Z",
+  "finishedAt": "2026-11-19T11:51:41.301Z",
+  "elapsedMs": 82360,
+  "timings": {
+    "browserSpawnMs": 46,
+    "cdpReadyMs": 1464,
+    "cdpReady": true,
+    "cliMs": 79425,
+    "cliFirstOutputMs": 4176,
+    "cliRunEndMs": 77841
+  },
+  "files": {
+    "stdout": "D:\\Rule_Sabotage\\rule-sabotage-live\\evidence\\balance\\v2-runs\\2026-11-19T11-35-00Z-v2-kane\\kane-correction\\kane-stdout.ndjson",
+    "stderr": "D:\\Rule_Sabotage\\rule-sabotage-live\\evidence\\balance\\v2-runs\\2026-11-19T11-35-00Z-v2-kane\\kane-correction\\kane-stderr.txt",
+    "result": "D:\\Rule_Sabotage\\rule-sabotage-live\\evidence\\balance\\v2-runs\\2026-11-19T11-35-00Z-v2-kane\\kane-correction\\kane-result.json"
+  },
+  "conditions": [
+    "In the section titled 'Section K1', in the 'Per-seed values' table, more than half of the data rows have an 'Intervention value' number that is lower than the 'Control value' number in the same row.",
+    "In the section titled 'Section K1', the share of data rows whose 'Mover = installer' value is 'yes' is lower in the 'Intervention sample' table than in the 'Control sample' table."
+  ],
+  "url": "http://127.0.0.1:4200/v2/correction"
+}

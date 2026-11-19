@@ -1,0 +1,56 @@
+{
+  "generatedAt": "2026-11-19T09:04:39.644Z",
+  "note": "sha256 of every evidence file in this run directory (status.json changes until the run ends; recordings are added by the recorder).",
+  "files": [
+    {
+      "path": "REPORT.md",
+      "bytes": 2127,
+      "sha256": "2a2effd25defeb7f1b879db05b6d6669edd0abdb4ba5949409e8c6a5a7875064"
+    },
+    {
+      "path": "cycle.log",
+      "bytes": 1842,
+      "sha256": "5c2dac525104533709b1ada02dd775a04ab6493b2d96fdb209119d2f7565dd4a"
+    },
+    {
+      "path": "kane-explore/kane-notes.ndjson",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "page-explore.html",
+      "bytes": 30071,
+      "sha256": "9014d9d1bf702ba970ffcff76d370f58e708d3878abf4626f252f8392ca2b2fc"
+    },
+    {
+      "path": "recording/VIDEO-LOCATION.txt",
+      "bytes": 143,
+      "sha256": "cc7e93b5cd29d95d57aa8fe51714b28d8a1e21c0c8d9025ca1ecd18833f85eb9"
+    },
+    {
+      "path": "recording/recorder.log",
+      "bytes": 447,
+      "sha256": "c36a8031175600e7921d01e7de91e9f7f65644e932b52eb4e2566c3d8a0b331b"
+    },
+    {
+      "path": "recording/recording-manifest.json",
+      "bytes": 1206,
+      "sha256": "8fef17152a44154eecf2eec013e724e99e9401bc1bf26a0da12a3b5a205cdc4c"
+    },
+    {
+      "path": "recording/terminal.cast",
+      "bytes": 3032,
+      "sha256": "6a55ef8796c70049a57041859275eaf8e4e435cd81c5f0a88a2afe85034564d3"
+    },
+    {
+      "path": "recording/terminal.log",
+      "bytes": 2565,
+      "sha256": "0c181be8166d23454d6bf264adb0f26b0dd26a9b86197c39e50bb1747d6fd465"
+    },
+    {
+      "path": "status.json",
+      "bytes": 9480,
+      "sha256": "9a73e52699f64b4967df802f18f27a4bbdb9f1f5a21b66a49b30a0ab9c6418b6"
+    }
+  ]
+}

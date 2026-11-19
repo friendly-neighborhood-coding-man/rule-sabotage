@@ -77,7 +77,8 @@ function spawnCli(args: string[]): ChildProcess {
   return spawn(cli, args, { stdio: ['pipe', 'pipe', 'pipe'] });
 }
 
-function runCapture(args: string[], timeoutMs: number, onLine?: (line: string) => void): Promise<{ code: number | null; stdout: string; stderr: string; ms: number; timedOut: boolean; firstOutputMs: number | null; runEndMs: number | null }> {
+/** Exported for Balance Designer V2 (objective-mode exploration). Same process handling as the referee. */
+export function runCapture(args: string[], timeoutMs: number, onLine?: (line: string) => void): Promise<{ code: number | null; stdout: string; stderr: string; ms: number; timedOut: boolean; firstOutputMs: number | null; runEndMs: number | null }> {
   return new Promise(res => {
     const t0 = Date.now();
     let stdout = '', stderr = '', timedOut = false, firstOutputMs: number | null = null, runEndMs: number | null = null;

@@ -1,0 +1,63 @@
+{
+  "at": "2026-11-19T08:54:30.853Z",
+  "note": "Zero-credit preflight: no kane-cli was run; every note was typed by this script.",
+  "results": [
+    {
+      "step": "UI submission of a well-formed note is valid and stored verbatim",
+      "pass": true,
+      "detail": "PF1-N1: valid"
+    },
+    {
+      "step": "a tampered nonce is rejected",
+      "pass": true,
+      "detail": "wrong or missing nonce"
+    },
+    {
+      "step": "a note outside the call window is rejected",
+      "pass": true,
+      "detail": "arrived outside the Kane call window"
+    },
+    {
+      "step": "the page shows no hypothesis and no holdout seed",
+      "pass": true,
+      "detail": "checked page text"
+    },
+    {
+      "step": "the browser session was recorded (unedited video)",
+      "pass": true,
+      "detail": "preflight-raw.webm"
+    }
+  ],
+  "files": [
+    {
+      "path": "1-filled.png",
+      "bytes": 50319,
+      "sha256": "00000b4ed570285b87a16f7c532b3a0360e6f759b3fcfbfc19ecbafdcb1d2549"
+    },
+    {
+      "path": "2-submitted.png",
+      "bytes": 6774,
+      "sha256": "a89429c524cccb9aabbe32837bb9d7630de6699469ad8df4936d634731192550"
+    },
+    {
+      "path": "3-forged-nonce.png",
+      "bytes": 7606,
+      "sha256": "5c6f6ee03039ecf58263a03a7c89ae35c5ce7c62e0f4d6b897c1ff6953441ced"
+    },
+    {
+      "path": "4-after-window.png",
+      "bytes": 7927,
+      "sha256": "ea1131e7909e41320a38cbec8d5428eb24379dd9764f0b8a478bdc1e521be714"
+    },
+    {
+      "path": "kane-notes.ndjson",
+      "bytes": 2477,
+      "sha256": "b2845f031fcbda1522e9d9ff3c8151418f46c64b9d16109ef892665c60c13684"
+    },
+    {
+      "path": "preflight-raw.webm",
+      "bytes": 761448,
+      "sha256": "503a4dca25baec9061ef0c29e31155a5f01d0c71d9ffe10a6e81991e02c8762f"
+    }
+  ]
+}

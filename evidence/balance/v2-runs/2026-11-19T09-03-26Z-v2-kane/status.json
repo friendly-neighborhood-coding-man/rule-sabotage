@@ -1,0 +1,330 @@
+{
+  "schema": "rule-sabotage/balance-v2-status@1",
+  "runId": "2026-11-19T09-03-26Z-v2-kane",
+  "mode": "run-kane",
+  "startedAt": "2026-11-19T09:03:26.017Z",
+  "finishedAt": "2026-11-19T09:04:23.818Z",
+  "commit": "4a904894c25747385a440da8fbaf96e8815469af",
+  "dirty": false,
+  "engineHash": "5b79cac132ecdfbd",
+  "weights": "0.3.0#ddcf941c285bd537",
+  "stages": [
+    {
+      "key": "observe",
+      "title": "Observation",
+      "source": "V1 evidence (hash-verified) + planner traces",
+      "state": "done",
+      "startedAt": "2026-11-19T09:03:49.130Z",
+      "endedAt": "2026-11-19T09:04:23.743Z",
+      "summary": "V1 evidence hash-verified; 24 games; replays reproduce the recorded games"
+    },
+    {
+      "key": "explore",
+      "title": "Kane exploration",
+      "source": "real kane-cli objective mode: Kane proposes explanations",
+      "state": "checkpoint",
+      "startedAt": "2026-11-19T09:04:23.750Z",
+      "endedAt": "2026-11-19T09:04:23.799Z",
+      "summary": "not run (the exploration call did not run (credit balance check failed (kane-cli balance unavailable); no call without a verified balance))"
+    },
+    {
+      "key": "register",
+      "title": "Competing hypotheses",
+      "source": "pre-registered contracts (before any result)",
+      "state": "pending",
+      "startedAt": null,
+      "endedAt": null,
+      "summary": ""
+    },
+    {
+      "key": "experiment",
+      "title": "Controlled experiments",
+      "source": "real engine + planner, one factor each, development seeds",
+      "state": "pending",
+      "startedAt": null,
+      "endedAt": null,
+      "summary": ""
+    },
+    {
+      "key": "evaluate",
+      "title": "Hypothesis evaluation",
+      "source": "pre-registered predictions with uncertainty",
+      "state": "pending",
+      "startedAt": null,
+      "endedAt": null,
+      "summary": ""
+    },
+    {
+      "key": "challenge",
+      "title": "Kane challenge",
+      "source": "real kane-cli analyzer: independent raw-row conditions",
+      "state": "pending",
+      "startedAt": null,
+      "endedAt": null,
+      "summary": ""
+    },
+    {
+      "key": "correct",
+      "title": "Corrections",
+      "source": "typed, allowlisted, from surviving hypotheses only",
+      "state": "pending",
+      "startedAt": null,
+      "endedAt": null,
+      "summary": ""
+    },
+    {
+      "key": "reobserve",
+      "title": "Re-observation",
+      "source": "unsealed holdout seeds, never used before",
+      "state": "pending",
+      "startedAt": null,
+      "endedAt": null,
+      "summary": ""
+    },
+    {
+      "key": "adequacy",
+      "title": "Adequacy review",
+      "source": "implementation correctness vs balance adequacy",
+      "state": "pending",
+      "startedAt": null,
+      "endedAt": null,
+      "summary": ""
+    },
+    {
+      "key": "decide",
+      "title": "Decision",
+      "source": "proposal / review-required / no change (never applied to production)",
+      "state": "pending",
+      "startedAt": null,
+      "endedAt": null,
+      "summary": ""
+    }
+  ],
+  "progress": null,
+  "checkpoint": "CAPABILITY_LIMITATION: the exploration call did not run (credit balance check failed (kane-cli balance unavailable); no call without a verified balance). The Kane experiment stops here; no further Kane calls, no retry without operator approval. Evidence and recording are preserved. READY_FOR_OPERATOR_V2_RESULT_REVIEW",
+  "log": [
+    "[09:03:26] Balance Designer V2 2026-11-19T09-03-26Z-v2-kane (RUN-KANE) · dashboard http://127.0.0.1:4200/ · commit 4a904894c2 · engine 5b79cac132ecdfbd · weights 0.3.0#ddcf941c285bd537",
+    "[09:03:48] kane-cli: kane-cli not found on PATH (set KANE_CLI) (version none)",
+    "[09:03:49] ▶ Observation (V1 evidence (hash-verified) + planner traces)",
+    "[09:03:49] V1 evidence verified (24 games). Observed: teleport self-trigger share 0.879, east/west shove self-trigger share 0.885, teleport benefit to activator 3.414 squares.",
+    "[09:04:23] ✔ Observation: V1 evidence hash-verified; 24 games; replays reproduce the recorded games",
+    "[09:04:23] ▶ Kane exploration (real kane-cli objective mode: Kane proposes explanations)",
+    "[09:04:23] Kane KX1 REFUSED (no credits spent): credit balance check failed (kane-cli balance unavailable); no call without a verified balance",
+    "[09:04:23] ■ Kane exploration: not run (the exploration call did not run (credit balance check failed (kane-cli balance unavailable); no call without a verified balance))",
+    "[09:04:23] CAPABILITY_LIMITATION: the exploration call did not run (credit balance check failed (kane-cli balance unavailable); no call without a verified balance). The Kane experiment stops here; no further Kane calls, no retry without operator approval. Evidence and recording are preserved. READY_FOR_OPERATOR_V2_RESULT_REVIEW",
+    "[09:04:23] Journal balance\\v2\\journal.ndjson: 7 entries, hash chain verified",
+    "[09:04:23] ■ CAPABILITY_LIMITATION: the exploration call did not run (credit balance check failed (kane-cli balance unavailable); no call without a verified balance). The Kane experiment stops here; no further Kane calls, no retry without operator approval. Evidence and recording are preserved. READY_FOR_OPERATOR_V2_RESULT_REVIEW",
+    "[09:04:23] Dashboard stays open at http://127.0.0.1:4200/ (Ctrl+C to stop)"
+  ],
+  "kaneCli": {
+    "installed": false,
+    "version": null,
+    "loggedIn": null,
+    "detail": "kane-cli not found on PATH (set KANE_CLI)",
+    "isTestDouble": false
+  },
+  "budgets": {
+    "kaneCallsUsed": 0,
+    "kaneCallsMax": 4,
+    "creditsUsed": null,
+    "creditsMax": 80,
+    "gamesPlayed": 0,
+    "gamesMax": 700,
+    "creditLedger": [],
+    "creditCapNote": "Operating ceiling, enforced between calls (balance check before each call, conservative per-call estimate, no call once spending reaches the ceiling). A single kane-cli call cannot be stopped mid-run, so it can overshoot; any overshoot is reported."
+  },
+  "seeds": {
+    "exploration": [
+      1000,
+      1001,
+      1002,
+      1003,
+      1004,
+      1005,
+      1006,
+      1007,
+      1008,
+      1009,
+      1010,
+      1011
+    ],
+    "development": [
+      3200,
+      3201,
+      3202,
+      3203,
+      3204,
+      3205,
+      3206,
+      3207,
+      3208,
+      3209,
+      3210,
+      3211,
+      3212,
+      3213,
+      3214,
+      3215
+    ],
+    "holdout": "SEALED",
+    "holdoutCommitment": "87b4faa6f5c7cd91ed968344c9cb1179ac19d1a878d310d153533f290ee29aad"
+  },
+  "observation": {
+    "v1RunId": "2026-11-18T14-21-47Z-kane",
+    "v1Verified": true,
+    "v1Detail": "cycle-1/baseline-training-games.ndjson sha256 6d1f600e5ad61b43… matches the V1 manifest",
+    "metrics": {
+      "tp_self_share": 0.879,
+      "tp_per_game": 1.375,
+      "tp_benefit": 3.414,
+      "tp_self_benefit": 4.083,
+      "tp_opp_benefit": -1.571,
+      "tp_self_harm_rate": 0,
+      "ew_share": 0.646,
+      "ew_per_game": 7.375,
+      "ew_aligned_share": 1,
+      "ew_self_trigger_share": 0.885,
+      "self_trigger_share": 0.87,
+      "max_effect_share": 0.336,
+      "effect_entropy": 0.743,
+      "first_player_edge": -0.042,
+      "human_side_edge": -0.125,
+      "turns_mean": 11.458,
+      "comeback_rate": 0.792,
+      "lead_changes": 4.542,
+      "draw_or_limit_rate": 0,
+      "safety_events": 0,
+      "conditional_win_tp": 0.52
+    },
+    "effectTable": [
+      [
+        "freeze",
+        1,
+        1,
+        0,
+        0,
+        0,
+        null,
+        null
+      ],
+      [
+        "haste",
+        6,
+        7,
+        9,
+        9,
+        0,
+        1,
+        null
+      ],
+      [
+        "home",
+        10,
+        13,
+        0,
+        0,
+        0,
+        null,
+        null
+      ],
+      [
+        "shield",
+        5,
+        5,
+        13,
+        12,
+        1,
+        1.42,
+        3
+      ],
+      [
+        "shove:back:2",
+        6,
+        0,
+        3,
+        0,
+        3,
+        null,
+        -2
+      ],
+      [
+        "shove:back:3",
+        4,
+        5,
+        7,
+        1,
+        6,
+        3,
+        -1
+      ],
+      [
+        "shove:east:2",
+        92,
+        0,
+        184,
+        165,
+        19,
+        2,
+        -2
+      ],
+      [
+        "shove:forward:2",
+        1,
+        0,
+        1,
+        1,
+        0,
+        2,
+        null
+      ],
+      [
+        "shove:west:2",
+        0,
+        85,
+        164,
+        143,
+        21,
+        2,
+        -2
+      ],
+      [
+        "teleport",
+        10,
+        23,
+        58,
+        51,
+        7,
+        4.1,
+        -1.57
+      ]
+    ]
+  },
+  "kane": [
+    {
+      "callId": "KX1",
+      "role": "exploration",
+      "state": "skipped",
+      "url": "http://127.0.0.1:4200/v2/explore",
+      "liveLines": [],
+      "creditsBefore": null,
+      "creditsAfter": null,
+      "note": "credit balance check failed (kane-cli balance unavailable); no call without a verified balance"
+    }
+  ],
+  "exploration": {
+    "capability": "NOT_RUN",
+    "execution": "NOT_RUN",
+    "detail": "credit balance check failed (kane-cli balance unavailable); no call without a verified balance",
+    "notes": []
+  },
+  "hypotheses": [],
+  "experiments": [],
+  "corrections": [],
+  "reviews": [],
+  "decision": null,
+  "runDir": "D:\\Rule_Sabotage\\rule-sabotage-live\\evidence\\balance\\v2-runs\\2026-11-19T09-03-26Z-v2-kane",
+  "journalFile": "D:\\Rule_Sabotage\\rule-sabotage-live\\balance\\v2\\journal.ndjson",
+  "pages": {
+    "explore": "page-explore.html"
+  }
+}

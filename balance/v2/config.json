@@ -1,0 +1,102 @@
+{
+  "schema": "rule-sabotage/balance-v2-config@1",
+  "seeds": {
+    "exploration": [
+      1000,
+      1001,
+      1002,
+      1003,
+      1004,
+      1005,
+      1006,
+      1007,
+      1008,
+      1009,
+      1010,
+      1011
+    ],
+    "development": [
+      3200,
+      3201,
+      3202,
+      3203,
+      3204,
+      3205,
+      3206,
+      3207,
+      3208,
+      3209,
+      3210,
+      3211,
+      3212,
+      3213,
+      3214,
+      3215
+    ],
+    "holdout": [
+      7100,
+      7101,
+      7102,
+      7103,
+      7104,
+      7105,
+      7106,
+      7107,
+      7108,
+      7109,
+      7110,
+      7111,
+      7112,
+      7113,
+      7114,
+      7115
+    ],
+    "headToHeadSeeds": 8,
+    "note": "exploration = the V1 training seeds (observation and Kane exploration only). development = 3200-3215 and holdout = 7100-7115 for the NEXT run: 3000-3003 were consumed by a smoke test, and 3100-3115 / 7000-7015 by the first full dry-run (2026-11-19T07-54-37Z-v2-dry, holdout unsealed once), so none of them is reused. The holdout is sealed until hypotheses and corrections are frozen and used once. V1 held-out seeds 5000-5011 are not reused. Each seed is played with both first-player orders; head-to-head seeds also swap the treated planner side."
+  },
+  "v1": {
+    "runDir": "evidence/balance/runs/2026-11-18T14-21-47Z-kane",
+    "games": "cycle-1/baseline-training-games.ndjson"
+  },
+  "evaluation": {
+    "minUnits": 8,
+    "bootstrap": 1000,
+    "maxSampleRows": 15,
+    "minEvents": 20
+  },
+  "corrections": {
+    "max": 3
+  },
+  "adequacy": {
+    "minUnits": 8,
+    "maxEntropyDrop": 0.12,
+    "maxNewDominantShare": 0.45,
+    "maxEffectShareJump": 0.15,
+    "maxFirstPlayerEdgeIncrease": 0.12,
+    "maxComebackDrop": 0.15,
+    "maxTurnsChangeRel": 0.35,
+    "maxDrawIncrease": 0.1
+  },
+  "kane": {
+    "maxCallsTotal": 4,
+    "maxCreditsTotal": 80,
+    "maxConcurrent": 1,
+    "explore": {
+      "maxSteps": 25,
+      "timeoutS": 420
+    },
+    "challengeObjective": false,
+    "analyzerTimeoutS": 300,
+    "plan": "3 planned: 1 objective-mode exploration + 1 analyzer on the hypothesis comparison page + 1 analyzer on the post-correction page (only if a correction is executable). The 4th (objective challenge) is off by default.",
+    "estimatedCredits": {
+      "objective": 40,
+      "analyzer": 15
+    },
+    "stopOnCapabilityLimitation": true,
+    "creditCapNote": "80 is an operating ceiling enforced BETWEEN calls: a successful kane-cli balance check is required before each call, a call is refused if the remaining budget is below its conservative estimate (objective 40, analyzer 15; V1 analyzer calls measured 5.4-6.5), and no call starts once measured spending reaches 80. A running kane-cli call cannot be stopped at a credit limit, so one call can overshoot; objective calls are additionally bounded by maxSteps and timeoutS."
+  },
+  "budget": {
+    "maxGames": 700,
+    "maxWallMinutes": 180
+  }
+}
