@@ -1,0 +1,47 @@
+{
+  "schema": "rule-sabotage/v4-pilot-protocol@1",
+  "id": "V4-PILOT-180",
+  "status": "PREREGISTERED (frozen before any pilot game; its sha256 is journalled in balance/v4/journal.ndjson as 'pilot-preregistered')",
+  "question": "Does the expected-value teleport planner (ev-teleport-v4.1) remove the planner's hidden-RNG foresight, and is self-play with it still acceptable gameplay? Information fairness and gameplay are judged separately. A pilot, not a production decision.",
+  "totalGames": 180,
+  "seeds": { "from": 64001, "to": 64030, "note": "Fresh: not used or reserved by V1 (1000-1011), V2 (3000-3003, 3100-3115, 3200-3215, 7000-7015, 7100-7115), V3 (62001-62010, 62101-62130, reserved 62201-62240), V3/V4 smoke (90001-90002, 99001-99399)." },
+  "arms": [
+    { "id": "A", "label": "production planner vs itself, production 3v3 rules", "planner": { "human": "production", "ai": "production" }, "seeds": "64001-64030", "firstMovers": ["human", "ai"], "games": 60 },
+    { "id": "B", "label": "EV candidate vs itself, production 3v3 rules", "planner": { "human": "ev-v4", "ai": "ev-v4" }, "seeds": "64001-64030", "firstMovers": ["human", "ai"], "games": 60 },
+    { "id": "C", "label": "EV candidate vs production planner, mirrored: EV plays each side and each first-mover order on every seed", "planner": "EV on human x first human/ai, then EV on ai x first human/ai", "seeds": "64001-64015", "firstMovers": ["human", "ai"], "games": 60 }
+  ],
+  "rules": [
+    "Run once. The runner refuses a second pilot start recorded in the journal. No rerun of failed or unflattering games.",
+    "Production rules: no experimental starting configuration, no rule variant, no planner hooks. Only the planner differs between arms.",
+    "0 external calls (V3 offline worker guard), 0 Kane calls.",
+    "C is a diagnostic of competitive impact against the information-advantaged planner, not a measure of information fairness.",
+    "If 180 games cannot decide a question, the answer is INCONCLUSIVE; the untouched holdout for a later approved run is seeds 65001-65060."
+  ],
+  "uncertainty": {
+    "rates": "Wilson 95% interval",
+    "B minus A": "paired by seed (a seed's two games move together), seeded bootstrap, 5000 resamples, seed 64000",
+    "foresight": "per teleport move: realized squares gained minus the mean over 200 engine re-runs with random RNG states from the same pre-move position (V3 method, seed 4242); mean with a bootstrap 95% interval"
+  },
+  "gates": {
+    "information": {
+      "I1": "unit tests: hidden-RNG invariance, exact outcome distribution, committed prefix ends at the first random move (tests/balance-v4.test.ts) all pass",
+      "I2": "arm B foresight advantage: PASS if the 95% interval contains 0 and |mean| < 0.30 squares; FAIL if its lower bound > 0; otherwise INCONCLUSIVE",
+      "I3": "arm C, moves made by the EV side: same rule as I2",
+      "I4": "manipulation check: arm A (production) foresight lower bound > 0 (the leak is present in the control)"
+    },
+    "gameplay": {
+      "G1": "game length: (B - A) mean turns, PASS if the upper bound <= 0.25 x A's mean, FAIL if the lower bound > 0.25 x A's mean, else INCONCLUSIVE",
+      "G2": "turn-limit rate: (B - A), PASS if the upper bound <= +0.10, FAIL if the lower bound > +0.10, else INCONCLUSIVE",
+      "G3": "fairness: (B - A) first-mover edge |rate - 0.5|, PASS if the upper bound <= +0.05, FAIL if the lower bound > +0.05, else INCONCLUSIVE",
+      "G4": "diversity: (B - A) effect entropy, PASS if the lower bound >= -0.10, FAIL if the upper bound < -0.10, else INCONCLUSIVE",
+      "G5": "counterplay: (B - A) comeback rate, PASS if the lower bound >= -0.10, FAIL if the upper bound < -0.10, else INCONCLUSIVE; lead changes reported",
+      "G6": "safety: 0 illegal moves, engine errors and softlocks in every arm; every game replays identically through the engine",
+      "S1": "strength (diagnostic): EV-side decisive win rate in C with Wilson 95%. 'no detectable loss' if the interval contains 0.50; 'substantially weaker' if the upper bound < 0.35; otherwise 'weaker'"
+    },
+    "verdicts": {
+      "informationFairness": "PASS if I1, I2, I3 PASS and I4 holds; FAIL if I2 or I3 FAIL; else PARTIAL",
+      "gameplayAdequacy": "REGRESSION if any of G1-G6 FAIL; SUFFICIENT (pilot only) if G1-G6 all PASS and S1 is not 'substantially weaker'; PARTIAL if no gate fails but S1 is 'substantially weaker'; INCONCLUSIVE otherwise"
+    }
+  },
+  "measuresReported": ["first_mover_win_rate", "human_side_win_rate", "turn1_score_rate", "mean_turns", "median_turns", "turn_limit_rate", "draws", "teleport placements per game", "teleport triggers per game", "conveyor_per_game", "self_trigger_share", "effect_entropy", "distinct openings", "lead_changes", "comeback_rate", "illegal, errors, softlocks", "replans per game (EV)"]
+}
