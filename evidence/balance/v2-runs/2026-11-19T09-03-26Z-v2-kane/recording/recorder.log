@@ -1,0 +1,4 @@
+[recorder 09:03:25] output D:\Rule_Sabotage\rule-sabotage-live\evidence\balance\v2-recordings\2026-11-19T09-03-25Z
+[recorder 09:03:25] browser: C:\Program Files\Google\Chrome\Application\chrome.exe · ffmpeg: C:\Users\ericl\AppData\Local\ms-playwright\ffmpeg-1013\ffmpeg-win64.exe
+[recorder 09:03:30] recording dashboard http://127.0.0.1:4200/ at 4 fps (1600×1000)
+[recorder 09:04:38] concise cut: 30 frames (8 s), each labelled ACCELERATED 12×

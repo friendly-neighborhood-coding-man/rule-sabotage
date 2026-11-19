@@ -1,0 +1,12 @@
+[09:03:26] Balance Designer V2 2026-11-19T09-03-26Z-v2-kane (RUN-KANE) · dashboard http://127.0.0.1:4200/ · commit 4a904894c2 · engine 5b79cac132ecdfbd · weights 0.3.0#ddcf941c285bd537
+[09:03:48] kane-cli: kane-cli not found on PATH (set KANE_CLI) (version none)
+[09:03:49] ▶ Observation (V1 evidence (hash-verified) + planner traces)
+[09:03:49] V1 evidence verified (24 games). Observed: teleport self-trigger share 0.879, east/west shove self-trigger share 0.885, teleport benefit to activator 3.414 squares.
+[09:04:23] ✔ Observation: V1 evidence hash-verified; 24 games; replays reproduce the recorded games
+[09:04:23] ▶ Kane exploration (real kane-cli objective mode: Kane proposes explanations)
+[09:04:23] Kane KX1 REFUSED (no credits spent): credit balance check failed (kane-cli balance unavailable); no call without a verified balance
+[09:04:23] ■ Kane exploration: not run (the exploration call did not run (credit balance check failed (kane-cli balance unavailable); no call without a verified balance))
+[09:04:23] CAPABILITY_LIMITATION: the exploration call did not run (credit balance check failed (kane-cli balance unavailable); no call without a verified balance). The Kane experiment stops here; no further Kane calls, no retry without operator approval. Evidence and recording are preserved. READY_FOR_OPERATOR_V2_RESULT_REVIEW
+[09:04:23] Journal balance\v2\journal.ndjson: 7 entries, hash chain verified
+[09:04:23] ■ CAPABILITY_LIMITATION: the exploration call did not run (credit balance check failed (kane-cli balance unavailable); no call without a verified balance). The Kane experiment stops here; no further Kane calls, no retry without operator approval. Evidence and recording are preserved. READY_FOR_OPERATOR_V2_RESULT_REVIEW
+[09:04:23] Dashboard stays open at http://127.0.0.1:4200/ (Ctrl+C to stop)

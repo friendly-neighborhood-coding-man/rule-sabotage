@@ -1,0 +1,41 @@
+{
+  "recordedAt": "2026-11-19T09:03:25.271Z",
+  "durationS": 74,
+  "loopArgs": [
+    "--run-kane"
+  ],
+  "runDir": "D:\\Rule_Sabotage\\rule-sabotage-live\\evidence\\balance\\v2-runs\\2026-11-19T09-03-26Z-v2-kane",
+  "fps": 4,
+  "speed": 12,
+  "raw": "raw.webm (unedited, real time)",
+  "concise": "concise.webm (ACCELERATED 12×, every frame labelled)",
+  "terminal": "terminal.cast (asciicast v2, secrets redacted) + terminal.log",
+  "rawFrames": 208,
+  "files": [
+    {
+      "path": "concise.webm",
+      "bytes": 403384,
+      "sha256": "f1333a2efc6ef5e93e6fb96d1c0b45b04d22d61018378eaab7c9e28883cd1935"
+    },
+    {
+      "path": "raw.webm",
+      "bytes": 2180932,
+      "sha256": "26ff338dd77175c5598bb2dba648f0af120c74ef1e9554aefc5500de119a9a2f"
+    },
+    {
+      "path": "recorder.log",
+      "bytes": 447,
+      "sha256": "c36a8031175600e7921d01e7de91e9f7f65644e932b52eb4e2566c3d8a0b331b"
+    },
+    {
+      "path": "terminal.cast",
+      "bytes": 3032,
+      "sha256": "6a55ef8796c70049a57041859275eaf8e4e435cd81c5f0a88a2afe85034564d3"
+    },
+    {
+      "path": "terminal.log",
+      "bytes": 2565,
+      "sha256": "0c181be8166d23454d6bf264adb0f26b0dd26a9b86197c39e50bb1747d6fd465"
+    }
+  ]
+}
