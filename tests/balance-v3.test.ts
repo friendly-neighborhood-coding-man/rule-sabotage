@@ -297,6 +297,40 @@ test('Kane V3 is prepared but cannot run without an approval record and the matc
   assert.ok(!/first mover (has|holds) an advantage|is imbalanced/i.test(K3.objectiveV3()), 'the objective asks questions and states no conclusion');
 });
 
+test('quick notebook entries expand by fixed rules into the same typed proposal as the long form', () => {
+  const quick = new URLSearchParams({ nonce: 'n', structured: 'entry: hypothesis\ntitle: First mover tempo\ncause: starting-rules\nexplanation: The first mover gets a full set of actions before the opponent can place a single trap.\nevidence: C0-62001-human C3-62004-ai\nprediction1: abs_first_mover_edge decrease 0.15\nprediction2: \nintervention: S3_FIRST_TURN_ACTIONS\nvalue: 2\ncompeting: The planner is just better\n  at moving first.\ncounterexample: C3-62004-ai\nacceptance: edge below 10 points on 60 fresh games\ndisproof: edge unchanged\nverdict: ' }).toString();
+  const a = P.parseNotebookEntry(quick, { id: 'Q', provenance: claude, gameIds, datasetHash: 'd' });
+  const b = P.parseNotebookEntry(body({}), { id: 'Q', provenance: claude, gameIds, datasetHash: 'd' });
+  assert.deepEqual(a.problems, []);
+  assert.deepEqual({ ...a.proposal, competing: '', sideEffects: '' }, { ...b.proposal, competing: '', sideEffects: '' });
+  assert.equal(a.proposal.competing, 'The planner is just better at moving first.', 'continuation lines join the previous key');
+  assert.match(P.parseNotebookEntry(new URLSearchParams({ structured: 'entry: hypothesis\nprediction1: rm -rf /' }).toString(), { id: 'x', provenance: claude, gameIds, datasetHash: 'd' }).problems.join(), /not listed/);
+});
+
+test('validation rules: prediction judge, paired seed bootstrap and Kane arm mapping behave as frozen', async () => {
+  const V = await import('../server/balance/v3/evaluate.ts');
+  assert.equal(V.judge({ metric: 'm', comparison: 'X', direction: 'decrease', minEffect: 0.1 }, -0.2, [-0.35, -0.05]).status, 'met');
+  assert.equal(V.judge({ metric: 'm', comparison: 'X', direction: 'decrease', minEffect: 0.1 }, 0.02, [-0.06, 0.1]).status, 'contradicted');
+  assert.equal(V.judge({ metric: 'm', comparison: 'X', direction: 'decrease', minEffect: 0.1 }, -0.12, [-0.3, 0.05]).status, 'unclear');
+  assert.equal(V.judge({ metric: 'm', comparison: 'X', direction: 'no-change', minEffect: 0.1 }, 0.01, [-0.08, 0.09]).status, 'met');
+  assert.equal(V.judge({ metric: 'm', comparison: 'X', direction: 'no-change', minEffect: 0.1 }, 0.2, [0.05, 0.35]).status, 'contradicted');
+  const mk = (cond: string, seed: number, first: Player, start: ReturnType<typeof cfg>, hooks?: object) => { const rec = playGame(seed, first, { human: W.freezeWeights(w), ai: W.freezeWeights(w) }, { start: { ...start, id: cond }, detail: true, ...(hooks ? { hooks: { human: hooks, ai: hooks }, replanOnRandom: true } : {}) }); return { row: B.summaryRow(rec, { gameId: B.gameId(cond, seed, first), condition: cond }), rec }; };
+  const gs = [95, 96].flatMap(seed => (['human', 'ai'] as Player[]).flatMap(f => [mk('A', seed, f, cfg(3, 3)), mk('B', seed, f, cfg(3, 3), { blindRng: true })]));
+  for (const g of gs) assert.deepEqual(g.rec.illegal, [], 'a blind planner re-plans after a teleport instead of issuing stale moves');
+  const ev1 = V.evaluateProtocol(gs, { comparisons: [{ id: 'B-A', treated: 'B', control: 'A' }], mapping: {} });
+  const ev2 = V.evaluateProtocol(gs, { comparisons: [{ id: 'B-A', treated: 'B', control: 'A' }], mapping: {} });
+  assert.deepEqual(ev1.comparisons, ev2.comparisons, 'seeded bootstrap is reproducible');
+  const k = V.mapKane([
+    { noteId: 'K1', registered: true, proposal: { kind: 'hypothesis', title: 't', intervention: { id: 'P3_BLIND_RNG', value: true }, predictions: [{ metric: 'turn1_score_rate', direction: 'decrease', minEffect: 0.15 }] } },
+    { noteId: 'K2', registered: true, proposal: { kind: 'hypothesis', title: 't', intervention: { id: 'S3_FIRST_TURN_ACTIONS', value: 1 }, predictions: [{ metric: 'abs_first_mover_edge', direction: 'decrease', minEffect: 0.1 }] } },
+    { noteId: 'K3', registered: false, proposal: { kind: 'hypothesis', title: 't', intervention: null, predictions: [] } },
+  ], ev1.comparisons as never);
+  assert.equal(k.length, 2, 'unregistered entries are never evaluated');
+  assert.equal(k[0].comparison, 'B-A'); assert.equal(k[1].outcome, 'NOT_TESTED');
+  const f = V.teleportForesight(gs.filter(g => g.row.condition === 'A').map(g => g.rec), 20);
+  assert.ok(f.rows.every(r => r.pctile >= 0 && r.pctile <= 1));
+});
+
 test('registered V3 proposals are well-formed, cite real games of the dataset, and none claims Kane', () => {
   const reg = JSON.parse(src('balance/v3/proposals.json')) as { dataset: { runId: string }; proposals: import('../server/balance/v3/proposals.ts').Proposal[] };
   const ids = new Set(src(`evidence/balance/v3/datasets/${reg.dataset.runId}/games.ndjson`).split(/\r?\n/).filter(Boolean).map(l => JSON.parse(l).gameId as string));

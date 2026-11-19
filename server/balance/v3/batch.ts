@@ -27,7 +27,8 @@ import { type GuardReport } from './offline.ts';
 
 export const ROOT = resolve(fileURLToPath(new URL('../../../', import.meta.url)));
 export const MATRIX_FILE = join(ROOT, 'balance/v3/matrix.json');
-export type Condition = { id: string; label: string; firstMover: number; secondMover: number };
+/** A condition (screen) or arm (validation). `hooks` = experiment-only planner hooks passed to BOTH sides. */
+export type Condition = { id: string; label: string; firstMover: number; secondMover: number; hooks?: import('../../ai.ts').PlannerHooks };
 export type Matrix = { schema: string; id: string; totalGames: number; seeds: number[]; conditions: Condition[]; layout: 'spread' | 'center' | 'edge'; workers: number; maxMsPerGame: number; [k: string]: unknown };
 const sortKeys = (v: unknown): unknown => (v && typeof v === 'object' && !Array.isArray(v) ? Object.fromEntries(Object.entries(v).sort(([a], [b]) => a.localeCompare(b)).map(([k, x]) => [k, sortKeys(x)])) : Array.isArray(v) ? v.map(sortKeys) : v);
 export const hashOf = (v: unknown) => createHash('sha256').update(JSON.stringify(sortKeys(v))).digest('hex').slice(0, 16);
@@ -44,7 +45,7 @@ export const startConfig = (c: Condition, layout: Matrix['layout'] = 'spread'): 
 export const gameId = (cond: string, seed: number, first: Player) => `${cond}-${seed}-${first}`;
 export type BatchJob = Job & { gameId: string; condition: string };
 export function buildJobs(m: Matrix, weights: Weights): BatchJob[] {
-  return m.conditions.flatMap(c => m.seeds.flatMap(seed => PLAYERS.map(first => ({ gameId: gameId(c.id, seed, first), condition: c.id, seed, first, weights: { human: weights, ai: weights }, start: startConfig(c, m.layout), detail: true }))));
+  return m.conditions.flatMap(c => m.seeds.flatMap(seed => PLAYERS.map(first => ({ gameId: gameId(c.id, seed, first), condition: c.id, seed, first, weights: { human: weights, ai: weights }, start: startConfig(c, m.layout), detail: true, ...(c.hooks ? { hooks: { human: c.hooks, ai: c.hooks } } : {}), ...(c.hooks?.blindRng ? { replanOnRandom: true } : {}) }))));
 }
 
 /** Source files whose content defines the engine and the planner (hashed into the run record). */

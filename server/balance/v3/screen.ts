@@ -14,7 +14,7 @@ import { execFileSync } from 'node:child_process';
 import { availableParallelism, cpus, totalmem, platform, release } from 'node:os';
 import { type GameRec, playGame, jobOpts } from '../selfplay.ts';
 import { loadWeights, freezeWeights } from '../../weights.ts';
-import { appendJournal, verifyJournal } from '../journal.ts';
+import { appendJournal, verifyJournal, readJournal } from '../journal.ts';
 import { engineSourceHash } from '../invariants.ts';
 import { installOfflineGuard, guardReport } from './offline.ts';
 import { ROOT, loadMatrix, buildJobs, runBatch, summaryRow, replayDetail, offlineImportCheck, hashOf, sha256, filesHash, ENGINE_FILES, PLANNER_FILES, type Matrix, type SummaryRow, type BatchJob } from './batch.ts';
@@ -45,10 +45,15 @@ export function datasetHash(dir: string) {
   return sha256(Buffer.concat([rows, Buffer.from('\n'), Buffer.from(games)])).slice(0, 16);
 }
 
-export type ScreenOptions = { workers?: number; approvedRerun?: string; smoke?: { outDir: string; seeds: number[] }; log?: (l: string) => void };
+export type ScreenOptions = { matrixFile?: string; withoutKane?: string; workers?: number; approvedRerun?: string; smoke?: { outDir: string; seeds: number[] }; log?: (l: string) => void };
 export async function runScreen(o: ScreenOptions = {}) {
   const log = o.log ?? console.log;
-  const matrix0 = loadMatrix();
+  const matrix0 = loadMatrix(o.matrixFile);
+  if (matrix0.id.startsWith('V3-VALIDATE') && !o.smoke) {
+    const J = readJournal(V3_JOURNAL);
+    if (!J.some(e => e.type === 'validate-protocol-frozen')) throw new Error('V3-VALIDATE needs the frozen protocol entry in the journal first.');
+    if (!J.some(e => e.type === 'kane-proposals-registered') && !o.withoutKane) throw new Error('Operator order is Kane first: register the Kane call entries (kane-register) before any validation game, or pass --without-kane "<operator decision>".');
+  }
   const matrix: Matrix = o.smoke ? { ...matrix0, id: `${matrix0.id}-SMOKE`, seeds: o.smoke.seeds, totalGames: matrix0.conditions.length * o.smoke.seeds.length * 2 } : matrix0;
   const mHash = hashOf(matrix);
   const reg = readRegistry();
@@ -177,6 +182,7 @@ export function buildOutputs(dir: string) {
   mkdirSync(join(dir, 'dashboard'), { recursive: true });
   writeFileSync(join(dir, 'dashboard', 'index.html'), dashboardPage(a, { runId: run.runId, games: games.length, externalCalls: run.externalCalls.total, replayOk: run.replay.engineReplayOk, wallMs: run.wallMs, datasetHash: run.datasetHash }, picks));
   mkdirSync(join(dir, 'dossier'), { recursive: true });
+  if (run.matrix.id?.startsWith('V3-VALIDATE')) { writeFileSync(join(dir, 'index.html'), page('V3 validation dataset', `<h1>V3 validation dataset ${run.runId}</h1><ul><li><a href="dashboard/index.html">Dashboard</a></li><li><a href="evaluation.html">Preregistered evaluation</a></li></ul><p>Replays: <code>replays/&lt;gameId&gt;.html</code>.</p>`)); return { analysis: a, picks }; }
   const pages = dossierPages(a, { runId: run.runId, datasetHash: run.datasetHash, trajectories, counterexamples, v2: V2_BACKGROUND, formAction: '/notebook', nonce: 'SET-AT-SERVE-TIME' });
   for (const [f, html] of Object.entries(pages)) writeFileSync(join(dir, 'dossier', f), html);
   writeFileSync(join(dir, 'index.html'), page('V3 dataset', `<h1>V3 dataset ${run.runId}</h1><ul><li><a href="dashboard/index.html">Operator dashboard</a></li><li><a href="dossier/index.html">Kane research dossier</a></li><li><a href="dossier/games.html">All 100 replays</a></li></ul>`));
