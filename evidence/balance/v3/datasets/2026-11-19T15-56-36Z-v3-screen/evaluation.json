@@ -1,0 +1,888 @@
+{
+  "schema": "rule-sabotage/v3-validation-evaluation@1",
+  "runId": "2026-11-19T15-56-36Z-v3-screen",
+  "datasetHash": "3e137fdfc8c031c6",
+  "protocol": "balance/v3/validate-protocol.json",
+  "arms": {
+    "A": {
+      "first_mover_win_rate": 0.559,
+      "abs_first_mover_edge": 0.059,
+      "more_pieces_side_win_rate": null,
+      "human_side_win_rate": 0.492,
+      "mean_turns": 13.617,
+      "turn_limit_rate": 0.033,
+      "conveyor_per_game": 16,
+      "self_trigger_share": 0.858,
+      "turn1_score_rate": 0.267,
+      "lead_changes": 4.283,
+      "comeback_rate": 0.797,
+      "effect_entropy": 0.745,
+      "unused_cell_rate": 0.442
+    },
+    "B": {
+      "first_mover_win_rate": 0.6,
+      "abs_first_mover_edge": 0.1,
+      "more_pieces_side_win_rate": null,
+      "human_side_win_rate": 0.533,
+      "mean_turns": 16.533,
+      "turn_limit_rate": 0.1,
+      "conveyor_per_game": 14.817,
+      "self_trigger_share": 0.85,
+      "turn1_score_rate": 0.217,
+      "lead_changes": 3.733,
+      "comeback_rate": 0.667,
+      "effect_entropy": 0.792,
+      "unused_cell_rate": 0.491
+    },
+    "C": {
+      "first_mover_win_rate": 0.617,
+      "abs_first_mover_edge": 0.117,
+      "more_pieces_side_win_rate": 0.383,
+      "human_side_win_rate": 0.583,
+      "mean_turns": 14.617,
+      "turn_limit_rate": 0.067,
+      "conveyor_per_game": 13.833,
+      "self_trigger_share": 0.852,
+      "turn1_score_rate": 0.117,
+      "lead_changes": 3.483,
+      "comeback_rate": 0.65,
+      "effect_entropy": 0.773,
+      "unused_cell_rate": 0.509
+    },
+    "D": {
+      "first_mover_win_rate": 0.617,
+      "abs_first_mover_edge": 0.117,
+      "more_pieces_side_win_rate": 0.383,
+      "human_side_win_rate": 0.417,
+      "mean_turns": 14.967,
+      "turn_limit_rate": 0.083,
+      "conveyor_per_game": 14.317,
+      "self_trigger_share": 0.837,
+      "turn1_score_rate": 0.117,
+      "lead_changes": 4.017,
+      "comeback_rate": 0.733,
+      "effect_entropy": 0.725,
+      "unused_cell_rate": 0.486
+    }
+  },
+  "comparisons": {
+    "B-A": {
+      "first_mover_win_rate": {
+        "metric": "first_mover_win_rate",
+        "treated": 0.6,
+        "control": 0.559,
+        "diff": 0.041,
+        "ci95": [
+          -0.144,
+          0.218
+        ]
+      },
+      "abs_first_mover_edge": {
+        "metric": "abs_first_mover_edge",
+        "treated": 0.1,
+        "control": 0.059,
+        "diff": 0.041,
+        "ci95": [
+          -0.117,
+          0.183
+        ]
+      },
+      "more_pieces_side_win_rate": {
+        "metric": "more_pieces_side_win_rate",
+        "treated": null,
+        "control": null,
+        "diff": null,
+        "ci95": null
+      },
+      "human_side_win_rate": {
+        "metric": "human_side_win_rate",
+        "treated": 0.533,
+        "control": 0.492,
+        "diff": 0.042,
+        "ci95": [
+          -0.109,
+          0.195
+        ]
+      },
+      "mean_turns": {
+        "metric": "mean_turns",
+        "treated": 16.533,
+        "control": 13.617,
+        "diff": 2.917,
+        "ci95": [
+          -1.683,
+          7.617
+        ]
+      },
+      "turn_limit_rate": {
+        "metric": "turn_limit_rate",
+        "treated": 0.1,
+        "control": 0.033,
+        "diff": 0.067,
+        "ci95": [
+          0,
+          0.15
+        ]
+      },
+      "conveyor_per_game": {
+        "metric": "conveyor_per_game",
+        "treated": 14.817,
+        "control": 16,
+        "diff": -1.183,
+        "ci95": [
+          -2.9,
+          0.567
+        ]
+      },
+      "self_trigger_share": {
+        "metric": "self_trigger_share",
+        "treated": 0.85,
+        "control": 0.858,
+        "diff": -0.008,
+        "ci95": [
+          -0.044,
+          0.031
+        ]
+      },
+      "turn1_score_rate": {
+        "metric": "turn1_score_rate",
+        "treated": 0.217,
+        "control": 0.267,
+        "diff": -0.05,
+        "ci95": [
+          -0.1,
+          0
+        ]
+      },
+      "lead_changes": {
+        "metric": "lead_changes",
+        "treated": 3.733,
+        "control": 4.283,
+        "diff": -0.55,
+        "ci95": [
+          -1.567,
+          0.55
+        ]
+      },
+      "comeback_rate": {
+        "metric": "comeback_rate",
+        "treated": 0.667,
+        "control": 0.797,
+        "diff": -0.13,
+        "ci95": [
+          -0.292,
+          0.025
+        ]
+      },
+      "effect_entropy": {
+        "metric": "effect_entropy",
+        "treated": 0.792,
+        "control": 0.745,
+        "diff": 0.047,
+        "ci95": [
+          0.011,
+          0.082
+        ]
+      },
+      "unused_cell_rate": {
+        "metric": "unused_cell_rate",
+        "treated": 0.491,
+        "control": 0.442,
+        "diff": 0.049,
+        "ci95": [
+          0.013,
+          0.086
+        ]
+      }
+    },
+    "C-A": {
+      "first_mover_win_rate": {
+        "metric": "first_mover_win_rate",
+        "treated": 0.617,
+        "control": 0.559,
+        "diff": 0.057,
+        "ci95": [
+          -0.067,
+          0.183
+        ]
+      },
+      "abs_first_mover_edge": {
+        "metric": "abs_first_mover_edge",
+        "treated": 0.117,
+        "control": 0.059,
+        "diff": 0.057,
+        "ci95": [
+          -0.067,
+          0.167
+        ]
+      },
+      "more_pieces_side_win_rate": {
+        "metric": "more_pieces_side_win_rate",
+        "treated": 0.38333333333333336,
+        "control": null,
+        "diff": null,
+        "ci95": null
+      },
+      "human_side_win_rate": {
+        "metric": "human_side_win_rate",
+        "treated": 0.583,
+        "control": 0.492,
+        "diff": 0.092,
+        "ci95": [
+          -0.121,
+          0.294
+        ]
+      },
+      "mean_turns": {
+        "metric": "mean_turns",
+        "treated": 14.617,
+        "control": 13.617,
+        "diff": 1,
+        "ci95": [
+          -3.484,
+          5.55
+        ]
+      },
+      "turn_limit_rate": {
+        "metric": "turn_limit_rate",
+        "treated": 0.067,
+        "control": 0.033,
+        "diff": 0.033,
+        "ci95": [
+          -0.05,
+          0.117
+        ]
+      },
+      "conveyor_per_game": {
+        "metric": "conveyor_per_game",
+        "treated": 13.833,
+        "control": 16,
+        "diff": -2.167,
+        "ci95": [
+          -3.917,
+          -0.283
+        ]
+      },
+      "self_trigger_share": {
+        "metric": "self_trigger_share",
+        "treated": 0.852,
+        "control": 0.858,
+        "diff": -0.006,
+        "ci95": [
+          -0.04,
+          0.027
+        ]
+      },
+      "turn1_score_rate": {
+        "metric": "turn1_score_rate",
+        "treated": 0.117,
+        "control": 0.267,
+        "diff": -0.15,
+        "ci95": [
+          -0.233,
+          -0.067
+        ]
+      },
+      "lead_changes": {
+        "metric": "lead_changes",
+        "treated": 3.483,
+        "control": 4.283,
+        "diff": -0.8,
+        "ci95": [
+          -1.683,
+          0.1
+        ]
+      },
+      "comeback_rate": {
+        "metric": "comeback_rate",
+        "treated": 0.65,
+        "control": 0.797,
+        "diff": -0.147,
+        "ci95": [
+          -0.298,
+          0.01
+        ]
+      },
+      "effect_entropy": {
+        "metric": "effect_entropy",
+        "treated": 0.773,
+        "control": 0.745,
+        "diff": 0.027,
+        "ci95": [
+          -0.02,
+          0.069
+        ]
+      },
+      "unused_cell_rate": {
+        "metric": "unused_cell_rate",
+        "treated": 0.509,
+        "control": 0.442,
+        "diff": 0.067,
+        "ci95": [
+          0.025,
+          0.11
+        ]
+      }
+    },
+    "D-C": {
+      "first_mover_win_rate": {
+        "metric": "first_mover_win_rate",
+        "treated": 0.617,
+        "control": 0.617,
+        "diff": 0,
+        "ci95": [
+          -0.117,
+          0.117
+        ]
+      },
+      "abs_first_mover_edge": {
+        "metric": "abs_first_mover_edge",
+        "treated": 0.117,
+        "control": 0.117,
+        "diff": 0,
+        "ci95": [
+          -0.117,
+          0.1
+        ]
+      },
+      "more_pieces_side_win_rate": {
+        "metric": "more_pieces_side_win_rate",
+        "treated": 0.383,
+        "control": 0.383,
+        "diff": 0,
+        "ci95": [
+          -0.117,
+          0.117
+        ]
+      },
+      "human_side_win_rate": {
+        "metric": "human_side_win_rate",
+        "treated": 0.417,
+        "control": 0.583,
+        "diff": -0.167,
+        "ci95": [
+          -0.283,
+          -0.05
+        ]
+      },
+      "mean_turns": {
+        "metric": "mean_turns",
+        "treated": 14.967,
+        "control": 14.617,
+        "diff": 0.35,
+        "ci95": [
+          -4.034,
+          4.55
+        ]
+      },
+      "turn_limit_rate": {
+        "metric": "turn_limit_rate",
+        "treated": 0.083,
+        "control": 0.067,
+        "diff": 0.017,
+        "ci95": [
+          -0.067,
+          0.1
+        ]
+      },
+      "conveyor_per_game": {
+        "metric": "conveyor_per_game",
+        "treated": 14.317,
+        "control": 13.833,
+        "diff": 0.483,
+        "ci95": [
+          -0.933,
+          2.017
+        ]
+      },
+      "self_trigger_share": {
+        "metric": "self_trigger_share",
+        "treated": 0.837,
+        "control": 0.852,
+        "diff": -0.014,
+        "ci95": [
+          -0.042,
+          0.014
+        ]
+      },
+      "turn1_score_rate": {
+        "metric": "turn1_score_rate",
+        "treated": 0.117,
+        "control": 0.117,
+        "diff": 0,
+        "ci95": [
+          0,
+          0
+        ]
+      },
+      "lead_changes": {
+        "metric": "lead_changes",
+        "treated": 4.017,
+        "control": 3.483,
+        "diff": 0.533,
+        "ci95": [
+          0.083,
+          1.017
+        ]
+      },
+      "comeback_rate": {
+        "metric": "comeback_rate",
+        "treated": 0.733,
+        "control": 0.65,
+        "diff": 0.083,
+        "ci95": [
+          0,
+          0.183
+        ]
+      },
+      "effect_entropy": {
+        "metric": "effect_entropy",
+        "treated": 0.725,
+        "control": 0.773,
+        "diff": -0.048,
+        "ci95": [
+          -0.08,
+          -0.013
+        ]
+      },
+      "unused_cell_rate": {
+        "metric": "unused_cell_rate",
+        "treated": 0.486,
+        "control": 0.509,
+        "diff": -0.023,
+        "ci95": [
+          -0.056,
+          0.01
+        ]
+      }
+    }
+  },
+  "firstMover": {
+    "A": {
+      "k": 33,
+      "n": 59,
+      "rate": 0.559,
+      "ci95": [
+        0.433,
+        0.678
+      ]
+    },
+    "B": {
+      "k": 36,
+      "n": 60,
+      "rate": 0.6,
+      "ci95": [
+        0.474,
+        0.714
+      ]
+    },
+    "C": {
+      "k": 37,
+      "n": 60,
+      "rate": 0.617,
+      "ci95": [
+        0.49,
+        0.729
+      ]
+    },
+    "D": {
+      "k": 37,
+      "n": 60,
+      "rate": 0.617,
+      "ci95": [
+        0.49,
+        0.729
+      ]
+    }
+  },
+  "morePieces": {
+    "C": {
+      "k": 23,
+      "n": 60,
+      "rate": 0.383,
+      "ci95": [
+        0.271,
+        0.51
+      ]
+    },
+    "D": {
+      "k": 23,
+      "n": 60,
+      "rate": 0.383,
+      "ci95": [
+        0.271,
+        0.51
+      ]
+    }
+  },
+  "hypotheses": {
+    "HC0": {
+      "outcome": "SUPPORTED",
+      "predictions": [
+        {
+          "metric": "first_mover_win_rate",
+          "arm": "C",
+          "k": 37,
+          "n": 60,
+          "rate": 0.617,
+          "ci95": [
+            0.49,
+            0.729
+          ],
+          "rule": "SUPPORTED if <= 0.70 with interval including 0.60; REFUTED if >= 0.75 with lower bound > 0.60"
+        }
+      ]
+    },
+    "HC1": {
+      "outcome": "INCONCLUSIVE",
+      "predictions": [
+        {
+          "metric": "first_mover_win_rate",
+          "comparison": "C-A",
+          "direction": "increase",
+          "minEffect": 0.15,
+          "treated": 0.617,
+          "control": 0.559,
+          "diff": 0.057,
+          "ci95": [
+            -0.067,
+            0.183
+          ],
+          "status": "unclear",
+          "reason": "+0.057 with interval [-0.067,0.183]"
+        },
+        {
+          "metric": "more_pieces_side_win_rate",
+          "comparison": "absolute on C vs 0.5",
+          "direction": "decrease",
+          "minEffect": 0.15,
+          "note": "C's rate must be at most 0.35 with the Wilson upper bound below 0.5",
+          "arm": "C",
+          "k": 23,
+          "n": 60,
+          "rate": 0.383,
+          "ci95": [
+            0.271,
+            0.51
+          ],
+          "status": "unclear",
+          "reason": "met if rate <= 0.35 with Wilson upper bound < 0.5; contradicted if the lower bound > 0.35"
+        },
+        {
+          "metric": "first_mover_win_rate",
+          "comparison": "D-C",
+          "direction": "no-change",
+          "minEffect": 0.1,
+          "treated": 0.617,
+          "control": 0.617,
+          "diff": 0,
+          "ci95": [
+            -0.117,
+            0.117
+          ],
+          "status": "unclear",
+          "reason": "interval [-0.117,0.117] neither within ±0.1 nor a material change"
+        }
+      ]
+    },
+    "HC2": {
+      "outcome": "REFUTED",
+      "predictions": [
+        {
+          "metric": "more_pieces_side_win_rate",
+          "comparison": "D-C",
+          "direction": "increase",
+          "minEffect": 0.15,
+          "treated": 0.383,
+          "control": 0.383,
+          "diff": 0,
+          "ci95": [
+            -0.117,
+            0.117
+          ],
+          "status": "contradicted",
+          "reason": "an increase of 0.15 is outside the interval [-0.117,0.117]"
+        }
+      ]
+    },
+    "HC3": {
+      "outcome": "NOT_TESTED",
+      "predictions": [],
+      "reason": "needs P1 (partial own-benefit search); no arm runs it"
+    },
+    "HC4": {
+      "outcome": "NOT_TESTED",
+      "predictions": [],
+      "reason": "needs S3 (turn-1 action cap); no arm runs it. Arm B reports whether first-mover tempo remains without RNG foresight, which bears on HC4 but does not test its intervention."
+    },
+    "HC5": {
+      "outcome": "REFUTED",
+      "predictions": [
+        {
+          "metric": "turn1_score_rate",
+          "comparison": "B-A",
+          "direction": "decrease",
+          "minEffect": 0.15,
+          "treated": 0.217,
+          "control": 0.267,
+          "diff": -0.05,
+          "ci95": [
+            -0.1,
+            0
+          ],
+          "status": "contradicted",
+          "reason": "an decrease of 0.15 is outside the interval [-0.1,0]"
+        },
+        {
+          "metric": "abs_first_mover_edge",
+          "comparison": "B-A",
+          "direction": "decrease",
+          "minEffect": 0.1,
+          "treated": 0.1,
+          "control": 0.059,
+          "diff": 0.041,
+          "ci95": [
+            -0.117,
+            0.183
+          ],
+          "status": "unclear",
+          "reason": "0.041 with interval [-0.117,0.183]"
+        }
+      ]
+    },
+    "HD1": {
+      "outcome": "NOT_TESTED",
+      "predictions": [],
+      "reason": "needs S4 (second-mover bonus); no arm runs it"
+    }
+  },
+  "kane": [
+    {
+      "noteId": "KX3-N1",
+      "title": "First-turn tempo rather than piece-count advantage",
+      "intervention": {
+        "id": "S3_FIRST_TURN_ACTIONS",
+        "value": 1
+      },
+      "outcome": "NOT_TESTED",
+      "reason": "not registered (failed the frozen parser), so not evaluated; and no frozen arm runs S3_FIRST_TURN_ACTIONS = 1",
+      "predictions": []
+    },
+    {
+      "noteId": "KX3-N2",
+      "title": "Conveyor valuation may amplify opening tempo",
+      "intervention": {
+        "id": "P2_SELF_BENEFIT_VALUE",
+        "value": 0
+      },
+      "outcome": "NOT_TESTED",
+      "reason": "not registered (failed the frozen parser), so not evaluated; and no frozen arm runs P2_SELF_BENEFIT_VALUE = 0",
+      "predictions": []
+    },
+    {
+      "noteId": "KX3-N3",
+      "title": "Provisional balance conclusion",
+      "intervention": {
+        "id": "S3_FIRST_TURN_ACTIONS",
+        "value": 1
+      },
+      "outcome": "NOT_TESTED",
+      "reason": "not registered (failed the frozen parser), so not evaluated; and no frozen arm runs S3_FIRST_TURN_ACTIONS = 1",
+      "predictions": []
+    },
+    {
+      "noteId": "KX3-N4",
+      "title": "Opening-tempo test",
+      "intervention": {
+        "id": "S3_FIRST_TURN_ACTIONS",
+        "value": 1
+      },
+      "outcome": "NOT_TESTED",
+      "reason": "not registered (failed the frozen parser), so not evaluated; and no frozen arm runs S3_FIRST_TURN_ACTIONS = 1",
+      "predictions": []
+    },
+    {
+      "noteId": "KX3-N5",
+      "title": "Conveyor valuation test",
+      "intervention": {
+        "id": "P2_SELF_BENEFIT_VALUE",
+        "value": 0
+      },
+      "outcome": "NOT_TESTED",
+      "reason": "not registered (failed the frozen parser), so not evaluated; and no frozen arm runs P2_SELF_BENEFIT_VALUE = 0",
+      "predictions": []
+    }
+  ],
+  "foresight": {
+    "validation": {
+      "A": {
+        "all": {
+          "moves": 147,
+          "realizedMean": 3.728,
+          "blindExpectedMean": 2.454,
+          "advantageMean": 1.274,
+          "advantageCi95": [
+            1.096,
+            1.45
+          ],
+          "meanPercentile": 0.753,
+          "scoredOnMove": 0,
+          "expectedScoresIfBlind": 0
+        },
+        "turn1": {
+          "moves": 32,
+          "realizedMean": 4.156,
+          "blindExpectedMean": 2.987,
+          "advantageMean": 1.169,
+          "advantageCi95": [
+            0.716,
+            1.569
+          ],
+          "meanPercentile": 0.73,
+          "scoredOnMove": 0,
+          "expectedScoresIfBlind": 0
+        }
+      },
+      "B": {
+        "all": {
+          "moves": 352,
+          "realizedMean": 2.486,
+          "blindExpectedMean": 2.479,
+          "advantageMean": 0.007,
+          "advantageCi95": [
+            -0.135,
+            0.147
+          ],
+          "meanPercentile": 0.502,
+          "scoredOnMove": 0,
+          "expectedScoresIfBlind": 0
+        },
+        "turn1": {
+          "moves": 118,
+          "realizedMean": 3.008,
+          "blindExpectedMean": 3.004,
+          "advantageMean": 0.004,
+          "advantageCi95": [
+            -0.236,
+            0.245
+          ],
+          "meanPercentile": 0.503,
+          "scoredOnMove": 0,
+          "expectedScoresIfBlind": 0
+        }
+      },
+      "C": {
+        "all": {
+          "moves": 189,
+          "realizedMean": 3.481,
+          "blindExpectedMean": 2.081,
+          "advantageMean": 1.401,
+          "advantageCi95": [
+            1.267,
+            1.53
+          ],
+          "meanPercentile": 0.773,
+          "scoredOnMove": 0,
+          "expectedScoresIfBlind": 0
+        },
+        "turn1": {
+          "moves": 9,
+          "realizedMean": 4.889,
+          "blindExpectedMean": 2.972,
+          "advantageMean": 1.917,
+          "advantageCi95": [
+            1.666,
+            2.073
+          ],
+          "meanPercentile": 0.884,
+          "scoredOnMove": 0,
+          "expectedScoresIfBlind": 0
+        }
+      },
+      "D": {
+        "all": {
+          "moves": 179,
+          "realizedMean": 3.609,
+          "blindExpectedMean": 2.196,
+          "advantageMean": 1.413,
+          "advantageCi95": [
+            1.271,
+            1.553
+          ],
+          "meanPercentile": 0.768,
+          "scoredOnMove": 0,
+          "expectedScoresIfBlind": 0
+        },
+        "turn1": {
+          "moves": 15,
+          "realizedMean": 4.533,
+          "blindExpectedMean": 3.01,
+          "advantageMean": 1.523,
+          "advantageCi95": [
+            1.23,
+            1.788
+          ],
+          "meanPercentile": 0.808,
+          "scoredOnMove": 0,
+          "expectedScoresIfBlind": 0
+        }
+      }
+    },
+    "screen": {
+      "all": {
+        "moves": 296,
+        "realizedMean": 3.422,
+        "blindExpectedMean": 2.336,
+        "advantageMean": 1.086,
+        "advantageCi95": [
+          0.942,
+          1.229
+        ],
+        "meanPercentile": 0.716,
+        "scoredOnMove": 0,
+        "expectedScoresIfBlind": 0
+      },
+      "turn1": {
+        "moves": 70,
+        "realizedMean": 3.914,
+        "blindExpectedMean": 3.017,
+        "advantageMean": 0.897,
+        "advantageCi95": [
+          0.525,
+          1.249
+        ],
+        "meanPercentile": 0.677,
+        "scoredOnMove": 0,
+        "expectedScoresIfBlind": 0
+      },
+      "C0": {
+        "all": {
+          "moves": 54,
+          "realizedMean": 3.5,
+          "blindExpectedMean": 2.433,
+          "advantageMean": 1.067,
+          "advantageCi95": [
+            0.71,
+            1.388
+          ],
+          "meanPercentile": 0.708,
+          "scoredOnMove": 0,
+          "expectedScoresIfBlind": 0
+        },
+        "turn1": {
+          "moves": 14,
+          "realizedMean": 3.929,
+          "blindExpectedMean": 3.039,
+          "advantageMean": 0.89,
+          "advantageCi95": [
+            0.045,
+            1.61
+          ],
+          "meanPercentile": 0.672,
+          "scoredOnMove": 0,
+          "expectedScoresIfBlind": 0
+        }
+      }
+    }
+  }
+}

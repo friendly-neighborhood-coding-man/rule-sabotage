@@ -1,4 +1,6 @@
-# Balance Designer V3: independent critical review
+# Balance Designer V3: independent critical review (of the 100-game screen)
+
+> Follow-up: the Kane call and the 240-game validation, with their own assessment, are in [BALANCE_V3_VALIDATION_RESULT.md](BALANCE_V3_VALIDATION_RESULT.md).
 
 Written against the evidence, not the plan. Verdicts: PASS, PARTIAL, FAIL, NOT_TESTED. Completing 100 games is
 not evidence of balanced gameplay, and this review does not treat it as such.

@@ -325,8 +325,9 @@ test('validation rules: prediction judge, paired seed bootstrap and Kane arm map
     { noteId: 'K2', registered: true, proposal: { kind: 'hypothesis', title: 't', intervention: { id: 'S3_FIRST_TURN_ACTIONS', value: 1 }, predictions: [{ metric: 'abs_first_mover_edge', direction: 'decrease', minEffect: 0.1 }] } },
     { noteId: 'K3', registered: false, proposal: { kind: 'hypothesis', title: 't', intervention: null, predictions: [] } },
   ], ev1.comparisons as never);
-  assert.equal(k.length, 2, 'unregistered entries are never evaluated');
-  assert.equal(k[0].comparison, 'B-A'); assert.equal(k[1].outcome, 'NOT_TESTED');
+  assert.equal(k.length, 3);
+  const un = k.find(x => x.noteId === 'K3')!; assert.equal(un.outcome, 'NOT_TESTED'); assert.match(String((un as { reason?: string }).reason), /not registered/); assert.equal(un.predictions.length, 0, 'unregistered entries are never evaluated');
+  assert.equal(k.find(x => x.noteId === 'K1')!.comparison, 'B-A'); assert.equal(k.find(x => x.noteId === 'K2')!.outcome, 'NOT_TESTED');
   const f = V.teleportForesight(gs.filter(g => g.row.condition === 'A').map(g => g.rec), 20);
   assert.ok(f.rows.every(r => r.pctile >= 0 && r.pctile <= 1));
 });

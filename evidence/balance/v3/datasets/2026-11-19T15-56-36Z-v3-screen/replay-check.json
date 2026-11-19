@@ -1,0 +1,1704 @@
+{
+  "note": "Every recorded placement and move re-executed through the real engine (no planner). Plus a complete planner re-run of the first game of every condition, compared field by field (except wall time).",
+  "engineReplays": [
+    {
+      "gameId": "A-62101-human",
+      "ok": true,
+      "problems": [],
+      "turns": 25,
+      "moves": 37
+    },
+    {
+      "gameId": "A-62101-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 11,
+      "moves": 21
+    },
+    {
+      "gameId": "A-62102-human",
+      "ok": true,
+      "problems": [],
+      "turns": 30,
+      "moves": 45
+    },
+    {
+      "gameId": "A-62102-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 9,
+      "moves": 19
+    },
+    {
+      "gameId": "A-62103-human",
+      "ok": true,
+      "problems": [],
+      "turns": 6,
+      "moves": 16
+    },
+    {
+      "gameId": "A-62103-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 11,
+      "moves": 22
+    },
+    {
+      "gameId": "A-62104-human",
+      "ok": true,
+      "problems": [],
+      "turns": 11,
+      "moves": 28
+    },
+    {
+      "gameId": "A-62104-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 25,
+      "moves": 30
+    },
+    {
+      "gameId": "A-62105-human",
+      "ok": true,
+      "problems": [],
+      "turns": 20,
+      "moves": 32
+    },
+    {
+      "gameId": "A-62105-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 8,
+      "moves": 17
+    },
+    {
+      "gameId": "A-62106-human",
+      "ok": true,
+      "problems": [],
+      "turns": 7,
+      "moves": 15
+    },
+    {
+      "gameId": "A-62106-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 13,
+      "moves": 21
+    },
+    {
+      "gameId": "A-62107-human",
+      "ok": true,
+      "problems": [],
+      "turns": 10,
+      "moves": 26
+    },
+    {
+      "gameId": "A-62107-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 9,
+      "moves": 19
+    },
+    {
+      "gameId": "A-62108-human",
+      "ok": true,
+      "problems": [],
+      "turns": 60,
+      "moves": 40
+    },
+    {
+      "gameId": "A-62108-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 20,
+      "moves": 38
+    },
+    {
+      "gameId": "A-62109-human",
+      "ok": true,
+      "problems": [],
+      "turns": 14,
+      "moves": 31
+    },
+    {
+      "gameId": "A-62109-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 19,
+      "moves": 29
+    },
+    {
+      "gameId": "A-62110-human",
+      "ok": true,
+      "problems": [],
+      "turns": 60,
+      "moves": 40
+    },
+    {
+      "gameId": "A-62110-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 26,
+      "moves": 40
+    },
+    {
+      "gameId": "A-62111-human",
+      "ok": true,
+      "problems": [],
+      "turns": 15,
+      "moves": 27
+    },
+    {
+      "gameId": "A-62111-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 11,
+      "moves": 21
+    },
+    {
+      "gameId": "A-62112-human",
+      "ok": true,
+      "problems": [],
+      "turns": 14,
+      "moves": 32
+    },
+    {
+      "gameId": "A-62112-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 11,
+      "moves": 25
+    },
+    {
+      "gameId": "A-62113-human",
+      "ok": true,
+      "problems": [],
+      "turns": 15,
+      "moves": 31
+    },
+    {
+      "gameId": "A-62113-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 11,
+      "moves": 18
+    },
+    {
+      "gameId": "A-62114-human",
+      "ok": true,
+      "problems": [],
+      "turns": 5,
+      "moves": 12
+    },
+    {
+      "gameId": "A-62114-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 8,
+      "moves": 19
+    },
+    {
+      "gameId": "A-62115-human",
+      "ok": true,
+      "problems": [],
+      "turns": 15,
+      "moves": 33
+    },
+    {
+      "gameId": "A-62115-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 12,
+      "moves": 24
+    },
+    {
+      "gameId": "A-62116-human",
+      "ok": true,
+      "problems": [],
+      "turns": 10,
+      "moves": 26
+    },
+    {
+      "gameId": "A-62116-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 15,
+      "moves": 27
+    },
+    {
+      "gameId": "A-62117-human",
+      "ok": true,
+      "problems": [],
+      "turns": 8,
+      "moves": 16
+    },
+    {
+      "gameId": "A-62117-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 9,
+      "moves": 18
+    },
+    {
+      "gameId": "A-62118-human",
+      "ok": true,
+      "problems": [],
+      "turns": 8,
+      "moves": 16
+    },
+    {
+      "gameId": "A-62118-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 14,
+      "moves": 25
+    },
+    {
+      "gameId": "A-62119-human",
+      "ok": true,
+      "problems": [],
+      "turns": 19,
+      "moves": 33
+    },
+    {
+      "gameId": "A-62119-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 10,
+      "moves": 19
+    },
+    {
+      "gameId": "A-62120-human",
+      "ok": true,
+      "problems": [],
+      "turns": 13,
+      "moves": 33
+    },
+    {
+      "gameId": "A-62120-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 8,
+      "moves": 19
+    },
+    {
+      "gameId": "A-62121-human",
+      "ok": true,
+      "problems": [],
+      "turns": 10,
+      "moves": 26
+    },
+    {
+      "gameId": "A-62121-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 11,
+      "moves": 24
+    },
+    {
+      "gameId": "A-62122-human",
+      "ok": true,
+      "problems": [],
+      "turns": 10,
+      "moves": 26
+    },
+    {
+      "gameId": "A-62122-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 9,
+      "moves": 19
+    },
+    {
+      "gameId": "A-62123-human",
+      "ok": true,
+      "problems": [],
+      "turns": 7,
+      "moves": 16
+    },
+    {
+      "gameId": "A-62123-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 12,
+      "moves": 22
+    },
+    {
+      "gameId": "A-62124-human",
+      "ok": true,
+      "problems": [],
+      "turns": 11,
+      "moves": 20
+    },
+    {
+      "gameId": "A-62124-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 8,
+      "moves": 17
+    },
+    {
+      "gameId": "A-62125-human",
+      "ok": true,
+      "problems": [],
+      "turns": 15,
+      "moves": 24
+    },
+    {
+      "gameId": "A-62125-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 4,
+      "moves": 12
+    },
+    {
+      "gameId": "A-62126-human",
+      "ok": true,
+      "problems": [],
+      "turns": 5,
+      "moves": 11
+    },
+    {
+      "gameId": "A-62126-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 12,
+      "moves": 23
+    },
+    {
+      "gameId": "A-62127-human",
+      "ok": true,
+      "problems": [],
+      "turns": 5,
+      "moves": 13
+    },
+    {
+      "gameId": "A-62127-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 11,
+      "moves": 21
+    },
+    {
+      "gameId": "A-62128-human",
+      "ok": true,
+      "problems": [],
+      "turns": 14,
+      "moves": 32
+    },
+    {
+      "gameId": "A-62128-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 15,
+      "moves": 28
+    },
+    {
+      "gameId": "A-62129-human",
+      "ok": true,
+      "problems": [],
+      "turns": 11,
+      "moves": 22
+    },
+    {
+      "gameId": "A-62129-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 9,
+      "moves": 19
+    },
+    {
+      "gameId": "A-62130-human",
+      "ok": true,
+      "problems": [],
+      "turns": 5,
+      "moves": 12
+    },
+    {
+      "gameId": "A-62130-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 8,
+      "moves": 19
+    },
+    {
+      "gameId": "B-62101-human",
+      "ok": true,
+      "problems": [],
+      "turns": 10,
+      "moves": 23
+    },
+    {
+      "gameId": "B-62101-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 19,
+      "moves": 34
+    },
+    {
+      "gameId": "B-62102-human",
+      "ok": true,
+      "problems": [],
+      "turns": 7,
+      "moves": 15
+    },
+    {
+      "gameId": "B-62102-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 8,
+      "moves": 18
+    },
+    {
+      "gameId": "B-62103-human",
+      "ok": true,
+      "problems": [],
+      "turns": 18,
+      "moves": 26
+    },
+    {
+      "gameId": "B-62103-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 13,
+      "moves": 24
+    },
+    {
+      "gameId": "B-62104-human",
+      "ok": true,
+      "problems": [],
+      "turns": 19,
+      "moves": 29
+    },
+    {
+      "gameId": "B-62104-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 11,
+      "moves": 19
+    },
+    {
+      "gameId": "B-62105-human",
+      "ok": true,
+      "problems": [],
+      "turns": 12,
+      "moves": 24
+    },
+    {
+      "gameId": "B-62105-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 8,
+      "moves": 17
+    },
+    {
+      "gameId": "B-62106-human",
+      "ok": true,
+      "problems": [],
+      "turns": 6,
+      "moves": 13
+    },
+    {
+      "gameId": "B-62106-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 20,
+      "moves": 30
+    },
+    {
+      "gameId": "B-62107-human",
+      "ok": true,
+      "problems": [],
+      "turns": 7,
+      "moves": 21
+    },
+    {
+      "gameId": "B-62107-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 12,
+      "moves": 24
+    },
+    {
+      "gameId": "B-62108-human",
+      "ok": true,
+      "problems": [],
+      "turns": 60,
+      "moves": 43
+    },
+    {
+      "gameId": "B-62108-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 60,
+      "moves": 27
+    },
+    {
+      "gameId": "B-62109-human",
+      "ok": true,
+      "problems": [],
+      "turns": 27,
+      "moves": 54
+    },
+    {
+      "gameId": "B-62109-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 13,
+      "moves": 25
+    },
+    {
+      "gameId": "B-62110-human",
+      "ok": true,
+      "problems": [],
+      "turns": 9,
+      "moves": 19
+    },
+    {
+      "gameId": "B-62110-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 7,
+      "moves": 17
+    },
+    {
+      "gameId": "B-62111-human",
+      "ok": true,
+      "problems": [],
+      "turns": 10,
+      "moves": 26
+    },
+    {
+      "gameId": "B-62111-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 8,
+      "moves": 19
+    },
+    {
+      "gameId": "B-62112-human",
+      "ok": true,
+      "problems": [],
+      "turns": 8,
+      "moves": 19
+    },
+    {
+      "gameId": "B-62112-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 13,
+      "moves": 26
+    },
+    {
+      "gameId": "B-62113-human",
+      "ok": true,
+      "problems": [],
+      "turns": 8,
+      "moves": 18
+    },
+    {
+      "gameId": "B-62113-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 10,
+      "moves": 20
+    },
+    {
+      "gameId": "B-62114-human",
+      "ok": true,
+      "problems": [],
+      "turns": 29,
+      "moves": 43
+    },
+    {
+      "gameId": "B-62114-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 60,
+      "moves": 31
+    },
+    {
+      "gameId": "B-62115-human",
+      "ok": true,
+      "problems": [],
+      "turns": 5,
+      "moves": 13
+    },
+    {
+      "gameId": "B-62115-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 11,
+      "moves": 23
+    },
+    {
+      "gameId": "B-62116-human",
+      "ok": true,
+      "problems": [],
+      "turns": 7,
+      "moves": 19
+    },
+    {
+      "gameId": "B-62116-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 17,
+      "moves": 31
+    },
+    {
+      "gameId": "B-62117-human",
+      "ok": true,
+      "problems": [],
+      "turns": 28,
+      "moves": 52
+    },
+    {
+      "gameId": "B-62117-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 7,
+      "moves": 17
+    },
+    {
+      "gameId": "B-62118-human",
+      "ok": true,
+      "problems": [],
+      "turns": 60,
+      "moves": 35
+    },
+    {
+      "gameId": "B-62118-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 6,
+      "moves": 17
+    },
+    {
+      "gameId": "B-62119-human",
+      "ok": true,
+      "problems": [],
+      "turns": 15,
+      "moves": 28
+    },
+    {
+      "gameId": "B-62119-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 10,
+      "moves": 23
+    },
+    {
+      "gameId": "B-62120-human",
+      "ok": true,
+      "problems": [],
+      "turns": 60,
+      "moves": 37
+    },
+    {
+      "gameId": "B-62120-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 17,
+      "moves": 30
+    },
+    {
+      "gameId": "B-62121-human",
+      "ok": true,
+      "problems": [],
+      "turns": 11,
+      "moves": 21
+    },
+    {
+      "gameId": "B-62121-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 19,
+      "moves": 28
+    },
+    {
+      "gameId": "B-62122-human",
+      "ok": true,
+      "problems": [],
+      "turns": 8,
+      "moves": 19
+    },
+    {
+      "gameId": "B-62122-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 5,
+      "moves": 13
+    },
+    {
+      "gameId": "B-62123-human",
+      "ok": true,
+      "problems": [],
+      "turns": 5,
+      "moves": 12
+    },
+    {
+      "gameId": "B-62123-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 11,
+      "moves": 29
+    },
+    {
+      "gameId": "B-62124-human",
+      "ok": true,
+      "problems": [],
+      "turns": 11,
+      "moves": 21
+    },
+    {
+      "gameId": "B-62124-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 15,
+      "moves": 32
+    },
+    {
+      "gameId": "B-62125-human",
+      "ok": true,
+      "problems": [],
+      "turns": 5,
+      "moves": 14
+    },
+    {
+      "gameId": "B-62125-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 28,
+      "moves": 32
+    },
+    {
+      "gameId": "B-62126-human",
+      "ok": true,
+      "problems": [],
+      "turns": 60,
+      "moves": 35
+    },
+    {
+      "gameId": "B-62126-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 6,
+      "moves": 15
+    },
+    {
+      "gameId": "B-62127-human",
+      "ok": true,
+      "problems": [],
+      "turns": 8,
+      "moves": 20
+    },
+    {
+      "gameId": "B-62127-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 8,
+      "moves": 19
+    },
+    {
+      "gameId": "B-62128-human",
+      "ok": true,
+      "problems": [],
+      "turns": 17,
+      "moves": 31
+    },
+    {
+      "gameId": "B-62128-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 9,
+      "moves": 21
+    },
+    {
+      "gameId": "B-62129-human",
+      "ok": true,
+      "problems": [],
+      "turns": 5,
+      "moves": 12
+    },
+    {
+      "gameId": "B-62129-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 6,
+      "moves": 14
+    },
+    {
+      "gameId": "B-62130-human",
+      "ok": true,
+      "problems": [],
+      "turns": 5,
+      "moves": 13
+    },
+    {
+      "gameId": "B-62130-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 15,
+      "moves": 25
+    },
+    {
+      "gameId": "C-62101-human",
+      "ok": true,
+      "problems": [],
+      "turns": 6,
+      "moves": 13
+    },
+    {
+      "gameId": "C-62101-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 7,
+      "moves": 15
+    },
+    {
+      "gameId": "C-62102-human",
+      "ok": true,
+      "problems": [],
+      "turns": 7,
+      "moves": 13
+    },
+    {
+      "gameId": "C-62102-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 10,
+      "moves": 23
+    },
+    {
+      "gameId": "C-62103-human",
+      "ok": true,
+      "problems": [],
+      "turns": 5,
+      "moves": 11
+    },
+    {
+      "gameId": "C-62103-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 12,
+      "moves": 20
+    },
+    {
+      "gameId": "C-62104-human",
+      "ok": true,
+      "problems": [],
+      "turns": 5,
+      "moves": 10
+    },
+    {
+      "gameId": "C-62104-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 5,
+      "moves": 10
+    },
+    {
+      "gameId": "C-62105-human",
+      "ok": true,
+      "problems": [],
+      "turns": 18,
+      "moves": 30
+    },
+    {
+      "gameId": "C-62105-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 18,
+      "moves": 33
+    },
+    {
+      "gameId": "C-62106-human",
+      "ok": true,
+      "problems": [],
+      "turns": 9,
+      "moves": 17
+    },
+    {
+      "gameId": "C-62106-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 9,
+      "moves": 18
+    },
+    {
+      "gameId": "C-62107-human",
+      "ok": true,
+      "problems": [],
+      "turns": 9,
+      "moves": 17
+    },
+    {
+      "gameId": "C-62107-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 14,
+      "moves": 26
+    },
+    {
+      "gameId": "C-62108-human",
+      "ok": true,
+      "problems": [],
+      "turns": 23,
+      "moves": 40
+    },
+    {
+      "gameId": "C-62108-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 14,
+      "moves": 19
+    },
+    {
+      "gameId": "C-62109-human",
+      "ok": true,
+      "problems": [],
+      "turns": 5,
+      "moves": 10
+    },
+    {
+      "gameId": "C-62109-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 8,
+      "moves": 19
+    },
+    {
+      "gameId": "C-62110-human",
+      "ok": true,
+      "problems": [],
+      "turns": 27,
+      "moves": 41
+    },
+    {
+      "gameId": "C-62110-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 7,
+      "moves": 14
+    },
+    {
+      "gameId": "C-62111-human",
+      "ok": true,
+      "problems": [],
+      "turns": 9,
+      "moves": 17
+    },
+    {
+      "gameId": "C-62111-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 5,
+      "moves": 10
+    },
+    {
+      "gameId": "C-62112-human",
+      "ok": true,
+      "problems": [],
+      "turns": 13,
+      "moves": 27
+    },
+    {
+      "gameId": "C-62112-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 5,
+      "moves": 10
+    },
+    {
+      "gameId": "C-62113-human",
+      "ok": true,
+      "problems": [],
+      "turns": 9,
+      "moves": 17
+    },
+    {
+      "gameId": "C-62113-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 14,
+      "moves": 26
+    },
+    {
+      "gameId": "C-62114-human",
+      "ok": true,
+      "problems": [],
+      "turns": 7,
+      "moves": 17
+    },
+    {
+      "gameId": "C-62114-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 18,
+      "moves": 24
+    },
+    {
+      "gameId": "C-62115-human",
+      "ok": true,
+      "problems": [],
+      "turns": 5,
+      "moves": 11
+    },
+    {
+      "gameId": "C-62115-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 7,
+      "moves": 13
+    },
+    {
+      "gameId": "C-62116-human",
+      "ok": true,
+      "problems": [],
+      "turns": 20,
+      "moves": 25
+    },
+    {
+      "gameId": "C-62116-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 23,
+      "moves": 34
+    },
+    {
+      "gameId": "C-62117-human",
+      "ok": true,
+      "problems": [],
+      "turns": 14,
+      "moves": 25
+    },
+    {
+      "gameId": "C-62117-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 60,
+      "moves": 24
+    },
+    {
+      "gameId": "C-62118-human",
+      "ok": true,
+      "problems": [],
+      "turns": 17,
+      "moves": 32
+    },
+    {
+      "gameId": "C-62118-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 8,
+      "moves": 14
+    },
+    {
+      "gameId": "C-62119-human",
+      "ok": true,
+      "problems": [],
+      "turns": 17,
+      "moves": 22
+    },
+    {
+      "gameId": "C-62119-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 60,
+      "moves": 27
+    },
+    {
+      "gameId": "C-62120-human",
+      "ok": true,
+      "problems": [],
+      "turns": 5,
+      "moves": 10
+    },
+    {
+      "gameId": "C-62120-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 9,
+      "moves": 17
+    },
+    {
+      "gameId": "C-62121-human",
+      "ok": true,
+      "problems": [],
+      "turns": 20,
+      "moves": 25
+    },
+    {
+      "gameId": "C-62121-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 18,
+      "moves": 31
+    },
+    {
+      "gameId": "C-62122-human",
+      "ok": true,
+      "problems": [],
+      "turns": 9,
+      "moves": 17
+    },
+    {
+      "gameId": "C-62122-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 8,
+      "moves": 20
+    },
+    {
+      "gameId": "C-62123-human",
+      "ok": true,
+      "problems": [],
+      "turns": 5,
+      "moves": 10
+    },
+    {
+      "gameId": "C-62123-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 15,
+      "moves": 32
+    },
+    {
+      "gameId": "C-62124-human",
+      "ok": true,
+      "problems": [],
+      "turns": 60,
+      "moves": 18
+    },
+    {
+      "gameId": "C-62124-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 11,
+      "moves": 22
+    },
+    {
+      "gameId": "C-62125-human",
+      "ok": true,
+      "problems": [],
+      "turns": 60,
+      "moves": 22
+    },
+    {
+      "gameId": "C-62125-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 9,
+      "moves": 17
+    },
+    {
+      "gameId": "C-62126-human",
+      "ok": true,
+      "problems": [],
+      "turns": 5,
+      "moves": 10
+    },
+    {
+      "gameId": "C-62126-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 12,
+      "moves": 17
+    },
+    {
+      "gameId": "C-62127-human",
+      "ok": true,
+      "problems": [],
+      "turns": 13,
+      "moves": 28
+    },
+    {
+      "gameId": "C-62127-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 17,
+      "moves": 30
+    },
+    {
+      "gameId": "C-62128-human",
+      "ok": true,
+      "problems": [],
+      "turns": 12,
+      "moves": 23
+    },
+    {
+      "gameId": "C-62128-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 5,
+      "moves": 11
+    },
+    {
+      "gameId": "C-62129-human",
+      "ok": true,
+      "problems": [],
+      "turns": 20,
+      "moves": 38
+    },
+    {
+      "gameId": "C-62129-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 19,
+      "moves": 35
+    },
+    {
+      "gameId": "C-62130-human",
+      "ok": true,
+      "problems": [],
+      "turns": 7,
+      "moves": 12
+    },
+    {
+      "gameId": "C-62130-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 9,
+      "moves": 17
+    },
+    {
+      "gameId": "D-62101-human",
+      "ok": true,
+      "problems": [],
+      "turns": 6,
+      "moves": 13
+    },
+    {
+      "gameId": "D-62101-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 5,
+      "moves": 10
+    },
+    {
+      "gameId": "D-62102-human",
+      "ok": true,
+      "problems": [],
+      "turns": 10,
+      "moves": 17
+    },
+    {
+      "gameId": "D-62102-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 19,
+      "moves": 30
+    },
+    {
+      "gameId": "D-62103-human",
+      "ok": true,
+      "problems": [],
+      "turns": 7,
+      "moves": 15
+    },
+    {
+      "gameId": "D-62103-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 12,
+      "moves": 20
+    },
+    {
+      "gameId": "D-62104-human",
+      "ok": true,
+      "problems": [],
+      "turns": 5,
+      "moves": 10
+    },
+    {
+      "gameId": "D-62104-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 5,
+      "moves": 10
+    },
+    {
+      "gameId": "D-62105-human",
+      "ok": true,
+      "problems": [],
+      "turns": 60,
+      "moves": 23
+    },
+    {
+      "gameId": "D-62105-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 13,
+      "moves": 29
+    },
+    {
+      "gameId": "D-62106-human",
+      "ok": true,
+      "problems": [],
+      "turns": 7,
+      "moves": 14
+    },
+    {
+      "gameId": "D-62106-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 12,
+      "moves": 19
+    },
+    {
+      "gameId": "D-62107-human",
+      "ok": true,
+      "problems": [],
+      "turns": 7,
+      "moves": 16
+    },
+    {
+      "gameId": "D-62107-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 14,
+      "moves": 26
+    },
+    {
+      "gameId": "D-62108-human",
+      "ok": true,
+      "problems": [],
+      "turns": 19,
+      "moves": 40
+    },
+    {
+      "gameId": "D-62108-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 60,
+      "moves": 31
+    },
+    {
+      "gameId": "D-62109-human",
+      "ok": true,
+      "problems": [],
+      "turns": 10,
+      "moves": 20
+    },
+    {
+      "gameId": "D-62109-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 8,
+      "moves": 19
+    },
+    {
+      "gameId": "D-62110-human",
+      "ok": true,
+      "problems": [],
+      "turns": 7,
+      "moves": 20
+    },
+    {
+      "gameId": "D-62110-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 60,
+      "moves": 37
+    },
+    {
+      "gameId": "D-62111-human",
+      "ok": true,
+      "problems": [],
+      "turns": 3,
+      "moves": 7
+    },
+    {
+      "gameId": "D-62111-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 5,
+      "moves": 10
+    },
+    {
+      "gameId": "D-62112-human",
+      "ok": true,
+      "problems": [],
+      "turns": 16,
+      "moves": 27
+    },
+    {
+      "gameId": "D-62112-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 5,
+      "moves": 10
+    },
+    {
+      "gameId": "D-62113-human",
+      "ok": true,
+      "problems": [],
+      "turns": 9,
+      "moves": 17
+    },
+    {
+      "gameId": "D-62113-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 11,
+      "moves": 25
+    },
+    {
+      "gameId": "D-62114-human",
+      "ok": true,
+      "problems": [],
+      "turns": 6,
+      "moves": 11
+    },
+    {
+      "gameId": "D-62114-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 14,
+      "moves": 23
+    },
+    {
+      "gameId": "D-62115-human",
+      "ok": true,
+      "problems": [],
+      "turns": 9,
+      "moves": 19
+    },
+    {
+      "gameId": "D-62115-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 7,
+      "moves": 13
+    },
+    {
+      "gameId": "D-62116-human",
+      "ok": true,
+      "problems": [],
+      "turns": 10,
+      "moves": 22
+    },
+    {
+      "gameId": "D-62116-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 23,
+      "moves": 34
+    },
+    {
+      "gameId": "D-62117-human",
+      "ok": true,
+      "problems": [],
+      "turns": 12,
+      "moves": 21
+    },
+    {
+      "gameId": "D-62117-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 13,
+      "moves": 23
+    },
+    {
+      "gameId": "D-62118-human",
+      "ok": true,
+      "problems": [],
+      "turns": 60,
+      "moves": 33
+    },
+    {
+      "gameId": "D-62118-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 24,
+      "moves": 33
+    },
+    {
+      "gameId": "D-62119-human",
+      "ok": true,
+      "problems": [],
+      "turns": 7,
+      "moves": 13
+    },
+    {
+      "gameId": "D-62119-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 13,
+      "moves": 29
+    },
+    {
+      "gameId": "D-62120-human",
+      "ok": true,
+      "problems": [],
+      "turns": 23,
+      "moves": 45
+    },
+    {
+      "gameId": "D-62120-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 9,
+      "moves": 17
+    },
+    {
+      "gameId": "D-62121-human",
+      "ok": true,
+      "problems": [],
+      "turns": 18,
+      "moves": 25
+    },
+    {
+      "gameId": "D-62121-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 17,
+      "moves": 30
+    },
+    {
+      "gameId": "D-62122-human",
+      "ok": true,
+      "problems": [],
+      "turns": 7,
+      "moves": 14
+    },
+    {
+      "gameId": "D-62122-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 8,
+      "moves": 20
+    },
+    {
+      "gameId": "D-62123-human",
+      "ok": true,
+      "problems": [],
+      "turns": 5,
+      "moves": 10
+    },
+    {
+      "gameId": "D-62123-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 13,
+      "moves": 29
+    },
+    {
+      "gameId": "D-62124-human",
+      "ok": true,
+      "problems": [],
+      "turns": 10,
+      "moves": 16
+    },
+    {
+      "gameId": "D-62124-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 11,
+      "moves": 22
+    },
+    {
+      "gameId": "D-62125-human",
+      "ok": true,
+      "problems": [],
+      "turns": 60,
+      "moves": 22
+    },
+    {
+      "gameId": "D-62125-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 13,
+      "moves": 29
+    },
+    {
+      "gameId": "D-62126-human",
+      "ok": true,
+      "problems": [],
+      "turns": 5,
+      "moves": 10
+    },
+    {
+      "gameId": "D-62126-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 12,
+      "moves": 18
+    },
+    {
+      "gameId": "D-62127-human",
+      "ok": true,
+      "problems": [],
+      "turns": 20,
+      "moves": 38
+    },
+    {
+      "gameId": "D-62127-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 17,
+      "moves": 29
+    },
+    {
+      "gameId": "D-62128-human",
+      "ok": true,
+      "problems": [],
+      "turns": 13,
+      "moves": 22
+    },
+    {
+      "gameId": "D-62128-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 5,
+      "moves": 11
+    },
+    {
+      "gameId": "D-62129-human",
+      "ok": true,
+      "problems": [],
+      "turns": 12,
+      "moves": 27
+    },
+    {
+      "gameId": "D-62129-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 11,
+      "moves": 26
+    },
+    {
+      "gameId": "D-62130-human",
+      "ok": true,
+      "problems": [],
+      "turns": 7,
+      "moves": 12
+    },
+    {
+      "gameId": "D-62130-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 9,
+      "moves": 17
+    }
+  ],
+  "plannerReruns": [
+    {
+      "gameId": "A-62101-human",
+      "identical": true
+    },
+    {
+      "gameId": "B-62101-human",
+      "identical": true
+    },
+    {
+      "gameId": "C-62101-human",
+      "identical": true
+    },
+    {
+      "gameId": "D-62101-human",
+      "identical": true
+    }
+  ],
+  "plannerRerunNote": "4 verification re-runs: same seeds as dataset games, NOT new dataset games"
+}

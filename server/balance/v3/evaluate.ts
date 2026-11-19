@@ -151,7 +151,11 @@ export const KANE_ARM_RULES: { intervention: string; when?: (v: unknown) => bool
   { intervention: 'S1_PIECES', when: v => !!v && (v as { firstMover: number }).firstMover === 2 && (v as { secondMover: number }).secondMover === 3, comparison: 'C-A', note: 'arm C is the 2/3 start, arm A the 3/3 control' },
 ];
 export function mapKane(entries: { noteId: string; registered: boolean; proposal: { kind: string; title: string; intervention: { id: string; value: unknown } | null; predictions: { metric: string; direction: 'increase' | 'decrease' | 'no-change'; minEffect: number }[] } }[], comparisons: Record<string, Record<string, ReturnType<typeof pairedDiff>>>) {
-  return entries.filter(e => e.registered && e.proposal.kind === 'hypothesis').map(e => {
+  const unregistered = entries.filter(e => !e.registered).map(e => {
+    const iv = e.proposal.intervention, rule = iv ? KANE_ARM_RULES.find(r => r.intervention === iv.id && (!r.when || r.when(iv.value))) : undefined;
+    return { noteId: e.noteId, title: e.proposal.title, intervention: iv, outcome: 'NOT_TESTED', reason: `not registered (failed the frozen parser), so not evaluated; ${iv ? (rule ? `its intervention ${iv.id} WOULD map to ${rule.comparison}` : `and no frozen arm runs ${iv.id}${iv.value !== undefined ? ` = ${JSON.stringify(iv.value)}` : ''}`) : 'no intervention named'}`, predictions: [] };
+  });
+  return [...unregistered, ...entries.filter(e => e.registered && e.proposal.kind === 'hypothesis').map(e => {
     const iv = e.proposal.intervention;
     const rule = iv ? KANE_ARM_RULES.find(r => r.intervention === iv.id && (!r.when || r.when(iv.value))) : undefined;
     if (!rule) return { noteId: e.noteId, title: e.proposal.title, intervention: iv, outcome: 'NOT_TESTED', reason: iv ? `no frozen arm runs ${iv.id}${iv.value !== undefined ? ` = ${JSON.stringify(iv.value)}` : ''}` : 'no intervention named, and no frozen comparison is an observational test of a direction claim', predictions: [] };
@@ -161,7 +165,7 @@ export function mapKane(entries: { noteId: string; registered: boolean; proposal
       return { ...p, comparison: rule.comparison, treated: c.treated, control: c.control, diff: c.diff, ci95: c.ci95, ...judge({ ...p, comparison: rule.comparison }, c.diff, c.ci95) };
     });
     return { noteId: e.noteId, title: e.proposal.title, intervention: iv, comparison: rule.comparison, note: rule.note, outcome: combine(preds.map(p => p.status)), predictions: preds };
-  });
+  })];
 }
 
 /** Static page of the preregistered evaluation (no scripts). */

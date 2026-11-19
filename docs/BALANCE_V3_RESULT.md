@@ -1,6 +1,8 @@
 # Balance Designer V3: the 100-game starting-condition screen
 
-**Status: READY_FOR_OPERATOR_V3_KANE_RESEARCH_REVIEW.** Exploratory evidence only: nothing was promoted, production
+> **Superseded status:** after this screen, the authorised Kane call and the 240-game validation ran; see [BALANCE_V3_VALIDATION_RESULT.md](BALANCE_V3_VALIDATION_RESULT.md). The C4 signal below did **not** replicate on fresh seeds.
+
+**Status at the time of the screen: READY_FOR_OPERATOR_V3_KANE_RESEARCH_REVIEW.** Exploratory evidence only: nothing was promoted, production
 is unchanged (3 versus 3), Kane was not called.
 
 | | |
