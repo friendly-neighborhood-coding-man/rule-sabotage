@@ -224,3 +224,110 @@ test('production isolation: game.ts / server.ts never reach the candidate; selfp
   assert.ok(!/evplanner|planTurnEV|ev-v4/.test(readFileSync(join(ROOT, 'server/game.ts'), 'utf8')));
   assert.match(V4.evPlannerHash(), /^[0-9a-f]{16}$/);
 });
+
+// ---------------- Kane normalization (stored KX3 submissions only) ----------------
+
+const N = await import('../server/balance/v4/normalize.ts');
+const KR = await import('../server/balance/v4/kanereplay.ts');
+const { createHash } = await import('node:crypto');
+test('KX3 replay: originals untouched, 2 validated, 3 need an operator decision, historical V3 result unchanged', () => {
+  const shaOf = (f: string) => createHash('sha256').update(readFileSync(join(ROOT, f))).digest('hex');
+  const files = [`${KR.KX3_DIR}/kane-notes.ndjson`, `${KR.KX3_DIR}/kane-v3-entries.json`, 'balance/v3/kane-proposals.json'];
+  const before = files.map(shaOf);
+  const d = KR.replayKaneKX3(false);
+  assert.deepEqual(files.map(shaOf), before);
+  assert.equal(d.source.notesSha256, 'bd6f344f936ab126eed9179925bbe2995e4db1eed99c59f3970465b0b5dcd793');
+  const st = Object.fromEntries(d.records.map(r => [r.noteId, r.status]));
+  assert.deepEqual(st, { 'KX3-N1': 'VALIDATED_PROPOSAL', 'KX3-N2': 'REJECTED_AMBIGUOUS', 'KX3-N3': 'VALIDATED_PROPOSAL', 'KX3-N4': 'REJECTED_AMBIGUOUS', 'KX3-N5': 'REJECTED_AMBIGUOUS' });
+  const stored = JSON.parse(readFileSync(join(ROOT, `${KR.KX3_DIR}/kane-v3-entries.json`), 'utf8')) as { noteId: string; rawBody: string }[];
+  for (const r of d.records) {
+    assert.equal(r.provenanceCheck, 'PASS (raw file sha256, note id, real CLI)');
+    assert.equal(r.provenance.humanApprovedExperiment, null);
+    assert.equal(r.raw.rawBody, stored.find(e => e.noteId === r.noteId)!.rawBody, 'raw words kept verbatim');
+    const text = new URLSearchParams(r.raw.rawBody).get('structured')!;
+    for (const s of r.candidate.steps) assert.ok(text.includes(String(s.original).slice(0, 40)), `original words of ${s.field} are Kane's`);
+  }
+  const n1 = d.records.find(r => r.noteId === 'KX3-N1')!;
+  assert.deepEqual(n1.testablePredictions, [{ metric: 'first_mover_win_rate', direction: 'decrease', minEffect: 0.15 }, { metric: 'turn1_score_rate', direction: 'decrease', minEffect: 0.1 }]);
+  assert.deepEqual(n1.validated!.intervention, { id: 'S3_FIRST_TURN_ACTIONS', value: 1 });
+  const n5 = d.records.find(r => r.noteId === 'KX3-N5')!;
+  assert.deepEqual(n5.candidate.issues.find(i => i.field === 'prediction1.metric')!.operatorCandidates, ['conveyor_per_game'], 'near miss listed, not substituted');
+  assert.equal(n5.candidate.proposal.predictions.length, 0, 'nothing invented');
+  const v3 = JSON.parse(readFileSync(join(ROOT, 'balance/v3/kane-proposals.json'), 'utf8'));
+  assert.equal(v3.entries.filter((e: { registered: boolean }) => e.registered).length, 0, 'V3 historical result: 0 of 5 registered');
+});
+
+test('normalizer rules: labels resolve only when unique; ambiguity, contradictions, unknown ids, bad values and unknown games are refused', () => {
+  const prov = { origin: 'operator' as const, author: 'test', note: 'unit test' };
+  const games = new Set(['G1', 'G2']);
+  const mk = (lines: string[]) => ({ noteId: 'T', receivedAt: 'now', rawBody: new URLSearchParams({ nonce: 'x', structured: lines.join('\n') }).toString() });
+  const base = ['entry: hypothesis', 'title: t', 'cause: planner', 'explanation: a long enough explanation of the mechanism here', 'evidence: G1', 'intervention: S3_FIRST_TURN_ACTIONS', 'value: 1', 'competing: other'];
+  const run = (lines: string[]) => N.normalizeEntry(mk(lines), { provenance: prov, gameIds: games, datasetHash: 'h', id: 'X' });
+  const sub = (from: string, to: string) => base.map(l => l.replace(from, to));
+  assert.equal(run([...base, 'prediction1: Mean game length (turns) increase 2']).status, 'VALIDATED_PROPOSAL');
+  assert.equal(run([...base, 'prediction1: mean game length (TURNS). increase 2']).candidate.proposal.predictions[0]?.metric, 'mean_turns', 'case / spacing / trailing punctuation');
+  assert.equal(run([...base, 'prediction1: game length increase 2']).status, 'REJECTED_AMBIGUOUS', 'near miss is not substituted');
+  assert.equal(run([...base, 'prediction1: banana_rate increase 2']).status, 'REJECTED_INVALID', 'unknown metric');
+  assert.equal(run([...base, 'prediction1: mean_turns increase -2']).status, 'REJECTED_INVALID', 'negative size');
+  assert.equal(run([...base, 'prediction1: mean_turns goes up a lot']).status, 'REJECTED_INVALID', 'no quantity');
+  assert.equal(run(base).status, 'REJECTED_INVALID', 'missing prediction is not invented');
+  assert.equal(run([...sub('value: 1', 'value: 9'), 'prediction1: mean_turns increase 2']).status, 'REJECTED_INVALID', 'value outside catalog bounds');
+  assert.equal(run([...sub('S3_FIRST_TURN_ACTIONS', 'X9_MAGIC'), 'prediction1: mean_turns increase 2']).status, 'REJECTED_INVALID', 'unknown intervention');
+  assert.equal(run([...sub('evidence: G1', 'evidence: G1 G9'), 'prediction1: mean_turns increase 2']).status, 'REJECTED_INVALID', 'unknown game id');
+  assert.equal(run([...base, 'prediction1: mean_turns increase 2', 'verdict: more evidence is needed, although no change is justified']).status, 'REJECTED_AMBIGUOUS', 'contradictory verdict');
+  const c = run([...sub('entry: hypothesis', 'entry: conclusion').map(l => l.replace('cause: planner', 'cause: tempo and incentives')), 'verdict: No change is justified yet']);
+  assert.equal(c.status, 'VALIDATED_PROPOSAL'); assert.equal(c.validated!.verdict, 'no-change-justified'); assert.equal(c.validated!.cause, 'tempo and incentives', 'conclusion keeps its free-text cause verbatim');
+  assert.equal(run([...sub('cause: planner', 'cause: the AI planner (how it searches or values moves)'), 'prediction1: mean_turns increase 2']).candidate.proposal.cause, 'planner', 'cause display label');
+});
+
+// ---------------- Kane credit safety (test doubles only: no Kane call) ----------------
+
+const KB = await import('../server/balance/v4/kanebudget.ts');
+const FS = await import('node:fs');
+const { tmpdir } = await import('node:os');
+test('credit safety: disabled by default, then every pre-call rule, exceedance, unknown spend, timeout and no-retry', async () => {
+  const dir = FS.mkdtempSync(join(tmpdir(), 'rs-kb-'));
+  const ledgerFile = join(dir, 'ledger.ndjson');
+  let bal: number | null = 1000, cost = 10, execs = 0;
+  type D = Parameters<typeof KB.runPaidCall>[2];
+  const deps = (o: Partial<D> = {}): D => ({ ledgerFile, env: { KANE_PAID_RUN_AUTH: 'R1' }, isRealCli: async () => true, balance: async () => bal, exec: async () => { execs++; if (bal !== null) bal -= cost; return { timedOut: false, exitCode: 0 }; }, mode: 'per-run-approval', ...o });
+  const ap = (o: Record<string, unknown> = {}) => ({ runId: 'R1', approvedBy: 'op', approvedAt: 'now', maxCalls: 1 as const, maxSteps: 20, ceilingCredits: 80, acknowledgesNoHardCap: true as const, ...o }) as import('../server/balance/v4/kanebudget.ts').PaidApproval;
+  const plan = { maxSteps: 20, timeoutS: 600 };
+  const refused = (p: Promise<unknown>, re: RegExp) => assert.rejects(p, (e: Error) => e instanceof KB.PaidCallRefused && re.test(e.message));
+  assert.equal(KB.PAID_RESEARCH_EXECUTION, 'disabled', 'disabled in this workstream');
+  await refused(KB.runPaidCall(ap(), plan, { ...deps(), mode: undefined }), /disabled/);
+  await refused(KB.runPaidCall(null, plan, deps()), /no per-run approval/);
+  await refused(KB.runPaidCall(ap({ acknowledgesNoHardCap: false }), plan, deps()), /not a hard cap/);
+  await refused(KB.runPaidCall(ap(), plan, deps({ env: {} })), /KANE_PAID_RUN_AUTH/);
+  await refused(KB.runPaidCall(ap(), plan, deps({ isRealCli: async () => false })), /not the real CLI/);
+  bal = null; await refused(KB.runPaidCall(ap(), plan, deps()), /balance unavailable/); bal = 1000;
+  await refused(KB.runPaidCall(ap({ maxSteps: 35 }), { maxSteps: 35, timeoutS: 600 }, deps()), /local estimate 108\.5 .*exceeds the 80-credit ceiling/);
+  assert.equal(execs, 0, 'no process for any refusal');
+  // within the local estimate, but the real spend exceeds the ceiling (the V3 KX3 case)
+  cost = 107.934;
+  const r = await KB.runPaidCall(ap(), plan, deps());
+  assert.equal(r.outcome, 'CEILING_EXCEEDED'); assert.equal(r.used, 107.934); assert.equal(r.capKind, 'local-estimate-not-enforced'); assert.equal(execs, 1);
+  await refused(KB.runPaidCall(ap({ runId: 'R2' }), plan, deps({ env: { KANE_PAID_RUN_AUTH: 'R2' } })), /exceeded its ceiling/);
+  // operator clears; the same run id still can never call again (no retry)
+  FS.appendFileSync(ledgerFile, JSON.stringify({ at: new Date(Date.now() + 1000).toISOString(), runId: 'R1', event: 'operator-clear', detail: {} }) + '\n');
+  await refused(KB.runPaidCall(ap(), plan, deps({ now: () => new Date(Date.now() + 1500).toISOString() })), /already started a call/);
+  // timeout + unreadable balance afterwards = unknown spend, which also blocks further calls
+  cost = 5;
+  const t = await KB.runPaidCall(ap({ runId: 'R3' }), plan, deps({ env: { KANE_PAID_RUN_AUTH: 'R3' }, now: () => new Date(Date.now() + 2000).toISOString(), exec: async () => { execs++; bal = null; return { timedOut: true, exitCode: null }; } }));
+  assert.equal(t.timedOut, true); assert.equal(t.outcome, 'SPEND_UNKNOWN');
+  bal = 1000;
+  await refused(KB.runPaidCall(ap({ runId: 'R4' }), plan, deps({ env: { KANE_PAID_RUN_AUTH: 'R4' }, now: () => new Date(Date.now() + 3000).toISOString() })), /unknown spend/);
+  assert.equal(execs, 2);
+});
+
+test('a REAL-looking kane-cli research run is refused before any paid process starts (test double posing as real)', async () => {
+  const dir = FS.mkdtempSync(join(tmpdir(), 'rs-kb2-')), count = join(dir, 'count.txt');
+  const saved = { ...process.env };
+  Object.assign(process.env, { KANE_REFEREE: 'on', KANE_CLI: join(ROOT, 'tests/fixtures/fake-kane.mjs'), FAKE_KANE_VERSION: '0.10.4', FAKE_KANE_COUNT_FILE: count });
+  try {
+    const { kaneVerify } = await import('../server/kane.ts');
+    const r = await kaneVerify({ url: 'http://127.0.0.1:9/', conditions: ['x'], dir });
+    assert.match(r.detail, /Paid Kane call refused/);
+    assert.ok(!FS.existsSync(count), 'the CLI was never asked to run');
+  } finally { for (const k of Object.keys(process.env)) if (!(k in saved)) delete process.env[k]; Object.assign(process.env, saved); }
+});

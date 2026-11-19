@@ -299,6 +299,9 @@ export async function kaneVerify(opts: { url: string; conditions: string[]; dir:
     return r;
   };
   if (!probe.installed || probe.loggedIn === false) { r.detail = `Kane unavailable: ${probe.detail}`; return done(); }
+  // V4 credit safety (research path only; kaneJudge, the game referee, is not affected): a REAL kane-cli run needs the paid-call token.
+  const { paidCallTokenActive } = await import('./balance/v4/kanebudget.ts');
+  if (!r.isTestDouble && !paidCallTokenActive()) { r.detail = 'Paid Kane call refused (V4 credit safety: paid research calls are disabled by default).'; return done(); }
   let browser: Awaited<ReturnType<typeof openChrome>> | null = null;
   let out: Awaited<ReturnType<typeof runCapture>>;
   try {
