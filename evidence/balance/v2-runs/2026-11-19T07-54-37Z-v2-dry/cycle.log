@@ -1,0 +1,51 @@
+[07:54:38] Balance Designer V2 2026-11-19T07-54-37Z-v2-dry (DRY-RUN) · dashboard http://127.0.0.1:4200/ · commit 17bd7179cd · engine 5b79cac132ecdfbd · weights 0.3.0#ddcf941c285bd537
+[07:54:38] DRY-RUN: kane-cli will NOT be invoked. Kane stages are SKIPPED, no finding is attributed to Kane, every adequacy verdict stays UNVERIFIED.
+[07:54:38] ▶ Observation (V1 evidence (hash-verified) + planner traces)
+[07:54:38] V1 evidence verified (24 games). Observed: teleport self-trigger share 0.879, east/west shove self-trigger share 0.885, teleport benefit to activator 3.414 squares.
+[07:55:32] ✔ Observation: V1 evidence hash-verified; 24 games; replays reproduce the recorded games
+[07:55:32] ▶ Kane exploration (real kane-cli objective mode: Kane proposes explanations)
+[07:55:32] ○ Kane exploration: dry-run: kane-cli not invoked. Fallback: only the labelled operator/Claude hypotheses are tested; nothing is attributed to Kane.
+[07:55:32] ▶ Competing hypotheses (pre-registered contracts (before any result))
+[07:55:32]   registered H0 [operator] No actionable defect: self-boosting is rational play · hash 69f751f4f5440622 · journal #5
+[07:55:32]   registered H1 [operator] Intrinsic rule geometry favours forward progress · hash e3cbb140896aa952 · journal #6
+[07:55:32]   registered H2 [operator] Planner exploitation through its own valuation · hash 36fafec1221760e4 · journal #7
+[07:55:32]   registered H3 [operator] Placement search bias towards self-beneficial cells · hash f7418dc91124096e · journal #8
+[07:55:32]   registered H4 [operator] Valuation or calibration error in the V0.3 weights · hash cd7c490ee321b27b · journal #9
+[07:55:32]   registered H5 [claude] The planner foresees 'random' teleport destinations · hash f1aadf633e5b9099 · journal #10
+[07:55:32] ✔ Competing hypotheses: 6 contracts registered before any experiment result (H0:operator, H1:operator, H2:operator, H3:operator, H4:operator, H5:claude); holdout sealed
+[07:55:32] ▶ Controlled experiments (real engine + planner, one factor each, development seeds)
+[07:56:40]   C0/selfplay/development: 32 games, manipulation OK (control)
+[07:57:11]   E1a/selfplay/development: 32 games, manipulation OK (15/32 games diverged from their control game (median first divergence turn 3))
+[07:57:51]   E1b/selfplay/development: 32 games, manipulation OK (30/32 games diverged from their control game (median first divergence turn 5))
+[07:59:14]   E2/head-to-head/development: 32 games, manipulation OK (treated planner on both sides and both first-player orders; hooks recorded on every game: true)
+[08:00:38]   E2/selfplay/development: 32 games, manipulation OK (32/32 games diverged from their control game (median first divergence turn 3))
+[08:01:05]   E3/selfplay/development: 32 games, manipulation OK (32/32 games diverged from their control game (median first divergence turn 1))
+[08:01:42]   E4/selfplay/development: 32 games, manipulation OK (7 teleports, 0 changed the distance to goal; variant tag on every game: true)
+[08:02:49]   E5/head-to-head/development: 32 games, manipulation OK (treated planner on both sides and both first-player orders; hooks recorded on every game: true)
+[08:03:33]   E5/selfplay/development: 32 games, manipulation OK (32/32 games diverged from their control game (median first divergence turn 1))
+[08:03:33] ✔ Controlled experiments: 9 conditions, 290 games so far (seeds 3100–3115; head-to-head on 8 seeds)
+[08:03:33] ▶ Hypothesis evaluation (pre-registered predictions with uncertainty)
+[08:03:33]   H0: INCONCLUSIVE — P0a: unclear (effect -0.031 [95% CI -0.125, 0.063], material = 0.08)
+[08:03:33]   H1: INCONCLUSIVE — P1b: unclear (too few underlying events (6 < 20); an interval over so few events is not judged)
+[08:03:33]   H2: REFUTED — primary prediction contradicted: P2a (effect 0.034 [95% CI -0.027, 0.088], material = 0.15)
+[08:03:34]   H3: SUPPORTED — every primary and discriminating prediction held on these seeds (support, not proof)
+[08:03:34]   H4: REFUTED — primary prediction contradicted: P4a (effect -0.016 [95% CI -0.090, 0.065], material = 0.1)
+[08:03:34]   H5: REFUTED — primary prediction contradicted: P5b (effect 0.000 [95% CI 0.000, 0.000], material = 0.1)
+[08:03:34] ✔ Hypothesis evaluation: H0 INCONCLUSIVE · H1 INCONCLUSIVE · H2 REFUTED · H3 SUPPORTED · H4 REFUTED · H5 REFUTED
+[08:03:34] ▶ Kane challenge (real kane-cli analyzer: independent raw-row conditions)
+[08:03:34] ○ Kane challenge: dry-run: kane-cli not invoked; outcomes stay as evaluated, Kane corroboration UNVERIFIED
+[08:03:34] ▶ Corrections (typed, allowlisted, from surviving hypotheses only)
+[08:03:34] ✔ Corrections: K1 planner/REVIEW_REQUIRED: planner placement search only: own-piece benefit no longer makes a cell a candidate
+[08:03:34] ▶ Re-observation (unsealed holdout seeds, never used before)
+[08:04:06]   C0/selfplay/holdout: 32 games, manipulation OK (control)
+[08:04:51]   K1/selfplay/holdout: 32 games, manipulation OK (32/32 games diverged from their control game (median first divergence turn 1))
+[08:05:31]   K1/head-to-head/holdout: 32 games, manipulation OK (treated planner on both sides and both first-player orders; hooks recorded on every game: true)
+[08:05:31] ✔ Re-observation: holdout 7000–7015 unsealed once (commitment verified); 1 correction(s) re-observed
+[08:05:31] ▶ Adequacy review (implementation correctness vs balance adequacy)
+[08:05:42]   K1: implementation UNVERIFIED, adequacy REGRESSION (provisional REGRESSION) — Unacceptable deterioration: game length changed 11.969 turns; draws/turn-limit endings up 0.156
+[08:05:42] ✔ Adequacy review: K1: impl UNVERIFIED / adequacy REGRESSION (provisional REGRESSION)
+[08:05:42] ▶ Decision (proposal / review-required / no change (never applied to production))
+[08:05:42] ✔ Decision: NO CORRECTION PROMOTED (K1 REGRESSION)
+[08:05:42] Journal evidence\balance\v2-runs\2026-11-19T07-54-37Z-v2-dry\journal.ndjson: 36 entries, hash chain verified
+[08:05:42] ■ READY_FOR_OPERATOR_REAL_KANE_V2
+[08:05:42] Dashboard stays open at http://127.0.0.1:4200/ (Ctrl+C to stop)

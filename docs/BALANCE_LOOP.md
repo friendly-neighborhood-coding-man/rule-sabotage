@@ -1,5 +1,7 @@
 # Living Balance Loop V1
 
+> **V2:** the hypothesis-driven successor is documented in [BALANCE_DESIGNER_V2.md](BALANCE_DESIGNER_V2.md) (first dry-run result: [BALANCE_V2_RESULT.md](BALANCE_V2_RESULT.md), review: [BALANCE_V2_REVIEW.md](BALANCE_V2_REVIEW.md)). V1 evidence is unchanged.
+
 One bounded, auditable closed loop that tunes the AI planner's **balance weights** from evidence:
 
 ```

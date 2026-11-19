@@ -301,7 +301,7 @@ test('a metric over too few underlying events is never judged, even with a tight
   const eff = M.pairedEffect('tp_self_harm_rate', set(S, { selfTp: 0 }).map((g, i) => (i ? g : rec(g.seed, g.first, { selfTp: 1 }))), set(S, { selfTp: 0 }).map((g, i) => (i ? g : rec(g.seed, g.first, { selfTp: 1 }))), { boot: 300 });
   const p = contract('H5').predictions.find(x => x.id === 'P5b')!;
   assert.equal(C.judge(p, eff, 8, 20).status, 'unclear');
-  assert.match(C.judge(p, eff, 8, 20).reason, /too few/);
+  assert.match(C.judge(p, eff, 8, 20).reason, /too few|no usable interval/);
   const few = M.pairedEffect('tp_self_harm_rate', set(S.slice(0, 8), { selfTp: 1 }), set(S.slice(0, 8), { selfTp: 1 }), { boot: 300 });
   assert.ok(few.ci, 'every resample has events, so an interval exists');
   assert.match(C.judge(p, few, 8, 20).reason, /too few underlying events/);

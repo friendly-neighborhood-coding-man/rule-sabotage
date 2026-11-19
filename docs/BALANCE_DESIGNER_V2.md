@@ -106,7 +106,7 @@ first changed decision, so pairing is at the (seed, first player) level; the fir
 ## Seeds
 
 `balance/v2/config.json`: **exploration** = V1 training seeds 1000–1011 (observation and Kane exploration only) ·
-**development** = 3000–3015 (experiments, evaluation) · **holdout** = 7000–7015, sealed in a `SeedVault`: requesting
+**development** = 3200–3215 (experiments, evaluation; 3000–3003 and 3100–3115 are already spent) · **holdout** = 7100–7115 (7000–7015 was spent by the first dry-run), sealed in a `SeedVault`: requesting
 them throws until hypotheses and corrections are frozen; the run journals a salted sha256 commitment at sealing and
 the salt + seeds at unsealing. The exploration and challenge pages are checked for holdout seed numbers.
 
