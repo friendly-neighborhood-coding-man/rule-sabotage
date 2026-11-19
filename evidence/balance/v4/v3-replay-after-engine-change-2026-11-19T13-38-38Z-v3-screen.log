@@ -1,0 +1,6 @@
+PASS  manifest        216/216 files match their sha256
+PASS  dataset hash    cf5e4a82cfa3d4ee vs recorded cf5e4a82cfa3d4ee
+PASS  complete        100/100 games
+PASS  external calls  0 recorded external call attempts
+PASS  engine replay   100/100 games re-executed identically through the engine
+PASS  journal         20 entries, hash chain verified

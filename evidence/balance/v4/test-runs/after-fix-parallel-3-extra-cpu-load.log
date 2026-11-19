@@ -1,0 +1,195 @@
+
+> rule-sabotage@0.3.0 test
+> node --experimental-strip-types --no-warnings=ExperimentalWarning --test tests/*.test.ts
+
+✖ no valid hypothesis from exploration: stop at CAPABILITY_LIMITATION after one call, no experiments, credits accounted (102241.9916ms)
+✖ a valid note from a kane-cli run that did not complete is kept as evidence but never registered as a Kane hypothesis (16923.0314ms)
+✔ no Kane call without a verified credit balance (32653.9123ms)
+✔ a call whose conservative estimate exceeds the remaining budget is refused before it starts (55565.4867ms)
+✔ production code never passes planner hooks or rule variants; V1 games replay identically with the hooked planner (1879.7253ms)
+✔ a rule variant must carry the explicit experimental token (0.9152ms)
+✔ only allowlisted interventions are accepted; each modifies only its declared component (5.4818ms)
+✔ planner hooks are isolated: E3 changes candidate cells but not valuation; E2 changes valuation but not candidates; E5 changes neither on a teleport-free state (15.8548ms)
+✔ same-seed experiment replay is deterministic, and the E4 variant keeps every teleport distance-neutral (15352.315ms)
+✔ provenance cannot be forged: a hardcoded hypothesis cannot be labelled Kane-generated (30.3077ms)
+✔ contracts are registered before results exist, immutable, and evaluation refuses results that predate registration (58.9155ms)
+✔ predictions must be testable and discriminating; a shared prediction is not discriminating (4.5148ms)
+✔ a clear, discriminating, pre-registered result is SUPPORTED; a negligible one REFUTED; noisy or confounded ones INCONCLUSIVE (321.8732ms)
+✔ the old V1 13-row confirmation cannot establish a cause, and Kane can lower but never raise an outcome (13.3093ms)
+✔ selection-biased conditional win rate and randomized head-to-head impact are different metrics (2.5306ms)
+✔ the final holdout is sealed until corrections are frozen and never leaks into exploration pages (7.7497ms)
+✔ Kane notebook: wrong nonce, out-of-window or malformed notes are invalid; timeout or garbage output yields no valid finding (3718.7535ms)
+✔ a correctly implemented correction with negligible improvement is INEFFECTIVE (or PARTIAL), never SUFFICIENT (65.9006ms)
+✔ a correction that improves its target but worsens safety is a REGRESSION (33.2793ms)
+✔ SUFFICIENT needs a material, robust improvement AND real Kane; the test double or a dry-run leaves it UNVERIFIED (92.9508ms)
+✔ an honest null result does not trigger a forced modification (2.0785ms)
+✔ V2 journal and evidence manifests verify; tampering is detected (34.8461ms)
+✔ V1 evidence is untouched: the V1 manifest still matches every file it lists (141.687ms)
+✔ a metric over too few underlying events is never judged, even with a tight-looking interval (20.683ms)
+✔ the shove self-boost placement metric is flagged as non-discriminating; the trigger metric is used instead (1.2491ms)
+✔ a starting configuration must carry the experimental token and stay inside 2..4 pieces (22.2056ms)
+✔ piece counts 2, 3, 4: stable ids, symmetric home rows, correct action allowance (16.8092ms)
+✔ asymmetric counts follow the FIRST MOVER, not the side (3/2 and 2/3, both sides starting) (15.6532ms)
+✔ first-turn action cap and second-mover bonus apply to exactly one turn each (0.3765ms)
+✔ winner detection: all own pieces across wins, for 2, 3 and 4 pieces and unequal counts (2.6831ms)
+✔ normalized turn-limit tie-break: fraction across first, then fraction of journey left, then draw (exact integers) (1.4158ms)
+✔ 3:3 experimental games reproduce production games exactly (both first movers) (31381.4921ms)
+✔ fixed seed is deterministic and the recorded game replays move by move through the engine alone (23225.4935ms)
+✔ production code never creates an experimental starting configuration (18.0717ms)
+✔ the batch worker cannot reach game.ts, Kane, OpenRouter or tiers (static import graph) (15.3488ms)
+✔ the offline guard counts and blocks every outbound channel, and strips model keys (267.0964ms)
+✔ offline worker batch: real games, zero external calls, results in job order (17184.9571ms)
+✔ the matrix is exactly 100 games: 5 conditions x 10 seeds x both first movers, seeds disjoint from V1/V2 (3.5577ms)
+✔ statistics: Wilson interval, exact binomial, minimum significant share, seeded permutation (35.5864ms)
+✔ analysis of real recorded games: per-condition rates carry intervals and findings stay cautious (45376.5409ms)
+✔ notebook entries become typed proposals; unknown games, out-of-bounds values and missing predictions are refused (4.5369ms)
+✔ provenance: only a stored real kane-cli output can be labelled Kane; the test double never can (25.4421ms)
+✔ catalog: starting-rule interventions become typed treatments; combinations need single-factor results first (1.9314ms)
+✔ partial search hook: factor 0 equals the V2 searchOwnBenefit:false, factor 1 equals production (20.1543ms)
+✔ normalized evaluation hook is the production evaluation at 3 v 3 and differs only when counts differ (16.1324ms)
+✔ acceptance gates: moving toward 50% is not enough; length, fairness, diversity, counterplay and safety all count (2.2714ms)
+✔ Kane V3 is prepared but cannot run without an approval record and the matching environment token (1.186ms)
+✔ quick notebook entries expand by fixed rules into the same typed proposal as the long form (2.4099ms)
+✔ validation rules: prediction judge, paired seed bootstrap and Kane arm mapping behave as frozen (97519.4005ms)
+✔ registered V3 proposals are well-formed, cite real games of the dataset, and none claims Kane (16.3529ms)
+[v4-stratify] candidates approximated 9, max |score error| 0.2327, leader place “Shove east 2” on A3 B2 B6, then 1 move: A4→ (then re-plan after the teleport) / exact place “Shove east 2” on A3 B2 B6, then 1 move: A4→ (then re-plan after the teleport)
+✔ teleport index probabilities are the exact law of rand() % n (sum 1, within 1e-9 of 1/n) and match an empirical draw (6.8704ms)
+✔ teleportDestinations is the engine’s own choice set: the real move always lands on destinations[rng % n] (57.5018ms)
+✔ moveOutcomes enumerates every legal destination exactly once with the engine law, and each outcome equals a real engine run (11.1414ms)
+✔ the same-column rule variant (R1) is enumerated through the same engine helper (1.1425ms)
+✔ hidden-RNG invariance: identical public state + different hidden RNG => identical EV decisions and values (production differs) (34896.4927ms)
+✔ the EV value of a random move is the probability-weighted average of its outcomes (not the best or the realized one) (751.9295ms)
+✔ the committed move sequence ends at the first random move (no moves that assume an unresolved destination) (1879.9915ms)
+✔ production planner is untouched: planTurn / planMoves give the same result as the V3-recorded decisions on a V3 game (4550.0686ms)
+✔ evaluateCached is exactly the production evaluate() (4463.2037ms)
+✔ reply stratification (the one approximation) keeps the full mass and stays close to exact replies (14702.2641ms)
+✔ an EV-candidate self-play game is deterministic and replays move for move through the engine alone (21612.0283ms)
+✔ production isolation: game.ts / server.ts never reach the candidate; selfplay uses it only when asked (69.4341ms)
+✔ KX3 replay: originals untouched, 2 validated, 3 need an operator decision, historical V3 result unchanged (61.2175ms)
+✔ normalizer rules: labels resolve only when unique; ambiguity, contradictions, unknown ids, bad values and unknown games are refused (19.8839ms)
+✔ credit safety: disabled by default, then every pre-call rule, exceedance, unknown spend, timeout and no-retry (47.0383ms)
+✔ a REAL-looking kane-cli research run is refused before any paid process starts (test double posing as real) (399.2064ms)
+✔ the shipped weights are the V0.3 human prior; with weightMix 0 the planner is exactly the PR #2 planner (9565.6728ms)
+✔ activator utilities follow V0.3 §10A signs (east/west signed by the stepping side) (2.5637ms)
+✔ weights change what the planner prefers (4891.1037ms)
+✔ legality, effect execution, symmetry and the referee never import balance weights (855.5302ms)
+✔ validateWeights refuses out-of-range values and mislabelled effects instead of clamping (5.6791ms)
+✔ V0.3 §10C future effects are listed as UNSUPPORTED and never offered to the planner (2.8472ms)
+✔ frozen weights cannot be mutated during a game (0.8806ms)
+✔ self-play is reproducible: same seed, first player and weights give the identical game (5286.8079ms)
+✔ paired jobs play every seed with both sides starting; training and held-out seeds are disjoint (12.1625ms)
+✔ sampled evidence always has an odd number of rows (the statement and its negation cannot tie) (1.2136ms)
+✔ anomaly detection uses the configured thresholds, and a strong first-player edge is flagged as rule-level (8.1559ms)
+✔ a finding is CONFIRMED only when real kane-cli answers the statement true and its negated control false (5.7151ms)
+✔ the evidence page shows raw rows, not the optimizer conclusion (2.8332ms)
+✔ candidates: refuted anomalies give none, unverified ones are not eligible, Kane-confirmed ones are; steps are bounded (13.6513ms)
+✔ the V0.3 bundle candidate is evaluated but can never be promoted (6.4218ms)
+✔ promotion gates: a softlock or an engine change is a hard failure even if everything else improves (4.4398ms)
+✔ the journal is append-only and hash-chained: edits are detected and further appends refused (31.8518ms)
+✔ kaneVerify runs the CLI on a served page, stores its output and labels the test double as such (2222.3056ms)
+✔ setup: 3 pieces each, coin flip decides who starts, actions = pieces on board (3.5491ms)
+✔ placement: up to 3 cells anywhere eligible, no geometric shape required (7.0123ms)
+✔ effects persist across turns, cannot be overwritten by the opponent, and can be removed or replaced by their owner (1.5351ms)
+✔ an effect does exactly the same to a human piece and an AI piece (absolute direction) (28.4506ms)
+✔ back/forward are relative to the entry direction, not to ownership (0.4953ms)
+✔ only the triggered cell is consumed; the rest of the rule stays (0.6067ms)
+✔ friendly pieces stack and move together; enemies are captured and sent home (0.8112ms)
+✔ forced movement can chain into further effects, capped by the engine (0.5771ms)
+✔ freeze, home, shield and haste behave identically regardless of who owns the piece (5.2989ms)
+✔ all three pieces across wins; the turn limit has a deterministic tiebreak (0.7639ms)
+✔ same seed + same actions = same result (teleport uses the seeded RNG) (0.8243ms)
+✔ a complete game can be played to the end through the session API (7553.6786ms)
+✔ the AI plans only from the public board at the start of its own turn (1795.7431ms)
+✔ AI takes a winning sequence when one exists, and sets effects in the human’s path (3083.0808ms)
+✔ AI is not a fixed script: openings vary across games (12041.1847ms)
+✔ an AI rule goes through the same interpreter and referee as a human rule (2214.4822ms)
+✔ trial: symmetric outcome for a human and an AI piece, no re-fire, no softlock (587.1887ms)
+✔ trial: an illegal placement fails the engine check (no overwriting the opponent) (251.7507ms)
+✔ OpenRouter (mocked): valid reply is used and labelled as OpenRouter (29.5539ms)
+✔ OpenRouter (mocked) failures fall back to the labelled offline parser (1178.7241ms)
+✔ OpenRouter (mocked): structured-output rejection or an empty reply retries once with plain JSON; reasoning is kept short (16.9666ms)
+✔ NVIDIA provider (mocked): OpenAI-compatible endpoint, labelled, no OpenRouter-only parameters, key never in the body (7.1093ms)
+✔ Default provider order follows the benchmark: NVIDIA, then Groq, then OpenRouter; LLM_PROVIDER overrides (1.4059ms)
+✔ Groq provider (mocked): strict JSON schema adapted, reasoning kept out of content, opponent choice limited to real options (661.9568ms)
+✔ OpenRouter (mocked) opponent: unknown option ids are refused and the local planner takes over (814.4431ms)
+✔ Kane output parser only accepts a complete run_end verdict (1.817ms)
+✔ a missing browser binary gives an unverified verdict instead of crashing (630.4971ms)
+✔ referee plumbing with a Kane TEST DOUBLE: approve, reject, garbage=unverified, cache (4100.0322ms)
+✔ slow Kane (test double): the rule is pending, play continues, and it goes live only after approval (11452.839ms)
+✔ unverified rules do not go live in Kane mode (Kane missing) (341.6665ms)
+✔ canonical rule text round-trips to its exact effect for every supported effect (and every planner phrase does too) (6.7774ms)
+✔ AI rule text: matching prose is kept, mismatched / invalid / approximate prose falls back to canonical text (0.6851ms)
+✔ the AI installs exactly the planned effect even when the model describes a different one (8549.0813ms)
+✔ tier selection: simple isolated effects are tier 1, interacting ones tier 2, uncertain ones tier 3 (4083.9768ms)
+✔ tier selection escalates on a failed engine check, an untestable cell, a chain at the cap, or a near-softlock (611.9437ms)
+✔ tier selection is deterministic and identical for a Human and an AI proposer (20580.7224ms)
+✔ tiers ON: a tier-1 rule is engine-approved at once, never labelled Kane, and Kane is not run (3773.0269ms)
+[referee-settle] uncertain rule review: 3350 ms (bound 75000 ms; the old fixed poll gave up at 20000 ms)
+✔ tiers ON: an uncertain (approximated) rule still goes to Kane and stays fail-closed until Kane approves (5240.9251ms)
+[referee-settle] tiers-off review: 4464 ms (bound 75000 ms; the old fixed poll gave up at 20000 ms)
+✔ tiers OFF (default): the same simple rule goes to real-Kane review exactly as before (9527.1157ms)
+[referee-settle] timeout review: 2736 ms (bound 27500 ms; the old fixed poll gave up at 20000 ms)
+✔ Kane timeout: unverified, not cached, and the rule never goes live (tiers on, tier 3) (4491.0463ms)
+✔ cache key changes with conditions, page content, engine source, Kane version, mode and CLI; not with the trial id (1035.0847ms)
+✔ trial signature separates materially different states (owner of a nearby effect, RNG, turn, rule text) (5307.4346ms)
+✔ Kane cache: hit for identical trials, concurrent identical reviews share one run, unverified is never cached (19449.6786ms)
+[referee-settle] delayed approval review: 4660 ms (bound 75000 ms; the old fixed poll gave up at 20000 ms)
+✔ a delayed Kane approval never activates illegal cells on a changed board (6428.8849ms)
+✔ English phrasings map to effects with absolute or entry-relative directions (7.8728ms)
+✔ Korean phrasings map to the same effects (2.6711ms)
+✔ over-limit requests are approximated WITH disclosure, never silently (0.6655ms)
+✔ unsafe, unfair or ownership-dependent rules are rejected with a helpful reason (0.4428ms)
+✔ input guard length limits (0.2079ms)
+✔ model replies are validated strictly; malformed or ambiguous output never becomes a rule (1.9609ms)
+✔ effect values are a closed set (0.2796ms)
+✔ every phrase the AI can say parses back to exactly the effect it planned (1.0701ms)
+ℹ tests 136
+ℹ suites 0
+ℹ pass 134
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 215789.7274
+
+✖ failing tests:
+
+test at tests\balance-v2-gates.test.ts:35:1
+✖ no valid hypothesis from exploration: stop at CAPABILITY_LIMITATION after one call, no experiments, credits accounted (102241.9916ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  0 !== 1
+  
+      at TestContext.<anonymous> (file:///D:/Rule_Sabotage/rule-sabotage-live/tests/balance-v2-gates.test.ts:38:10)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 0,
+    expected: 1,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests\balance-v2-gates.test.ts:43:1
+✖ a valid note from a kane-cli run that did not complete is kept as evidence but never registered as a Kane hypothesis (16923.0314ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  0 !== 1
+  
+      at TestContext.<anonymous> (file:///D:/Rule_Sabotage/rule-sabotage-live/tests/balance-v2-gates.test.ts:45:10)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 0,
+    expected: 1,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+real	3m37.052s
+user	0m0.121s
+sys	0m0.151s

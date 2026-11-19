@@ -1,0 +1,20 @@
+PILOT 2026-11-19T21-42-56Z-v4-pilot: 180 games, commit f59c8ee1, EV 3ccd64207314c1f3
+  10/180 A-64004-ai ai t11 2s
+  20/180 A-64011-ai ai t9 7s
+  30/180 A-64016-human human t13 3s
+  40/180 A-64020-human ai t14 7s
+  50/180 A-64025-human ai t12 5s
+  60/180 A-64028-human ai t60 11s
+  70/180 B-64006-ai ai t23 7s
+  80/180 B-64009-human human t13 32s
+  90/180 B-64016-human ai t10 22s
+  100/180 B-64021-ai ai t11 6s
+  110/180 B-64026-human ai t20 11s
+  120/180 B-64030-ai human t60 6s
+  130/180 C-64002-human-evhuman ai t16 10s
+  140/180 C-64004-human-evai ai t60 18s
+  150/180 C-64008-human-evhuman ai t14 7s
+  160/180 C-64011-ai-evhuman ai t9 15s
+  170/180 C-64013-human-evai ai t14 13s
+  180/180 C-64015-human-evai ai t20 15s
+done in 4.9 min: replay OK, external calls 0, dataset a00a93d8aa03749c

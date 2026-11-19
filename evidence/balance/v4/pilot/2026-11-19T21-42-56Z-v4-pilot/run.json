@@ -1,0 +1,44 @@
+{
+  "schema": "rule-sabotage/v4-pilot-run@1",
+  "runId": "2026-11-19T21-42-56Z-v4-pilot",
+  "smoke": false,
+  "games": 180,
+  "wallMs": 292683,
+  "cpuMs": 616264,
+  "workers": 6,
+  "guard": {
+    "attempts": 0,
+    "blocked": [],
+    "workers": 6,
+    "strippedEnv": [
+      "ANTHROPIC_BASE_URL",
+      "GROQ_API_KEY",
+      "HF_HOME",
+      "NVIDIA_API_KEY",
+      "OPENROUTER_API_KEY",
+      "OPENROUTER_JEV_API_KEY"
+    ]
+  },
+  "externalCalls": 0,
+  "kaneCalls": 0,
+  "datasetHash": "a00a93d8aa03749c",
+  "replayOk": true,
+  "engineFilesHash": "f92354f4b139d30c",
+  "plannerFilesHash": "b84ddfb8a18103c8",
+  "evPlanner": {
+    "id": "ev-teleport-v4.1",
+    "file": "server/balance/v4/evplanner.ts",
+    "hash": "3ccd64207314c1f3",
+    "replyStrata": 16
+  },
+  "protocolSha256": "4cfaf95e2064b63290704b4a11586c2f09ed96603bdff83e1540b16c8f494114",
+  "weights": {
+    "version": "0.3.0"
+  },
+  "commit": "f59c8ee16a5a6bd15e8b585419db433e86d7a004",
+  "dirty": false,
+  "node": "v24.22.1",
+  "platform": "win32 10.0.26300",
+  "cpu": "13th Gen Intel(R) Core(TM) i5-1335U",
+  "logicalCores": 12
+}
