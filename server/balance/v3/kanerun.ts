@@ -19,7 +19,7 @@ import { kaneExplore, type ExploreResult } from '../v2/kane2.ts';
 import { appendJournal, readJournal } from '../journal.ts';
 import { checkProvenance } from '../v2/contracts.ts';
 import { openV3Session, serveDossier, sealProvenance, objectiveV3, assertKaneApproved, KANE_V3_PLAN, type Approval, type V3Session } from './kane3.ts';
-import { checkProposal, type Proposal } from './proposals.ts';
+import { checkProposal, PROPOSAL_METRICS, type Proposal } from './proposals.ts';
 import { ROOT } from './batch.ts';
 import { V3_JOURNAL } from './screen.ts';
 
@@ -141,7 +141,11 @@ export function registerKaneEntries(callDir: string) {
     const structural = checkProposal({ ...p, provenance: { ...p.provenance, kane: p.provenance.kane ? { ...p.provenance.kane, rawFile: notesFile } : undefined } });
     const problems = [...new Set([...e.problems, ...provProblems, ...structural])];
     const registered = problems.length === 0 && call.execution === 'COMPLETE';
-    return { noteId: e.noteId, receivedAt: e.receivedAt, validNonce: e.validNonce, inWindow: e.inWindow, rawBody: e.rawBody, rawStructured: new URLSearchParams(e.rawBody).get('structured'), problems, registered, proposal: p };
+    // Informational only (NOT used to register): where Kane wrote a metric's exact on-page LABEL instead of its id, show the id it names.
+    const raw = new URLSearchParams(e.rawBody).get('structured') ?? '';
+    const labelToId = Object.fromEntries(Object.entries(PROPOSAL_METRICS).map(([k, v]) => [v.toLowerCase(), k]));
+    const exactLabelMetrics = [...raw.matchAll(/^prediction[12]:\s*(.+?)\s+(increase|decrease|no-change)\s+([\d.]+)\s*$/gim)].map(m => ({ written: m[1], id: labelToId[m[1].trim().toLowerCase()] ?? (PROPOSAL_METRICS[m[1].trim()] ? m[1].trim() : null), direction: m[2].toLowerCase(), size: Number(m[3]) }));
+    return { noteId: e.noteId, receivedAt: e.receivedAt, validNonce: e.validNonce, inWindow: e.inWindow, rawBody: e.rawBody, rawStructured: raw || null, problems, registered, proposal: p, informational: { exactLabelMetrics, note: 'Exact-label lookup shown for the reader only. Registration uses the strict parse that was frozen before the call.' } };
   });
   const file = join(ROOT, 'balance/v3/kane-proposals.json');
   const doc = { schema: 'rule-sabotage/v3-kane-proposals@1', call: { dir: callDir.replace(/\\/g, '/').split('/rule-sabotage-live/').pop(), execution: call.execution, cli: call.cli, notesSha256: fileSha, recordedNotesSha256: call.notesSha256, creditsUsed: call.creditsUsed }, note: 'Every entry Kane submitted, verbatim (rawBody / rawStructured) and as parsed. Only entries with no problems from a COMPLETE real call are registered as Kane hypotheses.', entries: out };

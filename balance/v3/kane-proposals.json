@@ -1,0 +1,367 @@
+{
+  "schema": "rule-sabotage/v3-kane-proposals@1",
+  "call": {
+    "dir": "evidence/balance/v3/kane/2026-11-19T15-41-35Z-KX3",
+    "execution": "COMPLETE",
+    "cli": "0.10.4",
+    "notesSha256": "bd6f344f936ab126eed9179925bbe2995e4db1eed99c59f3970465b0b5dcd793",
+    "recordedNotesSha256": "bd6f344f936ab126eed9179925bbe2995e4db1eed99c59f3970465b0b5dcd793",
+    "creditsUsed": 107.934
+  },
+  "note": "Every entry Kane submitted, verbatim (rawBody / rawStructured) and as parsed. Only entries with no problems from a COMPLETE real call are registered as Kane hypotheses.",
+  "entries": [
+    {
+      "noteId": "KX3-N1",
+      "receivedAt": "2026-11-19T15:51:18.194Z",
+      "validNonce": true,
+      "inWindow": true,
+      "rawBody": "nonce=7feb3e833e095898de&structured=entry%3A+hypothesis%0D%0Atitle%3A+First-turn+tempo+rather+than+piece-count+advantage%0D%0Acause%3A+interaction+of+planner+and+starting+conditions%0D%0Aexplanation%3A+The+pooled+64%25+first-mover+result+is+reproducible%2C+but+changing+equal+counts+2%2F2%2C+3%2F3%2C+or+4%2F4+leaves+60-65%25+first+wins+while+C4+2%2F3+reaches+85%25%3B+extra+pieces+do+not+explain+it%2C+so+opening+tempo+and+the+planner%27s+response+likely+do.%0D%0Aevidence%3A+C0-62001-ai+C1-62003-human+C2-62001-ai+C3-62004-ai+C4-62002-ai%0D%0Aprediction1%3A+First-mover+win+rate+%28decisive+games%29+decrease+0.15%0D%0Aprediction2%3A+Share+of+games+in+which+the+first+mover+brings+a+piece+across+on+turn+1+decrease+0.10%0D%0Aintervention%3A+S3_FIRST_TURN_ACTIONS%0D%0Avalue%3A+1%0D%0AsideEffects%3A+Slower+openings+and+more+turn-limit+games%3B+may+reduce+legitimate+tactical+initiative.%0D%0Acompeting%3A+Conveyor+self-benefit+valuation+creates+the+imbalance.%0D%0Acounterexample%3A+C0-62001-human%0D%0Aacceptance%3A+On+fresh+paired+seeds%2C+the+first-mover+win+rate+falls+by+at+least+15+points+without+a+comparable+rise+in+turn-limit+rate.%0D%0Adisproof%3A+A+one-action+opening+cap+leaves+first-mover+win+rate+within+5+points+of+production%2C+or+second+movers+still+lose+at+the+same+rate.%0D%0Averdict%3A+more+evidence+is+needed+first",
+      "rawStructured": "entry: hypothesis\r\ntitle: First-turn tempo rather than piece-count advantage\r\ncause: interaction of planner and starting conditions\r\nexplanation: The pooled 64% first-mover result is reproducible, but changing equal counts 2/2, 3/3, or 4/4 leaves 60-65% first wins while C4 2/3 reaches 85%; extra pieces do not explain it, so opening tempo and the planner's response likely do.\r\nevidence: C0-62001-ai C1-62003-human C2-62001-ai C3-62004-ai C4-62002-ai\r\nprediction1: First-mover win rate (decisive games) decrease 0.15\r\nprediction2: Share of games in which the first mover brings a piece across on turn 1 decrease 0.10\r\nintervention: S3_FIRST_TURN_ACTIONS\r\nvalue: 1\r\nsideEffects: Slower openings and more turn-limit games; may reduce legitimate tactical initiative.\r\ncompeting: Conveyor self-benefit valuation creates the imbalance.\r\ncounterexample: C0-62001-human\r\nacceptance: On fresh paired seeds, the first-mover win rate falls by at least 15 points without a comparable rise in turn-limit rate.\r\ndisproof: A one-action opening cap leaves first-mover win rate within 5 points of production, or second movers still lose at the same rate.\r\nverdict: more evidence is needed first",
+      "problems": [
+        "prediction 1: metric UNPARSEABLE:First-mover win rate (decisi is not listed",
+        "prediction 2: metric UNPARSEABLE:Share of games in which the is not listed",
+        "cause must be one of the listed options",
+        "no falsifiable prediction (metric + direction + size)"
+      ],
+      "registered": false,
+      "proposal": {
+        "schema": "rule-sabotage/proposal@1",
+        "id": "HK3-KX3-N1",
+        "kind": "hypothesis",
+        "provenance": {
+          "origin": "kane",
+          "author": "Kane (kane-cli objective mode)",
+          "note": "notebook entry KX3-N1",
+          "kane": {
+            "callId": "KX3",
+            "rawFile": "evidence/balance/v3/kane/2026-11-19T15-41-35Z-KX3/kane-notes.ndjson",
+            "rawSha256": "bd6f344f936ab126eed9179925bbe2995e4db1eed99c59f3970465b0b5dcd793",
+            "noteId": "KX3-N1",
+            "cliVersion": "0.10.4",
+            "isTestDouble": false
+          }
+        },
+        "title": "First-turn tempo rather than piece-count advantage",
+        "cause": "interaction of planner and sta",
+        "explanation": "The pooled 64% first-mover result is reproducible, but changing equal counts 2/2, 3/3, or 4/4 leaves 60-65% first wins while C4 2/3 reaches 85%; extra pieces do not explain it, so opening tempo and the planner's response likely do.",
+        "evidenceGames": [
+          "C0-62001-ai",
+          "C1-62003-human",
+          "C2-62001-ai",
+          "C3-62004-ai",
+          "C4-62002-ai"
+        ],
+        "predictions": [],
+        "intervention": {
+          "id": "S3_FIRST_TURN_ACTIONS",
+          "value": 1
+        },
+        "sideEffects": "Slower openings and more turn-limit games; may reduce legitimate tactical initiative.",
+        "competing": "Conveyor self-benefit valuation creates the imbalance.",
+        "counterexample": "C0-62001-human",
+        "acceptance": "On fresh paired seeds, the first-mover win rate falls by at least 15 points without a comparable rise in turn-limit rate.",
+        "disproof": "A one-action opening cap leaves first-mover win rate within 5 points of production, or second movers still lose at the same rate.",
+        "verdict": null,
+        "datasetHash": "cf5e4a82cfa3d4ee"
+      },
+      "informational": {
+        "exactLabelMetrics": [
+          {
+            "written": "First-mover win rate (decisive games)",
+            "id": "first_mover_win_rate",
+            "direction": "decrease",
+            "size": 0.15
+          },
+          {
+            "written": "Share of games in which the first mover brings a piece across on turn 1",
+            "id": "turn1_score_rate",
+            "direction": "decrease",
+            "size": 0.1
+          }
+        ],
+        "note": "Exact-label lookup shown for the reader only. Registration uses the strict parse that was frozen before the call."
+      }
+    },
+    {
+      "noteId": "KX3-N2",
+      "receivedAt": "2026-11-19T15:52:06.670Z",
+      "validNonce": true,
+      "inWindow": true,
+      "rawBody": "nonce=7feb3e833e095898de&structured=entry%3A+hypothesis%0D%0Atitle%3A+Conveyor+valuation+may+amplify+opening+tempo%0D%0Acause%3A+AI+planner+valuation+of+own-trap+benefit%0D%0Aexplanation%3A+Every+condition+has+conveyor+moves+and+most+trap+triggers+are+own+traps%2C+so+the+planner+may+overvalue+self-carriage%3B+this+can+amplify+a+first+mover%27s+early+setup%2C+but+it+is+not+proven+to+be+the+primary+cause.%0D%0Aevidence%3A+C0-62003-human+C0-62005-ai+C1-62003-ai+C4-62002-ai%0D%0Aprediction1%3A+Conveyor+moves+per+game+%28own+trap+carries+the+piece+forward%29+decrease+5%0D%0Aprediction2%3A+Distance+of+first-mover+win+rate+from+50%25+decrease+0.10%0D%0Aintervention%3A+P2_SELF_BENEFIT_VALUE%0D%0Avalue%3A+0%0D%0AsideEffects%3A+Fewer+creative+trap+chains%2C+longer+routes%2C+and+weaker+tactical+identity.%0D%0Acompeting%3A+First-turn+action+surplus%2C+rather+than+self-trap+valuation%2C+drives+the+first-mover+edge.%0D%0Acounterexample%3A+C0-62001-human%0D%0Aacceptance%3A+On+fresh+paired+seeds%2C+conveyor+moves+decline+by+at+least+5+per+game+and+the+first-mover+distance+from+50%25+declines+by+at+least+10+points.%0D%0Adisproof%3A+Reducing+self-benefit+to+zero+cuts+conveyors+but+leaves+the+first-mover+imbalance+unchanged.%0D%0Averdict%3A+more+evidence+is+needed+first",
+      "rawStructured": "entry: hypothesis\r\ntitle: Conveyor valuation may amplify opening tempo\r\ncause: AI planner valuation of own-trap benefit\r\nexplanation: Every condition has conveyor moves and most trap triggers are own traps, so the planner may overvalue self-carriage; this can amplify a first mover's early setup, but it is not proven to be the primary cause.\r\nevidence: C0-62003-human C0-62005-ai C1-62003-ai C4-62002-ai\r\nprediction1: Conveyor moves per game (own trap carries the piece forward) decrease 5\r\nprediction2: Distance of first-mover win rate from 50% decrease 0.10\r\nintervention: P2_SELF_BENEFIT_VALUE\r\nvalue: 0\r\nsideEffects: Fewer creative trap chains, longer routes, and weaker tactical identity.\r\ncompeting: First-turn action surplus, rather than self-trap valuation, drives the first-mover edge.\r\ncounterexample: C0-62001-human\r\nacceptance: On fresh paired seeds, conveyor moves decline by at least 5 per game and the first-mover distance from 50% declines by at least 10 points.\r\ndisproof: Reducing self-benefit to zero cuts conveyors but leaves the first-mover imbalance unchanged.\r\nverdict: more evidence is needed first",
+      "problems": [
+        "prediction 1: metric UNPARSEABLE:Conveyor moves per game (own is not listed",
+        "prediction 2: metric UNPARSEABLE:Distance of first-mover win is not listed",
+        "cause must be one of the listed options",
+        "no falsifiable prediction (metric + direction + size)"
+      ],
+      "registered": false,
+      "proposal": {
+        "schema": "rule-sabotage/proposal@1",
+        "id": "HK3-KX3-N2",
+        "kind": "hypothesis",
+        "provenance": {
+          "origin": "kane",
+          "author": "Kane (kane-cli objective mode)",
+          "note": "notebook entry KX3-N2",
+          "kane": {
+            "callId": "KX3",
+            "rawFile": "evidence/balance/v3/kane/2026-11-19T15-41-35Z-KX3/kane-notes.ndjson",
+            "rawSha256": "bd6f344f936ab126eed9179925bbe2995e4db1eed99c59f3970465b0b5dcd793",
+            "noteId": "KX3-N2",
+            "cliVersion": "0.10.4",
+            "isTestDouble": false
+          }
+        },
+        "title": "Conveyor valuation may amplify opening tempo",
+        "cause": "AI planner valuation of own-tr",
+        "explanation": "Every condition has conveyor moves and most trap triggers are own traps, so the planner may overvalue self-carriage; this can amplify a first mover's early setup, but it is not proven to be the primary cause.",
+        "evidenceGames": [
+          "C0-62003-human",
+          "C0-62005-ai",
+          "C1-62003-ai",
+          "C4-62002-ai"
+        ],
+        "predictions": [],
+        "intervention": {
+          "id": "P2_SELF_BENEFIT_VALUE",
+          "value": 0
+        },
+        "sideEffects": "Fewer creative trap chains, longer routes, and weaker tactical identity.",
+        "competing": "First-turn action surplus, rather than self-trap valuation, drives the first-mover edge.",
+        "counterexample": "C0-62001-human",
+        "acceptance": "On fresh paired seeds, conveyor moves decline by at least 5 per game and the first-mover distance from 50% declines by at least 10 points.",
+        "disproof": "Reducing self-benefit to zero cuts conveyors but leaves the first-mover imbalance unchanged.",
+        "verdict": null,
+        "datasetHash": "cf5e4a82cfa3d4ee"
+      },
+      "informational": {
+        "exactLabelMetrics": [
+          {
+            "written": "Conveyor moves per game (own trap carries the piece forward)",
+            "id": "conveyor_per_game",
+            "direction": "decrease",
+            "size": 5
+          },
+          {
+            "written": "Distance of first-mover win rate from 50%",
+            "id": "abs_first_mover_edge",
+            "direction": "decrease",
+            "size": 0.1
+          }
+        ],
+        "note": "Exact-label lookup shown for the reader only. Registration uses the strict parse that was frozen before the call."
+      }
+    },
+    {
+      "noteId": "KX3-N3",
+      "receivedAt": "2026-11-19T15:52:30.510Z",
+      "validNonce": true,
+      "inWindow": true,
+      "rawBody": "nonce=7feb3e833e095898de&structured=entry%3A+conclusion%0D%0Atitle%3A+Provisional+balance+conclusion%0D%0Acause%3A+interaction+of+first-turn+tempo+and+planner+incentives%0D%0Aexplanation%3A+The+64%2F100+first-mover+record+is+statistically+inconsistent+with+50%2F50%2C+yet+condition-level+variation+is+inconclusive+and+altered+piece+counts+do+not+consistently+favor+the+side+with+more+pieces%3B+C4%27s+2%2F3+setup+still+produced+85%25+first+wins.+Conveyor+play+is+ubiquitous+and+strategically+meaningful%2C+but+current+data+do+not+show+it+alone+causes+the+imbalance.%0D%0Aevidence%3A+C0-62001-ai+C1-62003-human+C2-62001-ai+C3-62004-ai+C4-62002-ai%0D%0Aprediction1%3A+First-mover+win+rate+%28decisive+games%29+decrease+0.15%0D%0Aprediction2%3A+Share+of+games+in+which+the+first+mover+brings+a+piece+across+on+turn+1+decrease+0.10%0D%0Aintervention%3A+S3_FIRST_TURN_ACTIONS%0D%0Avalue%3A+1%0D%0AsideEffects%3A+Reduced+opening+initiative+and+possibly+longer+games+or+more+turn+limits.%0D%0Acompeting%3A+The+imbalance+is+entirely+caused+by+planner+overvaluation+of+conveyor+self-benefit.%0D%0Acounterexample%3A+C0-62001-human%0D%0Aacceptance%3A+Fresh+paired-seed+tests+with+the+one-action+opening+cap+reduce+first-mover+wins+by+at+least+15+points+while+preserving+completion+and+acceptable+game+length.%0D%0Adisproof%3A+The+cap+has+no+material+effect%2C+or+a+conveyor-value+reduction+instead+balances+wins+without+strategic-quality+harm.%0D%0Averdict%3A+More+evidence+is+needed+first%3A+first-mover+advantage+is+reproducible+%2864%25%29%2C+initial+piece+count+is+not+a+reliable+fairness+lever%2C+conveyors+are+legitimate+but+warrant+measurement%2C+and+the+best+current+explanation+is+opening+tempo+interacting+with+planner+incentives.+Test+S3_FIRST_TURN_ACTIONS%3D1+against+P2_SELF_BENEFIT_VALUE%3D0%3B+the+winning+intervention+should+lower+first-mover+wins+by+at+least+15+points+without+raising+turn+limits.+C0-62001-human+and+any+null+cap+result+would+disconfirm+a+universal+first-mover+or+conveyor+account.",
+      "rawStructured": "entry: conclusion\r\ntitle: Provisional balance conclusion\r\ncause: interaction of first-turn tempo and planner incentives\r\nexplanation: The 64/100 first-mover record is statistically inconsistent with 50/50, yet condition-level variation is inconclusive and altered piece counts do not consistently favor the side with more pieces; C4's 2/3 setup still produced 85% first wins. Conveyor play is ubiquitous and strategically meaningful, but current data do not show it alone causes the imbalance.\r\nevidence: C0-62001-ai C1-62003-human C2-62001-ai C3-62004-ai C4-62002-ai\r\nprediction1: First-mover win rate (decisive games) decrease 0.15\r\nprediction2: Share of games in which the first mover brings a piece across on turn 1 decrease 0.10\r\nintervention: S3_FIRST_TURN_ACTIONS\r\nvalue: 1\r\nsideEffects: Reduced opening initiative and possibly longer games or more turn limits.\r\ncompeting: The imbalance is entirely caused by planner overvaluation of conveyor self-benefit.\r\ncounterexample: C0-62001-human\r\nacceptance: Fresh paired-seed tests with the one-action opening cap reduce first-mover wins by at least 15 points while preserving completion and acceptable game length.\r\ndisproof: The cap has no material effect, or a conveyor-value reduction instead balances wins without strategic-quality harm.\r\nverdict: More evidence is needed first: first-mover advantage is reproducible (64%), initial piece count is not a reliable fairness lever, conveyors are legitimate but warrant measurement, and the best current explanation is opening tempo interacting with planner incentives. Test S3_FIRST_TURN_ACTIONS=1 against P2_SELF_BENEFIT_VALUE=0; the winning intervention should lower first-mover wins by at least 15 points without raising turn limits. C0-62001-human and any null cap result would disconfirm a universal first-mover or conveyor account.",
+      "problems": [
+        "prediction 1: metric UNPARSEABLE:First-mover win rate (decisi is not listed",
+        "prediction 2: metric UNPARSEABLE:Share of games in which the is not listed",
+        "cause must be one of the listed options",
+        "a conclusion needs a verdict"
+      ],
+      "registered": false,
+      "proposal": {
+        "schema": "rule-sabotage/proposal@1",
+        "id": "HK3-KX3-N3",
+        "kind": "conclusion",
+        "provenance": {
+          "origin": "kane",
+          "author": "Kane (kane-cli objective mode)",
+          "note": "notebook entry KX3-N3",
+          "kane": {
+            "callId": "KX3",
+            "rawFile": "evidence/balance/v3/kane/2026-11-19T15-41-35Z-KX3/kane-notes.ndjson",
+            "rawSha256": "bd6f344f936ab126eed9179925bbe2995e4db1eed99c59f3970465b0b5dcd793",
+            "noteId": "KX3-N3",
+            "cliVersion": "0.10.4",
+            "isTestDouble": false
+          }
+        },
+        "title": "Provisional balance conclusion",
+        "cause": "interaction of first-turn temp",
+        "explanation": "The 64/100 first-mover record is statistically inconsistent with 50/50, yet condition-level variation is inconclusive and altered piece counts do not consistently favor the side with more pieces; C4's 2/3 setup still produced 85% first wins. Conveyor play is ubiquitous and strategically meaningful, but current data do not show it alone causes the imbalance.",
+        "evidenceGames": [
+          "C0-62001-ai",
+          "C1-62003-human",
+          "C2-62001-ai",
+          "C3-62004-ai",
+          "C4-62002-ai"
+        ],
+        "predictions": [],
+        "intervention": {
+          "id": "S3_FIRST_TURN_ACTIONS",
+          "value": 1
+        },
+        "sideEffects": "Reduced opening initiative and possibly longer games or more turn limits.",
+        "competing": "The imbalance is entirely caused by planner overvaluation of conveyor self-benefit.",
+        "counterexample": "C0-62001-human",
+        "acceptance": "Fresh paired-seed tests with the one-action opening cap reduce first-mover wins by at least 15 points while preserving completion and acceptable game length.",
+        "disproof": "The cap has no material effect, or a conveyor-value reduction instead balances wins without strategic-quality harm.",
+        "verdict": null,
+        "datasetHash": "cf5e4a82cfa3d4ee"
+      },
+      "informational": {
+        "exactLabelMetrics": [
+          {
+            "written": "First-mover win rate (decisive games)",
+            "id": "first_mover_win_rate",
+            "direction": "decrease",
+            "size": 0.15
+          },
+          {
+            "written": "Share of games in which the first mover brings a piece across on turn 1",
+            "id": "turn1_score_rate",
+            "direction": "decrease",
+            "size": 0.1
+          }
+        ],
+        "note": "Exact-label lookup shown for the reader only. Registration uses the strict parse that was frozen before the call."
+      }
+    },
+    {
+      "noteId": "KX3-N4",
+      "receivedAt": "2026-11-19T15:53:13.096Z",
+      "validNonce": true,
+      "inWindow": true,
+      "rawBody": "nonce=7feb3e833e095898de&structured=entry%3A+hypothesis%0D%0Atitle%3A+Opening-tempo+test%0D%0Acause%3A+interaction%0D%0Aexplanation%3A+First-mover+advantage+is+pooled+at+64%25+and+persists+across+equal+counts%2C+while+C4+2%2F3+gives+85%25+first+wins%2C+so+opening+tempo+is+more+plausible+than+piece+count+alone.%0D%0Aevidence%3A+C0-62001-ai+C1-62003-human+C2-62001-ai+C3-62004-ai+C4-62002-ai%0D%0Aprediction1%3A+first_mover_win_rate+decrease+0.15%0D%0Aprediction2%3A+first_mover_turn1_cross_rate+decrease+0.10%0D%0Aintervention%3A+S3_FIRST_TURN_ACTIONS%0D%0Avalue%3A+1%0D%0AsideEffects%3A+slower+openings+and+more+turn-limit+games%0D%0Acompeting%3A+planner+conveyor+valuation%0D%0Acounterexample%3A+C0-62001-human%0D%0Aacceptance%3A+paired+fresh+seeds+reduce+first+mover+wins+by+0.15%0D%0A+disproof%3A+win+rate+changes+less+than+0.05%0D%0Averdict%3A+more-evidence-needed",
+      "rawStructured": "entry: hypothesis\r\ntitle: Opening-tempo test\r\ncause: interaction\r\nexplanation: First-mover advantage is pooled at 64% and persists across equal counts, while C4 2/3 gives 85% first wins, so opening tempo is more plausible than piece count alone.\r\nevidence: C0-62001-ai C1-62003-human C2-62001-ai C3-62004-ai C4-62002-ai\r\nprediction1: first_mover_win_rate decrease 0.15\r\nprediction2: first_mover_turn1_cross_rate decrease 0.10\r\nintervention: S3_FIRST_TURN_ACTIONS\r\nvalue: 1\r\nsideEffects: slower openings and more turn-limit games\r\ncompeting: planner conveyor valuation\r\ncounterexample: C0-62001-human\r\nacceptance: paired fresh seeds reduce first mover wins by 0.15\r\n disproof: win rate changes less than 0.05\r\nverdict: more-evidence-needed",
+      "problems": [
+        "prediction 2: metric first_mover_turn1_cross_rate is not listed"
+      ],
+      "registered": false,
+      "proposal": {
+        "schema": "rule-sabotage/proposal@1",
+        "id": "HK3-KX3-N4",
+        "kind": "hypothesis",
+        "provenance": {
+          "origin": "kane",
+          "author": "Kane (kane-cli objective mode)",
+          "note": "notebook entry KX3-N4",
+          "kane": {
+            "callId": "KX3",
+            "rawFile": "evidence/balance/v3/kane/2026-11-19T15-41-35Z-KX3/kane-notes.ndjson",
+            "rawSha256": "bd6f344f936ab126eed9179925bbe2995e4db1eed99c59f3970465b0b5dcd793",
+            "noteId": "KX3-N4",
+            "cliVersion": "0.10.4",
+            "isTestDouble": false
+          }
+        },
+        "title": "Opening-tempo test",
+        "cause": "interaction",
+        "explanation": "First-mover advantage is pooled at 64% and persists across equal counts, while C4 2/3 gives 85% first wins, so opening tempo is more plausible than piece count alone.",
+        "evidenceGames": [
+          "C0-62001-ai",
+          "C1-62003-human",
+          "C2-62001-ai",
+          "C3-62004-ai",
+          "C4-62002-ai"
+        ],
+        "predictions": [
+          {
+            "metric": "first_mover_win_rate",
+            "direction": "decrease",
+            "minEffect": 0.15
+          }
+        ],
+        "intervention": {
+          "id": "S3_FIRST_TURN_ACTIONS",
+          "value": 1
+        },
+        "sideEffects": "slower openings and more turn-limit games",
+        "competing": "planner conveyor valuation",
+        "counterexample": "C0-62001-human",
+        "acceptance": "paired fresh seeds reduce first mover wins by 0.15",
+        "disproof": "win rate changes less than 0.05",
+        "verdict": "more-evidence-needed",
+        "datasetHash": "cf5e4a82cfa3d4ee"
+      },
+      "informational": {
+        "exactLabelMetrics": [
+          {
+            "written": "first_mover_win_rate",
+            "id": "first_mover_win_rate",
+            "direction": "decrease",
+            "size": 0.15
+          },
+          {
+            "written": "first_mover_turn1_cross_rate",
+            "id": null,
+            "direction": "decrease",
+            "size": 0.1
+          }
+        ],
+        "note": "Exact-label lookup shown for the reader only. Registration uses the strict parse that was frozen before the call."
+      }
+    },
+    {
+      "noteId": "KX3-N5",
+      "receivedAt": "2026-11-19T15:53:36.263Z",
+      "validNonce": true,
+      "inWindow": true,
+      "rawBody": "nonce=7feb3e833e095898de&structured=entry%3A+hypothesis%0D%0Atitle%3A+Conveyor+valuation+test%0D%0Acause%3A+planner%0D%0Aexplanation%3A+Frequent+own-trap+carriage+could+amplify+early+setup%2C+though+it+is+not+yet+proven+as+the+main+source+of+imbalance.%0D%0Aevidence%3A+C0-62003-human+C0-62005-ai+C1-62003-ai+C4-62002-ai%0D%0Aprediction1%3A+conveyor_moves+decrease+5%0D%0Aprediction2%3A+%0D%0Aintervention%3A+P2_SELF_BENEFIT_VALUE%0D%0Avalue%3A+0%0D%0AsideEffects%3A+fewer+trap+chains+and+longer+routes%0D%0Acompeting%3A+opening+tempo%0D%0Acounterexample%3A+C0-62001-human%0D%0Aacceptance%3A+conveyor+moves+fall+by+5+per+game+and+first-mover+edge+narrows%0D%0A+disproof%3A+conveyors+fall+but+first-mover+edge+does+not+narrow%0D%0Averdict%3A+more-evidence-needed",
+      "rawStructured": "entry: hypothesis\r\ntitle: Conveyor valuation test\r\ncause: planner\r\nexplanation: Frequent own-trap carriage could amplify early setup, though it is not yet proven as the main source of imbalance.\r\nevidence: C0-62003-human C0-62005-ai C1-62003-ai C4-62002-ai\r\nprediction1: conveyor_moves decrease 5\r\nprediction2: \r\nintervention: P2_SELF_BENEFIT_VALUE\r\nvalue: 0\r\nsideEffects: fewer trap chains and longer routes\r\ncompeting: opening tempo\r\ncounterexample: C0-62001-human\r\nacceptance: conveyor moves fall by 5 per game and first-mover edge narrows\r\n disproof: conveyors fall but first-mover edge does not narrow\r\nverdict: more-evidence-needed",
+      "problems": [
+        "prediction 1: metric conveyor_moves is not listed",
+        "no falsifiable prediction (metric + direction + size)"
+      ],
+      "registered": false,
+      "proposal": {
+        "schema": "rule-sabotage/proposal@1",
+        "id": "HK3-KX3-N5",
+        "kind": "hypothesis",
+        "provenance": {
+          "origin": "kane",
+          "author": "Kane (kane-cli objective mode)",
+          "note": "notebook entry KX3-N5",
+          "kane": {
+            "callId": "KX3",
+            "rawFile": "evidence/balance/v3/kane/2026-11-19T15-41-35Z-KX3/kane-notes.ndjson",
+            "rawSha256": "bd6f344f936ab126eed9179925bbe2995e4db1eed99c59f3970465b0b5dcd793",
+            "noteId": "KX3-N5",
+            "cliVersion": "0.10.4",
+            "isTestDouble": false
+          }
+        },
+        "title": "Conveyor valuation test",
+        "cause": "planner",
+        "explanation": "Frequent own-trap carriage could amplify early setup, though it is not yet proven as the main source of imbalance.",
+        "evidenceGames": [
+          "C0-62003-human",
+          "C0-62005-ai",
+          "C1-62003-ai",
+          "C4-62002-ai"
+        ],
+        "predictions": [],
+        "intervention": {
+          "id": "P2_SELF_BENEFIT_VALUE",
+          "value": 0
+        },
+        "sideEffects": "fewer trap chains and longer routes",
+        "competing": "opening tempo",
+        "counterexample": "C0-62001-human",
+        "acceptance": "conveyor moves fall by 5 per game and first-mover edge narrows",
+        "disproof": "conveyors fall but first-mover edge does not narrow",
+        "verdict": "more-evidence-needed",
+        "datasetHash": "cf5e4a82cfa3d4ee"
+      },
+      "informational": {
+        "exactLabelMetrics": [
+          {
+            "written": "conveyor_moves",
+            "id": null,
+            "direction": "decrease",
+            "size": 5
+          }
+        ],
+        "note": "Exact-label lookup shown for the reader only. Registration uses the strict parse that was frozen before the call."
+      }
+    }
+  ]
+}

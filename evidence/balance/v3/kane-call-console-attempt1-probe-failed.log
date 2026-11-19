@@ -1,0 +1,10 @@
+file:///D:/Rule_Sabotage/rule-sabotage-live/server/balance/v3/kanerun.ts:101
+  if (!probe.installed || probe.loggedIn === false) throw new Error(`kane-cli not ready: ${probe.detail}`);
+                                                          ^
+
+Error: kane-cli not ready: kane-cli not found on PATH (set KANE_CLI)
+    at Module.runKaneV3Call (file:///D:/Rule_Sabotage/rule-sabotage-live/server/balance/v3/kanerun.ts:101:59)
+    at async file:///D:/Rule_Sabotage/rule-sabotage-live/scripts/balance-v3.ts:63:13
+
+Node.js v24.22.1
+EXIT 1
