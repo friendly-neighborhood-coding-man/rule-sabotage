@@ -1,0 +1,370 @@
+{
+  "schema": "rule-sabotage/v4-pilot-evaluation@1",
+  "dir": "evidence/balance/v4/pilot/2026-11-19T21-42-56Z-v4-pilot",
+  "protocolSha256": "4cfaf95e2064b63290704b4a11586c2f09ed96603bdff83e1540b16c8f494114",
+  "describe": {
+    "A": {
+      "games": 60,
+      "decisive": 59,
+      "draws": 1,
+      "firstMover": {
+        "k": 33,
+        "n": 59,
+        "rate": 0.559,
+        "ci95": [
+          0.433,
+          0.678
+        ]
+      },
+      "humanSide": {
+        "k": 25,
+        "n": 59,
+        "ci95": [
+          0.306,
+          0.551
+        ]
+      },
+      "first_mover_win_rate": 0.559,
+      "abs_first_mover_edge": 0.059,
+      "more_pieces_side_win_rate": null,
+      "human_side_win_rate": 0.424,
+      "mean_turns": 16.633,
+      "turn_limit_rate": 0.117,
+      "conveyor_per_game": 14.9,
+      "self_trigger_share": 0.867,
+      "turn1_score_rate": 0.35,
+      "lead_changes": 4.233,
+      "comeback_rate": 0.695,
+      "effect_entropy": 0.762,
+      "unused_cell_rate": 0.481,
+      "median_turns": 11,
+      "teleportPlacementsPerGame": 1.517,
+      "teleportTriggersPerGame": 2.667,
+      "distinctOpenings": 24,
+      "replansPerGame": 0,
+      "safety": {
+        "illegal": 0,
+        "errors": 0,
+        "softlocks": 0
+      },
+      "cpuSecondsPerGame": 4.162
+    },
+    "B": {
+      "games": 60,
+      "decisive": 58,
+      "draws": 2,
+      "firstMover": {
+        "k": 16,
+        "n": 58,
+        "rate": 0.276,
+        "ci95": [
+          0.178,
+          0.402
+        ]
+      },
+      "humanSide": {
+        "k": 21,
+        "n": 58,
+        "ci95": [
+          0.251,
+          0.491
+        ]
+      },
+      "first_mover_win_rate": 0.276,
+      "abs_first_mover_edge": 0.224,
+      "more_pieces_side_win_rate": null,
+      "human_side_win_rate": 0.362,
+      "mean_turns": 18.8,
+      "turn_limit_rate": 0.117,
+      "conveyor_per_game": 17.9,
+      "self_trigger_share": 0.862,
+      "turn1_score_rate": 0,
+      "lead_changes": 5.617,
+      "comeback_rate": 0.776,
+      "effect_entropy": 0.732,
+      "unused_cell_rate": 0.45,
+      "median_turns": 13,
+      "teleportPlacementsPerGame": 0.583,
+      "teleportTriggersPerGame": 0.767,
+      "distinctOpenings": 5,
+      "replansPerGame": 0.3,
+      "safety": {
+        "illegal": 0,
+        "errors": 0,
+        "softlocks": 0
+      },
+      "cpuSecondsPerGame": 12.651
+    },
+    "C": {
+      "games": 60,
+      "decisive": 60,
+      "draws": 0,
+      "firstMover": {
+        "k": 25,
+        "n": 60,
+        "rate": 0.417,
+        "ci95": [
+          0.301,
+          0.543
+        ]
+      },
+      "humanSide": {
+        "k": 21,
+        "n": 60,
+        "ci95": [
+          0.242,
+          0.476
+        ]
+      },
+      "first_mover_win_rate": 0.417,
+      "abs_first_mover_edge": 0.083,
+      "more_pieces_side_win_rate": null,
+      "human_side_win_rate": 0.35,
+      "mean_turns": 14.7,
+      "turn_limit_rate": 0.05,
+      "conveyor_per_game": 16.4,
+      "self_trigger_share": 0.873,
+      "turn1_score_rate": 0.2,
+      "lead_changes": 4.717,
+      "comeback_rate": 0.717,
+      "effect_entropy": 0.765,
+      "unused_cell_rate": 0.445,
+      "median_turns": 11,
+      "teleportPlacementsPerGame": 1.133,
+      "teleportTriggersPerGame": 1.783,
+      "distinctOpenings": 20,
+      "replansPerGame": 0.15,
+      "safety": {
+        "illegal": 0,
+        "errors": 0,
+        "softlocks": 0
+      },
+      "cpuSecondsPerGame": 12.106
+    }
+  },
+  "bMinusA": {
+    "mean_turns": {
+      "metric": "mean_turns",
+      "treated": 18.8,
+      "control": 16.633,
+      "diff": 2.167,
+      "ci95": [
+        -2.8,
+        7.183
+      ]
+    },
+    "turn_limit_rate": {
+      "metric": "turn_limit_rate",
+      "treated": 0.117,
+      "control": 0.117,
+      "diff": 0,
+      "ci95": [
+        -0.1,
+        0.1
+      ]
+    },
+    "first_mover_win_rate": {
+      "metric": "first_mover_win_rate",
+      "treated": 0.276,
+      "control": 0.559,
+      "diff": -0.283,
+      "ci95": [
+        -0.449,
+        -0.119
+      ]
+    },
+    "human_side_win_rate": {
+      "metric": "human_side_win_rate",
+      "treated": 0.362,
+      "control": 0.424,
+      "diff": -0.062,
+      "ci95": [
+        -0.233,
+        0.117
+      ]
+    },
+    "turn1_score_rate": {
+      "metric": "turn1_score_rate",
+      "treated": 0,
+      "control": 0.35,
+      "diff": -0.35,
+      "ci95": [
+        -0.467,
+        -0.233
+      ]
+    },
+    "conveyor_per_game": {
+      "metric": "conveyor_per_game",
+      "treated": 17.9,
+      "control": 14.9,
+      "diff": 3,
+      "ci95": [
+        1.95,
+        4.067
+      ]
+    },
+    "self_trigger_share": {
+      "metric": "self_trigger_share",
+      "treated": 0.862,
+      "control": 0.867,
+      "diff": -0.005,
+      "ci95": [
+        -0.033,
+        0.023
+      ]
+    },
+    "effect_entropy": {
+      "metric": "effect_entropy",
+      "treated": 0.732,
+      "control": 0.762,
+      "diff": -0.031,
+      "ci95": [
+        -0.078,
+        0.017
+      ]
+    },
+    "lead_changes": {
+      "metric": "lead_changes",
+      "treated": 5.617,
+      "control": 4.233,
+      "diff": 1.383,
+      "ci95": [
+        0.6,
+        2.167
+      ]
+    },
+    "comeback_rate": {
+      "metric": "comeback_rate",
+      "treated": 0.776,
+      "control": 0.695,
+      "diff": 0.081,
+      "ci95": [
+        -0.07,
+        0.233
+      ]
+    },
+    "abs_first_mover_edge": {
+      "treated": 0.224,
+      "control": 0.059,
+      "diff": 0.165,
+      "ci95": [
+        -0.023,
+        0.286
+      ]
+    }
+  },
+  "foresight": {
+    "A": {
+      "moves": 160,
+      "realizedMean": 3.6,
+      "blindExpectedMean": 2.321,
+      "advantageMean": 1.279,
+      "ci95": [
+        1.11,
+        1.438
+      ],
+      "meanPercentile": 0.757,
+      "turn1Moves": 44
+    },
+    "B": {
+      "moves": 45,
+      "realizedMean": 1.356,
+      "blindExpectedMean": 1.346,
+      "advantageMean": 0.01,
+      "ci95": [
+        -0.401,
+        0.414
+      ],
+      "meanPercentile": 0.501,
+      "turn1Moves": 0
+    },
+    "C_ev": {
+      "moves": 22,
+      "realizedMean": 0.773,
+      "blindExpectedMean": 0.81,
+      "advantageMean": -0.038,
+      "ci95": [
+        -0.696,
+        0.613
+      ],
+      "meanPercentile": 0.49,
+      "turn1Moves": 0
+    },
+    "C_prod": {
+      "moves": 85,
+      "realizedMean": 3.635,
+      "blindExpectedMean": 2.434,
+      "advantageMean": 1.201,
+      "ci95": [
+        0.979,
+        1.426
+      ],
+      "meanPercentile": 0.747,
+      "turn1Moves": 23
+    }
+  },
+  "strength": {
+    "evDecisiveWins": 19,
+    "decisive": 60,
+    "rate": 0.317,
+    "ci95": [
+      0.213,
+      0.442
+    ],
+    "verdict": "weaker",
+    "evAs_human": {
+      "k": 5,
+      "n": 30,
+      "rate": 0.167,
+      "ci95": [
+        0.073,
+        0.336
+      ]
+    },
+    "evAs_ai": {
+      "k": 14,
+      "n": 30,
+      "rate": 0.467,
+      "ci95": [
+        0.302,
+        0.639
+      ]
+    },
+    "evFirst": {
+      "k": 7,
+      "n": 30,
+      "rate": 0.233,
+      "ci95": [
+        0.118,
+        0.409
+      ]
+    },
+    "evSecond": {
+      "k": 12,
+      "n": 30,
+      "rate": 0.4,
+      "ci95": [
+        0.246,
+        0.577
+      ]
+    },
+    "draws": 0
+  },
+  "gates": {
+    "I1": "PASS",
+    "I2": "PASS",
+    "I3": "PASS",
+    "I4": "HOLDS",
+    "G1": "INCONCLUSIVE",
+    "G2": "PASS",
+    "G3": "INCONCLUSIVE",
+    "G4": "PASS",
+    "G5": "PASS",
+    "G6": "PASS",
+    "S1": "weaker"
+  },
+  "verdicts": {
+    "informationFairness": "PASS",
+    "gameplayAdequacy": "INCONCLUSIVE"
+  }
+}

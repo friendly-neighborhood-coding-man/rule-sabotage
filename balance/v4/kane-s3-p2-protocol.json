@@ -1,0 +1,34 @@
+{
+  "schema": "rule-sabotage/v4-prospective-protocol@1",
+  "id": "V4-KANE-S3-P2",
+  "status": "PREPARED_NOT_AUTHORISED (no game of this protocol has been played; it needs its own operator-approved, frozen game budget)",
+  "origin": {
+    "kaneAuthored": "KX3-N1 (S3 = 1 hypothesis), KX3-N2 (P2 = 0 hypothesis), KX3-N3 (conclusion proposing S3 = 1 versus P2 = 0): evidence/balance/v3/kane/2026-11-19T15-41-35Z-KX3/kane-notes.ndjson, sha256 bd6f344f936ab126eed9179925bbe2995e4db1eed99c59f3970465b0b5dcd793",
+    "systemNormalized": "balance/v4/kane-normalized.json (normalizer kane-normalizer-v4.1): N1 and N3 VALIDATED_PROPOSAL; N2 REJECTED_AMBIGUOUS on its free-text cause only (its two predictions resolve exactly: conveyor_per_game decrease 5, abs_first_mover_edge decrease 0.10)",
+    "humanApprovedExperiment": null,
+    "note": "These are Kane's hypotheses to TEST, not corrections shown to work. Registration is prospective: against games not yet played. V3's completed games are never used as their test."
+  },
+  "operatorDecisionsBeforeRegistration": [
+    "KX3-N2: classify the cause 'AI planner valuation of own-trap benefit' (the normalizer lists 'planner' as the only candidate; it does not choose). Without a decision, N2 stays unregistered and P2 is run only as the comparator Kane's N3 asked for.",
+    "KX3-N4 and KX3-N5 are shorter duplicates of N1 / N2 with an invented metric id each; they add no prediction N1 / N2 do not already make and are not needed for this protocol."
+  ],
+  "design": {
+    "arms": [
+      { "id": "K0", "label": "control: production 3v3, production planner", "treatment": null },
+      { "id": "K1", "label": "S3 alone: first mover limited to 1 action on turn 1", "treatment": { "id": "S3_FIRST_TURN_ACTIONS", "value": 1 } },
+      { "id": "K2", "label": "P2 alone: own-benefit valuation 0 (both sides)", "treatment": { "id": "P2_SELF_BENEFIT_VALUE", "value": 0 } }
+    ],
+    "seeds": "one fresh common list for all three arms (matched seeds, both first movers per seed), chosen and committed at approval time; not 64001-64030 (V4 pilot) and not the V4 holdout 65001-65060",
+    "gamesPerArm": 80,
+    "estimatedGames": 240,
+    "planner": "decided at approval: production planner (comparable to V3), or the EV candidate if the operator adopts it first. Fixed for all arms.",
+    "comparisons": [
+      { "id": "K1-K0", "tests": "KX3-N1 predictions: first_mover_win_rate decrease >= 0.15; turn1_score_rate decrease >= 0.10" },
+      { "id": "K2-K0", "tests": "KX3-N2 predictions (only if N2 is registered): conveyor_per_game decrease >= 5; abs_first_mover_edge decrease >= 0.10" },
+      { "id": "K1-K2", "tests": "KX3-N3 discriminating design: which single factor lowers the first-mover rate more, judged by its own words: a drop of at least 15 points without a comparable rise in turn-limit games (operationalised as turn_limit_rate increase < 0.10)" }
+    ],
+    "uncertainty": "paired-by-seed bootstrap 95% intervals (V3 pairedDiff), the frozen V3 met / contradicted / unclear rule",
+    "acceptance": "Neither arm is a correction until it also clears the V3 acceptance gates (server/balance/v3/proposals.ts acceptCorrection) on an untouched holdout."
+  },
+  "budget": { "kaneCalls": 0, "externalCalls": 0, "games": 240, "approvedBy": null }
+}
