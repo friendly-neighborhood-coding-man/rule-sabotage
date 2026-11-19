@@ -125,7 +125,8 @@ export type ResultLookup = (experiment: string, design: Design, metric: string) 
 /** Judge one prediction against its effect estimate. Small or noisy samples end "unclear", never "met". */
 export function judge(p: Prediction, e: Effect | null, minUnits: number, minEvents = 0): { status: PredictionResult['status']; reason: string } {
   if (!e || e.effect === null) return { status: 'not-run', reason: 'no result' };
-  if (!e.ci || e.units < minUnits) return { status: 'unclear', reason: `too few independent seeds (${e.units} < ${minUnits}) for an interval` };
+  if (e.units < minUnits) return { status: 'unclear', reason: `too few independent seeds (${e.units} < ${minUnits}) for an interval` };
+  if (!e.ci) return { status: 'unclear', reason: 'no usable interval (too many bootstrap resamples contain no events of this kind)' };
   const ev = [e.events?.control, e.events?.treatment].filter((x): x is number => typeof x === 'number');
   if (ev.length && Math.min(...ev) < minEvents) return { status: 'unclear', reason: `too few underlying events (${ev.join(' / ')} < ${minEvents}); an interval over so few events is not judged` };
   const [lo, hi] = e.ci, m = p.minEffect, f = (x: number) => x.toFixed(3);

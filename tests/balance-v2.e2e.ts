@@ -18,19 +18,17 @@ const chrome = ['C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe', 'C
 if (!chrome) { console.log('SKIP: no Chrome for the analyzer pages'); process.exit(0); }
 Object.assign(process.env, { KANE_REFEREE: 'on', KANE_CLI: join(root, 'tests/fixtures/fake-kane.mjs'), KANE_CHROME: chrome, FAKE_KANE_MODE: 'approve', FAKE_KANE_OBJECTIVE_MODE: 'note' });
 const cfg = JSON.parse(readFileSync(join(root, 'balance/v2/config.json'), 'utf8'));
-cfg.seeds.development = [3000, 3001, 3005]; cfg.seeds.holdout = [7000, 7001, 7002]; cfg.seeds.headToHeadSeeds = 1;
-cfg.evaluation.minUnits = 3; cfg.evaluation.bootstrap = 200; cfg.adequacy.minUnits = 3; cfg.corrections.max = 1;
+cfg.seeds.development = [3000, 3001, 3005, 3006]; cfg.seeds.holdout = [7000, 7001, 7002]; cfg.seeds.headToHeadSeeds = 1;
+cfg.evaluation.minUnits = 3; cfg.evaluation.minEvents = 3; cfg.evaluation.bootstrap = 200; cfg.adequacy.minUnits = 3; cfg.corrections.max = 1;
 writeFileSync(join(tmp, 'config.json'), JSON.stringify(cfg));
 const hs = JSON.parse(readFileSync(join(root, 'balance/v2/hypotheses.json'), 'utf8'));
 hs.hypotheses = hs.hypotheses.filter((h: { id: string }) => ['H0', 'H2', 'H5'].includes(h.id));
-hs.hypotheses.find((h: { id: string }) => h.id === 'H2').predictions = hs.hypotheses.find((h: { id: string }) => h.id === 'H2').predictions.filter((p: { versus?: string[] }) => !p.versus?.includes('H1') && !p.versus?.includes('H4')).concat([{ id: 'P2x', experiment: 'E2', design: 'selfplay', metric: 'ew_self_trigger_share', direction: 'decrease', minEffect: 0.15, role: 'discriminating', versus: ['H0'], text: 'e2e: H0 makes no prediction here' }]);
-// A plumbing-only H1 whose prediction the rule variant satisfies by construction, so the correction → holdout →
-// adequacy path is exercised end to end. It is labelled as such and proves nothing about balance.
-const h1 = structuredClone(hs.hypotheses.find((h: { id: string }) => h.id === 'H0'));
-Object.assign(h1, { id: 'H1', title: 'E2E PLUMBING ONLY: the same-column rule variant removes teleport displacement', competitors: ['H0'], interventions: ['E4'], primaryMetric: 'tp_abs_dx', predictions: [
-  { id: 'P1a', experiment: 'E4', design: 'selfplay', metric: 'tp_abs_dx', direction: 'decrease', minEffect: 0.5, role: 'primary', text: 'plumbing' },
-  { id: 'P1b', experiment: 'E4', design: 'selfplay', metric: 'tp_abs_dx', direction: 'decrease', minEffect: 0.5, role: 'discriminating', versus: ['H0'], text: 'plumbing' }] });
-hs.hypotheses.push(h1);
+// PLUMBING ONLY: H2 is replaced by a deliberately weak version (any 3-point drop in shove self-triggers under E2),
+// so the correction → holdout → adequacy path is exercised end to end on these few seeds. Games are deterministic,
+// so this outcome is fixed for these seeds. It is labelled as such and proves nothing about balance.
+Object.assign(hs.hypotheses.find((h: { id: string }) => h.id === 'H2'), { title: 'E2E PLUMBING ONLY: weak version of H2', competitors: ['H0'], interventions: ['E2'], predictions: [
+  { id: 'P2a', experiment: 'E2', design: 'selfplay', metric: 'ew_self_trigger_share', direction: 'decrease', minEffect: 0.03, role: 'primary', text: 'plumbing' },
+  { id: 'P2x', experiment: 'E2', design: 'selfplay', metric: 'ew_self_trigger_share', direction: 'decrease', minEffect: 0.03, role: 'discriminating', versus: ['H0'], text: 'plumbing: H0 makes no prediction here' }] });
 writeFileSync(join(tmp, 'hypotheses.json'), JSON.stringify(hs));
 
 const { runV2 } = await import('../server/balance/v2/cycle.ts');
@@ -53,7 +51,7 @@ ok('every hypothesis got an explicit outcome', st.hypotheses.every(h => ['SUPPOR
 ok('the analyzer challenge ran on served pages with independent conditions, and the test double corroborates nothing', st.kane.some(k => k.role === 'challenge-analyzer' && k.analyzer?.isTestDouble) && st.hypotheses.every(h => h.evaluation?.kane.corroboration !== 'AGREES'));
 const executable = st.corrections.filter(c => c.spec);
 console.log(`  outcomes: ${st.hypotheses.map(h => `${h.id}=${h.evaluation?.outcome}`).join(' ')} · corrections: ${st.corrections.map(c => `${c.id}:${c.category}`).join(' ')}`);
-ok('an executable correction was re-observed on the holdout (plumbing hypothesis H1)', executable.length > 0 && st.experiments.some(e => e.seedSet === 'holdout' && e.key.startsWith(executable[0].id)));
+ok('an executable correction was re-observed on the holdout (plumbing version of H2)', executable.length > 0 && st.experiments.some(e => e.seedSet === 'holdout' && e.key.startsWith(executable[0].id)));
 ok('every adequacy review keeps implementation correctness and balance adequacy separate, and nothing is SUFFICIENT without real Kane', st.reviews.length > 0 && st.reviews.every(r => r.implementationCorrectness !== 'PASS' && ['UNVERIFIED', 'REGRESSION'].includes(r.balanceAdequacy)));
 ok('production weights untouched; nothing was promoted', readFileSync(join(root, 'balance/balance.weights.json'), 'utf8') === before && !st.decision?.items.some(i => /^PROPOSED|^RECOMMENDED/.test(i.action)));
 ok('Kane call budget respected', st.budgets.kaneCallsUsed <= st.budgets.kaneCallsMax);
