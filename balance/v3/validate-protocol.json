@@ -1,0 +1,54 @@
+{
+  "schema": "rule-sabotage/v3-validate-protocol@1",
+  "status": "FROZEN_BEFORE_KANE",
+  "matrix": "balance/v3/validate-matrix.json",
+  "authorisation": "Eric, 2026-11-19 15:01 UTC: Kane first (one objective call), then exactly 240 offline games on fresh seeds 62101-62130, 0 external calls, 0 further Kane calls, no promotion.",
+  "freezeRule": "This file and the matrix are hashed into balance/v3/journal.ndjson BEFORE the Kane call. Kane's proposals are mapped onto these arms afterwards. The arms, the seed set, the 240-game total and the comparisons below are not changed after seeing Kane's output or any validation result. A proposal that would need a different allocation is recorded as NOT_TESTED.",
+  "arms": {
+    "A": { "start": "3/3", "planner": "production", "games": 60, "role": "control for B and C" },
+    "B": { "start": "3/3", "planner": "P3 blindRng (both sides)", "games": 60, "role": "teleport RNG foresight (HC5 vs HC4)" },
+    "C": { "start": "2/3", "planner": "production", "games": 60, "role": "does the screen's C4 signal replicate (HC0 vs HC1); control for D" },
+    "D": { "start": "2/3", "planner": "P4 normalizedEval (both sides)", "games": 60, "role": "starting rules vs planner evaluation (HC1 vs HC2)" }
+  },
+  "comparisons": [
+    { "id": "B-A", "treated": "B", "control": "A" },
+    { "id": "C-A", "treated": "C", "control": "A" },
+    { "id": "D-C", "treated": "D", "control": "C" }
+  ],
+  "metrics": {
+    "first_mover_win_rate": "first-mover wins / decisive games",
+    "abs_first_mover_edge": "|first_mover_win_rate - 0.5|",
+    "more_pieces_side_win_rate": "wins of the side that started with more pieces / decisive games (unequal arms only)",
+    "human_side_win_rate": "Human-side wins / decisive games",
+    "mean_turns": "mean game length in turns",
+    "turn_limit_rate": "games that reached turn 60 / games",
+    "conveyor_per_game": "own-trap triggers that carried the stepping piece forward, per game",
+    "self_trigger_share": "triggers on the stepping side's own traps / all triggers",
+    "turn1_score_rate": "games in which the first mover had a piece across at the end of turn 1 / games",
+    "lead_changes": "lead changes per game",
+    "comeback_rate": "decisive games won by a side that trailed after turn 4 / decisive games",
+    "effect_entropy": "normalized entropy of placed effects",
+    "unused_cell_rate": "trap cells never triggered / cells placed"
+  },
+  "statistics": {
+    "difference": "treated minus control, paired by seed: a seed's two games (both first movers) move together. 95% interval from 5000 seeded bootstrap resamples of the 30 seeds (seed 62100).",
+    "absoluteRate": "Wilson 95% interval",
+    "predictionRule": {
+      "increase/decrease": "met = the difference in the predicted direction is at least minEffect AND its 95% interval excludes 0; contradicted = the interval's bound in the predicted direction is below minEffect (an effect of the predicted size is excluded); otherwise unclear",
+      "no-change": "met = the whole 95% interval lies within [-minEffect, +minEffect]; contradicted = the interval excludes 0 and |difference| >= minEffect; otherwise unclear"
+    },
+    "hypothesisRule": "SUPPORTED = every tested prediction met; REFUTED = at least one contradicted; INCONCLUSIVE = otherwise; NOT_TESTED = none of its predictions can be measured under its intervention by arms A-D. SUPPORTED means the predictions held on these seeds, not proof."
+  },
+  "mapping": {
+    "HC0": { "test": "absolute criteria on arm C, first_mover_win_rate", "supported": "rate <= 0.70 and Wilson interval includes 0.60", "refuted": "rate >= 0.75 and Wilson lower bound > 0.60", "else": "INCONCLUSIVE" },
+    "HC1": { "predictions": [ { "metric": "first_mover_win_rate", "comparison": "C-A", "direction": "increase", "minEffect": 0.15 }, { "metric": "more_pieces_side_win_rate", "comparison": "absolute on C vs 0.5", "direction": "decrease", "minEffect": 0.15, "note": "C's rate must be at most 0.35 with the Wilson upper bound below 0.5" }, { "metric": "first_mover_win_rate", "comparison": "D-C", "direction": "no-change", "minEffect": 0.10 } ] },
+    "HC2": { "predictions": [ { "metric": "more_pieces_side_win_rate", "comparison": "D-C", "direction": "increase", "minEffect": 0.15 } ] },
+    "HC3": { "status": "NOT_TESTED", "reason": "needs P1 (partial own-benefit search); no arm runs it" },
+    "HC4": { "status": "NOT_TESTED", "reason": "needs S3 (turn-1 action cap); no arm runs it. Arm B reports whether first-mover tempo remains without RNG foresight, which bears on HC4 but does not test its intervention." },
+    "HC5": { "predictions": [ { "metric": "turn1_score_rate", "comparison": "B-A", "direction": "decrease", "minEffect": 0.15 }, { "metric": "abs_first_mover_edge", "comparison": "B-A", "direction": "decrease", "minEffect": 0.10 } ] },
+    "HD1": { "status": "NOT_TESTED", "reason": "needs S4 (second-mover bonus); no arm runs it" },
+    "kane": "Kane proposals registered after the call are mapped by the same rules: a prediction is tested only if its metric is measured by one of the comparisons above under the proposal's own intervention (or observationally, if it names none). Everything else is NOT_TESTED."
+  },
+  "foresight": "Independent of win rates: for every teleport a piece triggers, the real engine re-runs that move from the pre-move state with 200 seeded random RNG states, which gives the squares a blind (non-foreseeing) step onto that teleport would gain on average. Realized minus blind-expected gain, in A (and the screen) versus B, measures how much information the planner extracts from the engine RNG. Reported as an information-access fairness question whatever the win-rate tests show.",
+  "reported": "Safety (illegal, errors, softlocks), length (mean turns, turn-limit rate), counterplay and diversity for B and D versus their controls are reported for context. Nothing is promoted."
+}
