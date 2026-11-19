@@ -20,8 +20,10 @@ import { type Weights, DEFAULT_WEIGHTS, effectUpkeep, plannerEffects, activation
  *    harm to self; benefit to own pieces no longer makes a cell a candidate. Valuation is untouched.
  *  - blindRng (E5, information): the planner's look-ahead simulations use a perturbed copy of the engine RNG, so it
  *    can no longer foresee where a random effect (teleport) will send a piece. The real game RNG is untouched.
+ *  - searchOwnBenefitFactor (V3, placement search, PARTIAL): benefit to own pieces counts only this fraction when a
+ *    cell is scored as a trap candidate. 1 = unchanged, 0 = the same as searchOwnBenefit:false. Valuation untouched.
  */
-export type PlannerHooks = { selfBenefitFactor?: number; searchOwnBenefit?: boolean; blindRng?: boolean };
+export type PlannerHooks = { selfBenefitFactor?: number; searchOwnBenefit?: boolean; blindRng?: boolean; searchOwnBenefitFactor?: number };
 const blind = (st: State, salt: number) => { let x = (st.rng ^ Math.imul(salt + 1, 0x85ebca6b) ^ 0x5bd1e995) >>> 0; x ^= x << 13; x >>>= 0; x ^= x >>> 17; x ^= x << 5; st.rng = (x >>> 0) || 0x2545f491; };
 
 export type TurnPlan = { placement: Placement | null; moves: Move[]; score: number; afterReply: number; summary: string; id: string };
@@ -105,6 +107,7 @@ export function bestCells(s: State, p: Player, e: Effect, w: Weights = DEFAULT_W
       const wt = ahead / (1 + 0.6 * d + 0.8 * lateral);
       let pen = cellPenalty(s, q.owner, k, e, w);
       if (hooks?.searchOwnBenefit === false && q.owner === p) pen = Math.max(0, pen);
+      else if (hooks?.searchOwnBenefitFactor !== undefined && q.owner === p && pen < 0) pen *= hooks.searchOwnBenefitFactor;
       v += (q.owner === p ? -w.planner.selfHarmFactor : 1) * wt * pen;
     }
     return { k, v };

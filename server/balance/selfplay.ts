@@ -9,7 +9,9 @@ import { Worker } from 'node:worker_threads';
 import {
   type State, type GameEvent, type Placement, type RuleVariant, init, applyPlacement, applyMove, endTurn, validatePlacement, validateMove,
   legalMoves, onBoard, parseKey, GOAL_X, ruleById, scored as scoredN, distanceLeft,
+  type StartingConfiguration, type StartState, compareStanding,
 } from '../engine.ts';
+import { createHash } from 'node:crypto';
 import { planTurn, planMoves, basePenalty, type PlannerHooks } from '../ai.ts';
 import { type Player, type Effect, PLAYERS, other } from '../rules.ts';
 import { type Weights, type FrozenWeights, effectId, activationUtility, freezeWeights, weightsHash } from '../weights.ts';
@@ -36,9 +38,26 @@ export type GameRec = {
   variant?: string; hooks?: Partial<Record<Player, PlannerHooks>>;
   /** V2 exploration replays only: the planner's chosen plan and its best rejected alternatives per turn. */
   planTrace?: PlanTrace[];
+  /** V3 experiments only: the resolved experimental starting configuration (absent in production-condition games). */
+  start?: StartState;
+  /** V3 only (opts.detail): pieces across per side at the end, and the replayable turn-by-turn record. */
+  scored?: Record<Player, number>;
+  detail?: GameDetail;
 };
+/** One move as executed by the real engine, with the engine RNG before it and every engine event it produced. */
+export type DetailMove = { from: string; dir: string; mode: string; rngBefore: number; events: GameEvent[] };
+export type DetailCandidate = { id: string; summary: string; score: number; effect: string | null; cells: string[]; moves: number };
+export type DetailTurn = {
+  turn: number; p: Player; actions: number; rngStart: number;
+  /** Compact board at the start of the turn: piece id@x,y (s = across, fN = frozen N, + = shield) and live effect cells. */
+  board: { pieces: string[]; cells: string[] };
+  /** Every whole-turn candidate the planner evaluated (placement variants x greedy moves), ranked; `chosen` is its id. */
+  candidates: DetailCandidate[]; chosen: string; considered: number; sims: number;
+  placement: { effect: string; cells: string[]; events: GameEvent[] } | null; moves: DetailMove[]; endEvents: GameEvent[]; unused: number;
+};
+export type GameDetail = { schema: 'rule-sabotage/game-detail@1'; seed: number; first: Player; start: StartState | null; turns: DetailTurn[]; finalHash: string };
 export type PlanTrace = { turn: number; p: Player; chosen: string; chosenScore: number; alternatives: { summary: string; score: number }[] };
-export type PlayOpts = { maxMs?: number; capture?: { turn: number; cell: string }; hooks?: Partial<Record<Player, PlannerHooks>>; variant?: RuleVariant; traceTurns?: number };
+export type PlayOpts = { maxMs?: number; capture?: { turn: number; cell: string }; hooks?: Partial<Record<Player, PlannerHooks>>; variant?: RuleVariant; traceTurns?: number; start?: StartingConfiguration; detail?: boolean };
 export type BoardSnap = { pieces: { id: string; owner: Player; x: number; y: number; scored: boolean; frozen: number }[]; cells: { cell: string; label: string; owner: Player }[] };
 export type Captured = { turn: number; cell: string; mover: Player; move: string; before: BoardSnap; after: BoardSnap; events: GameEvent[] };
 
@@ -49,7 +68,12 @@ type Pending = { rec: TriggerRec; owner: Player; nPieces: number; kind: 'freeze'
 /** Play one complete game. Weights are frozen copies; nothing here can change the engine. */
 export function playGame(seed: number, first: Player, weights: Record<Player, FrozenWeights>, opts: PlayOpts = {}): GameRec {
   const t0 = Date.now();
-  const s: State = init(seed, { first, ...(opts.variant ? { variant: opts.variant } : {}) });
+  const s: State = init(seed, { first, ...(opts.variant ? { variant: opts.variant } : {}), ...(opts.start ? { start: opts.start } : {}) });
+  const detail: DetailTurn[] | null = opts.detail ? [] : null;
+  const compactBoard = () => ({
+    pieces: s.pieces.map(q => `${q.id}@${q.x},${q.y}${q.scored ? 's' : ''}${q.frozen ? `f${q.frozen}` : ''}${q.shield ? '+' : ''}`),
+    cells: Object.entries(s.cells).sort(([a], [b]) => a.localeCompare(b)).map(([k, id]) => { const r = ruleById(s, id)!; return `${k}=${effectId(r.effect)}:${r.owner}`; }),
+  });
   const rec: GameRec = {
     seed, first, weights: { human: { version: weights.human.version, hash: weights.human.hash }, ai: { version: weights.ai.version, hash: weights.ai.hash } },
     winner: 'draw', reason: '', turns: 0, turnLimit: false, placements: [], triggers: [], unusedCells: {}, placedCells: {},
@@ -107,15 +131,18 @@ export function playGame(seed: number, first: Player, weights: Record<Player, Fr
     const turnNo = s.turn;
     const lm = legalMoves(s, p).length;
     if (onBoard(s, p).length && lm === 0) { stuck[p]++; rec.longestStuck[p] = Math.max(rec.longestStuck[p], stuck[p]); } else stuck[p] = 0;
+    const dt: DetailTurn | null = detail ? { turn: turnNo, p, actions: s.actionsLeft, rngStart: s.rng, board: compactBoard(), candidates: [], chosen: '', considered: 0, sims: 0, placement: null, moves: [], endEvents: [], unused: 0 } : null;
+    if (dt) detail!.push(dt);
     try {
       const full = planTurn(s, { me: p, weights: w, ...(opts.hooks?.[p] ? { hooks: opts.hooks[p] } : {}) });
       const plan = full.chosen;
+      if (dt) { dt.candidates = full.ranked.map(c => ({ id: c.id, summary: c.summary, score: Math.round(c.score * 1000) / 1000, effect: c.placement ? effectId(c.placement.effect) : null, cells: c.placement ? [...c.placement.cells] : [], moves: c.moves.length })); dt.chosen = plan.id; dt.considered = full.candidates; dt.sims = full.sims; }
       if (opts.traceTurns && turnNo <= opts.traceTurns) (rec.planTrace ??= []).push({ turn: turnNo, p, chosen: plan.summary, chosenScore: Math.round(plan.score * 1000) / 1000, alternatives: full.ranked.filter(c => c !== plan).slice(0, 4).map(c => ({ summary: c.summary, score: Math.round(c.score * 1000) / 1000 })) });
       if (plan.placement) {
         const pl: Placement = plan.placement;
         const c = validatePlacement(s, p, pl);
         if (!c.ok) rec.illegal.push(`turn ${turnNo} ${p} placement: ${c.reason}`);
-        else { applyPlacement(s, p, pl); rec.placements.push({ turn: turnNo, p, effect: effectId(pl.effect), cells: pl.cells }); placedBy[p].push(effectId(pl.effect)); }
+        else { const pev = applyPlacement(s, p, pl); rec.placements.push({ turn: turnNo, p, effect: effectId(pl.effect), cells: pl.cells }); placedBy[p].push(effectId(pl.effect)); if (dt) dt.placement = { effect: effectId(pl.effect), cells: [...pl.cells], events: pev }; }
       }
       if (s.phase === 'place') s.phase = 'move';
       const moves = planMoves(s, p, 0, Math.random, w, opts.hooks?.[p]).moves;
@@ -125,7 +152,9 @@ export function playGame(seed: number, first: Player, weights: Record<Player, Fr
         if (!c.ok) { rec.illegal.push(`turn ${turnNo} ${p} move ${m.from} ${m.dir}: ${c.reason}`); break; }
         const snap = snapshot();
         const before = opts.capture && !rec.captured && turnNo === opts.capture.turn ? board() : null;
+        const rngBefore = s.rng;
         const ev = applyMove(s, p, m);
+        if (dt) dt.moves.push({ from: m.from, dir: m.dir, mode: m.mode, rngBefore, events: ev });
         if (before && ev.some(e => e.t === 'trigger' && e.cell === opts.capture!.cell)) rec.captured = { turn: turnNo, cell: opts.capture!.cell, mover: p, move: `${m.from} ${m.dir}`, before, after: board(), events: ev };
         handle(ev, snap);
       }
@@ -142,8 +171,9 @@ export function playGame(seed: number, first: Player, weights: Record<Player, Fr
       else { pd.rec.realized = unused === 0 ? -1 : 0; pd.rec.how = unused === 0 ? 'banked action used' : 'banked action wasted'; }
       pending.splice(pending.indexOf(pd), 1);
     }
-    endTurn(s);
-    const lead = Math.sign((scoredN(s, 'human') - scoredN(s, 'ai')) * 100 + (distanceLeft(s, 'ai') - distanceLeft(s, 'human')));
+    const endEv = endTurn(s);
+    if (dt) { dt.endEvents = endEv; dt.unused = unused; }
+    const lead = s.start ? compareStanding(s) : Math.sign((scoredN(s, 'human') - scoredN(s, 'ai')) * 100 + (distanceLeft(s, 'ai') - distanceLeft(s, 'human')));
     if (lead !== 0 && lastLead !== 0 && lead !== lastLead) rec.leadChanges++;
     if (lead !== 0) lastLead = lead;
     if (s.turn > 4 && lead !== 0) rec.trailed[lead > 0 ? 'ai' : 'human'] = true;
@@ -158,13 +188,24 @@ export function playGame(seed: number, first: Player, weights: Record<Player, Fr
   }
   for (const p of PLAYERS) rec.signature[p] = [...placedBy[p].slice(0, 3)].join('>') || '(none)';
   if (opts.variant) rec.variant = opts.variant.id;
+  if (s.start) rec.start = structuredClone(s.start);
+  if (detail) {
+    rec.scored = { human: scoredN(s, 'human'), ai: scoredN(s, 'ai') };
+    rec.detail = { schema: 'rule-sabotage/game-detail@1', seed, first, start: s.start ? structuredClone(s.start) : null, turns: detail, finalHash: stateHash(s) };
+  }
   if (opts.hooks && Object.values(opts.hooks).some(Boolean)) rec.hooks = structuredClone(opts.hooks);
   rec.ms = Date.now() - t0;
   return rec;
 }
 
-export type Job = { seed: number; first: Player; weights: Record<Player, Weights>; hooks?: Partial<Record<Player, PlannerHooks>>; variant?: RuleVariant };
-export const jobOpts = (j: Job, maxMs?: number): PlayOpts => ({ maxMs, ...(j.hooks ? { hooks: j.hooks } : {}), ...(j.variant ? { variant: j.variant } : {}) });
+/** Content hash of the parts of a state that decide the game (pieces, live cells, rules' cells, turn, RNG, winner). */
+export function stateHash(s: State): string {
+  const core = { turn: s.turn, rng: s.rng, current: s.current, winner: s.winner, winReason: s.winReason, pieces: s.pieces, cells: s.cells, rules: s.rules.map(r => [r.id, r.owner, effectId(r.effect), r.cells, r.hits]), bonus: s.bonus };
+  return createHash('sha256').update(JSON.stringify(core)).digest('hex').slice(0, 16);
+}
+
+export type Job = { seed: number; first: Player; weights: Record<Player, Weights>; hooks?: Partial<Record<Player, PlannerHooks>>; variant?: RuleVariant; start?: StartingConfiguration; detail?: boolean };
+export const jobOpts = (j: Job, maxMs?: number): PlayOpts => ({ maxMs, ...(j.hooks ? { hooks: j.hooks } : {}), ...(j.variant ? { variant: j.variant } : {}), ...(j.start ? { start: j.start } : {}), ...(j.detail ? { detail: true } : {}) });
 export function pairedJobs(seeds: number[], weights: Weights | Record<Player, Weights>): Job[] {
   const w = 'schema' in weights ? { human: weights as Weights, ai: weights as Weights } : weights as Record<Player, Weights>;
   return seeds.flatMap(seed => PLAYERS.map(first => ({ seed, first, weights: w })));

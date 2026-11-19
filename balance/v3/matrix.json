@@ -1,0 +1,21 @@
+{
+  "schema": "rule-sabotage/v3-screen-matrix@1",
+  "id": "V3-SCREEN-100",
+  "purpose": "EXPLORATORY evidence gathering only. Not a promotion holdout and not proof of anything; no correction is promoted from these games.",
+  "totalGames": 100,
+  "seeds": [62001, 62002, 62003, 62004, 62005, 62006, 62007, 62008, 62009, 62010],
+  "seedNote": "10 predetermined seeds never used by V1 (1000-1011, 5000-5011) or V2 (3000-3003, 3100-3115, 3200-3215, 7000-7015, 7100-7115). The same 10 seeds are used in every condition (paired exploratory comparison); every seed is played once with Human moving first and once with AI moving first. RNG divergence between configurations is recorded per game.",
+  "conditions": [
+    { "id": "C0", "label": "3 / 3 (existing baseline)", "firstMover": 3, "secondMover": 3 },
+    { "id": "C1", "label": "2 / 2", "firstMover": 2, "secondMover": 2 },
+    { "id": "C2", "label": "4 / 4", "firstMover": 4, "secondMover": 4 },
+    { "id": "C3", "label": "3 / 2 (first mover has more)", "firstMover": 3, "secondMover": 2 },
+    { "id": "C4", "label": "2 / 3 (second mover has more)", "firstMover": 2, "secondMover": 3 }
+  ],
+  "layout": "spread",
+  "actionPolicy": "UNCHANGED: actions per turn = own pieces still on the board + banked bonus. Piece count therefore also changes action capacity and the victory requirement (all own pieces across). This is a property of the condition, not an isolated strategic advantage.",
+  "outcomeRule": "Completion: a side wins at once when all of its own pieces are across. Turn limit (60 turns, 30 each): higher fraction of own pieces across wins; then lower fraction of the total journey left (squares left / (own pieces x 6)); then a draw. Exact integer comparison. For equal counts this is identical to the production rule.",
+  "planner": "Production planner (server/ai.ts planTurn) for BOTH sides with the production weights balance/balance.weights.json, no hooks, no rule variant.",
+  "workers": 6,
+  "maxMsPerGame": 900000
+}

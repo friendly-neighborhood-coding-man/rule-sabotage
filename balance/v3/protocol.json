@@ -1,0 +1,42 @@
+{
+  "schema": "rule-sabotage/v3-fresh-seed-protocol@1",
+  "status": "PREPARED_NOT_AUTHORISED",
+  "purpose": "What happens AFTER Kane (or the operator) has proposed hypotheses and corrections from the 100-game screen. Each phase needs its own operator-approved game budget; none of it runs in the screening phase.",
+  "rules": [
+    "The 100 screening games (seeds 62001-62010) are exploratory and are never reused as validation or holdout evidence.",
+    "Hypotheses and their predictions are registered (hashed, journalled) before any validation game is played.",
+    "Single factors first: a combined intervention is only allowed after each factor has its own registered result.",
+    "Correction comparison uses seeds that hypothesis validation never touched.",
+    "The sealed holdout is used exactly once, after hypotheses AND corrections are frozen; its seed list is committed by hash below and revealed only at unsealing.",
+    "No correction is promoted to production by any phase of this protocol; promotion is a separate operator decision.",
+    "Every phase uses the offline batch runner: 0 external model calls during play is a hard requirement."
+  ],
+  "phases": [
+    {
+      "id": "V3-VALIDATE",
+      "goal": "Hypothesis validation: does the pattern that motivated a hypothesis reproduce on fresh seeds, and do its predictions hold under its intervention?",
+      "seeds": { "from": 62101, "to": 62130 },
+      "gamesPerArm": 60,
+      "arms": "control (the condition that showed the pattern) + one arm per registered single-factor intervention",
+      "estimatedGames": "60 x (1 + interventions), e.g. 180 for two interventions",
+      "budgetApprovedBy": null
+    },
+    {
+      "id": "V3-CORRECT",
+      "goal": "Correction comparison: bounded alternatives (e.g. P1 at 0.5 and 0.75, S3 at 2, S4 at 1) against control, judged by the acceptance gates in server/balance/v3/proposals.ts.",
+      "seeds": { "from": 62201, "to": 62240 },
+      "gamesPerArm": 80,
+      "estimatedGames": "80 x (1 + corrections), plus head-to-head games for planner changes",
+      "budgetApprovedBy": null
+    },
+    {
+      "id": "V3-HOLDOUT",
+      "goal": "Final sealed holdout for the one or two frozen corrections that passed V3-CORRECT.",
+      "seedCommitment": "sha256 of the comma-separated seed list, recorded in balance/v3/journal.ndjson at entry 'protocol-sealed'",
+      "gamesPerArm": 80,
+      "estimatedGames": "80 x (1 + frozen corrections)",
+      "budgetApprovedBy": null
+    }
+  ],
+  "acceptanceGates": "server/balance/v3/proposals.ts acceptCorrection(): behaviour changed, target moved by the pre-registered size with a 95% interval excluding 0, mean length at most +25% and turn-limit rate at most +10 points, first-mover edge not worse by more than 5 points, effect entropy not down by more than 0.1, comebacks not down by more than 10 points and lead changes not down by more than 25%, zero safety violations, independent seeds."
+}

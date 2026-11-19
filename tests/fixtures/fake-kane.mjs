@@ -24,7 +24,20 @@ if (args[0] === 'run' && !args.includes('--analyzer-only') && args.includes('--u
   else {
     let posted = 0;
     try {
-      const html = await (await fetch(url)).text();
+      let html = await (await fetch(url)).text();
+      // V3 dossier: the form lives on notebook.html. Fixed scripted entries (one hypothesis + one conclusion), not reasoning.
+      if (process.env.FAKE_KANE_V3 === '1') {
+        const nbUrl = new URL('notebook.html', url); const nb = await (await fetch(nbUrl)).text();
+        const nonce = /name="nonce" value="([^"]+)"/.exec(nb)?.[1] ?? '';
+        const action = new URL(/<form method="post" action="([^"]+)"/.exec(nb)?.[1] ?? '/notebook', nbUrl);
+        const games = await (await fetch(new URL('games.html', url))).text(); const ids = [...games.matchAll(/replays\/([\w-]+)\.html/g)].map(m => m[1]);
+        const entries = [
+          { entry: 'hypothesis', title: 'TEST DOUBLE scripted hypothesis', cause: 'starting-rules', explanation: 'TEST DOUBLE scripted entry: the first mover completes a full turn before any opponent trap exists.', evidence: ids.slice(0, 2).join(' '), p1metric: 'abs_first_mover_edge', p1dir: 'decrease', p1size: '0.15', intervention: 'S3_FIRST_TURN_ACTIONS', value: '2', sideEffects: 'TEST DOUBLE', competing: 'TEST DOUBLE: planner foresight of teleports.', counterexample: ids[2] ?? '', acceptance: 'TEST DOUBLE', disproof: 'TEST DOUBLE' },
+          { entry: 'conclusion', title: 'TEST DOUBLE conclusion', cause: 'no-defect', verdict: 'more-evidence-needed' },
+        ];
+        for (const e of entries) { const r = await fetch(action, { method: 'POST', headers: { 'content-type': 'application/x-www-form-urlencoded' }, body: new URLSearchParams({ nonce, ...e }).toString() }); if (r.ok) posted++; }
+        html = '';
+      }
       const nonce = /name="nonce" value="([^"]+)"/.exec(html)?.[1] ?? '';
       const action = /<form method="post" action="([^"]+)"/.exec(html)?.[1];
       if (action && objMode !== 'no-notes') {
