@@ -266,6 +266,19 @@ test('partial search hook: factor 0 equals the V2 searchOwnBenefit:false, factor
   }
 });
 
+test('normalized evaluation hook is the production evaluation at 3 v 3 and differs only when counts differ', async () => {
+  const AI = await import('../server/ai.ts');
+  for (const seed of [21, 22, 23]) {
+    const s = E.init(seed, { first: 'ai' }); const e = E.init(seed, { first: 'ai', start: cfg(3, 3) });
+    assert.equal(AI.evaluate(s, 'ai', w, { normalizedEval: true }), AI.evaluate(s, 'ai', w));
+    assert.equal(AI.evaluate(e, 'human', w, { normalizedEval: true }), AI.evaluate(e, 'human', w));
+  }
+  const u = E.init(21, { first: 'ai', start: cfg(2, 3) });
+  assert.notEqual(AI.evaluate(u, 'ai', w, { normalizedEval: true }), AI.evaluate(u, 'ai', w));
+  const t = P.toTreatment([{ id: 'P4_NORMALIZED_EVAL', value: true }]);
+  assert.ok(t.ok && t.treatment.hooks?.normalizedEval === true);
+});
+
 test('acceptance gates: moving toward 50% is not enough; length, fairness, diversity, counterplay and safety all count', () => {
   const base = { targetMetric: { control: 0.3, treated: 0.1, ci95OfDifference: [-0.32, -0.08] as [number, number], direction: 'decrease' as const, minEffect: 0.1 }, intendedBehaviourChanged: true, meanTurns: { control: 14, treated: 15 }, turnLimitRate: { control: 0, treated: 0.02 }, firstMoverEdge: { control: 0.2, treated: 0.1 }, entropy: { control: 0.8, treated: 0.78 }, comebackRate: { control: 0.3, treated: 0.28 }, leadChanges: { control: 2, treated: 1.9 }, safety: { illegal: 0, errors: 0, softlocks: 0 }, independentSeeds: true };
   assert.equal(P.acceptCorrection(base).accepted, true);
@@ -282,4 +295,17 @@ test('Kane V3 is prepared but cannot run without an approval record and the matc
   assert.throws(() => K3.assertKaneApproved({ approvedBy: 'x', approvedAt: 'now', runId: 'r1', maxCredits: 80, maxCalls: 1 }, 'r1'), /KANE_V3_APPROVED/);
   assert.equal(K3.KANE_V3_PLAN.status, 'PREPARED_NOT_RUN');
   assert.ok(!/first mover (has|holds) an advantage|is imbalanced/i.test(K3.objectiveV3()), 'the objective asks questions and states no conclusion');
+});
+
+test('registered V3 proposals are well-formed, cite real games of the dataset, and none claims Kane', () => {
+  const reg = JSON.parse(src('balance/v3/proposals.json')) as { dataset: { runId: string }; proposals: import('../server/balance/v3/proposals.ts').Proposal[] };
+  const ids = new Set(src(`evidence/balance/v3/datasets/${reg.dataset.runId}/games.ndjson`).split(/\r?\n/).filter(Boolean).map(l => JSON.parse(l).gameId as string));
+  assert.equal(ids.size, 100);
+  for (const p of reg.proposals) {
+    assert.deepEqual(P.checkProposal(p), [], p.id);
+    assert.ok(!p.provenance.origin.startsWith('kane'), `${p.id} must not claim Kane`);
+    for (const g of [...p.evidenceGames, ...(p.counterexample ? [p.counterexample] : [])]) assert.ok(ids.has(g), `${p.id}: ${g}`);
+    for (const pr of p.predictions) assert.ok(P.PROPOSAL_METRICS[pr.metric], `${p.id}: ${pr.metric}`);
+    if (p.intervention) assert.ok(P.toTreatment([p.intervention]).ok, `${p.id} intervention`);
+  }
 });

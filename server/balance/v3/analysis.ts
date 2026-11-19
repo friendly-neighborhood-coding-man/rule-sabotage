@@ -90,6 +90,7 @@ export function conditionStats(id: string, games: Game[], ds: Derived[]) {
     counterplay: { leadChangesPerGame: agg.counterplay.leadChangesPerGame, comebackRate: agg.counterplay.comebackRate },
     decision: { meanMargin: r3(mean(ds.map(d => d.decision.meanMargin ?? 0))), nearTieShare: sum(d => d.decision.nearTieShare), notTopShare: sum(d => d.decision.notTopShare), candidatesPerTurn: sum(d => d.decision.candidatesPerTurn) },
     actions: { perTurnFirst: sum(d => d.actionsPerTurn.first), perTurnSecond: sum(d => d.actionsPerTurn.second), unusedPerGame: sum(d => d.unusedActions.human + d.unusedActions.ai) },
+    turn1ScoreRate: r3(ds.filter(d => d.firstScoreTurn[d.first] === 1).length / (n || 1)), turn1Teleport: ds.filter(d => d.firstScoreTurn[d.first] === 1 && d.teleports.some(t => t.turn === 1)).length,
     firstScoreTurn: { firstMover: r3(mean(ds.map(d => d.firstScoreTurn[d.first]).filter((x): x is number => x !== null))), secondMover: r3(mean(ds.map(d => d.firstScoreTurn[d.second]).filter((x): x is number => x !== null))) },
     safety: agg.safety,
   };
@@ -141,7 +142,7 @@ function writeFindings(cs: ConditionStats[], overall: { firstMover: Rate; turns:
   const F: { kind: 'DESCRIPTIVE' | 'SIGNAL' | 'NO_EVIDENCE' | 'LIMITATION'; text: string }[] = [];
   for (const c of cs) {
     const fm = c.firstMover;
-    F.push({ kind: fm.includesHalf ? 'DESCRIPTIVE' : 'SIGNAL', text: `${c.id} (${c.pieces?.firstMover}/${c.pieces?.secondMover}): first mover won ${fmtRate(fm)}. ${fm.includesHalf ? 'The interval includes 50%: no reliable first-mover effect at n = ${c.games}.' : 'The interval excludes 50%: an exploratory first-mover signal, to be re-tested on fresh seeds.'} Mean length ${c.turns.mean} turns (95% CI ${c.turns.ci[0]}–${c.turns.ci[1]}), turn-limit rate ${pc(c.turnLimitRate)}.` });
+    F.push({ kind: fm.includesHalf ? 'DESCRIPTIVE' : 'SIGNAL', text: `${c.id} (${c.pieces?.firstMover}/${c.pieces?.secondMover}): first mover won ${fmtRate(fm)}. ${fm.includesHalf ? `The interval includes 50%: no reliable first-mover effect at n = ${c.games}.` : 'The interval excludes 50%: an exploratory first-mover signal, to be re-tested on fresh seeds.'} Mean length ${c.turns.mean} turns (95% CI ${c.turns.ci[0]}–${c.turns.ci[1]}), turn-limit rate ${pc(c.turnLimitRate)}.` });
     if (c.sideWithMorePieces) F.push({ kind: c.sideWithMorePieces.includesHalf ? 'DESCRIPTIVE' : 'SIGNAL', text: `${c.id}: the side that started with more pieces won ${fmtRate(c.sideWithMorePieces)}. More pieces also means more actions per turn and a larger victory requirement, so this is the effect of the whole package, not of piece count alone.` });
   }
   F.push({ kind: overall.firstMover.includesHalf ? 'DESCRIPTIVE' : 'SIGNAL', text: `All ${cs.reduce((a, c) => a + c.games, 0)} games pooled: first mover won ${fmtRate(overall.firstMover)}. Pooled across different rules, so it only says whether a first-mover tendency shows up broadly.` });

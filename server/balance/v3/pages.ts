@@ -100,6 +100,7 @@ function comparisonTables(a: Analysis, prefix: string) {
     ['Completed (all pieces across) · turn limit', ...rows(c => `${pc(c.completionRate)} · ${pc(c.turnLimitRate)}`)],
     ['Turns: mean (95% CI)', ...rows(c => `${c.turns.mean} (${c.turns.ci[0]}–${c.turns.ci[1]})`)],
     ['Turns: median [p10, p90] · range', ...rows(c => `${c.turns.median} [${c.turns.p10}, ${c.turns.p90}] · ${c.turns.min}–${c.turns.max}`)],
+    ['First mover scored on turn 1 (of those: with a turn-1 teleport)', ...rows(c => `${pc(c.turn1ScoreRate)} (${c.turn1Teleport})`)],
     ['First score at turn (first / second mover)', ...rows(c => `${c.firstScoreTurn.firstMover} / ${c.firstScoreTurn.secondMover}`)],
     ['Actions per turn (first / second mover)', ...rows(c => `${c.actions.perTurnFirst} / ${c.actions.perTurnSecond}`)],
   ]);

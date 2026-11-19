@@ -28,6 +28,7 @@ export const CATALOG: Record<string, CatalogEntry> = {
   P1_SEARCH_OWN_BENEFIT: { component: 'planner-search', description: 'PARTIAL reduction of own-benefit in trap-cell search (V2 H3 used 0 and regressed)', bounds: 'factor 0..1 (1 = production, 0 = V2 K1)', production: '1', parse: num(0, 1) },
   P2_SELF_BENEFIT_VALUE: { component: 'planner-valuation', description: 'How much the planner values a piece being helped by its own trap', bounds: 'factor 0..1', production: '1', parse: num(0, 1) },
   P3_BLIND_RNG: { component: 'planner-information', description: 'Planner look-ahead cannot foresee random outcomes (teleport)', bounds: 'true', production: 'false', parse: v => (v.trim() === 'true' ? { ok: true, value: true } : { ok: false, reason: 'only "true"' }) },
+  P4_NORMALIZED_EVAL: { component: 'planner-valuation', description: 'Planner compares progress per piece (fractions) instead of raw sums when piece counts differ (identical to production at 3 v 3)', bounds: 'true', production: 'false (raw sums)', parse: v => (v.trim() === 'true' ? { ok: true, value: true } : { ok: false, reason: 'only "true"' }) },
   R1_TELEPORT_SAME_COLUMN: { component: 'rules', description: 'Teleport stays in the same column (distance-neutral)', bounds: 'true', production: 'false', parse: v => (v.trim() === 'true' ? { ok: true, value: true } : { ok: false, reason: 'only "true"' }) },
   W1_WEIGHT: { component: 'weights', description: 'One allowlisted V0.3 weight (path=value, at most 30% relative change)', bounds: 'path=value', production: 'balance/balance.weights.json', parse: v => { const m = /^\s*([\w.:]+)\s*=\s*(-?[\d.]+)\s*$/.exec(v); if (!m) return { ok: false, reason: 'must be path=value' }; const bad = validateSpec({ kind: 'weight', path: m[1], value: +m[2] }); return bad.length ? { ok: false, reason: bad.join('; ') } : { ok: true, value: { path: m[1], value: +m[2] } }; } },
 };
@@ -37,6 +38,7 @@ export const PROPOSAL_METRICS: Record<string, string> = {
   more_pieces_side_win_rate: 'Win rate of the side that started with more pieces', mean_turns: 'Mean game length (turns)', turn_limit_rate: 'Share of games reaching the turn limit',
   conveyor_per_game: 'Conveyor moves per game (own trap carries the piece forward)', self_trigger_share: 'Share of triggers on own traps', lead_changes: 'Lead changes per game',
   comeback_rate: 'Share of decisive games won by a side that trailed', effect_entropy: 'Effect diversity (normalized entropy)', unused_cell_rate: 'Share of trap cells never triggered',
+  turn1_score_rate: 'Share of games in which the first mover brings a piece across on turn 1',
   treated_win_rate: 'Head-to-head strength of a changed planner against production',
 };
 
@@ -132,6 +134,7 @@ export function toTreatment(ivs: { id: string; value: unknown }[], singleFactorR
       case 'P1_SEARCH_OWN_BENEFIT': t.hooks = { ...t.hooks, searchOwnBenefitFactor: v.value as number }; break;
       case 'P2_SELF_BENEFIT_VALUE': t.hooks = { ...t.hooks, selfBenefitFactor: v.value as number }; break;
       case 'P3_BLIND_RNG': t.hooks = { ...t.hooks, blindRng: true }; break;
+      case 'P4_NORMALIZED_EVAL': t.hooks = { ...t.hooks, normalizedEval: true }; break;
       case 'R1_TELEPORT_SAME_COLUMN': t.variant = { id: 'teleport-same-column', experimental: EXPERIMENTAL_RULE_VARIANT, teleport: 'same-column' }; break;
       case 'W1_WEIGHT': t.weight = v.value as { path: string; value: number }; break;
     }
