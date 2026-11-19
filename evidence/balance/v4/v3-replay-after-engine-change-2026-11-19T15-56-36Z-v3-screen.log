@@ -1,0 +1,6 @@
+PASS  manifest        488/488 files match their sha256
+PASS  dataset hash    3e137fdfc8c031c6 vs recorded 3e137fdfc8c031c6
+PASS  complete        240/240 games
+PASS  external calls  0 recorded external call attempts
+PASS  engine replay   240/240 games re-executed identically through the engine
+PASS  journal         20 entries, hash chain verified

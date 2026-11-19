@@ -278,7 +278,36 @@ export function validateMove(s: State, p: Player, m: Move): Check {
   return { ok: true };
 }
 
-export function applyMove(s: State, p: Player, m: Move): GameEvent[] {
+/**
+ * V4 (experiment-only use): how a random outcome is resolved. Production never passes one, so every production call
+ * draws from the engine RNG exactly as before. A planner passes one to ENUMERATE the legal outcomes instead of
+ * reading the hidden RNG: `teleport` receives the engine's own destination list (teleportDestinations) and returns
+ * the index to use. With a resolver the engine RNG is neither read nor advanced.
+ */
+export type ChanceResolver = { teleport: (destinations: readonly string[]) => number };
+/**
+ * The ONLY definition of where a teleport may send a piece standing on `from` (applyEffect uses it too): every
+ * square in the middle columns B..F (same column only under the experimental R1 variant) holding no piece and no
+ * live effect, in fixed row-major order. The engine picks index rand() % length.
+ */
+export function teleportDestinations(s: State, from: Pos): string[] {
+  const opts: string[] = [];
+  if (s.variant?.teleport === 'same-column') { for (let y = 0; y < SIZE; y++) { const k = key(from.x, y); if (!s.cells[k] && !piecesAt(s, k).length) opts.push(k); } }
+  else for (let x = 1; x < SIZE - 1; x++) for (let y = 0; y < SIZE; y++) { const k = key(x, y); if (!s.cells[k] && !piecesAt(s, k).length) opts.push(k); }
+  return opts;
+}
+/**
+ * Exact probability of each destination index under the engine's draw `rand(s) % n`. rand() is xorshift32, which
+ * visits every non-zero 32-bit value exactly once per period, so the draw is uniform on 1..2^32-1 and index i has
+ * probability #{x in 1..2^32-1 : x mod n = i} / (2^32-1). That differs from 1/n by less than 1e-9.
+ */
+export function teleportIndexProbabilities(n: number): number[] {
+  const N = 0xffffffff, out: number[] = [];
+  for (let i = 0; i < n; i++) out.push((i === 0 ? Math.floor(N / n) : Math.floor((N - i) / n) + 1) / N);
+  return out;
+}
+
+export function applyMove(s: State, p: Player, m: Move, chance?: ChanceResolver): GameEvent[] {
   const c = validateMove(s, p, m);
   if (!c.ok) throw new Error(c.reason);
   if (s.phase === 'place') s.phase = 'move';
@@ -289,13 +318,13 @@ export function applyMove(s: State, p: Player, m: Move): GameEvent[] {
   for (const q of group) { q.x = to.x; q.y = to.y; }
   s.actionsLeft--;
   events.push({ t: 'move', p, pieces: group.map(q => q.id), from: m.from, to: key(to.x, to.y), dir: m.dir });
-  land(s, group, m.dir, events, 1, false);
+  land(s, group, m.dir, events, 1, false, chance);
   checkWin(s, events);
   return events;
 }
 
 /** A group of same-owner pieces has just arrived at its current cell. */
-function land(s: State, group: Piece[], dir: Dir, events: GameEvent[], depth: number, forced: boolean) {
+function land(s: State, group: Piece[], dir: Dir, events: GameEvent[], depth: number, forced: boolean, chance?: ChanceResolver) {
   group = group.filter(q => !q.scored);
   if (!group.length) return;
   const owner = group[0].owner, k = key(group[0].x, group[0].y);
@@ -319,7 +348,7 @@ function land(s: State, group: Piece[], dir: Dir, events: GameEvent[], depth: nu
       if (shielded.length) events.push({ t: 'shielded', pieces: shielded.map(q => q.id), cell: k });
       if (hit.length) {
         events.push({ t: 'trigger', p: owner, owner: rule.owner, pieces: hit.map(q => q.id), ruleId: rule.id, text: rule.text, label: rule.label, kind: rule.effect.kind, cell: k, chain: depth, self: rule.owner === owner });
-        applyEffect(s, hit, rule.effect, dir, events, depth);
+        applyEffect(s, hit, rule.effect, dir, events, depth, chance);
         scoreIfGoal(s, hit, events);
         scoreIfGoal(s, shielded, events);
         return;
@@ -335,7 +364,7 @@ function scoreIfGoal(s: State, group: Piece[], events: GameEvent[]) {
   events.push({ t: 'score', p: g[0].owner, pieces: g.map(q => q.id), cell: key(g[0].x, g[0].y), total: scored(s, g[0].owner) });
 }
 
-function applyEffect(s: State, group: Piece[], e: Effect, dir: Dir, events: GameEvent[], depth: number) {
+function applyEffect(s: State, group: Piece[], e: Effect, dir: Dir, events: GameEvent[], depth: number, chance?: ChanceResolver) {
   const owner = group[0].owner;
   const from = key(group[0].x, group[0].y);
   if (e.kind === 'shove') {
@@ -345,16 +374,17 @@ function applyEffect(s: State, group: Piece[], e: Effect, dir: Dir, events: Game
     for (let i = 0; i < e.amount && inside(x + v.x, y + v.y); i++) { x += v.x; y += v.y; }
     for (const q of group) { q.x = x; q.y = y; }
     events.push({ t: 'forced', pieces: group.map(q => q.id), from, to: key(x, y), how: 'shove' });
-    if (key(x, y) !== from) land(s, group, d, events, depth + 1, true);
+    if (key(x, y) !== from) land(s, group, d, events, depth + 1, true, chance);
   } else if (e.kind === 'home') {
     for (const q of group) { q.x = q.home.x; q.y = q.home.y; }
     events.push({ t: 'forced', pieces: group.map(q => q.id), from, to: group.map(q => key(q.x, q.y)).join('|'), how: 'home' });
   } else if (e.kind === 'teleport') {
-    const opts: string[] = [];
-    if (s.variant?.teleport === 'same-column') { for (let y = 0; y < SIZE; y++) { const k = key(group[0].x, y); if (!s.cells[k] && !piecesAt(s, k).length) opts.push(k); } }
-    else for (let x = 1; x < SIZE - 1; x++) for (let y = 0; y < SIZE; y++) { const k = key(x, y); if (!s.cells[k] && !piecesAt(s, k).length) opts.push(k); }
+    const opts = teleportDestinations(s, group[0]);
     if (opts.length) {
-      const t = parseKey(opts[rand(s) % opts.length]);
+      let i: number;
+      if (chance) { i = chance.teleport(opts); if (!Number.isInteger(i) || i < 0 || i >= opts.length) throw new Error(`chance resolver returned ${i} for ${opts.length} destinations`); }
+      else i = rand(s) % opts.length;
+      const t = parseKey(opts[i]);
       for (const q of group) { q.x = t.x; q.y = t.y; }
       events.push({ t: 'forced', pieces: group.map(q => q.id), from, to: key(t.x, t.y), how: 'teleport' });
     }

@@ -13,6 +13,7 @@ import {
 } from '../engine.ts';
 import { createHash } from 'node:crypto';
 import { planTurn, planMoves, basePenalty, type PlannerHooks } from '../ai.ts';
+import { planTurnEV, nextMovesEV, EV_PLANNER_ID } from './v4/evplanner.ts';
 import { type Player, type Effect, PLAYERS, other } from '../rules.ts';
 import { type Weights, type FrozenWeights, effectId, activationUtility, freezeWeights, weightsHash } from '../weights.ts';
 
@@ -44,6 +45,8 @@ export type GameRec = {
   scored?: Record<Player, number>;
   /** V3 only (opts.replanOnRandom): how often a side re-planned after a teleport during its turn. */
   replans?: number;
+  /** V4 only (opts.planner): which side used the experiment-only expected-value candidate. Absent = production planner on both sides. */
+  planners?: Partial<Record<Player, string>>;
   detail?: GameDetail;
 };
 /** One move as executed by the real engine, with the engine RNG before it and every engine event it produced. */
@@ -59,7 +62,7 @@ export type DetailTurn = {
 };
 export type GameDetail = { schema: 'rule-sabotage/game-detail@1'; seed: number; first: Player; start: StartState | null; turns: DetailTurn[]; finalHash: string };
 export type PlanTrace = { turn: number; p: Player; chosen: string; chosenScore: number; alternatives: { summary: string; score: number }[] };
-export type PlayOpts = { maxMs?: number; capture?: { turn: number; cell: string }; hooks?: Partial<Record<Player, PlannerHooks>>; variant?: RuleVariant; traceTurns?: number; start?: StartingConfiguration; detail?: boolean; replanOnRandom?: boolean };
+export type PlayOpts = { maxMs?: number; capture?: { turn: number; cell: string }; hooks?: Partial<Record<Player, PlannerHooks>>; variant?: RuleVariant; traceTurns?: number; start?: StartingConfiguration; detail?: boolean; replanOnRandom?: boolean; planner?: Partial<Record<Player, 'ev-v4'>> };
 export type BoardSnap = { pieces: { id: string; owner: Player; x: number; y: number; scored: boolean; frozen: number }[]; cells: { cell: string; label: string; owner: Player }[] };
 export type Captured = { turn: number; cell: string; mover: Player; move: string; before: BoardSnap; after: BoardSnap; events: GameEvent[] };
 
@@ -136,7 +139,8 @@ export function playGame(seed: number, first: Player, weights: Record<Player, Fr
     const dt: DetailTurn | null = detail ? { turn: turnNo, p, actions: s.actionsLeft, rngStart: s.rng, board: compactBoard(), candidates: [], chosen: '', considered: 0, sims: 0, placement: null, moves: [], endEvents: [], unused: 0 } : null;
     if (dt) detail!.push(dt);
     try {
-      const full = planTurn(s, { me: p, weights: w, ...(opts.hooks?.[p] ? { hooks: opts.hooks[p] } : {}) });
+      const ev = opts.planner?.[p] === 'ev-v4';
+      const full = ev ? planTurnEV(s, { me: p, weights: w }) : planTurn(s, { me: p, weights: w, ...(opts.hooks?.[p] ? { hooks: opts.hooks[p] } : {}) });
       const plan = full.chosen;
       if (dt) { dt.candidates = full.ranked.map(c => ({ id: c.id, summary: c.summary, score: Math.round(c.score * 1000) / 1000, effect: c.placement ? effectId(c.placement.effect) : null, cells: c.placement ? [...c.placement.cells] : [], moves: c.moves.length })); dt.chosen = plan.id; dt.considered = full.candidates; dt.sims = full.sims; }
       if (opts.traceTurns && turnNo <= opts.traceTurns) (rec.planTrace ??= []).push({ turn: turnNo, p, chosen: plan.summary, chosenScore: Math.round(plan.score * 1000) / 1000, alternatives: full.ranked.filter(c => c !== plan).slice(0, 4).map(c => ({ summary: c.summary, score: Math.round(c.score * 1000) / 1000 })) });
@@ -147,8 +151,12 @@ export function playGame(seed: number, first: Player, weights: Record<Player, Fr
         else { const pev = applyPlacement(s, p, pl); rec.placements.push({ turn: turnNo, p, effect: effectId(pl.effect), cells: pl.cells }); placedBy[p].push(effectId(pl.effect)); if (dt) dt.placement = { effect: effectId(pl.effect), cells: [...pl.cells], events: pev }; }
       }
       if (s.phase === 'place') s.phase = 'move';
-      let moves = planMoves(s, p, 0, Math.random, w, opts.hooks?.[p]).moves, mi = 0;
-      while (mi < moves.length) {
+      // V4 candidate: play the committed prefix (it ends at a random move), then ask again from the real, now public, position.
+      let evDone = !ev;
+      let moves = ev ? [] : planMoves(s, p, 0, Math.random, w, opts.hooks?.[p]).moves, mi = 0;
+      if (ev) { const nx = nextMovesEV(s, p, w); moves = nx.moves; evDone = !nx.endsAtChance; }
+      while (mi < moves.length || (!evDone && !s.winner && s.current === p && s.actionsLeft > 0)) {
+        if (mi >= moves.length) { const nx = nextMovesEV(s, p, w); moves = nx.moves; mi = 0; evDone = !nx.endsAtChance; rec.replans = (rec.replans ?? 0) + 1; if (!moves.length) break; }
         const m = moves[mi++];
         if (s.winner || s.current !== p) break;
         const c = validateMove(s, p, m);
@@ -156,13 +164,14 @@ export function playGame(seed: number, first: Player, weights: Record<Player, Fr
         const snap = snapshot();
         const before = opts.capture && !rec.captured && turnNo === opts.capture.turn ? board() : null;
         const rngBefore = s.rng;
-        const ev = applyMove(s, p, m);
-        if (dt) dt.moves.push({ from: m.from, dir: m.dir, mode: m.mode, rngBefore, events: ev });
-        if (before && ev.some(e => e.t === 'trigger' && e.cell === opts.capture!.cell)) rec.captured = { turn: turnNo, cell: opts.capture!.cell, mover: p, move: `${m.from} ${m.dir}`, before, after: board(), events: ev };
-        handle(ev, snap);
+        const evt = applyMove(s, p, m);
+        if (dt) dt.moves.push({ from: m.from, dir: m.dir, mode: m.mode, rngBefore, events: evt });
+        if (before && evt.some(e => e.t === 'trigger' && e.cell === opts.capture!.cell)) rec.captured = { turn: turnNo, cell: opts.capture!.cell, mover: p, move: `${m.from} ${m.dir}`, before, after: board(), events: evt };
+        handle(evt, snap);
         // V3 only: a planner that cannot see the RNG committed to moves for a teleport outcome it did not know; after a
         // teleport it re-plans its remaining actions from the real position (as a player would), instead of issuing stale moves.
-        if (opts.replanOnRandom && ev.some(e => e.t === 'forced' && e.how === 'teleport') && !s.winner && s.current === p && s.actionsLeft > 0) { moves = planMoves(s, p, 0, Math.random, w, opts.hooks?.[p]).moves; mi = 0; rec.replans = (rec.replans ?? 0) + 1; }
+        if (ev && evt.some(e => e.t === 'forced' && e.how === 'teleport') && mi < moves.length) { moves = moves.slice(0, mi); evDone = false; }
+        if (opts.replanOnRandom && evt.some(e => e.t === 'forced' && e.how === 'teleport') && !s.winner && s.current === p && s.actionsLeft > 0) { moves = planMoves(s, p, 0, Math.random, w, opts.hooks?.[p]).moves; mi = 0; rec.replans = (rec.replans ?? 0) + 1; }
       }
     } catch (e) { rec.errors.push(`turn ${turnNo} ${p}: ${(e as Error).message}`); break; }
     if (s.winner) break;
@@ -200,6 +209,7 @@ export function playGame(seed: number, first: Player, weights: Record<Player, Fr
     rec.detail = { schema: 'rule-sabotage/game-detail@1', seed, first, start: s.start ? structuredClone(s.start) : null, turns: detail, finalHash: stateHash(s) };
   }
   if (opts.hooks && Object.values(opts.hooks).some(Boolean)) rec.hooks = structuredClone(opts.hooks);
+  if (opts.planner && Object.values(opts.planner).some(Boolean)) rec.planners = Object.fromEntries(Object.entries(opts.planner).filter(([, v]) => v).map(([k]) => [k, EV_PLANNER_ID]));
   rec.ms = Date.now() - t0;
   return rec;
 }
@@ -210,8 +220,8 @@ export function stateHash(s: State): string {
   return createHash('sha256').update(JSON.stringify(core)).digest('hex').slice(0, 16);
 }
 
-export type Job = { seed: number; first: Player; weights: Record<Player, Weights>; hooks?: Partial<Record<Player, PlannerHooks>>; variant?: RuleVariant; start?: StartingConfiguration; detail?: boolean; replanOnRandom?: boolean };
-export const jobOpts = (j: Job, maxMs?: number): PlayOpts => ({ maxMs, ...(j.hooks ? { hooks: j.hooks } : {}), ...(j.variant ? { variant: j.variant } : {}), ...(j.start ? { start: j.start } : {}), ...(j.detail ? { detail: true } : {}), ...(j.replanOnRandom ? { replanOnRandom: true } : {}) });
+export type Job = { seed: number; first: Player; weights: Record<Player, Weights>; hooks?: Partial<Record<Player, PlannerHooks>>; variant?: RuleVariant; start?: StartingConfiguration; detail?: boolean; replanOnRandom?: boolean; planner?: Partial<Record<Player, 'ev-v4'>> };
+export const jobOpts = (j: Job, maxMs?: number): PlayOpts => ({ maxMs, ...(j.hooks ? { hooks: j.hooks } : {}), ...(j.variant ? { variant: j.variant } : {}), ...(j.start ? { start: j.start } : {}), ...(j.detail ? { detail: true } : {}), ...(j.replanOnRandom ? { replanOnRandom: true } : {}), ...(j.planner ? { planner: j.planner } : {}) });
 export function pairedJobs(seeds: number[], weights: Weights | Record<Player, Weights>): Job[] {
   const w = 'schema' in weights ? { human: weights as Weights, ai: weights as Weights } : weights as Record<Player, Weights>;
   return seeds.flatMap(seed => PLAYERS.map(first => ({ seed, first, weights: w })));

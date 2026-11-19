@@ -128,6 +128,7 @@ async function referee(g: Game, s: State, p: Player, pl: Placement): Promise<{ v
   const done = kaneJudge({ trialId: trial.trialId, signature: trial.signature, url: `http://127.0.0.1:${port}/trial/${trial.trialId}`, html, conditions: KANE_CONDITIONS })
     .catch((e): KaneResult => ({ status: 'unverified', reason: `Kane run failed: ${(e as Error).message}`, conditionResults: [], conditionReasons: [], elapsedMs: 0, exitCode: null, evidencePath: null, mode: kaneConfig().mode, cached: false, version: null }))
     .then(kane => finishReview(g, p, pl, rec, kane));
+  settledReviews.set(verdict, done.then(() => {}, () => {}));
   await Promise.race([done, new Promise(r => setTimeout(r, QUICK_MS))]);
   return rec;
 }
@@ -140,6 +141,14 @@ function finishReview(g: Game, p: Player, pl: Placement, rec: { verdict: Verdict
   if (kane.status === 'approved' || (kane.status === 'unverified' && allowUnverified())) activate(g, p, pl, rec);
   else v.resolvedTurn = g.state.turn;
 }
+
+/**
+ * V4 (observability only, no behaviour change): the promise of every background Kane review, so a caller can wait
+ * for the review's genuine terminal state instead of polling with a fixed wall-clock budget. The review itself is
+ * bounded by kane.ts (browser readiness wait + the CLI hard kill timer), so this promise always settles.
+ */
+const settledReviews = new WeakMap<Verdict, Promise<void>>();
+export function reviewSettled(v: Verdict): Promise<void> { return settledReviews.get(v) ?? Promise.resolve(); }
 
 function stamp(v: Verdict) { v.timing.resolvedAt = Date.now(); v.timing.submitToVerdictMs = v.timing.resolvedAt - v.timing.submittedAt; }
 
