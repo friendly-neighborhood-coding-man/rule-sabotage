@@ -61,7 +61,17 @@ export type State = {
   phase: 'place' | 'move'; actionsLeft: number; bonus: Record<Player, number>;
   pieces: Piece[]; cells: Record<string, number>; rules: Rule[]; nextId: number;
   winner: Player | 'draw' | null; winReason: string; log: GameEvent[][]; stats: { activePerTurn: number[] };
+  /** EXPERIMENT-ONLY rule variant (Balance Designer V2, intervention E4). Absent in every production game. */
+  variant?: RuleVariant;
 };
+/**
+ * An isolated, experiment-only change to ONE rule property. Only the V2 experiment executor creates one, and only
+ * through init(seed, { variant }) with the explicit EXPERIMENTAL_RULE_VARIANT token; the game server never does
+ * (tests check it). `teleport: 'same-column'` = a teleport moves the piece to a random empty square of the SAME
+ * column (distance to every goal unchanged) instead of a random empty middle square.
+ */
+export type RuleVariant = { id: string; experimental: typeof EXPERIMENTAL_RULE_VARIANT; teleport?: 'same-column' };
+export const EXPERIMENTAL_RULE_VARIANT = 'EXPERIMENT-ONLY-NOT-PRODUCTION' as const;
 
 export const key = (x: number, y: number) => `${x},${y}`;
 export const parseKey = (k: string): Pos => { const [x, y] = k.split(',').map(Number); return { x, y }; };
@@ -76,7 +86,8 @@ export function rand(s: State): number {
 }
 
 /** `first` forces who starts (paired self-play uses it to mirror a seed); omitted = seeded coin flip, as before. */
-export function init(seed: number = Date.now(), opts: { first?: Player } = {}): State {
+export function init(seed: number = Date.now(), opts: { first?: Player; variant?: RuleVariant } = {}): State {
+  if (opts.variant && opts.variant.experimental !== EXPERIMENTAL_RULE_VARIANT) throw new Error('A rule variant must be explicitly marked experimental.');
   const pieces: Piece[] = [];
   for (const p of PLAYERS) START_ROWS.forEach((y, i) => pieces.push({ id: `${p === 'human' ? 'h' : 'a'}${i + 1}`, owner: p, x: START_X[p], y, home: { x: START_X[p], y }, scored: false, frozen: 0, shield: false }));
   const s: State = {
@@ -87,6 +98,7 @@ export function init(seed: number = Date.now(), opts: { first?: Player } = {}): 
   for (let i = 0; i < 3; i++) rand(s);
   s.firstPlayer = s.current = rand(s) % 2 === 0 ? 'human' : 'ai';
   if (opts.first) s.firstPlayer = s.current = opts.first;
+  if (opts.variant) s.variant = structuredClone(opts.variant);
   startTurn(s, []);
   return s;
 }
@@ -277,7 +289,8 @@ function applyEffect(s: State, group: Piece[], e: Effect, dir: Dir, events: Game
     events.push({ t: 'forced', pieces: group.map(q => q.id), from, to: group.map(q => key(q.x, q.y)).join('|'), how: 'home' });
   } else if (e.kind === 'teleport') {
     const opts: string[] = [];
-    for (let x = 1; x < SIZE - 1; x++) for (let y = 0; y < SIZE; y++) { const k = key(x, y); if (!s.cells[k] && !piecesAt(s, k).length) opts.push(k); }
+    if (s.variant?.teleport === 'same-column') { for (let y = 0; y < SIZE; y++) { const k = key(group[0].x, y); if (!s.cells[k] && !piecesAt(s, k).length) opts.push(k); } }
+    else for (let x = 1; x < SIZE - 1; x++) for (let y = 0; y < SIZE; y++) { const k = key(x, y); if (!s.cells[k] && !piecesAt(s, k).length) opts.push(k); }
     if (opts.length) {
       const t = parseKey(opts[rand(s) % opts.length]);
       for (const q of group) { q.x = t.x; q.y = t.y; }

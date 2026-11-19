@@ -10,6 +10,20 @@ import {
 import { type Player, type Effect, other, makeEffect, shortLabel, MAX_CELLS_PER_TURN } from './rules.ts';
 import { type Weights, DEFAULT_WEIGHTS, effectUpkeep, plannerEffects, activationUtility } from './weights.ts';
 
+/**
+ * EXPERIMENT-ONLY planner hooks (Balance Designer V2). Each hook changes exactly one explanatory factor.
+ * Production never passes hooks: with `hooks` undefined every code path below is the V1 planner
+ * (tests/balance-v2.test.ts replays recorded V1 games and checks they reproduce exactly).
+ *  - selfBenefitFactor (E2, valuation): multiplies the benefit a piece gets from a trap its OWN side installed,
+ *    in the simulated path cost and in the V0.3 overlay's own-activation term. 1 = unchanged, 0 = ignored.
+ *  - searchOwnBenefit (E3, placement search): false = candidate cells are scored only by harm to the opponent and
+ *    harm to self; benefit to own pieces no longer makes a cell a candidate. Valuation is untouched.
+ *  - blindRng (E5, information): the planner's look-ahead simulations use a perturbed copy of the engine RNG, so it
+ *    can no longer foresee where a random effect (teleport) will send a piece. The real game RNG is untouched.
+ */
+export type PlannerHooks = { selfBenefitFactor?: number; searchOwnBenefit?: boolean; blindRng?: boolean };
+const blind = (st: State, salt: number) => { let x = (st.rng ^ Math.imul(salt + 1, 0x85ebca6b) ^ 0x5bd1e995) >>> 0; x ^= x << 13; x >>>= 0; x ^= x >>> 17; x ^= x << 5; st.rng = (x >>> 0) || 0x2545f491; };
+
 export type TurnPlan = { placement: Placement | null; moves: Move[]; score: number; afterReply: number; summary: string; id: string };
 export type Plan = { chosen: TurnPlan; ranked: TurnPlan[]; candidates: number; sims: number; ms: number };
 
@@ -43,7 +57,7 @@ export function basePenalty(p: Player, k: string, eff: Effect): number {
 }
 
 /** Dijkstra: estimated actions for piece q to reach its goal column, traps priced in. */
-export function pieceCost(s: State, q: Piece, w: Weights = DEFAULT_WEIGHTS): number {
+export function pieceCost(s: State, q: Piece, w: Weights = DEFAULT_WEIGHTS, hooks?: PlannerHooks): number {
   if (q.scored) return 0;
   const p = q.owner;
   const best = new Map<string, number>([[key(q.x, q.y), 0]]);
@@ -60,6 +74,7 @@ export function pieceCost(s: State, q: Piece, w: Weights = DEFAULT_WEIGHTS): num
       if (!inside(nx, ny)) continue;
       const nk = key(nx, ny);
       let pen = cellPenalty(s, p, nk, undefined, w);
+      if (hooks?.selfBenefitFactor !== undefined && pen < 0 && ruleAt(s, nk)?.owner === p) pen *= hooks.selfBenefitFactor;
       if (q.shield && pen > 0) pen = 0;
       const nd = b + Math.max(0.1, 1 + pen);
       if (nd < (best.get(nk) ?? Infinity)) best.set(nk, nd);
@@ -68,17 +83,17 @@ export function pieceCost(s: State, q: Piece, w: Weights = DEFAULT_WEIGHTS): num
 }
 
 /** Positive = good for `me`. */
-export function evaluate(s: State, me: Player, w: Weights = DEFAULT_WEIGHTS): number {
+export function evaluate(s: State, me: Player, w: Weights = DEFAULT_WEIGHTS, hooks?: PlannerHooks): number {
   const opp = other(me);
   if (s.winner === me) return 1000;
   if (s.winner === opp) return -1000;
   if (s.winner === 'draw') return 0;
-  const cost = (p: Player) => onBoard(s, p).reduce((a, q) => a + pieceCost(s, q, w), 0);
+  const cost = (p: Player) => onBoard(s, p).reduce((a, q) => a + pieceCost(s, q, w, hooks), 0);
   return cost(opp) - cost(me) + w.planner.scoredBonus * (scored(s, me) - scored(s, opp));
 }
 
 /** Per-cell value of placing `e` for player p: expected harm to the opponent minus harm to self. */
-export function bestCells(s: State, p: Player, e: Effect, w: Weights = DEFAULT_WEIGHTS): string[] {
+export function bestCells(s: State, p: Player, e: Effect, w: Weights = DEFAULT_WEIGHTS, hooks?: PlannerHooks): string[] {
   const pieces = s.pieces.filter(q => !q.scored);
   const scoredCells = eligibleCells(s, p).filter(k => !ruleAt(s, k)).map(k => {
     const c = parseKey(k);
@@ -88,7 +103,8 @@ export function bestCells(s: State, p: Player, e: Effect, w: Weights = DEFAULT_W
       const d = Math.abs(q.x - c.x) + Math.abs(q.y - c.y);
       const lateral = Math.abs(q.y - c.y);
       const wt = ahead / (1 + 0.6 * d + 0.8 * lateral);
-      const pen = cellPenalty(s, q.owner, k, e, w);
+      let pen = cellPenalty(s, q.owner, k, e, w);
+      if (hooks?.searchOwnBenefit === false && q.owner === p) pen = Math.max(0, pen);
       v += (q.owner === p ? -w.planner.selfHarmFactor : 1) * wt * pen;
     }
     return { k, v };
@@ -105,16 +121,17 @@ export const CANDIDATE_EFFECTS: Effect[] = [
 function rng(seed: number) { let x = seed >>> 0 || 1; return () => { x ^= x << 13; x >>>= 0; x ^= x >>> 17; x ^= x << 5; x >>>= 0; return x / 0x100000000; }; }
 
 /** Greedy move sequence with the engine as simulator. Stops early if every move makes things worse. */
-export function planMoves(s0: State, p: Player, noise = 0, rnd = Math.random, w: Weights = DEFAULT_WEIGHTS): { moves: Move[]; state: State; sims: number } {
+export function planMoves(s0: State, p: Player, noise = 0, rnd = Math.random, w: Weights = DEFAULT_WEIGHTS, hooks?: PlannerHooks): { moves: Move[]; state: State; sims: number } {
   let s = structuredClone(s0), sims = 0;
   const moves: Move[] = [];
   while (s.current === p && !s.winner && s.actionsLeft > 0) {
-    const base = evaluate(s, p, w);
+    const base = evaluate(s, p, w, hooks);
     let best: { m: Move; v: number; st: State } | null = null;
     for (const m of legalMoves(s, p)) {
       const t = structuredClone(s);
+      if (hooks?.blindRng) blind(t, sims);
       applyMove(t, p, m); sims++;
-      const v = evaluate(t, p, w) + (noise ? (rnd() - 0.5) * noise : 0);
+      const v = evaluate(t, p, w, hooks) + (noise ? (rnd() - 0.5) * noise : 0);
       if (!best || v > best.v) best = { m, v, st: t };
     }
     if (!best || best.v < base - 0.25) break;
@@ -140,25 +157,27 @@ function riskExposure(s: State, p: Player, x: number, y: number): number {
   }
   return prob;
 }
-export function placementValue(s: State, p: Player, pl: Placement, w: Weights): number {
+export function placementValue(s: State, p: Player, pl: Placement, w: Weights, hooks?: PlannerHooks): number {
   let v = 0;
+  let own = activationUtility(pl.effect, p, w);
+  if (hooks?.selfBenefitFactor !== undefined && own > 0) own *= hooks.selfBenefitFactor;
   for (const k of pl.cells) {
     const { x, y } = parseKey(k);
     v += -activationUtility(pl.effect, other(p), w) * riskExposure(s, other(p), x, y);
-    v += activationUtility(pl.effect, p, w) * riskExposure(s, p, x, y);
+    v += own * riskExposure(s, p, x, y);
   }
   return v;
 }
 
 /** Plan a whole turn for `me` (default AI). */
-export function planTurn(s: State, opts: { me?: Player; temperature?: number; weights?: Weights } = {}): Plan {
+export function planTurn(s: State, opts: { me?: Player; temperature?: number; weights?: Weights; hooks?: PlannerHooks } = {}): Plan {
   const t0 = performance.now();
-  const w = opts.weights ?? DEFAULT_WEIGHTS;
+  const w = opts.weights ?? DEFAULT_WEIGHTS, hooks = opts.hooks;
   const me = opts.me ?? 'ai', opp = other(me), temperature = opts.temperature ?? w.planner.temperature;
   const r = rng((s.seed ^ Math.imul(s.turn + 7, 0x9e3779b1)) >>> 0);
   const placements: (Placement | null)[] = [null];
   for (const e of plannerEffects(w)) {
-    const cells = bestCells(s, me, e, w);
+    const cells = bestCells(s, me, e, w, hooks);
     if (!cells.length) continue;
     const pl: Placement = { text: 'planner', effect: e, cells, interpretedBy: 'planner' };
     if (validatePlacement(s, me, pl).ok) placements.push(pl);
@@ -167,18 +186,19 @@ export function planTurn(s: State, opts: { me?: Player; temperature?: number; we
   const ranked: TurnPlan[] = [];
   for (const pl of placements) {
     const st = structuredClone(s);
+    if (hooks?.blindRng) blind(st, ranked.length + 101);
     if (pl) applyPlacement(st, me, pl);
-    const mv = planMoves(st, me, 0.02, r, w); sims += mv.sims;
+    const mv = planMoves(st, me, 0.02, r, w, hooks); sims += mv.sims;
     const afterMine = mv.state;
-    let afterReply = evaluate(afterMine, me, w);
+    let afterReply = evaluate(afterMine, me, w, hooks);
     if (!afterMine.winner) {
       const rep = structuredClone(afterMine);
       endTurn(rep);
-      if (!rep.winner && rep.current === opp) { const reply = planMoves(rep, opp, 0, Math.random, w); sims += reply.sims; afterReply = evaluate(reply.state, me, w); }
+      if (!rep.winner && rep.current === opp) { const reply = planMoves(rep, opp, 0, Math.random, w, hooks); sims += reply.sims; afterReply = evaluate(reply.state, me, w, hooks); }
     }
     const upkeep = pl ? effectUpkeep(w, pl.effect) : 0;
-    const overlay = pl && w.weightMix ? w.weightMix * placementValue(s, me, pl, w) : 0;
-    ranked.push({ id: '', placement: pl, moves: mv.moves, score: evaluate(afterMine, me, w) * w.planner.immediateWeight + afterReply * w.planner.replyWeight - upkeep + overlay, afterReply, summary: describeTurn(pl, mv.moves) });
+    const overlay = pl && w.weightMix ? w.weightMix * placementValue(s, me, pl, w, hooks) : 0;
+    ranked.push({ id: '', placement: pl, moves: mv.moves, score: evaluate(afterMine, me, w, hooks) * w.planner.immediateWeight + afterReply * w.planner.replyWeight - upkeep + overlay, afterReply, summary: describeTurn(pl, mv.moves) });
   }
   ranked.sort((a, b) => b.score - a.score || a.summary.localeCompare(b.summary));
   ranked.forEach((c, i) => { c.id = 'p' + (i + 1); });

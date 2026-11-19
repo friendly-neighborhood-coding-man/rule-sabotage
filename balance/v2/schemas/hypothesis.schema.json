@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "rule-sabotage/hypothesis@1",
+  "title": "Balance Designer V2 hypothesis contract (immutable once registered)",
+  "description": "Enforced in code by checkContract() and checkProvenance() in server/balance/v2/contracts.ts. Registration hashes and deep-freezes the contract and journals it before any experiment result exists.",
+  "type": "object",
+  "required": ["schema", "id", "version", "title", "provenance", "observation", "mechanism", "competingExplanation", "competitors", "requiredData", "interventions", "heldConstant", "primaryMetric", "secondaryMetrics", "safetyMetrics", "predictions", "rejectionCriteria", "expectedFailureModes", "kaneRunIds"],
+  "properties": {
+    "schema": { "const": "rule-sabotage/hypothesis@1" },
+    "id": { "type": "string", "pattern": "^H[\\w-]+$" },
+    "version": { "type": "integer", "minimum": 1 },
+    "title": { "type": "string", "minLength": 1 },
+    "provenance": {
+      "type": "object", "required": ["origin", "author", "note"],
+      "properties": {
+        "origin": { "enum": ["kane", "kane-test-double", "deterministic", "claude", "operator"] },
+        "author": { "type": "string" }, "note": { "type": "string" },
+        "kane": {
+          "description": "Required for origin kane / kane-test-double, forbidden otherwise. rawFile must exist, its sha256 must equal rawSha256, it must contain noteId, and origin kane requires isTestDouble=false.",
+          "type": "object", "required": ["callId", "rawFile", "rawSha256", "noteId", "cliVersion", "isTestDouble"],
+          "properties": { "callId": { "type": "string" }, "rawFile": { "type": "string" }, "rawSha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }, "noteId": { "type": "string" }, "cliVersion": { "type": "string" }, "isTestDouble": { "type": "boolean" } }
+        }
+      }
+    },
+    "observation": { "type": "object", "required": ["text", "evidenceRefs"], "properties": { "text": { "type": "string" }, "evidenceRefs": { "type": "array", "items": { "type": "string" } } } },
+    "mechanism": { "type": "string", "minLength": 1 },
+    "competingExplanation": { "type": "string", "minLength": 1 },
+    "competitors": { "type": "array", "items": { "type": "string" } },
+    "requiredData": { "type": "array", "items": { "type": "string" } },
+    "interventions": { "type": "array", "items": { "enum": ["C0", "E1a", "E1b", "E2", "E3", "E4", "E5"] } },
+    "heldConstant": { "type": "array", "items": { "type": "string" } },
+    "primaryMetric": { "type": "string", "description": "A key of METRICS in server/balance/v2/metrics.ts" },
+    "secondaryMetrics": { "type": "array", "items": { "type": "string" } },
+    "safetyMetrics": { "type": "array", "items": { "type": "string" } },
+    "predictions": {
+      "type": "array", "minItems": 1,
+      "description": "At least one primary and one discriminating prediction. A discriminating prediction names rivals (versus) that predict the same measurement differently or not at all; otherwise it cannot support the hypothesis.",
+      "items": {
+        "type": "object", "required": ["id", "experiment", "design", "metric", "direction", "minEffect", "role", "text"],
+        "properties": {
+          "id": { "type": "string" }, "experiment": { "type": "string" },
+          "design": { "enum": ["selfplay", "head-to-head", "observational"] },
+          "metric": { "type": "string" },
+          "direction": { "enum": ["decrease", "increase", "change", "no-change"] },
+          "minEffect": { "type": "number", "exclusiveMinimum": 0, "description": "Material effect size; smaller effects are 'negligible'." },
+          "role": { "enum": ["primary", "discriminating", "secondary"] },
+          "versus": { "type": "array", "items": { "type": "string" } },
+          "text": { "type": "string" }
+        }
+      }
+    },
+    "rejectionCriteria": { "type": "string", "minLength": 1 },
+    "expectedFailureModes": { "type": "array", "items": { "type": "string" } },
+    "kaneRunIds": { "type": "array", "items": { "type": "string" } }
+  }
+}

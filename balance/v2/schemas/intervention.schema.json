@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "rule-sabotage/intervention@1",
+  "title": "Balance Designer V2 intervention / correction spec (closed allowlist)",
+  "description": "Enforced by validateSpec() in server/balance/v2/interventions.ts. Unknown kinds, hooks, paths or extra fields are refused, never coerced. No spec can carry code or free text that is executed.",
+  "oneOf": [
+    { "type": "object", "additionalProperties": false, "required": ["kind"], "properties": { "kind": { "const": "control" } } },
+    { "type": "object", "additionalProperties": false, "required": ["kind", "path", "value"], "description": "Weights only (E1). The resulting weights must pass validateWeights (bounds, implemented effects only).",
+      "properties": { "kind": { "const": "weight" }, "path": { "type": "string", "pattern": "^(featureUtilityToActivator\\.(shovePerSquare|shoveBackPerSquare|shoveForwardPerSquare|shoveLateralPerSquare|freeze|home|teleport|shield|haste)|weightMix|placementUpkeep\\.[a-z:0-9]+)$" }, "value": { "type": "number" } } },
+    { "type": "object", "additionalProperties": false, "required": ["kind", "hook", "value"], "description": "Planner valuation only (E2).", "properties": { "kind": { "const": "planner" }, "hook": { "const": "selfBenefitFactor" }, "value": { "type": "number", "minimum": 0, "maximum": 1 } } },
+    { "type": "object", "additionalProperties": false, "required": ["kind", "hook", "value"], "description": "Placement search only (E3).", "properties": { "kind": { "const": "planner" }, "hook": { "const": "searchOwnBenefit" }, "value": { "const": false } } },
+    { "type": "object", "additionalProperties": false, "required": ["kind", "hook", "value"], "description": "Planner information only (E5).", "properties": { "kind": { "const": "planner" }, "hook": { "const": "blindRng" }, "value": { "const": true } } },
+    { "type": "object", "additionalProperties": false, "required": ["kind", "teleport"], "description": "EXPERIMENT-ONLY rule variant (E4). Requires the engine's EXPERIMENTAL_RULE_VARIANT token; never used by the game server.", "properties": { "kind": { "const": "rule-variant" }, "teleport": { "const": "same-column" } } }
+  ]
+}

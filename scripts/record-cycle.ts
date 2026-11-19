@@ -21,10 +21,12 @@ import { fileURLToPath } from 'node:url';
 
 const ROOT = resolve(fileURLToPath(new URL('../', import.meta.url)));
 const argv = process.argv.slice(2);
+/** --v2 records the Balance Designer V2 cycle (scripts/balance-v2.ts) instead of the V1 loop. */
+const V2 = argv.includes('--v2'); if (V2) argv.splice(argv.indexOf('--v2'), 1);
 const take = (n: string, d: string) => { const i = argv.indexOf(`--${n}`); if (i < 0) return d; const v = argv[i + 1]; argv.splice(i, 2); return v; };
 const fps = Number(take('fps', '4')), speed = Number(take('speed', '12')), W = Number(take('width', '1600')), H = Number(take('height', '1000'));
 const stamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19) + 'Z';
-const out = resolve(ROOT, 'evidence/balance/recordings', stamp);
+const out = resolve(ROOT, V2 ? 'evidence/balance/v2-recordings' : 'evidence/balance/recordings', stamp);
 mkdirSync(out, { recursive: true });
 const t0 = Date.now();
 const SECRET = /(sk-or-[\w-]{8,}|nvapi-[\w-]{8,}|gsk_[\w]{8,}|Bearer\s+[\w.-]{12,}|(?:api[_-]?key|token|secret)["'=: ]+[\w.-]{12,})/gi;
@@ -54,15 +56,15 @@ class CDP {
 const chrome = findChrome(), ffmpeg = findFfmpeg();
 note(`output ${out}`);
 note(`browser: ${chrome ?? 'NONE (browser capture not supported here)'} · ffmpeg: ${ffmpeg ?? 'NONE (frames are kept as JPEG files instead of video)'}`);
-const dashPort = Number(take('port', '4100'));
+const dashPort = Number(take('port', V2 ? '4200' : '4100'));
 
 // ---------- terminal capture (asciicast v2)
 const cast = createWriteStream(join(out, 'terminal.cast'));
 cast.write(JSON.stringify({ version: 2, width: 160, height: 48, timestamp: Math.floor(t0 / 1000), title: `Rule Sabotage balance loop ${argv.join(' ')}`, env: { SHELL: process.platform, TERM: 'xterm-256color' } }) + '\n');
 const tlog = createWriteStream(join(out, 'terminal.log'));
 const term = (d: string) => { const s = redact(d); cast.write(JSON.stringify([(Date.now() - t0) / 1000, 'o', s.replace(/\n/g, '\r\n')]) + '\n'); tlog.write(s); process.stdout.write(s); };
-term(`$ npm run balance:loop -- ${[...argv, '--keep-open', '--port', String(dashPort)].join(' ')}\n`);
-const loop: ChildProcess = spawn(process.execPath, ['--env-file-if-exists=.env', '--experimental-strip-types', '--no-warnings=ExperimentalWarning', 'scripts/balance-loop.ts', 'loop', ...argv, '--keep-open', '--port', String(dashPort)], { cwd: ROOT, stdio: ['ignore', 'pipe', 'pipe'], env: { ...process.env, FORCE_COLOR: '0' } });
+term(`$ npm run ${V2 ? 'balance:v2' : 'balance:loop'} -- ${[...argv, '--keep-open', '--port', String(dashPort)].join(' ')}\n`);
+const loop: ChildProcess = spawn(process.execPath, ['--env-file-if-exists=.env', '--experimental-strip-types', '--no-warnings=ExperimentalWarning', ...(V2 ? ['scripts/balance-v2.ts', 'cycle'] : ['scripts/balance-loop.ts', 'loop']), ...argv, '--keep-open', '--port', String(dashPort)], { cwd: ROOT, stdio: ['ignore', 'pipe', 'pipe'], env: { ...process.env, FORCE_COLOR: '0' } });
 let runDir: string | null = null, finished = false, dashboard: string | null = null;
 const onOut = (d: Buffer) => {
   const s = String(d); term(s);
