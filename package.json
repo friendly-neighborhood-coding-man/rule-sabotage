@@ -24,6 +24,7 @@
     "balance:v2:verify": "node --experimental-strip-types --no-warnings=ExperimentalWarning scripts/balance-v2.ts verify",
     "balance:v2:record": "node --experimental-strip-types --no-warnings=ExperimentalWarning scripts/record-cycle.ts --v2",
     "test:balance-v2-e2e": "node --experimental-strip-types --no-warnings=ExperimentalWarning tests/balance-v2.e2e.ts",
-    "balance:v2:verify-v1-replay": "node --experimental-strip-types --no-warnings=ExperimentalWarning scripts/verify-v1-replay.ts"
+    "balance:v2:verify-v1-replay": "node --experimental-strip-types --no-warnings=ExperimentalWarning scripts/verify-v1-replay.ts",
+    "balance:v2:preflight": "node --experimental-strip-types --no-warnings=ExperimentalWarning scripts/v2-preflight.ts"
   }
 }

@@ -9,7 +9,7 @@ const PANEL = { observe: 's-observe', explore: 's-explore', register: 's-registe
 let lastActive = '';
 
 function render(st) {
-  $('meta').innerHTML = esc(`${new Date().toISOString().slice(11, 19)} UTC · run ${st.runId} · ${st.mode.toUpperCase()} · commit ${st.commit.slice(0, 10)}${st.dirty ? ' (dirty)' : ''} · engine ${st.engineHash} · weights ${st.weights} · games ${st.budgets.gamesPlayed}/${st.budgets.gamesMax} · Kane calls ${st.budgets.kaneCallsUsed}/${st.budgets.kaneCallsMax} · credits ${st.budgets.creditsUsed ?? 0}/${st.budgets.creditsMax} · dev seeds ${st.seeds.development[0]}–${st.seeds.development.at(-1)} · holdout ${Array.isArray(st.seeds.holdout) ? `${st.seeds.holdout[0]}–${st.seeds.holdout.at(-1)} (unsealed)` : 'SEALED'}`);
+  $('meta').innerHTML = esc(`${new Date().toISOString().slice(11, 19)} UTC · run ${st.runId} · ${st.mode.toUpperCase()} · commit ${st.commit.slice(0, 10)}${st.dirty ? ' (dirty)' : ''} · engine ${st.engineHash} · weights ${st.weights} · games ${st.budgets.gamesPlayed}/${st.budgets.gamesMax} · Kane calls ${st.budgets.kaneCallsUsed}/${st.budgets.kaneCallsMax} · credits ${st.budgets.creditsUsed ?? 0}/${st.budgets.creditsMax} (ceiling checked between calls) · dev seeds ${st.seeds.development[0]}–${st.seeds.development.at(-1)} · holdout ${Array.isArray(st.seeds.holdout) ? `${st.seeds.holdout[0]}–${st.seeds.holdout.at(-1)} (unsealed)` : 'SEALED'}`);
   const banner = [];
   if (st.mode === 'dry-run') banner.push('<span class="b NOT_RUN">DRY-RUN: kane-cli not invoked, no finding attributed to Kane</span>');
   if (st.kaneCli?.isTestDouble) banner.push('<span class="b origin-kane-test-double">KANE TEST DOUBLE: its output is labelled and is never evidence</span>');
@@ -26,7 +26,7 @@ function render(st) {
 
   const kx = st.kane.find(k => k.role === 'exploration');
   const ex = st.exploration;
-  $('explore').innerHTML = `${ex ? `<p>${tag(ex.capability)} ${esc(ex.detail)}</p>` : '<p class="muted">pending</p>'}
+  $('explore').innerHTML = `${ex ? `<p>${tag(ex.capability)} kane-cli execution: ${tag(ex.execution ?? "—", ex.execution === "COMPLETE" ? "OK" : "UNVERIFIED")} ${esc(ex.detail)}</p>` : '<p class="muted">pending</p>'}
   ${kx ? `<p>Call ${esc(kx.callId)}: ${esc(kx.state)} ${kx.note ? `· ${esc(kx.note)}` : ''} · page <a href="/v2/explore" target="_blank">/v2/explore</a> (raw data only, no hypotheses shown)</p>${kx.objective ? `<details><summary>Exact objective sent to kane-cli</summary><p>${esc(kx.objective)}</p></details>` : ''}${kx.liveLines.length ? `<div class="live">${kx.liveLines.map(esc).join('\n')}</div>` : ''}` : ''}
   ${(ex?.notes ?? []).map(n => `<div class="note"><b>${esc(n.noteId)}</b> ${n.problems.length ? tag('REJECTED', 'FAIL') + ' ' + esc(n.problems.join('; ')) : tag(st.kaneCli?.isTestDouble ? 'TEST DOUBLE NOTE' : 'KANE NOTE', st.kaneCli?.isTestDouble ? 'origin-kane-test-double' : 'origin-kane')} · defect: ${esc(n.fields.defect)} · component: ${esc(n.fields.component)} · expects ${esc(n.fields.metric)} to ${esc(n.fields.direction)}<br>“${esc(n.fields.explanation)}”<br><span class="muted">alternative: ${esc(n.fields.alternative)}</span></div>`).join('')}`;
 

@@ -77,6 +77,8 @@ export type ExploreResult = {
   runEnd: { status: string | null; summary: string | null; credits: number | null } | null; exitCode: number | null; timedOut: boolean;
   files: { stdout: string | null; stderr: string | null; notes: string; result: string }; sha256: { stdout: string | null; notes: string | null };
   validNotes: string[];
+  /** Tracked separately from the notes: did the kane-cli process itself finish (run_end received, no timeout, run_end status passed)? */
+  execution: 'COMPLETE' | 'RUN_END_NOT_PASSED' | 'INCOMPLETE' | 'TIMEOUT' | 'FAILED' | 'NOT_RUN';
 };
 const sha = (f: string) => (existsSync(f) ? createHash('sha256').update(readFileSync(f)).digest('hex') : null);
 
@@ -95,15 +97,18 @@ export async function kaneExplore(o: { session: Session; url: string; objective:
   const r: ExploreResult = {
     callId: o.session.callId, role: o.session.kind, status: 'unavailable', capability: 'NOT_RUN', capabilityDetail: '', version: probe.version, isTestDouble: probe.version === TEST_DOUBLE_VERSION,
     objective: o.objective, args: [], url: o.url, startedAt, finishedAt: '', elapsedMs: 0, runEnd: null, exitCode: null, timedOut: false,
-    files: { stdout: null, stderr: null, notes: o.session.file, result: join(o.dir, 'kane-explore-result.json') }, sha256: { stdout: null, notes: null }, validNotes: [],
+    files: { stdout: null, stderr: null, notes: o.session.file, result: join(o.dir, 'kane-explore-result.json') }, sha256: { stdout: null, notes: null }, validNotes: [], execution: 'NOT_RUN',
   };
   const done = () => {
     o.session.open = false; o.session.closedAt = new Date().toISOString();
     r.finishedAt = new Date().toISOString(); r.elapsedMs = Date.now() - t0;
     r.validNotes = o.session.notes.filter(n => !n.problems.length).map(n => n.noteId);
     r.sha256 = { stdout: r.files.stdout ? sha(r.files.stdout) : null, notes: sha(o.session.file) };
+    r.execution = r.status === 'unavailable' ? 'NOT_RUN' : r.status === 'error' ? 'FAILED' : r.status === 'timeout' ? 'TIMEOUT' : r.status !== 'complete' ? 'INCOMPLETE' : r.runEnd?.status === 'passed' ? 'COMPLETE' : 'RUN_END_NOT_PASSED';
+    // Successful autonomous hypothesis generation needs BOTH a complete kane-cli execution and at least one valid note.
     if (r.status === 'unavailable' || r.status === 'error') { r.capability = 'NOT_RUN'; }
-    else if (r.validNotes.length) { r.capability = 'OK'; r.capabilityDetail = `${r.validNotes.length} valid notebook note(s) submitted by the browser agent during the call`; }
+    else if (r.validNotes.length && r.execution === 'COMPLETE') { r.capability = 'OK'; r.capabilityDetail = `${r.validNotes.length} valid notebook note(s) submitted by the browser agent during a complete kane-cli run`; }
+    else if (r.validNotes.length) { r.capability = 'CAPABILITY_LIMITATION'; r.capabilityDetail = `${r.validNotes.length} valid-looking note(s) arrived, but the kane-cli run did not complete successfully (execution ${r.execution}${r.runEnd?.status ? `, run_end ${r.runEnd.status}` : ''}); the notes are kept as raw evidence and NOT registered as Kane hypotheses`; }
     else { r.capability = 'CAPABILITY_LIMITATION'; r.capabilityDetail = `kane-cli objective mode ran (${r.status}${r.runEnd?.status ? `, run_end ${r.runEnd.status}` : ''}) but produced no valid notebook note${o.session.notes.length ? ` (${o.session.notes.length} rejected: ${o.session.notes.map(n => n.problems.join('/')).join('; ')})` : ''}; ${r.runEnd?.summary ? 'only a free-text summary is available, which is kept but not turned into a hypothesis' : 'no summary either'}`; }
     writeFileSync(r.files.result, JSON.stringify(r, null, 2));
     return r;

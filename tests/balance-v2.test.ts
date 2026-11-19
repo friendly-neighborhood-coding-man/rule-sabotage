@@ -232,7 +232,7 @@ test('Kane notebook: wrong nonce, out-of-window or malformed notes are invalid; 
     const silent = await run('C', 'no-notes');
     assert.equal(silent.capability, 'CAPABILITY_LIMITATION');
     const garbage = await run('D', 'garbage');
-    assert.equal(garbage.status, 'incomplete');
+    assert.equal(garbage.status, 'incomplete'); assert.equal(garbage.validNotes.length, 1); assert.equal(garbage.capability, 'CAPABILITY_LIMITATION', 'a note without a complete kane-cli run is not success'); assert.equal(garbage.execution, 'INCOMPLETE');
     const hang = await run('E', 'hang', { KANE_KILL_AFTER_MS: '1500' });
     assert.equal(hang.status, 'timeout'); assert.equal(hang.validNotes.length, 0);
     delete process.env.KANE_KILL_AFTER_MS;

@@ -87,7 +87,13 @@
     },
     "challengeObjective": false,
     "analyzerTimeoutS": 300,
-    "plan": "1 objective-mode exploration call + 1 analyzer call on the hypothesis comparison page + 1 analyzer call on the post-correction page (+1 optional objective-mode challenge call if challengeObjective is true)."
+    "plan": "3 planned: 1 objective-mode exploration + 1 analyzer on the hypothesis comparison page + 1 analyzer on the post-correction page (only if a correction is executable). The 4th (objective challenge) is off by default.",
+    "estimatedCredits": {
+      "objective": 40,
+      "analyzer": 15
+    },
+    "stopOnCapabilityLimitation": true,
+    "creditCapNote": "80 is an operating ceiling enforced BETWEEN calls: a successful kane-cli balance check is required before each call, a call is refused if the remaining budget is below its conservative estimate (objective 40, analyzer 15; V1 analyzer calls measured 5.4-6.5), and no call starts once measured spending reaches 80. A running kane-cli call cannot be stopped at a credit limit, so one call can overshoot; objective calls are additionally bounded by maxSteps and timeoutS."
   },
   "budget": {
     "maxGames": 700,

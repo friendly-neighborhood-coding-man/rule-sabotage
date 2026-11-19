@@ -24,6 +24,7 @@ npm run balance:v2 -- --run-kane       # REAL kane-cli: spends credits. Only wit
 npm run balance:v2:record [-- --run-kane]   # the same, recorded (terminal cast + raw dashboard video + labelled accelerated cut)
 npm run balance:v2:verify -- <journal.ndjson>
 npm run test:balance-v2-e2e            # whole cycle with the kane-cli TEST DOUBLE (labelled, never evidence)
+npm run balance:v2:preflight           # zero-credit real-browser check of the notebook form (submit, nonce, window, video)
 ```
 
 Flags: `--port N` (dashboard, default 4200) · `--keep-open` · `--config FILE` · `--hypotheses FILE` · `--weights FILE` · `--journal FILE` · `--workers N`.
@@ -44,6 +45,8 @@ by our loopback server with the call's nonce, arrival time and the kane-cli proc
 `kane-explore/kane-notes.ndjson`, and hashed. A note becomes a hypothesis contract only if its provenance checks out
 (raw file exists, sha256 matches, note id present, real non-test-double CLI). Field values are allowlisted
 (component, metric, direction); the free text is stored and shown, never executed.
+
+**Success needs both** a COMPLETE kane-cli execution (run_end received, no timeout, run_end status passed) and at least one valid note; the two are tracked separately (`execution` vs notes). Notes from an incomplete or failed run are kept as raw evidence and never registered as Kane hypotheses. In a real run, anything short of that stops the whole cycle at `CAPABILITY_LIMITATION` right after the exploration call: no further Kane calls, no retry without operator approval.
 
 **If it does not work** (no valid note: timeout, malformed output, wrong nonce, the agent never submits), the call is
 recorded as `CAPABILITY_LIMITATION` and the cycle continues with the labelled operator/Claude hypotheses only. Nothing
@@ -142,7 +145,7 @@ is unresolved and proposes the next discriminating experiment instead of widenin
 |---|---|
 | kane-cli only with `--run-kane` | dry-run |
 | Kane calls per run | 4 (1 exploration, 1 challenge analyzer, 1 correction analyzer, +1 optional challenge objective) |
-| Credit cap (measured with `kane-cli balance` before and after each call) | 80 |
+| Credit ceiling | 80, an **operating ceiling, not a hard limit**: a successful `kane-cli balance` check is required before every call (no verified balance → no call); a call is refused if the remaining budget is below its conservative estimate (objective 40, analyzer 15); no call starts once measured spending reaches 80; if the balance cannot be read after a call, no further calls. A running kane-cli call cannot be stopped at a credit limit, so one call can overshoot; that is reported in the credit ledger. |
 | Exploration step / time limit | 25 steps / 420 s |
 | Concurrent kane-cli processes | 1 |
 | Games per run / wall clock | 700 / 90 min |

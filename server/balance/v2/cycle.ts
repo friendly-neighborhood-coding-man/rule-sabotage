@@ -40,7 +40,7 @@ function git(args: string[]) { try { return execFileSync('git', args, { cwd: ROO
 export type V2Config = {
   seeds: { exploration: number[]; development: number[]; holdout: number[]; headToHeadSeeds: number };
   v1: { runDir: string; games: string }; evaluation: { minUnits: number; bootstrap: number; maxSampleRows: number; minEvents?: number }; corrections: { max: number };
-  adequacy: AdequacyConfig; kane: { maxCallsTotal: number; maxCreditsTotal: number; maxConcurrent: number; explore: { maxSteps: number; timeoutS: number }; challengeObjective: boolean; analyzerTimeoutS: number };
+  adequacy: AdequacyConfig; kane: { maxCallsTotal: number; maxCreditsTotal: number; maxConcurrent: number; estimatedCredits?: { objective: number; analyzer: number }; stopOnCapabilityLimitation?: boolean; explore: { maxSteps: number; timeoutS: number }; challengeObjective: boolean; analyzerTimeoutS: number };
   budget: { maxGames: number; maxWallMinutes: number };
 };
 export type V2Options = {
@@ -67,10 +67,10 @@ export type V2Status = {
   schema: 'rule-sabotage/balance-v2-status@1'; runId: string; mode: 'dry-run' | 'run-kane'; startedAt: string; finishedAt: string | null; commit: string; dirty: boolean; engineHash: string; weights: string;
   stages: Stage[]; progress: { done: number; total: number; label: string } | null; checkpoint: string | null; log: string[];
   kaneCli: { installed: boolean; version: string | null; loggedIn: boolean | null; detail: string; isTestDouble: boolean };
-  budgets: { kaneCallsUsed: number; kaneCallsMax: number; creditsUsed: number | null; creditsMax: number; gamesPlayed: number; gamesMax: number };
+  budgets: { kaneCallsUsed: number; kaneCallsMax: number; creditsUsed: number | null; creditsMax: number; gamesPlayed: number; gamesMax: number; creditLedger: { callId: string; role: string; before: number | null; after: number | null; used: number | null }[]; creditCapNote: string };
   seeds: { exploration: number[]; development: number[]; holdout: number[] | 'SEALED'; holdoutCommitment: string };
   observation: { v1RunId: string; v1Verified: boolean; v1Detail: string; metrics: Record<string, number | null>; effectTable: (string | number | null)[][] } | null;
-  kane: KaneCall[]; exploration: { capability: string; detail: string; notes: Note[] } | null;
+  kane: KaneCall[]; exploration: { capability: string; execution: string; detail: string; notes: Note[] } | null;
   hypotheses: HypRow[]; experiments: { key: string; experiment: string; design: Design; title: string; description: string; component: string; diff: string[]; seedSet: string; games: number; ms: number; manipulation: Manipulation; summary: Record<string, number | null> }[];
   corrections: Correction[]; reviews: Review[]; decision: { overall: string; items: { correction: string; category: string; action: string; why: string }[] } | null;
   runDir: string; journalFile: string; pages: Record<string, string>;
@@ -107,7 +107,7 @@ export async function runV2(o: V2Options): Promise<V2Status> {
     dirty: git(['status', '--porcelain', '--', 'server', 'balance']) !== '', engineHash: engineSourceHash(), weights: `${weights.version}#${weights.hash}`,
     stages: STAGES.map(([key, title, source]) => ({ key, title, source, state: 'pending', startedAt: null, endedAt: null, summary: '' })), progress: null, checkpoint: null, log: [],
     kaneCli: { installed: false, version: null, loggedIn: null, detail: 'not probed', isTestDouble: false },
-    budgets: { kaneCallsUsed: 0, kaneCallsMax: cfg.kane.maxCallsTotal, creditsUsed: null, creditsMax: cfg.kane.maxCreditsTotal, gamesPlayed: 0, gamesMax: cfg.budget.maxGames },
+    budgets: { kaneCallsUsed: 0, kaneCallsMax: cfg.kane.maxCallsTotal, creditsUsed: null, creditsMax: cfg.kane.maxCreditsTotal, gamesPlayed: 0, gamesMax: cfg.budget.maxGames, creditLedger: [], creditCapNote: 'Operating ceiling, enforced between calls (balance check before each call, conservative per-call estimate, no call once spending reaches the ceiling). A single kane-cli call cannot be stopped mid-run, so it can overshoot; any overshoot is reported.' },
     seeds: { exploration: cfg.seeds.exploration, development: cfg.seeds.development, holdout: 'SEALED', holdoutCommitment: commitment },
     observation: null, kane: [], exploration: null, hypotheses: [], experiments: [], corrections: [], reviews: [], decision: null, runDir, journalFile, pages: {},
   };
@@ -119,6 +119,7 @@ export async function runV2(o: V2Options): Promise<V2Status> {
   const begin = (k: StageKey) => { const s = stage(k); s.state = 'running'; s.startedAt = now(); log(`▶ ${s.title} (${s.source})`); };
   const end = (k: StageKey, state: Stage['state'], summary: string) => { const s = stage(k); s.state = state; s.endedAt = now(); s.summary = summary; log(`${state === 'done' ? '✔' : state === 'skipped' ? '○' : '■'} ${s.title}: ${summary}`); };
   const overWall = () => (Date.now() - t0) / 60000 > cfg.budget.maxWallMinutes;
+  let stopKane: string | null = null;
   const kaneCallAllowed = () => st.budgets.kaneCallsUsed < cfg.kane.maxCallsTotal && (st.budgets.creditsUsed ?? 0) < cfg.kane.maxCreditsTotal;
 
   // ---------- loopback server: dashboard, Kane pages, notebook endpoint
@@ -185,12 +186,30 @@ export async function runV2(o: V2Options): Promise<V2Status> {
     const c: KaneCall = { callId, role, state: 'queued', url, liveLines: [], creditsBefore: null, creditsAfter: null, note: '' };
     st.kane.push(c);
     if (!o.runKane) { c.state = 'skipped'; c.note = 'dry-run: kane-cli not invoked'; save(); return c; }
-    if (!kaneCallAllowed()) { c.state = 'skipped'; c.note = `Kane budget exhausted (${st.budgets.kaneCallsUsed}/${cfg.kane.maxCallsTotal} calls, ${st.budgets.creditsUsed ?? 0}/${cfg.kane.maxCreditsTotal} credits)`; log(`Kane ${callId} SKIPPED: ${c.note}`); save(); return c; }
+    const refuse = (why: string) => { c.state = 'skipped'; c.note = why; log(`Kane ${callId} REFUSED (no credits spent): ${why}`); J('kane-call-refused', { callId, role, why, budgets: st.budgets }); save(); return c; };
+    if (stopKane) return refuse(stopKane);
+    if (!kaneCallAllowed()) return refuse(`Kane budget exhausted (${st.budgets.kaneCallsUsed}/${cfg.kane.maxCallsTotal} calls, ${st.budgets.creditsUsed ?? 0}/${cfg.kane.maxCreditsTotal} credits used)`);
+    // Credit gate. kane-cli cannot be stopped mid-call at a credit limit, so the cap is enforced BETWEEN calls only:
+    // a successful balance check is required before every call, and the call is refused unless the remaining budget
+    // covers a conservative estimate of its cost. A single call can still overshoot; that is reported, not hidden.
+    let b: Awaited<ReturnType<typeof kaneCredits>> = null;
+    if (!st.kaneCli.isTestDouble) {
+      b = await kaneCredits();
+      if (!b || b.credits === null) return refuse(`credit balance check failed (${b?.raw ?? 'kane-cli balance unavailable'}); no call without a verified balance`);
+      const est = cfg.kane.estimatedCredits?.[role === 'exploration' || role === 'challenge-objective' ? 'objective' : 'analyzer'] ?? 0;
+      const remaining = cfg.kane.maxCreditsTotal - (st.budgets.creditsUsed ?? 0);
+      if (remaining < est) return refuse(`remaining budget ${remaining.toFixed(3)} credits < conservative estimate ${est} for a ${role} call`);
+    }
     c.state = 'running'; st.budgets.kaneCallsUsed++;
-    const b = st.kaneCli.isTestDouble ? null : await kaneCredits(); c.creditsBefore = b?.credits ?? null;
+    c.creditsBefore = b?.credits ?? null;
     await fn(c);
-    const a = st.kaneCli.isTestDouble ? null : await kaneCredits(); c.creditsAfter = a?.credits ?? null;
-    if (c.creditsBefore !== null && c.creditsAfter !== null) st.budgets.creditsUsed = Math.round(((st.budgets.creditsUsed ?? 0) + (c.creditsBefore - c.creditsAfter)) * 1000) / 1000;
+    if (!st.kaneCli.isTestDouble) {
+      const a = await kaneCredits(); c.creditsAfter = a?.credits ?? null;
+      if (c.creditsBefore !== null && c.creditsAfter !== null) st.budgets.creditsUsed = Math.round(((st.budgets.creditsUsed ?? 0) + (c.creditsBefore - c.creditsAfter)) * 1000) / 1000;
+      else stopKane = `credit balance check after ${callId} failed; spending can no longer be accounted, so no further Kane calls`;
+      st.budgets.creditLedger.push({ callId, role, before: c.creditsBefore, after: c.creditsAfter, used: c.creditsBefore !== null && c.creditsAfter !== null ? Math.round((c.creditsBefore - c.creditsAfter) * 1000) / 1000 : null });
+      if ((st.budgets.creditsUsed ?? 0) >= cfg.kane.maxCreditsTotal) { stopKane = `actual spending ${st.budgets.creditsUsed} reached the ${cfg.kane.maxCreditsTotal}-credit ceiling`; log(`Kane credit ceiling reached: ${stopKane}`); }
+    }
     c.state = 'done'; save();
     return c;
   };
@@ -252,8 +271,15 @@ export async function runV2(o: V2Options): Promise<V2Status> {
       c.explore = await kaneExplore({ session: exploreSession, url: `${baseUrl}/v2/explore`, objective: exploreObjective, dir: join(runDir, 'kane-explore'), maxSteps: cfg.kane.explore.maxSteps, timeoutS: cfg.kane.explore.timeoutS, onLine: live(c) });
     });
     const xr = xc.explore ?? null;
-    st.exploration = { capability: xr ? xr.capability : 'NOT_RUN', detail: xr ? xr.capabilityDetail : xc.note, notes: exploreSession.notes };
+    st.exploration = { capability: xr ? xr.capability : 'NOT_RUN', execution: xr ? xr.execution : 'NOT_RUN', detail: xr ? xr.capabilityDetail : xc.note, notes: exploreSession.notes };
     J('kane-exploration', { role: 'exploration (objective mode)', callId: 'KX1', state: xc.state, note: xc.note, objective: exploreObjective, url: '/v2/explore', pageSha256: sha(exploreHtml), result: xr, notes: exploreSession.notes.map(n => ({ noteId: n.noteId, problems: n.problems, receivedAt: n.receivedAt })), notesFileSha256: xr?.sha256.notes ?? null });
+    // Operator rule: a real run whose exploration yields no valid hypothesis from a COMPLETE kane-cli execution stops here.
+    if (o.runKane && !st.kaneCli.isTestDouble && (!xr || xr.capability !== 'OK') && cfg.kane.stopOnCapabilityLimitation !== false) {
+      const why = xr ? xr.capabilityDetail : `the exploration call did not run (${xc.note})`;
+      stopKane = `CAPABILITY_LIMITATION in exploration (${xr ? `${xr.execution}, ${xr.validNotes.length} valid note(s)` : 'not run'})`;
+      end('explore', 'checkpoint', `${xr ? `kane-cli ${xr.version}: ${xr.capability}` : 'not run'} (${why})`);
+      throw new Checkpoint(`CAPABILITY_LIMITATION: ${why}. The Kane experiment stops here; no further Kane calls, no retry without operator approval. Evidence and recording are preserved. READY_FOR_OPERATOR_V2_RESULT_REVIEW`);
+    }
     if (!xr) end('explore', 'skipped', `${xc.note}. Fallback: only the labelled operator/Claude hypotheses are tested; nothing is attributed to Kane.`);
     else end('explore', 'done', `${xr.isTestDouble ? 'TEST DOUBLE' : `kane-cli ${xr.version}`}: ${xr.capability}${xr.capability === 'CAPABILITY_LIMITATION' ? ` (${xr.capabilityDetail}); fallback to labelled operator/Claude hypotheses` : ` (${xr.capabilityDetail})`}`);
 
@@ -263,7 +289,7 @@ export async function runV2(o: V2Options): Promise<V2Status> {
     const contracts: HypothesisContract[] = hfile.hypotheses.map(h => ({ ...h, observation: hfile.observation } as HypothesisContract));
     // Kane's own notes become contracts only from the stored raw notes file, with checked provenance.
     const kaneOrigin = xr && !xr.isTestDouble ? 'kane' : 'kane-test-double';
-    for (const n of exploreSession.notes.filter(n => !n.problems.length)) {
+    for (const n of exploreSession.notes.filter(n => !n.problems.length && xr?.capability === 'OK')) {
       const comp = COMPONENTS[n.fields.component];
       const id = `HK${contracts.filter(c => c.id.startsWith('HK')).length + 1}`;
       const base0 = { schema: 'rule-sabotage/hypothesis@1' as const, id, version: 1, title: `${kaneOrigin === 'kane' ? 'Kane' : 'Kane TEST DOUBLE'}: ${n.fields.explanation.slice(0, 80)}`, provenance: { origin: kaneOrigin as 'kane' | 'kane-test-double', author: kaneOrigin === 'kane' ? `kane-cli ${xr!.version} (objective mode, call KX1)` : 'kane-cli TEST DOUBLE', note: 'Verbatim notebook note; fields chosen by the browser agent from allowlisted options.', kane: { callId: 'KX1', rawFile: exploreSession.file, rawSha256: sha256File(exploreSession.file), noteId: n.noteId, cliVersion: xr!.version ?? 'unknown', isTestDouble: xr!.isTestDouble } }, observation: hfile.observation, mechanism: n.fields.explanation, competingExplanation: n.fields.alternative || '(none given)', competitors: ['H0'], requiredData: [], heldConstant: ['everything except the named component'], secondaryMetrics: [], safetyMetrics: ['safety_events'], rejectionCriteria: 'Refuted if the named measurement confidently does not move by the material amount in the stated direction when the named component is changed.', expectedFailureModes: ['Mapped from a browser-agent note to an allowlisted experiment; the mapping is mechanical.'], kaneRunIds: ['KX1'] };
@@ -470,12 +496,12 @@ export async function runV2(o: V2Options): Promise<V2Status> {
     st.decision = { overall, items };
     J('decision', st.decision);
     end('decide', 'done', overall);
-    st.checkpoint = !o.runKane ? 'READY_FOR_OPERATOR_REAL_KANE_V2' : st.kaneCli.isTestDouble ? 'READY_FOR_OPERATOR_REAL_KANE_V2 (pipeline exercised with the labelled Kane TEST DOUBLE)' : null;
+    st.checkpoint = !o.runKane ? 'READY_FOR_OPERATOR_REAL_KANE_V2' : st.kaneCli.isTestDouble ? 'READY_FOR_OPERATOR_REAL_KANE_V2 (pipeline exercised with the labelled Kane TEST DOUBLE)' : 'READY_FOR_OPERATOR_V2_RESULT_REVIEW';
   } catch (e) {
     const msg = e instanceof Checkpoint ? e.message : `FAILED: ${(e as Error).stack ?? e}`;
     st.checkpoint = msg;
     const running = st.stages.find(s => s.state === 'running');
-    if (running) end(running.key, msg.startsWith('CHECKPOINT') ? 'checkpoint' : 'failed', msg.slice(0, 300));
+    if (running) end(running.key, /^(CHECKPOINT|CAPABILITY_LIMITATION)/.test(msg) ? 'checkpoint' : 'failed', msg.slice(0, 300));
     log(msg.slice(0, 2000));
     try { J('failure', { message: msg.slice(0, 4000) }); } catch { /* journal problems are reported by verify */ }
   }
