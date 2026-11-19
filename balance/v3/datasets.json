@@ -1,0 +1,26 @@
+{
+  "schema": "rule-sabotage/v3-datasets@1",
+  "note": "Append-only registry of V3 datasets. Old entries are never rewritten except to mark a run quarantined (with a reason).",
+  "runs": [
+    {
+      "runId": "2026-11-19T13-38-38Z-v3-screen",
+      "matrixId": "V3-SCREEN-100",
+      "matrixHash": "3361aba086e473f0",
+      "status": "accepted",
+      "at": "2026-11-19T13:38:38.284Z",
+      "dir": "evidence/balance/v3/datasets/2026-11-19T13-38-38Z-v3-screen",
+      "games": 100,
+      "datasetHash": "cf5e4a82cfa3d4ee"
+    },
+    {
+      "runId": "2026-11-19T15-56-36Z-v3-screen",
+      "matrixId": "V3-VALIDATE-240",
+      "matrixHash": "b8ae4f8a3099aba6",
+      "status": "accepted",
+      "at": "2026-11-19T15:56:36.777Z",
+      "dir": "evidence/balance/v3/datasets/2026-11-19T15-56-36Z-v3-screen",
+      "games": 240,
+      "datasetHash": "3e137fdfc8c031c6"
+    }
+  ]
+}

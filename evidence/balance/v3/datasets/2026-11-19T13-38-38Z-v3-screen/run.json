@@ -1,0 +1,177 @@
+{
+  "schema": "rule-sabotage/v3-run@1",
+  "runId": "2026-11-19T13-38-38Z-v3-screen",
+  "status": "accepted",
+  "problems": [],
+  "matrix": {
+    "schema": "rule-sabotage/v3-screen-matrix@1",
+    "id": "V3-SCREEN-100",
+    "purpose": "EXPLORATORY evidence gathering only. Not a promotion holdout and not proof of anything; no correction is promoted from these games.",
+    "totalGames": 100,
+    "seeds": [
+      62001,
+      62002,
+      62003,
+      62004,
+      62005,
+      62006,
+      62007,
+      62008,
+      62009,
+      62010
+    ],
+    "seedNote": "10 predetermined seeds never used by V1 (1000-1011, 5000-5011) or V2 (3000-3003, 3100-3115, 3200-3215, 7000-7015, 7100-7115). The same 10 seeds are used in every condition (paired exploratory comparison); every seed is played once with Human moving first and once with AI moving first. RNG divergence between configurations is recorded per game.",
+    "conditions": [
+      {
+        "id": "C0",
+        "label": "3 / 3 (existing baseline)",
+        "firstMover": 3,
+        "secondMover": 3
+      },
+      {
+        "id": "C1",
+        "label": "2 / 2",
+        "firstMover": 2,
+        "secondMover": 2
+      },
+      {
+        "id": "C2",
+        "label": "4 / 4",
+        "firstMover": 4,
+        "secondMover": 4
+      },
+      {
+        "id": "C3",
+        "label": "3 / 2 (first mover has more)",
+        "firstMover": 3,
+        "secondMover": 2
+      },
+      {
+        "id": "C4",
+        "label": "2 / 3 (second mover has more)",
+        "firstMover": 2,
+        "secondMover": 3
+      }
+    ],
+    "layout": "spread",
+    "actionPolicy": "UNCHANGED: actions per turn = own pieces still on the board + banked bonus. Piece count therefore also changes action capacity and the victory requirement (all own pieces across). This is a property of the condition, not an isolated strategic advantage.",
+    "outcomeRule": "Completion: a side wins at once when all of its own pieces are across. Turn limit (60 turns, 30 each): higher fraction of own pieces across wins; then lower fraction of the total journey left (squares left / (own pieces x 6)); then a draw. Exact integer comparison. For equal counts this is identical to the production rule.",
+    "planner": "Production planner (server/ai.ts planTurn) for BOTH sides with the production weights balance/balance.weights.json, no hooks, no rule variant.",
+    "workers": 6,
+    "maxMsPerGame": 900000
+  },
+  "matrixHash": "3361aba086e473f0",
+  "env": {
+    "engineHash": "a7c0e281753a0114",
+    "engineFilesHash": "b0e657e81acc166d",
+    "plannerHash": "079c81a71b9dc09b",
+    "weights": {
+      "version": "0.3.0",
+      "hash": "ddcf941c285bd537"
+    },
+    "matrixHash": "3361aba086e473f0",
+    "commit": "4e98d29",
+    "dirty": false,
+    "node": "v24.22.1",
+    "platform": "win32 10.0.26300",
+    "cpu": "13th Gen Intel(R) Core(TM) i5-1335U",
+    "logicalCores": 12,
+    "memGB": 16
+  },
+  "startedAt": "2026-11-19T13:38:38.288Z",
+  "finishedAt": "2026-11-19T13:47:46.201Z",
+  "wallMs": 507481,
+  "games": {
+    "planned": 100,
+    "completed": 100,
+    "illegal": 0,
+    "errors": 0,
+    "softlocks": 0
+  },
+  "externalCalls": {
+    "total": 0,
+    "workers": 0,
+    "main": 0,
+    "blocked": [],
+    "guardWorkers": 6,
+    "strippedEnv": [
+      "ANTHROPIC_BASE_URL",
+      "GROQ_API_KEY",
+      "HF_HOME",
+      "NVIDIA_API_KEY",
+      "OPENROUTER_API_KEY",
+      "OPENROUTER_JEV_API_KEY"
+    ],
+    "kaneCalls": 0,
+    "kaneCredits": 0,
+    "note": "Counted by the offline guard in the main thread and in every worker; every outbound channel is replaced by a counting stub that throws."
+  },
+  "imports": {
+    "entry": "server/balance/v3/worker.ts",
+    "files": [
+      "server/ai.ts",
+      "server/balance/selfplay.ts",
+      "server/balance/v3/offline.ts",
+      "server/balance/v3/worker.ts",
+      "server/engine.ts",
+      "server/rules.ts",
+      "server/weights.ts"
+    ],
+    "builtins": [
+      "node:child_process",
+      "node:crypto",
+      "node:dgram",
+      "node:dns",
+      "node:fs",
+      "node:http",
+      "node:https",
+      "node:module",
+      "node:net",
+      "node:os",
+      "node:tls",
+      "node:url",
+      "node:worker_threads"
+    ],
+    "forbidden": [],
+    "pass": true,
+    "note": "network/child_process builtins may only be imported by offline.ts (which replaces them with blocking stubs)"
+  },
+  "resources": {
+    "workers": 6,
+    "mainCpuMs": 591532,
+    "workerCpuMs": 565964,
+    "maxRssMB": 646,
+    "perGameMs": {
+      "min": 1129,
+      "max": 200466,
+      "total": 2995116
+    }
+  },
+  "replay": {
+    "engineReplayOk": 100,
+    "of": 100,
+    "plannerReruns": [
+      {
+        "gameId": "C0-62001-human",
+        "identical": true
+      },
+      {
+        "gameId": "C1-62001-human",
+        "identical": true
+      },
+      {
+        "gameId": "C2-62001-human",
+        "identical": true
+      },
+      {
+        "gameId": "C3-62001-human",
+        "identical": true
+      },
+      {
+        "gameId": "C4-62001-human",
+        "identical": true
+      }
+    ]
+  },
+  "datasetHash": "cf5e4a82cfa3d4ee"
+}

@@ -1,0 +1,131 @@
+{
+  "schema": "rule-sabotage/v3-proposals@1",
+  "dataset": { "runId": "2026-11-19T13-38-38Z-v3-screen", "datasetHash": "cf5e4a82cfa3d4ee" },
+  "note": "Competing hypotheses registered AFTER the exploratory screen and BEFORE any validation game. None is from Kane (Kane was not called in V3). Each is a proposal to TEST on fresh seeds (balance/v3/protocol.json), not a conclusion. Kane's own proposals, when an approved run happens, are added with origin kane and checked provenance.",
+  "proposals": [
+    {
+      "schema": "rule-sabotage/proposal@1", "id": "HC0", "kind": "hypothesis",
+      "provenance": { "origin": "claude", "author": "Claude (V3 thread session)", "note": "written after reading the screen analysis; not Kane" },
+      "title": "The 2/3 first-mover signal is a screening artifact",
+      "cause": "no-defect",
+      "explanation": "Five conditions were screened with 20 games each. C4's 17/20 first-mover wins (exact p 0.003) is the most extreme of five looks; the seed-paired comparison with C0 is not significant (8 vs 3, p 0.227) and the across-condition permutation test is not either (p 0.243). A real but much smaller effect, or none, would also produce one such result now and then.",
+      "evidenceGames": ["C4-62004-human", "C4-62008-ai", "C4-62009-ai", "C3-62001-human", "C3-62002-ai"],
+      "predictions": [{ "metric": "first_mover_win_rate", "direction": "decrease", "minEffect": 0.15 }],
+      "intervention": null,
+      "sideEffects": "none (observational)",
+      "competing": "HC1 and HC2: the 2/3 start really favours the first mover.",
+      "counterexample": "C4-62001-ai",
+      "acceptance": "On 60 fresh 2/3 games the first-mover win rate is at most 70% and its 95% interval includes 60%.",
+      "disproof": "On 60 fresh 2/3 games the first-mover win rate stays at or above 75% with a 95% interval excluding 60%.",
+      "verdict": null, "datasetHash": "cf5e4a82cfa3d4ee"
+    },
+    {
+      "schema": "rule-sabotage/proposal@1", "id": "HC1", "kind": "hypothesis",
+      "provenance": { "origin": "claude", "author": "Claude (V3 thread session)", "note": "written after reading the screen analysis; not Kane" },
+      "title": "Fewer pieces to bring across beats more actions, because traps do most of the moving",
+      "cause": "starting-rules",
+      "explanation": "Forced movement from traps covers about 90 to 115 percent of each side's whole journey (C0 0.94, C4 1.15), and 79 to 88 percent of all triggers are on the stepping side's own traps. When own-trap conveyors carry pieces, an extra piece adds a victory requirement more than it adds useful actions. The 2-piece first mover (C4) must bring 2 across and moves first, so it wins (17/20); the 3-piece first mover (C3) has more actions but a bigger requirement and only breaks even (10/20).",
+      "evidenceGames": ["C4-62001-ai", "C4-62002-ai", "C4-62003-ai", "C3-62001-ai", "C3-62004-ai"],
+      "predictions": [
+        { "metric": "first_mover_win_rate", "direction": "increase", "minEffect": 0.15 },
+        { "metric": "more_pieces_side_win_rate", "direction": "decrease", "minEffect": 0.15 }
+      ],
+      "intervention": { "id": "S1_PIECES", "value": { "firstMover": 2, "secondMover": 3 } },
+      "sideEffects": "Shorter or similar games; the effect should persist when the planner evaluates per piece (P4), because it is about the rules, not the evaluation.",
+      "competing": "HC2: the planner's raw-sum evaluation misjudges positions with unequal counts. HC0: chance.",
+      "counterexample": "C4-62009-ai",
+      "acceptance": "Fresh seeds: 2/3 first-mover win rate exceeds 3/3 by at least 15 points with the interval of the difference excluding 0, AND the gap survives P4 (no-change within 10 points).",
+      "disproof": "The 2/3 first-mover rate is not higher than 3/3 on fresh seeds, or it collapses under P4.",
+      "verdict": null, "datasetHash": "cf5e4a82cfa3d4ee"
+    },
+    {
+      "schema": "rule-sabotage/proposal@1", "id": "HC2", "kind": "hypothesis",
+      "provenance": { "origin": "claude", "author": "Claude (V3 thread session)", "note": "written after reading the screen analysis; not Kane" },
+      "title": "Raw-sum planner evaluation mis-plays unequal piece counts",
+      "cause": "interaction",
+      "explanation": "The planner scores a position as the opponent's summed path cost minus its own plus 6 per piece-across difference, all in raw counts. With 3 versus 2 pieces, the 3-piece side carries a larger own cost and the same per-piece bonus, so it may value racing differently from what the normalized victory rule rewards. If so, the side with more pieces under-performs because of the planner, not the rules.",
+      "evidenceGames": ["C4-62001-human", "C4-62005-human", "C3-62002-human", "C3-62003-human"],
+      "predictions": [{ "metric": "more_pieces_side_win_rate", "direction": "increase", "minEffect": 0.15 }],
+      "intervention": { "id": "P4_NORMALIZED_EVAL", "value": true },
+      "sideEffects": "None at 3 v 3 (the hook is identical there); in unequal conditions game length may change.",
+      "competing": "HC1: the rules themselves favour the smaller side; the evaluation is not the cause.",
+      "counterexample": "C3-62005-ai",
+      "acceptance": "Under P4 on fresh 2/3 and 3/2 seeds the more-pieces side's win rate rises by at least 15 points (interval excluding 0) with no safety failures.",
+      "disproof": "P4 leaves the more-pieces side's win rate unchanged (within 10 points).",
+      "verdict": null, "datasetHash": "cf5e4a82cfa3d4ee"
+    },
+    {
+      "schema": "rule-sabotage/proposal@1", "id": "HC3", "kind": "hypothesis",
+      "provenance": { "origin": "claude", "author": "Claude (V3 thread session)", "note": "written after reading the screen analysis; builds on V2 H3; not Kane" },
+      "title": "Own-trap conveyor belts dominate movement; a PARTIAL search correction may reduce them without V2's length regression",
+      "cause": "planner",
+      "explanation": "In every condition about 85 percent of triggers are on the mover's own traps and the winners gain roughly their whole journey from them (winner conveyor squares divided by journey: 0.91 to 1.30). The most common openings are three identical shoves toward the placer's own goal. V2 showed that removing own-benefit from the cell search entirely (factor 0) cut this but nearly doubled game length. A factor of 0.5 should cut conveyor use materially while keeping length within the acceptance gate.",
+      "evidenceGames": ["C3-62006-ai", "C2-62010-ai", "C2-62008-ai", "C1-62006-human", "C4-62002-human"],
+      "predictions": [
+        { "metric": "conveyor_per_game", "direction": "decrease", "minEffect": 3 },
+        { "metric": "mean_turns", "direction": "no-change", "minEffect": 3 }
+      ],
+      "intervention": { "id": "P1_SEARCH_OWN_BENEFIT", "value": 0.5 },
+      "sideEffects": "Possibly longer games and a weaker planner head-to-head (as in V2 K1); fewer turn-1 scores.",
+      "competing": "Conveyors are legitimate play (the rules allow stepping on your own trap) and reducing them only weakens the AI; or they are a consequence of the trap rules (R1-type rule change) rather than the search.",
+      "counterexample": "C2-62008-ai",
+      "acceptance": "Fresh 3/3 seeds: conveyor moves down by at least 3 per game, mean length at most +25%, head-to-head win rate of the changed planner not below 40%, all other gates pass.",
+      "disproof": "Conveyor use does not fall at factor 0.5, or falls only with the V2-style length regression.",
+      "verdict": null, "datasetHash": "cf5e4a82cfa3d4ee"
+    },
+    {
+      "schema": "rule-sabotage/proposal@1", "id": "HC4", "kind": "hypothesis",
+      "provenance": { "origin": "claude", "author": "Claude (V3 thread session)", "note": "written after reading the screen analysis; not Kane" },
+      "title": "First-turn tempo: the first mover often scores before the opponent has moved",
+      "cause": "starting-rules",
+      "explanation": "In 36 of the 100 games the first mover brought a piece across on turn 1, before the second mover had placed any trap (C0 7/20, C1 6/20, C2 9/20, C3 8/20, C4 6/20). Pooled, the first mover won 64/100 (95% CI 54 to 73 percent). Capping the first mover's turn-1 actions removes that tempo directly.",
+      "evidenceGames": ["C0-62001-ai", "C0-62002-ai", "C2-62001-ai", "C3-62001-ai", "C4-62002-ai"],
+      "predictions": [
+        { "metric": "abs_first_mover_edge", "direction": "decrease", "minEffect": 0.1 },
+        { "metric": "mean_turns", "direction": "no-change", "minEffect": 3 }
+      ],
+      "intervention": { "id": "S3_FIRST_TURN_ACTIONS", "value": 1 },
+      "sideEffects": "Slightly longer games; possibly a second-mover advantage if over-corrected (S4 is the alternative single factor).",
+      "competing": "HC0: the pooled edge is a mixture of conditions and partly chance; or the edge comes from conveyors (HC3) rather than from turn order.",
+      "counterexample": "C0-62001-human",
+      "acceptance": "Fresh 3/3 seeds: first-mover edge reduced by at least 10 points with the interval of the difference excluding 0, every other gate passes.",
+      "disproof": "The edge does not shrink under the cap, or a second-mover edge of similar size appears.",
+      "verdict": null, "datasetHash": "cf5e4a82cfa3d4ee"
+    },
+    {
+      "schema": "rule-sabotage/proposal@1", "id": "HC5", "kind": "hypothesis",
+      "provenance": { "origin": "claude", "author": "Claude (V3 thread session)", "note": "added after reading replays, before any validation game; revisits V2 H5; not Kane" },
+      "title": "Turn-1 scores come from the planner foreseeing where its own teleport will send a piece",
+      "cause": "planner",
+      "explanation": "All 36 turn-1 scores used a teleport on turn 1: the planner places a teleport next to its own piece, steps on it, lands near its goal and walks in (e.g. C4-62002-ai: G3 to G2, teleport to B2, then A2). Its look-ahead copies the engine RNG, so it can see the destination before choosing. Over the 100 games the stepping side's own teleports gained 4.01 squares on average (255 triggers), more than a blind random destination should give. V2 refuted H5 as a balance explanation on 3 v 3 metrics, but did not look at turn-1 tempo.",
+      "evidenceGames": ["C4-62002-ai", "C0-62001-ai", "C0-62002-ai", "C0-62003-ai", "C0-62004-human"],
+      "predictions": [
+        { "metric": "abs_first_mover_edge", "direction": "decrease", "minEffect": 0.1 },
+        { "metric": "turn1_score_rate", "direction": "decrease", "minEffect": 0.15 }
+      ],
+      "intervention": { "id": "P3_BLIND_RNG", "value": true },
+      "sideEffects": "Fewer teleport placements, possibly longer games; the planner may get weaker head-to-head because it loses information it currently uses.",
+      "competing": "HC4: the tempo comes from turn order itself (any strong first turn), not from teleport foresight; R1 (teleport same column) would then help as much as P3.",
+      "counterexample": "C0-62001-human",
+      "acceptance": "Fresh 3/3 seeds under P3: turn-1 scores fall by at least half and the first-mover edge falls by at least 10 points (interval excluding 0), length gate passes.",
+      "disproof": "Turn-1 scores and the first-mover edge are unchanged when the planner cannot see the RNG.",
+      "verdict": null, "datasetHash": "cf5e4a82cfa3d4ee"
+    },
+    {
+      "schema": "rule-sabotage/proposal@1", "id": "HD1", "kind": "hypothesis",
+      "provenance": { "origin": "deterministic", "author": "V3 rule: a condition whose first-mover interval excludes 50% gets the single-factor tempo corrections", "note": "mechanical; fired for C4 only" },
+      "title": "Mechanical tempo correction for the condition with a first-mover signal (C4)",
+      "cause": "starting-rules",
+      "explanation": "Rule-based: C4's first-mover win interval (64 to 95 percent) excludes 50 percent, so the catalog's tempo corrections are proposed as single factors for that condition: S4 second-mover bonus 1 (S3 cap is the alternative).",
+      "evidenceGames": ["C4-62001-human", "C4-62001-ai"],
+      "predictions": [{ "metric": "abs_first_mover_edge", "direction": "decrease", "minEffect": 0.15 }],
+      "intervention": { "id": "S4_SECOND_MOVER_BONUS", "value": 1 },
+      "sideEffects": "Unknown; mechanical proposal.",
+      "competing": "HC0 (artifact) and HC2 (planner) would make a rule correction unnecessary.",
+      "counterexample": "C4-62009-ai",
+      "acceptance": "As the acceptance gates, on fresh 2/3 seeds.",
+      "disproof": "No edge reduction on fresh seeds.",
+      "verdict": null, "datasetHash": "cf5e4a82cfa3d4ee"
+    }
+  ]
+}

@@ -63,6 +63,8 @@ export type State = {
   winner: Player | 'draw' | null; winReason: string; log: GameEvent[][]; stats: { activePerTurn: number[] };
   /** EXPERIMENT-ONLY rule variant (Balance Designer V2, intervention E4). Absent in every production game. */
   variant?: RuleVariant;
+  /** EXPERIMENT-ONLY starting configuration (Balance Designer V3). Absent in every production game. */
+  start?: StartState;
 };
 /**
  * An isolated, experiment-only change to ONE rule property. Only the V2 experiment executor creates one, and only
@@ -72,6 +74,51 @@ export type State = {
  */
 export type RuleVariant = { id: string; experimental: typeof EXPERIMENTAL_RULE_VARIANT; teleport?: 'same-column' };
 export const EXPERIMENTAL_RULE_VARIANT = 'EXPERIMENT-ONLY-NOT-PRODUCTION' as const;
+
+/**
+ * EXPERIMENT-ONLY starting configuration (Balance Designer V3). Absent in every production game: production is
+ * always 3 versus 3 on board rows 2, 4, 6 with the original turn-limit rule. Only init(seed, { start }) with the
+ * explicit EXPERIMENTAL_START_CONFIG token creates one; game.ts / server.ts never do (tests check it).
+ *
+ *  - pieces: counts for the FIRST MOVER and the SECOND MOVER (not for Human/AI), each 2, 3 or 4. Which side
+ *    receives which count is decided once the first player is known, so a seed played with either side
+ *    starting gives the same first-mover/second-mover asymmetry.
+ *  - layout: deterministic, mirror-symmetric (top/bottom) home rows (0-based). 'spread' keeps the production
+ *    spacing of 2: 2 pieces -> 2,4; 3 -> 1,3,5 (production); 4 -> 0,2,4,6. 'center' packs pieces around the
+ *    middle row, 'edge' pushes them to the outer rows.
+ *  - The existing action policy is KEPT: actions per turn = own pieces still on the board + banked bonus. Changing
+ *    the piece count therefore also changes action capacity and what "all pieces across" requires.
+ *  - firstTurnActions (optional): caps the first mover's actions on turn 1. secondMoverFirstTurnBonus (optional):
+ *    extra actions for the second mover on turn 2. Neither is used by the initial 100-game screen.
+ *  - Outcome rule (every experimental game, equal counts included): a side wins at once when ALL of its own pieces
+ *    are across. At the turn limit the higher FRACTION of own pieces across wins; then the lower fraction of the
+ *    total remaining journey (squares left / (own pieces x 6)); then a draw. For equal counts this orders games
+ *    exactly like the production rule, so a 3:3 experimental game reproduces a production game.
+ */
+export const EXPERIMENTAL_START_CONFIG = 'EXPERIMENT-ONLY-START-NOT-PRODUCTION' as const;
+export type StartLayout = 'spread' | 'center' | 'edge';
+export type StartingConfiguration = {
+  id: string; experimental: typeof EXPERIMENTAL_START_CONFIG;
+  pieces: { firstMover: number; secondMover: number }; layout?: StartLayout;
+  firstTurnActions?: number; secondMoverFirstTurnBonus?: number;
+};
+/** What a started game records about its configuration (resolved per side). */
+export type StartState = { id: string; layout: StartLayout; count: Record<Player, number>; rows: Record<Player, number[]>; firstTurnActions?: number; secondMoverFirstTurnBonus?: number };
+export const START_LAYOUTS: Record<StartLayout, Record<number, number[]>> = {
+  spread: { 2: [2, 4], 3: [1, 3, 5], 4: [0, 2, 4, 6] },
+  center: { 2: [2, 4], 3: [2, 3, 4], 4: [1, 2, 4, 5] },
+  edge: { 2: [0, 6], 3: [0, 3, 6], 4: [0, 1, 5, 6] },
+};
+export function validateStart(c: StartingConfiguration): string[] {
+  const out: string[] = [];
+  if (!c || c.experimental !== EXPERIMENTAL_START_CONFIG) return ['A starting configuration must be explicitly marked experimental.'];
+  if (typeof c.id !== 'string' || !/^[\w.:-]{1,40}$/.test(c.id)) out.push('id');
+  for (const k of ['firstMover', 'secondMover'] as const) if (![2, 3, 4].includes(c.pieces?.[k])) out.push(`pieces.${k} must be 2, 3 or 4`);
+  if (c.layout !== undefined && !START_LAYOUTS[c.layout]) out.push('layout must be spread, center or edge');
+  if (c.firstTurnActions !== undefined && !(Number.isInteger(c.firstTurnActions) && c.firstTurnActions >= 1 && c.firstTurnActions <= 4)) out.push('firstTurnActions must be an integer 1..4');
+  if (c.secondMoverFirstTurnBonus !== undefined && !(Number.isInteger(c.secondMoverFirstTurnBonus) && c.secondMoverFirstTurnBonus >= 0 && c.secondMoverFirstTurnBonus <= 2)) out.push('secondMoverFirstTurnBonus must be an integer 0..2');
+  return out;
+}
 
 export const key = (x: number, y: number) => `${x},${y}`;
 export const parseKey = (k: string): Pos => { const [x, y] = k.split(',').map(Number); return { x, y }; };
@@ -86,10 +133,11 @@ export function rand(s: State): number {
 }
 
 /** `first` forces who starts (paired self-play uses it to mirror a seed); omitted = seeded coin flip, as before. */
-export function init(seed: number = Date.now(), opts: { first?: Player; variant?: RuleVariant } = {}): State {
+export function init(seed: number = Date.now(), opts: { first?: Player; variant?: RuleVariant; start?: StartingConfiguration } = {}): State {
   if (opts.variant && opts.variant.experimental !== EXPERIMENTAL_RULE_VARIANT) throw new Error('A rule variant must be explicitly marked experimental.');
+  if (opts.start) { const bad = validateStart(opts.start); if (bad.length) throw new Error(`Invalid starting configuration: ${bad.join('; ')}`); }
   const pieces: Piece[] = [];
-  for (const p of PLAYERS) START_ROWS.forEach((y, i) => pieces.push({ id: `${p === 'human' ? 'h' : 'a'}${i + 1}`, owner: p, x: START_X[p], y, home: { x: START_X[p], y }, scored: false, frozen: 0, shield: false }));
+  if (!opts.start) for (const p of PLAYERS) START_ROWS.forEach((y, i) => pieces.push({ id: `${p === 'human' ? 'h' : 'a'}${i + 1}`, owner: p, x: START_X[p], y, home: { x: START_X[p], y }, scored: false, frozen: 0, shield: false }));
   const s: State = {
     seed: seed >>> 0, rng: (seed >>> 0) || 123456789, turn: 1, maxTurns: MAX_TURNS, current: 'human', firstPlayer: 'human',
     phase: 'place', actionsLeft: 0, bonus: { human: 0, ai: 0 }, pieces, cells: {}, rules: [], nextId: 1,
@@ -99,6 +147,14 @@ export function init(seed: number = Date.now(), opts: { first?: Player; variant?
   s.firstPlayer = s.current = rand(s) % 2 === 0 ? 'human' : 'ai';
   if (opts.first) s.firstPlayer = s.current = opts.first;
   if (opts.variant) s.variant = structuredClone(opts.variant);
+  if (opts.start) {
+    // Pieces are laid out only once the first mover is known (the RNG sequence above is unchanged).
+    const c = opts.start, layout = c.layout ?? 'spread', fm = s.firstPlayer;
+    const count: Record<Player, number> = { human: 0, ai: 0 }; count[fm] = c.pieces.firstMover; count[other(fm)] = c.pieces.secondMover;
+    const rows = { human: START_LAYOUTS[layout][count.human], ai: START_LAYOUTS[layout][count.ai] };
+    for (const p of PLAYERS) rows[p].forEach((y, i) => s.pieces.push({ id: `${p === 'human' ? 'h' : 'a'}${i + 1}`, owner: p, x: START_X[p], y, home: { x: START_X[p], y }, scored: false, frozen: 0, shield: false }));
+    s.start = { id: c.id, layout, count, rows: { human: [...rows.human], ai: [...rows.ai] }, ...(c.firstTurnActions !== undefined ? { firstTurnActions: c.firstTurnActions } : {}), ...(c.secondMoverFirstTurnBonus !== undefined ? { secondMoverFirstTurnBonus: c.secondMoverFirstTurnBonus } : {}) };
+  }
   startTurn(s, []);
   return s;
 }
@@ -108,12 +164,18 @@ export const scored = (s: State, p: Player) => s.pieces.filter(x => x.owner === 
 export const piecesAt = (s: State, k: string) => { const { x, y } = parseKey(k); return s.pieces.filter(q => !q.scored && q.x === x && q.y === y); };
 export const ruleById = (s: State, id: number) => s.rules.find(r => r.id === id);
 export const ruleAt = (s: State, k: string): Rule | null => (s.cells[k] ? ruleById(s, s.cells[k]) ?? null : null);
+/** Pieces a side started with (3 in production). */
+export const piecesOf = (s: State, p: Player) => (s.start ? s.start.count[p] : PIECES);
 export const activeEffects = (s: State, p?: Player) => Object.values(s.cells).filter(id => !p || ruleById(s, id)?.owner === p).length;
 
 function startTurn(s: State, events: GameEvent[]) {
   const p = s.current;
   s.actionsLeft = onBoard(s, p).length + s.bonus[p];
   s.bonus[p] = 0;
+  if (s.start) {
+    if (s.turn === 1 && s.start.firstTurnActions !== undefined) s.actionsLeft = Math.min(s.actionsLeft, s.start.firstTurnActions);
+    if (s.turn === 2 && s.start.secondMoverFirstTurnBonus) s.actionsLeft += s.start.secondMoverFirstTurnBonus;
+  }
   s.phase = 'place';
   events.push({ t: 'turn', p, actions: s.actionsLeft, turn: s.turn });
 }
@@ -310,8 +372,8 @@ function applyEffect(s: State, group: Piece[], e: Effect, dir: Dir, events: Game
 
 function checkWin(s: State, events: GameEvent[]) {
   if (s.winner) return;
-  for (const p of PLAYERS) if (scored(s, p) === PIECES) {
-    s.winner = p; s.winReason = `${p === 'human' ? 'You' : 'The AI'} got all ${PIECES} pieces across.`;
+  for (const p of PLAYERS) if (scored(s, p) === piecesOf(s, p)) {
+    s.winner = p; s.winReason = `${p === 'human' ? 'You' : 'The AI'} got all ${piecesOf(s, p)} pieces across.`;
     events.push({ t: 'win', winner: p, reason: s.winReason });
     return;
   }
@@ -319,12 +381,31 @@ function checkWin(s: State, events: GameEvent[]) {
 
 export function distanceLeft(s: State, p: Player) { return onBoard(s, p).reduce((a, q) => a + Math.abs(GOAL_X[p] - q.x), 0); }
 
+/**
+ * Normalized standing (experimental outcome rule): > 0 = human ahead, < 0 = AI ahead, 0 = level.
+ * First the fraction of own pieces across, then the fraction of the total journey still left. Exact integer
+ * cross-multiplication, no floating point. For equal piece counts this is the production ordering.
+ */
+export function compareStanding(s: State): number {
+  const nh = piecesOf(s, 'human'), na = piecesOf(s, 'ai');
+  const a = scored(s, 'human') * na - scored(s, 'ai') * nh;
+  if (a !== 0) return Math.sign(a);
+  return Math.sign(distanceLeft(s, 'ai') * nh - distanceLeft(s, 'human') * na);
+}
+
 /** End the current player's turn (also used when they run out of actions). */
 export function endTurn(s: State): GameEvent[] {
   if (s.winner) return [];
   const events: GameEvent[] = [{ t: 'end', p: s.current }];
   for (const q of onBoard(s, s.current)) if (q.frozen > 0) q.frozen--;
   s.stats.activePerTurn.push(activeEffects(s));
+  if (s.turn >= s.maxTurns && s.start) {
+    const c = compareStanding(s);
+    s.winner = c > 0 ? 'human' : c < 0 ? 'ai' : 'draw';
+    s.winReason = `Turn limit (normalized). Pieces across: you ${scored(s, 'human')}/${piecesOf(s, 'human')}, AI ${scored(s, 'ai')}/${piecesOf(s, 'ai')}. Squares left: you ${distanceLeft(s, 'human')}/${piecesOf(s, 'human') * (SIZE - 1)}, AI ${distanceLeft(s, 'ai')}/${piecesOf(s, 'ai') * (SIZE - 1)}.`;
+    events.push({ t: 'win', winner: s.winner, reason: s.winReason });
+    return events;
+  }
   if (s.turn >= s.maxTurns) {
     const sh = scored(s, 'human'), sa = scored(s, 'ai'), dh = distanceLeft(s, 'human'), da = distanceLeft(s, 'ai');
     s.winner = sh > sa ? 'human' : sa > sh ? 'ai' : dh < da ? 'human' : da < dh ? 'ai' : 'draw';

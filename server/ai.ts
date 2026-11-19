@@ -5,7 +5,7 @@
  */
 import {
   type State, type Placement, type Move, type Piece, SIZE, GOAL_X, DIRS, key, parseKey, inside, cellName,
-  applyPlacement, applyMove, endTurn, legalMoves, eligibleCells, ruleAt, onBoard, scored, validatePlacement,
+  applyPlacement, applyMove, endTurn, legalMoves, eligibleCells, ruleAt, onBoard, scored, validatePlacement, piecesOf,
 } from './engine.ts';
 import { type Player, type Effect, other, makeEffect, shortLabel, MAX_CELLS_PER_TURN } from './rules.ts';
 import { type Weights, DEFAULT_WEIGHTS, effectUpkeep, plannerEffects, activationUtility } from './weights.ts';
@@ -20,8 +20,12 @@ import { type Weights, DEFAULT_WEIGHTS, effectUpkeep, plannerEffects, activation
  *    harm to self; benefit to own pieces no longer makes a cell a candidate. Valuation is untouched.
  *  - blindRng (E5, information): the planner's look-ahead simulations use a perturbed copy of the engine RNG, so it
  *    can no longer foresee where a random effect (teleport) will send a piece. The real game RNG is untouched.
+ *  - searchOwnBenefitFactor (V3, placement search, PARTIAL): benefit to own pieces counts only this fraction when a
+ *    cell is scored as a trap candidate. 1 = unchanged, 0 = the same as searchOwnBenefit:false. Valuation untouched.
+ *  - normalizedEval (V3, valuation under unequal piece counts): path costs and pieces across are compared as
+ *    per-piece FRACTIONS (scaled to 3 pieces) instead of raw sums. For 3 v 3 it is exactly the production evaluation.
  */
-export type PlannerHooks = { selfBenefitFactor?: number; searchOwnBenefit?: boolean; blindRng?: boolean };
+export type PlannerHooks = { selfBenefitFactor?: number; searchOwnBenefit?: boolean; blindRng?: boolean; searchOwnBenefitFactor?: number; normalizedEval?: boolean };
 const blind = (st: State, salt: number) => { let x = (st.rng ^ Math.imul(salt + 1, 0x85ebca6b) ^ 0x5bd1e995) >>> 0; x ^= x << 13; x >>>= 0; x ^= x >>> 17; x ^= x << 5; st.rng = (x >>> 0) || 0x2545f491; };
 
 export type TurnPlan = { placement: Placement | null; moves: Move[]; score: number; afterReply: number; summary: string; id: string };
@@ -89,6 +93,7 @@ export function evaluate(s: State, me: Player, w: Weights = DEFAULT_WEIGHTS, hoo
   if (s.winner === opp) return -1000;
   if (s.winner === 'draw') return 0;
   const cost = (p: Player) => onBoard(s, p).reduce((a, q) => a + pieceCost(s, q, w, hooks), 0);
+  if (hooks?.normalizedEval) { const n = (p: Player) => piecesOf(s, p) / 3; return cost(opp) / n(opp) - cost(me) / n(me) + w.planner.scoredBonus * (scored(s, me) / n(me) - scored(s, opp) / n(opp)); }
   return cost(opp) - cost(me) + w.planner.scoredBonus * (scored(s, me) - scored(s, opp));
 }
 
@@ -105,6 +110,7 @@ export function bestCells(s: State, p: Player, e: Effect, w: Weights = DEFAULT_W
       const wt = ahead / (1 + 0.6 * d + 0.8 * lateral);
       let pen = cellPenalty(s, q.owner, k, e, w);
       if (hooks?.searchOwnBenefit === false && q.owner === p) pen = Math.max(0, pen);
+      else if (hooks?.searchOwnBenefitFactor !== undefined && q.owner === p && pen < 0) pen *= hooks.searchOwnBenefitFactor;
       v += (q.owner === p ? -w.planner.selfHarmFactor : 1) * wt * pen;
     }
     return { k, v };

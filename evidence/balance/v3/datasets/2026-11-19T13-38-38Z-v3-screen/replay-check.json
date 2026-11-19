@@ -1,0 +1,728 @@
+{
+  "note": "Every recorded placement and move re-executed through the real engine (no planner). Plus a complete planner re-run of the first game of every condition, compared field by field (except wall time).",
+  "engineReplays": [
+    {
+      "gameId": "C0-62001-human",
+      "ok": true,
+      "problems": [],
+      "turns": 12,
+      "moves": 25
+    },
+    {
+      "gameId": "C0-62001-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 9,
+      "moves": 17
+    },
+    {
+      "gameId": "C0-62002-human",
+      "ok": true,
+      "problems": [],
+      "turns": 10,
+      "moves": 26
+    },
+    {
+      "gameId": "C0-62002-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 15,
+      "moves": 31
+    },
+    {
+      "gameId": "C0-62003-human",
+      "ok": true,
+      "problems": [],
+      "turns": 60,
+      "moves": 30
+    },
+    {
+      "gameId": "C0-62003-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 6,
+      "moves": 15
+    },
+    {
+      "gameId": "C0-62004-human",
+      "ok": true,
+      "problems": [],
+      "turns": 5,
+      "moves": 12
+    },
+    {
+      "gameId": "C0-62004-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 8,
+      "moves": 19
+    },
+    {
+      "gameId": "C0-62005-human",
+      "ok": true,
+      "problems": [],
+      "turns": 60,
+      "moves": 37
+    },
+    {
+      "gameId": "C0-62005-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 11,
+      "moves": 18
+    },
+    {
+      "gameId": "C0-62006-human",
+      "ok": true,
+      "problems": [],
+      "turns": 60,
+      "moves": 36
+    },
+    {
+      "gameId": "C0-62006-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 5,
+      "moves": 12
+    },
+    {
+      "gameId": "C0-62007-human",
+      "ok": true,
+      "problems": [],
+      "turns": 10,
+      "moves": 26
+    },
+    {
+      "gameId": "C0-62007-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 7,
+      "moves": 15
+    },
+    {
+      "gameId": "C0-62008-human",
+      "ok": true,
+      "problems": [],
+      "turns": 10,
+      "moves": 26
+    },
+    {
+      "gameId": "C0-62008-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 13,
+      "moves": 24
+    },
+    {
+      "gameId": "C0-62009-human",
+      "ok": true,
+      "problems": [],
+      "turns": 9,
+      "moves": 20
+    },
+    {
+      "gameId": "C0-62009-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 11,
+      "moves": 23
+    },
+    {
+      "gameId": "C0-62010-human",
+      "ok": true,
+      "problems": [],
+      "turns": 10,
+      "moves": 26
+    },
+    {
+      "gameId": "C0-62010-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 5,
+      "moves": 12
+    },
+    {
+      "gameId": "C1-62001-human",
+      "ok": true,
+      "problems": [],
+      "turns": 9,
+      "moves": 15
+    },
+    {
+      "gameId": "C1-62001-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 10,
+      "moves": 19
+    },
+    {
+      "gameId": "C1-62002-human",
+      "ok": true,
+      "problems": [],
+      "turns": 11,
+      "moves": 20
+    },
+    {
+      "gameId": "C1-62002-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 13,
+      "moves": 18
+    },
+    {
+      "gameId": "C1-62003-human",
+      "ok": true,
+      "problems": [],
+      "turns": 5,
+      "moves": 9
+    },
+    {
+      "gameId": "C1-62003-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 13,
+      "moves": 19
+    },
+    {
+      "gameId": "C1-62004-human",
+      "ok": true,
+      "problems": [],
+      "turns": 7,
+      "moves": 11
+    },
+    {
+      "gameId": "C1-62004-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 6,
+      "moves": 10
+    },
+    {
+      "gameId": "C1-62005-human",
+      "ok": true,
+      "problems": [],
+      "turns": 14,
+      "moves": 22
+    },
+    {
+      "gameId": "C1-62005-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 7,
+      "moves": 11
+    },
+    {
+      "gameId": "C1-62006-human",
+      "ok": true,
+      "problems": [],
+      "turns": 20,
+      "moves": 28
+    },
+    {
+      "gameId": "C1-62006-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 5,
+      "moves": 9
+    },
+    {
+      "gameId": "C1-62007-human",
+      "ok": true,
+      "problems": [],
+      "turns": 11,
+      "moves": 20
+    },
+    {
+      "gameId": "C1-62007-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 6,
+      "moves": 8
+    },
+    {
+      "gameId": "C1-62008-human",
+      "ok": true,
+      "problems": [],
+      "turns": 10,
+      "moves": 21
+    },
+    {
+      "gameId": "C1-62008-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 9,
+      "moves": 13
+    },
+    {
+      "gameId": "C1-62009-human",
+      "ok": true,
+      "problems": [],
+      "turns": 5,
+      "moves": 9
+    },
+    {
+      "gameId": "C1-62009-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 10,
+      "moves": 19
+    },
+    {
+      "gameId": "C1-62010-human",
+      "ok": true,
+      "problems": [],
+      "turns": 13,
+      "moves": 19
+    },
+    {
+      "gameId": "C1-62010-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 5,
+      "moves": 9
+    },
+    {
+      "gameId": "C2-62001-human",
+      "ok": true,
+      "problems": [],
+      "turns": 17,
+      "moves": 35
+    },
+    {
+      "gameId": "C2-62001-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 13,
+      "moves": 33
+    },
+    {
+      "gameId": "C2-62002-human",
+      "ok": true,
+      "problems": [],
+      "turns": 13,
+      "moves": 36
+    },
+    {
+      "gameId": "C2-62002-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 15,
+      "moves": 31
+    },
+    {
+      "gameId": "C2-62003-human",
+      "ok": true,
+      "problems": [],
+      "turns": 10,
+      "moves": 23
+    },
+    {
+      "gameId": "C2-62003-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 7,
+      "moves": 15
+    },
+    {
+      "gameId": "C2-62004-human",
+      "ok": true,
+      "problems": [],
+      "turns": 13,
+      "moves": 30
+    },
+    {
+      "gameId": "C2-62004-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 22,
+      "moves": 49
+    },
+    {
+      "gameId": "C2-62005-human",
+      "ok": true,
+      "problems": [],
+      "turns": 60,
+      "moves": 37
+    },
+    {
+      "gameId": "C2-62005-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 12,
+      "moves": 28
+    },
+    {
+      "gameId": "C2-62006-human",
+      "ok": true,
+      "problems": [],
+      "turns": 60,
+      "moves": 35
+    },
+    {
+      "gameId": "C2-62006-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 15,
+      "moves": 34
+    },
+    {
+      "gameId": "C2-62007-human",
+      "ok": true,
+      "problems": [],
+      "turns": 12,
+      "moves": 35
+    },
+    {
+      "gameId": "C2-62007-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 13,
+      "moves": 32
+    },
+    {
+      "gameId": "C2-62008-human",
+      "ok": true,
+      "problems": [],
+      "turns": 20,
+      "moves": 34
+    },
+    {
+      "gameId": "C2-62008-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 14,
+      "moves": 39
+    },
+    {
+      "gameId": "C2-62009-human",
+      "ok": true,
+      "problems": [],
+      "turns": 10,
+      "moves": 27
+    },
+    {
+      "gameId": "C2-62009-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 15,
+      "moves": 38
+    },
+    {
+      "gameId": "C2-62010-human",
+      "ok": true,
+      "problems": [],
+      "turns": 10,
+      "moves": 26
+    },
+    {
+      "gameId": "C2-62010-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 27,
+      "moves": 50
+    },
+    {
+      "gameId": "C3-62001-human",
+      "ok": true,
+      "problems": [],
+      "turns": 10,
+      "moves": 19
+    },
+    {
+      "gameId": "C3-62001-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 12,
+      "moves": 23
+    },
+    {
+      "gameId": "C3-62002-human",
+      "ok": true,
+      "problems": [],
+      "turns": 4,
+      "moves": 10
+    },
+    {
+      "gameId": "C3-62002-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 18,
+      "moves": 30
+    },
+    {
+      "gameId": "C3-62003-human",
+      "ok": true,
+      "problems": [],
+      "turns": 10,
+      "moves": 18
+    },
+    {
+      "gameId": "C3-62003-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 13,
+      "moves": 20
+    },
+    {
+      "gameId": "C3-62004-human",
+      "ok": true,
+      "problems": [],
+      "turns": 10,
+      "moves": 17
+    },
+    {
+      "gameId": "C3-62004-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 8,
+      "moves": 17
+    },
+    {
+      "gameId": "C3-62005-human",
+      "ok": true,
+      "problems": [],
+      "turns": 7,
+      "moves": 14
+    },
+    {
+      "gameId": "C3-62005-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 60,
+      "moves": 31
+    },
+    {
+      "gameId": "C3-62006-human",
+      "ok": true,
+      "problems": [],
+      "turns": 16,
+      "moves": 23
+    },
+    {
+      "gameId": "C3-62006-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 60,
+      "moves": 52
+    },
+    {
+      "gameId": "C3-62007-human",
+      "ok": true,
+      "problems": [],
+      "turns": 15,
+      "moves": 22
+    },
+    {
+      "gameId": "C3-62007-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 7,
+      "moves": 13
+    },
+    {
+      "gameId": "C3-62008-human",
+      "ok": true,
+      "problems": [],
+      "turns": 13,
+      "moves": 20
+    },
+    {
+      "gameId": "C3-62008-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 14,
+      "moves": 20
+    },
+    {
+      "gameId": "C3-62009-human",
+      "ok": true,
+      "problems": [],
+      "turns": 7,
+      "moves": 14
+    },
+    {
+      "gameId": "C3-62009-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 13,
+      "moves": 21
+    },
+    {
+      "gameId": "C3-62010-human",
+      "ok": true,
+      "problems": [],
+      "turns": 10,
+      "moves": 18
+    },
+    {
+      "gameId": "C3-62010-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 7,
+      "moves": 14
+    },
+    {
+      "gameId": "C4-62001-human",
+      "ok": true,
+      "problems": [],
+      "turns": 11,
+      "moves": 26
+    },
+    {
+      "gameId": "C4-62001-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 9,
+      "moves": 17
+    },
+    {
+      "gameId": "C4-62002-human",
+      "ok": true,
+      "problems": [],
+      "turns": 17,
+      "moves": 31
+    },
+    {
+      "gameId": "C4-62002-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 7,
+      "moves": 12
+    },
+    {
+      "gameId": "C4-62003-human",
+      "ok": true,
+      "problems": [],
+      "turns": 17,
+      "moves": 26
+    },
+    {
+      "gameId": "C4-62003-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 5,
+      "moves": 10
+    },
+    {
+      "gameId": "C4-62004-human",
+      "ok": true,
+      "problems": [],
+      "turns": 60,
+      "moves": 28
+    },
+    {
+      "gameId": "C4-62004-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 13,
+      "moves": 25
+    },
+    {
+      "gameId": "C4-62005-human",
+      "ok": true,
+      "problems": [],
+      "turns": 9,
+      "moves": 17
+    },
+    {
+      "gameId": "C4-62005-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 5,
+      "moves": 10
+    },
+    {
+      "gameId": "C4-62006-human",
+      "ok": true,
+      "problems": [],
+      "turns": 9,
+      "moves": 17
+    },
+    {
+      "gameId": "C4-62006-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 15,
+      "moves": 30
+    },
+    {
+      "gameId": "C4-62007-human",
+      "ok": true,
+      "problems": [],
+      "turns": 13,
+      "moves": 28
+    },
+    {
+      "gameId": "C4-62007-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 11,
+      "moves": 18
+    },
+    {
+      "gameId": "C4-62008-human",
+      "ok": true,
+      "problems": [],
+      "turns": 5,
+      "moves": 10
+    },
+    {
+      "gameId": "C4-62008-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 60,
+      "moves": 18
+    },
+    {
+      "gameId": "C4-62009-human",
+      "ok": true,
+      "problems": [],
+      "turns": 13,
+      "moves": 21
+    },
+    {
+      "gameId": "C4-62009-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 20,
+      "moves": 38
+    },
+    {
+      "gameId": "C4-62010-human",
+      "ok": true,
+      "problems": [],
+      "turns": 5,
+      "moves": 10
+    },
+    {
+      "gameId": "C4-62010-ai",
+      "ok": true,
+      "problems": [],
+      "turns": 13,
+      "moves": 18
+    }
+  ],
+  "plannerReruns": [
+    {
+      "gameId": "C0-62001-human",
+      "identical": true
+    },
+    {
+      "gameId": "C1-62001-human",
+      "identical": true
+    },
+    {
+      "gameId": "C2-62001-human",
+      "identical": true
+    },
+    {
+      "gameId": "C3-62001-human",
+      "identical": true
+    },
+    {
+      "gameId": "C4-62001-human",
+      "identical": true
+    }
+  ],
+  "plannerRerunNote": "5 verification re-runs: same seeds as dataset games, NOT new dataset games"
+}
