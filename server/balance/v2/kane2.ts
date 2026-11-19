@@ -16,7 +16,7 @@ import { appendFileSync, mkdirSync, readFileSync, writeFileSync, existsSync } fr
 import { join } from 'node:path';
 import { createHash, randomBytes } from 'node:crypto';
 import { kaneProbe, runCapture, TEST_DOUBLE_VERSION } from '../../kane.ts';
-import { paidCallTokenActive, CAP_WARNING } from '../v4/kanebudget.ts';
+import { paidCallTokenActive, isGateTestFixture, CAP_WARNING } from '../v4/kanebudget.ts';
 
 export const COMPONENTS: Record<string, { label: string; experiment: string | null }> = {
   'rule-geometry': { label: 'Where a rule sends pieces (board geometry)', experiment: 'E4' },
@@ -116,7 +116,7 @@ export async function kaneExplore(o: { session: Session; url: string; objective:
   };
   if (!probe.installed || probe.loggedIn === false) { r.capabilityDetail = `Kane unavailable: ${probe.detail}`; return done(); }
   // V4 credit safety: a REAL kane-cli research run needs the single-use token of server/balance/v4/kanebudget.ts runPaidCall.
-  if (!r.isTestDouble && !paidCallTokenActive()) { r.capabilityDetail = `Paid Kane call refused (V4 credit safety: paid research calls are disabled by default). ${CAP_WARNING}`; return done(); }
+  if (!r.isTestDouble && !isGateTestFixture(probe.version) && !paidCallTokenActive()) { r.capabilityDetail = `Paid Kane call refused (V4 credit safety: paid research calls are disabled by default). ${CAP_WARNING}`; return done(); }
   // Windows .cmd shims: our objective never contains double quotes or percent signs.
   const objective = o.objective.replace(/["%!^]/g, '');
   r.args = ['run', objective, '--url', o.url, '--agent', '--headless', '--max-steps', String(o.maxSteps), '--timeout', String(o.timeoutS)];

@@ -37,6 +37,12 @@ export type Deps = {
 /** Set only while runPaidCall's exec runs. kaneExplore / kaneVerify refuse a REAL kane-cli run without it. */
 let paidToken: string | null = null;
 export const paidCallTokenActive = () => paidToken !== null;
+/**
+ * The repo's own kane-cli test double can report a fake 'real-looking' version so the V2 gate tests can exercise
+ * post-call stop rules; those fixture versions end in '-gate-test', which the real kane-cli never reports. Only
+ * they bypass the paid-call gate. Any other version (e.g. 0.10.4) is treated as the real, paid CLI.
+ */
+export const isGateTestFixture = (version: string | null) => !!version && /-gate-test$/.test(version);
 export class PaidCallRefused extends Error { reason: string; constructor(reason: string) { super(`Paid Kane call refused: ${reason}`); this.reason = reason; } }
 
 export function readLedger(file: string): LedgerEntry[] { return existsSync(file) ? readFileSync(file, 'utf8').split(/\r?\n/).filter(Boolean).map(l => JSON.parse(l)) : []; }
