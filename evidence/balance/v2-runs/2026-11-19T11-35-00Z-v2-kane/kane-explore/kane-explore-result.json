@@ -1,0 +1,47 @@
+{
+  "callId": "KX1",
+  "role": "exploration",
+  "status": "complete",
+  "capability": "OK",
+  "capabilityDetail": "1 valid notebook note(s) submitted by the browser agent during a complete kane-cli run",
+  "version": "0.10.4",
+  "isTestDouble": false,
+  "objective": "You are investigating an AI board-game planner. Read this whole page: how the game works, the per-effect summary, the prior valuation versus measured consequences, the raw trigger and placement histories, and the planner choices with their rejected alternatives. Work out WHY the AI uses Teleport and the east and west shoves the way it does. Consider at least two different explanations and look for rows that contradict them. Then, in the Investigation notebook form at the bottom, submit your best explanation, choose which part it involves, which measurement should change and in which direction, and write the alternative you considered. Submit at most 3 notes. Do not do anything else on the page.",
+  "args": [
+    "run",
+    "You are investigating an AI board-game planner. Read this whole page: how the game works, the per-effect summary, the prior valuation versus measured consequences, the raw trigger and placement histories, and the planner choices with their rejected alternatives. Work out WHY the AI uses Teleport and the east and west shoves the way it does. Consider at least two different explanations and look for rows that contradict them. Then, in the Investigation notebook form at the bottom, submit your best explanation, choose which part it involves, which measurement should change and in which direction, and write the alternative you considered. Submit at most 3 notes. Do not do anything else on the page.",
+    "--url",
+    "http://127.0.0.1:4200/v2/explore",
+    "--agent",
+    "--headless",
+    "--max-steps",
+    "25",
+    "--timeout",
+    "420"
+  ],
+  "url": "http://127.0.0.1:4200/v2/explore",
+  "startedAt": "2026-11-19T11:35:23.661Z",
+  "finishedAt": "2026-11-19T11:39:46.667Z",
+  "elapsedMs": 263006,
+  "runEnd": {
+    "status": "passed",
+    "summary": "Reviewed the full game-analysis page, including the game rules, effect summaries, valuation and consequence comparisons, trigger and placement histories, and planner alternatives.\nInvestigated the AI’s use of Teleport and east and west shoves by comparing multiple possible explanations and checking for contradictory rows.\nSubmitted an Investigation notebook note with an explanation, the relevant area, a proposed measurement change and direction, and an alternative that was considered.\nThe investigation was completed on the notebook page.",
+    "credits": 38.011489999999995
+  },
+  "exitCode": 0,
+  "timedOut": false,
+  "files": {
+    "stdout": "D:\\Rule_Sabotage\\rule-sabotage-live\\evidence\\balance\\v2-runs\\2026-11-19T11-35-00Z-v2-kane\\kane-explore\\kane-stdout.ndjson",
+    "stderr": "D:\\Rule_Sabotage\\rule-sabotage-live\\evidence\\balance\\v2-runs\\2026-11-19T11-35-00Z-v2-kane\\kane-explore\\kane-stderr.txt",
+    "notes": "D:\\Rule_Sabotage\\rule-sabotage-live\\evidence\\balance\\v2-runs\\2026-11-19T11-35-00Z-v2-kane\\kane-explore\\kane-notes.ndjson",
+    "result": "D:\\Rule_Sabotage\\rule-sabotage-live\\evidence\\balance\\v2-runs\\2026-11-19T11-35-00Z-v2-kane\\kane-explore\\kane-explore-result.json"
+  },
+  "sha256": {
+    "stdout": "6737a66135996a4e17d1ddd49d8db56030da74c803064dd6d0496df1679b96f7",
+    "notes": "bb4c9325982bad811028ef9f392ad66a7740b3c7dbeb0735cea43aef66a291b1"
+  },
+  "validNotes": [
+    "KX1-N1"
+  ],
+  "execution": "COMPLETE"
+}

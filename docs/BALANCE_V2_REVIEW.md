@@ -36,3 +36,32 @@ test-double E2E run, unit tests.
 **Seeds for the next run.** The first dry-run unsealed holdout 7000–7015 and used development seeds 3100–3115, so
 `balance/v2/config.json` now points to fresh sets: development 3200–3215, holdout 7100–7115. The next run (real
 Kane or not) never reuses seeds it has already looked at.
+
+---
+
+## Update after the one authorised real Kane run (2026-11-19 11:35 UTC)
+
+Details: `docs/BALANCE_V2_KANE_RESULT.md`, run `evidence/balance/v2-runs/2026-11-19T11-35-00Z-v2-kane/`.
+3 kane-cli calls, **54.336 credits** (exploration 40.092, challenge 9.119, correction check 5.125). Launch 1
+never reached Kane (kane-cli not on PATH; the credit gate refused the call; 0 credits).
+
+**Overall: still PARTIAL.** The primary acceptance target was met: real Kane observed the game, submitted its own
+valid hypothesis from a complete run, and that hypothesis was registered and evaluated against the competing
+hypotheses. The outcome is INCONCLUSIVE. The secondary target was only partly met. Kane checked the evidence and
+agreed with it, but never challenged it. The correction is a REGRESSION.
+
+| Dimension | Before | After the real run | Why / what is still missing |
+|---|---|---|---|
+| Kane autonomy | NOT_TESTED | **PARTIAL** | Kane wrote its own explanation, alternative and counterexample (`KX1-N1`), registered as `HK1` with checked provenance before any result. Its hypothesis largely restates H4. The form let it express only one testable prediction, and the experiment mapping was mechanical. |
+| Hypothesis quality | PARTIAL | **PARTIAL** | H3 replicated on fresh seeds (−0.175, after −0.19). H5's mis-specified P5b again forced REFUTED. HK1's prediction sits near a ceiling (0.88 → ?). H0 and H4 outcomes differ from the dry-run (H0 INCONCLUSIVE → REFUTED; H4 REFUTED → INCONCLUSIVE), which shows how sensitive 16-seed verdicts are. |
+| Experimental rigor | PARTIAL | **PARTIAL** | Unchanged design. Fresh seeds this time, so nothing was reused. |
+| Correction effectiveness | PARTIAL | **PARTIAL** | K1 changed behaviour as declared (Kane confirmed) and moved the target robustly (−0.26), but not acceptably. |
+| Adequacy | FAIL | **FAIL** (issue unresolved) | REGRESSION again: game length 14.5 → 27.1, draws/turn-limit +18.7 pts, first-player edge to +0.21. The reviewer worked; the problem is not fixed. |
+| Safety | PASS | **PASS** | 0 illegal/errors/softlocks in 384 games. Ceiling respected (54.3/80). No production change. |
+| Reproducibility | PASS | **PASS** | Journal (44 entries) and manifests verify. Raw Kane NDJSON, stderr, notes and the exact pages Kane saw are stored. |
+| Demonstration quality | PARTIAL | **PARTIAL** | The real recording (19 min raw, 87 s labelled accelerated) shows Kane's live exploration, its note, the 11 condition answers and the REGRESSION verdict. Kane's contribution is visible, but it is modest. |
+
+**Would make Kane's contribution stronger next time** (each needs separate approval):
+- A notebook that lets Kane state several claims with their own predictions.
+- Letting Kane pick the experiment from the allowlist, instead of mapping it mechanically.
+- The objective-mode challenge call, so Kane can argue with the evidence rather than only re-derive it.

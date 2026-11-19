@@ -1,0 +1,176 @@
+{
+  "generatedAt": "2026-11-19T11:54:07.536Z",
+  "note": "sha256 of every evidence file in this run directory (status.json changes until the run ends; recordings are added by the recorder).",
+  "files": [
+    {
+      "path": "REPORT.md",
+      "bytes": 8521,
+      "sha256": "fb1a7684b825b640265426d421c1eac8ec312f55b751b79c18418efbe68379aa"
+    },
+    {
+      "path": "cycle.log",
+      "bytes": 6388,
+      "sha256": "31777d698998489bb67e041cdccebcdd923044b67dcd38bbab73a11ec51fece9"
+    },
+    {
+      "path": "games-C0_selfplay_development.ndjson",
+      "bytes": 164888,
+      "sha256": "37028ef9cfd5a4796ed35f8acc2bc0c150edf130897c36668d454c94051a0131"
+    },
+    {
+      "path": "games-C0_selfplay_holdout.ndjson",
+      "bytes": 165653,
+      "sha256": "05231f403eceefb7ee883b846b31ff66ea8babfb233b3375d86b1942d5ba9584"
+    },
+    {
+      "path": "games-E1a_selfplay_development.ndjson",
+      "bytes": 163113,
+      "sha256": "7841380c0c5ed673515c3df8287680330a31ee38151ea7d3271d233a7deecdc8"
+    },
+    {
+      "path": "games-E1b_selfplay_development.ndjson",
+      "bytes": 147265,
+      "sha256": "2777f9033b8e5dd9e732e6abce1be61642bc2268b8ba56e04f5dc1ecc6f053bd"
+    },
+    {
+      "path": "games-E2_head-to-head_development.ndjson",
+      "bytes": 172513,
+      "sha256": "34102ba06b6650caab2f1e815a73af72015dfabb8389dd57960e0f37ecd3d09d"
+    },
+    {
+      "path": "games-E2_selfplay_development.ndjson",
+      "bytes": 170427,
+      "sha256": "2d74d69a2c618aca9d07f0f2465fde502aa7d6a19ec37a124d31c0df392b3430"
+    },
+    {
+      "path": "games-E3_selfplay_development.ndjson",
+      "bytes": 184875,
+      "sha256": "511960095872fdd7be4ceb2d5b3f09c7500d6303a6a5aad52a4980ba981408cd"
+    },
+    {
+      "path": "games-E4_selfplay_development.ndjson",
+      "bytes": 191185,
+      "sha256": "f736009feda6a58c23467e72a6c37cf9c05ab7cc8751ea5a1b58b22cf0ee668a"
+    },
+    {
+      "path": "games-E5_head-to-head_development.ndjson",
+      "bytes": 187733,
+      "sha256": "99d8a0df5eca708a55ff621ddc5932783d07366bf8ac996b8dab183a1fdf2e65"
+    },
+    {
+      "path": "games-E5_selfplay_development.ndjson",
+      "bytes": 194549,
+      "sha256": "2177496221dd386676293094f7350f2b0c43fc727374c31140aa9de7e99030ac"
+    },
+    {
+      "path": "games-K1_head-to-head_holdout.ndjson",
+      "bytes": 170594,
+      "sha256": "90596b93efba9de9f94e5e4f13ab1421d666fd806841068ddb798ba2507e29db"
+    },
+    {
+      "path": "games-K1_selfplay_holdout.ndjson",
+      "bytes": 193355,
+      "sha256": "a8d709a22859d4dba09bee40bad6ade66b4b61e9c2fdb4dfb678db0896f1056d"
+    },
+    {
+      "path": "kane-challenge/kane-notes.ndjson",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "kane-challenge/kane-result.json",
+      "bytes": 6174,
+      "sha256": "b1c812036249dc7fcf5a0a5b7d515bdb0746ea20a12cfdd0cdb3cae7e86f809c"
+    },
+    {
+      "path": "kane-challenge/kane-stderr.txt",
+      "bytes": 211,
+      "sha256": "9cd34eda273c20bbdf76f176c53e86e3dd2b1f7ccd220a9b227c6f0fc023def1"
+    },
+    {
+      "path": "kane-challenge/kane-stdout.ndjson",
+      "bytes": 6326,
+      "sha256": "085ba08d92617452b406dc63d9a0db732f97076079e54faa5cd9c331a8a2c779"
+    },
+    {
+      "path": "kane-correction/kane-result.json",
+      "bytes": 2330,
+      "sha256": "247c1f5e45a59f296082ea0ff5ecadb000b7042f5441c3c622837439c8364280"
+    },
+    {
+      "path": "kane-correction/kane-stderr.txt",
+      "bytes": 211,
+      "sha256": "9cd34eda273c20bbdf76f176c53e86e3dd2b1f7ccd220a9b227c6f0fc023def1"
+    },
+    {
+      "path": "kane-correction/kane-stdout.ndjson",
+      "bytes": 1988,
+      "sha256": "b65f4f47f6f75096e8821b8d547ffb6161c826c24b78a49498e74ee8aef960d5"
+    },
+    {
+      "path": "kane-explore/kane-explore-result.json",
+      "bytes": 3542,
+      "sha256": "6fae3f83ea9ccafffd4bbf982e773b37ebb71455c3a457a6711d24d192c3a955"
+    },
+    {
+      "path": "kane-explore/kane-notes.ndjson",
+      "bytes": 1893,
+      "sha256": "bb4c9325982bad811028ef9f392ad66a7740b3c7dbeb0735cea43aef66a291b1"
+    },
+    {
+      "path": "kane-explore/kane-stderr.txt",
+      "bytes": 398,
+      "sha256": "e065170c681ecafb69b2d8ea47284aa0c0b1b7eaff077cd80bb40b53983ef835"
+    },
+    {
+      "path": "kane-explore/kane-stdout.ndjson",
+      "bytes": 6578,
+      "sha256": "6737a66135996a4e17d1ddd49d8db56030da74c803064dd6d0496df1679b96f7"
+    },
+    {
+      "path": "page-challenge.html",
+      "bytes": 67144,
+      "sha256": "0d4e8db5f927192963eabdc037375ea04d20f6d1895d1bfdb9bce04941a5ce40"
+    },
+    {
+      "path": "page-correction.html",
+      "bytes": 13143,
+      "sha256": "a835a7a3ed9f7359cdfdaf76f3ce623c6b66aa682f4df7d43374c3e22a3f0314"
+    },
+    {
+      "path": "page-explore.html",
+      "bytes": 30071,
+      "sha256": "9eef7031743f104579edb9cf5b851fb88f27d066c4f751e13a7afc51c517092f"
+    },
+    {
+      "path": "recording/VIDEO-LOCATION.txt",
+      "bytes": 143,
+      "sha256": "7b303e6ca3e79b60e2c7be83c6b2a4e859fcfdeed94ddb6d046a144af0041af6"
+    },
+    {
+      "path": "recording/recorder.log",
+      "bytes": 449,
+      "sha256": "6a1ffcb3d6225fbf5dc1f4bbb3142bc07cd040719a2b9cb15c904d31f66355ed"
+    },
+    {
+      "path": "recording/recording-manifest.json",
+      "bytes": 1212,
+      "sha256": "392bdc6df0bc57da29a358716beab867351c6dd66c195ff6b0ceae1c97730916"
+    },
+    {
+      "path": "recording/terminal.cast",
+      "bytes": 8144,
+      "sha256": "7a2ba60d18596488e6e9303b439267cd3e36cd4260b452ac612baf61e804f8d5"
+    },
+    {
+      "path": "recording/terminal.log",
+      "bytes": 6828,
+      "sha256": "a76a6cbb4d07b58392e430588a3cc3786d714773edf9a490627e102d735577b9"
+    },
+    {
+      "path": "status.json",
+      "bytes": 142051,
+      "sha256": "6f7a539517851efa9399f0cfccb5519c8a21514fda26b716082cc0acdf5a7f6a"
+    }
+  ]
+}

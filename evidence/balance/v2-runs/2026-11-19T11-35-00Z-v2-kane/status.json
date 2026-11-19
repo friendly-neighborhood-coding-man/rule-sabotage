@@ -1,0 +1,4035 @@
+{
+  "schema": "rule-sabotage/balance-v2-status@1",
+  "runId": "2026-11-19T11-35-00Z-v2-kane",
+  "mode": "run-kane",
+  "startedAt": "2026-11-19T11:35:00.632Z",
+  "finishedAt": "2026-11-19T11:52:16.981Z",
+  "commit": "ebcc04bba31f755822af5a36ec89ce0e28344f74",
+  "dirty": false,
+  "engineHash": "5b79cac132ecdfbd",
+  "weights": "0.3.0#ddcf941c285bd537",
+  "stages": [
+    {
+      "key": "observe",
+      "title": "Observation",
+      "source": "V1 evidence (hash-verified) + planner traces",
+      "state": "done",
+      "startedAt": "2026-11-19T11:35:15.636Z",
+      "endedAt": "2026-11-19T11:35:21.946Z",
+      "summary": "V1 evidence hash-verified; 24 games; replays reproduce the recorded games"
+    },
+    {
+      "key": "explore",
+      "title": "Kane exploration",
+      "source": "real kane-cli objective mode: Kane proposes explanations",
+      "state": "done",
+      "startedAt": "2026-11-19T11:35:21.953Z",
+      "endedAt": "2026-11-19T11:39:56.587Z",
+      "summary": "kane-cli 0.10.4: OK (1 valid notebook note(s) submitted by the browser agent during a complete kane-cli run)"
+    },
+    {
+      "key": "register",
+      "title": "Competing hypotheses",
+      "source": "pre-registered contracts (before any result)",
+      "state": "done",
+      "startedAt": "2026-11-19T11:39:56.599Z",
+      "endedAt": "2026-11-19T11:39:56.875Z",
+      "summary": "7 contracts registered before any experiment result (H0:operator, H1:operator, H2:operator, H3:operator, H4:operator, H5:claude, HK1:kane); holdout sealed"
+    },
+    {
+      "key": "experiment",
+      "title": "Controlled experiments",
+      "source": "real engine + planner, one factor each, development seeds",
+      "state": "done",
+      "startedAt": "2026-11-19T11:39:56.888Z",
+      "endedAt": "2026-11-19T11:46:24.050Z",
+      "summary": "9 conditions, 290 games so far (seeds 3200–3215; head-to-head on 8 seeds)"
+    },
+    {
+      "key": "evaluate",
+      "title": "Hypothesis evaluation",
+      "source": "pre-registered predictions with uncertainty",
+      "state": "done",
+      "startedAt": "2026-11-19T11:46:24.058Z",
+      "endedAt": "2026-11-19T11:46:25.154Z",
+      "summary": "H0 REFUTED · H1 INCONCLUSIVE · H2 REFUTED · H3 SUPPORTED · H4 INCONCLUSIVE · H5 REFUTED · HK1 INCONCLUSIVE"
+    },
+    {
+      "key": "challenge",
+      "title": "Kane challenge",
+      "source": "real kane-cli analyzer: independent raw-row conditions",
+      "state": "done",
+      "startedAt": "2026-11-19T11:46:25.160Z",
+      "endedAt": "2026-11-19T11:48:29.139Z",
+      "summary": "kane-cli 0.10.4: complete; 9 independent conditions over 6 hypotheses"
+    },
+    {
+      "key": "correct",
+      "title": "Corrections",
+      "source": "typed, allowlisted, from surviving hypotheses only",
+      "state": "done",
+      "startedAt": "2026-11-19T11:48:29.146Z",
+      "endedAt": "2026-11-19T11:48:29.165Z",
+      "summary": "K1 planner/REVIEW_REQUIRED: planner placement search only: own-piece benefit no longer makes a cell a candidate"
+    },
+    {
+      "key": "reobserve",
+      "title": "Re-observation",
+      "source": "unsealed holdout seeds, never used before",
+      "state": "done",
+      "startedAt": "2026-11-19T11:48:29.171Z",
+      "endedAt": "2026-11-19T11:50:15.673Z",
+      "summary": "holdout 7100–7115 unsealed once (commitment verified); 1 correction(s) re-observed"
+    },
+    {
+      "key": "adequacy",
+      "title": "Adequacy review",
+      "source": "implementation correctness vs balance adequacy",
+      "state": "done",
+      "startedAt": "2026-11-19T11:50:15.679Z",
+      "endedAt": "2026-11-19T11:52:16.954Z",
+      "summary": "K1: impl PASS / adequacy REGRESSION (provisional REGRESSION)"
+    },
+    {
+      "key": "decide",
+      "title": "Decision",
+      "source": "proposal / review-required / no change (never applied to production)",
+      "state": "done",
+      "startedAt": "2026-11-19T11:52:16.961Z",
+      "endedAt": "2026-11-19T11:52:16.974Z",
+      "summary": "NO CORRECTION PROMOTED (K1 REGRESSION)"
+    }
+  ],
+  "progress": null,
+  "checkpoint": "READY_FOR_OPERATOR_V2_RESULT_REVIEW",
+  "log": [
+    "[11:35:00] Balance Designer V2 2026-11-19T11-35-00Z-v2-kane (RUN-KANE) · dashboard http://127.0.0.1:4200/ · commit ebcc04bba3 · engine 5b79cac132ecdfbd · weights 0.3.0#ddcf941c285bd537",
+    "[11:35:15] kane-cli: kane-cli ready (version 0.10.4)",
+    "[11:35:15] ▶ Observation (V1 evidence (hash-verified) + planner traces)",
+    "[11:35:15] V1 evidence verified (24 games). Observed: teleport self-trigger share 0.879, east/west shove self-trigger share 0.885, teleport benefit to activator 3.414 squares.",
+    "[11:35:21] ✔ Observation: V1 evidence hash-verified; 24 games; replays reproduce the recorded games",
+    "[11:35:21] ▶ Kane exploration (real kane-cli objective mode: Kane proposes explanations)",
+    "[11:38:45] notebook: KX1-N1 received (valid)",
+    "[11:39:56] ✔ Kane exploration: kane-cli 0.10.4: OK (1 valid notebook note(s) submitted by the browser agent during a complete kane-cli run)",
+    "[11:39:56] ▶ Competing hypotheses (pre-registered contracts (before any result))",
+    "[11:39:56]   registered H0 [operator] No actionable defect: self-boosting is rational play · hash 69f751f4f5440622 · journal #11",
+    "[11:39:56]   registered H1 [operator] Intrinsic rule geometry favours forward progress · hash e3cbb140896aa952 · journal #12",
+    "[11:39:56]   registered H2 [operator] Planner exploitation through its own valuation · hash 36fafec1221760e4 · journal #13",
+    "[11:39:56]   registered H3 [operator] Placement search bias towards self-beneficial cells · hash f7418dc91124096e · journal #14",
+    "[11:39:56]   registered H4 [operator] Valuation or calibration error in the V0.3 weights · hash cd7c490ee321b27b · journal #15",
+    "[11:39:56]   registered H5 [claude] The planner foresees 'random' teleport destinations · hash f1aadf633e5b9099 · journal #16",
+    "[11:39:56]   registered HK1 [kane] Kane: The V0.3 prior/blend misvalues Teleport: it assigns -0.80 although triggered pie · hash 6cf2be4cf60b5e92 · journal #17",
+    "[11:39:56] ✔ Competing hypotheses: 7 contracts registered before any experiment result (H0:operator, H1:operator, H2:operator, H3:operator, H4:operator, H5:claude, HK1:kane); holdout sealed",
+    "[11:39:56] ▶ Controlled experiments (real engine + planner, one factor each, development seeds)",
+    "[11:40:27]   C0/selfplay/development: 32 games, manipulation OK (control)",
+    "[11:41:22]   E1a/selfplay/development: 32 games, manipulation OK (19/32 games diverged from their control game (median first divergence turn 5))",
+    "[11:41:52]   E1b/selfplay/development: 32 games, manipulation OK (31/32 games diverged from their control game (median first divergence turn 4))",
+    "[11:42:51]   E2/head-to-head/development: 32 games, manipulation OK (treated planner on both sides and both first-player orders; hooks recorded on every game: true)",
+    "[11:43:36]   E2/selfplay/development: 32 games, manipulation OK (30/32 games diverged from their control game (median first divergence turn 3))",
+    "[11:43:58]   E3/selfplay/development: 32 games, manipulation OK (32/32 games diverged from their control game (median first divergence turn 1))",
+    "[11:45:08]   E4/selfplay/development: 32 games, manipulation OK (6 teleports, 0 changed the distance to goal; variant tag on every game: true)",
+    "[11:45:48]   E5/head-to-head/development: 32 games, manipulation OK (treated planner on both sides and both first-player orders; hooks recorded on every game: true)",
+    "[11:46:24]   E5/selfplay/development: 32 games, manipulation OK (32/32 games diverged from their control game (median first divergence turn 1))",
+    "[11:46:24] ✔ Controlled experiments: 9 conditions, 290 games so far (seeds 3200–3215; head-to-head on 8 seeds)",
+    "[11:46:24] ▶ Hypothesis evaluation (pre-registered predictions with uncertainty)",
+    "[11:46:24]   H0: REFUTED — primary prediction contradicted: P0a (effect 0.063 [95% CI -0.063, 0.188], material = 0.08)",
+    "[11:46:24]   H1: INCONCLUSIVE — P1b: unclear (too few underlying events (10 < 20); an interval over so few events is not judged)",
+    "[11:46:24]   H2: REFUTED — primary prediction contradicted: P2a (effect 0.016 [95% CI -0.051, 0.087], material = 0.15); P2b (effect 0.029 [95% CI -0.065, 0.120], material = 0.15)",
+    "[11:46:24]   H3: SUPPORTED — every primary and discriminating prediction held on these seeds (support, not proof)",
+    "[11:46:25]   H4: INCONCLUSIVE — P4a: unclear (effect 0.010 [95% CI -0.087, 0.103], material = 0.1)",
+    "[11:46:25]   H5: REFUTED — primary prediction contradicted: P5b (effect 0.000 [95% CI 0.000, 0.000], material = 0.1)",
+    "[11:46:25]   HK1: INCONCLUSIVE — HK1a: unclear (effect 0.010 [95% CI -0.087, 0.103], material = 0.1)",
+    "[11:46:25] ✔ Hypothesis evaluation: H0 REFUTED · H1 INCONCLUSIVE · H2 REFUTED · H3 SUPPORTED · H4 INCONCLUSIVE · H5 REFUTED · HK1 INCONCLUSIVE",
+    "[11:46:25] ▶ Kane challenge (real kane-cli analyzer: independent raw-row conditions)",
+    "[11:48:29] ✔ Kane challenge: kane-cli 0.10.4: complete; 9 independent conditions over 6 hypotheses",
+    "[11:48:29] ▶ Corrections (typed, allowlisted, from surviving hypotheses only)",
+    "[11:48:29] ✔ Corrections: K1 planner/REVIEW_REQUIRED: planner placement search only: own-piece benefit no longer makes a cell a candidate",
+    "[11:48:29] ▶ Re-observation (unsealed holdout seeds, never used before)",
+    "[11:48:58]   C0/selfplay/holdout: 32 games, manipulation OK (control)",
+    "[11:49:31]   K1/selfplay/holdout: 32 games, manipulation OK (32/32 games diverged from their control game (median first divergence turn 1))",
+    "[11:50:15]   K1/head-to-head/holdout: 32 games, manipulation OK (treated planner on both sides and both first-player orders; hooks recorded on every game: true)",
+    "[11:50:15] ✔ Re-observation: holdout 7100–7115 unsealed once (commitment verified); 1 correction(s) re-observed",
+    "[11:50:15] ▶ Adequacy review (implementation correctness vs balance adequacy)",
+    "[11:52:16]   K1: implementation PASS, adequacy REGRESSION (provisional REGRESSION) — Unacceptable deterioration: first-player edge grew to 0.210; game length changed 12.594 turns; draws/turn-limit endings up 0.187",
+    "[11:52:16] ✔ Adequacy review: K1: impl PASS / adequacy REGRESSION (provisional REGRESSION)",
+    "[11:52:16] ▶ Decision (proposal / review-required / no change (never applied to production))",
+    "[11:52:16] ✔ Decision: NO CORRECTION PROMOTED (K1 REGRESSION)",
+    "[11:52:17] Journal balance\\v2\\journal.ndjson: 44 entries, hash chain verified",
+    "[11:52:17] ■ READY_FOR_OPERATOR_V2_RESULT_REVIEW",
+    "[11:52:17] Dashboard stays open at http://127.0.0.1:4200/ (Ctrl+C to stop)"
+  ],
+  "kaneCli": {
+    "installed": true,
+    "version": "0.10.4",
+    "loggedIn": true,
+    "detail": "kane-cli ready",
+    "isTestDouble": false
+  },
+  "budgets": {
+    "kaneCallsUsed": 3,
+    "kaneCallsMax": 4,
+    "creditsUsed": 54.336,
+    "creditsMax": 80,
+    "gamesPlayed": 386,
+    "gamesMax": 700,
+    "creditLedger": [
+      {
+        "callId": "KX1",
+        "role": "exploration",
+        "before": 10665.5561,
+        "after": 10625.4643,
+        "used": 40.092
+      },
+      {
+        "callId": "KC1",
+        "role": "challenge-analyzer",
+        "before": 10625.4643,
+        "after": 10616.3458,
+        "used": 9.119
+      },
+      {
+        "callId": "KA1",
+        "role": "correction-analyzer",
+        "before": 10616.3458,
+        "after": 10611.2207,
+        "used": 5.125
+      }
+    ],
+    "creditCapNote": "Operating ceiling, enforced between calls (balance check before each call, conservative per-call estimate, no call once spending reaches the ceiling). A single kane-cli call cannot be stopped mid-run, so it can overshoot; any overshoot is reported."
+  },
+  "seeds": {
+    "exploration": [
+      1000,
+      1001,
+      1002,
+      1003,
+      1004,
+      1005,
+      1006,
+      1007,
+      1008,
+      1009,
+      1010,
+      1011
+    ],
+    "development": [
+      3200,
+      3201,
+      3202,
+      3203,
+      3204,
+      3205,
+      3206,
+      3207,
+      3208,
+      3209,
+      3210,
+      3211,
+      3212,
+      3213,
+      3214,
+      3215
+    ],
+    "holdout": [
+      7100,
+      7101,
+      7102,
+      7103,
+      7104,
+      7105,
+      7106,
+      7107,
+      7108,
+      7109,
+      7110,
+      7111,
+      7112,
+      7113,
+      7114,
+      7115
+    ],
+    "holdoutCommitment": "b6150e8380c0875dd1a7b87ba8fccc61e16b172b2bb12a8506d4d4f99837e932"
+  },
+  "observation": {
+    "v1RunId": "2026-11-18T14-21-47Z-kane",
+    "v1Verified": true,
+    "v1Detail": "cycle-1/baseline-training-games.ndjson sha256 6d1f600e5ad61b43… matches the V1 manifest",
+    "metrics": {
+      "tp_self_share": 0.879,
+      "tp_per_game": 1.375,
+      "tp_benefit": 3.414,
+      "tp_self_benefit": 4.083,
+      "tp_opp_benefit": -1.571,
+      "tp_self_harm_rate": 0,
+      "ew_share": 0.646,
+      "ew_per_game": 7.375,
+      "ew_aligned_share": 1,
+      "ew_self_trigger_share": 0.885,
+      "self_trigger_share": 0.87,
+      "max_effect_share": 0.336,
+      "effect_entropy": 0.743,
+      "first_player_edge": -0.042,
+      "human_side_edge": -0.125,
+      "turns_mean": 11.458,
+      "comeback_rate": 0.792,
+      "lead_changes": 4.542,
+      "draw_or_limit_rate": 0,
+      "safety_events": 0,
+      "conditional_win_tp": 0.52
+    },
+    "effectTable": [
+      [
+        "freeze",
+        1,
+        1,
+        0,
+        0,
+        0,
+        null,
+        null
+      ],
+      [
+        "haste",
+        6,
+        7,
+        9,
+        9,
+        0,
+        1,
+        null
+      ],
+      [
+        "home",
+        10,
+        13,
+        0,
+        0,
+        0,
+        null,
+        null
+      ],
+      [
+        "shield",
+        5,
+        5,
+        13,
+        12,
+        1,
+        1.42,
+        3
+      ],
+      [
+        "shove:back:2",
+        6,
+        0,
+        3,
+        0,
+        3,
+        null,
+        -2
+      ],
+      [
+        "shove:back:3",
+        4,
+        5,
+        7,
+        1,
+        6,
+        3,
+        -1
+      ],
+      [
+        "shove:east:2",
+        92,
+        0,
+        184,
+        165,
+        19,
+        2,
+        -2
+      ],
+      [
+        "shove:forward:2",
+        1,
+        0,
+        1,
+        1,
+        0,
+        2,
+        null
+      ],
+      [
+        "shove:west:2",
+        0,
+        85,
+        164,
+        143,
+        21,
+        2,
+        -2
+      ],
+      [
+        "teleport",
+        10,
+        23,
+        58,
+        51,
+        7,
+        4.1,
+        -1.57
+      ]
+    ]
+  },
+  "kane": [
+    {
+      "callId": "KX1",
+      "role": "exploration",
+      "state": "done",
+      "url": "http://127.0.0.1:4200/v2/explore",
+      "liveLines": [
+        "{\"type\":\"stream_start\",\"cli_version\":\"0.10.4\",\"surface\":\"run\",\"pid\":39624,\"v\":1,\"ts\":\"2026-11-19T11:35:24.380Z\"}",
+        "{\"type\":\"recording_state\",\"enabled\":true,\"session_id\":\"88ce101a-5282-4e2a-afcb-aa9a7349e42b\",\"persist\":false,\"v\":1,\"ts\":\"2026-11-19T11:35:24.526Z\"}",
+        "{\"type\":\"update_available\",\"current\":\"0.10.4\",\"latest\":\"0.10.6\",\"severity\":\"patch\",\"v\":1,\"ts\":\"2026-11-19T11:35:29.462Z\"}",
+        "{\"type\":\"skill_update_available\",\"current\":null,\"latest\":\"0.1.4\",\"install_cmd\":\"kane-cli install skill\",\"v\":1,\"ts\":\"2026-11-19T11:35:29.482Z\"}",
+        "{\"type\":\"bifurcation\",\"flows\":[\"Navigate to http://127.0.0.1:4200/v2/explore then You are investigating an AI board-game planner.\\nRead this whole page: how the game works, the per-effect summary, the prior valuation versus measured consequences, the raw trigger and placement histories, and the planner choices with their rejected alternatives.\\nWork out WHY the AI uses Teleport and the east and we",
+        "{\"step\":2,\"status\":\"running\",\"remark\":\"Step 1\",\"v\":1,\"ts\":\"2026-11-19T11:37:25.084Z\"}",
+        "{\"step\":2,\"status\":\"done\",\"remark\":\"navigate: Navigate to http://127.0.0.1:4200/v2/explore\",\"v\":1,\"ts\":\"2026-11-19T11:37:25.108Z\"}",
+        "{\"step\":3,\"status\":\"running\",\"remark\":\"Step 2\",\"v\":1,\"ts\":\"2026-11-19T11:37:29.724Z\"}",
+        "{\"step\":3,\"status\":\"done\",\"remark\":\"scroll: Scrolling to the bottom of the page to read the Investigation notebook form\",\"v\":1,\"ts\":\"2026-11-19T11:37:41.391Z\"}",
+        "{\"step\":4,\"status\":\"running\",\"remark\":\"Step 3\",\"v\":1,\"ts\":\"2026-11-19T11:37:43.608Z\"}",
+        "{\"step\":4,\"status\":\"done\",\"remark\":\"select: Selecting the part for the explanation in the investigation notebook\",\"v\":1,\"ts\":\"2026-11-19T11:38:06.030Z\"}",
+        "{\"step\":5,\"status\":\"running\",\"remark\":\"Step 4\",\"v\":1,\"ts\":\"2026-11-19T11:38:10.011Z\"}",
+        "{\"step\":5,\"status\":\"done\",\"remark\":\"wait: queued plan (6 steps): type \\\"Your explanation (what causes the pattern, in your \",\"v\":1,\"ts\":\"2026-11-19T11:38:21.914Z\"}",
+        "{\"step\":6,\"status\":\"running\",\"remark\":\"Step 5\",\"v\":1,\"ts\":\"2026-11-19T11:38:23.816Z\"}",
+        "{\"step\":6,\"status\":\"done\",\"remark\":\"type: Type \\\"The V0.3 prior/blend misvalues Teleport: it assigns -0.80 although trigger\",\"v\":1,\"ts\":\"2026-11-19T11:38:25.242Z\"}",
+        "{\"step\":7,\"status\":\"running\",\"remark\":\"Step 6\",\"v\":1,\"ts\":\"2026-11-19T11:38:27.429Z\"}",
+        "{\"step\":7,\"status\":\"done\",\"remark\":\"select: Select \\\"Teleports set off by the installer’s own pieces (share)\\\" in \\\"Which measu\",\"v\":1,\"ts\":\"2026-11-19T11:38:28.599Z\"}",
+        "{\"step\":8,\"status\":\"running\",\"remark\":\"Step 7\",\"v\":1,\"ts\":\"2026-11-19T11:38:30.700Z\"}",
+        "{\"step\":8,\"status\":\"done\",\"remark\":\"select: Select \\\"increase\\\" in \\\"It should\\\"\",\"v\":1,\"ts\":\"2026-11-19T11:38:32.828Z\"}",
+        "{\"step\":9,\"status\":\"running\",\"remark\":\"Step 8\",\"v\":1,\"ts\":\"2026-11-19T11:38:36.386Z\"}",
+        "{\"step\":9,\"status\":\"done\",\"remark\":\"type: Type \\\"I considered that Teleport is simply harmful random play, and that the sho\",\"v\":1,\"ts\":\"2026-11-19T11:38:38.183Z\"}",
+        "{\"step\":10,\"status\":\"running\",\"remark\":\"Step 9\",\"v\":1,\"ts\":\"2026-11-19T11:38:40.866Z\"}",
+        "{\"step\":10,\"status\":\"done\",\"remark\":\"type: Type \\\"T3\\\" into \\\"A row id or seed that contradicts an explanation (optional)\\\"\",\"v\":1,\"ts\":\"2026-11-19T11:38:42.298Z\"}",
+        "{\"step\":11,\"status\":\"running\",\"remark\":\"Step 10\",\"v\":1,\"ts\":\"2026-11-19T11:38:44.507Z\"}",
+        "{\"step\":11,\"status\":\"done\",\"remark\":\"click: Click \\\"Submit note\\\"\",\"v\":1,\"ts\":\"2026-11-19T11:38:46.323Z\"}",
+        "{\"step\":12,\"status\":\"running\",\"remark\":\"Step 11\",\"v\":1,\"ts\":\"2026-11-19T11:38:47.387Z\"}",
+        "{\"step\":12,\"status\":\"done\",\"remark\":\"wait: Waiting after the recorded investigation note confirmation\",\"v\":1,\"ts\":\"2026-11-19T11:38:54.324Z\"}",
+        "{\"type\":\"coverage\",\"status\":\"skipped\",\"reason\":\"not_assurance_project\",\"pack\":\"C:\\\\Users\\\\ericl\\\\.testmuai\\\\kaneai\\\\sessions\\\\88ce101a-5282-4e2a-afcb-aa9a7349e42b\\\\evidence\\\\b0d467d6-fbf9-4e1a-9dc8-f7658ede58a8.evidence\",\"v\":1,\"ts\":\"2026-11-19T11:39:42.925Z\"}",
+        "{\"type\":\"run_end\",\"status\":\"passed\",\"summary\":\"Reviewed the full game-analysis page, including the game rules, effect summaries, valuation and consequence comparisons, trigger and placement histories, and planner alternatives.\\nInvestigated the AI’s use of Teleport and east and west shoves by comparing multiple possible explanations and checking for contradictory rows.\\nSubmitted an Investigation "
+      ],
+      "creditsBefore": 10665.5561,
+      "creditsAfter": 10625.4643,
+      "note": "",
+      "objective": "You are investigating an AI board-game planner. Read this whole page: how the game works, the per-effect summary, the prior valuation versus measured consequences, the raw trigger and placement histories, and the planner choices with their rejected alternatives. Work out WHY the AI uses Teleport and the east and west shoves the way it does. Consider at least two different explanations and look for rows that contradict them. Then, in the Investigation notebook form at the bottom, submit your best explanation, choose which part it involves, which measurement should change and in which direction, and write the alternative you considered. Submit at most 3 notes. Do not do anything else on the page.",
+      "explore": {
+        "callId": "KX1",
+        "role": "exploration",
+        "status": "complete",
+        "capability": "OK",
+        "capabilityDetail": "1 valid notebook note(s) submitted by the browser agent during a complete kane-cli run",
+        "version": "0.10.4",
+        "isTestDouble": false,
+        "objective": "You are investigating an AI board-game planner. Read this whole page: how the game works, the per-effect summary, the prior valuation versus measured consequences, the raw trigger and placement histories, and the planner choices with their rejected alternatives. Work out WHY the AI uses Teleport and the east and west shoves the way it does. Consider at least two different explanations and look for rows that contradict them. Then, in the Investigation notebook form at the bottom, submit your best explanation, choose which part it involves, which measurement should change and in which direction, and write the alternative you considered. Submit at most 3 notes. Do not do anything else on the page.",
+        "args": [
+          "run",
+          "You are investigating an AI board-game planner. Read this whole page: how the game works, the per-effect summary, the prior valuation versus measured consequences, the raw trigger and placement histories, and the planner choices with their rejected alternatives. Work out WHY the AI uses Teleport and the east and west shoves the way it does. Consider at least two different explanations and look for rows that contradict them. Then, in the Investigation notebook form at the bottom, submit your best explanation, choose which part it involves, which measurement should change and in which direction, and write the alternative you considered. Submit at most 3 notes. Do not do anything else on the page.",
+          "--url",
+          "http://127.0.0.1:4200/v2/explore",
+          "--agent",
+          "--headless",
+          "--max-steps",
+          "25",
+          "--timeout",
+          "420"
+        ],
+        "url": "http://127.0.0.1:4200/v2/explore",
+        "startedAt": "2026-11-19T11:35:23.661Z",
+        "finishedAt": "2026-11-19T11:39:46.667Z",
+        "elapsedMs": 263006,
+        "runEnd": {
+          "status": "passed",
+          "summary": "Reviewed the full game-analysis page, including the game rules, effect summaries, valuation and consequence comparisons, trigger and placement histories, and planner alternatives.\nInvestigated the AI’s use of Teleport and east and west shoves by comparing multiple possible explanations and checking for contradictory rows.\nSubmitted an Investigation notebook note with an explanation, the relevant area, a proposed measurement change and direction, and an alternative that was considered.\nThe investigation was completed on the notebook page.",
+          "credits": 38.011489999999995
+        },
+        "exitCode": 0,
+        "timedOut": false,
+        "files": {
+          "stdout": "D:\\Rule_Sabotage\\rule-sabotage-live\\evidence\\balance\\v2-runs\\2026-11-19T11-35-00Z-v2-kane\\kane-explore\\kane-stdout.ndjson",
+          "stderr": "D:\\Rule_Sabotage\\rule-sabotage-live\\evidence\\balance\\v2-runs\\2026-11-19T11-35-00Z-v2-kane\\kane-explore\\kane-stderr.txt",
+          "notes": "D:\\Rule_Sabotage\\rule-sabotage-live\\evidence\\balance\\v2-runs\\2026-11-19T11-35-00Z-v2-kane\\kane-explore\\kane-notes.ndjson",
+          "result": "D:\\Rule_Sabotage\\rule-sabotage-live\\evidence\\balance\\v2-runs\\2026-11-19T11-35-00Z-v2-kane\\kane-explore\\kane-explore-result.json"
+        },
+        "sha256": {
+          "stdout": "6737a66135996a4e17d1ddd49d8db56030da74c803064dd6d0496df1679b96f7",
+          "notes": "bb4c9325982bad811028ef9f392ad66a7740b3c7dbeb0735cea43aef66a291b1"
+        },
+        "validNotes": [
+          "KX1-N1"
+        ],
+        "execution": "COMPLETE"
+      }
+    },
+    {
+      "callId": "KC1",
+      "role": "challenge-analyzer",
+      "state": "done",
+      "url": "http://127.0.0.1:4200/v2/challenge",
+      "liveLines": [
+        "{\"type\":\"stream_start\",\"cli_version\":\"0.10.4\",\"surface\":\"run\",\"pid\":34020,\"v\":1,\"ts\":\"2026-11-19T11:46:34.630Z\"}",
+        "{\"type\":\"recording_state\",\"enabled\":true,\"session_id\":\"a0a6f600-8412-4b40-948b-ee8bef88fdf6\",\"persist\":false,\"v\":1,\"ts\":\"2026-11-19T11:46:34.693Z\"}",
+        "{\"type\":\"update_available\",\"current\":\"0.10.4\",\"latest\":\"0.10.6\",\"severity\":\"patch\",\"v\":1,\"ts\":\"2026-11-19T11:46:35.266Z\"}",
+        "{\"type\":\"skill_update_available\",\"current\":null,\"latest\":\"0.1.4\",\"install_cmd\":\"kane-cli install skill\",\"v\":1,\"ts\":\"2026-11-19T11:46:35.275Z\"}",
+        "{\"step\":1,\"status\":\"done\",\"remark\":\"Comparing Section H0 per-seed intervention and control values: value: 'false' -> 'false'; equals 'true' -> FAIL\",\"v\":1,\"ts\":\"2026-11-19T11:48:24.312Z\"}",
+        "{\"step\":2,\"status\":\"done\",\"remark\":\"Comparing Section H1 per-seed intervention and control values: value: 'true' -> 'true'; equals 'true' -> PASS\",\"v\":1,\"ts\":\"2026-11-19T11:48:24.327Z\"}",
+        "{\"step\":3,\"status\":\"done\",\"remark\":\"Comparing Section H2 per-seed intervention and control values: value: 'false' -> 'false'; equals 'true' -> FAIL\",\"v\":1,\"ts\":\"2026-11-19T11:48:24.358Z\"}",
+        "{\"step\":4,\"status\":\"done\",\"remark\":\"Comparing Section H2 mover-installer yes shares between samples: value: 'false' -> 'false'; equals 'true' -> FAIL\",\"v\":1,\"ts\":\"2026-11-19T11:48:24.360Z\"}",
+        "{\"step\":5,\"status\":\"done\",\"remark\":\"Comparing Section H3 per-seed intervention and control values: value: 'true' -> 'true'; equals 'true' -> PASS\",\"v\":1,\"ts\":\"2026-11-19T11:48:24.377Z\"}",
+        "{\"step\":6,\"status\":\"done\",\"remark\":\"Comparing Section H3 mover-installer yes shares between samples: value: 'true' -> 'true'; equals 'true' -> PASS\",\"v\":1,\"ts\":\"2026-11-19T11:48:24.496Z\"}",
+        "{\"step\":7,\"status\":\"done\",\"remark\":\"Comparing Section H5 per-seed intervention and control values: value: 'true' -> 'true'; equals 'true' -> PASS\",\"v\":1,\"ts\":\"2026-11-19T11:48:24.499Z\"}",
+        "{\"step\":8,\"status\":\"done\",\"remark\":\"Comparing Section HK1 per-seed intervention and control values: value: 'false' -> 'false'; equals 'true' -> FAIL\",\"v\":1,\"ts\":\"2026-11-19T11:48:24.501Z\"}",
+        "{\"step\":9,\"status\":\"done\",\"remark\":\"Comparing Section HK1 mover-installer yes shares between samples: value: 'true' -> 'true'; equals 'true' -> PASS\",\"v\":1,\"ts\":\"2026-11-19T11:48:24.504Z\"}",
+        "{\"type\":\"run_end\",\"status\":\"passed\",\"run_id\":\"run-0\",\"duration\":37.28,\"condition_results\":[false,true,false,false,true,true,true,false,true],\"condition_reasons\":[\"Comparing Section H0 per-seed intervention and control values: value: 'false' -> 'false'; equals 'true' -> FAIL\",\"Comparing Section H1 per-seed intervention and control values: value: 'true' -> 'true'; equals 'true' -> PASS\",\"Comparing S"
+      ],
+      "creditsBefore": 10625.4643,
+      "creditsAfter": 10616.3458,
+      "note": "",
+      "conditions": [
+        {
+          "id": "H0-seeds",
+          "section": "H0",
+          "kind": "per-seed",
+          "text": "In the section titled 'Section H0', in the 'Per-seed values' table, more than half of the data rows have an 'Intervention value' number that is lower than the 'Control value' number in the same row.",
+          "ours": false
+        },
+        {
+          "id": "H1-seeds",
+          "section": "H1",
+          "kind": "per-seed",
+          "text": "In the section titled 'Section H1', in the 'Per-seed values' table, more than half of the data rows have an 'Intervention value' number that is lower than the 'Control value' number in the same row.",
+          "ours": true
+        },
+        {
+          "id": "H2-seeds",
+          "section": "H2",
+          "kind": "per-seed",
+          "text": "In the section titled 'Section H2', in the 'Per-seed values' table, more than half of the data rows have an 'Intervention value' number that is lower than the 'Control value' number in the same row.",
+          "ours": false
+        },
+        {
+          "id": "H2-sample",
+          "section": "H2",
+          "kind": "sample-count",
+          "text": "In the section titled 'Section H2', the share of data rows whose 'Mover = installer' value is 'yes' is lower in the 'Intervention sample' table than in the 'Control sample' table.",
+          "ours": false
+        },
+        {
+          "id": "H3-seeds",
+          "section": "H3",
+          "kind": "per-seed",
+          "text": "In the section titled 'Section H3', in the 'Per-seed values' table, more than half of the data rows have an 'Intervention value' number that is lower than the 'Control value' number in the same row.",
+          "ours": true
+        },
+        {
+          "id": "H3-sample",
+          "section": "H3",
+          "kind": "sample-count",
+          "text": "In the section titled 'Section H3', the share of data rows whose 'Mover = installer' value is 'yes' is lower in the 'Intervention sample' table than in the 'Control sample' table.",
+          "ours": true
+        },
+        {
+          "id": "H5-seeds",
+          "section": "H5",
+          "kind": "per-seed",
+          "text": "In the section titled 'Section H5', in the 'Per-seed values' table, more than half of the data rows have an 'Intervention value' number that is lower than the 'Control value' number in the same row.",
+          "ours": true
+        },
+        {
+          "id": "HK1-seeds",
+          "section": "HK1",
+          "kind": "per-seed",
+          "text": "In the section titled 'Section HK1', in the 'Per-seed values' table, more than half of the data rows have an 'Intervention value' number that is higher than the 'Control value' number in the same row.",
+          "ours": false
+        },
+        {
+          "id": "HK1-sample",
+          "section": "HK1",
+          "kind": "sample-count",
+          "text": "In the section titled 'Section HK1', the share of data rows whose 'Mover = installer' value is 'yes' is higher in the 'Intervention sample' table than in the 'Control sample' table.",
+          "ours": true
+        }
+      ],
+      "analyzer": {
+        "status": "complete",
+        "conditionResults": [
+          false,
+          true,
+          false,
+          false,
+          true,
+          true,
+          true,
+          false,
+          true
+        ],
+        "conditionReasons": [
+          "Comparing Section H0 per-seed intervention and control values: value: 'false' -> 'false'; equals 'true' -> FAIL",
+          "Comparing Section H1 per-seed intervention and control values: value: 'true' -> 'true'; equals 'true' -> PASS",
+          "Comparing Section H2 per-seed intervention and control values: value: 'false' -> 'false'; equals 'true' -> FAIL",
+          "Comparing Section H2 mover-installer yes shares between samples: value: 'false' -> 'false'; equals 'true' -> FAIL",
+          "Comparing Section H3 per-seed intervention and control values: value: 'true' -> 'true'; equals 'true' -> PASS",
+          "Comparing Section H3 mover-installer yes shares between samples: value: 'true' -> 'true'; equals 'true' -> PASS",
+          "Comparing Section H5 per-seed intervention and control values: value: 'true' -> 'true'; equals 'true' -> PASS",
+          "Comparing Section HK1 per-seed intervention and control values: value: 'false' -> 'false'; equals 'true' -> FAIL",
+          "Comparing Section HK1 mover-installer yes shares between samples: value: 'true' -> 'true'; equals 'true' -> PASS"
+        ],
+        "detail": "Kane returned 9 condition results.",
+        "exitCode": 0,
+        "timedOut": false,
+        "version": "0.10.4",
+        "isTestDouble": false,
+        "cli": "D:\\Tools\\npm-global\\kane-cli.cmd",
+        "mode": "analyzer",
+        "args": [
+          "run",
+          "--analyzer-only",
+          "--agent",
+          "--cdp-endpoint",
+          "http://127.0.0.1:55571",
+          "--timeout",
+          "300",
+          "--condition",
+          "In the section titled 'Section H0', in the 'Per-seed values' table, more than half of the data rows have an 'Intervention value' number that is lower than the 'Control value' number in the same row.",
+          "--condition",
+          "In the section titled 'Section H1', in the 'Per-seed values' table, more than half of the data rows have an 'Intervention value' number that is lower than the 'Control value' number in the same row.",
+          "--condition",
+          "In the section titled 'Section H2', in the 'Per-seed values' table, more than half of the data rows have an 'Intervention value' number that is lower than the 'Control value' number in the same row.",
+          "--condition",
+          "In the section titled 'Section H2', the share of data rows whose 'Mover = installer' value is 'yes' is lower in the 'Intervention sample' table than in the 'Control sample' table.",
+          "--condition",
+          "In the section titled 'Section H3', in the 'Per-seed values' table, more than half of the data rows have an 'Intervention value' number that is lower than the 'Control value' number in the same row.",
+          "--condition",
+          "In the section titled 'Section H3', the share of data rows whose 'Mover = installer' value is 'yes' is lower in the 'Intervention sample' table than in the 'Control sample' table.",
+          "--condition",
+          "In the section titled 'Section H5', in the 'Per-seed values' table, more than half of the data rows have an 'Intervention value' number that is lower than the 'Control value' number in the same row.",
+          "--condition",
+          "In the section titled 'Section HK1', in the 'Per-seed values' table, more than half of the data rows have an 'Intervention value' number that is higher than the 'Control value' number in the same row.",
+          "--condition",
+          "In the section titled 'Section HK1', the share of data rows whose 'Mover = installer' value is 'yes' is higher in the 'Intervention sample' table than in the 'Control sample' table."
+        ],
+        "startedAt": "2026-11-19T11:46:32.853Z",
+        "finishedAt": "2026-11-19T11:48:27.559Z",
+        "elapsedMs": 114706,
+        "timings": {
+          "browserSpawnMs": 42,
+          "cdpReadyMs": 854,
+          "cdpReady": true,
+          "cliMs": 113202,
+          "cliFirstOutputMs": 881,
+          "cliRunEndMs": 111874
+        },
+        "files": {
+          "stdout": "D:\\Rule_Sabotage\\rule-sabotage-live\\evidence\\balance\\v2-runs\\2026-11-19T11-35-00Z-v2-kane\\kane-challenge\\kane-stdout.ndjson",
+          "stderr": "D:\\Rule_Sabotage\\rule-sabotage-live\\evidence\\balance\\v2-runs\\2026-11-19T11-35-00Z-v2-kane\\kane-challenge\\kane-stderr.txt",
+          "result": "D:\\Rule_Sabotage\\rule-sabotage-live\\evidence\\balance\\v2-runs\\2026-11-19T11-35-00Z-v2-kane\\kane-challenge\\kane-result.json"
+        }
+      }
+    },
+    {
+      "callId": "KA1",
+      "role": "correction-analyzer",
+      "state": "done",
+      "url": "http://127.0.0.1:4200/v2/correction",
+      "liveLines": [
+        "{\"type\":\"stream_start\",\"cli_version\":\"0.10.4\",\"surface\":\"run\",\"pid\":30268,\"v\":1,\"ts\":\"2026-11-19T11:50:24.584Z\"}",
+        "{\"type\":\"recording_state\",\"enabled\":true,\"session_id\":\"f4a78d7f-2f6a-4569-bc1a-079f8b0d1492\",\"persist\":false,\"v\":1,\"ts\":\"2026-11-19T11:50:24.691Z\"}",
+        "{\"type\":\"update_available\",\"current\":\"0.10.4\",\"latest\":\"0.10.6\",\"severity\":\"patch\",\"v\":1,\"ts\":\"2026-11-19T11:50:26.522Z\"}",
+        "{\"type\":\"skill_update_available\",\"current\":null,\"latest\":\"0.1.4\",\"install_cmd\":\"kane-cli install skill\",\"v\":1,\"ts\":\"2026-11-19T11:50:26.605Z\"}",
+        "{\"step\":1,\"status\":\"done\",\"remark\":\"Checking the lower-intervention majority in the Per-seed values table: value: 'true' -> 'true'; equals 'true' -> PASS\",\"v\":1,\"ts\":\"2026-11-19T11:51:36.814Z\"}",
+        "{\"step\":2,\"status\":\"done\",\"remark\":\"Comparing Mover = installer yes shares between the sample tables: value: 'true' -> 'true'; equals 'true' -> PASS\",\"v\":1,\"ts\":\"2026-11-19T11:51:36.817Z\"}",
+        "{\"type\":\"run_end\",\"status\":\"passed\",\"run_id\":\"run-0\",\"duration\":16.86,\"condition_results\":[true,true],\"condition_reasons\":[\"Checking the lower-intervention majority in the Per-seed values table: value: 'true' -> 'true'; equals 'true' -> PASS\",\"Comparing Mover = installer yes shares between the sample tables: value: 'true' -> 'true'; equals 'true' -> PASS\"],\"condition_sub_checks\":[{\"description\":\"I"
+      ],
+      "creditsBefore": 10616.3458,
+      "creditsAfter": 10611.2207,
+      "note": "",
+      "conditions": [
+        {
+          "id": "K1-seeds",
+          "section": "K1",
+          "kind": "per-seed",
+          "text": "In the section titled 'Section K1', in the 'Per-seed values' table, more than half of the data rows have an 'Intervention value' number that is lower than the 'Control value' number in the same row.",
+          "ours": true
+        },
+        {
+          "id": "K1-sample",
+          "section": "K1",
+          "kind": "sample-count",
+          "text": "In the section titled 'Section K1', the share of data rows whose 'Mover = installer' value is 'yes' is lower in the 'Intervention sample' table than in the 'Control sample' table.",
+          "ours": true
+        }
+      ],
+      "analyzer": {
+        "status": "complete",
+        "conditionResults": [
+          true,
+          true
+        ],
+        "conditionReasons": [
+          "Checking the lower-intervention majority in the Per-seed values table: value: 'true' -> 'true'; equals 'true' -> PASS",
+          "Comparing Mover = installer yes shares between the sample tables: value: 'true' -> 'true'; equals 'true' -> PASS"
+        ],
+        "detail": "Kane returned 2 condition results.",
+        "exitCode": 0,
+        "timedOut": false,
+        "version": "0.10.4",
+        "isTestDouble": false,
+        "cli": "D:\\Tools\\npm-global\\kane-cli.cmd",
+        "mode": "analyzer",
+        "args": [
+          "run",
+          "--analyzer-only",
+          "--agent",
+          "--cdp-endpoint",
+          "http://127.0.0.1:64954",
+          "--timeout",
+          "300",
+          "--condition",
+          "In the section titled 'Section K1', in the 'Per-seed values' table, more than half of the data rows have an 'Intervention value' number that is lower than the 'Control value' number in the same row.",
+          "--condition",
+          "In the section titled 'Section K1', the share of data rows whose 'Mover = installer' value is 'yes' is lower in the 'Intervention sample' table than in the 'Control sample' table."
+        ],
+        "startedAt": "2026-11-19T11:50:18.941Z",
+        "finishedAt": "2026-11-19T11:51:41.301Z",
+        "elapsedMs": 82360,
+        "timings": {
+          "browserSpawnMs": 46,
+          "cdpReadyMs": 1464,
+          "cdpReady": true,
+          "cliMs": 79425,
+          "cliFirstOutputMs": 4176,
+          "cliRunEndMs": 77841
+        },
+        "files": {
+          "stdout": "D:\\Rule_Sabotage\\rule-sabotage-live\\evidence\\balance\\v2-runs\\2026-11-19T11-35-00Z-v2-kane\\kane-correction\\kane-stdout.ndjson",
+          "stderr": "D:\\Rule_Sabotage\\rule-sabotage-live\\evidence\\balance\\v2-runs\\2026-11-19T11-35-00Z-v2-kane\\kane-correction\\kane-stderr.txt",
+          "result": "D:\\Rule_Sabotage\\rule-sabotage-live\\evidence\\balance\\v2-runs\\2026-11-19T11-35-00Z-v2-kane\\kane-correction\\kane-result.json"
+        }
+      }
+    }
+  ],
+  "exploration": {
+    "capability": "OK",
+    "execution": "COMPLETE",
+    "detail": "1 valid notebook note(s) submitted by the browser agent during a complete kane-cli run",
+    "notes": [
+      {
+        "noteId": "KX1-N1",
+        "callId": "KX1",
+        "kind": "exploration",
+        "receivedAt": "2026-11-19T11:38:45.352Z",
+        "validNonce": true,
+        "inWindow": true,
+        "rawBody": "nonce=3c1eb72c16de90d28a&defect=yes&explanation=The+V0.3+prior%2Fblend+misvalues+Teleport%3A+it+assigns+-0.80+although+triggered+pieces+gain+3.41+squares+on+average%2C+so+the+planner%27s+use+of+Teleport+is+better+than+that+prior+says.+East+and+west+shoves+are+not+a+directional+defect%3A+each+player+places+the+shove+toward+its+own+goal+%28Human+east%2C+AI+west%29%2C+and+the+measured+gains+are+positive.+The+planner+choices+therefore+reflect+board+geometry+plus+an+outdated+Teleport+weight.&component=weights&metric=tp_self_share&direction=increase&alternative=I+considered+that+Teleport+is+simply+harmful+random+play%2C+and+that+the+shove+pattern+reflects+a+geometry+bug+rather+than+correct+directional+play.+The+positive+measured+Teleport+mean+and+the+opposite%2C+goal-directed+east%2Fwest+choices+argue+against+those+alternatives.&counterexample=T3",
+        "bytes": 852,
+        "fields": {
+          "explanation": "The V0.3 prior/blend misvalues Teleport: it assigns -0.80 although triggered pieces gain 3.41 squares on average, so the planner's use of Teleport is better than that prior says. East and west shoves are not a directional defect: each player places the shove toward its own goal (Human east, AI west), and the measured gains are positive. The planner choices therefore reflect board geometry plus an outdated Teleport weight.",
+          "component": "weights",
+          "metric": "tp_self_share",
+          "direction": "increase",
+          "alternative": "I considered that Teleport is simply harmful random play, and that the shove pattern reflects a geometry bug rather than correct directional play. The positive measured Teleport mean and the opposite, goal-directed east/west choices argue against those alternatives.",
+          "counterexample": "T3",
+          "defect": "yes",
+          "hypothesis": "",
+          "verdict": ""
+        },
+        "problems": []
+      }
+    ]
+  },
+  "hypotheses": [
+    {
+      "id": "H0",
+      "title": "No actionable defect: self-boosting is rational play",
+      "origin": "operator",
+      "author": "Eric (V2 specification), formalised by Claude",
+      "hash": "69f751f4f5440622",
+      "journalSeq": 11,
+      "mechanism": "Placing movement boosts on one's own route is a permissible, strong strategy. The V1 'dominant effect' and 'penalty that rarely hurts' metrics flag it because they measure frequency and the installer's prior, not whether the play is a defect.",
+      "predictions": [
+        {
+          "id": "P0a",
+          "experiment": "E2",
+          "design": "head-to-head",
+          "metric": "treated_win_rate",
+          "direction": "decrease",
+          "minEffect": 0.08,
+          "role": "primary",
+          "text": "A planner that ignores benefit from its own traps loses head-to-head against the control planner (win rate at least 8 points below 50%)."
+        },
+        {
+          "id": "P0b",
+          "experiment": "E5",
+          "design": "head-to-head",
+          "metric": "treated_win_rate",
+          "direction": "no-change",
+          "minEffect": 0.08,
+          "role": "discriminating",
+          "versus": [
+            "H5"
+          ],
+          "text": "Blinding the planner to the RNG does not materially change its head-to-head strength (the strength is not borrowed from foreseeing randomness)."
+        },
+        {
+          "id": "P0c",
+          "experiment": "C0",
+          "design": "observational",
+          "metric": "first_player_edge",
+          "direction": "no-change",
+          "minEffect": 0.18,
+          "role": "secondary",
+          "text": "In control self-play the first-player edge stays within ±18 points."
+        }
+      ],
+      "evaluation": {
+        "id": "H0",
+        "contractHash": "69f751f4f5440622",
+        "outcome": "REFUTED",
+        "predictions": [
+          {
+            "id": "P0a",
+            "status": "contradicted",
+            "effect": {
+              "metric": "treated_win_rate",
+              "control": 0.5,
+              "treatment": 0.5625,
+              "events": {
+                "control": null,
+                "treatment": null
+              },
+              "effect": 0.0625,
+              "ci": [
+                -0.0625,
+                0.1875
+              ],
+              "units": 8,
+              "batches": [
+                0.125,
+                0
+              ],
+              "sides": {
+                "humanFirst": -0.125,
+                "aiFirst": 0.25
+              },
+              "perSeed": [
+                {
+                  "seed": 3200,
+                  "control": 0.5,
+                  "treatment": 0.75
+                },
+                {
+                  "seed": 3201,
+                  "control": 0.5,
+                  "treatment": 0.5
+                },
+                {
+                  "seed": 3202,
+                  "control": 0.5,
+                  "treatment": 0.75
+                },
+                {
+                  "seed": 3203,
+                  "control": 0.5,
+                  "treatment": 0.5
+                },
+                {
+                  "seed": 3204,
+                  "control": 0.5,
+                  "treatment": 0.25
+                },
+                {
+                  "seed": 3205,
+                  "control": 0.5,
+                  "treatment": 0.5
+                },
+                {
+                  "seed": 3206,
+                  "control": 0.5,
+                  "treatment": 0.75
+                },
+                {
+                  "seed": 3207,
+                  "control": 0.5,
+                  "treatment": 0.5
+                }
+              ]
+            },
+            "reason": "effect 0.063 [95% CI -0.063, 0.188], material = 0.08"
+          },
+          {
+            "id": "P0b",
+            "status": "unclear",
+            "effect": {
+              "metric": "treated_win_rate",
+              "control": 0.5,
+              "treatment": 0.4219,
+              "events": {
+                "control": null,
+                "treatment": null
+              },
+              "effect": -0.0781,
+              "ci": [
+                -0.2187,
+                0.125
+              ],
+              "units": 8,
+              "batches": [
+                -0.1562,
+                0
+              ],
+              "sides": {
+                "humanFirst": -0.0937,
+                "aiFirst": -0.0625
+              },
+              "perSeed": [
+                {
+                  "seed": 3200,
+                  "control": 0.5,
+                  "treatment": 0.25
+                },
+                {
+                  "seed": 3201,
+                  "control": 0.5,
+                  "treatment": 0.625
+                },
+                {
+                  "seed": 3202,
+                  "control": 0.5,
+                  "treatment": 0.25
+                },
+                {
+                  "seed": 3203,
+                  "control": 0.5,
+                  "treatment": 0.25
+                },
+                {
+                  "seed": 3204,
+                  "control": 0.5,
+                  "treatment": 0.5
+                },
+                {
+                  "seed": 3205,
+                  "control": 0.5,
+                  "treatment": 0.25
+                },
+                {
+                  "seed": 3206,
+                  "control": 0.5,
+                  "treatment": 0.25
+                },
+                {
+                  "seed": 3207,
+                  "control": 0.5,
+                  "treatment": 1
+                }
+              ]
+            },
+            "reason": "effect -0.078 [95% CI -0.219, 0.125], material = 0.08"
+          },
+          {
+            "id": "P0c",
+            "status": "unclear",
+            "effect": {
+              "metric": "first_player_edge",
+              "control": 0,
+              "treatment": -0.0625,
+              "events": {
+                "control": null,
+                "treatment": null
+              },
+              "effect": -0.0625,
+              "ci": [
+                -0.25,
+                0.125
+              ],
+              "units": 16,
+              "batches": [
+                -0.125,
+                0
+              ],
+              "sides": {
+                "humanFirst": -0.125,
+                "aiFirst": 0
+              },
+              "perSeed": [
+                {
+                  "seed": 3200,
+                  "control": 0,
+                  "treatment": 0.5
+                },
+                {
+                  "seed": 3201,
+                  "control": 0,
+                  "treatment": 0
+                },
+                {
+                  "seed": 3202,
+                  "control": 0,
+                  "treatment": -0.5
+                },
+                {
+                  "seed": 3203,
+                  "control": 0,
+                  "treatment": -0.5
+                },
+                {
+                  "seed": 3204,
+                  "control": 0,
+                  "treatment": -0.5
+                },
+                {
+                  "seed": 3205,
+                  "control": 0,
+                  "treatment": 0
+                },
+                {
+                  "seed": 3206,
+                  "control": 0,
+                  "treatment": 0.5
+                },
+                {
+                  "seed": 3207,
+                  "control": 0,
+                  "treatment": -0.5
+                },
+                {
+                  "seed": 3208,
+                  "control": 0,
+                  "treatment": -0.5
+                },
+                {
+                  "seed": 3209,
+                  "control": 0,
+                  "treatment": 0
+                },
+                {
+                  "seed": 3210,
+                  "control": 0,
+                  "treatment": 0
+                },
+                {
+                  "seed": 3211,
+                  "control": 0,
+                  "treatment": 0
+                },
+                {
+                  "seed": 3212,
+                  "control": 0,
+                  "treatment": 0.5
+                },
+                {
+                  "seed": 3213,
+                  "control": 0,
+                  "treatment": -0.5
+                },
+                {
+                  "seed": 3214,
+                  "control": 0,
+                  "treatment": 0
+                },
+                {
+                  "seed": 3215,
+                  "control": 0,
+                  "treatment": 0.5
+                }
+              ]
+            },
+            "reason": "effect -0.063 [95% CI -0.250, 0.125], material = 0.18"
+          }
+        ],
+        "reasons": [
+          "primary prediction contradicted: P0a (effect 0.063 [95% CI -0.063, 0.188], material = 0.08)"
+        ],
+        "counterexamples": [],
+        "kane": {
+          "corroboration": "AGREES",
+          "detail": "Kane independently re-derived 1 raw-row condition(s) and agrees"
+        }
+      }
+    },
+    {
+      "id": "H1",
+      "title": "Intrinsic rule geometry favours forward progress",
+      "origin": "operator",
+      "author": "Eric (V2 specification), formalised by Claude",
+      "hash": "e3cbb140896aa952",
+      "journalSeq": 12,
+      "mechanism": "Teleport sends a piece to a random empty MIDDLE square (columns B-F). Pieces activate traps near their own start, about 6 squares from goal, so a middle destination is on average forward for any activator, whoever installed it.",
+      "predictions": [
+        {
+          "id": "P1a",
+          "experiment": "E4",
+          "design": "selfplay",
+          "metric": "tp_per_game",
+          "direction": "decrease",
+          "minEffect": 0.3,
+          "role": "primary",
+          "text": "With a distance-neutral teleport the planner places Teleport at least 0.3 fewer times per game."
+        },
+        {
+          "id": "P1b",
+          "experiment": "C0",
+          "design": "observational",
+          "metric": "tp_opp_benefit",
+          "direction": "increase",
+          "minEffect": 0.5,
+          "role": "discriminating",
+          "versus": [
+            "H2"
+          ],
+          "text": "In control games, an activator who did NOT install the teleport also gains at least 0.5 squares on average."
+        },
+        {
+          "id": "P1c",
+          "experiment": "E5",
+          "design": "selfplay",
+          "metric": "tp_self_benefit",
+          "direction": "no-change",
+          "minEffect": 1,
+          "role": "secondary",
+          "text": "Blinding the planner to the RNG does not change the benefit of chosen own-teleport steps by a square or more."
+        }
+      ],
+      "evaluation": {
+        "id": "H1",
+        "contractHash": "e3cbb140896aa952",
+        "outcome": "INCONCLUSIVE",
+        "predictions": [
+          {
+            "id": "P1a",
+            "status": "met",
+            "effect": {
+              "metric": "tp_per_game",
+              "control": 1.4375,
+              "treatment": 0.3125,
+              "events": {
+                "control": 32,
+                "treatment": 32
+              },
+              "effect": -1.125,
+              "ci": [
+                -1.5312,
+                -0.7187
+              ],
+              "units": 16,
+              "batches": [
+                -1.25,
+                -1
+              ],
+              "sides": {
+                "humanFirst": -1.25,
+                "aiFirst": -1
+              },
+              "perSeed": [
+                {
+                  "seed": 3200,
+                  "control": 1.5,
+                  "treatment": 0
+                },
+                {
+                  "seed": 3201,
+                  "control": 1.5,
+                  "treatment": 0
+                },
+                {
+                  "seed": 3202,
+                  "control": 0.5,
+                  "treatment": 1
+                },
+                {
+                  "seed": 3203,
+                  "control": 0,
+                  "treatment": 0
+                },
+                {
+                  "seed": 3204,
+                  "control": 2,
+                  "treatment": 0
+                },
+                {
+                  "seed": 3205,
+                  "control": 1.5,
+                  "treatment": 0
+                },
+                {
+                  "seed": 3206,
+                  "control": 3,
+                  "treatment": 0
+                },
+                {
+                  "seed": 3207,
+                  "control": 1.5,
+                  "treatment": 0.5
+                },
+                {
+                  "seed": 3208,
+                  "control": 2,
+                  "treatment": 0.5
+                },
+                {
+                  "seed": 3209,
+                  "control": 0.5,
+                  "treatment": 0.5
+                },
+                {
+                  "seed": 3210,
+                  "control": 1.5,
+                  "treatment": 0
+                },
+                {
+                  "seed": 3211,
+                  "control": 1.5,
+                  "treatment": 1
+                },
+                {
+                  "seed": 3212,
+                  "control": 2,
+                  "treatment": 0.5
+                },
+                {
+                  "seed": 3213,
+                  "control": 1.5,
+                  "treatment": 0
+                },
+                {
+                  "seed": 3214,
+                  "control": 1.5,
+                  "treatment": 0.5
+                },
+                {
+                  "seed": 3215,
+                  "control": 1,
+                  "treatment": 0.5
+                }
+              ]
+            },
+            "reason": "effect -1.125 [95% CI -1.531, -0.719], material = 0.3"
+          },
+          {
+            "id": "P1b",
+            "status": "unclear",
+            "effect": {
+              "metric": "tp_opp_benefit",
+              "control": 0,
+              "treatment": -1.5,
+              "events": {
+                "control": null,
+                "treatment": 10
+              },
+              "effect": -1.5,
+              "ci": [
+                -1.6667,
+                -1
+              ],
+              "units": 16,
+              "batches": [
+                -1.625,
+                -1
+              ],
+              "sides": {
+                "humanFirst": -1.5556,
+                "aiFirst": -1
+              },
+              "perSeed": [
+                {
+                  "seed": 3200,
+                  "control": 0,
+                  "treatment": null
+                },
+                {
+                  "seed": 3201,
+                  "control": 0,
+                  "treatment": null
+                },
+                {
+                  "seed": 3202,
+                  "control": 0,
+                  "treatment": null
+                },
+                {
+                  "seed": 3203,
+                  "control": 0,
+                  "treatment": null
+                },
+                {
+                  "seed": 3204,
+                  "control": 0,
+                  "treatment": -1.6667
+                },
+                {
+                  "seed": 3205,
+                  "control": 0,
+                  "treatment": null
+                },
+                {
+                  "seed": 3206,
+                  "control": 0,
+                  "treatment": -1.5
+                },
+                {
+                  "seed": 3207,
+                  "control": 0,
+                  "treatment": -1.6667
+                },
+                {
+                  "seed": 3208,
+                  "control": 0,
+                  "treatment": -1
+                },
+                {
+                  "seed": 3209,
+                  "control": 0,
+                  "treatment": null
+                },
+                {
+                  "seed": 3210,
+                  "control": 0,
+                  "treatment": null
+                },
+                {
+                  "seed": 3211,
+                  "control": 0,
+                  "treatment": null
+                },
+                {
+                  "seed": 3212,
+                  "control": 0,
+                  "treatment": -1
+                },
+                {
+                  "seed": 3213,
+                  "control": 0,
+                  "treatment": null
+                },
+                {
+                  "seed": 3214,
+                  "control": 0,
+                  "treatment": null
+                },
+                {
+                  "seed": 3215,
+                  "control": 0,
+                  "treatment": null
+                }
+              ]
+            },
+            "reason": "too few underlying events (10 < 20); an interval over so few events is not judged"
+          },
+          {
+            "id": "P1c",
+            "status": "contradicted",
+            "effect": {
+              "metric": "tp_self_benefit",
+              "control": 4.2676,
+              "treatment": 2.8056,
+              "events": {
+                "control": 71,
+                "treatment": 144
+              },
+              "effect": -1.4621,
+              "ci": [
+                -1.7909,
+                -1.0511
+              ],
+              "units": 16,
+              "batches": [
+                -1.4657,
+                -1.4844
+              ],
+              "sides": {
+                "humanFirst": -1.4188,
+                "aiFirst": -1.4965
+              },
+              "perSeed": [
+                {
+                  "seed": 3200,
+                  "control": 4.6667,
+                  "treatment": 2.3333
+                },
+                {
+                  "seed": 3201,
+                  "control": 4,
+                  "treatment": 2.5
+                },
+                {
+                  "seed": 3202,
+                  "control": 3,
+                  "treatment": 3.375
+                },
+                {
+                  "seed": 3203,
+                  "control": null,
+                  "treatment": 4.2
+                },
+                {
+                  "seed": 3204,
+                  "control": 4.1667,
+                  "treatment": 2.8
+                },
+                {
+                  "seed": 3205,
+                  "control": 5,
+                  "treatment": 2.75
+                },
+                {
+                  "seed": 3206,
+                  "control": 4.8571,
+                  "treatment": 2.625
+                },
+                {
+                  "seed": 3207,
+                  "control": 3.5,
+                  "treatment": 3
+                },
+                {
+                  "seed": 3208,
+                  "control": 3.75,
+                  "treatment": 3.4
+                },
+                {
+                  "seed": 3209,
+                  "control": 3.6667,
+                  "treatment": 2.7778
+                },
+                {
+                  "seed": 3210,
+                  "control": 4,
+                  "treatment": 2.9231
+                },
+                {
+                  "seed": 3211,
+                  "control": 4.5,
+                  "treatment": 3.4
+                },
+                {
+                  "seed": 3212,
+                  "control": 4.8,
+                  "treatment": 2.2
+                },
+                {
+                  "seed": 3213,
+                  "control": 3.4286,
+                  "treatment": 1.8462
+                },
+                {
+                  "seed": 3214,
+                  "control": 4.3333,
+                  "treatment": 2.1667
+                },
+                {
+                  "seed": 3215,
+                  "control": 4.5,
+                  "treatment": 3.1818
+                }
+              ]
+            },
+            "reason": "effect -1.462 [95% CI -1.791, -1.051], material = 1"
+          }
+        ],
+        "reasons": [
+          "P1b: unclear (too few underlying events (10 < 20); an interval over so few events is not judged)"
+        ],
+        "counterexamples": [],
+        "kane": {
+          "corroboration": "AGREES",
+          "detail": "Kane independently re-derived 1 raw-row condition(s) and agrees"
+        }
+      }
+    },
+    {
+      "id": "H2",
+      "title": "Planner exploitation through its own valuation",
+      "origin": "operator",
+      "author": "Eric (V2 specification), formalised by Claude",
+      "hash": "36fafec1221760e4",
+      "journalSeq": 13,
+      "mechanism": "The planner's engine-simulated score lowers its own pieces' path cost when they can ride its own traps, so it builds conveyor belts (Shove east 2 for Human, Shove west 2 for AI) and teleports on its own route. The behaviour comes from the simulated reward, not from the V0.3 prior.",
+      "predictions": [
+        {
+          "id": "P2a",
+          "experiment": "E2",
+          "design": "selfplay",
+          "metric": "ew_self_trigger_share",
+          "direction": "decrease",
+          "minEffect": 0.15,
+          "role": "primary",
+          "text": "Without self-benefit valuation, the share of east/west shove triggers set off by the installer’s own pieces falls by at least 15 points."
+        },
+        {
+          "id": "P2b",
+          "experiment": "E2",
+          "design": "selfplay",
+          "metric": "tp_self_share",
+          "direction": "decrease",
+          "minEffect": 0.15,
+          "role": "primary",
+          "text": "Without self-benefit valuation, the share of teleports set off by the installer's own pieces falls by at least 15 points."
+        },
+        {
+          "id": "P2c",
+          "experiment": "C0",
+          "design": "observational",
+          "metric": "tp_opp_benefit",
+          "direction": "decrease",
+          "minEffect": 0.5,
+          "role": "discriminating",
+          "versus": [
+            "H1"
+          ],
+          "text": "In control games, a non-installer activator LOSES at least 0.5 squares on average (placements are chosen to help self and hurt the opponent)."
+        },
+        {
+          "id": "P2d",
+          "experiment": "E1b",
+          "design": "selfplay",
+          "metric": "ew_self_trigger_share",
+          "direction": "no-change",
+          "minEffect": 0.15,
+          "role": "discriminating",
+          "versus": [
+            "H4"
+          ],
+          "text": "Removing the V0.3 overlay does not change the east/west shove self-trigger share by 15 points or more."
+        }
+      ],
+      "evaluation": {
+        "id": "H2",
+        "contractHash": "36fafec1221760e4",
+        "outcome": "REFUTED",
+        "predictions": [
+          {
+            "id": "P2a",
+            "status": "contradicted",
+            "effect": {
+              "metric": "ew_self_trigger_share",
+              "control": 0.8891,
+              "treatment": 0.9054,
+              "events": {
+                "control": 442,
+                "treatment": 349
+              },
+              "effect": 0.0163,
+              "ci": [
+                -0.0513,
+                0.0871
+              ],
+              "units": 16,
+              "batches": [
+                0.0003,
+                0.0469
+              ],
+              "sides": {
+                "humanFirst": 0.0221,
+                "aiFirst": 0.009
+              },
+              "perSeed": [
+                {
+                  "seed": 3200,
+                  "control": 0.8158,
+                  "treatment": 0.9545
+                },
+                {
+                  "seed": 3201,
+                  "control": 0.9167,
+                  "treatment": 0.92
+                },
+                {
+                  "seed": 3202,
+                  "control": 0.9189,
+                  "treatment": 0.7391
+                },
+                {
+                  "seed": 3203,
+                  "control": 0.8667,
+                  "treatment": 0.9583
+                },
+                {
+                  "seed": 3204,
+                  "control": 0.8621,
+                  "treatment": 1
+                },
+                {
+                  "seed": 3205,
+                  "control": 0.9545,
+                  "treatment": 0.7576
+                },
+                {
+                  "seed": 3206,
+                  "control": 0.8077,
+                  "treatment": 0.8846
+                },
+                {
+                  "seed": 3207,
+                  "control": 0.8974,
+                  "treatment": 1
+                },
+                {
+                  "seed": 3208,
+                  "control": 0.9091,
+                  "treatment": 1
+                },
+                {
+                  "seed": 3209,
+                  "control": 0.9259,
+                  "treatment": 0.9167
+                },
+                {
+                  "seed": 3210,
+                  "control": 0.9524,
+                  "treatment": 0.9474
+                },
+                {
+                  "seed": 3211,
+                  "control": 0.9048,
+                  "treatment": 1
+                },
+                {
+                  "seed": 3212,
+                  "control": 0.7813,
+                  "treatment": 1
+                },
+                {
+                  "seed": 3213,
+                  "control": 0.95,
+                  "treatment": 0.9
+                },
+                {
+                  "seed": 3214,
+                  "control": 0.9474,
+                  "treatment": 0.9444
+                },
+                {
+                  "seed": 3215,
+                  "control": 1,
+                  "treatment": 0.9091
+                }
+              ]
+            },
+            "reason": "effect 0.016 [95% CI -0.051, 0.087], material = 0.15"
+          },
+          {
+            "id": "P2b",
+            "status": "contradicted",
+            "effect": {
+              "metric": "tp_self_share",
+              "control": 0.8824,
+              "treatment": 0.9116,
+              "events": {
+                "control": 85,
+                "treatment": 147
+              },
+              "effect": 0.0292,
+              "ci": [
+                -0.0653,
+                0.1198
+              ],
+              "units": 16,
+              "batches": [
+                0.0919,
+                -0.024
+              ],
+              "sides": {
+                "humanFirst": 0.0733,
+                "aiFirst": -0.0409
+              },
+              "perSeed": [
+                {
+                  "seed": 3200,
+                  "control": 1,
+                  "treatment": 0.6667
+                },
+                {
+                  "seed": 3201,
+                  "control": 1,
+                  "treatment": 0.9524
+                },
+                {
+                  "seed": 3202,
+                  "control": 1,
+                  "treatment": 0.875
+                },
+                {
+                  "seed": 3203,
+                  "control": null,
+                  "treatment": 0.875
+                },
+                {
+                  "seed": 3204,
+                  "control": 0.6667,
+                  "treatment": 1
+                },
+                {
+                  "seed": 3205,
+                  "control": 1,
+                  "treatment": 1
+                },
+                {
+                  "seed": 3206,
+                  "control": 0.7778,
+                  "treatment": 1
+                },
+                {
+                  "seed": 3207,
+                  "control": 0.4,
+                  "treatment": 0.7143
+                },
+                {
+                  "seed": 3208,
+                  "control": 0.8333,
+                  "treatment": 0.8571
+                },
+                {
+                  "seed": 3209,
+                  "control": 1,
+                  "treatment": 0.75
+                },
+                {
+                  "seed": 3210,
+                  "control": 1,
+                  "treatment": 0.8889
+                },
+                {
+                  "seed": 3211,
+                  "control": 1,
+                  "treatment": 1
+                },
+                {
+                  "seed": 3212,
+                  "control": 0.8571,
+                  "treatment": 1
+                },
+                {
+                  "seed": 3213,
+                  "control": 1,
+                  "treatment": 1
+                },
+                {
+                  "seed": 3214,
+                  "control": 1,
+                  "treatment": 0.8571
+                },
+                {
+                  "seed": 3215,
+                  "control": 1,
+                  "treatment": 1
+                }
+              ]
+            },
+            "reason": "effect 0.029 [95% CI -0.065, 0.120], material = 0.15"
+          },
+          {
+            "id": "P2c",
+            "status": "unclear",
+            "effect": {
+              "metric": "tp_opp_benefit",
+              "control": 0,
+              "treatment": -1.5,
+              "events": {
+                "control": null,
+                "treatment": 10
+              },
+              "effect": -1.5,
+              "ci": [
+                -1.6667,
+                -1
+              ],
+              "units": 16,
+              "batches": [
+                -1.625,
+                -1
+              ],
+              "sides": {
+                "humanFirst": -1.5556,
+                "aiFirst": -1
+              },
+              "perSeed": [
+                {
+                  "seed": 3200,
+                  "control": 0,
+                  "treatment": null
+                },
+                {
+                  "seed": 3201,
+                  "control": 0,
+                  "treatment": null
+                },
+                {
+                  "seed": 3202,
+                  "control": 0,
+                  "treatment": null
+                },
+                {
+                  "seed": 3203,
+                  "control": 0,
+                  "treatment": null
+                },
+                {
+                  "seed": 3204,
+                  "control": 0,
+                  "treatment": -1.6667
+                },
+                {
+                  "seed": 3205,
+                  "control": 0,
+                  "treatment": null
+                },
+                {
+                  "seed": 3206,
+                  "control": 0,
+                  "treatment": -1.5
+                },
+                {
+                  "seed": 3207,
+                  "control": 0,
+                  "treatment": -1.6667
+                },
+                {
+                  "seed": 3208,
+                  "control": 0,
+                  "treatment": -1
+                },
+                {
+                  "seed": 3209,
+                  "control": 0,
+                  "treatment": null
+                },
+                {
+                  "seed": 3210,
+                  "control": 0,
+                  "treatment": null
+                },
+                {
+                  "seed": 3211,
+                  "control": 0,
+                  "treatment": null
+                },
+                {
+                  "seed": 3212,
+                  "control": 0,
+                  "treatment": -1
+                },
+                {
+                  "seed": 3213,
+                  "control": 0,
+                  "treatment": null
+                },
+                {
+                  "seed": 3214,
+                  "control": 0,
+                  "treatment": null
+                },
+                {
+                  "seed": 3215,
+                  "control": 0,
+                  "treatment": null
+                }
+              ]
+            },
+            "reason": "too few underlying events (10 < 20); an interval over so few events is not judged"
+          },
+          {
+            "id": "P2d",
+            "status": "met",
+            "effect": {
+              "metric": "ew_self_trigger_share",
+              "control": 0.8891,
+              "treatment": 0.9024,
+              "events": {
+                "control": 442,
+                "treatment": 246
+              },
+              "effect": 0.0133,
+              "ci": [
+                -0.0273,
+                0.0528
+              ],
+              "units": 16,
+              "batches": [
+                0.012,
+                0.0123
+              ],
+              "sides": {
+                "humanFirst": 0.0362,
+                "aiFirst": -0.011
+              },
+              "perSeed": [
+                {
+                  "seed": 3200,
+                  "control": 0.8158,
+                  "treatment": 0.9412
+                },
+                {
+                  "seed": 3201,
+                  "control": 0.9167,
+                  "treatment": 0.875
+                },
+                {
+                  "seed": 3202,
+                  "control": 0.9189,
+                  "treatment": 0.9444
+                },
+                {
+                  "seed": 3203,
+                  "control": 0.8667,
+                  "treatment": 1
+                },
+                {
+                  "seed": 3204,
+                  "control": 0.8621,
+                  "treatment": 0.7826
+                },
+                {
+                  "seed": 3205,
+                  "control": 0.9545,
+                  "treatment": 0.9412
+                },
+                {
+                  "seed": 3206,
+                  "control": 0.8077,
+                  "treatment": 0.8261
+                },
+                {
+                  "seed": 3207,
+                  "control": 0.8974,
+                  "treatment": 0.8667
+                },
+                {
+                  "seed": 3208,
+                  "control": 0.9091,
+                  "treatment": 0.9444
+                },
+                {
+                  "seed": 3209,
+                  "control": 0.9259,
+                  "treatment": 0.8947
+                },
+                {
+                  "seed": 3210,
+                  "control": 0.9524,
+                  "treatment": 0.9474
+                },
+                {
+                  "seed": 3211,
+                  "control": 0.9048,
+                  "treatment": 0.9
+                },
+                {
+                  "seed": 3212,
+                  "control": 0.7813,
+                  "treatment": 0.9333
+                },
+                {
+                  "seed": 3213,
+                  "control": 0.95,
+                  "treatment": 0.75
+                },
+                {
+                  "seed": 3214,
+                  "control": 0.9474,
+                  "treatment": 0.9412
+                },
+                {
+                  "seed": 3215,
+                  "control": 1,
+                  "treatment": 1
+                }
+              ]
+            },
+            "reason": "effect 0.013 [95% CI -0.027, 0.053], material = 0.15"
+          }
+        ],
+        "reasons": [
+          "primary prediction contradicted: P2a (effect 0.016 [95% CI -0.051, 0.087], material = 0.15); P2b (effect 0.029 [95% CI -0.065, 0.120], material = 0.15)"
+        ],
+        "counterexamples": [],
+        "kane": {
+          "corroboration": "AGREES",
+          "detail": "Kane independently re-derived 2 raw-row condition(s) and agrees"
+        }
+      }
+    },
+    {
+      "id": "H3",
+      "title": "Placement search bias towards self-beneficial cells",
+      "origin": "operator",
+      "author": "Eric (V2 specification), formalised by Claude",
+      "hash": "f7418dc91124096e",
+      "journalSeq": 14,
+      "mechanism": "Candidate cells are scored by summed exposure-weighted 'penalty' over ALL pieces; a forward shove has negative penalty for the placer's own pieces, and with the self-harm sign that becomes positive value, so cells on the placer's own route become candidates.",
+      "predictions": [
+        {
+          "id": "P3a",
+          "experiment": "E3",
+          "design": "selfplay",
+          "metric": "ew_self_trigger_share",
+          "direction": "decrease",
+          "minEffect": 0.15,
+          "role": "primary",
+          "text": "With own-piece benefit removed from candidate scoring, the share of east/west shove triggers set off by the installer’s own pieces falls by at least 15 points."
+        },
+        {
+          "id": "P3b",
+          "experiment": "E1b",
+          "design": "selfplay",
+          "metric": "ew_self_trigger_share",
+          "direction": "no-change",
+          "minEffect": 0.15,
+          "role": "discriminating",
+          "versus": [
+            "H4"
+          ],
+          "text": "Removing the V0.3 overlay does not change the east/west shove self-trigger share by 15 points or more."
+        },
+        {
+          "id": "P3c",
+          "experiment": "E3",
+          "design": "selfplay",
+          "metric": "tp_self_share",
+          "direction": "decrease",
+          "minEffect": 0.1,
+          "role": "secondary",
+          "text": "Teleport self-trigger share also falls by at least 10 points."
+        }
+      ],
+      "evaluation": {
+        "id": "H3",
+        "contractHash": "f7418dc91124096e",
+        "outcome": "SUPPORTED",
+        "predictions": [
+          {
+            "id": "P3a",
+            "status": "met",
+            "effect": {
+              "metric": "ew_self_trigger_share",
+              "control": 0.8891,
+              "treatment": 0.7143,
+              "events": {
+                "control": 442,
+                "treatment": 322
+              },
+              "effect": -0.1749,
+              "ci": [
+                -0.2351,
+                -0.104
+              ],
+              "units": 16,
+              "batches": [
+                -0.2001,
+                -0.1534
+              ],
+              "sides": {
+                "humanFirst": -0.1738,
+                "aiFirst": -0.1775
+              },
+              "perSeed": [
+                {
+                  "seed": 3200,
+                  "control": 0.8158,
+                  "treatment": 0.6875
+                },
+                {
+                  "seed": 3201,
+                  "control": 0.9167,
+                  "treatment": 0.6333
+                },
+                {
+                  "seed": 3202,
+                  "control": 0.9189,
+                  "treatment": 0.6842
+                },
+                {
+                  "seed": 3203,
+                  "control": 0.8667,
+                  "treatment": 0.5417
+                },
+                {
+                  "seed": 3204,
+                  "control": 0.8621,
+                  "treatment": 0.5667
+                },
+                {
+                  "seed": 3205,
+                  "control": 0.9545,
+                  "treatment": 0.6667
+                },
+                {
+                  "seed": 3206,
+                  "control": 0.8077,
+                  "treatment": 0.9286
+                },
+                {
+                  "seed": 3207,
+                  "control": 0.8974,
+                  "treatment": 0.8947
+                },
+                {
+                  "seed": 3208,
+                  "control": 0.9091,
+                  "treatment": 0.8333
+                },
+                {
+                  "seed": 3209,
+                  "control": 0.9259,
+                  "treatment": 0.9231
+                },
+                {
+                  "seed": 3210,
+                  "control": 0.9524,
+                  "treatment": 0.7353
+                },
+                {
+                  "seed": 3211,
+                  "control": 0.9048,
+                  "treatment": 0.8125
+                },
+                {
+                  "seed": 3212,
+                  "control": 0.7813,
+                  "treatment": 0.7619
+                },
+                {
+                  "seed": 3213,
+                  "control": 0.95,
+                  "treatment": 0.6176
+                },
+                {
+                  "seed": 3214,
+                  "control": 0.9474,
+                  "treatment": 0.7368
+                },
+                {
+                  "seed": 3215,
+                  "control": 1,
+                  "treatment": 1
+                }
+              ]
+            },
+            "reason": "effect -0.175 [95% CI -0.235, -0.104], material = 0.15"
+          },
+          {
+            "id": "P3b",
+            "status": "met",
+            "effect": {
+              "metric": "ew_self_trigger_share",
+              "control": 0.8891,
+              "treatment": 0.9024,
+              "events": {
+                "control": 442,
+                "treatment": 246
+              },
+              "effect": 0.0133,
+              "ci": [
+                -0.0273,
+                0.0528
+              ],
+              "units": 16,
+              "batches": [
+                0.012,
+                0.0123
+              ],
+              "sides": {
+                "humanFirst": 0.0362,
+                "aiFirst": -0.011
+              },
+              "perSeed": [
+                {
+                  "seed": 3200,
+                  "control": 0.8158,
+                  "treatment": 0.9412
+                },
+                {
+                  "seed": 3201,
+                  "control": 0.9167,
+                  "treatment": 0.875
+                },
+                {
+                  "seed": 3202,
+                  "control": 0.9189,
+                  "treatment": 0.9444
+                },
+                {
+                  "seed": 3203,
+                  "control": 0.8667,
+                  "treatment": 1
+                },
+                {
+                  "seed": 3204,
+                  "control": 0.8621,
+                  "treatment": 0.7826
+                },
+                {
+                  "seed": 3205,
+                  "control": 0.9545,
+                  "treatment": 0.9412
+                },
+                {
+                  "seed": 3206,
+                  "control": 0.8077,
+                  "treatment": 0.8261
+                },
+                {
+                  "seed": 3207,
+                  "control": 0.8974,
+                  "treatment": 0.8667
+                },
+                {
+                  "seed": 3208,
+                  "control": 0.9091,
+                  "treatment": 0.9444
+                },
+                {
+                  "seed": 3209,
+                  "control": 0.9259,
+                  "treatment": 0.8947
+                },
+                {
+                  "seed": 3210,
+                  "control": 0.9524,
+                  "treatment": 0.9474
+                },
+                {
+                  "seed": 3211,
+                  "control": 0.9048,
+                  "treatment": 0.9
+                },
+                {
+                  "seed": 3212,
+                  "control": 0.7813,
+                  "treatment": 0.9333
+                },
+                {
+                  "seed": 3213,
+                  "control": 0.95,
+                  "treatment": 0.75
+                },
+                {
+                  "seed": 3214,
+                  "control": 0.9474,
+                  "treatment": 0.9412
+                },
+                {
+                  "seed": 3215,
+                  "control": 1,
+                  "treatment": 1
+                }
+              ]
+            },
+            "reason": "effect 0.013 [95% CI -0.027, 0.053], material = 0.15"
+          },
+          {
+            "id": "P3c",
+            "status": "unclear",
+            "effect": {
+              "metric": "tp_self_share",
+              "control": 0.8824,
+              "treatment": 0.814,
+              "events": {
+                "control": 85,
+                "treatment": 215
+              },
+              "effect": -0.0684,
+              "ci": [
+                -0.1748,
+                0.0339
+              ],
+              "units": 16,
+              "batches": [
+                0.0039,
+                -0.1325
+              ],
+              "sides": {
+                "humanFirst": 0.0329,
+                "aiFirst": -0.1927
+              },
+              "perSeed": [
+                {
+                  "seed": 3200,
+                  "control": 1,
+                  "treatment": 0.8462
+                },
+                {
+                  "seed": 3201,
+                  "control": 1,
+                  "treatment": 0.75
+                },
+                {
+                  "seed": 3202,
+                  "control": 1,
+                  "treatment": 0.7692
+                },
+                {
+                  "seed": 3203,
+                  "control": null,
+                  "treatment": 0.6667
+                },
+                {
+                  "seed": 3204,
+                  "control": 0.6667,
+                  "treatment": 0.8
+                },
+                {
+                  "seed": 3205,
+                  "control": 1,
+                  "treatment": 0.8667
+                },
+                {
+                  "seed": 3206,
+                  "control": 0.7778,
+                  "treatment": 0.8889
+                },
+                {
+                  "seed": 3207,
+                  "control": 0.4,
+                  "treatment": 0.875
+                },
+                {
+                  "seed": 3208,
+                  "control": 0.8333,
+                  "treatment": 0.8889
+                },
+                {
+                  "seed": 3209,
+                  "control": 1,
+                  "treatment": 0.8571
+                },
+                {
+                  "seed": 3210,
+                  "control": 1,
+                  "treatment": 0.72
+                },
+                {
+                  "seed": 3211,
+                  "control": 1,
+                  "treatment": 1
+                },
+                {
+                  "seed": 3212,
+                  "control": 0.8571,
+                  "treatment": 1
+                },
+                {
+                  "seed": 3213,
+                  "control": 1,
+                  "treatment": 0.7241
+                },
+                {
+                  "seed": 3214,
+                  "control": 1,
+                  "treatment": 0.9333
+                },
+                {
+                  "seed": 3215,
+                  "control": 1,
+                  "treatment": 0.8333
+                }
+              ]
+            },
+            "reason": "effect -0.068 [95% CI -0.175, 0.034], material = 0.1"
+          }
+        ],
+        "reasons": [
+          "every primary and discriminating prediction held on these seeds (support, not proof)"
+        ],
+        "counterexamples": [],
+        "kane": {
+          "corroboration": "AGREES",
+          "detail": "Kane independently re-derived 2 raw-row condition(s) and agrees"
+        }
+      }
+    },
+    {
+      "id": "H4",
+      "title": "Valuation or calibration error in the V0.3 weights",
+      "origin": "operator",
+      "author": "Eric (V2 specification), formalised by Claude",
+      "hash": "cd7c490ee321b27b",
+      "journalSeq": 15,
+      "mechanism": "The signed activator utility (Teleport -0.8), the blend factor (weightMix 0.3) or placement upkeep are miscalibrated relative to realized consequences, and this drives the behaviour.",
+      "predictions": [
+        {
+          "id": "P4a",
+          "experiment": "E1a",
+          "design": "selfplay",
+          "metric": "tp_self_share",
+          "direction": "change",
+          "minEffect": 0.1,
+          "role": "primary",
+          "text": "Calibrating the Teleport utility to its measured value changes the teleport self-trigger share by at least 10 points."
+        },
+        {
+          "id": "P4b",
+          "experiment": "E1b",
+          "design": "selfplay",
+          "metric": "ew_self_trigger_share",
+          "direction": "change",
+          "minEffect": 0.1,
+          "role": "discriminating",
+          "versus": [
+            "H2",
+            "H3"
+          ],
+          "text": "Removing the overlay changes the east/west shove self-trigger share by at least 10 points."
+        },
+        {
+          "id": "P4c",
+          "experiment": "E1a",
+          "design": "selfplay",
+          "metric": "tp_per_game",
+          "direction": "change",
+          "minEffect": 0.3,
+          "role": "secondary",
+          "text": "Calibrating the Teleport utility changes Teleport placements by at least 0.3 per game."
+        }
+      ],
+      "evaluation": {
+        "id": "H4",
+        "contractHash": "cd7c490ee321b27b",
+        "outcome": "INCONCLUSIVE",
+        "predictions": [
+          {
+            "id": "P4a",
+            "status": "unclear",
+            "effect": {
+              "metric": "tp_self_share",
+              "control": 0.8824,
+              "treatment": 0.8926,
+              "events": {
+                "control": 85,
+                "treatment": 121
+              },
+              "effect": 0.0102,
+              "ci": [
+                -0.087,
+                0.1034
+              ],
+              "units": 16,
+              "batches": [
+                0.0548,
+                -0.0234
+              ],
+              "sides": {
+                "humanFirst": 0.0606,
+                "aiFirst": -0.064
+              },
+              "perSeed": [
+                {
+                  "seed": 3200,
+                  "control": 1,
+                  "treatment": 0.75
+                },
+                {
+                  "seed": 3201,
+                  "control": 1,
+                  "treatment": 0.9286
+                },
+                {
+                  "seed": 3202,
+                  "control": 1,
+                  "treatment": 1
+                },
+                {
+                  "seed": 3203,
+                  "control": null,
+                  "treatment": 1
+                },
+                {
+                  "seed": 3204,
+                  "control": 0.6667,
+                  "treatment": 0.6667
+                },
+                {
+                  "seed": 3205,
+                  "control": 1,
+                  "treatment": 1
+                },
+                {
+                  "seed": 3206,
+                  "control": 0.7778,
+                  "treatment": 0.8182
+                },
+                {
+                  "seed": 3207,
+                  "control": 0.4,
+                  "treatment": 1
+                },
+                {
+                  "seed": 3208,
+                  "control": 0.8333,
+                  "treatment": 1
+                },
+                {
+                  "seed": 3209,
+                  "control": 1,
+                  "treatment": 1
+                },
+                {
+                  "seed": 3210,
+                  "control": 1,
+                  "treatment": 1
+                },
+                {
+                  "seed": 3211,
+                  "control": 1,
+                  "treatment": 0.7
+                },
+                {
+                  "seed": 3212,
+                  "control": 0.8571,
+                  "treatment": 1
+                },
+                {
+                  "seed": 3213,
+                  "control": 1,
+                  "treatment": 1
+                },
+                {
+                  "seed": 3214,
+                  "control": 1,
+                  "treatment": 1
+                },
+                {
+                  "seed": 3215,
+                  "control": 1,
+                  "treatment": 0.8571
+                }
+              ]
+            },
+            "reason": "effect 0.010 [95% CI -0.087, 0.103], material = 0.1"
+          },
+          {
+            "id": "P4b",
+            "status": "contradicted",
+            "effect": {
+              "metric": "ew_self_trigger_share",
+              "control": 0.8891,
+              "treatment": 0.9024,
+              "events": {
+                "control": 442,
+                "treatment": 246
+              },
+              "effect": 0.0133,
+              "ci": [
+                -0.0273,
+                0.0528
+              ],
+              "units": 16,
+              "batches": [
+                0.012,
+                0.0123
+              ],
+              "sides": {
+                "humanFirst": 0.0362,
+                "aiFirst": -0.011
+              },
+              "perSeed": [
+                {
+                  "seed": 3200,
+                  "control": 0.8158,
+                  "treatment": 0.9412
+                },
+                {
+                  "seed": 3201,
+                  "control": 0.9167,
+                  "treatment": 0.875
+                },
+                {
+                  "seed": 3202,
+                  "control": 0.9189,
+                  "treatment": 0.9444
+                },
+                {
+                  "seed": 3203,
+                  "control": 0.8667,
+                  "treatment": 1
+                },
+                {
+                  "seed": 3204,
+                  "control": 0.8621,
+                  "treatment": 0.7826
+                },
+                {
+                  "seed": 3205,
+                  "control": 0.9545,
+                  "treatment": 0.9412
+                },
+                {
+                  "seed": 3206,
+                  "control": 0.8077,
+                  "treatment": 0.8261
+                },
+                {
+                  "seed": 3207,
+                  "control": 0.8974,
+                  "treatment": 0.8667
+                },
+                {
+                  "seed": 3208,
+                  "control": 0.9091,
+                  "treatment": 0.9444
+                },
+                {
+                  "seed": 3209,
+                  "control": 0.9259,
+                  "treatment": 0.8947
+                },
+                {
+                  "seed": 3210,
+                  "control": 0.9524,
+                  "treatment": 0.9474
+                },
+                {
+                  "seed": 3211,
+                  "control": 0.9048,
+                  "treatment": 0.9
+                },
+                {
+                  "seed": 3212,
+                  "control": 0.7813,
+                  "treatment": 0.9333
+                },
+                {
+                  "seed": 3213,
+                  "control": 0.95,
+                  "treatment": 0.75
+                },
+                {
+                  "seed": 3214,
+                  "control": 0.9474,
+                  "treatment": 0.9412
+                },
+                {
+                  "seed": 3215,
+                  "control": 1,
+                  "treatment": 1
+                }
+              ]
+            },
+            "reason": "effect 0.013 [95% CI -0.027, 0.053], material = 0.1"
+          },
+          {
+            "id": "P4c",
+            "status": "met",
+            "effect": {
+              "metric": "tp_per_game",
+              "control": 1.4375,
+              "treatment": 2,
+              "events": {
+                "control": 32,
+                "treatment": 32
+              },
+              "effect": 0.5625,
+              "ci": [
+                0.2188,
+                0.9063
+              ],
+              "units": 16,
+              "batches": [
+                0.6875,
+                0.4375
+              ],
+              "sides": {
+                "humanFirst": 0.5625,
+                "aiFirst": 0.5625
+              },
+              "perSeed": [
+                {
+                  "seed": 3200,
+                  "control": 1.5,
+                  "treatment": 3
+                },
+                {
+                  "seed": 3201,
+                  "control": 1.5,
+                  "treatment": 3.5
+                },
+                {
+                  "seed": 3202,
+                  "control": 0.5,
+                  "treatment": 1.5
+                },
+                {
+                  "seed": 3203,
+                  "control": 0,
+                  "treatment": 1
+                },
+                {
+                  "seed": 3204,
+                  "control": 2,
+                  "treatment": 2
+                },
+                {
+                  "seed": 3205,
+                  "control": 1.5,
+                  "treatment": 1.5
+                },
+                {
+                  "seed": 3206,
+                  "control": 3,
+                  "treatment": 3.5
+                },
+                {
+                  "seed": 3207,
+                  "control": 1.5,
+                  "treatment": 1
+                },
+                {
+                  "seed": 3208,
+                  "control": 2,
+                  "treatment": 2.5
+                },
+                {
+                  "seed": 3209,
+                  "control": 0.5,
+                  "treatment": 0.5
+                },
+                {
+                  "seed": 3210,
+                  "control": 1.5,
+                  "treatment": 1.5
+                },
+                {
+                  "seed": 3211,
+                  "control": 1.5,
+                  "treatment": 2.5
+                },
+                {
+                  "seed": 3212,
+                  "control": 2,
+                  "treatment": 1.5
+                },
+                {
+                  "seed": 3213,
+                  "control": 1.5,
+                  "treatment": 2.5
+                },
+                {
+                  "seed": 3214,
+                  "control": 1.5,
+                  "treatment": 2.5
+                },
+                {
+                  "seed": 3215,
+                  "control": 1,
+                  "treatment": 1.5
+                }
+              ]
+            },
+            "reason": "effect 0.563 [95% CI 0.219, 0.906], material = 0.3"
+          }
+        ],
+        "reasons": [
+          "P4a: unclear (effect 0.010 [95% CI -0.087, 0.103], material = 0.1)",
+          "P4b: contradicted (effect 0.013 [95% CI -0.027, 0.053], material = 0.1)"
+        ],
+        "counterexamples": [],
+        "kane": {
+          "corroboration": "NOT_ASKED",
+          "detail": ""
+        }
+      }
+    },
+    {
+      "id": "H5",
+      "title": "The planner foresees 'random' teleport destinations",
+      "origin": "claude",
+      "author": "Claude",
+      "hash": "f1aadf633e5b9099",
+      "journalSeq": 16,
+      "mechanism": "Because the look-ahead shares the engine's RNG state, the planner steps its pieces onto a teleport only when the (deterministic) destination is good. The benefit of chosen own-teleport steps is information leakage, not geometry. A human cannot do this.",
+      "predictions": [
+        {
+          "id": "P5a",
+          "experiment": "E5",
+          "design": "selfplay",
+          "metric": "tp_self_benefit",
+          "direction": "decrease",
+          "minEffect": 1,
+          "role": "primary",
+          "text": "With an RNG-blind look-ahead, chosen own-teleport steps gain at least 1 square less on average."
+        },
+        {
+          "id": "P5b",
+          "experiment": "E5",
+          "design": "selfplay",
+          "metric": "tp_self_harm_rate",
+          "direction": "increase",
+          "minEffect": 0.1,
+          "role": "primary",
+          "text": "With an RNG-blind look-ahead, at least 10 points more of chosen own-teleport steps move the piece away from its goal."
+        },
+        {
+          "id": "P5c",
+          "experiment": "E5",
+          "design": "head-to-head",
+          "metric": "treated_win_rate",
+          "direction": "decrease",
+          "minEffect": 0.05,
+          "role": "discriminating",
+          "versus": [
+            "H0",
+            "H1"
+          ],
+          "text": "An RNG-blind planner loses head-to-head against the control planner by at least 5 points."
+        }
+      ],
+      "evaluation": {
+        "id": "H5",
+        "contractHash": "f1aadf633e5b9099",
+        "outcome": "REFUTED",
+        "predictions": [
+          {
+            "id": "P5a",
+            "status": "met",
+            "effect": {
+              "metric": "tp_self_benefit",
+              "control": 4.2676,
+              "treatment": 2.8056,
+              "events": {
+                "control": 71,
+                "treatment": 144
+              },
+              "effect": -1.4621,
+              "ci": [
+                -1.7909,
+                -1.0511
+              ],
+              "units": 16,
+              "batches": [
+                -1.4657,
+                -1.4844
+              ],
+              "sides": {
+                "humanFirst": -1.4188,
+                "aiFirst": -1.4965
+              },
+              "perSeed": [
+                {
+                  "seed": 3200,
+                  "control": 4.6667,
+                  "treatment": 2.3333
+                },
+                {
+                  "seed": 3201,
+                  "control": 4,
+                  "treatment": 2.5
+                },
+                {
+                  "seed": 3202,
+                  "control": 3,
+                  "treatment": 3.375
+                },
+                {
+                  "seed": 3203,
+                  "control": null,
+                  "treatment": 4.2
+                },
+                {
+                  "seed": 3204,
+                  "control": 4.1667,
+                  "treatment": 2.8
+                },
+                {
+                  "seed": 3205,
+                  "control": 5,
+                  "treatment": 2.75
+                },
+                {
+                  "seed": 3206,
+                  "control": 4.8571,
+                  "treatment": 2.625
+                },
+                {
+                  "seed": 3207,
+                  "control": 3.5,
+                  "treatment": 3
+                },
+                {
+                  "seed": 3208,
+                  "control": 3.75,
+                  "treatment": 3.4
+                },
+                {
+                  "seed": 3209,
+                  "control": 3.6667,
+                  "treatment": 2.7778
+                },
+                {
+                  "seed": 3210,
+                  "control": 4,
+                  "treatment": 2.9231
+                },
+                {
+                  "seed": 3211,
+                  "control": 4.5,
+                  "treatment": 3.4
+                },
+                {
+                  "seed": 3212,
+                  "control": 4.8,
+                  "treatment": 2.2
+                },
+                {
+                  "seed": 3213,
+                  "control": 3.4286,
+                  "treatment": 1.8462
+                },
+                {
+                  "seed": 3214,
+                  "control": 4.3333,
+                  "treatment": 2.1667
+                },
+                {
+                  "seed": 3215,
+                  "control": 4.5,
+                  "treatment": 3.1818
+                }
+              ]
+            },
+            "reason": "effect -1.462 [95% CI -1.791, -1.051], material = 1"
+          },
+          {
+            "id": "P5b",
+            "status": "contradicted",
+            "effect": {
+              "metric": "tp_self_harm_rate",
+              "control": 0,
+              "treatment": 0,
+              "events": {
+                "control": 71,
+                "treatment": 144
+              },
+              "effect": 0,
+              "ci": [
+                0,
+                0
+              ],
+              "units": 16,
+              "batches": [
+                0,
+                0
+              ],
+              "sides": {
+                "humanFirst": 0,
+                "aiFirst": 0
+              },
+              "perSeed": [
+                {
+                  "seed": 3200,
+                  "control": 0,
+                  "treatment": 0
+                },
+                {
+                  "seed": 3201,
+                  "control": 0,
+                  "treatment": 0
+                },
+                {
+                  "seed": 3202,
+                  "control": 0,
+                  "treatment": 0
+                },
+                {
+                  "seed": 3203,
+                  "control": null,
+                  "treatment": 0
+                },
+                {
+                  "seed": 3204,
+                  "control": 0,
+                  "treatment": 0
+                },
+                {
+                  "seed": 3205,
+                  "control": 0,
+                  "treatment": 0
+                },
+                {
+                  "seed": 3206,
+                  "control": 0,
+                  "treatment": 0
+                },
+                {
+                  "seed": 3207,
+                  "control": 0,
+                  "treatment": 0
+                },
+                {
+                  "seed": 3208,
+                  "control": 0,
+                  "treatment": 0
+                },
+                {
+                  "seed": 3209,
+                  "control": 0,
+                  "treatment": 0
+                },
+                {
+                  "seed": 3210,
+                  "control": 0,
+                  "treatment": 0
+                },
+                {
+                  "seed": 3211,
+                  "control": 0,
+                  "treatment": 0
+                },
+                {
+                  "seed": 3212,
+                  "control": 0,
+                  "treatment": 0
+                },
+                {
+                  "seed": 3213,
+                  "control": 0,
+                  "treatment": 0
+                },
+                {
+                  "seed": 3214,
+                  "control": 0,
+                  "treatment": 0
+                },
+                {
+                  "seed": 3215,
+                  "control": 0,
+                  "treatment": 0
+                }
+              ]
+            },
+            "reason": "effect 0.000 [95% CI 0.000, 0.000], material = 0.1"
+          },
+          {
+            "id": "P5c",
+            "status": "unclear",
+            "effect": {
+              "metric": "treated_win_rate",
+              "control": 0.5,
+              "treatment": 0.4219,
+              "events": {
+                "control": null,
+                "treatment": null
+              },
+              "effect": -0.0781,
+              "ci": [
+                -0.2187,
+                0.125
+              ],
+              "units": 8,
+              "batches": [
+                -0.1562,
+                0
+              ],
+              "sides": {
+                "humanFirst": -0.0937,
+                "aiFirst": -0.0625
+              },
+              "perSeed": [
+                {
+                  "seed": 3200,
+                  "control": 0.5,
+                  "treatment": 0.25
+                },
+                {
+                  "seed": 3201,
+                  "control": 0.5,
+                  "treatment": 0.625
+                },
+                {
+                  "seed": 3202,
+                  "control": 0.5,
+                  "treatment": 0.25
+                },
+                {
+                  "seed": 3203,
+                  "control": 0.5,
+                  "treatment": 0.25
+                },
+                {
+                  "seed": 3204,
+                  "control": 0.5,
+                  "treatment": 0.5
+                },
+                {
+                  "seed": 3205,
+                  "control": 0.5,
+                  "treatment": 0.25
+                },
+                {
+                  "seed": 3206,
+                  "control": 0.5,
+                  "treatment": 0.25
+                },
+                {
+                  "seed": 3207,
+                  "control": 0.5,
+                  "treatment": 1
+                }
+              ]
+            },
+            "reason": "effect -0.078 [95% CI -0.219, 0.125], material = 0.05"
+          }
+        ],
+        "reasons": [
+          "primary prediction contradicted: P5b (effect 0.000 [95% CI 0.000, 0.000], material = 0.1)"
+        ],
+        "counterexamples": [],
+        "kane": {
+          "corroboration": "AGREES",
+          "detail": "Kane independently re-derived 1 raw-row condition(s) and agrees"
+        }
+      }
+    },
+    {
+      "id": "HK1",
+      "title": "Kane: The V0.3 prior/blend misvalues Teleport: it assigns -0.80 although triggered pie",
+      "origin": "kane",
+      "author": "kane-cli 0.10.4 (objective mode, call KX1)",
+      "hash": "6cf2be4cf60b5e92",
+      "journalSeq": 17,
+      "mechanism": "The V0.3 prior/blend misvalues Teleport: it assigns -0.80 although triggered pieces gain 3.41 squares on average, so the planner's use of Teleport is better than that prior says. East and west shoves are not a directional defect: each player places the shove toward its own goal (Human east, AI west), and the measured gains are positive. The planner choices therefore reflect board geometry plus an outdated Teleport weight.",
+      "predictions": [
+        {
+          "id": "HK1a",
+          "experiment": "E1a",
+          "design": "selfplay",
+          "metric": "tp_self_share",
+          "direction": "increase",
+          "minEffect": 0.1,
+          "role": "primary",
+          "text": "Kane: changing \"The V0.3 prior weights / blend\" should make \"tp_self_share\" increase."
+        },
+        {
+          "id": "HK1b",
+          "experiment": "E1a",
+          "design": "selfplay",
+          "metric": "tp_self_share",
+          "direction": "increase",
+          "minEffect": 0.1,
+          "role": "discriminating",
+          "versus": [
+            "H0"
+          ],
+          "text": "Same measurement, judged against the null hypothesis H0."
+        }
+      ],
+      "evaluation": {
+        "id": "HK1",
+        "contractHash": "6cf2be4cf60b5e92",
+        "outcome": "INCONCLUSIVE",
+        "predictions": [
+          {
+            "id": "HK1a",
+            "status": "unclear",
+            "effect": {
+              "metric": "tp_self_share",
+              "control": 0.8824,
+              "treatment": 0.8926,
+              "events": {
+                "control": 85,
+                "treatment": 121
+              },
+              "effect": 0.0102,
+              "ci": [
+                -0.087,
+                0.1034
+              ],
+              "units": 16,
+              "batches": [
+                0.0548,
+                -0.0234
+              ],
+              "sides": {
+                "humanFirst": 0.0606,
+                "aiFirst": -0.064
+              },
+              "perSeed": [
+                {
+                  "seed": 3200,
+                  "control": 1,
+                  "treatment": 0.75
+                },
+                {
+                  "seed": 3201,
+                  "control": 1,
+                  "treatment": 0.9286
+                },
+                {
+                  "seed": 3202,
+                  "control": 1,
+                  "treatment": 1
+                },
+                {
+                  "seed": 3203,
+                  "control": null,
+                  "treatment": 1
+                },
+                {
+                  "seed": 3204,
+                  "control": 0.6667,
+                  "treatment": 0.6667
+                },
+                {
+                  "seed": 3205,
+                  "control": 1,
+                  "treatment": 1
+                },
+                {
+                  "seed": 3206,
+                  "control": 0.7778,
+                  "treatment": 0.8182
+                },
+                {
+                  "seed": 3207,
+                  "control": 0.4,
+                  "treatment": 1
+                },
+                {
+                  "seed": 3208,
+                  "control": 0.8333,
+                  "treatment": 1
+                },
+                {
+                  "seed": 3209,
+                  "control": 1,
+                  "treatment": 1
+                },
+                {
+                  "seed": 3210,
+                  "control": 1,
+                  "treatment": 1
+                },
+                {
+                  "seed": 3211,
+                  "control": 1,
+                  "treatment": 0.7
+                },
+                {
+                  "seed": 3212,
+                  "control": 0.8571,
+                  "treatment": 1
+                },
+                {
+                  "seed": 3213,
+                  "control": 1,
+                  "treatment": 1
+                },
+                {
+                  "seed": 3214,
+                  "control": 1,
+                  "treatment": 1
+                },
+                {
+                  "seed": 3215,
+                  "control": 1,
+                  "treatment": 0.8571
+                }
+              ]
+            },
+            "reason": "effect 0.010 [95% CI -0.087, 0.103], material = 0.1"
+          },
+          {
+            "id": "HK1b",
+            "status": "unclear",
+            "effect": {
+              "metric": "tp_self_share",
+              "control": 0.8824,
+              "treatment": 0.8926,
+              "events": {
+                "control": 85,
+                "treatment": 121
+              },
+              "effect": 0.0102,
+              "ci": [
+                -0.087,
+                0.1034
+              ],
+              "units": 16,
+              "batches": [
+                0.0548,
+                -0.0234
+              ],
+              "sides": {
+                "humanFirst": 0.0606,
+                "aiFirst": -0.064
+              },
+              "perSeed": [
+                {
+                  "seed": 3200,
+                  "control": 1,
+                  "treatment": 0.75
+                },
+                {
+                  "seed": 3201,
+                  "control": 1,
+                  "treatment": 0.9286
+                },
+                {
+                  "seed": 3202,
+                  "control": 1,
+                  "treatment": 1
+                },
+                {
+                  "seed": 3203,
+                  "control": null,
+                  "treatment": 1
+                },
+                {
+                  "seed": 3204,
+                  "control": 0.6667,
+                  "treatment": 0.6667
+                },
+                {
+                  "seed": 3205,
+                  "control": 1,
+                  "treatment": 1
+                },
+                {
+                  "seed": 3206,
+                  "control": 0.7778,
+                  "treatment": 0.8182
+                },
+                {
+                  "seed": 3207,
+                  "control": 0.4,
+                  "treatment": 1
+                },
+                {
+                  "seed": 3208,
+                  "control": 0.8333,
+                  "treatment": 1
+                },
+                {
+                  "seed": 3209,
+                  "control": 1,
+                  "treatment": 1
+                },
+                {
+                  "seed": 3210,
+                  "control": 1,
+                  "treatment": 1
+                },
+                {
+                  "seed": 3211,
+                  "control": 1,
+                  "treatment": 0.7
+                },
+                {
+                  "seed": 3212,
+                  "control": 0.8571,
+                  "treatment": 1
+                },
+                {
+                  "seed": 3213,
+                  "control": 1,
+                  "treatment": 1
+                },
+                {
+                  "seed": 3214,
+                  "control": 1,
+                  "treatment": 1
+                },
+                {
+                  "seed": 3215,
+                  "control": 1,
+                  "treatment": 0.8571
+                }
+              ]
+            },
+            "reason": "effect 0.010 [95% CI -0.087, 0.103], material = 0.1"
+          }
+        ],
+        "reasons": [
+          "HK1a: unclear (effect 0.010 [95% CI -0.087, 0.103], material = 0.1)",
+          "HK1b: unclear (effect 0.010 [95% CI -0.087, 0.103], material = 0.1)"
+        ],
+        "counterexamples": [],
+        "kane": {
+          "corroboration": "AGREES",
+          "detail": "Kane independently re-derived 2 raw-row condition(s) and agrees"
+        }
+      },
+      "kaneNote": {
+        "noteId": "KX1-N1",
+        "callId": "KX1",
+        "kind": "exploration",
+        "receivedAt": "2026-11-19T11:38:45.352Z",
+        "validNonce": true,
+        "inWindow": true,
+        "rawBody": "nonce=3c1eb72c16de90d28a&defect=yes&explanation=The+V0.3+prior%2Fblend+misvalues+Teleport%3A+it+assigns+-0.80+although+triggered+pieces+gain+3.41+squares+on+average%2C+so+the+planner%27s+use+of+Teleport+is+better+than+that+prior+says.+East+and+west+shoves+are+not+a+directional+defect%3A+each+player+places+the+shove+toward+its+own+goal+%28Human+east%2C+AI+west%29%2C+and+the+measured+gains+are+positive.+The+planner+choices+therefore+reflect+board+geometry+plus+an+outdated+Teleport+weight.&component=weights&metric=tp_self_share&direction=increase&alternative=I+considered+that+Teleport+is+simply+harmful+random+play%2C+and+that+the+shove+pattern+reflects+a+geometry+bug+rather+than+correct+directional+play.+The+positive+measured+Teleport+mean+and+the+opposite%2C+goal-directed+east%2Fwest+choices+argue+against+those+alternatives.&counterexample=T3",
+        "bytes": 852,
+        "fields": {
+          "explanation": "The V0.3 prior/blend misvalues Teleport: it assigns -0.80 although triggered pieces gain 3.41 squares on average, so the planner's use of Teleport is better than that prior says. East and west shoves are not a directional defect: each player places the shove toward its own goal (Human east, AI west), and the measured gains are positive. The planner choices therefore reflect board geometry plus an outdated Teleport weight.",
+          "component": "weights",
+          "metric": "tp_self_share",
+          "direction": "increase",
+          "alternative": "I considered that Teleport is simply harmful random play, and that the shove pattern reflects a geometry bug rather than correct directional play. The positive measured Teleport mean and the opposite, goal-directed east/west choices argue against those alternatives.",
+          "counterexample": "T3",
+          "defect": "yes",
+          "hypothesis": "",
+          "verdict": ""
+        },
+        "problems": []
+      }
+    }
+  ],
+  "experiments": [
+    {
+      "key": "C0/selfplay/development",
+      "experiment": "C0",
+      "design": "selfplay",
+      "title": "Control",
+      "description": "control: V0.3 weights, production planner, production rules",
+      "component": "none",
+      "diff": [],
+      "seedSet": "development",
+      "games": 32,
+      "ms": 31027,
+      "manipulation": {
+        "ok": true,
+        "detail": "control",
+        "divergedGames": 0,
+        "games": 32,
+        "medianDivergenceTurn": null
+      },
+      "summary": {
+        "tp_self_share": 0.882,
+        "tp_per_game": 1.438,
+        "tp_benefit": 3.612,
+        "tp_self_benefit": 4.268,
+        "tp_opp_benefit": -1.5,
+        "tp_self_harm_rate": 0,
+        "ew_share": 0.597,
+        "ew_per_game": 7.375,
+        "ew_aligned_share": 1,
+        "ew_self_trigger_share": 0.889,
+        "self_trigger_share": 0.875,
+        "max_effect_share": 0.322,
+        "effect_entropy": 0.768,
+        "first_player_edge": -0.062,
+        "human_side_edge": -0.062,
+        "turns_mean": 15.406,
+        "comeback_rate": 0.719,
+        "lead_changes": 4.063,
+        "draw_or_limit_rate": 0.094,
+        "safety_events": 0,
+        "conditional_win_tp": 0.472
+      }
+    },
+    {
+      "key": "E1a/selfplay/development",
+      "experiment": "E1a",
+      "design": "selfplay",
+      "title": "Weight only: Teleport utility set to its measured V1 value (+3.4)",
+      "description": "weights only: featureUtilityToActivator.teleport = 3.4",
+      "component": "weights",
+      "diff": [
+        "featureUtilityToActivator.teleport"
+      ],
+      "seedSet": "development",
+      "games": 32,
+      "ms": 54464,
+      "manipulation": {
+        "ok": true,
+        "detail": "19/32 games diverged from their control game (median first divergence turn 5)",
+        "divergedGames": 19,
+        "games": 32,
+        "medianDivergenceTurn": 5
+      },
+      "summary": {
+        "tp_self_share": 0.893,
+        "tp_per_game": 2,
+        "tp_benefit": 3.355,
+        "tp_self_benefit": 4,
+        "tp_opp_benefit": -1.923,
+        "tp_self_harm_rate": 0,
+        "ew_share": 0.554,
+        "ew_per_game": 6.781,
+        "ew_aligned_share": 1,
+        "ew_self_trigger_share": 0.843,
+        "self_trigger_share": 0.834,
+        "max_effect_share": 0.286,
+        "effect_entropy": 0.767,
+        "first_player_edge": -0.016,
+        "human_side_edge": -0.048,
+        "turns_mean": 15.844,
+        "comeback_rate": 0.677,
+        "lead_changes": 3.656,
+        "draw_or_limit_rate": 0.125,
+        "safety_events": 0,
+        "conditional_win_tp": 0.581
+      }
+    },
+    {
+      "key": "E1b/selfplay/development",
+      "experiment": "E1b",
+      "design": "selfplay",
+      "title": "Weight only: utility overlay removed (weightMix 0)",
+      "description": "weights only: weightMix = 0",
+      "component": "weights",
+      "diff": [
+        "weightMix"
+      ],
+      "seedSet": "development",
+      "games": 32,
+      "ms": 30365,
+      "manipulation": {
+        "ok": true,
+        "detail": "31/32 games diverged from their control game (median first divergence turn 4)",
+        "divergedGames": 31,
+        "games": 32,
+        "medianDivergenceTurn": 4
+      },
+      "summary": {
+        "tp_self_share": 0.834,
+        "tp_per_game": 3.094,
+        "tp_benefit": 3.007,
+        "tp_self_benefit": 3.843,
+        "tp_opp_benefit": -1.16,
+        "tp_self_harm_rate": 0,
+        "ew_share": 0.29,
+        "ew_per_game": 3.656,
+        "ew_aligned_share": 1,
+        "ew_self_trigger_share": 0.902,
+        "self_trigger_share": 0.834,
+        "max_effect_share": 0.245,
+        "effect_entropy": 0.864,
+        "first_player_edge": 0.21,
+        "human_side_edge": -0.081,
+        "turns_mean": 19.313,
+        "comeback_rate": 0.581,
+        "lead_changes": 3.219,
+        "draw_or_limit_rate": 0.188,
+        "safety_events": 0,
+        "conditional_win_tp": 0.531
+      }
+    },
+    {
+      "key": "E2/head-to-head/development",
+      "experiment": "E2",
+      "design": "head-to-head",
+      "title": "Planner valuation only: benefit from own-installed traps ignored",
+      "description": "planner valuation only: benefit from own-installed traps × 0",
+      "component": "planner-valuation",
+      "diff": [
+        "hooks.selfBenefitFactor"
+      ],
+      "seedSet": "development",
+      "games": 32,
+      "ms": 58483,
+      "manipulation": {
+        "ok": true,
+        "detail": "treated planner on both sides and both first-player orders; hooks recorded on every game: true",
+        "divergedGames": 0,
+        "games": 32,
+        "medianDivergenceTurn": null
+      },
+      "summary": {
+        "tp_self_share": 0.879,
+        "tp_per_game": 1.906,
+        "tp_benefit": 3.385,
+        "tp_self_benefit": 4.141,
+        "tp_opp_benefit": -1.636,
+        "tp_self_harm_rate": 0,
+        "ew_share": 0.585,
+        "ew_per_game": 7.313,
+        "ew_aligned_share": 1,
+        "ew_self_trigger_share": 0.88,
+        "self_trigger_share": 0.871,
+        "max_effect_share": 0.305,
+        "effect_entropy": 0.789,
+        "first_player_edge": 0.125,
+        "human_side_edge": 0,
+        "turns_mean": 15.719,
+        "comeback_rate": 0.688,
+        "lead_changes": 4.438,
+        "draw_or_limit_rate": 0.094,
+        "safety_events": 0,
+        "conditional_win_tp": 0.615
+      }
+    },
+    {
+      "key": "E2/selfplay/development",
+      "experiment": "E2",
+      "design": "selfplay",
+      "title": "Planner valuation only: benefit from own-installed traps ignored",
+      "description": "planner valuation only: benefit from own-installed traps × 0",
+      "component": "planner-valuation",
+      "diff": [
+        "hooks.selfBenefitFactor"
+      ],
+      "seedSet": "development",
+      "games": 32,
+      "ms": 44534,
+      "manipulation": {
+        "ok": true,
+        "detail": "30/32 games diverged from their control game (median first divergence turn 3)",
+        "divergedGames": 30,
+        "games": 32,
+        "medianDivergenceTurn": 3
+      },
+      "summary": {
+        "tp_self_share": 0.912,
+        "tp_per_game": 2.688,
+        "tp_benefit": 3.653,
+        "tp_self_benefit": 4.142,
+        "tp_opp_benefit": -0.923,
+        "tp_self_harm_rate": 0,
+        "ew_share": 0.428,
+        "ew_per_game": 6.469,
+        "ew_aligned_share": 1,
+        "ew_self_trigger_share": 0.905,
+        "self_trigger_share": 0.867,
+        "max_effect_share": 0.229,
+        "effect_entropy": 0.799,
+        "first_player_edge": 0.033,
+        "human_side_edge": 0,
+        "turns_mean": 23.938,
+        "comeback_rate": 0.7,
+        "lead_changes": 4.375,
+        "draw_or_limit_rate": 0.25,
+        "safety_events": 0,
+        "conditional_win_tp": 0.531
+      }
+    },
+    {
+      "key": "E3/selfplay/development",
+      "experiment": "E3",
+      "design": "selfplay",
+      "title": "Placement search only: own-piece benefit no longer selects candidate cells",
+      "description": "planner placement search only: own-piece benefit no longer makes a cell a candidate",
+      "component": "planner-search",
+      "diff": [
+        "hooks.searchOwnBenefit"
+      ],
+      "seedSet": "development",
+      "games": 32,
+      "ms": 22522,
+      "manipulation": {
+        "ok": true,
+        "detail": "32/32 games diverged from their control game (median first divergence turn 1)",
+        "divergedGames": 32,
+        "games": 32,
+        "medianDivergenceTurn": 1
+      },
+      "summary": {
+        "tp_self_share": 0.814,
+        "tp_per_game": 3.156,
+        "tp_benefit": 2.884,
+        "tp_self_benefit": 3.8,
+        "tp_opp_benefit": -1.075,
+        "tp_self_harm_rate": 0,
+        "ew_share": 0.546,
+        "ew_per_game": 9.688,
+        "ew_aligned_share": 1,
+        "ew_self_trigger_share": 0.714,
+        "self_trigger_share": 0.696,
+        "max_effect_share": 0.278,
+        "effect_entropy": 0.82,
+        "first_player_edge": 0.067,
+        "human_side_edge": 0.133,
+        "turns_mean": 27.5,
+        "comeback_rate": 0.8,
+        "lead_changes": 3.219,
+        "draw_or_limit_rate": 0.281,
+        "safety_events": 0,
+        "conditional_win_tp": 0.479
+      }
+    },
+    {
+      "key": "E4/selfplay/development",
+      "experiment": "E4",
+      "design": "selfplay",
+      "title": "EXPERIMENTAL rule variant: Teleport stays in the same column",
+      "description": "EXPERIMENTAL RULE VARIANT: teleport destination = random empty square in the same column",
+      "component": "rules",
+      "diff": [
+        "rules.teleport=same-column"
+      ],
+      "seedSet": "development",
+      "games": 32,
+      "ms": 69859,
+      "manipulation": {
+        "ok": true,
+        "detail": "6 teleports, 0 changed the distance to goal; variant tag on every game: true",
+        "divergedGames": 24,
+        "games": 32,
+        "medianDivergenceTurn": 2
+      },
+      "summary": {
+        "tp_self_share": 0.5,
+        "tp_per_game": 0.313,
+        "tp_benefit": 0,
+        "tp_self_benefit": 0,
+        "tp_opp_benefit": 0,
+        "tp_self_harm_rate": 0,
+        "ew_share": 0.685,
+        "ew_per_game": 9.25,
+        "ew_aligned_share": 1,
+        "ew_self_trigger_share": 0.897,
+        "self_trigger_share": 0.894,
+        "max_effect_share": 0.37,
+        "effect_entropy": 0.712,
+        "first_player_edge": -0.344,
+        "human_side_edge": -0.156,
+        "turns_mean": 15.531,
+        "comeback_rate": 0.75,
+        "lead_changes": 5.531,
+        "draw_or_limit_rate": 0.063,
+        "safety_events": 0,
+        "conditional_win_tp": 0.7
+      }
+    },
+    {
+      "key": "E5/head-to-head/development",
+      "experiment": "E5",
+      "design": "head-to-head",
+      "title": "Planner information only: look-ahead cannot foresee random destinations",
+      "description": "planner information only: look-ahead uses a perturbed RNG copy (cannot foresee teleport destinations)",
+      "component": "planner-information",
+      "diff": [
+        "hooks.blindRng"
+      ],
+      "seedSet": "development",
+      "games": 32,
+      "ms": 40081,
+      "manipulation": {
+        "ok": true,
+        "detail": "treated planner on both sides and both first-player orders; hooks recorded on every game: true",
+        "divergedGames": 0,
+        "games": 32,
+        "medianDivergenceTurn": null
+      },
+      "summary": {
+        "tp_self_share": 0.844,
+        "tp_per_game": 2.125,
+        "tp_benefit": 2.533,
+        "tp_self_benefit": 3.333,
+        "tp_opp_benefit": -1.789,
+        "tp_self_harm_rate": 0,
+        "ew_share": 0.601,
+        "ew_per_game": 8.938,
+        "ew_aligned_share": 1,
+        "ew_self_trigger_share": 0.863,
+        "self_trigger_share": 0.841,
+        "max_effect_share": 0.305,
+        "effect_entropy": 0.746,
+        "first_player_edge": -0.016,
+        "human_side_edge": -0.081,
+        "turns_mean": 21.656,
+        "comeback_rate": 0.677,
+        "lead_changes": 4.063,
+        "draw_or_limit_rate": 0.188,
+        "safety_events": 30,
+        "conditional_win_tp": 0.432
+      }
+    },
+    {
+      "key": "E5/selfplay/development",
+      "experiment": "E5",
+      "design": "selfplay",
+      "title": "Planner information only: look-ahead cannot foresee random destinations",
+      "description": "planner information only: look-ahead uses a perturbed RNG copy (cannot foresee teleport destinations)",
+      "component": "planner-information",
+      "diff": [
+        "hooks.blindRng"
+      ],
+      "seedSet": "development",
+      "games": 32,
+      "ms": 35395,
+      "manipulation": {
+        "ok": true,
+        "detail": "32/32 games diverged from their control game (median first divergence turn 1)",
+        "divergedGames": 32,
+        "games": 32,
+        "medianDivergenceTurn": 1
+      },
+      "summary": {
+        "tp_self_share": 0.878,
+        "tp_per_game": 2.594,
+        "tp_benefit": 2.215,
+        "tp_self_benefit": 2.806,
+        "tp_opp_benefit": -2.286,
+        "tp_self_harm_rate": 0,
+        "ew_share": 0.548,
+        "ew_per_game": 8.406,
+        "ew_aligned_share": 1,
+        "ew_self_trigger_share": 0.831,
+        "self_trigger_share": 0.81,
+        "max_effect_share": 0.283,
+        "effect_entropy": 0.806,
+        "first_player_edge": 0.156,
+        "human_side_edge": 0.031,
+        "turns_mean": 20.031,
+        "comeback_rate": 0.625,
+        "lead_changes": 3.531,
+        "draw_or_limit_rate": 0.156,
+        "safety_events": 88,
+        "conditional_win_tp": 0.458
+      }
+    },
+    {
+      "key": "C0/selfplay/holdout",
+      "experiment": "C0",
+      "design": "selfplay",
+      "title": "Control",
+      "description": "control: V0.3 weights, production planner, production rules",
+      "component": "none",
+      "diff": [],
+      "seedSet": "holdout",
+      "games": 32,
+      "ms": 29572,
+      "manipulation": {
+        "ok": true,
+        "detail": "control",
+        "divergedGames": 0,
+        "games": 32,
+        "medianDivergenceTurn": null
+      },
+      "summary": {
+        "tp_self_share": 0.943,
+        "tp_per_game": 1.188,
+        "tp_benefit": 3.871,
+        "tp_self_benefit": 4.119,
+        "tp_opp_benefit": -1,
+        "tp_self_harm_rate": 0,
+        "ew_share": 0.623,
+        "ew_per_game": 7.656,
+        "ew_aligned_share": 1,
+        "ew_self_trigger_share": 0.873,
+        "self_trigger_share": 0.881,
+        "max_effect_share": 0.316,
+        "effect_entropy": 0.759,
+        "first_player_edge": -0.062,
+        "human_side_edge": -0.062,
+        "turns_mean": 14.5,
+        "comeback_rate": 0.625,
+        "lead_changes": 4.031,
+        "draw_or_limit_rate": 0.063,
+        "safety_events": 0,
+        "conditional_win_tp": 0.552
+      }
+    },
+    {
+      "key": "K1/selfplay/holdout",
+      "experiment": "correction-K1",
+      "design": "selfplay",
+      "title": "correction-K1",
+      "description": "planner placement search only: own-piece benefit no longer makes a cell a candidate",
+      "component": "planner-search",
+      "diff": [
+        "hooks.searchOwnBenefit"
+      ],
+      "seedSet": "holdout",
+      "games": 32,
+      "ms": 32257,
+      "manipulation": {
+        "ok": true,
+        "detail": "32/32 games diverged from their control game (median first divergence turn 1)",
+        "divergedGames": 32,
+        "games": 32,
+        "medianDivergenceTurn": 1
+      },
+      "summary": {
+        "tp_self_share": 0.835,
+        "tp_per_game": 3.531,
+        "tp_benefit": 3.18,
+        "tp_self_benefit": 3.98,
+        "tp_opp_benefit": -1.059,
+        "tp_self_harm_rate": 0,
+        "ew_share": 0.548,
+        "ew_per_game": 10.25,
+        "ew_aligned_share": 1,
+        "ew_self_trigger_share": 0.612,
+        "self_trigger_share": 0.662,
+        "max_effect_share": 0.278,
+        "effect_entropy": 0.862,
+        "first_player_edge": 0.21,
+        "human_side_edge": -0.081,
+        "turns_mean": 27.094,
+        "comeback_rate": 0.71,
+        "lead_changes": 3.188,
+        "draw_or_limit_rate": 0.25,
+        "safety_events": 0,
+        "conditional_win_tp": 0.509
+      }
+    },
+    {
+      "key": "K1/head-to-head/holdout",
+      "experiment": "correction-K1",
+      "design": "head-to-head",
+      "title": "correction-K1",
+      "description": "planner placement search only: own-piece benefit no longer makes a cell a candidate",
+      "component": "planner-search",
+      "diff": [
+        "hooks.searchOwnBenefit"
+      ],
+      "seedSet": "holdout",
+      "games": 32,
+      "ms": 44553,
+      "manipulation": {
+        "ok": true,
+        "detail": "treated planner on both sides and both first-player orders; hooks recorded on every game: true",
+        "divergedGames": 0,
+        "games": 32,
+        "medianDivergenceTurn": null
+      },
+      "summary": {
+        "tp_self_share": 0.854,
+        "tp_per_game": 1.938,
+        "tp_benefit": 3.252,
+        "tp_self_benefit": 3.957,
+        "tp_opp_benefit": -1,
+        "tp_self_harm_rate": 0,
+        "ew_share": 0.621,
+        "ew_per_game": 8.969,
+        "ew_aligned_share": 1,
+        "ew_self_trigger_share": 0.798,
+        "self_trigger_share": 0.779,
+        "max_effect_share": 0.318,
+        "effect_entropy": 0.718,
+        "first_player_edge": 0.063,
+        "human_side_edge": 0.125,
+        "turns_mean": 16.406,
+        "comeback_rate": 0.656,
+        "lead_changes": 3.375,
+        "draw_or_limit_rate": 0.063,
+        "safety_events": 0,
+        "conditional_win_tp": 0.548
+      }
+    }
+  ],
+  "corrections": [
+    {
+      "category": "planner",
+      "policy": "REVIEW_REQUIRED",
+      "basis": [
+        "H3"
+      ],
+      "spec": {
+        "kind": "planner",
+        "hook": "searchOwnBenefit",
+        "value": false
+      },
+      "description": "planner placement search only: own-piece benefit no longer makes a cell a candidate",
+      "rationale": "Candidate cells are chosen for self-benefit; score candidates by opponent harm and self-harm only.",
+      "targets": [
+        {
+          "metric": "ew_self_trigger_share",
+          "direction": "decrease",
+          "minEffect": 0.15
+        }
+      ],
+      "id": "K1",
+      "origin": "deterministic"
+    }
+  ],
+  "reviews": [
+    {
+      "correction": "K1",
+      "implementationCorrectness": "PASS",
+      "balanceAdequacy": "REGRESSION",
+      "provisionalAdequacy": "REGRESSION",
+      "implementation": [
+        {
+          "q": "Did the corrected planner/rules actually make different decisions?",
+          "pass": true,
+          "detail": "32/32 games diverged from their control game (median first divergence turn 1)"
+        },
+        {
+          "q": "Did only the declared component change (no unrelated one)?",
+          "pass": true,
+          "detail": "declared component only (static isolation checks + diff)"
+        },
+        {
+          "q": "Do the engine invariants still hold?",
+          "pass": true,
+          "detail": "invariant suite passed"
+        },
+        {
+          "q": "Does browser-observable behaviour match the declared specification (Kane)?",
+          "pass": true,
+          "detail": "Kane re-derived 2 condition(s) on the holdout page and agrees"
+        }
+      ],
+      "adequacy": [
+        {
+          "q": "Did ew_self_trigger_share decrease materially (≥ 0.15) on fresh holdout seeds?",
+          "pass": true,
+          "detail": "0.873 → 0.612, effect -0.261 [-0.327, -0.191], 16 seeds"
+        },
+        {
+          "q": "Does the ew_self_trigger_share effect persist in both independent seed batches?",
+          "pass": true,
+          "detail": "batches -0.262 / -0.257"
+        },
+        {
+          "q": "Does the ew_self_trigger_share effect survive mirrored first-player controls?",
+          "pass": true,
+          "detail": "Human first -0.271 / AI first -0.255"
+        },
+        {
+          "q": "Safety preserved (no illegal actions, errors, softlocks; invariants hold)?",
+          "pass": true,
+          "detail": "safety events 0"
+        },
+        {
+          "q": "Strategic diversity preserved and no new dominant exploit?",
+          "pass": true,
+          "detail": "entropy 0.759 → 0.862; max share 0.316 → 0.278; biggest riser teleport"
+        },
+        {
+          "q": "Counterplay still possible (comebacks, lead changes)?",
+          "pass": true,
+          "detail": "comeback rate 0.625 → 0.710; lead changes 4.031 → 3.188"
+        },
+        {
+          "q": "Side / first-player balance and game length within tolerance?",
+          "pass": false,
+          "detail": "first-player edge -0.062 → 0.210; turns 14.500 → 27.094"
+        },
+        {
+          "q": "More enjoyable, or only closer to a metric?",
+          "pass": null,
+          "detail": "NOT MEASURED: no human play data. Proxies only (diversity, counterplay, length). A metric gain is not evidence of more fun."
+        },
+        {
+          "q": "Strength cost: corrected planner vs control planner head-to-head",
+          "pass": null,
+          "detail": "treated win rate 0.188 (CI 0.063–0.313): informational; a weaker AI is a trade-off for the operator, not an automatic failure"
+        }
+      ],
+      "unresolved": [],
+      "nextExperiment": null,
+      "why": "Unacceptable deterioration: first-player edge grew to 0.210; game length changed 12.594 turns; draws/turn-limit endings up 0.187",
+      "kane": {
+        "status": "AGREES",
+        "detail": "Kane re-derived 2 condition(s) on the holdout page and agrees"
+      }
+    }
+  ],
+  "decision": {
+    "overall": "NO CORRECTION PROMOTED (K1 REGRESSION)",
+    "items": [
+      {
+        "correction": "K1",
+        "category": "planner",
+        "action": "NOT PROMOTED (REGRESSION)",
+        "why": "Unacceptable deterioration: first-player edge grew to 0.210; game length changed 12.594 turns; draws/turn-limit endings up 0.187"
+      }
+    ]
+  },
+  "runDir": "D:\\Rule_Sabotage\\rule-sabotage-live\\evidence\\balance\\v2-runs\\2026-11-19T11-35-00Z-v2-kane",
+  "journalFile": "D:\\Rule_Sabotage\\rule-sabotage-live\\balance\\v2\\journal.ndjson",
+  "pages": {
+    "explore": "page-explore.html",
+    "challenge": "page-challenge.html",
+    "correction": "page-correction.html"
+  }
+}
