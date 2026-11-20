@@ -1,0 +1,170 @@
+{
+  "stream": "stream-1",
+  "newGamesPlayed": 0,
+  "criteria": {
+    "chi2_df19_crit95": 30.14,
+    "ksCrit": "see per-test",
+    "corrAbsCrit95": 0.014
+  },
+  "plannerStreams": {
+    "legacy": {
+      "consecutive": {
+        "uniformityTurn21": {
+          "chi2": 1695.162,
+          "ks": {
+            "d": 0.090421,
+            "crit95": 0.009617
+          }
+        },
+        "uniformityTurn1": {
+          "chi2": 1883.692
+        },
+        "adjacentSeedCorrTurn21": 1,
+        "crossTurnCorr21vs22": -0.871,
+        "meanSdWithin30SeedBlocks": 0.004,
+        "uniformSd": 0.289
+      },
+      "dispersed": {
+        "uniformityTurn21": {
+          "chi2": 6.01,
+          "ks": {
+            "d": 0.0035169999999999997,
+            "crit95": 0.009617
+          }
+        },
+        "uniformityTurn1": {
+          "chi2": 5.64
+        },
+        "adjacentSeedCorrTurn21": 0.006,
+        "crossTurnCorr21vs22": -0.874,
+        "meanSdWithin30SeedBlocks": 0.277,
+        "uniformSd": 0.289
+      }
+    },
+    "mixed": {
+      "consecutive": {
+        "uniformityTurn21": {
+          "chi2": 17.31,
+          "ks": {
+            "d": 0.004391,
+            "crit95": 0.009617
+          }
+        },
+        "uniformityTurn1": {
+          "chi2": 14.352
+        },
+        "adjacentSeedCorrTurn21": -0.005,
+        "crossTurnCorr21vs22": 0.004,
+        "meanSdWithin30SeedBlocks": 0.283,
+        "uniformSd": 0.289
+      },
+      "dispersed": {
+        "uniformityTurn21": {
+          "chi2": 20.484,
+          "ks": {
+            "d": 0.006527,
+            "crit95": 0.009617
+          }
+        },
+        "uniformityTurn1": {
+          "chi2": 23.96
+        },
+        "adjacentSeedCorrTurn21": 0.013,
+        "crossTurnCorr21vs22": 0.006,
+        "meanSdWithin30SeedBlocks": 0.283,
+        "uniformSd": 0.289
+      },
+      "roleSeparationCorr": 0.018,
+      "purposeSeparationCorr": -0.008,
+      "reproducible": true
+    }
+  },
+  "engineRng": {
+    "note": "chi2 against the exact law, df = n-1 (95% critical: n20 30.1, n27 38.9, n35 48.6); index/n sd within 30-seed blocks for comparison with the uniform 0.289",
+    "n20_draw1": {
+      "chi2": 20.396,
+      "df": 19,
+      "adjacentSeedCorrOfIndex": -0.005,
+      "sdWithin30SeedBlocks": 0.283
+    },
+    "n20_draw2": {
+      "chi2": 20.456,
+      "df": 19,
+      "adjacentSeedCorrOfIndex": 0.018,
+      "sdWithin30SeedBlocks": 0.281
+    },
+    "n20_draw5": {
+      "chi2": 16.61,
+      "df": 19,
+      "adjacentSeedCorrOfIndex": 0,
+      "sdWithin30SeedBlocks": 0.282
+    },
+    "n27_draw1": {
+      "chi2": 34.821,
+      "df": 26,
+      "adjacentSeedCorrOfIndex": 0.003,
+      "sdWithin30SeedBlocks": 0.284
+    },
+    "n27_draw2": {
+      "chi2": 26.799,
+      "df": 26,
+      "adjacentSeedCorrOfIndex": 0.001,
+      "sdWithin30SeedBlocks": 0.283
+    },
+    "n27_draw5": {
+      "chi2": 16.436,
+      "df": 26,
+      "adjacentSeedCorrOfIndex": 0.007,
+      "sdWithin30SeedBlocks": 0.283
+    },
+    "n35_draw1": {
+      "chi2": 56.711,
+      "df": 34,
+      "adjacentSeedCorrOfIndex": 0.005,
+      "sdWithin30SeedBlocks": 0.283
+    },
+    "n35_draw2": {
+      "chi2": 37.479,
+      "df": 34,
+      "adjacentSeedCorrOfIndex": 0.015,
+      "sdWithin30SeedBlocks": 0.281
+    },
+    "n35_draw5": {
+      "chi2": 33.85,
+      "df": 34,
+      "adjacentSeedCorrOfIndex": 0,
+      "sdWithin30SeedBlocks": 0.283
+    }
+  },
+  "planner": {
+    "C4off-legacy": {
+      "positions": 40,
+      "mirrorMismatch": 0,
+      "hiddenRngChanged": 0,
+      "positionsWithATemperatureRoll": 1
+    },
+    "C4on-legacy": {
+      "positions": 40,
+      "mirrorMismatch": 0,
+      "hiddenRngChanged": 0,
+      "positionsWithATemperatureRoll": 1
+    },
+    "C4off-mixed": {
+      "positions": 40,
+      "mirrorMismatch": 0,
+      "hiddenRngChanged": 0,
+      "positionsWithATemperatureRoll": 1
+    },
+    "C4on-mixed": {
+      "positions": 40,
+      "mirrorMismatch": 0,
+      "hiddenRngChanged": 0,
+      "positionsWithATemperatureRoll": 1
+    },
+    "equivalence": {
+      "C4off-legacy == V5.1 ablation {c1,c2,c3}": "40/40",
+      "C4on-legacy == ev-k1.1": "40/40"
+    }
+  },
+  "pass": true
+}

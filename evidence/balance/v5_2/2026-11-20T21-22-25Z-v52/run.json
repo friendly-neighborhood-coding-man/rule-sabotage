@@ -1,0 +1,23 @@
+{
+  "schema": "rule-sabotage/v52-run@1",
+  "runId": "2026-11-20T21-22-25Z-v52",
+  "games": 120,
+  "wallMs": 285217,
+  "externalCalls": 0,
+  "kaneCalls": 0,
+  "datasetHash": "d83f11780c99225a",
+  "replayOk": true,
+  "implementation": {
+    "engine": "f92354f4b139d30c",
+    "plannerFiles": "123dfb3ba6d22dae",
+    "v52": "81b74efd717b004b",
+    "all": "d97b0814a6a70d18"
+  },
+  "protocolSha256": "f5411e084b7bafb8b1d7dde84982ee85b1007ed316276747208e5128b7c8aad8",
+  "commit": "b7d7fba216244003471d530a85936022c17e2910",
+  "dirty": false,
+  "node": "v24.22.1",
+  "platform": "win32 10.0.26300",
+  "cpu": "13th Gen Intel(R) Core(TM) i5-1335U",
+  "logicalCores": 12
+}
