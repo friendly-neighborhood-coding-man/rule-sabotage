@@ -1,0 +1,43 @@
+{
+  "policiesHash": "0cd88da9989a23de",
+  "evPlannerHash": "3af55720fad8b2ce",
+  "params": {
+    "oa": {
+      "topN": 6,
+      "maxEnds": 8
+    },
+    "softmax": {
+      "k": 4,
+      "temperature": 1.3255,
+      "minProb": 0.02
+    }
+  },
+  "positions": 40,
+  "newGamesPlayed": 0,
+  "requirements": {
+    "ev-k1": {
+      "mirrorMismatch": 0,
+      "hiddenRngChanged": 0,
+      "msPerDecision": 331
+    },
+    "softmax-v1": {
+      "mirrorMismatch": 0,
+      "hiddenRngChanged": 0,
+      "msPerDecision": 366
+    },
+    "oa-v1": {
+      "mirrorMismatch": 0,
+      "hiddenRngChanged": 0,
+      "msPerDecision": 2505
+    }
+  },
+  "decisionDifferenceVsRef": {
+    "softmax-v1": 11,
+    "oa-v1": 22
+  },
+  "distinctTurn1PlacementsFromStart": {
+    "ev-k1": 1,
+    "softmax-v1": 4,
+    "oa-v1": 1
+  }
+}

@@ -1,0 +1,4 @@
+[2026-11-20T14:16:41.949Z] ev-k1: {"mirrorMismatch":0,"hiddenRngChanged":0,"msPerDecision":331}
+[2026-11-20T14:17:40.519Z] softmax-v1: {"mirrorMismatch":0,"hiddenRngChanged":0,"msPerDecision":366}
+[2026-11-20T14:24:21.287Z] oa-v1: {"mirrorMismatch":0,"hiddenRngChanged":0,"msPerDecision":2505}
+[2026-11-20T14:27:04.272Z] {"requirements":{"ev-k1":{"mirrorMismatch":0,"hiddenRngChanged":0,"msPerDecision":331},"softmax-v1":{"mirrorMismatch":0,"hiddenRngChanged":0,"msPerDecision":366},"oa-v1":{"mirrorMismatch":0,"hiddenRngChanged":0,"msPerDecision":2505}},"decisionDifferenceVsRef":{"softmax-v1":11,"oa-v1":22},"distinctTurn1PlacementsFromStart":{"ev-k1":1,"softmax-v1":4,"oa-v1":1}}

@@ -1,0 +1,46 @@
+{
+  "schema": "rule-sabotage/v5-policy-diversity-protocol@1",
+  "id": "V5-POLICY-DIVERSITY-300",
+  "status": "PROPOSED, NOT AUTHORISED, NOT RUN. Before any game: operator approval, then freeze (journal 'v5-preregistered' with this file's sha256, policiesHash, the reference hashes and evidence/balance/v5/policy-checks.json sha256).",
+  "question": "Do the balance patterns observed so far (first/second-mover advantage, Human/AI-side asymmetry, game length, opening collapse) survive a change of the policy that generates the observations?",
+  "scope": "Self-play with three engine-based policies. Conclusions about a policy describe that policy. A pattern is called a RULE-LEVEL CANDIDATE only if it survives all three; even then it says nothing about human players.",
+  "policies": [
+    { "id": "ev-k1", "role": "reference", "definition": "balance/v5/reference.json (frozen)" },
+    { "id": "oa-v1", "role": "opponent-aware search", "definition": "server/balance/v5/policies.ts planOpponentAware: own symmetric candidate set, exact own move-phase ends (rank strata 8), worst case over every opponent placement option + its greedy moves, maximin; top 6 candidates; deterministic" },
+    { "id": "softmax-v1", "role": "uncertainty-aware bounded Top-k softmax", "definition": "server/balance/v5/policies.ts planSoftmax: reference scores, k = 4, T = 1.3255 (half the reference reply model's measured mean prediction error 2.651), floor 0.02, sampled from public seed + turn" }
+  ],
+  "mandatoryRequirements": {
+    "hiddenRngInvariance": "decision unchanged when only the hidden RNG differs: 0 changes allowed (evidence/balance/v5/policy-checks.json, 40 positions + tests)",
+    "mirrorSymmetry": "position and its mirror give the mirrored decision and score: 0 mismatches allowed for oa-v1 and softmax-v1; for the frozen reference the residual is reported and accepted only by explicit operator decision",
+    "executor": "all policies use the reference EV executor with K1 for moves (re-plan after teleports)"
+  },
+  "seeds": { "selfPlay": "68001-68030 x both first movers", "crossPlay": "68031-68040", "note": "fresh. Not used before: V4 pilot 64001-64030, V4.2 dev 66001-66030, holdout 65001-65060 (untouched), decision probes 67901-67930 (no game), smoke 99001-99499" },
+  "arms": [
+    { "id": "S-REF", "games": 60, "design": "ev-k1 vs ev-k1" },
+    { "id": "S-OA", "games": 60, "design": "oa-v1 vs oa-v1" },
+    { "id": "S-SM", "games": 60, "design": "softmax-v1 vs softmax-v1" },
+    { "id": "X-REF-OA", "games": 40, "design": "10 seeds x each policy on each side x each first mover" },
+    { "id": "X-REF-SM", "games": 40, "design": "as above" },
+    { "id": "X-OA-SM", "games": 40, "design": "as above" }
+  ],
+  "totalGames": 300,
+  "estimatedCost": "about 30-45 min wall time with 6 workers on this PC (oa-v1 about 3.4 s per decision); 0 Kane, 0 external calls",
+  "metrics": {
+    "moverBalance": "first-mover decisive win rate; Wilson 95% and opening-cluster bootstrap 95% (games grouped by their first two turns, side-relative)",
+    "roleSymmetry": "Human-side decisive win rate; same two intervals",
+    "strategicDiversity": "distinct two-turn openings, opening entropy (bits), effective openings 2^H, largest opening share, distinct placement signatures, normalized effect entropy",
+    "strength": "Bradley-Terry log-strength vs the reference from cross-play (bootstrap 95%), pairwise decisive win rates (Wilson)",
+    "length": "mean, median, 90th percentile turns, turn-limit rate, draws",
+    "counterplay": "lead changes per game, comeback rate",
+    "openingPatterns": "frequency table of side-relative openings per policy; turn-2 captures per game",
+    "integrity": "illegal moves, errors, softlocks, engine replay of every game, teleport foresight (V3 method) must contain 0"
+  },
+  "decisionRules": {
+    "policyLevel": "For each policy separately: first-mover and Human-side edges (rate - 0.5) with opening-cluster intervals; length and diversity reported. These are statements about that policy.",
+    "validityForRuleClaims": "A policy counts toward a rule-level claim only if its self-play has at least 3 effective openings (2^H >= 3). Fewer means its games observe too few distinct situations to speak for the rules.",
+    "survival": "For a pattern measured as (rate - 0.5): SURVIVES (rule-level candidate) if every valid policy's opening-cluster interval lies beyond +0.05 (or every one beyond -0.05); POLICY-SPECIFIC if one valid policy shows it beyond 0.05 and another's interval lies within +-0.05 or beyond 0.05 the other way; INCONCLUSIVE otherwise, or if fewer than 2 policies are valid.",
+    "length": "a long-game pattern SURVIVES if every valid policy has turn-limit rate >= 15% (Wilson lower bound >= 0.10); POLICY-SPECIFIC if one is >= 15% and another's upper bound < 10%",
+    "strength": "reported, not a gate. A policy that loses heavily to the reference is still informative about the rules; its weakness is stated next to its balance numbers.",
+    "noPromotion": "Nothing from this protocol is promoted; the holdout stays reserved for a later, separately approved, frozen candidate."
+  }
+}
