@@ -14,7 +14,7 @@
 | K2 reported honestly | prediction changed on 25/40 and 30/30 positions; mean absolute error against the real reply **2.65 → 0.61** (recorded) and 7.76 → 0.74 (synthetic); chosen plan changed on only 23% / 13%. Earlier probes: the chosen opening did not change. Better prediction was not assumed to change actions |
 | K3 manipulation | hold-back offered on 28/40 and 30/30 positions, chosen on 1/40 and 5/30 |
 | Frozen before the run | `balance/v4/v42-dev-protocol.json` (hypotheses HK1–HK3, seeds, metrics, decision rules) + implementation hashes (engine `f92354f4…`, planner files `a87d4d49…`, EV planner `3af55720…`) + manipulation results sha256, journal #4, commit `827fce2` (clean) |
-| Tests | V4 + V4.1 + V4.2 tests 25/25 on the frozen code |
+| Tests | V4 + V4.1 + V4.2 tests 25/25 on the frozen code; full default parallel `npm test` 149/149 after the run (`evidence/balance/v4/test-runs/v42-parallel-1.log`) |
 
 ## 2. The run
 
