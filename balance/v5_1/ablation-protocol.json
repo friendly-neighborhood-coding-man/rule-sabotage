@@ -1,0 +1,23 @@
+{
+  "schema": "rule-sabotage/v51-ablation-protocol@1",
+  "id": "V5.1-ABLATION-96",
+  "status": "Authorised by the operator (2026-11-20 19:20 UTC) as the only new game budget. FROZEN before any game: sha256 journalled in balance/v5_1/journal.ndjson ('ablation-preregistered') with implementation hashes, preflight sha256 and every assignment. Run once.",
+  "question": "Which of C1-C4 explains the jump in turn-limit endings from ev-k1 (V4.2: 22%) to ev-k1.1 (V5: 85%)?",
+  "nature": "Exploratory causal diagnosis, not a confirmation. Single-factor arms only: interactions between corrections are NOT identified and are reported as unresolved.",
+  "arms": {
+    "K1": "frozen historical ev-k1 (server/balance/v4/evplanner.ts with { sideRelativeOrder: true }, its own code path and executor)",
+    "C1": "K1 + C1 (side-relative trap-cell ties) only",
+    "C2": "K1 + C2 (complete side-relative reply-state ordering key) only",
+    "C3": "K1 + C3 (near-ties < 1e-7, canonical ranking tie-break) only",
+    "C4": "K1 + C4 (planning without the 0.02 noise = the executor's move model) only",
+    "K11": "full ev-k1.1 (server/balance/v5/evk11.ts via the V5 policy 'ev-k1.1')"
+  },
+  "implementation": "C1-C4 arms: server/balance/v5_1/ablation.ts (one module, four switches). Verified before the run: switches off == frozen ev-k1 and all switches on == ev-k1.1, decision by decision (plans, every candidate score, executor moves).",
+  "seeds": { "list": "69001-69008", "design": "every arm on the same 8 seeds x both first movers = 16 games per arm", "excluded": "holdout 65001-65060 untouched; all earlier ranges" },
+  "totalGames": 96,
+  "limits": { "games": 96, "runs": 1, "workers": 6, "maxMsPerGame": 1800000, "kaneCalls": 0, "externalCalls": 0 },
+  "metrics": ["turn-limit rate (primary)", "mean and median turns", "moves per turn", "share of turns with zero moves", "unused actions per game", "pieces scored by turn 20", "first-mover decisive win rate", "lead changes", "draws", "teleport foresight (information invariance, must contain 0)", "integrity and engine replay"],
+  "uncertainty": "seed-blocked bootstrap (blocks = the 2 games of a seed), arm differences paired by seed; Wilson for the turn-limit count",
+  "decisionRule": "A single correction is a CANDIDATE CAUSE of the stall if its paired seed-blocked 95% interval versus K1 lies above 0 for the turn-limit rate or for mean turns. If no single correction qualifies while K11 does, the stall is attributed to an INTERACTION (unresolved). If K11 does not reproduce the stall on these seeds, the result is INCONCLUSIVE.",
+  "after": "Stop at READY_FOR_OPERATOR_V5_1_CAUSAL_DIAGNOSTIC_REVIEW. No further games, no Kane."
+}

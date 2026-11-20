@@ -1,0 +1,82 @@
+{
+  "smoke": [
+    {
+      "arm": "K1",
+      "seed": 99801,
+      "winner": "human",
+      "turns": 15,
+      "ms": 11555,
+      "replayOk": true,
+      "plannedTurns": 0,
+      "agree": 0,
+      "errors": [],
+      "illegal": []
+    },
+    {
+      "arm": "C1",
+      "seed": 99802,
+      "winner": "ai",
+      "turns": 14,
+      "ms": 10173,
+      "replayOk": true,
+      "plannedTurns": 14,
+      "agree": 10,
+      "errors": [],
+      "illegal": []
+    },
+    {
+      "arm": "C2",
+      "seed": 99803,
+      "winner": "human",
+      "turns": 60,
+      "ms": 15164,
+      "replayOk": true,
+      "plannedTurns": 60,
+      "agree": 56,
+      "errors": [],
+      "illegal": []
+    },
+    {
+      "arm": "C3",
+      "seed": 99804,
+      "winner": "human",
+      "turns": 13,
+      "ms": 12047,
+      "replayOk": true,
+      "plannedTurns": 13,
+      "agree": 8,
+      "errors": [],
+      "illegal": []
+    },
+    {
+      "arm": "C4",
+      "seed": 99805,
+      "winner": "ai",
+      "turns": 22,
+      "ms": 13265,
+      "replayOk": true,
+      "plannedTurns": 22,
+      "agree": 22,
+      "errors": [],
+      "illegal": []
+    },
+    {
+      "arm": "K11",
+      "seed": 99806,
+      "winner": "ai",
+      "turns": 22,
+      "ms": 13960,
+      "replayOk": true,
+      "plannedTurns": 22,
+      "agree": 22,
+      "errors": [],
+      "illegal": []
+    }
+  ],
+  "traceEquivalence": {
+    "states": 80,
+    "armK1EqualsFrozenEvK1": 80,
+    "armK11EqualsEvK11": 80
+  },
+  "pass": true
+}

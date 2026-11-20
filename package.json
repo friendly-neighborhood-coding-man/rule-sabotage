@@ -37,6 +37,11 @@
     "balance:v42:manip": "node --experimental-strip-types --no-warnings=ExperimentalWarning scripts/balance-v42-manip.ts",
     "balance:v42": "node --experimental-strip-types --no-warnings=ExperimentalWarning scripts/balance-v42.ts",
     "balance:v5:preflight": "node --experimental-strip-types --no-warnings=ExperimentalWarning scripts/v5-preflight.ts",
-    "balance:v5": "node --experimental-strip-types --no-warnings=ExperimentalWarning scripts/balance-v5.ts"
+    "balance:v5": "node --experimental-strip-types --no-warnings=ExperimentalWarning scripts/balance-v5.ts",
+    "balance:v51:reanalysis": "node --experimental-strip-types --no-warnings=ExperimentalWarning scripts/v51-reanalysis.ts",
+    "balance:v51:oa-profile": "node --experimental-strip-types --no-warnings=ExperimentalWarning scripts/v51-oa-profile.ts",
+    "balance:v51:openings": "node --experimental-strip-types --no-warnings=ExperimentalWarning scripts/v51-openings.ts",
+    "balance:v51:trace": "node --experimental-strip-types --no-warnings=ExperimentalWarning scripts/v51-trace.ts",
+    "balance:v51:ablation": "node --experimental-strip-types --no-warnings=ExperimentalWarning scripts/v51-ablation.ts"
   }
 }

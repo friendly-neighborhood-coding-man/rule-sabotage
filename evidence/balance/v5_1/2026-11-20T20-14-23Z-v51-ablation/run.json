@@ -1,0 +1,23 @@
+{
+  "schema": "rule-sabotage/v51-ablation-run@1",
+  "runId": "2026-11-20T20-14-23Z-v51-ablation",
+  "games": 96,
+  "wallMs": 363341,
+  "externalCalls": 0,
+  "kaneCalls": 0,
+  "datasetHash": "f69ab861a35adc05",
+  "replayOk": true,
+  "implementation": {
+    "engine": "f92354f4b139d30c",
+    "plannerFiles": "3375eb3247548f19",
+    "ablation": "c25fe6539ad4731e",
+    "all": "09c086299cdef9f6"
+  },
+  "protocolSha256": "931c7c2afd649fc0572856e232e7d3ee0868de1ea45eef9a8a1eaddccdf2e309",
+  "commit": "133c3616f6bc57aa74dc405b908d1533f9945cfb",
+  "dirty": false,
+  "node": "v24.22.1",
+  "platform": "win32 10.0.26300",
+  "cpu": "13th Gen Intel(R) Core(TM) i5-1335U",
+  "logicalCores": 12
+}

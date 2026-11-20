@@ -1,0 +1,953 @@
+{
+  "schema": "rule-sabotage/v51-ablation-evaluation@1",
+  "dir": "evidence/balance/v5_1/2026-11-20T20-14-23Z-v51-ablation",
+  "replayOk": true,
+  "perArm": {
+    "K1": {
+      "label": "frozen ev-k1 (historical code path)",
+      "games": 16,
+      "turnLimit": {
+        "k": 5,
+        "n": 16,
+        "wilson95": [
+          0.142,
+          0.556
+        ]
+      },
+      "turn_limit_rate": {
+        "value": 0.313,
+        "ci95": [
+          0,
+          0.625
+        ],
+        "blocks": 8
+      },
+      "mean_turns": {
+        "value": 30.313,
+        "ci95": [
+          16.867,
+          44.5
+        ],
+        "blocks": 8
+      },
+      "first_mover_win_rate": {
+        "value": 0.8,
+        "ci95": [
+          0.533,
+          1
+        ],
+        "blocks": 8
+      },
+      "moves_per_turn": {
+        "value": 1.316,
+        "ci95": [
+          0.917,
+          1.694
+        ],
+        "blocks": 8
+      },
+      "zero_move_turn_share": {
+        "value": 0.234,
+        "ci95": [
+          0.015,
+          0.449
+        ],
+        "blocks": 8
+      },
+      "unused_actions_per_game": {
+        "value": 13.438,
+        "ci95": [
+          0.25,
+          26.502
+        ],
+        "blocks": 8
+      },
+      "pieces_scored_by_turn20": {
+        "value": 4.625,
+        "ci95": [
+          4.25,
+          5
+        ],
+        "blocks": 8
+      },
+      "lead_changes": {
+        "value": 5.313,
+        "ci95": [
+          4.375,
+          6.438
+        ],
+        "blocks": 8
+      },
+      "medianTurns": 17,
+      "draws": 1,
+      "integrity": {
+        "illegal": 0,
+        "errors": 0
+      },
+      "foresight": {
+        "moves": 11,
+        "advantage": 0.305,
+        "ci95": [
+          -0.65,
+          1.261
+        ]
+      }
+    },
+    "C1": {
+      "label": "K1 + C1 only",
+      "games": 16,
+      "turnLimit": {
+        "k": 5,
+        "n": 16,
+        "wilson95": [
+          0.142,
+          0.556
+        ]
+      },
+      "turn_limit_rate": {
+        "value": 0.313,
+        "ci95": [
+          0,
+          0.625
+        ],
+        "blocks": 8
+      },
+      "mean_turns": {
+        "value": 30.313,
+        "ci95": [
+          16.867,
+          44.5
+        ],
+        "blocks": 8
+      },
+      "first_mover_win_rate": {
+        "value": 0.8,
+        "ci95": [
+          0.533,
+          1
+        ],
+        "blocks": 8
+      },
+      "moves_per_turn": {
+        "value": 1.316,
+        "ci95": [
+          0.917,
+          1.694
+        ],
+        "blocks": 8
+      },
+      "zero_move_turn_share": {
+        "value": 0.234,
+        "ci95": [
+          0.015,
+          0.449
+        ],
+        "blocks": 8
+      },
+      "unused_actions_per_game": {
+        "value": 13.438,
+        "ci95": [
+          0.25,
+          26.502
+        ],
+        "blocks": 8
+      },
+      "pieces_scored_by_turn20": {
+        "value": 4.625,
+        "ci95": [
+          4.25,
+          5
+        ],
+        "blocks": 8
+      },
+      "lead_changes": {
+        "value": 5.313,
+        "ci95": [
+          4.375,
+          6.438
+        ],
+        "blocks": 8
+      },
+      "medianTurns": 17,
+      "draws": 1,
+      "integrity": {
+        "illegal": 0,
+        "errors": 0
+      },
+      "foresight": {
+        "moves": 11,
+        "advantage": 0.305,
+        "ci95": [
+          -0.65,
+          1.261
+        ]
+      }
+    },
+    "C2": {
+      "label": "K1 + C2 only",
+      "games": 16,
+      "turnLimit": {
+        "k": 5,
+        "n": 16,
+        "wilson95": [
+          0.142,
+          0.556
+        ]
+      },
+      "turn_limit_rate": {
+        "value": 0.313,
+        "ci95": [
+          0,
+          0.625
+        ],
+        "blocks": 8
+      },
+      "mean_turns": {
+        "value": 30.313,
+        "ci95": [
+          16.867,
+          44.5
+        ],
+        "blocks": 8
+      },
+      "first_mover_win_rate": {
+        "value": 0.8,
+        "ci95": [
+          0.533,
+          1
+        ],
+        "blocks": 8
+      },
+      "moves_per_turn": {
+        "value": 1.316,
+        "ci95": [
+          0.917,
+          1.694
+        ],
+        "blocks": 8
+      },
+      "zero_move_turn_share": {
+        "value": 0.234,
+        "ci95": [
+          0.015,
+          0.449
+        ],
+        "blocks": 8
+      },
+      "unused_actions_per_game": {
+        "value": 13.438,
+        "ci95": [
+          0.25,
+          26.502
+        ],
+        "blocks": 8
+      },
+      "pieces_scored_by_turn20": {
+        "value": 4.625,
+        "ci95": [
+          4.25,
+          5
+        ],
+        "blocks": 8
+      },
+      "lead_changes": {
+        "value": 5.313,
+        "ci95": [
+          4.375,
+          6.438
+        ],
+        "blocks": 8
+      },
+      "medianTurns": 17,
+      "draws": 1,
+      "integrity": {
+        "illegal": 0,
+        "errors": 0
+      },
+      "foresight": {
+        "moves": 11,
+        "advantage": 0.305,
+        "ci95": [
+          -0.65,
+          1.261
+        ]
+      }
+    },
+    "C3": {
+      "label": "K1 + C3 only",
+      "games": 16,
+      "turnLimit": {
+        "k": 5,
+        "n": 16,
+        "wilson95": [
+          0.142,
+          0.556
+        ]
+      },
+      "turn_limit_rate": {
+        "value": 0.313,
+        "ci95": [
+          0,
+          0.625
+        ],
+        "blocks": 8
+      },
+      "mean_turns": {
+        "value": 30.313,
+        "ci95": [
+          16.867,
+          44.5
+        ],
+        "blocks": 8
+      },
+      "first_mover_win_rate": {
+        "value": 0.8,
+        "ci95": [
+          0.533,
+          1
+        ],
+        "blocks": 8
+      },
+      "moves_per_turn": {
+        "value": 1.316,
+        "ci95": [
+          0.917,
+          1.694
+        ],
+        "blocks": 8
+      },
+      "zero_move_turn_share": {
+        "value": 0.234,
+        "ci95": [
+          0.015,
+          0.449
+        ],
+        "blocks": 8
+      },
+      "unused_actions_per_game": {
+        "value": 13.438,
+        "ci95": [
+          0.25,
+          26.502
+        ],
+        "blocks": 8
+      },
+      "pieces_scored_by_turn20": {
+        "value": 4.625,
+        "ci95": [
+          4.25,
+          5
+        ],
+        "blocks": 8
+      },
+      "lead_changes": {
+        "value": 5.313,
+        "ci95": [
+          4.375,
+          6.438
+        ],
+        "blocks": 8
+      },
+      "medianTurns": 17,
+      "draws": 1,
+      "integrity": {
+        "illegal": 0,
+        "errors": 0
+      },
+      "foresight": {
+        "moves": 11,
+        "advantage": 0.305,
+        "ci95": [
+          -0.65,
+          1.261
+        ]
+      }
+    },
+    "C4": {
+      "label": "K1 + C4 only",
+      "games": 16,
+      "turnLimit": {
+        "k": 0,
+        "n": 16,
+        "wilson95": [
+          0,
+          0.194
+        ]
+      },
+      "turn_limit_rate": {
+        "value": 0,
+        "ci95": [
+          0,
+          0
+        ],
+        "blocks": 8
+      },
+      "mean_turns": {
+        "value": 22,
+        "ci95": [
+          22,
+          22
+        ],
+        "blocks": 8
+      },
+      "first_mover_win_rate": {
+        "value": 0,
+        "ci95": [
+          0,
+          0
+        ],
+        "blocks": 8
+      },
+      "moves_per_turn": {
+        "value": 1.5,
+        "ci95": [
+          1.5,
+          1.5
+        ],
+        "blocks": 8
+      },
+      "zero_move_turn_share": {
+        "value": 0.045,
+        "ci95": [
+          0.045,
+          0.045
+        ],
+        "blocks": 8
+      },
+      "unused_actions_per_game": {
+        "value": 1,
+        "ci95": [
+          1,
+          1
+        ],
+        "blocks": 8
+      },
+      "pieces_scored_by_turn20": {
+        "value": 4,
+        "ci95": [
+          4,
+          4
+        ],
+        "blocks": 8
+      },
+      "lead_changes": {
+        "value": 7,
+        "ci95": [
+          7,
+          7
+        ],
+        "blocks": 8
+      },
+      "medianTurns": 22,
+      "draws": 0,
+      "integrity": {
+        "illegal": 0,
+        "errors": 0
+      },
+      "foresight": {
+        "moves": 0,
+        "advantage": 0,
+        "ci95": null
+      }
+    },
+    "K11": {
+      "label": "full ev-k1.1 (V5 code path)",
+      "games": 16,
+      "turnLimit": {
+        "k": 0,
+        "n": 16,
+        "wilson95": [
+          0,
+          0.194
+        ]
+      },
+      "turn_limit_rate": {
+        "value": 0,
+        "ci95": [
+          0,
+          0
+        ],
+        "blocks": 8
+      },
+      "mean_turns": {
+        "value": 22,
+        "ci95": [
+          22,
+          22
+        ],
+        "blocks": 8
+      },
+      "first_mover_win_rate": {
+        "value": 0,
+        "ci95": [
+          0,
+          0
+        ],
+        "blocks": 8
+      },
+      "moves_per_turn": {
+        "value": 1.5,
+        "ci95": [
+          1.5,
+          1.5
+        ],
+        "blocks": 8
+      },
+      "zero_move_turn_share": {
+        "value": 0.045,
+        "ci95": [
+          0.045,
+          0.045
+        ],
+        "blocks": 8
+      },
+      "unused_actions_per_game": {
+        "value": 1,
+        "ci95": [
+          1,
+          1
+        ],
+        "blocks": 8
+      },
+      "pieces_scored_by_turn20": {
+        "value": 4,
+        "ci95": [
+          4,
+          4
+        ],
+        "blocks": 8
+      },
+      "lead_changes": {
+        "value": 7,
+        "ci95": [
+          7,
+          7
+        ],
+        "blocks": 8
+      },
+      "medianTurns": 22,
+      "draws": 0,
+      "integrity": {
+        "illegal": 0,
+        "errors": 0
+      },
+      "foresight": {
+        "moves": 0,
+        "advantage": 0,
+        "ci95": null
+      }
+    }
+  },
+  "vsK1": {
+    "C1": {
+      "turn_limit_rate": {
+        "diff": 0,
+        "ci95": [
+          0,
+          0
+        ]
+      },
+      "mean_turns": {
+        "diff": 0,
+        "ci95": [
+          0,
+          0
+        ]
+      },
+      "first_mover_win_rate": {
+        "diff": 0,
+        "ci95": [
+          0,
+          0
+        ]
+      },
+      "moves_per_turn": {
+        "diff": 0,
+        "ci95": [
+          0,
+          0
+        ]
+      },
+      "zero_move_turn_share": {
+        "diff": 0,
+        "ci95": [
+          0,
+          0
+        ]
+      },
+      "unused_actions_per_game": {
+        "diff": 0,
+        "ci95": [
+          0,
+          0
+        ]
+      },
+      "pieces_scored_by_turn20": {
+        "diff": 0,
+        "ci95": [
+          0,
+          0
+        ]
+      },
+      "lead_changes": {
+        "diff": 0,
+        "ci95": [
+          0,
+          0
+        ]
+      }
+    },
+    "C2": {
+      "turn_limit_rate": {
+        "diff": 0,
+        "ci95": [
+          0,
+          0
+        ]
+      },
+      "mean_turns": {
+        "diff": 0,
+        "ci95": [
+          0,
+          0
+        ]
+      },
+      "first_mover_win_rate": {
+        "diff": 0,
+        "ci95": [
+          0,
+          0
+        ]
+      },
+      "moves_per_turn": {
+        "diff": 0,
+        "ci95": [
+          0,
+          0
+        ]
+      },
+      "zero_move_turn_share": {
+        "diff": 0,
+        "ci95": [
+          0,
+          0
+        ]
+      },
+      "unused_actions_per_game": {
+        "diff": 0,
+        "ci95": [
+          0,
+          0
+        ]
+      },
+      "pieces_scored_by_turn20": {
+        "diff": 0,
+        "ci95": [
+          0,
+          0
+        ]
+      },
+      "lead_changes": {
+        "diff": 0,
+        "ci95": [
+          0,
+          0
+        ]
+      }
+    },
+    "C3": {
+      "turn_limit_rate": {
+        "diff": 0,
+        "ci95": [
+          0,
+          0
+        ]
+      },
+      "mean_turns": {
+        "diff": 0,
+        "ci95": [
+          0,
+          0
+        ]
+      },
+      "first_mover_win_rate": {
+        "diff": 0,
+        "ci95": [
+          0,
+          0
+        ]
+      },
+      "moves_per_turn": {
+        "diff": 0,
+        "ci95": [
+          0,
+          0
+        ]
+      },
+      "zero_move_turn_share": {
+        "diff": 0,
+        "ci95": [
+          0,
+          0
+        ]
+      },
+      "unused_actions_per_game": {
+        "diff": 0,
+        "ci95": [
+          0,
+          0
+        ]
+      },
+      "pieces_scored_by_turn20": {
+        "diff": 0,
+        "ci95": [
+          0,
+          0
+        ]
+      },
+      "lead_changes": {
+        "diff": 0,
+        "ci95": [
+          0,
+          0
+        ]
+      }
+    },
+    "C4": {
+      "turn_limit_rate": {
+        "diff": -0.312,
+        "ci95": [
+          -0.625,
+          0
+        ]
+      },
+      "mean_turns": {
+        "diff": -8.312,
+        "ci95": [
+          -23.258,
+          6
+        ]
+      },
+      "first_mover_win_rate": {
+        "diff": -0.8,
+        "ci95": [
+          -1,
+          -0.533
+        ]
+      },
+      "moves_per_turn": {
+        "diff": 0.184,
+        "ci95": [
+          -0.201,
+          0.609
+        ]
+      },
+      "zero_move_turn_share": {
+        "diff": -0.188,
+        "ci95": [
+          -0.41,
+          0.034
+        ]
+      },
+      "unused_actions_per_game": {
+        "diff": -12.437,
+        "ci95": [
+          -25.75,
+          0.813
+        ]
+      },
+      "pieces_scored_by_turn20": {
+        "diff": -0.625,
+        "ci95": [
+          -1,
+          -0.25
+        ]
+      },
+      "lead_changes": {
+        "diff": 1.688,
+        "ci95": [
+          0.563,
+          2.625
+        ]
+      }
+    },
+    "K11": {
+      "turn_limit_rate": {
+        "diff": -0.312,
+        "ci95": [
+          -0.625,
+          0
+        ]
+      },
+      "mean_turns": {
+        "diff": -8.312,
+        "ci95": [
+          -23.258,
+          6
+        ]
+      },
+      "first_mover_win_rate": {
+        "diff": -0.8,
+        "ci95": [
+          -1,
+          -0.533
+        ]
+      },
+      "moves_per_turn": {
+        "diff": 0.184,
+        "ci95": [
+          -0.201,
+          0.609
+        ]
+      },
+      "zero_move_turn_share": {
+        "diff": -0.188,
+        "ci95": [
+          -0.41,
+          0.034
+        ]
+      },
+      "unused_actions_per_game": {
+        "diff": -12.437,
+        "ci95": [
+          -25.75,
+          0.813
+        ]
+      },
+      "pieces_scored_by_turn20": {
+        "diff": -0.625,
+        "ci95": [
+          -1,
+          -0.25
+        ]
+      },
+      "lead_changes": {
+        "diff": 1.688,
+        "ci95": [
+          0.563,
+          2.625
+        ]
+      }
+    }
+  },
+  "vsK11": {
+    "K1": {
+      "turn_limit_rate": {
+        "diff": 0.313,
+        "ci95": [
+          0,
+          0.625
+        ]
+      },
+      "mean_turns": {
+        "diff": 8.313,
+        "ci95": [
+          -6,
+          23.258
+        ]
+      },
+      "moves_per_turn": {
+        "diff": -0.184,
+        "ci95": [
+          -0.609,
+          0.201
+        ]
+      }
+    },
+    "C1": {
+      "turn_limit_rate": {
+        "diff": 0.313,
+        "ci95": [
+          0,
+          0.625
+        ]
+      },
+      "mean_turns": {
+        "diff": 8.313,
+        "ci95": [
+          -6,
+          23.258
+        ]
+      },
+      "moves_per_turn": {
+        "diff": -0.184,
+        "ci95": [
+          -0.609,
+          0.201
+        ]
+      }
+    },
+    "C2": {
+      "turn_limit_rate": {
+        "diff": 0.313,
+        "ci95": [
+          0,
+          0.625
+        ]
+      },
+      "mean_turns": {
+        "diff": 8.313,
+        "ci95": [
+          -6,
+          23.258
+        ]
+      },
+      "moves_per_turn": {
+        "diff": -0.184,
+        "ci95": [
+          -0.609,
+          0.201
+        ]
+      }
+    },
+    "C3": {
+      "turn_limit_rate": {
+        "diff": 0.313,
+        "ci95": [
+          0,
+          0.625
+        ]
+      },
+      "mean_turns": {
+        "diff": 8.313,
+        "ci95": [
+          -6,
+          23.258
+        ]
+      },
+      "moves_per_turn": {
+        "diff": -0.184,
+        "ci95": [
+          -0.609,
+          0.201
+        ]
+      }
+    },
+    "C4": {
+      "turn_limit_rate": {
+        "diff": 0,
+        "ci95": [
+          0,
+          0
+        ]
+      },
+      "mean_turns": {
+        "diff": 0,
+        "ci95": [
+          0,
+          0
+        ]
+      },
+      "moves_per_turn": {
+        "diff": 0,
+        "ci95": [
+          0,
+          0
+        ]
+      }
+    }
+  },
+  "candidateCauses": [],
+  "rule": "exploratory: a single correction is a CANDIDATE CAUSE if its paired seed-blocked 95% interval for turn-limit rate or mean turns versus K1 lies above 0. Interactions are unresolved (no pairwise arms).",
+  "scope": "self-play of this planner family only"
+}

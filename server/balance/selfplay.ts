@@ -15,6 +15,7 @@ import { createHash } from 'node:crypto';
 import { planTurn, planMoves, basePenalty, type PlannerHooks } from '../ai.ts';
 import { planTurnEV, nextMovesEV, EV_PLANNER_ID, type EVVariant } from './v4/evplanner.ts';
 import { planPolicy, policyMoves, type PolicyId } from './v5/policies.ts';
+import { planTurnAbl, nextMovesAbl, type AblFlags } from './v5_1/ablation.ts';
 import { type Player, type Effect, PLAYERS, other } from '../rules.ts';
 import { type Weights, type FrozenWeights, effectId, activationUtility, freezeWeights, weightsHash } from '../weights.ts';
 
@@ -52,6 +53,8 @@ export type GameRec = {
   evVariants?: Partial<Record<Player, EVVariant>>; holdBackTurns?: Record<Player, number>;
   /** V5 only (opts.policy): the policy each side played (prepared; no V5 game has been run yet). */
   policies?: Partial<Record<Player, PolicyId>>;
+  /** V5.1 only (opts.ablation): the C1-C4 flags each side played with. */
+  ablation?: Partial<Record<Player, AblFlags>>;
   detail?: GameDetail;
 };
 /** One move as executed by the real engine, with the engine RNG before it and every engine event it produced. */
@@ -69,7 +72,7 @@ export type DetailTurn = {
 };
 export type GameDetail = { schema: 'rule-sabotage/game-detail@1'; seed: number; first: Player; start: StartState | null; turns: DetailTurn[]; finalHash: string };
 export type PlanTrace = { turn: number; p: Player; chosen: string; chosenScore: number; alternatives: { summary: string; score: number }[] };
-export type PlayOpts = { maxMs?: number; capture?: { turn: number; cell: string }; hooks?: Partial<Record<Player, PlannerHooks>>; variant?: RuleVariant; traceTurns?: number; start?: StartingConfiguration; detail?: boolean; replanOnRandom?: boolean; planner?: Partial<Record<Player, 'ev-v4'>>; evVariant?: Partial<Record<Player, EVVariant>>; policy?: Partial<Record<Player, PolicyId>> };
+export type PlayOpts = { maxMs?: number; capture?: { turn: number; cell: string }; hooks?: Partial<Record<Player, PlannerHooks>>; variant?: RuleVariant; traceTurns?: number; start?: StartingConfiguration; detail?: boolean; replanOnRandom?: boolean; planner?: Partial<Record<Player, 'ev-v4'>>; evVariant?: Partial<Record<Player, EVVariant>>; policy?: Partial<Record<Player, PolicyId>>; ablation?: Partial<Record<Player, AblFlags>> };
 export type BoardSnap = { pieces: { id: string; owner: Player; x: number; y: number; scored: boolean; frozen: number }[]; cells: { cell: string; label: string; owner: Player }[] };
 export type Captured = { turn: number; cell: string; mover: Player; move: string; before: BoardSnap; after: BoardSnap; events: GameEvent[] };
 
@@ -148,11 +151,12 @@ export function playGame(seed: number, first: Player, weights: Record<Player, Fr
     try {
       // V5: a policy decides the turn (placement); moves always use the reference EV executor with K1.
       const pol = opts.policy?.[p];
-      const ev = opts.planner?.[p] === 'ev-v4' || !!pol;
+      const abl = opts.ablation?.[p];
+      const ev = opts.planner?.[p] === 'ev-v4' || !!pol || !!abl;
       const evv = opts.evVariant?.[p] ?? {};
       // V5 policies all execute with ev-k1.1's shared executor (policyMoves), never with the ev-k1 executor.
-      const nextMv = () => (pol ? policyMoves(s, p, w) : nextMovesEV(s, p, w, evv));
-      const full = pol ? planPolicy(pol, s, p, w) : ev ? planTurnEV(s, { me: p, weights: w, variant: evv }) : planTurn(s, { me: p, weights: w, ...(opts.hooks?.[p] ? { hooks: opts.hooks[p] } : {}) });
+      const nextMv = () => (abl ? nextMovesAbl(s, p, abl, w) : pol ? policyMoves(s, p, w) : nextMovesEV(s, p, w, evv));
+      const full = abl ? planTurnAbl(s, abl, { me: p, weights: w }) : pol ? planPolicy(pol, s, p, w) : ev ? planTurnEV(s, { me: p, weights: w, variant: evv }) : planTurn(s, { me: p, weights: w, ...(opts.hooks?.[p] ? { hooks: opts.hooks[p] } : {}) });
       const plan = full.chosen;
       if (dt) { dt.candidates = full.ranked.map(c => ({ id: c.id, summary: c.summary, score: Math.round(c.score * 1000) / 1000, effect: c.placement ? effectId(c.placement.effect) : null, cells: c.placement ? [...c.placement.cells] : [], moves: c.moves.length })); dt.chosen = plan.id; dt.considered = full.candidates; dt.sims = full.sims; }
       if (opts.traceTurns && turnNo <= opts.traceTurns) (rec.planTrace ??= []).push({ turn: turnNo, p, chosen: plan.summary, chosenScore: Math.round(plan.score * 1000) / 1000, alternatives: full.ranked.filter(c => c !== plan).slice(0, 4).map(c => ({ summary: c.summary, score: Math.round(c.score * 1000) / 1000 })) });
@@ -170,7 +174,7 @@ export function playGame(seed: number, first: Player, weights: Record<Player, Fr
       const holdBack = ev && (plan as { holdBack?: boolean }).holdBack === true;
       if (holdBack) { moves = [...plan.moves]; evDone = true; (rec.holdBackTurns ??= { human: 0, ai: 0 })[p]++; }
       else if (ev) { const nx = nextMv(); moves = nx.moves; evDone = !nx.endsAtChance; }
-      if (pol && dt) dt.plannedMoves = plan.moves.map(m => ({ from: m.from, dir: m.dir, mode: m.mode }));
+      if ((pol || abl) && dt) dt.plannedMoves = plan.moves.map(m => ({ from: m.from, dir: m.dir, mode: m.mode }));
       while (mi < moves.length || (!evDone && !s.winner && s.current === p && s.actionsLeft > 0)) {
         if (mi >= moves.length) { const nx = nextMv(); moves = nx.moves; mi = 0; evDone = !nx.endsAtChance; rec.replans = (rec.replans ?? 0) + 1; if (!moves.length) break; }
         const m = moves[mi++];
@@ -227,6 +231,7 @@ export function playGame(seed: number, first: Player, weights: Record<Player, Fr
   if (opts.hooks && Object.values(opts.hooks).some(Boolean)) rec.hooks = structuredClone(opts.hooks);
   if (opts.evVariant && Object.values(opts.evVariant).some(v => v && Object.keys(v).length)) rec.evVariants = structuredClone(opts.evVariant);
   if (opts.policy && Object.values(opts.policy).some(Boolean)) rec.policies = { ...opts.policy };
+  if (opts.ablation && Object.values(opts.ablation).some(Boolean)) rec.ablation = structuredClone(opts.ablation);
   if (opts.planner && Object.values(opts.planner).some(Boolean)) rec.planners = Object.fromEntries(Object.entries(opts.planner).filter(([, v]) => v).map(([k]) => [k, EV_PLANNER_ID]));
   rec.ms = Date.now() - t0;
   return rec;
@@ -238,8 +243,8 @@ export function stateHash(s: State): string {
   return createHash('sha256').update(JSON.stringify(core)).digest('hex').slice(0, 16);
 }
 
-export type Job = { seed: number; first: Player; weights: Record<Player, Weights>; hooks?: Partial<Record<Player, PlannerHooks>>; variant?: RuleVariant; start?: StartingConfiguration; detail?: boolean; replanOnRandom?: boolean; planner?: Partial<Record<Player, 'ev-v4'>>; evVariant?: Partial<Record<Player, EVVariant>>; policy?: Partial<Record<Player, PolicyId>> };
-export const jobOpts = (j: Job, maxMs?: number): PlayOpts => ({ maxMs, ...(j.hooks ? { hooks: j.hooks } : {}), ...(j.variant ? { variant: j.variant } : {}), ...(j.start ? { start: j.start } : {}), ...(j.detail ? { detail: true } : {}), ...(j.replanOnRandom ? { replanOnRandom: true } : {}), ...(j.planner ? { planner: j.planner } : {}), ...(j.evVariant ? { evVariant: j.evVariant } : {}), ...(j.policy ? { policy: j.policy } : {}) });
+export type Job = { seed: number; first: Player; weights: Record<Player, Weights>; hooks?: Partial<Record<Player, PlannerHooks>>; variant?: RuleVariant; start?: StartingConfiguration; detail?: boolean; replanOnRandom?: boolean; planner?: Partial<Record<Player, 'ev-v4'>>; evVariant?: Partial<Record<Player, EVVariant>>; policy?: Partial<Record<Player, PolicyId>>; ablation?: Partial<Record<Player, AblFlags>> };
+export const jobOpts = (j: Job, maxMs?: number): PlayOpts => ({ maxMs, ...(j.hooks ? { hooks: j.hooks } : {}), ...(j.variant ? { variant: j.variant } : {}), ...(j.start ? { start: j.start } : {}), ...(j.detail ? { detail: true } : {}), ...(j.replanOnRandom ? { replanOnRandom: true } : {}), ...(j.planner ? { planner: j.planner } : {}), ...(j.evVariant ? { evVariant: j.evVariant } : {}), ...(j.policy ? { policy: j.policy } : {}), ...(j.ablation ? { ablation: j.ablation } : {}) });
 export function pairedJobs(seeds: number[], weights: Weights | Record<Player, Weights>): Job[] {
   const w = 'schema' in weights ? { human: weights as Weights, ai: weights as Weights } : weights as Record<Player, Weights>;
   return seeds.flatMap(seed => PLAYERS.map(first => ({ seed, first, weights: w })));

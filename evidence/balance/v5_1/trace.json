@@ -1,0 +1,103 @@
+{
+  "newGamesPlayed": 0,
+  "note": "decisions at temperature 0 (the arms differ only in C1-C4); executor = moves the arm would actually play after the chosen placement",
+  "V4.2 K1 games": {
+    "states": 40,
+    "arms": {
+      "K1": {
+        "sameDecisionAsK1": 40,
+        "sameDecisionAsK11": 39,
+        "samePlacementAsK1": 40,
+        "meanCommittedMoves": 1.025,
+        "meanExecutorMoves": 1.025
+      },
+      "C1": {
+        "sameDecisionAsK1": 40,
+        "sameDecisionAsK11": 39,
+        "samePlacementAsK1": 40,
+        "meanCommittedMoves": 1.025,
+        "meanExecutorMoves": 1.025
+      },
+      "C2": {
+        "sameDecisionAsK1": 40,
+        "sameDecisionAsK11": 39,
+        "samePlacementAsK1": 40,
+        "meanCommittedMoves": 1.025,
+        "meanExecutorMoves": 1.025
+      },
+      "C3": {
+        "sameDecisionAsK1": 40,
+        "sameDecisionAsK11": 39,
+        "samePlacementAsK1": 40,
+        "meanCommittedMoves": 1.025,
+        "meanExecutorMoves": 1.025
+      },
+      "C4": {
+        "sameDecisionAsK1": 39,
+        "sameDecisionAsK11": 40,
+        "samePlacementAsK1": 40,
+        "meanCommittedMoves": 1.025,
+        "meanExecutorMoves": 1.025
+      },
+      "K11": {
+        "sameDecisionAsK1": 39,
+        "sameDecisionAsK11": 40,
+        "samePlacementAsK1": 40,
+        "meanCommittedMoves": 1.025,
+        "meanExecutorMoves": 1.025
+      }
+    }
+  },
+  "V5 ev-k1.1 self-play": {
+    "states": 40,
+    "arms": {
+      "K1": {
+        "sameDecisionAsK1": 40,
+        "sameDecisionAsK11": 33,
+        "samePlacementAsK1": 40,
+        "meanCommittedMoves": 0.65,
+        "meanExecutorMoves": 0.65
+      },
+      "C1": {
+        "sameDecisionAsK1": 40,
+        "sameDecisionAsK11": 33,
+        "samePlacementAsK1": 40,
+        "meanCommittedMoves": 0.65,
+        "meanExecutorMoves": 0.65
+      },
+      "C2": {
+        "sameDecisionAsK1": 40,
+        "sameDecisionAsK11": 33,
+        "samePlacementAsK1": 40,
+        "meanCommittedMoves": 0.65,
+        "meanExecutorMoves": 0.65
+      },
+      "C3": {
+        "sameDecisionAsK1": 40,
+        "sameDecisionAsK11": 33,
+        "samePlacementAsK1": 40,
+        "meanCommittedMoves": 0.65,
+        "meanExecutorMoves": 0.65
+      },
+      "C4": {
+        "sameDecisionAsK1": 33,
+        "sameDecisionAsK11": 40,
+        "samePlacementAsK1": 40,
+        "meanCommittedMoves": 0.65,
+        "meanExecutorMoves": 0.65
+      },
+      "K11": {
+        "sameDecisionAsK1": 33,
+        "sameDecisionAsK11": 40,
+        "samePlacementAsK1": 40,
+        "meanCommittedMoves": 0.65,
+        "meanExecutorMoves": 0.65
+      }
+    }
+  },
+  "equivalence": {
+    "states": 80,
+    "armK1EqualsFrozenEvK1": 80,
+    "armK11EqualsEvK11": 80
+  }
+}
