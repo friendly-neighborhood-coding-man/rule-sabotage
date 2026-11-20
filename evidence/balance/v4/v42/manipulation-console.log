@@ -1,0 +1,6 @@
+[2026-11-20T08:26:50.837Z] positions: 40 recorded (offset 3 / every 11th, arms A/B/C), 30 synthetic
+[2026-11-20T08:26:50.842Z] K1
+[2026-11-20T08:28:53.230Z] K3
+[2026-11-20T08:29:26.900Z] K2
+[2026-11-20T08:33:16.135Z] written evidence/balance/v4/v42/manipulation.json
+{"K1":{"recorded":{"positions":40,"mirrorMismatchE0":12,"mirrorMismatchK1":0,"behaviourChangedVsE0":18,"behaviourChangedRate":0.45},"synthetic":{"positions":30,"mirrorMismatchE0":27,"mirrorMismatchK1":0,"behaviourChangedVsE0":19,"behaviourChangedRate":0.633}},"K2":{"recorded":{"positions":40,"predictionChanged":25,"chosenPlanChanged":9,"chosenPlanChangedRate":0.225,"meanAbsPredictionErrorE0":2.651,"meanAbsPredictionErrorK2":0.61,"comparedPositions":33},"synthetic":{"positions":30,"predictionChanged":30,"chosenPlanChanged":4,"chosenPlanChangedRate":0.133,"meanAbsPredictionErrorE0":7.761,"meanAbsPredictionErrorK2":0.735,"comparedPositions":30}},"K3":{"recorded":{"positions":40,"holdBackOffered":28,"holdBackChosen":1,"holdBackChosenRate":0.025,"meanMovesWhenHoldingBack":0},"synthetic":{"positions":30,"holdBackOffered":30,"holdBackChosen":5,"holdBackChosenRate":0.167,"meanMovesWhenHoldingBack":1.8}}}

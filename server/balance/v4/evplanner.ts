@@ -35,7 +35,7 @@ import {
   type State, type Placement, type Move, type ChanceResolver, applyPlacement, applyMove, endTurn, legalMoves, validatePlacement,
   teleportDestinations, teleportIndexProbabilities, parseKey,
 } from '../../engine.ts';
-import { type Player, other } from '../../rules.ts';
+import { type Player, type Effect, other, makeEffect } from '../../rules.ts';
 import { type Weights, DEFAULT_WEIGHTS, effectUpkeep, plannerEffects } from '../../weights.ts';
 import { evaluate, pieceCost, bestCells, describeTurn, placementValue, type TurnPlan, type Plan } from '../../ai.ts';
 import { effectId } from '../../weights.ts';
@@ -94,7 +94,7 @@ export function teleportDistribution(s: State, from: string): { cell: string; p:
  * V4 executor re-plans moves greedily after the placement, so a chosen prefix is not yet played as such.)
  */
 export type EVVariant = { sideRelativeOrder?: boolean; placementAwareReply?: boolean; truncatedCandidates?: boolean };
-export type Ctx = { w: Weights; sims: number; outcomeStates: number; memo: Map<string, number>; replyStrata: number; approximated: number; variant: EVVariant };
+export type Ctx = { w: Weights; sims: number; outcomeStates: number; memo: Map<string, number>; replyStrata: number; approximated: number; variant: EVVariant; me?: Player };
 export const newCtx = (w: Weights = DEFAULT_WEIGHTS, replyStrata = REPLY_STRATA, variant: EVVariant = {}): Ctx => ({ w, sims: 0, outcomeStates: 0, memo: new Map(), replyStrata, approximated: 0, variant });
 const REL_DIR = (p: Player, d: Move['dir']) => (d === 'up' ? 1 : d === 'down' ? 2 : (d === 'right') === (p === 'human') ? 0 : 3);
 export function orderedMoves(s: State, p: Player, sideRelative = false): Move[] {
@@ -196,15 +196,26 @@ export function stratify<T extends { p: number; v: number; state: State }>(ends:
   const R = ctx.replyStrata;
   if (ends.length <= R) return ends;
   ctx.approximated++;
-  const sorted = [...ends].sort((a, b) => a.v - b.v);
+  // K1: equal values are ordered by a mirror-invariant description of the state (side-relative piece positions), not by
+  // the board-coordinate order in which the engine lists teleport destinations.
+  const rx = (x: number) => (ctx.me === 'ai' ? 6 - x : x);
+  const rEff = (id: string) => (ctx.me === 'ai' ? id.replace('east', 'W').replace('west', 'east').replace('W', 'west') : id);
+  const canon = (st: State) => st.pieces.map(q => `${q.owner === ctx.me ? 'm' : 'o'}${q.scored ? 's' : `${rx(q.x)},${q.y}`},${q.frozen},${q.shield ? 1 : 0}`).sort().join(';')
+    + '|' + Object.entries(st.cells).map(([k, id]) => { const [x, y] = k.split(',').map(Number); const r = st.rules.find(z => z.id === id)!; return `${rx(x)},${y}=${rEff(effectId(r.effect))}:${r.owner === ctx.me ? 'm' : 'o'}`; }).sort().join(';')
+    + '|' + `${st.actionsLeft},${st.bonus[ctx.me ?? 'ai']},${st.bonus[other(ctx.me ?? 'ai')]},${st.winner === null ? '-' : st.winner === ctx.me ? 'm' : st.winner === 'draw' ? 'd' : 'o'}`;
+  // K1 also compares values and probability masses at 1e-9 resolution: the engine's exact law gives destination index 0 a
+  // probability about 1e-9 different from the others, and indices follow board coordinates, which would otherwise break
+  // exact ties differently for a position and its mirror.
+  const sym = !!ctx.variant.sideRelativeOrder, q9 = (x: number) => (sym ? Math.round(x * 1e9) / 1e9 : x);
+  const sorted = [...ends].sort((a, b) => q9(a.v) - q9(b.v) || (sym ? (canon(a.state) < canon(b.state) ? -1 : canon(a.state) > canon(b.state) ? 1 : 0) : 0));
   const total = sorted.reduce((a, e) => a + e.p, 0);
   const strata: { mass: number; best: T | null; dist: number }[] = Array.from({ length: R }, () => ({ mass: 0, best: null, dist: Infinity }));
   let cum = 0;
   for (const e of sorted) {
-    const mid = (cum + e.p / 2) / total; cum += e.p;
-    const k = Math.min(R - 1, Math.floor(mid * R)), centre = (k + 0.5) / R;
+    const mid = q9((cum + e.p / 2) / total); cum += e.p;
+    const k = Math.min(R - 1, Math.floor(mid * R + (sym ? 1e-6 : 0))), centre = (k + 0.5) / R, dist = q9(Math.abs(mid - centre));
     strata[k].mass += e.p;
-    if (Math.abs(mid - centre) < strata[k].dist) { strata[k].dist = Math.abs(mid - centre); strata[k].best = e; }
+    if (dist < strata[k].dist) { strata[k].dist = dist; strata[k].best = e; }
   }
   return strata.filter(x => x.best).map(x => ({ p: x.mass, state: x.best!.state }));
 }
@@ -218,13 +229,17 @@ export function planTurnEV(s0: State, opts: { me?: Player; temperature?: number;
   // planner's own tie-breaking noise and never reads the engine RNG state, so it carries no outcome information.
   const r = rng((s0.seed ^ Math.imul(s0.turn + 7, 0x9e3779b1)) >>> 0);
   const placements: (Placement | null)[] = [null];
-  for (const e of plannerEffects(w)) {
+  // K1 (sideRelativeOrder) also visits placement effects in side-relative order (east/west swapped for the AI), so the
+  // planner's own tie-breaking noise stream is consumed identically for a position and its mirror.
+  const flipEW = (e: Effect): Effect => (e.kind === 'shove' && (e.dir === 'east' || e.dir === 'west') ? makeEffect('shove', e.dir === 'east' ? 'west' : 'east', e.amount) : e);
+  const effs = opts.variant?.sideRelativeOrder && me === 'ai' ? plannerEffects(w).map(flipEW) : plannerEffects(w);
+  for (const e of effs) {
     const cells = bestCells(s, me, e, w);
     if (!cells.length) continue;
     const pl: Placement = { text: 'planner', effect: e, cells, interpretedBy: 'planner' };
     if (validatePlacement(s, me, pl).ok) placements.push(pl);
   }
-  const ctx = newCtx(w, opts.replyStrata ?? REPLY_STRATA, opts.variant ?? {});
+  const ctx = newCtx(w, opts.replyStrata ?? REPLY_STRATA, opts.variant ?? {}); ctx.me = me;
   const ranked: TurnPlan[] = [];
   for (const pl of placements) {
     const st = structuredClone(s);
@@ -237,16 +252,17 @@ export function planTurnEV(s0: State, opts: { me?: Player; temperature?: number;
     const overlay = pl && w.weightMix ? w.weightMix * placementValue(s, me, pl, w) : 0;
     ranked.push({ id: '', placement: pl, moves: first.moves, score: immediate * w.planner.immediateWeight + afterReply * w.planner.replyWeight - upkeep + overlay, afterReply, summary: describeTurn(pl, first.moves) + (first.pending ? ' (then re-plan after the teleport)' : '') });
     if (ctx.variant.truncatedCandidates) {
+      // Prefixes of the DETERMINISTIC part only: stop after k = 0..n-1 moves (n = all moves if none is random), or
+      // after k = 0..d moves when the sequence ends with a random move after d deterministic ones (stop before it).
       const det = first.pending ? first.moves.length - 1 : first.moves.length;
+      const maxK = first.pending ? det : det - 1;
       const t = structuredClone(st); if (t.phase === 'place') t.phase = 'move';
-      const prefixes: State[] = [structuredClone(t)];
-      for (let i = 0; i < det - 1; i++) { applyMove(t, me, first.moves[i], { teleport: () => 0 }); prefixes.push(structuredClone(t)); }
-      prefixes.forEach((ps, k) => {
-        if (k >= det) return;
-        const im = evaluateCached(ps, me, ctx), ar = replyValue(ps, me, ctx);
+      for (let k = 0; k <= maxK; k++) {
+        if (k > 0) applyMove(t, me, first.moves[k - 1], { teleport: () => { throw new Error('a hold-back prefix must be deterministic'); } });
+        const im = evaluateCached(t, me, ctx), ar = replyValue(t, me, ctx);
         const mv = first.moves.slice(0, k);
-        ranked.push({ id: '', placement: pl, moves: mv, score: im * w.planner.immediateWeight + ar * w.planner.replyWeight - upkeep + overlay, afterReply: ar, summary: describeTurn(pl, mv) + ' (holds back)' });
-      });
+        ranked.push({ id: '', placement: pl, moves: mv, score: im * w.planner.immediateWeight + ar * w.planner.replyWeight - upkeep + overlay, afterReply: ar, summary: describeTurn(pl, mv) + ' (holds back)', holdBack: true } as TurnPlan);
+      }
     }
   }
   ranked.sort((a, b) => b.score - a.score || a.summary.localeCompare(b.summary));
