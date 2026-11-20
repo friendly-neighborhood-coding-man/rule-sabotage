@@ -1,0 +1,14 @@
+{
+  "schema": "rule-sabotage/v5-reference@1",
+  "id": "REF-EV-K1",
+  "status": "FROZEN (operator V4.2 verdict, 2026-11-20 11:57 UTC): EV + K1 is the experimental reference candidate. Not promoted, not merged, not deployed.",
+  "definition": { "planner": "ev-teleport-v4.1", "file": "server/balance/v4/evplanner.ts", "variant": { "sideRelativeOrder": true }, "executor": "server/balance/selfplay.ts EV path: committed prefix, re-plan after a teleport", "policyId": "ev-k1" },
+  "hashes": { "engine": "f92354f4b139d30c", "plannerFiles": "a87d4d49b64071dc", "evPlanner": "3af55720fad8b2ce", "all": "32970463ca584a60", "frozenAtCommit": "827fce20", "note": "the V4.2 preregistration hashes (journal #4). selfplay.ts has since gained a policy option; tests/policies-v5.test.ts proves the reference still re-executes a recorded V4.2 K1 game to the identical final hash" },
+  "evidence": { "dataset": "evidence/balance/v4/v42/2026-11-20T08-33-47Z-v42-dev", "datasetHash": "5083708e86c91217", "games": 300, "arm": "K1", "report": "docs/BALANCE_V4_2_DEVELOPMENT.md" },
+  "verdictsPreserved": { "HK1": "SUPPORTED", "HK2": "REFUTED", "HK3": "REFUTED", "note": "unchanged, never re-evaluated" },
+  "knownLimitations": [
+    "Residual mirror asymmetry found in V5 preparation: the reference still breaks exact ties in its own trap-cell search (ai.ts bestCells, board-key order) and orders equal-value end states in its reply approximation by a description that omits piece homes. 0 of 40 positions in the broad check, 1 of 4 in a synthetic test set. Fixing it would change the frozen reference (operator decision).",
+    "Openings are near-deterministic: one turn-1 placement per side from the start position; 2 distinct openings in its 60 V4.2 games.",
+    "First-mover improvement statistically fragile (lower bound +0.002); mean length +5.8 turns versus E0 (inconclusive)."
+  ]
+}

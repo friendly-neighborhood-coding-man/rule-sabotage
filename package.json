@@ -35,6 +35,7 @@
     "balance:v4": "node --experimental-strip-types --no-warnings=ExperimentalWarning scripts/balance-v4.ts",
     "balance:v41:diagnose": "node --experimental-strip-types --no-warnings=ExperimentalWarning scripts/balance-v41-diagnose.ts",
     "balance:v42:manip": "node --experimental-strip-types --no-warnings=ExperimentalWarning scripts/balance-v42-manip.ts",
-    "balance:v42": "node --experimental-strip-types --no-warnings=ExperimentalWarning scripts/balance-v42.ts"
+    "balance:v42": "node --experimental-strip-types --no-warnings=ExperimentalWarning scripts/balance-v42.ts",
+    "balance:v5:checks": "node --experimental-strip-types --no-warnings=ExperimentalWarning scripts/policy-checks-v5.ts"
   }
 }
