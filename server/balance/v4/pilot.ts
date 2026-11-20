@@ -75,10 +75,10 @@ export async function runPilot(o: { smoke?: { seedsAB: number[]; seedsC: number[
   log(`done in ${(wallMs / 60000).toFixed(1)} min: replay ${run.replayOk ? 'OK' : 'FAILED'}, external calls ${run.externalCalls}, dataset ${datasetHash}`);
   return { dir, run };
 }
-function listFiles(dir: string, base = ''): string[] { return readdirSync(join(dir, base), { withFileTypes: true }).flatMap(d => d.isDirectory() ? listFiles(dir, join(base, d.name)) : [join(base, d.name).replace(/\\/g, '/')]); }
+export function listFiles(dir: string, base = ''): string[] { return readdirSync(join(dir, base), { withFileTypes: true }).flatMap(d => d.isDirectory() ? listFiles(dir, join(base, d.name)) : [join(base, d.name).replace(/\\/g, '/')]); }
 
 // ---------------------------------------------------------------- evaluation
-type G = { g: Game; d: ReturnType<typeof derive>; arm: string; evSide: Player | 'both' | null };
+export type G = { g: Game; d: ReturnType<typeof derive>; arm: string; evSide: Player | 'both' | null };
 export function loadPilot(dir: string): G[] {
   return readdirSync(join(dir, 'games')).sort().map(f => {
     const x = JSON.parse(readFileSync(join(dir, 'games', f), 'utf8')) as { gameId: string; arm: string; evSide: G['evSide']; rec: GameRec };
@@ -87,13 +87,13 @@ export function loadPilot(dir: string): G[] {
     return { g, d: derive(g), arm: x.arm, evSide: x.evSide };
   });
 }
-function foresight(xs: G[], side: (x: G) => Player | 'both' | null) {
+export function foresight(xs: G[], side: (x: G) => Player | 'both' | null) {
   const rows = xs.flatMap(x => { const s = side(x); return teleportForesight([x.g.rec]).rows.filter(r => s === 'both' || r.p === s); });
   const adv = rows.map(r => r.realized - r.expected), b = xorshift(4243), boots: number[] = [];
   for (let i = 0; i < 2000 && rows.length; i++) boots.push(mean(rows.map(() => adv[Math.floor(b() * rows.length)])));
   return { moves: rows.length, realizedMean: r3(mean(rows.map(r => r.realized))), blindExpectedMean: r3(mean(rows.map(r => r.expected))), advantageMean: r3(mean(adv)), ci95: rows.length ? [r3(quant(boots, 0.025)), r3(quant(boots, 0.975))] as [number, number] : null, meanPercentile: r3(mean(rows.map(r => r.pctile))), turn1Moves: rows.filter(r => r.turn === 1).length };
 }
-const describe = (xs: G[]) => {
+export const describe = (xs: G[]) => {
   const n = xs.length, dec = xs.filter(x => x.d.winner !== 'draw');
   const tpPl = xs.map(x => x.g.rec.placements.filter(p => p.effect === 'teleport').length), tpTr = xs.map(x => x.g.rec.triggers.filter(t => t.kind === 'teleport').length);
   const sorted = xs.map(x => x.d.turns).sort((a, b) => a - b);
@@ -111,7 +111,7 @@ const describe = (xs: G[]) => {
     cpuSecondsPerGame: r3(mean(xs.map(x => x.g.rec.ms / 1000))),
   };
 };
-function edgeDiff(B: G[], A: G[], iters = 5000, seed = 64000) {
+export function edgeDiff(B: G[], A: G[], iters = 5000, seed = 64000) {
   const f = (xs: G[]) => { const v = METRIC_FNS.first_mover_win_rate(xs); return v === null ? null : Math.abs(v - 0.5); };
   const seeds = [...new Set(A.map(x => x.d.seed))].sort((a, b) => a - b);
   const rnd = xorshift(seed), ds: number[] = [];
@@ -119,7 +119,7 @@ function edgeDiff(B: G[], A: G[], iters = 5000, seed = 64000) {
   const b0 = f(B), a0 = f(A);
   return { treated: b0 === null ? null : r3(b0), control: a0 === null ? null : r3(a0), diff: b0 === null || a0 === null ? null : r3(b0 - a0), ci95: [r3(quant(ds, 0.025)), r3(quant(ds, 0.975))] as [number, number] };
 }
-const band = (ci: [number, number] | null, pass: (c: [number, number]) => boolean, fail: (c: [number, number]) => boolean) => (!ci ? 'INCONCLUSIVE' : pass(ci) ? 'PASS' : fail(ci) ? 'FAIL' : 'INCONCLUSIVE');
+export const band = (ci: [number, number] | null, pass: (c: [number, number]) => boolean, fail: (c: [number, number]) => boolean) => (!ci ? 'INCONCLUSIVE' : pass(ci) ? 'PASS' : fail(ci) ? 'FAIL' : 'INCONCLUSIVE');
 
 export function evaluatePilot(dir: string, unitTestsPassed: boolean) {
   const all = loadPilot(dir);

@@ -1,0 +1,101 @@
+{
+  "evPlannerHash": "3af55720fad8b2ce",
+  "newGamesPlayed": 0,
+  "positions": {
+    "recorded": [
+      "A-64001-ai@t9",
+      "A-64001-human@t9",
+      "A-64005-human@t9",
+      "A-64010-ai@t9",
+      "A-64010-human@t53",
+      "A-64012-human@t20",
+      "A-64014-human@t20",
+      "A-64015-human@t42",
+      "A-64019-ai@t9",
+      "A-64022-ai@t9",
+      "A-64022-human@t53",
+      "A-64026-human@t9",
+      "A-64028-human@t31",
+      "A-64029-human@t31",
+      "A-64030-ai@t31",
+      "B-64002-human@t9",
+      "B-64004-human@t31",
+      "B-64006-ai@t9",
+      "B-64007-human@t9",
+      "B-64010-human@t20",
+      "B-64013-human@t9",
+      "B-64015-human@t9",
+      "B-64018-human@t9",
+      "B-64019-human@t42",
+      "B-64021-human@t9",
+      "B-64023-human@t9",
+      "B-64024-human@t42",
+      "B-64027-ai@t9",
+      "B-64027-human@t53",
+      "B-64029-ai@t20",
+      "B-64030-ai@t9",
+      "B-64030-human@t9",
+      "C-64001-ai-evai@t9",
+      "C-64002-human-evhuman@t9",
+      "C-64004-human-evai@t20",
+      "C-64005-ai-evhuman@t9",
+      "C-64006-human-evhuman@t9",
+      "C-64007-ai-evai@t53",
+      "C-64008-ai-evhuman@t9",
+      "C-64009-human-evai@t31"
+    ],
+    "synthetic": 30
+  },
+  "K1": {
+    "recorded": {
+      "positions": 40,
+      "mirrorMismatchE0": 12,
+      "mirrorMismatchK1": 0,
+      "behaviourChangedVsE0": 18,
+      "behaviourChangedRate": 0.45
+    },
+    "synthetic": {
+      "positions": 30,
+      "mirrorMismatchE0": 27,
+      "mirrorMismatchK1": 0,
+      "behaviourChangedVsE0": 19,
+      "behaviourChangedRate": 0.633
+    }
+  },
+  "K3": {
+    "recorded": {
+      "positions": 40,
+      "holdBackOffered": 28,
+      "holdBackChosen": 1,
+      "holdBackChosenRate": 0.025,
+      "meanMovesWhenHoldingBack": 0
+    },
+    "synthetic": {
+      "positions": 30,
+      "holdBackOffered": 30,
+      "holdBackChosen": 5,
+      "holdBackChosenRate": 0.167,
+      "meanMovesWhenHoldingBack": 1.8
+    }
+  },
+  "K2": {
+    "recorded": {
+      "positions": 40,
+      "predictionChanged": 25,
+      "chosenPlanChanged": 9,
+      "chosenPlanChangedRate": 0.225,
+      "meanAbsPredictionErrorE0": 2.651,
+      "meanAbsPredictionErrorK2": 0.61,
+      "comparedPositions": 33
+    },
+    "synthetic": {
+      "positions": 30,
+      "predictionChanged": 30,
+      "chosenPlanChanged": 4,
+      "chosenPlanChangedRate": 0.133,
+      "meanAbsPredictionErrorE0": 7.761,
+      "meanAbsPredictionErrorK2": 0.735,
+      "comparedPositions": 30
+    }
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "schema": "rule-sabotage/v42-dev-protocol@1",
+  "id": "V4.2-DEV-300",
+  "status": "FROZEN before any game (sha256 journalled in balance/v4/journal.ndjson as 'dev-preregistered', together with the implementation hashes). Authorised by the operator's V4.1 review (2026-11-20 08:02 UTC): one bounded 300-game offline development experiment, run once.",
+  "scope": "PLANNER-SPECIFIC development evidence about one self-play planner family (the EV candidate and three single-factor variants). It says nothing about human players or other AI strategies, and nothing is promoted. The holdout seeds 65001-65060 are not used.",
+  "question": "Are the balance problems the V4 pilot showed under the honest (EV) planner (second-mover advantage, Human/AI-side gap, opening collapse) caused mainly by the game rules, or by this planner's behaviour and limitations?",
+  "seeds": { "selfPlay": "66001-66030 x both first movers", "headToHead": "66001-66015", "note": "fresh development seeds; never used or reserved before (V4 pilot 64001-64030, holdout 65001-65060, smoke 99001-99499)" },
+  "arms": [
+    { "id": "E0", "label": "control: EV candidate ev-teleport-v4.1, defaults, vs itself", "evVariant": {}, "games": 60 },
+    { "id": "K1", "label": "side-relative tie-breaking, both sides", "evVariant": { "sideRelativeOrder": true }, "games": 60 },
+    { "id": "K2", "label": "placement-aware opponent reply, both sides", "evVariant": { "placementAwareReply": true }, "games": 60 },
+    { "id": "K3", "label": "hold-back candidates, executed as chosen, both sides", "evVariant": { "truncatedCandidates": true }, "games": 60 },
+    { "id": "H1", "label": "K1 vs E0 head-to-head, K1 on each side and each first-mover order per seed", "games": 60 }
+  ],
+  "totalGames": 300,
+  "rules": [
+    "Run exactly once; the runner refuses a second 'dev-start' and refuses if the protocol or any frozen implementation hash differs.",
+    "Production rules (3 v 3, no start configuration, no rule variant, no planner hooks). Only the EV variant flags differ between arms.",
+    "0 external calls (V3 offline worker guard), 0 Kane calls.",
+    "No rerun of failed or unflattering games. A factor whose manipulation check fails is reported NOT_INFORMATIVE, not re-tuned."
+  ],
+  "registeredHypotheses": [
+    { "id": "HK1", "factor": "K1", "origin": "Claude (V4.1 diagnosis)", "claim": "The Human/AI-side gap comes from board-coordinate tie-breaking.", "predictions": [ { "metric": "abs_human_side_edge", "definition": "|Human-side win rate (decisive) - 0.5|", "comparison": "K1 - E0", "direction": "decrease", "minEffect": 0.1 } ], "headToHead": "H1 reported descriptively: K1's decisive win rate as Human and as AI, with Wilson intervals" },
+    { "id": "HK2", "factor": "K2", "origin": "Claude (V4.1 diagnosis)", "claim": "The second-mover advantage comes from the reply model ignoring opponent placements.", "predictions": [ { "metric": "first_mover_win_rate", "comparison": "K2 - E0", "direction": "increase", "minEffect": 0.1 }, { "metric": "turn2_captures_per_game", "comparison": "K2 - E0", "direction": "decrease", "minEffect": 0.5 } ], "caveat": "Existing probes: K2 improves prediction (mean abs error, see manipulation.json) but did not change the chosen opening. Better prediction is not assumed to produce better actions." },
+    { "id": "HK3", "factor": "K3", "origin": "Claude (V4.1 diagnosis)", "claim": "The second-mover advantage and the opening collapse come from the planner never comparing holding back.", "predictions": [ { "metric": "turn2_captures_per_game", "comparison": "K3 - E0", "direction": "decrease", "minEffect": 0.5 }, { "metric": "first_mover_win_rate", "comparison": "K3 - E0", "direction": "increase", "minEffect": 0.1 } ], "reported": "distinct openings, hold-back turns per game" }
+  ],
+  "metrics": {
+    "first_mover_win_rate": "decisive games won by the first mover",
+    "human_side_win_rate / abs_human_side_edge": "decisive games won by the Human side; distance from 0.5",
+    "turn2_captures_per_game": "pieces captured on turn 2 (the second mover's first turn)",
+    "distinct_openings": "distinct first-three-placement signatures over both sides; distinct turn-1 placements",
+    "mean_turns, median_turns, turn_limit_rate, draws": "length",
+    "lead_changes, comeback_rate": "counterplay",
+    "effect_entropy, teleport placements/triggers, conveyors": "behaviour",
+    "foresight": "teleport advantage over blind expectation (V3 method), information fairness must stay at ~0",
+    "hold_back_turns_per_game, replans_per_game": "manipulation (in-game)",
+    "safety and replay": "illegal moves, errors, softlocks; every game re-executed by the engine"
+  },
+  "uncertainty": "Kx - E0 paired by seed, seeded bootstrap 5000 resamples (seed 66000); rates with Wilson 95%; foresight bootstrap 95%",
+  "decisionRules": {
+    "prediction": "V3 judge rule: 'met' if the difference is in the predicted direction by at least minEffect and its 95% interval excludes 0; 'contradicted' if the interval excludes an effect of minEffect in the predicted direction; else 'unclear'. Hypothesis: SUPPORTED if all predictions met, REFUTED if any contradicted, else INCONCLUSIVE.",
+    "manipulation": "K1: mirror mismatches 0 in the pre-run check; K2: chosen plan differs from E0 on some pre-run positions or the in-game behaviour differs; K3: at least one hold-back turn per 10 games. Failing = NOT_INFORMATIVE for that factor.",
+    "guards": "for each Kx vs E0: V4 pilot gates G1 length, G2 turn limit, G4 diversity, G5 comebacks, G6 safety/replay, and information fairness (foresight interval contains 0 and |mean| < 0.3). Reported, they do not change hypothesis outcomes.",
+    "crucialQuestion": "PLANNER-DRIVEN (this planner family) if at least one factor's first-mover difference vs E0 has a 95% interval lower bound > 0 AND that arm's first-mover Wilson interval contains 0.5; NOT EXPLAINED BY THESE PLANNER FACTORS if E0's first-mover interval excludes 0.5 and every factor's first-mover difference has an upper bound < 0.10 (leans toward the rules, or toward planner limits not tested here; not proof); INCONCLUSIVE otherwise. The same structure is applied to the Human/AI-side gap with K1 and abs_human_side_edge."
+  }
+}
