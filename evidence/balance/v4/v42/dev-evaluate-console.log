@@ -1,0 +1,167 @@
+{
+ "hypotheses": {
+  "HK1": {
+   "factor": "K1",
+   "manipulation": "PASS",
+   "outcome": "SUPPORTED",
+   "predictions": [
+    {
+     "metric": "abs_human_side_edge",
+     "definition": "|Human-side win rate (decisive) - 0.5|",
+     "comparison": "K1 - E0",
+     "direction": "decrease",
+     "minEffect": 0.1,
+     "treated": 0.018,
+     "control": 0.144,
+     "diff": -0.126,
+     "ci95": [
+      -0.225,
+      -0.025
+     ],
+     "status": "met",
+     "reason": "decrease of 0.126 ≥ 0.1, interval [-0.225,-0.025] excludes 0"
+    }
+   ]
+  },
+  "HK2": {
+   "factor": "K2",
+   "manipulation": "PASS",
+   "outcome": "REFUTED",
+   "predictions": [
+    {
+     "metric": "first_mover_win_rate",
+     "comparison": "K2 - E0",
+     "direction": "increase",
+     "minEffect": 0.1,
+     "treated": 0.373,
+     "control": 0.237,
+     "diff": 0.135,
+     "ci95": [
+      -0.028,
+      0.295
+     ],
+     "status": "unclear",
+     "reason": "+0.135 with interval [-0.028,0.295]"
+    },
+    {
+     "metric": "turn2_captures_per_game",
+     "comparison": "K2 - E0",
+     "direction": "decrease",
+     "minEffect": 0.5,
+     "treated": 2,
+     "control": 2,
+     "diff": 0,
+     "ci95": [
+      0,
+      0
+     ],
+     "status": "contradicted",
+     "reason": "an decrease of 0.5 is outside the interval [0,0]"
+    }
+   ]
+  },
+  "HK3": {
+   "factor": "K3",
+   "manipulation": "PASS",
+   "outcome": "REFUTED",
+   "predictions": [
+    {
+     "metric": "turn2_captures_per_game",
+     "comparison": "K3 - E0",
+     "direction": "decrease",
+     "minEffect": 0.5,
+     "treated": 2,
+     "control": 2,
+     "diff": 0,
+     "ci95": [
+      0,
+      0
+     ],
+     "status": "contradicted",
+     "reason": "an decrease of 0.5 is outside the interval [0,0]"
+    },
+    {
+     "metric": "first_mover_win_rate",
+     "comparison": "K3 - E0",
+     "direction": "increase",
+     "minEffect": 0.1,
+     "treated": 0.362,
+     "control": 0.237,
+     "diff": 0.125,
+     "ci95": [
+      -0.012,
+      0.254
+     ],
+     "status": "unclear",
+     "reason": "+0.125 with interval [-0.012,0.254]"
+    }
+   ]
+  }
+ },
+ "manipulation": {
+  "K1": "PASS",
+  "K2": "PASS",
+  "K3": "PASS"
+ },
+ "guards": {
+  "K1": {
+   "G1": "INCONCLUSIVE",
+   "G2": "INCONCLUSIVE",
+   "G4": "PASS",
+   "G5": "PASS",
+   "G6": "PASS",
+   "information": "PASS"
+  },
+  "K2": {
+   "G1": "FAIL",
+   "G2": "FAIL",
+   "G4": "PASS",
+   "G5": "PASS",
+   "G6": "PASS",
+   "information": "PASS"
+  },
+  "K3": {
+   "G1": "PASS",
+   "G2": "PASS",
+   "G4": "INCONCLUSIVE",
+   "G5": "PASS",
+   "G6": "PASS",
+   "information": "PASS"
+  }
+ },
+ "crucialQuestion": {
+  "firstMover": "PLANNER-DRIVEN (this planner family)",
+  "by": [
+   "K1"
+  ],
+  "sideGap": "PLANNER-DRIVEN (tie-breaking), this planner family",
+  "scope": "planner-specific: this self-play planner family only; not about human players or other AI strategies"
+ },
+ "headToHead": {
+  "K1wins": 35,
+  "decisive": 58,
+  "rate": 0.603,
+  "ci95": [
+   0.475,
+   0.719
+  ],
+  "K1as_human": {
+   "k": 15,
+   "n": 28,
+   "rate": 0.536,
+   "ci95": [
+    0.358,
+    0.705
+   ]
+  },
+  "K1as_ai": {
+   "k": 20,
+   "n": 30,
+   "rate": 0.667,
+   "ci95": [
+    0.488,
+    0.808
+   ]
+  }
+ }
+}

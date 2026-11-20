@@ -1,0 +1,38 @@
+{
+  "schema": "rule-sabotage/v42-dev-run@1",
+  "runId": "2026-11-20T08-33-47Z-v42-dev",
+  "smoke": false,
+  "games": 300,
+  "wallMs": 3853010,
+  "cpuMs": 5871411,
+  "guard": {
+    "attempts": 0,
+    "blocked": [],
+    "workers": 6,
+    "strippedEnv": [
+      "ANTHROPIC_BASE_URL",
+      "GROQ_API_KEY",
+      "HF_HOME",
+      "NVIDIA_API_KEY",
+      "OPENROUTER_API_KEY",
+      "OPENROUTER_JEV_API_KEY"
+    ]
+  },
+  "externalCalls": 0,
+  "kaneCalls": 0,
+  "datasetHash": "5083708e86c91217",
+  "replayOk": true,
+  "implementation": {
+    "engine": "f92354f4b139d30c",
+    "planner": "a87d4d49b64071dc",
+    "evPlanner": "3af55720fad8b2ce",
+    "all": "32970463ca584a60"
+  },
+  "protocolSha256": "52320c0aff6eb3bbad5240c15157257378224d5e660b6ac54f46cea8711961fc",
+  "commit": "827fce20cbde6b7519daf0107b92f2896634a2b5",
+  "dirty": false,
+  "node": "v24.22.1",
+  "platform": "win32 10.0.26300",
+  "cpu": "13th Gen Intel(R) Core(TM) i5-1335U",
+  "logicalCores": 12
+}
