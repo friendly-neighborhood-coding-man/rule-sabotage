@@ -1,0 +1,604 @@
+{
+  "source": "evidence/balance/v4/pilot/2026-11-19T21-42-56Z-v4-pilot",
+  "newGamesPlayed": 0,
+  "D1": {
+    "tempo": {
+      "A": {
+        "games": 60,
+        "firstWins": 33,
+        "secondWins": 26,
+        "draws": 1,
+        "scoredByRound": {
+          "first": [
+            0.35,
+            0.867,
+            1.667,
+            1.917,
+            2.1,
+            2.233
+          ],
+          "second": [
+            0.183,
+            1.267,
+            1.467,
+            1.683,
+            2.017,
+            2.083
+          ]
+        },
+        "firstScoreTurnMean": {
+          "first": 2.967,
+          "second": 5.867
+        },
+        "conveyor": {
+          "first": 7.8,
+          "second": 7.2
+        },
+        "hitByOpponentTrap": {
+          "first": 1.333,
+          "second": 1.217
+        },
+        "ownTrapsUsedByOpponent": {
+          "first": 1.217,
+          "second": 1.333
+        },
+        "captures": {
+          "first": 2.117,
+          "second": 2.45
+        },
+        "placements": {
+          "first": {
+            "shove:west:2": 81,
+            "home": 42,
+            "teleport": 55,
+            "freeze": 8,
+            "shove:east:2": 133,
+            "haste": 33,
+            "shove:back:2": 9,
+            "shield": 17,
+            "shove:back:3": 13,
+            "shove:forward:2": 3
+          },
+          "second": {
+            "teleport": 36,
+            "shove:east:2": 100,
+            "home": 38,
+            "shield": 12,
+            "shove:west:2": 132,
+            "shove:forward:2": 6,
+            "shove:back:3": 16,
+            "haste": 14,
+            "freeze": 2,
+            "shove:north:2": 1,
+            "shove:back:2": 5
+          }
+        },
+        "turn1": {
+          "placement": {
+            "shove:west:2": 17,
+            "shove:east:2": 21,
+            "teleport": 22
+          },
+          "movesMade": 3,
+          "squaresGained": 0
+        }
+      },
+      "B": {
+        "games": 60,
+        "firstWins": 16,
+        "secondWins": 42,
+        "draws": 2,
+        "scoredByRound": {
+          "first": [
+            0,
+            0.5,
+            1.5,
+            1.5,
+            1.65,
+            1.767
+          ],
+          "second": [
+            0,
+            1.5,
+            1.5,
+            1.667,
+            2.233,
+            2.317
+          ]
+        },
+        "firstScoreTurnMean": {
+          "first": 4,
+          "second": 4
+        },
+        "conveyor": {
+          "first": 9.333,
+          "second": 8.867
+        },
+        "hitByOpponentTrap": {
+          "first": 2.083,
+          "second": 1.283
+        },
+        "ownTrapsUsedByOpponent": {
+          "first": 1.283,
+          "second": 2.083
+        },
+        "captures": {
+          "first": 2.233,
+          "second": 3.633
+        },
+        "placements": {
+          "first": {
+            "shove:west:2": 93,
+            "haste": 52,
+            "shove:back:2": 13,
+            "shove:east:2": 180,
+            "shove:back:3": 22,
+            "shield": 21,
+            "home": 47,
+            "teleport": 17,
+            "freeze": 11,
+            "shove:forward:2": 7
+          },
+          "second": {
+            "shove:east:2": 133,
+            "shove:west:2": 175,
+            "home": 52,
+            "teleport": 18,
+            "shield": 13,
+            "freeze": 5,
+            "shove:back:3": 20,
+            "haste": 18,
+            "shove:north:2": 1,
+            "shove:forward:2": 2,
+            "shove:back:2": 2
+          }
+        },
+        "turn1": {
+          "placement": {
+            "shove:west:2": 30,
+            "shove:east:2": 30
+          },
+          "movesMade": 3,
+          "squaresGained": 0
+        }
+      }
+    },
+    "timeline": {
+      "A": [
+        {
+          "afterTurn": 1,
+          "games": 60,
+          "firstLeft": 9.15,
+          "secondLeft": 18,
+          "capturesByFirst": 0.15,
+          "capturesBySecond": 0
+        },
+        {
+          "afterTurn": 2,
+          "games": 60,
+          "firstLeft": 12.933,
+          "secondLeft": 10.6,
+          "capturesByFirst": 0,
+          "capturesBySecond": 1.283
+        },
+        {
+          "afterTurn": 3,
+          "games": 60,
+          "firstLeft": 6.567,
+          "secondLeft": 13.133,
+          "capturesByFirst": 0.967,
+          "capturesBySecond": 0
+        },
+        {
+          "afterTurn": 4,
+          "games": 60,
+          "firstLeft": 8.167,
+          "secondLeft": 7.133,
+          "capturesByFirst": 0,
+          "capturesBySecond": 0.8
+        },
+        {
+          "afterTurn": 5,
+          "games": 55,
+          "firstLeft": 4.8,
+          "secondLeft": 7.691,
+          "capturesByFirst": 0.545,
+          "capturesBySecond": 0
+        },
+        {
+          "afterTurn": 6,
+          "games": 54,
+          "firstLeft": 5.204,
+          "secondLeft": 3.741,
+          "capturesByFirst": 0,
+          "capturesBySecond": 0.13
+        },
+        {
+          "afterTurn": 7,
+          "games": 48,
+          "firstLeft": 2.854,
+          "secondLeft": 5.438,
+          "capturesByFirst": 0.375,
+          "capturesBySecond": 0
+        },
+        {
+          "afterTurn": 8,
+          "games": 43,
+          "firstLeft": 4.233,
+          "secondLeft": 3.837,
+          "capturesByFirst": 0,
+          "capturesBySecond": 0.302
+        }
+      ],
+      "B": [
+        {
+          "afterTurn": 1,
+          "games": 60,
+          "firstLeft": 9,
+          "secondLeft": 18,
+          "capturesByFirst": 0,
+          "capturesBySecond": 0
+        },
+        {
+          "afterTurn": 2,
+          "games": 60,
+          "firstLeft": 15,
+          "secondLeft": 11,
+          "capturesByFirst": 0,
+          "capturesBySecond": 2
+        },
+        {
+          "afterTurn": 3,
+          "games": 60,
+          "firstLeft": 8,
+          "secondLeft": 14,
+          "capturesByFirst": 1,
+          "capturesBySecond": 0
+        },
+        {
+          "afterTurn": 4,
+          "games": 60,
+          "firstLeft": 9.5,
+          "secondLeft": 7,
+          "capturesByFirst": 0,
+          "capturesBySecond": 1
+        },
+        {
+          "afterTurn": 5,
+          "games": 60,
+          "firstLeft": 6,
+          "secondLeft": 7,
+          "capturesByFirst": 0.5,
+          "capturesBySecond": 0
+        },
+        {
+          "afterTurn": 6,
+          "games": 60,
+          "firstLeft": 6.167,
+          "secondLeft": 3.6,
+          "capturesByFirst": 0,
+          "capturesBySecond": 0.033
+        },
+        {
+          "afterTurn": 7,
+          "games": 60,
+          "firstLeft": 2.8,
+          "secondLeft": 5.533,
+          "capturesByFirst": 0.483,
+          "capturesBySecond": 0
+        },
+        {
+          "afterTurn": 8,
+          "games": 50,
+          "firstLeft": 5.28,
+          "secondLeft": 4.34,
+          "capturesByFirst": 0,
+          "capturesBySecond": 0.5
+        }
+      ]
+    },
+    "turn2Captures": {
+      "A": {
+        "games": 60,
+        "gamesWithTurn2Capture": 42,
+        "capturedPieces": 77,
+        "viaForcedMove": 70,
+        "throughSecondMoversNewTrap": 70
+      },
+      "B": {
+        "games": 60,
+        "gamesWithTurn2Capture": 60,
+        "capturedPieces": 120,
+        "viaForcedMove": 120,
+        "throughSecondMoversNewTrap": 120
+      }
+    }
+  },
+  "D3": {
+    "A": {
+      "games": 60,
+      "distinctTurn1Placements": 4,
+      "chosenTurn1Effect": {
+        "shove:west:2": 17,
+        "shove:east:2": 21,
+        "teleport": 22
+      },
+      "topRankedTurn1Effect": {
+        "shove:west:2": 17,
+        "shove:east:2": 21,
+        "teleport": 22
+      },
+      "meanMarginTop2": 3.353,
+      "meanCandidatesWithin0_6": 1.067,
+      "teleportCandidate": {
+        "present": 60,
+        "meanRank": 2.567,
+        "meanGapToTop": 3.016
+      }
+    },
+    "B": {
+      "games": 60,
+      "distinctTurn1Placements": 2,
+      "chosenTurn1Effect": {
+        "shove:west:2": 30,
+        "shove:east:2": 30
+      },
+      "topRankedTurn1Effect": {
+        "shove:west:2": 30,
+        "shove:east:2": 30
+      },
+      "meanMarginTop2": 4.826,
+      "meanCandidatesWithin0_6": 1,
+      "teleportCandidate": {
+        "present": 60,
+        "meanRank": 2.65,
+        "meanGapToTop": 5.105
+      }
+    }
+  },
+  "D2": {
+    "production": {
+      "planner": "production",
+      "variant": {},
+      "positions": 40,
+      "evaluateAsymmetric": 0,
+      "trapCellsAsymmetric": 0,
+      "chosenPlanAsymmetric": 12,
+      "chosenScoreAsymmetric": 17,
+      "moveOnlyAsymmetric": 0,
+      "examples": [
+        {
+          "turn": 1,
+          "side": "ai",
+          "plan": "place “Shove west 2” on F2 F4 F6, then 3 moves: G6← G2← G4←",
+          "scoreA": 9.903,
+          "mirroredPlan": "place “Shove east 2” on B2 B4 B6, then 3 moves: A2→ A4→ A6→",
+          "scoreB": 8.103,
+          "bScoreOfMirrorOfA": 8.103
+        },
+        {
+          "turn": 14,
+          "side": "ai",
+          "plan": "place “Shove west 2” on C5 D4 E5, then 1 move: D5→",
+          "scoreA": 1001.445,
+          "mirroredPlan": "place “Shove east 2” on C5 D4 E5, then 1 move: D5→",
+          "scoreB": 1001.445,
+          "bScoreOfMirrorOfA": 1001.445
+        },
+        {
+          "turn": 2,
+          "side": "human",
+          "plan": "place “Shove east 2” on A5 B6 C4, then 3 moves: A4→ B4→ A6→",
+          "scoreA": -3.93,
+          "mirroredPlan": "place “Shove west 2” on E4 F6 G5, then 3 moves: G4← G6← F4←",
+          "scoreB": -5.13,
+          "bScoreOfMirrorOfA": -5.13
+        },
+        {
+          "turn": 5,
+          "side": "human",
+          "plan": "place “Shove east 2” on C6 D5 E6, then 1 move: D6←",
+          "scoreA": 1001.225,
+          "mirroredPlan": "place “Shove west 2” on C6 D5 E6, then 1 move: D6←",
+          "scoreB": 1001.225,
+          "bScoreOfMirrorOfA": 1001.225
+        },
+        {
+          "turn": 10,
+          "side": "ai",
+          "plan": "place “Shove west 2” on C3 C6 E3, then 2 moves: D6← D3←",
+          "scoreA": 1001.755,
+          "mirroredPlan": "place “Shove east 2” on C3 E3 E6, then 2 moves: D3→ D6→",
+          "scoreB": 1001.755,
+          "bScoreOfMirrorOfA": 1001.755
+        },
+        {
+          "turn": 11,
+          "side": "human",
+          "plan": "place “Shove east 2” on A1 C1 D4, then 2 moves: B1→ E1↓",
+          "scoreA": -7.14,
+          "mirroredPlan": "place “Teleport” on G1 G2 G4, then 2 moves: F1→ B3←",
+          "scoreB": -7.071,
+          "bScoreOfMirrorOfA": -7.14
+        }
+      ]
+    },
+    "ev": {
+      "planner": "ev",
+      "variant": {},
+      "positions": 40,
+      "evaluateAsymmetric": 0,
+      "trapCellsAsymmetric": 0,
+      "chosenPlanAsymmetric": 7,
+      "chosenScoreAsymmetric": 12,
+      "moveOnlyAsymmetric": 16,
+      "examples": [
+        {
+          "turn": 7,
+          "side": "human",
+          "plan": "place “Shove east 2” on A2 D2 E2, then 2 moves: B2← C2→",
+          "scoreA": 5.213,
+          "mirroredPlan": "place “Shove west 2” on C2 D2 G2, then 2 moves: F2← E2←",
+          "scoreB": 5.213,
+          "bScoreOfMirrorOfA": 5.213
+        },
+        {
+          "turn": 17,
+          "side": "human",
+          "plan": "place “Shove east 2” on C2 D3 D4, then 2 moves: F7↑ A4→",
+          "scoreA": -10.778,
+          "mirroredPlan": "place “Shove west 2” on D3 D4 E2, then 2 moves: B7→ G4←",
+          "scoreB": -10.778,
+          "bScoreOfMirrorOfA": -10.778
+        },
+        {
+          "turn": 6,
+          "side": "human",
+          "plan": "place “Shove east 2” on A6 C6 D6, then 1 move: B6←",
+          "scoreA": 2.572,
+          "mirroredPlan": "place “Shove west 2” on D6 E6 G6, then 1 move: F6←",
+          "scoreB": 2.572,
+          "bScoreOfMirrorOfA": 2.572
+        },
+        {
+          "turn": 9,
+          "side": "human",
+          "plan": "place “+1 action” on A1 B2 C2, then 2 moves: F4↓ F5→",
+          "scoreA": 4.128,
+          "mirroredPlan": "place “+1 action” on E2 F2 G1, then 3 moves: G2← B4↓ B5←",
+          "scoreB": 5.128,
+          "bScoreOfMirrorOfA": 5.128
+        },
+        {
+          "turn": 6,
+          "side": "human",
+          "plan": "place “Shove east 2” on A6 C6 D6, then 1 move: B6←",
+          "scoreA": 2.572,
+          "mirroredPlan": "place “Shove west 2” on D6 E6 G6, then 1 move: F6←",
+          "scoreB": 2.572,
+          "bScoreOfMirrorOfA": 2.572
+        },
+        {
+          "turn": 13,
+          "side": "human",
+          "plan": "place “+1 action” on D3 F2 F3, then 5 moves: D2↓ D3↓ F4↑ F3↑ F2→",
+          "scoreA": 1000.92,
+          "mirroredPlan": "place “Shove west 2” on E4 E5 G5, then 2 moves: B4← C4←",
+          "scoreB": -8.087,
+          "bScoreOfMirrorOfA": -602.2
+        }
+      ]
+    },
+    "evSideRelative": {
+      "planner": "ev",
+      "variant": {
+        "sideRelativeOrder": true
+      },
+      "positions": 40,
+      "evaluateAsymmetric": 0,
+      "trapCellsAsymmetric": 0,
+      "chosenPlanAsymmetric": 0,
+      "chosenScoreAsymmetric": 0,
+      "moveOnlyAsymmetric": 0,
+      "examples": []
+    }
+  },
+  "openingProbes": [
+    {
+      "positions": 12,
+      "turn1MovesMean": 3,
+      "turn2CapturesMean": 2,
+      "firstMoverEvalAfterTurn2": -5,
+      "distinctOpenings": 2
+    },
+    {
+      "positions": 12,
+      "variant": {
+        "placementAwareReply": true
+      },
+      "turn1MovesMean": 3,
+      "turn2CapturesMean": 2,
+      "firstMoverEvalAfterTurn2": -5,
+      "distinctOpenings": 2
+    },
+    {
+      "positions": 12,
+      "variant": {
+        "truncatedCandidates": true,
+        "placementAwareReply": true
+      },
+      "turn1MovesMean": 3,
+      "turn2CapturesMean": 2,
+      "firstMoverEvalAfterTurn2": -5,
+      "distinctOpenings": 2
+    },
+    {
+      "positions": 12,
+      "forcedMoves": 0,
+      "turn1MovesMean": 0,
+      "turn2CapturesMean": 0,
+      "firstMoverEvalAfterTurn2": -3.3,
+      "distinctOpenings": 2
+    },
+    {
+      "positions": 12,
+      "forcedMoves": 1,
+      "turn1MovesMean": 1,
+      "turn2CapturesMean": 1,
+      "firstMoverEvalAfterTurn2": -4.2,
+      "distinctOpenings": 2
+    },
+    {
+      "positions": 12,
+      "forcedMoves": 2,
+      "turn1MovesMean": 2,
+      "turn2CapturesMean": 2,
+      "firstMoverEvalAfterTurn2": -6.1,
+      "distinctOpenings": 2
+    },
+    {
+      "positions": 12,
+      "forcedMoves": 3,
+      "turn1MovesMean": 3,
+      "turn2CapturesMean": 2,
+      "firstMoverEvalAfterTurn2": -5,
+      "distinctOpenings": 2
+    },
+    {
+      "positions": 12,
+      "forcedMoves": 0,
+      "noPlacement": true,
+      "turn1MovesMean": 0,
+      "turn2CapturesMean": 0,
+      "firstMoverEvalAfterTurn2": -9,
+      "distinctOpenings": 1
+    },
+    {
+      "positions": 12,
+      "forcedMoves": 1,
+      "noPlacement": true,
+      "turn1MovesMean": 1,
+      "turn2CapturesMean": 0,
+      "firstMoverEvalAfterTurn2": -8,
+      "distinctOpenings": 1
+    },
+    {
+      "positions": 12,
+      "forcedMoves": 2,
+      "noPlacement": true,
+      "turn1MovesMean": 2,
+      "turn2CapturesMean": 0,
+      "firstMoverEvalAfterTurn2": -13,
+      "distinctOpenings": 1
+    },
+    {
+      "positions": 12,
+      "forcedMoves": 3,
+      "noPlacement": true,
+      "turn1MovesMean": 3,
+      "turn2CapturesMean": 0.5,
+      "firstMoverEvalAfterTurn2": -10,
+      "distinctOpenings": 1
+    }
+  ]
+}

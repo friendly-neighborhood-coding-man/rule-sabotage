@@ -32,6 +32,7 @@
     "balance:v3:quarantine": "node --experimental-strip-types --no-warnings=ExperimentalWarning scripts/balance-v3.ts quarantine",
     "balance:v3:kane-plan": "node --experimental-strip-types --no-warnings=ExperimentalWarning scripts/balance-v3.ts kane-plan",
     "test:balance-v3-e2e": "node --experimental-strip-types --no-warnings=ExperimentalWarning tests/balance-v3.e2e.ts",
-    "balance:v4": "node --experimental-strip-types --no-warnings=ExperimentalWarning scripts/balance-v4.ts"
+    "balance:v4": "node --experimental-strip-types --no-warnings=ExperimentalWarning scripts/balance-v4.ts",
+    "balance:v41:diagnose": "node --experimental-strip-types --no-warnings=ExperimentalWarning scripts/balance-v41-diagnose.ts"
   }
 }

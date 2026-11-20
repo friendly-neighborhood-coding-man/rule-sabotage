@@ -82,8 +82,28 @@ export function teleportDistribution(s: State, from: string): { cell: string; p:
   return d.map((cell, i) => ({ cell, p: pr[i] }));
 }
 
-export type Ctx = { w: Weights; sims: number; outcomeStates: number; memo: Map<string, number>; replyStrata: number; approximated: number };
-export const newCtx = (w: Weights = DEFAULT_WEIGHTS, replyStrata = REPLY_STRATA): Ctx => ({ w, sims: 0, outcomeStates: 0, memo: new Map(), replyStrata, approximated: 0 });
+/**
+ * V4.1 DIAGNOSTIC variants (all default off = exactly ev-teleport-v4.1 as run in the V4 pilot; a test re-plays pilot
+ * games with the defaults). sideRelativeOrder: candidate moves are tried in an order defined relative to the moving
+ * side (distance to its own goal, row, forward/up/down/back, mode) instead of board-coordinate order, so equal-value
+ * ties are broken the same way for both sides and for a position and its mirror. placementAwareReply: the simulated
+ * opponent reply may first PLACE an effect (each planner effect on its bestCells, or none) and then move; the opponent
+ * picks the option best for itself by its immediate evaluation (a one-ply approximation of its own planner).
+ * truncatedCandidates: besides each placement's full greedy move sequence, its deterministic prefixes (stop after
+ * 0..n-1 moves) are ranked too, so holding pieces back can win when the reply punishes advancing. (Diagnostic: the
+ * V4 executor re-plans moves greedily after the placement, so a chosen prefix is not yet played as such.)
+ */
+export type EVVariant = { sideRelativeOrder?: boolean; placementAwareReply?: boolean; truncatedCandidates?: boolean };
+export type Ctx = { w: Weights; sims: number; outcomeStates: number; memo: Map<string, number>; replyStrata: number; approximated: number; variant: EVVariant };
+export const newCtx = (w: Weights = DEFAULT_WEIGHTS, replyStrata = REPLY_STRATA, variant: EVVariant = {}): Ctx => ({ w, sims: 0, outcomeStates: 0, memo: new Map(), replyStrata, approximated: 0, variant });
+const REL_DIR = (p: Player, d: Move['dir']) => (d === 'up' ? 1 : d === 'down' ? 2 : (d === 'right') === (p === 'human') ? 0 : 3);
+export function orderedMoves(s: State, p: Player, sideRelative = false): Move[] {
+  const ms = legalMoves(s, p);
+  if (!sideRelative) return ms;
+  const goal = p === 'human' ? 6 : 0;
+  const k = (m: Move) => { const { x, y } = parseKey(m.from); return [Math.abs(goal - x), y, REL_DIR(p, m.dir), m.mode === 'stack' ? 0 : 1]; };
+  return ms.map(m => ({ m, k: k(m) })).sort((a, b) => { for (let i = 0; i < 4; i++) if (a.k[i] !== b.k[i]) return a.k[i] - b.k[i]; return 0; }).map(x => x.m);
+}
 /**
  * Exactly ai.ts evaluate() (no hooks), with pieceCost memoised. pieceCost depends only on the piece (owner, square,
  * frozen, shield, scored) and the live effects on the board, which is what the key holds.
@@ -115,7 +135,7 @@ export function greedyEV(s0: State, p: Player, ctx: Ctx, noise = 0, rnd: () => n
   while (s.current === p && !s.winner && s.actionsLeft > 0) {
     const base = evaluateCached(s, p, ctx);
     let best: { m: Move; v: number; outs: Outcome[] } | null = null;
-    for (const m of legalMoves(s, p)) {
+    for (const m of orderedMoves(s, p, ctx.variant.sideRelativeOrder)) {
       const outs = moveOutcomes(s, p, m); ctx.sims += outs.length;
       const v = outs.reduce((a, o) => a + o.p * evaluateCached(o.state, p, ctx), 0) + (noise ? (rnd() - 0.5) * noise : 0);
       if (!best || v > best.v) best = { m, v, outs };
@@ -148,10 +168,19 @@ function replyValue(s: State, me: Player, ctx: Ctx): number {
   endTurn(rep);
   const opp = other(me);
   if (rep.winner || rep.current !== opp) return evaluateCached(rep, me, ctx);
-  const r = greedyEV(rep, opp, ctx, 0);
-  if (!r.pending) return evaluateCached(r.state!, me, ctx);
-  ctx.outcomeStates += r.pending.length;
-  return r.pending.reduce((a, o) => a + o.p * evaluateCached(o.state, me, ctx), 0);
+  const value = (st: State, who: Player) => { const r = greedyEV(st, opp, ctx, 0); if (!r.pending) return evaluateCached(r.state!, who, ctx); ctx.outcomeStates += r.pending.length; return r.pending.reduce((a, o) => a + o.p * evaluateCached(o.state, who, ctx), 0); };
+  if (!ctx.variant.placementAwareReply) return value(rep, me);
+  let best = { forOpp: value(rep, opp), forMe: value(rep, me) };
+  for (const e of plannerEffects(ctx.w)) {
+    const cells = bestCells(rep, opp, e, ctx.w);
+    if (!cells.length) continue;
+    const pl: Placement = { text: 'planner', effect: e, cells, interpretedBy: 'planner' };
+    if (!validatePlacement(rep, opp, pl).ok) continue;
+    const st = structuredClone(rep); applyPlacement(st, opp, pl);
+    const fo = value(st, opp);
+    if (fo > best.forOpp) best = { forOpp: fo, forMe: value(st, me) };
+  }
+  return best.forMe;
 }
 
 function rng(seed: number) { let x = seed >>> 0 || 1; return () => { x ^= x << 13; x >>>= 0; x ^= x >>> 17; x ^= x << 5; x >>>= 0; return x / 0x100000000; }; }
@@ -180,7 +209,7 @@ export function stratify<T extends { p: number; v: number; state: State }>(ends:
   return strata.filter(x => x.best).map(x => ({ p: x.mass, state: x.best!.state }));
 }
 
-export function planTurnEV(s0: State, opts: { me?: Player; temperature?: number; weights?: Weights; replyStrata?: number } = {}): EVPlan {
+export function planTurnEV(s0: State, opts: { me?: Player; temperature?: number; weights?: Weights; replyStrata?: number; variant?: EVVariant } = {}): EVPlan {
   const t0 = performance.now();
   const w = opts.weights ?? DEFAULT_WEIGHTS;
   const me = opts.me ?? 'ai', temperature = opts.temperature ?? w.planner.temperature;
@@ -195,7 +224,7 @@ export function planTurnEV(s0: State, opts: { me?: Player; temperature?: number;
     const pl: Placement = { text: 'planner', effect: e, cells, interpretedBy: 'planner' };
     if (validatePlacement(s, me, pl).ok) placements.push(pl);
   }
-  const ctx = newCtx(w, opts.replyStrata ?? REPLY_STRATA);
+  const ctx = newCtx(w, opts.replyStrata ?? REPLY_STRATA, opts.variant ?? {});
   const ranked: TurnPlan[] = [];
   for (const pl of placements) {
     const st = structuredClone(s);
@@ -207,6 +236,18 @@ export function planTurnEV(s0: State, opts: { me?: Player; temperature?: number;
     const upkeep = pl ? effectUpkeep(w, pl.effect) : 0;
     const overlay = pl && w.weightMix ? w.weightMix * placementValue(s, me, pl, w) : 0;
     ranked.push({ id: '', placement: pl, moves: first.moves, score: immediate * w.planner.immediateWeight + afterReply * w.planner.replyWeight - upkeep + overlay, afterReply, summary: describeTurn(pl, first.moves) + (first.pending ? ' (then re-plan after the teleport)' : '') });
+    if (ctx.variant.truncatedCandidates) {
+      const det = first.pending ? first.moves.length - 1 : first.moves.length;
+      const t = structuredClone(st); if (t.phase === 'place') t.phase = 'move';
+      const prefixes: State[] = [structuredClone(t)];
+      for (let i = 0; i < det - 1; i++) { applyMove(t, me, first.moves[i], { teleport: () => 0 }); prefixes.push(structuredClone(t)); }
+      prefixes.forEach((ps, k) => {
+        if (k >= det) return;
+        const im = evaluateCached(ps, me, ctx), ar = replyValue(ps, me, ctx);
+        const mv = first.moves.slice(0, k);
+        ranked.push({ id: '', placement: pl, moves: mv, score: im * w.planner.immediateWeight + ar * w.planner.replyWeight - upkeep + overlay, afterReply: ar, summary: describeTurn(pl, mv) + ' (holds back)' });
+      });
+    }
   }
   ranked.sort((a, b) => b.score - a.score || a.summary.localeCompare(b.summary));
   ranked.forEach((c, i) => { c.id = 'p' + (i + 1); });
@@ -221,8 +262,8 @@ export function planTurnEV(s0: State, opts: { me?: Player; temperature?: number;
 }
 
 /** Moves to play next on the REAL board: the committed prefix (ends at a random move, then ask again). */
-export function nextMovesEV(real: State, p: Player, w: Weights = DEFAULT_WEIGHTS): { moves: Move[]; endsAtChance: boolean; sims: number } {
-  const ctx = newCtx(w);
+export function nextMovesEV(real: State, p: Player, w: Weights = DEFAULT_WEIGHTS, variant: EVVariant = {}): { moves: Move[]; endsAtChance: boolean; sims: number } {
+  const ctx = newCtx(w, REPLY_STRATA, variant);
   const g = greedyEV(real, p, ctx, 0);
   return { moves: g.moves, endsAtChance: !!g.pending, sims: ctx.sims };
 }
