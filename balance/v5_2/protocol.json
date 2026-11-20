@@ -1,0 +1,37 @@
+{
+  "schema": "rule-sabotage/v52-protocol@1",
+  "id": "V5.2-C4xMIXING-120",
+  "status": "Authorised by the operator (2026-11-20 20:59 UTC): at most 120 games, once, only after the zero-game audit passes. FROZEN before any game: sha256, implementation hashes, audit sha256 and every assignment are journalled in balance/v5_2/journal.ndjson ('v52-preregistered').",
+  "question": "How much of the ev-k1 to ev-k1.1 behaviour change (stall, first-mover pattern) is due to C4, how much to the weak legacy seed mixing of the planner's own randomness, and do they interact?",
+  "nature": "Exploratory, 30 games per arm. No universal balance correction and no precise tail-risk estimate is claimed.",
+  "planner": "server/balance/v5_2/planner.ts ('k1x-1'): ev-k1 + C1 + C2 + C3 in every arm. Executor in every arm: the C1-C3 executor (ev-k1.1 nextMoves11). Verified before the run: (C4 off, legacy) == V5.1 ablation { c1, c2, c3 } and (C4 on, legacy) == ev-k1.1, decision by decision.",
+  "factors": {
+    "A_C4": { "off": "historical planning with 0.02 noise", "on": "planner/executor consistency, no planning noise" },
+    "B_stream": { "legacy": "rng((seed ^ Math.imul(turn + 7, 0x9e3779b1)) >>> 0), one stream for noise and temperature", "mixed": "server/balance/v5_2/stream.ts stream-1: SHA-256 counter stream, domains (seed, turn, mover role F/S, purpose 'noise' | 'temperature')" }
+  },
+  "arms": { "A1": "C4 off, legacy", "A2": "C4 on, legacy (= ev-k1.1)", "A3": "C4 off, mixed", "A4": "C4 on, mixed" },
+  "seeds": {
+    "consecutive": [70001, 70002, 70003, 70004, 70005, 70006, 70007],
+    "dispersed": [2553012179, 3963606250, 1035427400, 158600798, 3813076044, 1507449419, 188694619, 3162539684],
+    "derivation": "dispersed = 200000 + (first 32 bits of sha256('rule-sabotage/v5.2/dispersed-seed/' + i) mod 3999000000), i = 0..7",
+    "design": "every arm on all 15 seeds x both first movers = 30 games per arm, 120 total",
+    "excluded": "holdout 65001-65060 and every range used before (all earlier game seeds are below 100000)"
+  },
+  "totalGames": 120,
+  "limits": { "games": 120, "runs": 1, "workers": 6, "maxMsPerGame": 1800000, "kaneCalls": 0, "externalCalls": 0 },
+  "hypotheses": {
+    "H1_coverage": "Under the mixed stream the temperature draws actually used in games spread over [0,1] across seeds at the same turn (sd >= 0.2 where at least 5 games roll), while under legacy they do not (sd < 0.05).",
+    "H2_mixing_effect": "Within C4 on, the turn-limit rate differs between legacy and mixed (A4 - A2, two-sided).",
+    "H3_C4_effect": "Within the mixed stream, C4 changes the turn-limit rate or mean length (A4 - A3, two-sided).",
+    "H4_interaction": "The C4 effect differs between streams: (A4 - A3) - (A2 - A1) != 0 (turn-limit rate and mean length).",
+    "H5_first_mover": "Reported for every arm and contrast; no direction predicted."
+  },
+  "metrics": ["first-mover decisive win rate", "mean / median turns", "turn-limit rate", "draws", "temperature-roll draws used (per turn across seeds: sd, uniformity)", "decision at near-tie turns, incl. the turn-21 branch (chosen rank when the window holds > 1 candidate)", "plan/execution agreement (corrected; required = 1 only for C4-on arms)", "strategic prefixes vs realized two-turn trajectories", "teleport foresight", "engine replay of every game", "integrity"],
+  "uncertainty": "seed-blocked bootstrap (blocks = the 2 games of a seed), contrasts paired by seed across arms, 5000 resamples; consecutive and dispersed blocks also reported separately",
+  "decisionRules": {
+    "contrast": "SUPPORTED if the paired 95% interval excludes 0; NOT SUPPORTED if it lies within +-0.10 (turn-limit rate) or +-3 turns (length); otherwise INCONCLUSIVE",
+    "H1": "SUPPORTED if the mixed-stream sd condition holds at every turn with >= 5 rolls and legacy's does not; otherwise as observed",
+    "failure": "Any replay failure, illegal move or engine error invalidates the affected arm for H2-H4 (reported, not rerun). Plan/execution disagreement in a C4-on arm invalidates that arm."
+  },
+  "after": "Stop at READY_FOR_OPERATOR_V5_2_RANDOMIZATION_REVIEW. No further games, no Kane."
+}
