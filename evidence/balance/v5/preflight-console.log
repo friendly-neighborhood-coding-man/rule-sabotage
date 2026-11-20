@@ -1,0 +1,13 @@
+[2026-11-20T15:34:43.123Z] positions: 70
+[2026-11-20T15:37:42.418Z] ev-k1.1: {"mirrorPlanMismatch":0,"mirrorExecutedMovesMismatch":0,"hiddenRngPlanChanged":0,"hiddenRngExecutedMovesChanged":0,"nonDeterministic":0,"topTwoWithin1e6":0,"msPerCall":427}
+[2026-11-20T15:43:52.028Z] oa-v2: {"mirrorPlanMismatch":0,"mirrorExecutedMovesMismatch":0,"hiddenRngPlanChanged":0,"hiddenRngExecutedMovesChanged":0,"nonDeterministic":0,"topTwoWithin1e6":13,"msPerCall":880}
+[2026-11-20T15:45:55.555Z] softmax-v2: {"mirrorPlanMismatch":0,"mirrorExecutedMovesMismatch":0,"hiddenRngPlanChanged":0,"hiddenRngExecutedMovesChanged":0,"nonDeterministic":0,"topTwoWithin1e6":0,"msPerCall":294}
+[2026-11-20T15:46:24.148Z] k1 vs k1.1: {"positions":70,"sameChosenPlan":50,"sameChosenPlacement":68,"note":"differences come from C1-C4 (cell ties, reply ordering, near-ties, and planning without the 0.02 noise)"}
+[2026-11-20T15:49:45.067Z] turn-1 placements from start: {"ev-k1.1":1,"oa-v2":1,"softmax-v2":2}
+[2026-11-20T15:49:50.516Z] smoke ev-k1.1 vs ev-k1.1: {"human":"ev-k1.1","ai":"ev-k1.1","seed":99601,"first":"human","winner":"ai","turns":22,"ms":5447,"replayOk":true,"planExecAgree":"22/22","disagreements":[],"errors":[],"illegal":[]}
+[2026-11-20T15:51:02.946Z] smoke oa-v2 vs oa-v2: {"human":"oa-v2","ai":"oa-v2","seed":99602,"first":"ai","winner":"ai","turns":11,"ms":72421,"replayOk":true,"planExecAgree":"11/11","disagreements":[],"errors":[],"illegal":[]}
+[2026-11-20T15:51:09.878Z] smoke softmax-v2 vs softmax-v2: {"human":"softmax-v2","ai":"softmax-v2","seed":99603,"first":"human","winner":"human","turns":15,"ms":6932,"replayOk":true,"planExecAgree":"15/15","disagreements":[],"errors":[],"illegal":[]}
+[2026-11-20T15:51:12.992Z] smoke ev-k1.1 vs oa-v2: {"human":"ev-k1.1","ai":"oa-v2","seed":99601,"first":"ai","winner":"ai","turns":5,"ms":3114,"replayOk":true,"planExecAgree":"5/5","disagreements":[],"errors":[],"illegal":[]}
+[2026-11-20T15:51:17.312Z] smoke softmax-v2 vs ev-k1.1: {"human":"softmax-v2","ai":"ev-k1.1","seed":99602,"first":"human","winner":"human","turns":19,"ms":4319,"replayOk":true,"planExecAgree":"19/19","disagreements":[],"errors":[],"illegal":[]}
+[2026-11-20T15:51:20.893Z] smoke oa-v2 vs softmax-v2: {"human":"oa-v2","ai":"softmax-v2","seed":99603,"first":"ai","winner":"human","turns":10,"ms":3581,"replayOk":true,"planExecAgree":"10/10","disagreements":[],"errors":[],"illegal":[]}
+[2026-11-20T15:51:20.901Z] written evidence/balance/v5/preflight.json

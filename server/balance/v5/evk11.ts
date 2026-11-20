@@ -1,0 +1,180 @@
+/**
+ * ev-k1.1: the corrected V5 experimental reference (operator decision 2026-11-20 15:31 UTC). EXPERIMENT-ONLY.
+ *
+ * It is the frozen ev-k1 (server/balance/v4/evplanner.ts with { sideRelativeOrder: true }, kept unchanged with all its
+ * V4.2 evidence) plus exactly these corrections:
+ *
+ *  C1 trap-cell search: equal-value cells are broken by a side-relative cell key (symBestCells), not by the board key.
+ *  C2 reply-state ordering: equal-value end states in the reply approximation are ordered by a complete side-relative
+ *     description (canonicalState, which includes piece homes), and values within TIE are treated as equal.
+ *  C3 numerical near-ties: every comparison of expected values treats differences below TIE (1e-7) as ties broken by the
+ *     side-relative order. The engine's real teleport distribution is NOT changed (index 0 keeps its ~1e-9 difference);
+ *     only the planner's comparisons ignore differences that small.
+ *  C4 planner/executor consistency (operator requirement A): the planning move model is the executor itself
+ *     (greedy11, no planning noise), so a plan's committed moves are exactly the moves the executor plays on the real
+ *     board until the first random outcome. ev-k1 planned with 0.02 noise and executed without it.
+ *
+ * Everything else (evaluation, placement candidates, score formula, reply model, reply strata R = 16, temperature roll
+ * from the public seed and turn) is ev-k1's.
+ */
+import { createHash } from 'node:crypto';
+import { readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+import { type State, type Placement, type Move, applyPlacement, endTurn, validatePlacement, eligibleCells, ruleAt, parseKey, GOAL_X } from '../../engine.ts';
+import { type Player, type Effect, other, makeEffect, MAX_CELLS_PER_TURN } from '../../rules.ts';
+import { type Weights, DEFAULT_WEIGHTS, effectUpkeep, plannerEffects, effectId } from '../../weights.ts';
+import { cellPenalty, describeTurn, placementValue, type TurnPlan, type Plan } from '../../ai.ts';
+import { maskHidden, moveOutcomes, evaluateCached, newCtx, orderedMoves, MASKED_RNG, REPLY_STRATA, type Ctx, type Outcome } from '../v4/evplanner.ts';
+
+export const EVK11_ID = 'ev-k1.1';
+export const TIE = 1e-7;
+export const evk11Hash = () => createHash('sha256').update(readFileSync(fileURLToPath(import.meta.url), 'utf8').replace(/\r\n/g, '\n')).digest('hex').slice(0, 16);
+const K1 = { sideRelativeOrder: true } as const;
+
+// ---------------------------------------------------------------- side-relative helpers
+export const flipEW = (e: Effect): Effect => (e.kind === 'shove' && (e.dir === 'east' || e.dir === 'west') ? makeEffect('shove', e.dir === 'east' ? 'west' : 'east', e.amount) : e);
+export const rx = (p: Player, x: number) => (p === 'ai' ? 6 - x : x);
+export const rCell = (p: Player, k: string) => { const [x, y] = k.split(',').map(Number); return `${rx(p, x)},${y}`; };
+const rDir = (p: Player, d: Move['dir']) => (p === 'ai' ? (d === 'left' ? 'right' : d === 'right' ? 'left' : d) : d);
+const cmpStr = (a: string, b: string) => (a < b ? -1 : a > b ? 1 : 0);
+/** Values closer than TIE compare as equal (C3). */
+export const cmpVal = (a: number, b: number) => (Math.abs(a - b) < TIE ? 0 : a - b);
+/** A plan described relative to the side that plays it: identical for a plan and its mirror. */
+export function canonicalPlan(p: Player, c: { placement: Placement | null; moves: Move[] }): string {
+  const pl = c.placement ? `${effectId(p === 'ai' ? flipEW(c.placement.effect) : c.placement.effect)}@${c.placement.cells.map(k => rCell(p, k)).sort().join(' ')}` : 'none';
+  return `${pl}|${c.moves.map(m => `${rCell(p, m.from)}${rDir(p, m.dir)}${m.mode}`).join(' ')}`;
+}
+/** Complete side-relative description of a state (pieces with homes, live effects, actions, bonus, winner) (C2). */
+export function canonicalState(st: State, me: Player): string {
+  const rEff = (id: string) => (me === 'ai' ? id.replace('east', 'W').replace('west', 'east').replace('W', 'west') : id);
+  return st.pieces.map(q => `${q.owner === me ? 'm' : 'o'}${q.scored ? 's' : `${rx(me, q.x)},${q.y}`},${q.frozen},${q.shield ? 1 : 0},h${rx(me, q.home.x)},${q.home.y}`).sort().join(';')
+    + '|' + Object.entries(st.cells).map(([k, id]) => { const r = st.rules.find(z => z.id === id)!; return `${rCell(me, k)}=${rEff(effectId(r.effect))}:${r.owner === me ? 'm' : 'o'}`; }).sort().join(';')
+    + '|' + `${st.actionsLeft},${st.bonus[me]},${st.bonus[other(me)]},${st.winner === null ? '-' : st.winner === me ? 'm' : st.winner === 'draw' ? 'd' : 'o'}`;
+}
+/** C1: production trap-cell search (ai.ts bestCells, same value, floor, top 3) with side-relative tie-breaking. */
+export function symBestCells(s: State, p: Player, e: Effect, w: Weights): string[] {
+  const pieces = s.pieces.filter(q => !q.scored);
+  const scored = eligibleCells(s, p).filter(k => !ruleAt(s, k)).map(k => {
+    const c = parseKey(k); let v = 0;
+    for (const q of pieces) {
+      const ahead = (GOAL_X[q.owner] - q.x) * (GOAL_X[q.owner] - c.x) >= 0 ? 1 : 0.3;
+      const d = Math.abs(q.x - c.x) + Math.abs(q.y - c.y), lateral = Math.abs(q.y - c.y);
+      v += (q.owner === p ? -w.planner.selfHarmFactor : 1) * (ahead / (1 + 0.6 * d + 0.8 * lateral)) * cellPenalty(s, q.owner, k, e, w);
+    }
+    return { k, v, r: rCell(p, k) };
+  }).filter(o => o.v > 0.05).sort((a, b) => cmpVal(b.v, a.v) || cmpStr(a.r, b.r));
+  return scored.slice(0, MAX_CELLS_PER_TURN).map(o => o.k).sort();
+}
+
+// ---------------------------------------------------------------- the move model = the executor (C3, C4)
+export type Greedy = { moves: Move[]; state: State | null; pending: Outcome[] | null };
+/** ev-k1's greedy EV move loop (same stop rule, side-relative order), ties within TIE kept by order, no noise. */
+export function greedy11(s0: State, p: Player, ctx: Ctx): Greedy {
+  let s = s0.rng === MASKED_RNG ? structuredClone(s0) : maskHidden(s0);
+  const moves: Move[] = [];
+  while (s.current === p && !s.winner && s.actionsLeft > 0) {
+    const base = evaluateCached(s, p, ctx);
+    let best: { m: Move; v: number; outs: Outcome[] } | null = null;
+    for (const m of orderedMoves(s, p, true)) {
+      const outs = moveOutcomes(s, p, m); ctx.sims += outs.length;
+      const v = outs.reduce((a, o) => a + o.p * evaluateCached(o.state, p, ctx), 0);
+      if (!best || cmpVal(v, best.v) > 0) best = { m, v, outs };
+    }
+    if (!best || cmpVal(best.v, base - 0.25) < 0) break;
+    moves.push(best.m);
+    if (best.outs.length > 1) return { moves, state: null, pending: best.outs };
+    s = best.outs[0].state;
+  }
+  return { moves, state: s, pending: null };
+}
+/** THE executor for every V5 policy: the moves to play next on the real board (ends at a random move, then ask again). */
+export function nextMoves11(real: State, p: Player, w: Weights = DEFAULT_WEIGHTS): { moves: Move[]; endsAtChance: boolean } {
+  const ctx = newCtx(w, REPLY_STRATA, K1); ctx.me = p;
+  const g = greedy11(real, p, ctx);
+  return { moves: g.moves, endsAtChance: !!g.pending };
+}
+/** End states of our move phase: exact over teleports, our greedy continuation after the first one (as ev-k1). */
+export function ownEnds11(st: State, me: Player, ctx: Ctx): { p: number; state: State; v: number }[] {
+  const first = greedy11(st, me, ctx);
+  const raw: { p: number; state: State }[] = [];
+  if (!first.pending) raw.push({ p: 1, state: first.state! });
+  else for (const o of first.pending) { const c = greedy11(o.state, me, ctx); if (!c.pending) raw.push({ p: o.p, state: c.state! }); else for (const o2 of c.pending) raw.push({ p: o.p * o2.p, state: o2.state }); }
+  ctx.outcomeStates += raw.length;
+  return raw.map(e => ({ ...e, v: evaluateCached(e.state, me, ctx) }));
+}
+/** ev-k1's probability-mass strata with C2 (complete canonical order, TIE comparisons). */
+export function stratify11<T extends { p: number; v: number; state: State }>(ends: T[], me: Player, R: number): { p: number; state: State }[] {
+  if (ends.length <= R) return ends;
+  const key = new Map(ends.map(e => [e, canonicalState(e.state, me)]));
+  const sorted = [...ends].sort((a, b) => cmpVal(a.v, b.v) || cmpStr(key.get(a)!, key.get(b)!));
+  const total = sorted.reduce((a, e) => a + e.p, 0);
+  const strata: { mass: number; best: T | null; dist: number }[] = Array.from({ length: R }, () => ({ mass: 0, best: null, dist: Infinity }));
+  let cum = 0;
+  for (const e of sorted) {
+    const mid = (cum + e.p / 2) / total; cum += e.p;
+    const k = Math.min(R - 1, Math.floor(mid * R + 1e-6)), dist = Math.abs(mid - (k + 0.5) / R);
+    strata[k].mass += e.p;
+    if (cmpVal(dist, strata[k].dist) < 0) { strata[k].dist = dist; strata[k].best = e; }
+  }
+  return strata.filter(x => x.best).map(x => ({ p: x.mass, state: x.best!.state }));
+}
+function replyValue11(s: State, me: Player, ctx: Ctx): number {
+  if (s.winner) return evaluateCached(s, me, ctx);
+  const rep = structuredClone(s); endTurn(rep);
+  const opp = other(me);
+  if (rep.winner || rep.current !== opp) return evaluateCached(rep, me, ctx);
+  const r = greedy11(rep, opp, ctx);
+  if (!r.pending) return evaluateCached(r.state!, me, ctx);
+  ctx.outcomeStates += r.pending.length;
+  return r.pending.reduce((a, o) => a + o.p * evaluateCached(o.state, me, ctx), 0);
+}
+function rng(seed: number) { let x = seed >>> 0 || 1; return () => { x ^= x << 13; x >>>= 0; x ^= x >>> 17; x ^= x << 5; x >>>= 0; return x / 0x100000000; }; }
+
+export type Plan11 = Plan & { plannerId: string };
+/** Symmetric candidate placements: none, then each planner effect (side-relative order) on its symBestCells. */
+export function candidatePlacements(s: State, me: Player, w: Weights): (Placement | null)[] {
+  const out: (Placement | null)[] = [null];
+  for (const e of me === 'ai' ? plannerEffects(w).map(flipEW) : plannerEffects(w)) {
+    const cells = symBestCells(s, me, e, w);
+    if (!cells.length) continue;
+    const pl: Placement = { text: 'planner', effect: e, cells, interpretedBy: 'planner' };
+    if (validatePlacement(s, me, pl).ok) out.push(pl);
+  }
+  return out;
+}
+export const byScoreThenCanon = (me: Player) => (a: TurnPlan, b: TurnPlan) => cmpVal(b.score, a.score) || cmpStr(canonicalPlan(me, a), canonicalPlan(me, b));
+
+/** The ev-k1.1 whole-turn plan (ev-k1's structure and score formula; temperature roll from public seed + turn). */
+export function planTurn11(s0: State, opts: { me?: Player; temperature?: number; weights?: Weights } = {}): Plan11 {
+  const t0 = performance.now();
+  const w = opts.weights ?? DEFAULT_WEIGHTS, me = opts.me ?? 'ai', temperature = opts.temperature ?? w.planner.temperature;
+  const s = maskHidden(s0);
+  const r = rng((s0.seed ^ Math.imul(s0.turn + 7, 0x9e3779b1)) >>> 0);
+  const placements = candidatePlacements(s, me, w);
+  const ctx = newCtx(w, REPLY_STRATA, K1); ctx.me = me;
+  const ranked: TurnPlan[] = [];
+  for (const pl of placements) {
+    const st = structuredClone(s);
+    if (pl) applyPlacement(st, me, pl);
+    if (st.phase === 'place') st.phase = 'move';
+    const first = greedy11(st, me, ctx);
+    const ends = ownEnds11(st, me, ctx);
+    const immediate = ends.reduce((a, e) => a + e.p * e.v, 0);
+    const afterReply = stratify11(ends, me, REPLY_STRATA).reduce((a, e) => a + e.p * replyValue11(e.state, me, ctx), 0);
+    const upkeep = pl ? effectUpkeep(w, pl.effect) : 0;
+    const overlay = pl && w.weightMix ? w.weightMix * placementValue(s, me, pl, w) : 0;
+    ranked.push({ id: '', placement: pl, moves: first.moves, score: immediate * w.planner.immediateWeight + afterReply * w.planner.replyWeight - upkeep + overlay, afterReply, summary: describeTurn(pl, first.moves) + (first.pending ? ' (then re-plan after the teleport)' : '') });
+  }
+  ranked.sort(byScoreThenCanon(me));
+  ranked.forEach((c, i) => { c.id = 'p' + (i + 1); });
+  let chosen = ranked[0];
+  const near = ranked.filter(c => cmpVal(c.score, ranked[0].score - temperature) >= 0);
+  if (temperature > 0 && near.length > 1) {
+    const ws = near.map(c => Math.exp((c.score - ranked[0].score) / temperature * 2.5));
+    let roll = r() * ws.reduce((a, b) => a + b, 0);
+    for (let i = 0; i < near.length; i++) { roll -= ws[i]; if (roll <= 0) { chosen = near[i]; break; } }
+  }
+  return { chosen, ranked, candidates: placements.length, sims: ctx.sims, ms: Math.round(performance.now() - t0), plannerId: EVK11_ID };
+}
+export { K1 };
+export const describeOf = (pl: Placement | null, moves: Move[], pending: boolean) => describeTurn(pl, moves) + (pending ? ' (then re-plan after the teleport)' : '');

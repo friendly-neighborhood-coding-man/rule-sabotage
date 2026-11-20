@@ -1,0 +1,38 @@
+{
+  "schema": "rule-sabotage/v5-protocol@2",
+  "id": "V5-POLICY-DIVERSITY-300",
+  "status": "Conditionally approved by the operator (2026-11-20 15:31 UTC). FROZEN before any game: sha256 journalled in balance/v5/journal.ndjson ('v5-preregistered') with the implementation hashes, the preflight sha256 and every game's seed / role / first-mover assignment. Supersedes the PR #9 proposal (balance/v5/policy-diversity-protocol.json, kept for the record).",
+  "question": "Do the balance patterns observed so far survive a change of the policy that generates the observations?",
+  "scope": "Engine-based self-play and cross-play with three policies. Policy-level findings describe a policy. Robustness across these three policies is evidence about this policy family, never a proof that the rules are balanced or imbalanced, and says nothing about human players.",
+  "policies": {
+    "ev-k1.1": "corrected reference, server/balance/v5/evk11.ts (ev-k1 + C1 cell ties, C2 reply-state ordering, C3 near-ties < 1e-7, C4 planning with the executor's own move model, no planning noise). ev-k1 and its V4.2 evidence stay frozen and are not measurements of ev-k1.1",
+    "oa-v2": "opponent-aware maximin on ev-k1.1's move model, server/balance/v5/policies.ts",
+    "softmax-v2": "bounded Top-k softmax over ev-k1.1's ranked candidates, k 4, T 1.3255, floor 0.02, public-seed sampling"
+  },
+  "executor": "All three policies execute moves with ev-k1.1's greedy11 (nextMoves11), the same move model each uses in planning. Re-planning only after a teleport has resolved.",
+  "seeds": { "selfPlay": "68001-68030 x both first movers", "crossPlay": "68031-68040 x each policy on each side x each first mover", "excluded": "holdout 65001-65060 (untouched), V4 pilot 64001-64030, V4.2 66001-66030, probes 67901-67930 and 99611-99640, smoke 99001-99699" },
+  "arms": [
+    { "id": "S-REF", "games": 60, "policies": "ev-k1.1 vs ev-k1.1" },
+    { "id": "S-OA", "games": 60, "policies": "oa-v2 vs oa-v2" },
+    { "id": "S-SM", "games": 60, "policies": "softmax-v2 vs softmax-v2" },
+    { "id": "X-REF-OA", "games": 40, "policies": "ev-k1.1 vs oa-v2" },
+    { "id": "X-REF-SM", "games": 40, "policies": "ev-k1.1 vs softmax-v2" },
+    { "id": "X-OA-SM", "games": 40, "policies": "oa-v2 vs softmax-v2" }
+  ],
+  "totalGames": 300,
+  "limits": { "games": 300, "runs": 1, "workers": 6, "maxMsPerGame": 1800000, "kaneCalls": 0, "externalCalls": 0, "reruns": "none without operator approval" },
+  "metrics": "server/balance/v5/metrics.ts: first-mover and Human-side decisive win rates (Wilson + seed-blocked bootstrap), length (mean, median, turn-limit), counterplay (lead changes, comebacks), turn-2 captures, coverage (distinct two-turn openings, distinct turn-1 placements, opening entropy, effective openings, largest share, placement signatures, effect entropy), cross-play strength (seed-blocked, by role), planner/executor agreement in the real games, teleport foresight (information fairness), integrity (illegal, errors, softlocks, replay).",
+  "uncertainty": {
+    "gameLevel": "seed-blocked bootstrap, 5000 resamples: self-play blocks are the 2 games of a seed (both first movers), cross-play blocks the 4 games of a seed (each policy on each side x each first mover)",
+    "policyDependence": "differences between self-play arms paired by seed (68001-68030 shared), seed-blocked bootstrap",
+    "openingClusters": "sensitivity / coverage diagnostic only; NOT_ESTIMABLE when fewer than 5 clusters"
+  },
+  "decisionRules": {
+    "policyDependence": "a metric is POLICY-DEPENDENT between two policies if the paired seed-blocked 95% interval of their difference excludes 0",
+    "openingCoverage": "reported per policy; not a gate",
+    "eligibility": "a policy is eligible for robustness claims if every game replays, it has 0 illegal moves / errors / softlocks, plan-execution agreement is 1.0 in its games, and (for non-reference policies) its decisions differed from the reference in the preflight",
+    "ruleRobustness": "edge = rate - 0.5 per eligible policy (seed-blocked). ROBUST ACROSS THE ELIGIBLE POLICIES if every eligible policy's interval lies beyond +0.05 (or every one beyond -0.05); POLICY-DEPENDENT if one lies beyond 0.05 and another within +-0.05 or beyond on the other side; INCONCLUSIVE otherwise; INSUFFICIENT POLICIES with fewer than 2 eligible",
+    "noProof": "No result from these three policies is described as proof that the rules are universally balanced or imbalanced."
+  },
+  "after": "Stop at READY_FOR_OPERATOR_V5_POLICY_DIVERSITY_REVIEW. No Kane call; Kane's next investigation needs a separate operator decision."
+}

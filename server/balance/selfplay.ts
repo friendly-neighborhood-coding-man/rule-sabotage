@@ -14,7 +14,7 @@ import {
 import { createHash } from 'node:crypto';
 import { planTurn, planMoves, basePenalty, type PlannerHooks } from '../ai.ts';
 import { planTurnEV, nextMovesEV, EV_PLANNER_ID, type EVVariant } from './v4/evplanner.ts';
-import { planPolicy, K1 as K1_VARIANT, type PolicyId } from './v5/policies.ts';
+import { planPolicy, policyMoves, type PolicyId } from './v5/policies.ts';
 import { type Player, type Effect, PLAYERS, other } from '../rules.ts';
 import { type Weights, type FrozenWeights, effectId, activationUtility, freezeWeights, weightsHash } from '../weights.ts';
 
@@ -64,6 +64,8 @@ export type DetailTurn = {
   /** Every whole-turn candidate the planner evaluated (placement variants x greedy moves), ranked; `chosen` is its id. */
   candidates: DetailCandidate[]; chosen: string; considered: number; sims: number;
   placement: { effect: string; cells: string[]; events: GameEvent[] } | null; moves: DetailMove[]; endEvents: GameEvent[]; unused: number;
+  /** V5 only: the chosen plan's committed moves (to check planner/executor agreement against `moves`). */
+  plannedMoves?: { from: string; dir: string; mode: string }[];
 };
 export type GameDetail = { schema: 'rule-sabotage/game-detail@1'; seed: number; first: Player; start: StartState | null; turns: DetailTurn[]; finalHash: string };
 export type PlanTrace = { turn: number; p: Player; chosen: string; chosenScore: number; alternatives: { summary: string; score: number }[] };
@@ -147,7 +149,9 @@ export function playGame(seed: number, first: Player, weights: Record<Player, Fr
       // V5: a policy decides the turn (placement); moves always use the reference EV executor with K1.
       const pol = opts.policy?.[p];
       const ev = opts.planner?.[p] === 'ev-v4' || !!pol;
-      const evv = pol ? K1_VARIANT : (opts.evVariant?.[p] ?? {});
+      const evv = opts.evVariant?.[p] ?? {};
+      // V5 policies all execute with ev-k1.1's shared executor (policyMoves), never with the ev-k1 executor.
+      const nextMv = () => (pol ? policyMoves(s, p, w) : nextMovesEV(s, p, w, evv));
       const full = pol ? planPolicy(pol, s, p, w) : ev ? planTurnEV(s, { me: p, weights: w, variant: evv }) : planTurn(s, { me: p, weights: w, ...(opts.hooks?.[p] ? { hooks: opts.hooks[p] } : {}) });
       const plan = full.chosen;
       if (dt) { dt.candidates = full.ranked.map(c => ({ id: c.id, summary: c.summary, score: Math.round(c.score * 1000) / 1000, effect: c.placement ? effectId(c.placement.effect) : null, cells: c.placement ? [...c.placement.cells] : [], moves: c.moves.length })); dt.chosen = plan.id; dt.considered = full.candidates; dt.sims = full.sims; }
@@ -165,9 +169,10 @@ export function playGame(seed: number, first: Player, weights: Record<Player, Fr
       // V4.2 K3: a chosen hold-back plan is a deliberate decision: play exactly its (deterministic) moves and stop.
       const holdBack = ev && (plan as { holdBack?: boolean }).holdBack === true;
       if (holdBack) { moves = [...plan.moves]; evDone = true; (rec.holdBackTurns ??= { human: 0, ai: 0 })[p]++; }
-      else if (ev) { const nx = nextMovesEV(s, p, w, evv); moves = nx.moves; evDone = !nx.endsAtChance; }
+      else if (ev) { const nx = nextMv(); moves = nx.moves; evDone = !nx.endsAtChance; }
+      if (pol && dt) dt.plannedMoves = plan.moves.map(m => ({ from: m.from, dir: m.dir, mode: m.mode }));
       while (mi < moves.length || (!evDone && !s.winner && s.current === p && s.actionsLeft > 0)) {
-        if (mi >= moves.length) { const nx = nextMovesEV(s, p, w, evv); moves = nx.moves; mi = 0; evDone = !nx.endsAtChance; rec.replans = (rec.replans ?? 0) + 1; if (!moves.length) break; }
+        if (mi >= moves.length) { const nx = nextMv(); moves = nx.moves; mi = 0; evDone = !nx.endsAtChance; rec.replans = (rec.replans ?? 0) + 1; if (!moves.length) break; }
         const m = moves[mi++];
         if (s.winner || s.current !== p) break;
         const c = validateMove(s, p, m);

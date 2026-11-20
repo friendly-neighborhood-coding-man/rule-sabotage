@@ -1,0 +1,227 @@
+{
+  "hashes": {
+    "evk11": "1021a654e724c432",
+    "policies": "65939b1d734d1e97",
+    "evK1Frozen": "3af55720fad8b2ce"
+  },
+  "params": {
+    "oa": {
+      "topN": 6,
+      "strata": 8
+    },
+    "softmax": {
+      "k": 4,
+      "temperature": 1.3255,
+      "minProb": 0.02
+    }
+  },
+  "positions": 70,
+  "positionIds": [
+    "A-64001-ai@t11",
+    "A-64007-human@t11",
+    "A-64011-human@t11",
+    "A-64015-human@t28",
+    "A-64021-human@t11",
+    "A-64026-human@t11",
+    "A-64029-human@t45",
+    "B-64004-human@t28",
+    "B-64008-ai@t11",
+    "B-64013-human@t11",
+    "B-64018-ai@t11",
+    "B-64021-ai@t11",
+    "B-64024-human@t28",
+    "B-64027-human@t45",
+    "B-64030-ai@t45",
+    "C-64002-human-evhuman@t11",
+    "C-64005-ai-evhuman@t11",
+    "C-64007-human-evhuman@t11",
+    "C-64009-human-evhuman@t11",
+    "C-64012-human-evai@t11",
+    "E0-66001-human@t18",
+    "E0-66011-ai@t18",
+    "E0-66025-human@t18",
+    "H1-66004-ai-k1ai@t56",
+    "H1-66008-human-k1ai@t18",
+    "H1-66010-ai-k1human@t56",
+    "K1-66002-human@t18",
+    "K1-66009-human@t37",
+    "K1-66020-human@t18",
+    "K1-66023-ai@t56",
+    "K1-66027-human@t18",
+    "K2-66003-ai@t56",
+    "K2-66006-ai@t37",
+    "K2-66010-human@t18",
+    "K2-66014-human@t18",
+    "K2-66018-human@t18",
+    "K2-66021-ai@t56",
+    "K2-66024-ai@t56",
+    "K2-66027-human@t37",
+    "K2-66030-ai@t37",
+    "synthetic-0",
+    "synthetic-1",
+    "synthetic-2",
+    "synthetic-3",
+    "synthetic-4",
+    "synthetic-5",
+    "synthetic-6",
+    "synthetic-7",
+    "synthetic-8",
+    "synthetic-9",
+    "synthetic-10",
+    "synthetic-11",
+    "synthetic-12",
+    "synthetic-13",
+    "synthetic-14",
+    "synthetic-15",
+    "synthetic-16",
+    "synthetic-17",
+    "synthetic-18",
+    "synthetic-19",
+    "synthetic-20",
+    "synthetic-21",
+    "synthetic-22",
+    "synthetic-23",
+    "synthetic-24",
+    "synthetic-25",
+    "synthetic-26",
+    "synthetic-27",
+    "synthetic-28",
+    "synthetic-29"
+  ],
+  "requirements": {
+    "ev-k1.1": {
+      "mirrorPlanMismatch": 0,
+      "mirrorExecutedMovesMismatch": 0,
+      "hiddenRngPlanChanged": 0,
+      "hiddenRngExecutedMovesChanged": 0,
+      "nonDeterministic": 0,
+      "topTwoWithin1e6": 0,
+      "msPerCall": 427
+    },
+    "oa-v2": {
+      "mirrorPlanMismatch": 0,
+      "mirrorExecutedMovesMismatch": 0,
+      "hiddenRngPlanChanged": 0,
+      "hiddenRngExecutedMovesChanged": 0,
+      "nonDeterministic": 0,
+      "topTwoWithin1e6": 13,
+      "msPerCall": 880
+    },
+    "softmax-v2": {
+      "mirrorPlanMismatch": 0,
+      "mirrorExecutedMovesMismatch": 0,
+      "hiddenRngPlanChanged": 0,
+      "hiddenRngExecutedMovesChanged": 0,
+      "nonDeterministic": 0,
+      "topTwoWithin1e6": 0,
+      "msPerCall": 294
+    }
+  },
+  "distinctVsReference": {
+    "oa-v2": {
+      "plans": 22,
+      "placementOnly": 22
+    },
+    "softmax-v2": {
+      "plans": 19,
+      "placementOnly": 19
+    }
+  },
+  "k1VersusK11": {
+    "positions": 70,
+    "sameChosenPlan": 50,
+    "sameChosenPlacement": 68,
+    "note": "differences come from C1-C4 (cell ties, reply ordering, near-ties, and planning without the 0.02 noise)"
+  },
+  "turn1PlacementsFromStart": {
+    "ev-k1.1": 1,
+    "oa-v2": 1,
+    "softmax-v2": 2
+  },
+  "smoke": [
+    {
+      "human": "ev-k1.1",
+      "ai": "ev-k1.1",
+      "seed": 99601,
+      "first": "human",
+      "winner": "ai",
+      "turns": 22,
+      "ms": 5447,
+      "replayOk": true,
+      "planExecAgree": "22/22",
+      "disagreements": [],
+      "errors": [],
+      "illegal": []
+    },
+    {
+      "human": "oa-v2",
+      "ai": "oa-v2",
+      "seed": 99602,
+      "first": "ai",
+      "winner": "ai",
+      "turns": 11,
+      "ms": 72421,
+      "replayOk": true,
+      "planExecAgree": "11/11",
+      "disagreements": [],
+      "errors": [],
+      "illegal": []
+    },
+    {
+      "human": "softmax-v2",
+      "ai": "softmax-v2",
+      "seed": 99603,
+      "first": "human",
+      "winner": "human",
+      "turns": 15,
+      "ms": 6932,
+      "replayOk": true,
+      "planExecAgree": "15/15",
+      "disagreements": [],
+      "errors": [],
+      "illegal": []
+    },
+    {
+      "human": "ev-k1.1",
+      "ai": "oa-v2",
+      "seed": 99601,
+      "first": "ai",
+      "winner": "ai",
+      "turns": 5,
+      "ms": 3114,
+      "replayOk": true,
+      "planExecAgree": "5/5",
+      "disagreements": [],
+      "errors": [],
+      "illegal": []
+    },
+    {
+      "human": "softmax-v2",
+      "ai": "ev-k1.1",
+      "seed": 99602,
+      "first": "human",
+      "winner": "human",
+      "turns": 19,
+      "ms": 4319,
+      "replayOk": true,
+      "planExecAgree": "19/19",
+      "disagreements": [],
+      "errors": [],
+      "illegal": []
+    },
+    {
+      "human": "oa-v2",
+      "ai": "softmax-v2",
+      "seed": 99603,
+      "first": "ai",
+      "winner": "human",
+      "turns": 10,
+      "ms": 3581,
+      "replayOk": true,
+      "planExecAgree": "10/10",
+      "disagreements": [],
+      "errors": [],
+      "illegal": []
+    }
+  ]
+}
