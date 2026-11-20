@@ -1,0 +1,35 @@
+{
+  "schema": "rule-sabotage/v53-protocol@1",
+  "id": "V5.3-POLICY-RELIABILITY-180",
+  "status": "Authorised by the operator (2026-11-20 21:44 UTC): at most 180 games, once, only after the ev-k1.2 and oa-v3 preflight passes. FROZEN before any game in balance/v5_3/journal.ndjson ('v53-preregistered'): protocol sha256, source hashes, preflight sha256, every assignment.",
+  "primaryQuestion": "Do first-mover advantages still vary substantially across genuinely different decision policies once the planner-randomization defect is corrected?",
+  "policies": {
+    "ev-k1.2": "server/balance/v5_3/policies.ts planRef12 = V5.2 planner k1x-1 { c4: true, stream: 'mixed' } (ev-k1.1 + SHA-256 stream-1)",
+    "softmax-v2": "unchanged V5 policy (bounded Top-k softmax, sha256 public stream)",
+    "oa-v3": "server/balance/v5_3/policies.ts planOA3, bounded-work maximin (topN 6, own strata 8, second-level strata 8, opponent top-K 4 + none, budget 20,000 greedy simulations per decision, recorded fallback)"
+  },
+  "shared": "All three use ev-k1.1's original symmetric candidate generator (candidatePlacements) and the same executor (nextMoves11). The expanded opening generator is NOT used.",
+  "seeds": {
+    "consecutive": [73001, 73002, 73003, 73004, 73005, 73006, 73007, 73008, 73009, 73010, 73011, 73012, 73013, 73014, 73015],
+    "dispersed": [2532012293, 2335391545, 2666925590, 1510947526, 2481358929, 1906785780, 653711109, 976931362, 1439013218, 3355631747, 496991590, 262833418, 2703065956, 1816339435, 1517957762],
+    "derivation": "dispersed = 200000 + (first 32 bits of sha256('rule-sabotage/v5.3/dispersed-seed/' + i) mod 3999000000), i = 0..14",
+    "design": "the same 30 seeds for every policy, each with both first movers (mirrored): 60 self-play games per policy, 180 total, no cross-play",
+    "excluded": "holdout 65001-65060 and every earlier range"
+  },
+  "totalGames": 180,
+  "limits": { "games": 180, "runs": 1, "workers": 6, "maxMsPerGame": 1800000, "kaneCalls": 0, "externalCalls": 0, "reruns": "none, not even for failed or timed-out games" },
+  "censoring": "A game stopped by the 30-minute limit is ABORTED (censored), not a draw: excluded from win rates, counted separately, and win-rate sensitivity bounds are reported (all aborted games counted as first-mover wins / as first-mover losses).",
+  "hypotheses": {
+    "P1": "Policy dependence of the first-mover rate: at least one pairwise difference between policies (paired by seed, seed-blocked 95%) excludes 0.",
+    "P2": "Rule robustness of a first-mover edge across eligible policies (verdict rule below); INSUFFICIENT POLICIES with fewer than 2 eligible.",
+    "P3": "Descriptive: Human-side rate, length, turn-limit rate, turn-2 captures, strategic vs RNG diversity, conditional decisions, compute."
+  },
+  "eligibility": "replay OK for every game of the policy, 0 illegal moves, 0 engine errors other than the time limit, plan/execution agreement 1.0 (corrected metric), at most 3 of 60 games aborted",
+  "decisionRules": {
+    "policyDependence": "POLICY-DEPENDENT if a paired seed-blocked 95% interval of a pairwise first-mover difference excludes 0",
+    "ruleRobustness": "edge = first-mover rate - 0.5 per eligible policy (seed-blocked): ROBUST ACROSS THE ELIGIBLE POLICIES if all lie beyond +0.05 (or all beyond -0.05); POLICY-DEPENDENT if one lies beyond 0.05 and another within +-0.05 or beyond on the other side; INCONCLUSIVE otherwise; INSUFFICIENT POLICIES with fewer than 2 eligible. Never a proof about the rules.",
+    "stop": "If the preflight fails, no game is played. During the run nothing is stopped or rerun."
+  },
+  "distinguish": ["policy-dependent outcomes", "strategic coverage", "evidence about the rules", "gameplay quality for humans (not measurable by self-play)"],
+  "after": "Stop at READY_FOR_OPERATOR_V5_3_POLICY_RELIABILITY_REVIEW. Kane dossier prepared, Kane not invoked."
+}
