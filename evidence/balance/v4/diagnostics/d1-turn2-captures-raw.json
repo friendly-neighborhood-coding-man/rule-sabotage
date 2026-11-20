@@ -1,0 +1,4 @@
+{"arm":"A","games":60,"turn2CapturedPieces":77,"viaForcedMove":70,"onMoveThroughSecondMoversNewTrap":70,"gamesWithTurn2Capture":42,"ofWhichFirstMoverDidNotWin":24}
+{"arm":"B","games":60,"turn2CapturedPieces":120,"viaForcedMove":120,"onMoveThroughSecondMoversNewTrap":120,"gamesWithTurn2Capture":60,"ofWhichFirstMoverDidNotWin":44}
+{"arm":"A","turn1ChosenScoreMean":9.87,"realizedEvalForFirstMoverAfterTurn2Mean":-2.23}
+{"arm":"B","turn1ChosenScoreMean":9,"realizedEvalForFirstMoverAfterTurn2Mean":-5}

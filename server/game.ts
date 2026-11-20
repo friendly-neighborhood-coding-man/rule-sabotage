@@ -105,7 +105,11 @@ async function referee(g: Game, s: State, p: Player, pl: Placement): Promise<{ v
   if (g.reviews.length > 60) g.reviews.shift();
   const failed = trial.engineChecks.find(c => !c.pass);
   if (failed) { Object.assign(verdict, { final: 'rejected', decidedBy: 'engine', resolvedTurn: s.turn, message: `Engine safety check failed: ${failed.text} (${failed.detail}).` }); stamp(verdict); return rec; }
-  if (g.tiers) {
+  // V4.1 policy. Kane off (engine-only): the tier selection ALWAYS runs. Tier 1/2 are verified by the engine's own
+  // checks and go live labelled engine-approved; tier 3 needs Kane, so without Kane it is fail-closed: 'unverified',
+  // never placed. Kane on: tiers only when REFEREE_TIERS=on, as before.
+  const engineOnly = g.refereeMode === 'engine-only';
+  if (g.tiers || engineOnly) {
     const t = selectTier(s, p, pl, trial);
     verdict.tier = t; verdict.timing.tierMs = t.ms;
     g.progress.push({ at: Date.now(), text: `Referee tier ${t.tier} for ${who} rule: ${t.reasons.join('; ')}.` });
@@ -116,10 +120,11 @@ async function referee(g: Game, s: State, p: Player, pl: Placement): Promise<{ v
       return rec;
     }
   }
-  if (g.refereeMode === 'engine-only') {
-    verdict.final = 'unverified'; verdict.decidedBy = 'engine-only'; verdict.message = 'Engine checks passed. Kane referee is switched off, so this rule is NOT Kane-verified.';
+  if (engineOnly) {
+    const why = verdict.tier ? verdict.tier.reasons.join('; ') : 'needs Kane review';
+    Object.assign(verdict, { final: 'unverified', decidedBy: 'engine-only', resolvedTurn: s.turn, activated: false, message: `Not placed. This rule needs Kane review (tier 3: ${why}) and the Kane referee is off. Unverified rules never go live.` });
     stamp(verdict);
-    activate(g, p, pl, rec);
+    g.progress.push({ at: Date.now(), text: `${who} rule was not placed: it needs Kane review and the Kane referee is off.` });
     return rec;
   }
   g.progress.push({ at: Date.now(), text: `Kane is examining ${who} rule…` });

@@ -1,0 +1,26 @@
+{
+  "schema": "rule-sabotage/v41-dev-plan@1",
+  "id": "V4.1-DEV-SINGLE-FACTOR",
+  "status": "PREPARED_NOT_AUTHORISED. No game of this plan has been played. Before any game: operator approval of the budget, then a journal entry 'dev-preregistered' with this file's sha256.",
+  "purpose": "Single-factor tests of three planner corrections for problems the V4 pilot exposed in the honest (EV) planner. Development evidence only: the final holdout 65001-65060 stays untouched until a candidate is frozen.",
+  "seeds": { "from": 66001, "to": 66030, "note": "fresh development seeds: not used or reserved by V1-V4 (V4 pilot 64001-64030, V4 holdout 65001-65060, smoke 99001-99399)" },
+  "control": { "id": "E0", "planner": "ev-teleport-v4.1 defaults (exactly the V4 pilot candidate)" },
+  "factors": [
+    { "id": "K1", "variant": { "sideRelativeOrder": true }, "component": "planner-search (tie-breaking only)", "problem": "Human-side vs AI-side asymmetry", "mechanism": "greedy ties broken in board-coordinate order: for AI pieces low x = nearest the goal, for Human pieces = farthest. Mirror check: 7/40 chosen plans and 16/40 move lists differ between a position and its mirror; 0/40 with K1", "predictions": [{ "metric": "ev_side_asymmetry", "definition": "|win rate as Human side - win rate as AI side| for K1 vs E0 head-to-head with mirrored seats", "direction": "decrease" }, { "metric": "mirror_mismatch_rate", "direction": "decrease to 0" }] },
+    { "id": "K2", "variant": { "placementAwareReply": true }, "component": "planner-valuation (opponent model)", "problem": "second-mover advantage in EV-vs-EV", "mechanism": "the whole-turn look-ahead lets the opponent only move, never place. In 60/60 EV games the second mover captured on turn 2 (120 pieces), every capture through the trap it had just placed; the first mover's plan predicted +4.5, the real value after turn 2 was -5.0. K2 predicts -5.0 exactly", "caveat": "on the probed turn-1 positions K2 corrects the prediction but does not change the opening; it is still a single-factor test of the opponent model", "predictions": [{ "metric": "first_mover_win_rate", "direction": "increase toward 0.5" }, { "metric": "turn2_captures_per_game", "direction": "decrease" }] },
+    { "id": "K3", "variant": { "truncatedCandidates": true }, "component": "planner-search (candidate set) + executor plays the chosen move prefix", "problem": "second-mover advantage; opening collapse", "mechanism": "every whole-turn candidate moves greedily to the end, so holding pieces back is never compared. Against the real EV reply, 0 moves after the conveyor placement scored -3.3 versus -5.0 for the full rush (probe)", "requires": "executor change: play the chosen candidate's moves (not a fresh greedy re-plan) up to the first random move. Not implemented yet", "predictions": [{ "metric": "turn2_captures_per_game", "direction": "decrease" }, { "metric": "distinct_openings", "direction": "increase" }] }
+  ],
+  "notTestedYet": [
+    "Opening temperature / candidate-scale changes: deferred until K2 / K3 results, because the collapse (one candidate inside the 0.6 window on every turn 1, margin 4.8) may change with them.",
+    "Rules-level levers (Kane's S3, S4): S3 = 1 limits the first mover to 1 action on turn 1. Under EV the probe shows 1 move is LESS exposed than 3 (-4.2 vs -5.0), so S3 may RAISE the first-mover rate there, the opposite of Kane's prediction. Kane's original prediction stays as written; any rescoped S3 test must be registered as a new, two-sided hypothesis with Claude/operator provenance, separate from Kane's."
+  ],
+  "design": {
+    "selfPlay": "E0, K1, K2, K3 each EV-vs-EV on seeds 66001-66030 x both first movers = 60 games per arm, paired by seed with E0",
+    "headToHead": "K1 vs E0 with mirrored seats and first-mover order on 66001-66015 = 60 games (the asymmetry test)",
+    "totalGames": 300,
+    "uncertainty": "paired-by-seed bootstrap 95% (V3 pairedDiff), Wilson 95% for rates",
+    "gates": "V4 pilot gates G1-G6 against E0 (length, turn limit, edge, diversity, counterplay, safety) plus: information fairness unchanged (foresight interval contains 0), mirror mismatch 0 for K1",
+    "selection": "at most one factor (or a combination only after each has its own result) is frozen into a V4.2 candidate; that frozen candidate, not any of these arms, is what the holdout 65001-65060 evaluates later"
+  },
+  "budget": { "games": 300, "kaneCalls": 0, "externalCalls": 0, "approvedBy": null }
+}

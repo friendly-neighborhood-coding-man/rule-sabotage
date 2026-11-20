@@ -47,7 +47,8 @@ export function reviewCacheKey(o: { signature: string; html: string; trialId: st
 }
 
 export const kaneConfig = () => ({
-  enabled: process.env.KANE_REFEREE !== 'off',
+  // V4.1 (operator decision 2026-11-20): the Kane referee is OPT-IN. Unset or anything but 'on' = engine-only referee.
+  enabled: process.env.KANE_REFEREE === 'on',
   cli: process.env.KANE_CLI || 'kane-cli',
   mode: (process.env.KANE_MODE === 'objective' ? 'objective' : 'analyzer') as 'analyzer' | 'objective',
   timeoutS: Math.max(20, Math.min(600, Number(process.env.KANE_TIMEOUT_S) || 300)),
@@ -107,7 +108,7 @@ let versionCache: { at: number; cli: string; version: string | null; whoami: str
 /** Probe whether kane-cli is installed (and logged in). Cached for 5 minutes. */
 export async function kaneProbe(): Promise<{ installed: boolean; version: string | null; loggedIn: boolean | null; detail: string }> {
   const cfg = kaneConfig();
-  if (!cfg.enabled) return { installed: false, version: null, loggedIn: null, detail: 'KANE_REFEREE=off' };
+  if (!cfg.enabled) return { installed: false, version: null, loggedIn: null, detail: 'Kane referee is off (opt-in: set KANE_REFEREE=on)' };
   if (!versionCache || versionCache.cli !== cfg.cli || Date.now() - versionCache.at > 300_000) {
     const v = await runCapture(['--version'], 15_000);
     const version = v.code === 0 ? v.stdout.trim().split(/\s+/).pop() || null : null;

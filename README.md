@@ -48,8 +48,8 @@ The header chips always show what is actually running: `AI brain: OpenRouter · 
 
 | Setting | Effect |
 |---|---|
-| `KANE_REFEREE=on` (default) | Rules are reviewed by kane-cli. If Kane fails or times out the rule is **unverified and does not go live** (unless `ALLOW_UNVERIFIED_RULES=1`). |
-| `KANE_REFEREE=off` | Engine checks only; rules go live labelled “NOT Kane-verified”. Good for quick offline play. |
+| `KANE_REFEREE=on` (opt-in; each review is a paid kane-cli call) | Rules are reviewed by kane-cli. If Kane fails or times out the rule is **unverified and does not go live** (unless `ALLOW_UNVERIFIED_RULES=1`). |
+| unset / `KANE_REFEREE=off` (default) | Engine-only referee: tier 1/2 rules (fully checked by the engine) go live labelled “engine-approved”; tier-3 rules (need Kane) are **unverified and never go live**. |
 | `REFEREE_TIERS=on` (default off) | Simple or fully simulable rules are decided by the engine (tier 1/2) and shown as **engine-approved, not reviewed by Kane**. Approximated, untestable or borderline rules still go to Kane and stay off the board until Kane approves. See [docs/OPTIMIZATION.md](docs/OPTIMIZATION.md). |
 | `KANE_MODE=analyzer` (default) | `kane-cli run --analyzer-only --condition … --cdp-endpoint` on the trial page (no browser actions, one verdict per condition). |
 | `KANE_MODE=objective` | `kane-cli run "<objective>" --url <trial page>` (Kane drives a browser; slower). |
