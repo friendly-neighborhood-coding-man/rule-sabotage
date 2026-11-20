@@ -1,0 +1,14 @@
+ablation 2026-11-20T20-14-23Z-v51-ablation: 96 games
+  8/96 K1-69004-ai ai t13 19s
+  16/96 K1-69008-human draw t60 27s
+  24/96 C1-69004-ai ai t13 20s
+  32/96 C2-69001-human human t13 15s
+  40/96 C2-69004-ai ai t13 17s
+  48/96 C3-69001-human human t13 16s
+  56/96 C3-69003-ai ai t19 21s
+  64/96 C3-69008-ai ai t60 26s
+  72/96 C4-69004-ai human t22 21s
+  80/96 C4-69008-ai human t22 22s
+  88/96 K11-69004-ai human t22 23s
+  96/96 K11-69008-ai human t22 16s
+done in 6.1 min: replay OK, external calls 0
