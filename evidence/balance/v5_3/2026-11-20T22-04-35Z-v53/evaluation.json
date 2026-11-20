@@ -1,0 +1,535 @@
+{
+  "schema": "rule-sabotage/v53-evaluation@1",
+  "dir": "evidence/balance/v5_3/2026-11-20T22-04-35Z-v53",
+  "replayOk": true,
+  "perPolicy": {
+    "ev-k1.2": {
+      "games": 60,
+      "aborted": 0,
+      "completed": 60,
+      "decisive": 59,
+      "draws": 1,
+      "eligible": true,
+      "firstMover": {
+        "k": 54,
+        "n": 59,
+        "wilson95": [
+          0.816,
+          0.963
+        ],
+        "seedBlocked": {
+          "value": 0.915,
+          "ci95": [
+            0.814,
+            1
+          ],
+          "blocks": 30
+        },
+        "sensitivity": {
+          "abortedAllFirstMoverWins": 0.915,
+          "abortedAllFirstMoverLosses": 0.915
+        }
+      },
+      "humanSide": {
+        "k": 30,
+        "n": 59,
+        "wilson95": [
+          0.384,
+          0.632
+        ],
+        "seedBlocked": {
+          "value": 0.508,
+          "ci95": [
+            0.5,
+            0.526
+          ],
+          "blocks": 30
+        }
+      },
+      "length": {
+        "mean": {
+          "value": 25.583,
+          "ci95": [
+            19.299,
+            32.317
+          ],
+          "blocks": 30
+        },
+        "median": 15,
+        "turnLimit": {
+          "value": 0.233,
+          "ci95": [
+            0.1,
+            0.383
+          ],
+          "blocks": 30
+        }
+      },
+      "byBlock": {
+        "consecutive": {
+          "games": 30,
+          "firstMover": 0.867,
+          "turnLimit": 0.067
+        },
+        "dispersed": {
+          "games": 30,
+          "firstMover": 0.966,
+          "turnLimit": 0.4
+        }
+      },
+      "counterplay": {
+        "leadChanges": {
+          "value": 4.883,
+          "ci95": [
+            4.5,
+            5.283
+          ],
+          "blocks": 30
+        },
+        "comebacks": {
+          "value": 1,
+          "ci95": [
+            1,
+            1
+          ],
+          "blocks": 30
+        }
+      },
+      "turn2Captures": 2,
+      "diversity": {
+        "firstTurnChoices": 1,
+        "strategicPrefixes": 1,
+        "realizedTwoTurnTrajectories": 1,
+        "repeatedIdenticalStates": 340,
+        "repeatedStatesWithDifferentDecisions": 17
+      },
+      "compute": {
+        "decisions": 1535,
+        "msP50": 80,
+        "msP90": 722,
+        "msP99": 2385,
+        "msMax": 4905,
+        "budgetHits": 0,
+        "fallbacks": 0,
+        "secondLevelCollapsed": 0,
+        "opponentOptionsPruned": 0,
+        "temperatureRolls": 422
+      },
+      "agreement": {
+        "turns": 1535,
+        "agree": 1535,
+        "rate": 1
+      },
+      "foresight": {
+        "moves": 12,
+        "advantage": 0.375
+      },
+      "integrity": {
+        "illegal": 0,
+        "nonTimeoutErrors": 0
+      }
+    },
+    "softmax-v2": {
+      "games": 60,
+      "aborted": 0,
+      "completed": 60,
+      "decisive": 58,
+      "draws": 2,
+      "eligible": true,
+      "firstMover": {
+        "k": 31,
+        "n": 58,
+        "wilson95": [
+          0.408,
+          0.657
+        ],
+        "seedBlocked": {
+          "value": 0.534,
+          "ci95": [
+            0.367,
+            0.691
+          ],
+          "blocks": 30
+        },
+        "sensitivity": {
+          "abortedAllFirstMoverWins": 0.534,
+          "abortedAllFirstMoverLosses": 0.534
+        }
+      },
+      "humanSide": {
+        "k": 31,
+        "n": 58,
+        "wilson95": [
+          0.408,
+          0.657
+        ],
+        "seedBlocked": {
+          "value": 0.534,
+          "ci95": [
+            0.466,
+            0.603
+          ],
+          "blocks": 30
+        }
+      },
+      "length": {
+        "mean": {
+          "value": 27.217,
+          "ci95": [
+            20.633,
+            34.45
+          ],
+          "blocks": 30
+        },
+        "median": 14,
+        "turnLimit": {
+          "value": 0.283,
+          "ci95": [
+            0.15,
+            0.433
+          ],
+          "blocks": 30
+        }
+      },
+      "byBlock": {
+        "consecutive": {
+          "games": 30,
+          "firstMover": 0.655,
+          "turnLimit": 0.4
+        },
+        "dispersed": {
+          "games": 30,
+          "firstMover": 0.414,
+          "turnLimit": 0.167
+        }
+      },
+      "counterplay": {
+        "leadChanges": {
+          "value": 5.85,
+          "ci95": [
+            5.217,
+            6.517
+          ],
+          "blocks": 30
+        },
+        "comebacks": {
+          "value": 0.966,
+          "ci95": [
+            0.893,
+            1
+          ],
+          "blocks": 30
+        }
+      },
+      "turn2Captures": 1.967,
+      "diversity": {
+        "firstTurnChoices": 2,
+        "strategicPrefixes": 2,
+        "realizedTwoTurnTrajectories": 3,
+        "repeatedIdenticalStates": 415,
+        "repeatedStatesWithDifferentDecisions": 18
+      },
+      "compute": {
+        "decisions": 1633,
+        "msP50": 98,
+        "msP90": 849,
+        "msP99": 1830,
+        "msMax": 3459,
+        "budgetHits": 0,
+        "fallbacks": 0,
+        "secondLevelCollapsed": 0,
+        "opponentOptionsPruned": 0,
+        "temperatureRolls": 0
+      },
+      "agreement": {
+        "turns": 1633,
+        "agree": 1633,
+        "rate": 1
+      },
+      "foresight": {
+        "moves": 38,
+        "advantage": -0.152
+      },
+      "integrity": {
+        "illegal": 0,
+        "nonTimeoutErrors": 0
+      }
+    },
+    "oa-v3": {
+      "games": 60,
+      "aborted": 0,
+      "completed": 60,
+      "decisive": 58,
+      "draws": 2,
+      "eligible": true,
+      "firstMover": {
+        "k": 39,
+        "n": 58,
+        "wilson95": [
+          0.544,
+          0.779
+        ],
+        "seedBlocked": {
+          "value": 0.672,
+          "ci95": [
+            0.561,
+            0.776
+          ],
+          "blocks": 30
+        },
+        "sensitivity": {
+          "abortedAllFirstMoverWins": 0.672,
+          "abortedAllFirstMoverLosses": 0.672
+        }
+      },
+      "humanSide": {
+        "k": 31,
+        "n": 58,
+        "wilson95": [
+          0.408,
+          0.657
+        ],
+        "seedBlocked": {
+          "value": 0.534,
+          "ci95": [
+            0.397,
+            0.667
+          ],
+          "blocks": 30
+        }
+      },
+      "length": {
+        "mean": {
+          "value": 33.683,
+          "ci95": [
+            26.867,
+            40.6
+          ],
+          "blocks": 30
+        },
+        "median": 17,
+        "turnLimit": {
+          "value": 0.45,
+          "ci95": [
+            0.317,
+            0.6
+          ],
+          "blocks": 30
+        }
+      },
+      "byBlock": {
+        "consecutive": {
+          "games": 30,
+          "firstMover": 0.7,
+          "turnLimit": 0.4
+        },
+        "dispersed": {
+          "games": 30,
+          "firstMover": 0.643,
+          "turnLimit": 0.5
+        }
+      },
+      "counterplay": {
+        "leadChanges": {
+          "value": 2.8,
+          "ci95": [
+            2.233,
+            3.417
+          ],
+          "blocks": 30
+        },
+        "comebacks": {
+          "value": 0.655,
+          "ci95": [
+            0.542,
+            0.763
+          ],
+          "blocks": 30
+        }
+      },
+      "turn2Captures": 0.767,
+      "diversity": {
+        "firstTurnChoices": 1,
+        "strategicPrefixes": 1,
+        "realizedTwoTurnTrajectories": 59,
+        "repeatedIdenticalStates": 10,
+        "repeatedStatesWithDifferentDecisions": 0
+      },
+      "compute": {
+        "decisions": 2021,
+        "msP50": 107,
+        "msP90": 2117,
+        "msP99": 7291,
+        "msMax": 18457,
+        "budgetHits": 4,
+        "fallbacks": 4,
+        "secondLevelCollapsed": 8240,
+        "opponentOptionsPruned": 78483,
+        "temperatureRolls": 0
+      },
+      "agreement": {
+        "turns": 2021,
+        "agree": 2021,
+        "rate": 1
+      },
+      "foresight": {
+        "moves": 382,
+        "advantage": 0.089
+      },
+      "integrity": {
+        "illegal": 0,
+        "nonTimeoutErrors": 0
+      }
+    }
+  },
+  "policyDependence": {
+    "first_mover_win_rate": {
+      "softmax-v2 - ev-k1.2": {
+        "diff": -0.381,
+        "ci95": [
+          -0.577,
+          -0.175
+        ]
+      },
+      "oa-v3 - ev-k1.2": {
+        "diff": -0.243,
+        "ci95": [
+          -0.395,
+          -0.063
+        ]
+      },
+      "oa-v3 - softmax-v2": {
+        "diff": 0.138,
+        "ci95": [
+          -0.054,
+          0.335
+        ]
+      }
+    },
+    "human_side_win_rate": {
+      "softmax-v2 - ev-k1.2": {
+        "diff": 0.026,
+        "ci95": [
+          -0.035,
+          0.09
+        ]
+      },
+      "oa-v3 - ev-k1.2": {
+        "diff": 0.026,
+        "ci95": [
+          -0.1,
+          0.153
+        ]
+      },
+      "oa-v3 - softmax-v2": {
+        "diff": 0,
+        "ci95": [
+          -0.135,
+          0.137
+        ]
+      }
+    },
+    "mean_turns": {
+      "softmax-v2 - ev-k1.2": {
+        "diff": 1.633,
+        "ci95": [
+          -8.267,
+          11.767
+        ]
+      },
+      "oa-v3 - ev-k1.2": {
+        "diff": 8.1,
+        "ci95": [
+          1.866,
+          14.417
+        ]
+      },
+      "oa-v3 - softmax-v2": {
+        "diff": 6.467,
+        "ci95": [
+          -4.119,
+          16.65
+        ]
+      }
+    },
+    "turn_limit_rate": {
+      "softmax-v2 - ev-k1.2": {
+        "diff": 0.05,
+        "ci95": [
+          -0.167,
+          0.267
+        ]
+      },
+      "oa-v3 - ev-k1.2": {
+        "diff": 0.217,
+        "ci95": [
+          0.083,
+          0.35
+        ]
+      },
+      "oa-v3 - softmax-v2": {
+        "diff": 0.167,
+        "ci95": [
+          -0.05,
+          0.383
+        ]
+      }
+    },
+    "lead_changes": {
+      "softmax-v2 - ev-k1.2": {
+        "diff": 0.967,
+        "ci95": [
+          0.133,
+          1.733
+        ]
+      },
+      "oa-v3 - ev-k1.2": {
+        "diff": -2.083,
+        "ci95": [
+          -2.683,
+          -1.483
+        ]
+      },
+      "oa-v3 - softmax-v2": {
+        "diff": -3.05,
+        "ci95": [
+          -3.85,
+          -2.217
+        ]
+      }
+    }
+  },
+  "verdicts": {
+    "P1_policyDependence": "POLICY-DEPENDENT",
+    "P2_ruleRobustness": {
+      "perPolicy": {
+        "ev-k1.2": {
+          "eligible": true,
+          "ci95": [
+            0.314,
+            0.5
+          ],
+          "edge": 0.415
+        },
+        "softmax-v2": {
+          "eligible": true,
+          "ci95": [
+            -0.133,
+            0.191
+          ],
+          "edge": 0.034
+        },
+        "oa-v3": {
+          "eligible": true,
+          "ci95": [
+            0.061,
+            0.276
+          ],
+          "edge": 0.172
+        }
+      },
+      "verdict": "INCONCLUSIVE"
+    }
+  },
+  "scope": "engine-based self-play only: not evidence about human players or gameplay quality"
+}

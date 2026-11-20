@@ -18,6 +18,7 @@ import { planPolicy, policyMoves, type PolicyId } from './v5/policies.ts';
 import { planTurnAbl, nextMovesAbl, type AblFlags } from './v5_1/ablation.ts';
 import { planTurn52, type Arm as Arm52 } from './v5_2/planner.ts';
 import { nextMoves11 } from './v5/evk11.ts';
+import { planPolicy53, type Policy53, type Meta as Meta53 } from './v5_3/policies.ts';
 import { type Player, type Effect, PLAYERS, other } from '../rules.ts';
 import { type Weights, type FrozenWeights, effectId, activationUtility, freezeWeights, weightsHash } from '../weights.ts';
 
@@ -59,6 +60,8 @@ export type GameRec = {
   ablation?: Partial<Record<Player, AblFlags>>;
   /** V5.2 only (opts.v52): the C4 x stream arm each side played. */
   v52?: Partial<Record<Player, Arm52>>;
+  /** V5.3 only (opts.policy53). */
+  policies53?: Partial<Record<Player, Policy53>>;
   detail?: GameDetail;
 };
 /** One move as executed by the real engine, with the engine RNG before it and every engine event it produced. */
@@ -75,10 +78,12 @@ export type DetailTurn = {
   plannedMoves?: { from: string; dir: string; mode: string }[];
   /** V5.2 only: the temperature-roll draw used this turn (null = no roll needed) and how many candidates were in the window. */
   plannerRoll?: number | null; nearCount?: number;
+  /** V5.3 only: per-decision computation and approximation metadata of the policy. */
+  policyMeta?: Meta53;
 };
 export type GameDetail = { schema: 'rule-sabotage/game-detail@1'; seed: number; first: Player; start: StartState | null; turns: DetailTurn[]; finalHash: string };
 export type PlanTrace = { turn: number; p: Player; chosen: string; chosenScore: number; alternatives: { summary: string; score: number }[] };
-export type PlayOpts = { maxMs?: number; capture?: { turn: number; cell: string }; hooks?: Partial<Record<Player, PlannerHooks>>; variant?: RuleVariant; traceTurns?: number; start?: StartingConfiguration; detail?: boolean; replanOnRandom?: boolean; planner?: Partial<Record<Player, 'ev-v4'>>; evVariant?: Partial<Record<Player, EVVariant>>; policy?: Partial<Record<Player, PolicyId>>; ablation?: Partial<Record<Player, AblFlags>>; v52?: Partial<Record<Player, Arm52>> };
+export type PlayOpts = { maxMs?: number; capture?: { turn: number; cell: string }; hooks?: Partial<Record<Player, PlannerHooks>>; variant?: RuleVariant; traceTurns?: number; start?: StartingConfiguration; detail?: boolean; replanOnRandom?: boolean; planner?: Partial<Record<Player, 'ev-v4'>>; evVariant?: Partial<Record<Player, EVVariant>>; policy?: Partial<Record<Player, PolicyId>>; ablation?: Partial<Record<Player, AblFlags>>; v52?: Partial<Record<Player, Arm52>>; policy53?: Partial<Record<Player, Policy53>> };
 export type BoardSnap = { pieces: { id: string; owner: Player; x: number; y: number; scored: boolean; frozen: number }[]; cells: { cell: string; label: string; owner: Player }[] };
 export type Captured = { turn: number; cell: string; mover: Player; move: string; before: BoardSnap; after: BoardSnap; events: GameEvent[] };
 
@@ -159,11 +164,12 @@ export function playGame(seed: number, first: Player, weights: Record<Player, Fr
       const pol = opts.policy?.[p];
       const abl = opts.ablation?.[p];
       const a52 = opts.v52?.[p];
-      const ev = opts.planner?.[p] === 'ev-v4' || !!pol || !!abl || !!a52;
+      const p53 = opts.policy53?.[p];
+      const ev = opts.planner?.[p] === 'ev-v4' || !!pol || !!abl || !!a52 || !!p53;
       const evv = opts.evVariant?.[p] ?? {};
       // V5 policies all execute with ev-k1.1's shared executor (policyMoves), never with the ev-k1 executor.
-      const nextMv = () => (a52 ? nextMoves11(s, p, w) : abl ? nextMovesAbl(s, p, abl, w) : pol ? policyMoves(s, p, w) : nextMovesEV(s, p, w, evv));
-      const full = a52 ? planTurn52(s, a52, { me: p, weights: w }) : abl ? planTurnAbl(s, abl, { me: p, weights: w }) : pol ? planPolicy(pol, s, p, w) : ev ? planTurnEV(s, { me: p, weights: w, variant: evv }) : planTurn(s, { me: p, weights: w, ...(opts.hooks?.[p] ? { hooks: opts.hooks[p] } : {}) });
+      const nextMv = () => (a52 || p53 ? nextMoves11(s, p, w) : abl ? nextMovesAbl(s, p, abl, w) : pol ? policyMoves(s, p, w) : nextMovesEV(s, p, w, evv));
+      const full = p53 ? planPolicy53(p53, s, p, w) : a52 ? planTurn52(s, a52, { me: p, weights: w }) : abl ? planTurnAbl(s, abl, { me: p, weights: w }) : pol ? planPolicy(pol, s, p, w) : ev ? planTurnEV(s, { me: p, weights: w, variant: evv }) : planTurn(s, { me: p, weights: w, ...(opts.hooks?.[p] ? { hooks: opts.hooks[p] } : {}) });
       const plan = full.chosen;
       if (dt) { dt.candidates = full.ranked.map(c => ({ id: c.id, summary: c.summary, score: Math.round(c.score * 1000) / 1000, effect: c.placement ? effectId(c.placement.effect) : null, cells: c.placement ? [...c.placement.cells] : [], moves: c.moves.length })); dt.chosen = plan.id; dt.considered = full.candidates; dt.sims = full.sims; }
       if (opts.traceTurns && turnNo <= opts.traceTurns) (rec.planTrace ??= []).push({ turn: turnNo, p, chosen: plan.summary, chosenScore: Math.round(plan.score * 1000) / 1000, alternatives: full.ranked.filter(c => c !== plan).slice(0, 4).map(c => ({ summary: c.summary, score: Math.round(c.score * 1000) / 1000 })) });
@@ -182,7 +188,8 @@ export function playGame(seed: number, first: Player, weights: Record<Player, Fr
       if (holdBack) { moves = [...plan.moves]; evDone = true; (rec.holdBackTurns ??= { human: 0, ai: 0 })[p]++; }
       else if (ev) { const nx = nextMv(); moves = nx.moves; evDone = !nx.endsAtChance; }
       if (a52 && dt) { dt.plannerRoll = (full as { roll: number | null }).roll; dt.nearCount = (full as { nearCount: number }).nearCount; }
-      if ((pol || abl || a52) && dt) dt.plannedMoves = plan.moves.map(m => ({ from: m.from, dir: m.dir, mode: m.mode }));
+      if (p53 && dt) dt.policyMeta = (full as { meta: Meta53 }).meta;
+      if ((pol || abl || a52 || p53) && dt) dt.plannedMoves = plan.moves.map(m => ({ from: m.from, dir: m.dir, mode: m.mode }));
       while (mi < moves.length || (!evDone && !s.winner && s.current === p && s.actionsLeft > 0)) {
         if (mi >= moves.length) { const nx = nextMv(); moves = nx.moves; mi = 0; evDone = !nx.endsAtChance; rec.replans = (rec.replans ?? 0) + 1; if (!moves.length) break; }
         const m = moves[mi++];
@@ -241,6 +248,7 @@ export function playGame(seed: number, first: Player, weights: Record<Player, Fr
   if (opts.policy && Object.values(opts.policy).some(Boolean)) rec.policies = { ...opts.policy };
   if (opts.ablation && Object.values(opts.ablation).some(Boolean)) rec.ablation = structuredClone(opts.ablation);
   if (opts.v52 && Object.values(opts.v52).some(Boolean)) rec.v52 = structuredClone(opts.v52);
+  if (opts.policy53 && Object.values(opts.policy53).some(Boolean)) rec.policies53 = { ...opts.policy53 };
   if (opts.planner && Object.values(opts.planner).some(Boolean)) rec.planners = Object.fromEntries(Object.entries(opts.planner).filter(([, v]) => v).map(([k]) => [k, EV_PLANNER_ID]));
   rec.ms = Date.now() - t0;
   return rec;
@@ -252,8 +260,8 @@ export function stateHash(s: State): string {
   return createHash('sha256').update(JSON.stringify(core)).digest('hex').slice(0, 16);
 }
 
-export type Job = { seed: number; first: Player; weights: Record<Player, Weights>; hooks?: Partial<Record<Player, PlannerHooks>>; variant?: RuleVariant; start?: StartingConfiguration; detail?: boolean; replanOnRandom?: boolean; planner?: Partial<Record<Player, 'ev-v4'>>; evVariant?: Partial<Record<Player, EVVariant>>; policy?: Partial<Record<Player, PolicyId>>; ablation?: Partial<Record<Player, AblFlags>>; v52?: Partial<Record<Player, Arm52>> };
-export const jobOpts = (j: Job, maxMs?: number): PlayOpts => ({ maxMs, ...(j.hooks ? { hooks: j.hooks } : {}), ...(j.variant ? { variant: j.variant } : {}), ...(j.start ? { start: j.start } : {}), ...(j.detail ? { detail: true } : {}), ...(j.replanOnRandom ? { replanOnRandom: true } : {}), ...(j.planner ? { planner: j.planner } : {}), ...(j.evVariant ? { evVariant: j.evVariant } : {}), ...(j.policy ? { policy: j.policy } : {}), ...(j.ablation ? { ablation: j.ablation } : {}), ...(j.v52 ? { v52: j.v52 } : {}) });
+export type Job = { seed: number; first: Player; weights: Record<Player, Weights>; hooks?: Partial<Record<Player, PlannerHooks>>; variant?: RuleVariant; start?: StartingConfiguration; detail?: boolean; replanOnRandom?: boolean; planner?: Partial<Record<Player, 'ev-v4'>>; evVariant?: Partial<Record<Player, EVVariant>>; policy?: Partial<Record<Player, PolicyId>>; ablation?: Partial<Record<Player, AblFlags>>; v52?: Partial<Record<Player, Arm52>>; policy53?: Partial<Record<Player, Policy53>> };
+export const jobOpts = (j: Job, maxMs?: number): PlayOpts => ({ maxMs, ...(j.hooks ? { hooks: j.hooks } : {}), ...(j.variant ? { variant: j.variant } : {}), ...(j.start ? { start: j.start } : {}), ...(j.detail ? { detail: true } : {}), ...(j.replanOnRandom ? { replanOnRandom: true } : {}), ...(j.planner ? { planner: j.planner } : {}), ...(j.evVariant ? { evVariant: j.evVariant } : {}), ...(j.policy ? { policy: j.policy } : {}), ...(j.ablation ? { ablation: j.ablation } : {}), ...(j.v52 ? { v52: j.v52 } : {}), ...(j.policy53 ? { policy53: j.policy53 } : {}) });
 export function pairedJobs(seeds: number[], weights: Weights | Record<Player, Weights>): Job[] {
   const w = 'schema' in weights ? { human: weights as Weights, ai: weights as Weights } : weights as Record<Player, Weights>;
   return seeds.flatMap(seed => PLAYERS.map(first => ({ seed, first, weights: w })));

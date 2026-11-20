@@ -1,0 +1,20 @@
+V5.3 2026-11-20T22-04-35Z-v53: 180 games
+  10/180 ev-k1.2-73006-ai ai t13 8s
+  20/180 ev-k1.2-73010-ai ai t15 6s
+  30/180 ev-k1.2-73015-ai ai t60 6s
+  40/180 ev-k1.2-2481358929-ai ai t13 4s
+  50/180 ev-k1.2-3355631747-ai ai t13 3s
+  60/180 ev-k1.2-1517957762-human human t60 6s
+  70/180 softmax-v2-73006-ai human t14 5s
+  80/180 softmax-v2-73010-ai ai t13 4s
+  90/180 softmax-v2-73015-ai draw t60 9s
+  100/180 softmax-v2-1510947526-ai draw t60 9s
+  110/180 softmax-v2-496991590-human human t11 7s
+  120/180 softmax-v2-1816339435-ai human t8 13s
+  130/180 oa-v3-73002-ai human t14 59s
+  140/180 oa-v3-73013-human human t13 13s
+  150/180 oa-v3-73015-human ai t60 37s
+  160/180 oa-v3-2666925590-ai human t60 37s
+  170/180 oa-v3-2481358929-human human t60 60s
+  180/180 oa-v3-1517957762-ai ai t60 42s
+done in 7.2 min: replay OK, external calls 0
