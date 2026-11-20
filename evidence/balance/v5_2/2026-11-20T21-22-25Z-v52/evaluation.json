@@ -1,0 +1,779 @@
+{
+  "schema": "rule-sabotage/v52-evaluation@1",
+  "dir": "evidence/balance/v5_2/2026-11-20T21-22-25Z-v52",
+  "perArm": {
+    "A1": {
+      "arm": {
+        "c4": false,
+        "stream": "legacy"
+      },
+      "games": 30,
+      "turnLimit": {
+        "k": 9,
+        "n": 30,
+        "wilson95": [
+          0.167,
+          0.479
+        ],
+        "seedBlocked": {
+          "value": 0.3,
+          "ci95": [
+            0.1,
+            0.533
+          ],
+          "blocks": 15
+        }
+      },
+      "meanTurns": {
+        "value": 31.833,
+        "ci95": [
+          21.6,
+          43.168
+        ],
+        "blocks": 15
+      },
+      "medianTurns": 18,
+      "firstMover": {
+        "value": 0.448,
+        "ci95": [
+          0.207,
+          0.69
+        ],
+        "blocks": 15
+      },
+      "draws": 1,
+      "byBlock": {
+        "consecutive": {
+          "turnLimit": 0.214,
+          "meanTurns": 30.5
+        },
+        "dispersed": {
+          "turnLimit": 0.375,
+          "meanTurns": 33
+        }
+      },
+      "rolls": {
+        "turnsWithAtLeast5Rolls": 16,
+        "sdByTurn": [
+          {
+            "turn": 7,
+            "n": 30,
+            "sd": 0.293
+          },
+          {
+            "turn": 11,
+            "n": 24,
+            "sd": 0.237
+          },
+          {
+            "turn": 13,
+            "n": 18,
+            "sd": 0.354
+          },
+          {
+            "turn": 16,
+            "n": 8,
+            "sd": 0.282
+          },
+          {
+            "turn": 18,
+            "n": 14,
+            "sd": 0.229
+          },
+          {
+            "turn": 20,
+            "n": 8,
+            "sd": 0.204
+          },
+          {
+            "turn": 22,
+            "n": 5,
+            "sd": 0.24
+          },
+          {
+            "turn": 24,
+            "n": 7,
+            "sd": 0.357
+          },
+          {
+            "turn": 25,
+            "n": 9,
+            "sd": 0.178
+          },
+          {
+            "turn": 26,
+            "n": 9,
+            "sd": 0.225
+          },
+          {
+            "turn": 8,
+            "n": 24,
+            "sd": 0.38
+          },
+          {
+            "turn": 9,
+            "n": 18,
+            "sd": 0.242
+          },
+          {
+            "turn": 15,
+            "n": 5,
+            "sd": 0.178
+          },
+          {
+            "turn": 21,
+            "n": 7,
+            "sd": 0.282
+          },
+          {
+            "turn": 27,
+            "n": 6,
+            "sd": 0.22
+          },
+          {
+            "turn": 10,
+            "n": 14,
+            "sd": 0.304
+          }
+        ],
+        "meanSd": 0.263
+      },
+      "nearTieTurns": 256,
+      "nearTieNonTopChoices": 91,
+      "turn21NearTieChoices": [
+        "p1",
+        "p1",
+        "p4",
+        "p4",
+        "p1",
+        "p1",
+        "p1"
+      ],
+      "agreement": {
+        "turns": 955,
+        "agree": 831,
+        "rate": 0.87
+      },
+      "strategicPrefixes": 1,
+      "realizedTwoTurnTrajectories": 1,
+      "foresight": {
+        "moves": 35,
+        "advantage": 0.137
+      },
+      "integrity": {
+        "illegal": 0,
+        "errors": 0
+      }
+    },
+    "A2": {
+      "arm": {
+        "c4": true,
+        "stream": "legacy"
+      },
+      "games": 30,
+      "turnLimit": {
+        "k": 18,
+        "n": 30,
+        "wilson95": [
+          0.423,
+          0.754
+        ],
+        "seedBlocked": {
+          "value": 0.6,
+          "ci95": [
+            0.333,
+            0.867
+          ],
+          "blocks": 15
+        }
+      },
+      "meanTurns": {
+        "value": 43.067,
+        "ci95": [
+          31.8,
+          53.733
+        ],
+        "blocks": 15
+      },
+      "medianTurns": 60,
+      "firstMover": {
+        "value": 0.733,
+        "ci95": [
+          0.467,
+          0.933
+        ],
+        "blocks": 15
+      },
+      "draws": 0,
+      "byBlock": {
+        "consecutive": {
+          "turnLimit": 1,
+          "meanTurns": 60
+        },
+        "dispersed": {
+          "turnLimit": 0.25,
+          "meanTurns": 28.25
+        }
+      },
+      "rolls": {
+        "turnsWithAtLeast5Rolls": 15,
+        "sdByTurn": [
+          {
+            "turn": 7,
+            "n": 30,
+            "sd": 0.265
+          },
+          {
+            "turn": 11,
+            "n": 24,
+            "sd": 0.201
+          },
+          {
+            "turn": 13,
+            "n": 22,
+            "sd": 0.19
+          },
+          {
+            "turn": 16,
+            "n": 20,
+            "sd": 0.083
+          },
+          {
+            "turn": 17,
+            "n": 10,
+            "sd": 0.226
+          },
+          {
+            "turn": 20,
+            "n": 20,
+            "sd": 0.13
+          },
+          {
+            "turn": 8,
+            "n": 10,
+            "sd": 0.167
+          },
+          {
+            "turn": 9,
+            "n": 10,
+            "sd": 0.166
+          },
+          {
+            "turn": 10,
+            "n": 6,
+            "sd": 0.05
+          },
+          {
+            "turn": 26,
+            "n": 18,
+            "sd": 0.249
+          },
+          {
+            "turn": 12,
+            "n": 6,
+            "sd": 0.16
+          },
+          {
+            "turn": 18,
+            "n": 14,
+            "sd": 0
+          },
+          {
+            "turn": 22,
+            "n": 14,
+            "sd": 0
+          },
+          {
+            "turn": 24,
+            "n": 14,
+            "sd": 0
+          },
+          {
+            "turn": 25,
+            "n": 14,
+            "sd": 0
+          }
+        ],
+        "meanSd": 0.126
+      },
+      "nearTieTurns": 248,
+      "nearTieNonTopChoices": 62,
+      "turn21NearTieChoices": [],
+      "agreement": {
+        "turns": 1292,
+        "agree": 1292,
+        "rate": 1
+      },
+      "strategicPrefixes": 1,
+      "realizedTwoTurnTrajectories": 1,
+      "foresight": {
+        "moves": 0,
+        "advantage": 0
+      },
+      "integrity": {
+        "illegal": 0,
+        "errors": 0
+      }
+    },
+    "A3": {
+      "arm": {
+        "c4": false,
+        "stream": "mixed"
+      },
+      "games": 30,
+      "turnLimit": {
+        "k": 5,
+        "n": 30,
+        "wilson95": [
+          0.073,
+          0.336
+        ],
+        "seedBlocked": {
+          "value": 0.167,
+          "ci95": [
+            0,
+            0.367
+          ],
+          "blocks": 15
+        }
+      },
+      "meanTurns": {
+        "value": 24.233,
+        "ci95": [
+          16.933,
+          32.867
+        ],
+        "blocks": 15
+      },
+      "medianTurns": 15,
+      "firstMover": {
+        "value": 0.8,
+        "ci95": [
+          0.6,
+          1
+        ],
+        "blocks": 15
+      },
+      "draws": 0,
+      "byBlock": {
+        "consecutive": {
+          "turnLimit": 0.357,
+          "meanTurns": 30.929
+        },
+        "dispersed": {
+          "turnLimit": 0,
+          "meanTurns": 18.375
+        }
+      },
+      "rolls": {
+        "turnsWithAtLeast5Rolls": 16,
+        "sdByTurn": [
+          {
+            "turn": 7,
+            "n": 30,
+            "sd": 0.299
+          },
+          {
+            "turn": 8,
+            "n": 24,
+            "sd": 0.265
+          },
+          {
+            "turn": 9,
+            "n": 22,
+            "sd": 0.305
+          },
+          {
+            "turn": 13,
+            "n": 14,
+            "sd": 0.151
+          },
+          {
+            "turn": 16,
+            "n": 12,
+            "sd": 0.148
+          },
+          {
+            "turn": 14,
+            "n": 6,
+            "sd": 0.25
+          },
+          {
+            "turn": 15,
+            "n": 6,
+            "sd": 0.213
+          },
+          {
+            "turn": 17,
+            "n": 8,
+            "sd": 0.043
+          },
+          {
+            "turn": 19,
+            "n": 6,
+            "sd": 0.232
+          },
+          {
+            "turn": 21,
+            "n": 7,
+            "sd": 0.145
+          },
+          {
+            "turn": 25,
+            "n": 8,
+            "sd": 0.302
+          },
+          {
+            "turn": 10,
+            "n": 12,
+            "sd": 0.237
+          },
+          {
+            "turn": 11,
+            "n": 20,
+            "sd": 0.288
+          },
+          {
+            "turn": 12,
+            "n": 12,
+            "sd": 0.224
+          },
+          {
+            "turn": 20,
+            "n": 10,
+            "sd": 0.169
+          },
+          {
+            "turn": 26,
+            "n": 5,
+            "sd": 0.2
+          }
+        ],
+        "meanSd": 0.217
+      },
+      "nearTieTurns": 219,
+      "nearTieNonTopChoices": 79,
+      "turn21NearTieChoices": [
+        "p1",
+        "p1",
+        "p1",
+        "p1",
+        "p1",
+        "p1",
+        "p1"
+      ],
+      "agreement": {
+        "turns": 727,
+        "agree": 609,
+        "rate": 0.838
+      },
+      "strategicPrefixes": 1,
+      "realizedTwoTurnTrajectories": 1,
+      "foresight": {
+        "moves": 7,
+        "advantage": -0.046
+      },
+      "integrity": {
+        "illegal": 0,
+        "errors": 0
+      }
+    },
+    "A4": {
+      "arm": {
+        "c4": true,
+        "stream": "mixed"
+      },
+      "games": 30,
+      "turnLimit": {
+        "k": 7,
+        "n": 30,
+        "wilson95": [
+          0.118,
+          0.409
+        ],
+        "seedBlocked": {
+          "value": 0.233,
+          "ci95": [
+            0.067,
+            0.433
+          ],
+          "blocks": 15
+        }
+      },
+      "meanTurns": {
+        "value": 26.033,
+        "ci95": [
+          17.533,
+          35.667
+        ],
+        "blocks": 15
+      },
+      "medianTurns": 15,
+      "firstMover": {
+        "value": 0.767,
+        "ci95": [
+          0.566,
+          0.933
+        ],
+        "blocks": 15
+      },
+      "draws": 0,
+      "byBlock": {
+        "consecutive": {
+          "turnLimit": 0.357,
+          "meanTurns": 30.929
+        },
+        "dispersed": {
+          "turnLimit": 0.125,
+          "meanTurns": 21.75
+        }
+      },
+      "rolls": {
+        "turnsWithAtLeast5Rolls": 15,
+        "sdByTurn": [
+          {
+            "turn": 7,
+            "n": 30,
+            "sd": 0.299
+          },
+          {
+            "turn": 8,
+            "n": 22,
+            "sd": 0.277
+          },
+          {
+            "turn": 9,
+            "n": 22,
+            "sd": 0.305
+          },
+          {
+            "turn": 13,
+            "n": 14,
+            "sd": 0.151
+          },
+          {
+            "turn": 16,
+            "n": 10,
+            "sd": 0.163
+          },
+          {
+            "turn": 15,
+            "n": 6,
+            "sd": 0.213
+          },
+          {
+            "turn": 17,
+            "n": 8,
+            "sd": 0.043
+          },
+          {
+            "turn": 20,
+            "n": 12,
+            "sd": 0.208
+          },
+          {
+            "turn": 22,
+            "n": 5,
+            "sd": 0.152
+          },
+          {
+            "turn": 24,
+            "n": 5,
+            "sd": 0.207
+          },
+          {
+            "turn": 21,
+            "n": 6,
+            "sd": 0.148
+          },
+          {
+            "turn": 25,
+            "n": 5,
+            "sd": 0.306
+          },
+          {
+            "turn": 10,
+            "n": 12,
+            "sd": 0.237
+          },
+          {
+            "turn": 11,
+            "n": 20,
+            "sd": 0.288
+          },
+          {
+            "turn": 12,
+            "n": 12,
+            "sd": 0.224
+          }
+        ],
+        "meanSd": 0.215
+      },
+      "nearTieTurns": 214,
+      "nearTieNonTopChoices": 82,
+      "turn21NearTieChoices": [
+        "p1",
+        "p1",
+        "p1",
+        "p1",
+        "p1",
+        "p1"
+      ],
+      "agreement": {
+        "turns": 781,
+        "agree": 781,
+        "rate": 1
+      },
+      "strategicPrefixes": 1,
+      "realizedTwoTurnTrajectories": 1,
+      "foresight": {
+        "moves": 8,
+        "advantage": -0.11
+      },
+      "integrity": {
+        "illegal": 0,
+        "errors": 0
+      }
+    }
+  },
+  "contrasts": {
+    "H2_mixing_within_C4on": {
+      "turnLimit": {
+        "diff": -0.367,
+        "ci95": [
+          -0.667,
+          -0.067
+        ]
+      },
+      "meanTurns": {
+        "diff": -17.033,
+        "ci95": [
+          -29.567,
+          -4.133
+        ]
+      },
+      "firstMover": {
+        "diff": 0.033,
+        "ci95": [
+          -0.167,
+          0.233
+        ]
+      }
+    },
+    "mixing_within_C4off": {
+      "turnLimit": {
+        "diff": -0.133,
+        "ci95": [
+          -0.467,
+          0.2
+        ]
+      },
+      "meanTurns": {
+        "diff": -7.6,
+        "ci95": [
+          -19.901,
+          5.267
+        ]
+      },
+      "firstMover": {
+        "diff": 0.352,
+        "ci95": [
+          0.133,
+          0.593
+        ]
+      }
+    },
+    "H3_C4_within_mixed": {
+      "turnLimit": {
+        "diff": 0.067,
+        "ci95": [
+          0,
+          0.2
+        ]
+      },
+      "meanTurns": {
+        "diff": 1.8,
+        "ci95": [
+          -0.4,
+          5.8
+        ]
+      },
+      "firstMover": {
+        "diff": -0.033,
+        "ci95": [
+          -0.1,
+          0
+        ]
+      }
+    },
+    "C4_within_legacy": {
+      "turnLimit": {
+        "diff": 0.3,
+        "ci95": [
+          -0.067,
+          0.633
+        ]
+      },
+      "meanTurns": {
+        "diff": 11.233,
+        "ci95": [
+          -4.068,
+          25.567
+        ]
+      },
+      "firstMover": {
+        "diff": 0.285,
+        "ci95": [
+          0,
+          0.563
+        ]
+      }
+    },
+    "H4_interaction": {
+      "turnLimit": {
+        "value": -0.233,
+        "ci95": [
+          -0.633,
+          0.233
+        ]
+      },
+      "meanTurns": {
+        "value": -9.433,
+        "ci95": [
+          -25.902,
+          7.933
+        ]
+      },
+      "firstMover": {
+        "value": -0.318,
+        "ci95": [
+          -0.586,
+          -0.085
+        ]
+      }
+    }
+  },
+  "verdicts": {
+    "H1_coverage": "NOT AS PREDICTED (see rolls)",
+    "H2_mixing_effect": {
+      "turnLimit": "SUPPORTED",
+      "meanTurns": "SUPPORTED"
+    },
+    "H3_C4_effect": {
+      "turnLimit": "INCONCLUSIVE",
+      "meanTurns": "INCONCLUSIVE"
+    },
+    "H4_interaction": {
+      "turnLimit": "INCONCLUSIVE",
+      "meanTurns": "INCONCLUSIVE"
+    },
+    "validity": {
+      "replayOk": true,
+      "c4OnAgreement": {
+        "A2": 1,
+        "A4": 1
+      }
+    }
+  },
+  "scope": "exploratory, self-play of this planner family; no universal balance claim"
+}

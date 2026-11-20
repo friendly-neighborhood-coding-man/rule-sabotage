@@ -1,5 +1,7 @@
 # Balance Designer V5.1: causal ablation and strategy-versus-RNG diversity
 
+> **Wording correction (V5.2, 2026-11-20):** where this report says the 60 ev-k1.1 games were "close to one replicate", read: the planner-selection branch lacked effective sampling diversity (near-identical temperature draws across seeds), while engine teleport outcomes and first-player assignments still varied and all 60 games are distinct. No verdict changes. See docs/BALANCE_V5_2_RANDOMIZATION.md.
+
 **Status: READY_FOR_OPERATOR_V5_1_CAUSAL_DIAGNOSTIC_REVIEW.** Nothing merged, deployed or promoted. Holdout 65001–65060
 untouched. 0 Kane calls, 0 external calls. The only new games are the preregistered 96-game ablation, run once.
 All V1–V5 datasets, registrations and verdicts are unchanged (V5's evaluation.json is untouched; new measures are separate).
