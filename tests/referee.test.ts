@@ -272,10 +272,12 @@ test('cache key changes with conditions, page content, engine source, Kane versi
   assert.match(ENGINE_HASH, /^[0-9a-f]{12}$/);
 });
 
-test('trial signature separates materially different states (owner of a nearby effect, RNG, turn, rule text)', () => {
+test('trial signature separates materially different states (owner of a nearby effect, turn, rule text) and NOT the hidden RNG', () => {
   const p = pl(makeEffect('teleport'), ['3,3']);
-  const a = board(), b = board(); b.rng = (b.rng + 1) >>> 0;
-  assert.notEqual(buildTrial(a, 'human', p, 1).signature, buildTrial(b, 'human', p, 1).signature, 'RNG state');
+  const a = board(), b = board(); b.rng = (b.rng + 12345) >>> 0;
+  const ta = buildTrial(a, 'human', p, 1), tb = buildTrial(b, 'human', p, 1);
+  assert.equal(ta.signature, tb.signature, 'V4.1: the hidden RNG is not part of the trial');
+  assert.equal(normalizedPage(renderTrialPage(ta), ta.trialId).replace(/d+ ms/g, ''), normalizedPage(renderTrialPage(tb), tb.trialId).replace(/d+ ms/g, ''), 'identical public trial page for different hidden RNG');
   const c = board(); c.turn += 2;
   assert.notEqual(buildTrial(a, 'human', p, 1).signature, buildTrial(c, 'human', p, 1).signature, 'turn');
   const d = board(), e = board();

@@ -31,8 +31,15 @@ export type Trial = {
 const pieceText = (q: Piece) => (q.scored ? 'scored' : cellName(key(q.x, q.y)) + (q.frozen ? ' (frozen)' : ''));
 
 /** The board as it would be if the placement were accepted. */
+/**
+ * V4.1: the trial never sees the game's hidden RNG. Every what-if runs with this fixed, public RNG state, so a
+ * teleport scenario shows an EXAMPLE destination, not the one the real game will produce next (trial pages and
+ * /api/trial are public). The engine and the real game RNG are untouched.
+ */
+export const TRIAL_RNG = 0x7e57ab1e;
 export function withPlacement(s: State, proposer: Player, pl: Placement): State {
   const h = structuredClone(s);
+  h.rng = TRIAL_RNG;
   h.current = proposer; h.phase = 'place'; h.winner = null;
   applyPlacement(h, proposer, pl);
   return h;
@@ -88,7 +95,7 @@ export function buildTrial(state: State, proposer: Player, pl: Placement, trialN
   const t0 = performance.now();
   const id = `T${String(trialNo).padStart(4, '0')}`;
   const legal = validatePlacement({ ...structuredClone(state), current: proposer, phase: 'place', winner: null }, proposer, pl);
-  const h = legal.ok ? withPlacement(state, proposer, pl) : structuredClone(state);
+  const h = legal.ok ? withPlacement(state, proposer, pl) : Object.assign(structuredClone(state), { rng: TRIAL_RNG });
   const rule = legal.ok ? h.rules[h.rules.length - 1] : null;
   const symmetry: SymmetryRow[] = [], chains: Trial['chains'] = [];
   let n = 0;
@@ -130,9 +137,10 @@ export function buildTrial(state: State, proposer: Player, pl: Placement, trialN
   add('E6', 'Placing the effect moves no piece and decides nothing', h.winner === null && JSON.stringify(h.pieces) === JSON.stringify(state.pieces), 'pieces unchanged at placement');
 
   // Everything the trial's observations depend on: the proposal, every piece, every live effect with its OWNER,
-  // the RNG state (teleport destinations), the turn (turn limit) and banked actions.
+  // the turn (turn limit) and banked actions. NOT the game RNG: the trial runs on TRIAL_RNG (V4.1), so its
+  // observations do not depend on the hidden state.
   const sigData = {
-    proposer, text: pl.text, effect: pl.effect, approx: pl.approxNote ?? null, cells: [...pl.cells].sort(), rng: state.rng, turn: state.turn, maxTurns: state.maxTurns, bonus: state.bonus,
+    proposer, text: pl.text, effect: pl.effect, approx: pl.approxNote ?? null, cells: [...pl.cells].sort(), turn: state.turn, maxTurns: state.maxTurns, bonus: state.bonus,
     pieces: state.pieces.map(q => [q.id, q.x, q.y, q.scored, q.frozen, q.shield]), cells2: state.cells, rules: state.rules.filter(r => r.cells.length).map(r => [r.id, r.owner, r.effect, [...r.cells].sort()]),
   };
   const signature = createHash('sha256').update(JSON.stringify(sigData)).digest('hex').slice(0, 16);
@@ -161,7 +169,7 @@ export function renderTrialPage(t: Trial): string {
 <h2>Placement</h2><p id="placement">Cells chosen: <strong>${t.cells.length}</strong> (${t.cells.join(', ')}). Limit per turn: <strong>${t.maxCells}</strong>.</p>
 <h2>Board before the rule</h2><p>Human pieces: ${t.pieces.human.join(', ')}. AI pieces: ${t.pieces.ai.join(', ')}.</p>
 <p>Effects already on the board: ${t.existingEffects.length ? t.existingEffects.map(r => `${r.owner === 'human' ? 'Human' : 'AI'} “${esc(r.label)}” on ${r.squares.join(' ')}`).join('; ') : 'none'}.</p>
-<h2>Symmetry: a lone Human piece and a lone AI piece enter the same cell the same way</h2>
+<h2>Symmetry: a lone Human piece and a lone AI piece enter the same cell the same way</h2>${t.effect.kind === 'teleport' ? '<p id="teleport-note">Teleport destinations in these scenarios use a fixed example random state, not the game’s hidden one: the real destination is random and is not shown here.</p>' : ''}
 <table id="symmetry"><tr><th>Scenario</th><th>Step</th><th>Piece</th><th>Effect fired</th><th>Effect</th><th>Ended on</th><th>Extra actions</th><th>Effects fired in this step</th><th>Frozen turns</th><th>Shield</th><th>Second visit to same cell</th></tr>${sym || '<tr><td colspan="11">No reachable cell.</td></tr>'}</table>
 <h2>Chain reactions</h2><ul id="chains">${chains}</ul>
 <h2>Softlock rollout (${t.rollout.scenarioId}): both players play up to 10 turns</h2>

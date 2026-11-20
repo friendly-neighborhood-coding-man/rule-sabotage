@@ -88,7 +88,7 @@ test('an AI rule goes through the same interpreter and referee as a human rule',
   const { g } = await startGame(9);
   if (g.state.current === 'human') await endHumanTurn(g);
   const last = g.history.filter(h => h.p === 'ai').pop()!;
-  for (const v of last.verdicts) { assert.equal(v.player, 'ai'); assert.ok(v.trial.scenarioIds.length >= 1); assert.equal(v.final, 'unverified', 'engine-only mode is labelled unverified'); }
+  for (const v of last.verdicts) { assert.equal(v.player, 'ai'); assert.ok(v.trial.scenarioIds.length >= 1); assert.ok(v.final === 'engine-approved' ? v.activated && v.decidedBy === 'engine' : v.final === 'unverified' && !v.activated, `engine-only mode: tier 1/2 engine-approved and live, tier 3 unverified and NOT live (${v.final}, activated ${v.activated})`); }
   if (last.verdicts.length) { assert.ok(last.ai?.ruleTextSource, 'AI rule text was checked against the planned effect'); assert.equal(last.verdicts[0].ruleText, last.ai!.ruleText); }
 });
 

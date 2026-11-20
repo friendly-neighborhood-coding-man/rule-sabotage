@@ -260,7 +260,7 @@ function showVerdicts(vs) {
   const r = $('referee'); r.hidden = false;
   r.innerHTML = '<div class="ref-title">Referee</div>' + vs.map(v => {
     const k = v.kane;
-    const title = v.final === 'pending' ? `🔎 Kane is examining ${v.player === 'human' ? 'your' : 'the AI’s'} rule… keep playing` : v.final === 'approved' ? `✅ Kane approved ${v.player === 'human' ? 'your' : 'the AI’s'} rule` : v.final === 'engine-approved' ? `✔ Engine approved ${v.player === 'human' ? 'your' : 'the AI’s'} rule (tier ${v.tier?.tier ?? '?'}, not reviewed by Kane)` : v.final === 'rejected' ? `⛔ ${k ? 'Kane' : 'The engine'} rejected ${v.player === 'human' ? 'your' : 'the AI’s'} rule` : `⚠ ${v.player === 'human' ? 'Your' : 'The AI’s'} rule is NOT Kane-verified`;
+    const title = v.final === 'pending' ? `🔎 Kane is examining ${v.player === 'human' ? 'your' : 'the AI’s'} rule… keep playing` : v.final === 'approved' ? `✅ Kane approved ${v.player === 'human' ? 'your' : 'the AI’s'} rule` : v.final === 'engine-approved' ? `✔ Engine approved ${v.player === 'human' ? 'your' : 'the AI’s'} rule (tier ${v.tier?.tier ?? '?'}, not reviewed by Kane)` : v.final === 'rejected' ? `⛔ ${k ? 'Kane' : 'The engine'} rejected ${v.player === 'human' ? 'your' : 'the AI’s'} rule` : v.activated ? `⚠ ${v.player === 'human' ? 'Your' : 'The AI’s'} rule went live UNVERIFIED (operator override ALLOW_UNVERIFIED_RULES)` : `⚠ ${v.player === 'human' ? 'Your' : 'The AI’s'} rule is NOT verified and was not placed`;
     const meta = [`“${esc(v.ruleText)}” → ${esc(v.label)} on ${v.cells.join(' ')}`, `<a href="/trial/${v.trial.trialId}" target="_blank" rel="noopener">trial ${v.trial.trialId}</a> · scenarios ${v.trial.scenarioIds.join(', ')}`];
     if (k) meta.push(`Kane ${esc(k.version || '')} · ${k.cached ? 'cached verdict' : `${(k.elapsedMs / 1000).toFixed(1)} s`}${k.conditionResults?.length ? ` · ${k.conditionResults.filter(c => c === true).length}/${k.conditionResults.length} conditions true` : ''}`);
     if (v.timing?.submitToVerdictMs != null) meta.push(`Decided by ${v.decidedBy === 'kane' ? 'Kane' : v.decidedBy === 'engine' ? `the engine (tier ${v.tier?.tier})` : 'engine checks only'} ${(v.timing.submitToVerdictMs / 1000).toFixed(1)} s after it was submitted`);
@@ -356,7 +356,7 @@ async function loadHealth() {
     b.textContent = h.openrouter.configured ? `AI brain: ${h.openrouter.provider} (${h.openrouter.model})` : 'AI brain: local planner (no LLM key)';
     b.classList.add(h.openrouter.configured ? 'on' : 'off');
     const k = h.referee.kane;
-    r.textContent = (h.referee.mode === 'kane' ? (k.installed && k.loggedIn !== false ? `Referee: Kane ${k.version || ''}` : 'Referee: Kane (unavailable, rules stay unverified)') : 'Referee: engine only (NOT Kane-verified)') + (h.referee.tiers ? ' + engine tiers' : '');
+    r.textContent = (h.referee.mode === 'kane' ? (k.installed && k.loggedIn !== false ? `Referee: Kane ${k.version || ''}` : 'Referee: Kane (unavailable, rules stay unverified)') : 'Referee: engine only (simple rules engine-verified, uncertain rules are not placed; Kane off)') + (h.referee.tiers ? ' + engine tiers' : '');
     r.classList.add(h.referee.mode === 'kane' && k.installed && k.loggedIn !== false ? 'on' : 'off');
     r.title = k.detail || '';
   } catch { /* ignore */ }
