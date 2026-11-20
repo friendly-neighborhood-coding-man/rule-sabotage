@@ -1,0 +1,7 @@
+[2026-11-20T19:37:36.704Z] seed 99651 human: v1 12 cands (margin 3.95), v2 151 cands, within band v1 0 / v2 4
+[2026-11-20T19:39:00.733Z] seed 99651 ai: v1 12 cands (margin 3.95), v2 151 cands, within band v1 0 / v2 4
+[2026-11-20T19:39:47.044Z] seed 99652 human: v1 12 cands (margin 3.95), v2 151 cands, within band v1 0 / v2 4
+[2026-11-20T19:40:36.999Z] seed 99652 ai: v1 12 cands (margin 3.95), v2 151 cands, within band v1 0 / v2 4
+[2026-11-20T19:41:25.607Z] seed 99653 human: v1 12 cands (margin 3.95), v2 151 cands, within band v1 0 / v2 4
+[2026-11-20T19:42:02.526Z] seed 99653 ai: v1 12 cands (margin 3.95), v2 151 cands, within band v1 0 / v2 4
+[2026-11-20T19:42:02.709Z] written; scorer validation max |error| 0

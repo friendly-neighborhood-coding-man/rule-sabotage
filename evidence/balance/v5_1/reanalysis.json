@@ -1,0 +1,402 @@
+{
+  "source": "evidence/balance/v5/2026-11-20T16-11-56Z-v5 (unchanged)",
+  "newGamesPlayed": 0,
+  "schema": "rule-sabotage/v5-reanalysis@1",
+  "version": "reanalysis-1",
+  "arms": {
+    "S-OA": {
+      "games": 60,
+      "policies": [
+        "oa-v2"
+      ],
+      "firstTurnChoice": {
+        "n": 60,
+        "distinct": 1,
+        "entropyBits": 0,
+        "largestShare": 1
+      },
+      "firstTurnEffects": {
+        "n": 60,
+        "distinct": 1,
+        "entropyBits": 0,
+        "largestShare": 1
+      },
+      "firstTurnCellSets": {
+        "n": 60,
+        "distinct": 1,
+        "entropyBits": 0,
+        "largestShare": 1
+      },
+      "strategicPrefixes": {
+        "n": 60,
+        "distinct": 1,
+        "entropyBits": 0,
+        "largestShare": 1
+      },
+      "realizedTwoTurnTrajectories": {
+        "n": 60,
+        "distinct": 60,
+        "entropyBits": 5.907,
+        "largestShare": 0.017
+      },
+      "conditionalActionDiversity": {
+        "repeatedStates": 10,
+        "statesWithMoreThanOneDecision": 0,
+        "maxDecisionsInOneState": 1
+      },
+      "postChanceResponses": {
+        "randomMovesWithSeveralSeenDestinations": 39,
+        "meanDistinctDestinations": 3,
+        "meanDistinctResponses": 4.846,
+        "responsesPerDestination": 1.053
+      },
+      "correctedPlanExecutionAgreement": {
+        "turns": 2169,
+        "agree": 2169,
+        "rate": 1
+      }
+    },
+    "S-REF": {
+      "games": 60,
+      "policies": [
+        "ev-k1.1"
+      ],
+      "firstTurnChoice": {
+        "n": 60,
+        "distinct": 1,
+        "entropyBits": 0,
+        "largestShare": 1
+      },
+      "firstTurnEffects": {
+        "n": 60,
+        "distinct": 1,
+        "entropyBits": 0,
+        "largestShare": 1
+      },
+      "firstTurnCellSets": {
+        "n": 60,
+        "distinct": 1,
+        "entropyBits": 0,
+        "largestShare": 1
+      },
+      "strategicPrefixes": {
+        "n": 60,
+        "distinct": 1,
+        "entropyBits": 0,
+        "largestShare": 1
+      },
+      "realizedTwoTurnTrajectories": {
+        "n": 60,
+        "distinct": 1,
+        "entropyBits": 0,
+        "largestShare": 1
+      },
+      "conditionalActionDiversity": {
+        "repeatedStates": 476,
+        "statesWithMoreThanOneDecision": 0,
+        "maxDecisionsInOneState": 1
+      },
+      "postChanceResponses": {
+        "randomMovesWithSeveralSeenDestinations": 7,
+        "meanDistinctDestinations": 5.857,
+        "meanDistinctResponses": 5.857,
+        "responsesPerDestination": 1
+      },
+      "correctedPlanExecutionAgreement": {
+        "turns": 3391,
+        "agree": 3391,
+        "rate": 1
+      }
+    },
+    "S-SM": {
+      "games": 60,
+      "policies": [
+        "softmax-v2"
+      ],
+      "firstTurnChoice": {
+        "n": 60,
+        "distinct": 2,
+        "entropyBits": 0.211,
+        "largestShare": 0.967
+      },
+      "firstTurnEffects": {
+        "n": 60,
+        "distinct": 2,
+        "entropyBits": 0.211,
+        "largestShare": 0.967
+      },
+      "firstTurnCellSets": {
+        "n": 60,
+        "distinct": 2,
+        "entropyBits": 0.211,
+        "largestShare": 0.967
+      },
+      "strategicPrefixes": {
+        "n": 60,
+        "distinct": 2,
+        "entropyBits": 0.211,
+        "largestShare": 0.967
+      },
+      "realizedTwoTurnTrajectories": {
+        "n": 60,
+        "distinct": 3,
+        "entropyBits": 0.244,
+        "largestShare": 0.967
+      },
+      "conditionalActionDiversity": {
+        "repeatedStates": 153,
+        "statesWithMoreThanOneDecision": 15,
+        "maxDecisionsInOneState": 4
+      },
+      "postChanceResponses": {
+        "randomMovesWithSeveralSeenDestinations": 9,
+        "meanDistinctDestinations": 2.556,
+        "meanDistinctResponses": 2.667,
+        "responsesPerDestination": 1.028
+      },
+      "correctedPlanExecutionAgreement": {
+        "turns": 1262,
+        "agree": 1262,
+        "rate": 1
+      }
+    },
+    "X-OA-SM": {
+      "games": 40,
+      "policies": [
+        "oa-v2",
+        "softmax-v2"
+      ],
+      "firstTurnChoice": {
+        "n": 40,
+        "distinct": 2,
+        "entropyBits": 1,
+        "largestShare": 0.5
+      },
+      "firstTurnEffects": {
+        "n": 40,
+        "distinct": 2,
+        "entropyBits": 1,
+        "largestShare": 0.5
+      },
+      "firstTurnCellSets": {
+        "n": 40,
+        "distinct": 2,
+        "entropyBits": 1,
+        "largestShare": 0.5
+      },
+      "strategicPrefixes": {
+        "n": 40,
+        "distinct": 2,
+        "entropyBits": 1,
+        "largestShare": 0.5
+      },
+      "realizedTwoTurnTrajectories": {
+        "n": 40,
+        "distinct": 20,
+        "entropyBits": 3.111,
+        "largestShare": 0.5
+      },
+      "conditionalActionDiversity": {
+        "repeatedStates": 30,
+        "statesWithMoreThanOneDecision": 2,
+        "maxDecisionsInOneState": 4
+      },
+      "postChanceResponses": {
+        "randomMovesWithSeveralSeenDestinations": 9,
+        "meanDistinctDestinations": 5.222,
+        "meanDistinctResponses": 7.444,
+        "responsesPerDestination": 1.089
+      },
+      "correctedPlanExecutionAgreement": {
+        "turns": 822,
+        "agree": 822,
+        "rate": 1
+      }
+    },
+    "X-REF-OA": {
+      "games": 40,
+      "policies": [
+        "ev-k1.1",
+        "oa-v2"
+      ],
+      "firstTurnChoice": {
+        "n": 40,
+        "distinct": 2,
+        "entropyBits": 1,
+        "largestShare": 0.5
+      },
+      "firstTurnEffects": {
+        "n": 40,
+        "distinct": 2,
+        "entropyBits": 1,
+        "largestShare": 0.5
+      },
+      "firstTurnCellSets": {
+        "n": 40,
+        "distinct": 2,
+        "entropyBits": 1,
+        "largestShare": 0.5
+      },
+      "strategicPrefixes": {
+        "n": 40,
+        "distinct": 2,
+        "entropyBits": 1,
+        "largestShare": 0.5
+      },
+      "realizedTwoTurnTrajectories": {
+        "n": 40,
+        "distinct": 20,
+        "entropyBits": 3.111,
+        "largestShare": 0.5
+      },
+      "conditionalActionDiversity": {
+        "repeatedStates": 128,
+        "statesWithMoreThanOneDecision": 0,
+        "maxDecisionsInOneState": 1
+      },
+      "postChanceResponses": {
+        "randomMovesWithSeveralSeenDestinations": 7,
+        "meanDistinctDestinations": 6.857,
+        "meanDistinctResponses": 9.714,
+        "responsesPerDestination": 1.114
+      },
+      "correctedPlanExecutionAgreement": {
+        "turns": 803,
+        "agree": 803,
+        "rate": 1
+      }
+    },
+    "X-REF-SM": {
+      "games": 40,
+      "policies": [
+        "ev-k1.1",
+        "softmax-v2"
+      ],
+      "firstTurnChoice": {
+        "n": 40,
+        "distinct": 1,
+        "entropyBits": 0,
+        "largestShare": 1
+      },
+      "firstTurnEffects": {
+        "n": 40,
+        "distinct": 1,
+        "entropyBits": 0,
+        "largestShare": 1
+      },
+      "firstTurnCellSets": {
+        "n": 40,
+        "distinct": 1,
+        "entropyBits": 0,
+        "largestShare": 1
+      },
+      "strategicPrefixes": {
+        "n": 40,
+        "distinct": 1,
+        "entropyBits": 0,
+        "largestShare": 1
+      },
+      "realizedTwoTurnTrajectories": {
+        "n": 40,
+        "distinct": 1,
+        "entropyBits": 0,
+        "largestShare": 1
+      },
+      "conditionalActionDiversity": {
+        "repeatedStates": 222,
+        "statesWithMoreThanOneDecision": 11,
+        "maxDecisionsInOneState": 4
+      },
+      "postChanceResponses": {
+        "randomMovesWithSeveralSeenDestinations": 7,
+        "meanDistinctDestinations": 2.143,
+        "meanDistinctResponses": 2.143,
+        "responsesPerDestination": 1
+      },
+      "correctedPlanExecutionAgreement": {
+        "turns": 1164,
+        "agree": 1164,
+        "rate": 1
+      }
+    }
+  },
+  "matchedStates": {
+    "states": 60,
+    "ids": [
+      "S-OA-68001-ai@t1",
+      "S-OA-68006-ai@t1",
+      "S-OA-68011-ai@t1",
+      "S-OA-68011-ai@t17",
+      "S-OA-68011-ai@t33",
+      "S-OA-68016-ai@t5",
+      "S-OA-68016-ai@t21",
+      "S-OA-68016-ai@t37",
+      "S-OA-68016-ai@t53",
+      "S-OA-68021-ai@t9",
+      "S-OA-68021-ai@t25",
+      "S-OA-68021-ai@t41",
+      "S-OA-68021-ai@t57",
+      "S-OA-68026-ai@t13",
+      "S-OA-68026-ai@t29",
+      "S-OA-68026-ai@t45",
+      "S-REF-68001-ai@t1",
+      "S-REF-68001-ai@t17",
+      "S-REF-68001-ai@t33",
+      "S-REF-68001-ai@t49",
+      "S-REF-68006-ai@t5",
+      "S-REF-68006-ai@t21",
+      "S-REF-68006-ai@t37",
+      "S-REF-68006-ai@t53",
+      "S-REF-68011-ai@t9",
+      "S-REF-68011-ai@t25",
+      "S-REF-68011-ai@t41",
+      "S-REF-68011-ai@t57",
+      "S-REF-68016-ai@t13",
+      "S-REF-68016-ai@t29",
+      "S-REF-68016-ai@t45",
+      "S-REF-68021-ai@t1",
+      "S-REF-68021-ai@t17",
+      "S-REF-68021-ai@t33",
+      "S-REF-68021-ai@t49",
+      "S-REF-68026-ai@t5",
+      "S-REF-68026-ai@t21",
+      "S-REF-68026-ai@t37",
+      "S-REF-68026-ai@t53",
+      "S-SM-68001-ai@t9",
+      "S-SM-68011-ai@t1",
+      "S-SM-68011-ai@t17",
+      "S-SM-68011-ai@t33",
+      "S-SM-68011-ai@t49",
+      "S-SM-68016-ai@t5",
+      "S-SM-68021-ai@t5",
+      "S-SM-68026-ai@t5",
+      "S-SM-68026-ai@t21",
+      "X-OA-SM-68031-ai-Hoa-v2@t13",
+      "X-OA-SM-68033-human-Hoa-v2@t9",
+      "X-OA-SM-68038-human-Hoa-v2@t1",
+      "X-REF-OA-68031-ai-Hev-k1.1@t9",
+      "X-REF-OA-68033-human-Hev-k1.1@t13",
+      "X-REF-OA-68036-ai-Hev-k1.1@t1",
+      "X-REF-OA-68038-human-Hev-k1.1@t9",
+      "X-REF-OA-68038-human-Hev-k1.1@t25",
+      "X-REF-OA-68038-human-Hev-k1.1@t41",
+      "X-REF-OA-68038-human-Hev-k1.1@t57",
+      "X-REF-SM-68031-ai-Hev-k1.1@t13",
+      "X-REF-SM-68033-human-Hev-k1.1@t13"
+    ],
+    "disagreement": {
+      "ev-k1.1 vs oa-v2": {
+        "plan": 22,
+        "placement": 22
+      },
+      "ev-k1.1 vs softmax-v2": {
+        "plan": 11,
+        "placement": 11
+      },
+      "oa-v2 vs softmax-v2": {
+        "plan": 23,
+        "placement": 23
+      }
+    }
+  }
+}
