@@ -28,25 +28,18 @@ test('Kane preflight case: one AI self-play tier-3 case, no participant data, fi
   assert.ok(!existsSync(new URL('kane-verdict.ndjson', DIR)), 'no Kane result exists');
 });
 
-test('Kane single call: plan within 30 credits (local estimate, not a hard limit); execute is refused before any process starts', async () => {
-  const { PLAN, realDeps } = await import('../scripts/kane-single-call.ts');
+test('Kane single call: plan within 30 credits (local estimate, not a hard limit); the gate is disabled; not the production referee path', async () => {
+  const { PLAN } = await import('../scripts/kane-single-call.ts');
   const B = await import('../server/balance/v4/kanebudget.ts');
   assert.equal(PLAN.calls, 1); assert.equal(PLAN.retries, 0); assert.ok(PLAN.ceilingCredits <= 30);
   assert.ok(PLAN.maxStepsForEstimate * B.MEASURED_CREDITS_PER_STEP <= PLAN.ceilingCredits);
   assert.equal(B.PAID_RESEARCH_EXECUTION, 'disabled');
-  const tmp = mkdtempSync(join(tmpdir(), 'rs-ks1-'));
-  try {
-    const touched: string[] = [];
-    const deps = { ...realDeps(join(tmp, 'ledger.ndjson'), '<html></html>', ['c'], { stdout: '', stderr: '', args: [] }), isRealCli: async () => { touched.push('cli'); return true; }, balance: async () => { touched.push('balance'); return 1000; }, exec: async () => { touched.push('exec'); return { timedOut: false, exitCode: 0 }; } };
-    const approval = { runId: PLAN.runId, approvedBy: 'test', approvedAt: 'now', maxCalls: 1 as const, maxSteps: PLAN.maxStepsForEstimate, ceilingCredits: 30, acknowledgesNoHardCap: true as const };
-    await assert.rejects(B.runPaidCall(approval, { maxSteps: PLAN.maxStepsForEstimate, timeoutS: PLAN.timeoutS }, { ...deps, env: { KANE_PAID_RUN_AUTH: PLAN.runId } }), (e: Error) => e instanceof B.PaidCallRefused && /disabled/.test(e.message));
-    assert.deepEqual(touched, [], 'not even kane-cli --version or balance ran');
-    assert.equal(B.readLedger(join(tmp, 'ledger.ndjson'))[0].event, 'refused');
-  } finally { rmSync(tmp, { recursive: true, force: true }); }
+  // The repaired runner reuses only the generic pieces of server/kane.ts (runCapture, parseKaneOutput, kaneConfig), never the
+  // referee (kaneJudge / kaneProbe / cache) or the game servers. The full execution path is tested in tests/kane-single-call.test.ts.
   const src = readFileSync(new URL('../scripts/kane-single-call.ts', import.meta.url), 'utf8');
-  const imports = src.split('\n').filter(l => /^import /.test(l) || /import\(/.test(l)).join('\n'); // what the runner actually loads
-  assert.doesNotMatch(imports, /server\/kane\.ts|server\/game\.ts|server\/server\.ts|import\(/, 'not the production referee path');
-  assert.doesNotMatch(src.replace(/\/\*[\s\S]*?\*\//g, ''), /kaneJudge/, 'kaneJudge is never called');
+  const code = src.replace(/\/\*[\s\S]*?\*\//g, '');
+  assert.ok(code.includes("import { runCapture, parseKaneOutput, kaneConfig } from '../server/kane.ts'"));
+  assert.doesNotMatch(code, /kaneJudge|kaneProbe|server\/game\.ts|server\/server\.ts|import\(/, 'not the production referee path');
 });
 
 test('budgeted prototype: the pool terminates a planner at its deadline and the warm spare serves the next decision', async () => {
