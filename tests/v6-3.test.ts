@@ -19,7 +19,7 @@ const W8 = loadWeights();
 
 test('Kane preflight case: one AI self-play tier-3 case, no participant data, files intact and consistent', () => {
   const m = JSON.parse(readFileSync(new URL('manifest.json', DIR), 'utf8'));
-  for (const [f, h] of Object.entries(m.files as Record<string, string>)) assert.equal(createHash('sha256').update(readFileSync(new URL(f, DIR), 'utf8')).digest('hex'), h, f);
+  for (const [f, h] of Object.entries(m.files as Record<string, string>)) assert.equal(createHash('sha256').update(readFileSync(new URL(f, DIR), 'utf8').replace(/\r\n/g, '\n')).digest('hex'), h, f);
   assert.equal(m.participantData, false); assert.equal(m.source.game, 'oa-v3/96001/ai-first'); assert.equal(m.source.turn, 8);
   const c = JSON.parse(readFileSync(new URL('case.json', DIR), 'utf8'));
   assert.equal(c.engine.final, 'unverified'); assert.equal(c.engine.activated, false); assert.equal(c.engine.tier, 3);

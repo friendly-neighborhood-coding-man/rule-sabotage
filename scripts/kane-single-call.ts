@@ -50,7 +50,8 @@ export const PLAN = {
 
 function verifyCase() {
   const m = JSON.parse(readFileSync(join(DIR, 'manifest.json'), 'utf8')) as { files: Record<string, string>; participantData: boolean; source: unknown };
-  const bad = Object.entries(m.files).filter(([f, h]) => createHash('sha256').update(readFileSync(join(DIR, f), 'utf8')).digest('hex') !== h).map(([f]) => f);
+  // LF-normalised, so a Windows checkout with CRLF line endings verifies the same (the files were written with LF)
+  const bad = Object.entries(m.files).filter(([f, h]) => createHash('sha256').update(readFileSync(join(DIR, f), 'utf8').replace(/\r\n/g, '\n')).digest('hex') !== h).map(([f]) => f);
   if (bad.length) throw new Error(`case files changed since they were built: ${bad.join(', ')}`);
   if (m.participantData !== false) throw new Error('the case must not contain participant data');
   return { manifest: m, case: JSON.parse(readFileSync(join(DIR, 'case.json'), 'utf8')), conditions: (JSON.parse(readFileSync(join(DIR, 'conditions.json'), 'utf8')) as { conditions: string[] }).conditions, page: readFileSync(join(DIR, 'trial-page.html'), 'utf8') };
