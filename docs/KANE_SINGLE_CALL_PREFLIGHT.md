@@ -138,6 +138,11 @@ Only the four authorized commands were run: `kane-cli --version`, `kane-cli whoa
    the recorded spend and verdict. Cleanup now waits for Chrome's process tree to exit and removes the profile
    best-effort, never throwing.
 
+8. **A failed process is never authoritative** (operator correction before the manual run): a timeout or a non-zero
+   kane-cli exit code always yields status `error` (inconclusive), even if a complete all-boolean `run_end` was printed;
+   the raw condition results are kept in the verdict and in `stdout.ndjson` as evidence only. Regression test:
+   complete run_end followed by exit 1, and complete run_end followed by a hang until the hard timeout.
+
 ## C. Scientific interpretation (fixed in the plan and in every result record)
 
 The case is suitable for studying incomplete referee evidence. If Kane approves the six fixed conditions, the result is a

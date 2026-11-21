@@ -123,3 +123,24 @@ test('a hanging Kane behind a Windows .cmd shim is terminated as a whole process
   assert.equal(alive, false, `the node process behind the shim (pid ${pid}) is gone`);
   assert.equal(h.runs(), 1);
 });
+
+test('a complete run_end is NOT authoritative after a non-zero exit or a timeout: inconclusive, raw results kept', { skip: !chrome && 'no Chrome' }, async () => {
+  // complete all-true run_end, then exit code 1
+  const a = setup({ mode: 'approve-exit1' });
+  const r1 = await K.executeSingleCall({ dir: a.dir, approval: a.approval, env: a.env, testOverrides: T() });
+  assert.equal(r1.verdict!.status, 'error', 'never approved after a failed process');
+  assert.equal(r1.disagreement, 'kane-inconclusive');
+  assert.deepEqual(r1.verdict!.conditionResults, [true, true, true, true, true, true], 'raw condition results preserved');
+  assert.match(r1.verdict!.reason, /exited with code 1/); assert.match(r1.verdict!.reason, /NOT authoritative/);
+  assert.match(readFileSync(join(r1.runDir!, 'stdout.ndjson'), 'utf8'), /"type":"run_end"/, 'raw run_end kept verbatim');
+  const shadow = readFileSync(join(a.dir, 'shadow', 'kane.ndjson'), 'utf8').trim().split('\n').map(l => JSON.parse(l));
+  assert.equal(shadow.length, 1); assert.equal(shadow[0].status, 'error');
+  assert.equal(a.runs(), 1, 'no retry');
+  // complete all-true run_end, then the process hangs until the hard timeout
+  const b = setup({ mode: 'approve-then-hang' });
+  const r2 = await K.executeSingleCall({ dir: b.dir, approval: b.approval, env: b.env, testOverrides: T({ killAfterMs: 4_000 }) });
+  assert.equal(r2.verdict!.status, 'error'); assert.equal(r2.disagreement, 'kane-inconclusive');
+  assert.equal(r2.verdict!.conditionResults.length, 6);
+  assert.match(r2.verdict!.reason, /terminated at the hard timeout/);
+  assert.equal(b.runs(), 1, 'no retry');
+});

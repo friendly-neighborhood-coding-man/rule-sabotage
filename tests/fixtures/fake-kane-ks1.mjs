@@ -21,6 +21,11 @@ if (args[0] === 'run' && args.includes('--analyzer-only')) {
   console.log(JSON.stringify({ type: 'run_start', analyzer: true }));
   if (mode === 'hang') { setInterval(() => {}, 1e6); }
   else if (mode === 'garbage') { console.log('not json at all'); process.exit(3); }
+  else if (mode === 'approve-exit1' || mode === 'approve-then-hang') {
+    // a COMPLETE, all-true run_end ... followed by a failed process (exit 1) or a hang until the hard timeout
+    console.log(JSON.stringify({ type: 'run_end', status: 'passed', page_seen: seen, condition_results: Array(n).fill(true), condition_reasons: Array(n).fill('test double'), credits_consumed: Number(process.env.KS1_COST || 0) }));
+    if (mode === 'approve-exit1') process.exit(1); else setInterval(() => {}, 1e6);
+  }
   else {
     const results = mode === 'incomplete' ? Array(Math.max(0, n - 1)).fill(true) : Array.from({ length: n }, (_, i) => (mode === 'reject' && i === 0 ? false : true));
     console.log(JSON.stringify({ type: 'run_end', status: 'passed', page_seen: seen, condition_results: results, condition_reasons: results.map(() => 'test double'), credits_consumed: Number(process.env.KS1_COST || 0) }));

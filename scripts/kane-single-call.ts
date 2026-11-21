@@ -55,6 +55,7 @@ export const PLAN = {
     'Engine decision (preserved): unverified, tier 3, "a new cell could not be entered in the trial". Not placed.',
     'If Kane approves all six fixed conditions: classified engine-unverified-kane-approved (a DISAGREEMENT). This does NOT show the effect is safe or executable: the trial page has entry scenarios for only 2 of the 3 cells; A1 was never entered.',
     'If Kane rejects any condition: agree-not-approved. If run_end is missing or condition results are incomplete or non-boolean: kane-inconclusive.',
+    'A timeout or a non-zero kane-cli exit code makes the attempt inconclusive (error) even if a complete run_end appeared; the raw condition results are kept as evidence only.',
     'Nothing is placed in any case. The six-condition protocol (kane-conditions-v4.1) is used unchanged; the coverage limitation is recorded separately.',
   ],
   stopConditions: [
@@ -163,12 +164,19 @@ export async function executeSingleCall(o: {
   try { spend = await runPaidCall(o.approval, { maxSteps: PLAN.maxStepsForEstimate, timeoutS: PLAN.timeoutS }, deps); }
   catch (e) { if (e instanceof PaidCallRefused) return { refused: e.reason, spend: null, verdict: null, disagreement: null, runDir: null }; throw e; }
   finally { await browser.close(); }
-  // structured verdict: complete run_end => approved/rejected; anything else => inconclusive (never approved)
+  // Structured verdict. AUTHORITATIVE (approved / rejected) only when ALL hold: the process exited normally with code 0,
+  // was not terminated at the timeout, and run_end carries one boolean per condition. A timeout or a non-zero exit is
+  // ALWAYS 'error' (inconclusive), even if a complete run_end appeared in stdout; the raw condition results are kept.
+  // Anything else incomplete is 'unverified' (inconclusive). Never approved by default.
   const p = parseKaneOutput(out.stdout, c.conditions.length, 'analyzer');
-  const status: KaneShadowVerdict['status'] = p.verdict ?? (out.timedOut || (out.code !== 0 && !/"type"\s*:\s*"run_end"/.test(out.stdout)) ? 'error' : 'unverified');
+  const processFailed = out.timedOut || out.code !== 0;
+  const status: KaneShadowVerdict['status'] = processFailed ? 'error' : (p.verdict ?? 'unverified');
+  const failure = out.timedOut ? 'process tree terminated at the hard timeout' : `kane-cli exited with code ${out.code}`;
   const verdict: KaneShadowVerdict = {
     schema: SHADOW_SCHEMA, kind: 'kane', caseId: c.case.caseId, at: new Date().toISOString(), status,
-    reason: p.verdict ? `run_end with ${p.results.length}/${c.conditions.length} boolean condition results` : `inconclusive: ${p.detail}${out.timedOut ? ' (process tree terminated at the hard timeout)' : ''}`,
+    reason: processFailed
+      ? `inconclusive: ${failure}${p.verdict ? `; a complete run_end was present (would have read as ${p.verdict}) but is NOT authoritative after a failed process; raw condition results kept` : `; ${p.detail}`}`
+      : p.verdict ? `run_end with ${p.results.length}/${c.conditions.length} boolean condition results, exit code 0` : `inconclusive: ${p.detail}`,
     conditionResults: p.results, elapsedMs: out.ms, kaneVersion: version, evidencePath: runDir, testDouble: version !== EXPECTED_CLI_VERSION,
   };
   const log = new ShadowLog(join(dir, 'shadow'));

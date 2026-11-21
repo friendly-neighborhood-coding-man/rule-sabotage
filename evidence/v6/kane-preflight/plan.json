@@ -35,6 +35,7 @@
    "Engine decision (preserved): unverified, tier 3, \"a new cell could not be entered in the trial\". Not placed.",
    "If Kane approves all six fixed conditions: classified engine-unverified-kane-approved (a DISAGREEMENT). This does NOT show the effect is safe or executable: the trial page has entry scenarios for only 2 of the 3 cells; A1 was never entered.",
    "If Kane rejects any condition: agree-not-approved. If run_end is missing or condition results are incomplete or non-boolean: kane-inconclusive.",
+   "A timeout or a non-zero kane-cli exit code makes the attempt inconclusive (error) even if a complete run_end appeared; the raw condition results are kept as evidence only.",
    "Nothing is placed in any case. The six-condition protocol (kane-conditions-v4.1) is used unchanged; the coverage limitation is recorded separately."
   ],
   "stopConditions": [
