@@ -16,6 +16,8 @@ import { refereeV6, aiTurnV6, type AITurn, type RefVerdict } from './turn.ts';
 import { type Policy53, type Plan53 } from './forks/policies53.ts';
 import { OPPONENTS_V6, isOpponentV6, type OpponentV6 } from './opponents.ts';
 import { isHoldout, HOLDOUT } from './selfplay.ts';
+import { PlannerPool, decideBudgeted } from './budgeted.ts';
+import type { RAMemo } from './referee-aware.ts';
 import { type PSessionV6, captureShadow, saveGameRecord, V6_TELEMETRY_SCHEMA } from './pilot.ts';
 import { scored as scoredN } from './engine.ts';
 
@@ -42,6 +44,8 @@ export type GameV6 = {
   history: { turn: number; p: Player; events: GameEvent[]; verdicts: never[] }[]; achievements: Record<Player, { title: string; detail: string }[]>;
   humanRejections: { turn: number; reason: string; code: string | null }[];
   /** V6.2 pilot readiness: the consenting session (null = not recorded), lifecycle and the record state. */
+  /** V6.3 latency-bounded prototype: its own planner pool (active + warm spare) and repeat-suppression memo. */
+  pool?: PlannerPool; raMemo?: RAMemo;
   session: PSessionV6 | null; startedAt: number; endedAt: number | null; abandoned: boolean; saved: boolean; feedback: 'none' | 'submitted' | 'skipped';
 };
 const games = new Map<string, GameV6>();
@@ -147,7 +151,7 @@ function finish(g: GameV6) {
 /** A game left unfinished (new game, session end) is recorded as abandoned, never dropped. */
 export function abandon(g: GameV6) {
   if (g.endedAt || g.state.winner || g.busy) return;
-  g.abandoned = true; g.endedAt = Date.now(); persist(g);
+  g.abandoned = true; g.endedAt = Date.now(); persist(g); void g.pool?.close();
 }
 function persist(g: GameV6) { if (g.saved) return; g.saved = true; saveGameRecord(g.session, record(g)); }
 
@@ -170,7 +174,9 @@ export function record(g: GameV6) {
       ai: { attempts: v('ai').length, placed: v('ai').filter(x => x.activated).length, notPlaced: v('ai').filter(x => !x.activated).map(x => ({ turn: x.turn, final: x.final, code: x.code, label: x.label, cells: x.cells })) },
     },
     interactions: { triggers: trig.length, selfTriggers: trig.filter(t => t.self).length, chains: trig.filter(t => t.chain > 1).length, captures: evs.filter(x => x.e.t === 'capture').length },
-    ai: { turns: g.aiTurns.length, latencyMs: { median: q(0.5), p90: q(0.9), max: aiMs.at(-1) ?? null, over10s: aiMs.filter(x => x > 10_000).length }, zeroMoveTurns: g.aiTurns.filter(t => t.zeroMoves).map(t => ({ turn: t.turn, kind: t.zeroMoves!.kind })), errors: g.aiTurns.filter(t => t.error).map(t => ({ turn: t.turn, error: t.error })) },
+    // the opponent's first turn: its effect proposal (and whether it was placed) plus its moves, for counting repeated openings
+    opening: { ai: (() => { const t = g.history.find(h => h.p === 'ai'); if (!t) return null; const v0 = g.verdicts.find(x => x.player === 'ai' && x.turn === t.turn); return [v0 ? `p${v0.label}@${v0.cells.join('+')}${v0.activated ? '' : '(not placed)'}` : 'p-none', ...t.events.filter(e => e.t === 'move').map(e => `m${cellName((e as { from: string }).from)}>${cellName((e as { to: string }).to)}`)].join(','); })() },
+    ai: { deadline: g.aiTurns.filter(t => t.budget).map(t => ({ turn: t.turn, ...(t.budget as object) })), referee: { attempts: v('ai').length, notPlaced: v('ai').filter(x => !x.activated).length, rate: v('ai').length ? Math.round((v('ai').filter(x => !x.activated).length / v('ai').length) * 1000) / 1000 : null }, turns: g.aiTurns.length, latencyMs: { median: q(0.5), p90: q(0.9), max: aiMs.at(-1) ?? null, over10s: aiMs.filter(x => x > 10_000).length }, zeroMoveTurns: g.aiTurns.filter(t => t.zeroMoves).map(t => ({ turn: t.turn, kind: t.zeroMoves!.kind })), errors: g.aiTurns.filter(t => t.error).map(t => ({ turn: t.turn, error: t.error })) },
     turns: g.history.map(h => ({ turn: h.turn, p: h.p, events: h.events.map(e => e.t + ('cell' in e && typeof e.cell === 'string' ? ` ${cellName(e.cell)}` : '') + ('from' in e && 'to' in e && e.t === 'move' ? ` ${cellName(e.from)}>${cellName(e.to)}` : '')) })),
   };
 }
@@ -180,11 +186,18 @@ const raText = (ra: unknown) => {
   const m = ra as { chosenRank: number; trials: number; skippedKnownBlocked: number; fallback: string | null };
   return ` Referee-aware: played its rank-${m.chosenRank} plan after ${m.trials} referee pre-check(s)${m.skippedKnownBlocked ? `, skipped ${m.skippedKnownBlocked} known-blocked proposal(s)` : ''}${m.fallback ? ` (${m.fallback})` : ''}.`;
 };
+const budgetText = (b: unknown) => {
+  if (!b) return '';
+  const m = b as { outcome: string; plannerMs: number; fallback: string | null; precheck: { trials: number } };
+  return ` Deadline prototype: ${m.outcome} (planner ${(m.plannerMs / 1000).toFixed(1)} s, ${m.precheck.trials} pre-check(s))${m.fallback ? `; fallback: ${m.fallback}` : ''}.`;
+};
 async function aiTurn(g: GameV6) {
   const s = g.state, turn = s.turn;
   g.thinkingSince = Date.now();
   let r: AITurn;
-  try { r = await aiTurnV6(s, 'ai', g.opponent.policy, W, decideInWorker(g.opponent.adapter, g.id)); } finally { g.thinkingSince = null; }
+  const decide = g.opponent.adapter === 'latency-bounded@1' ? decideBudgeted((g.pool ??= new PlannerPool()), (g.raMemo ??= new Map())) : decideInWorker(g.opponent.adapter, g.id);
+  try { r = await aiTurnV6(s, 'ai', g.opponent.policy, W, decide); } finally { g.thinkingSince = null; }
+  if (s.winner) void g.pool?.close();
   const { events, endEvents, ...rest } = r;
   g.aiTurns.push({ ...rest, turn });
   if (r.verdict) { g.verdicts.push(r.verdict); captureShadow(g.session, { ruleset: s.ruleset, gameId: g.id, proposer: 'ai', verdict: r.verdict, text: r.verdict.ruleText }); }
@@ -193,10 +206,10 @@ async function aiTurn(g: GameV6) {
   const zero = r.zeroMoves ? ` It made no move: ${r.zeroMoves.kind === 'no-legal-move' ? `no legal move (${r.zeroMoves.detail})` : r.zeroMoves.kind === 'unfavorable' ? `it judged every legal move worse than standing still (${r.zeroMoves.detail})` : `planner error (${r.zeroMoves.detail})`}.` : '';
   const decision = {
     source: 'local-planner', model: null, fallbackReason: null, taunt: '',
-    rationale: `${o.label} [${o.version}] decided in ${(r.plannerMs / 1000).toFixed(1)} s from ${r.candidatePlacements} candidate turn plans; ${r.protectedCells} squares were closed to its new effects by the proximity rule.${r.placementBlocked ? ` Its effect was not placed (${r.placementBlocked}).` : ''}${zero}${raText(r.ra)}`,
+    rationale: `${o.label} [${o.version}] decided in ${(r.plannerMs / 1000).toFixed(1)} s from ${r.candidatePlacements} candidate turn plans; ${r.protectedCells} squares were closed to its new effects by the proximity rule.${r.placementBlocked ? ` Its effect was not placed (${r.placementBlocked}).` : ''}${zero}${raText(r.ra)}${budgetText(r.budget)}`,
     plan: { candidates: r.candidatePlacements, sims: r.plan?.sims ?? 0, ms: r.plannerMs, chosen: r.plan?.chosen ?? '(no plan)', score: Math.round((r.plan?.score ?? 0) * 100) / 100 },
     ruleText: r.verdict?.ruleText ?? null, ruleInterpretation: null, decidedAt: new Date().toISOString(), ms: r.plannerMs + r.executorMs,
   };
-  return { events, endEvents, verdicts: r.verdict ? [r.verdict] : [], decision, reactions: reactionsFor(events), diagnosis: { zeroMoves: r.zeroMoves, error: r.error, placementBlocked: r.placementBlocked, plannerMs: r.plannerMs, budgetHit: !!r.plan?.meta.budgetHit, adapter: r.ra ?? null } };
+  return { events, endEvents, verdicts: r.verdict ? [r.verdict] : [], decision, reactions: reactionsFor(events), diagnosis: { zeroMoves: r.zeroMoves, error: r.error, placementBlocked: r.placementBlocked, plannerMs: r.plannerMs, budgetHit: !!r.plan?.meta.budgetHit, adapter: r.ra ?? null, deadline: r.budget ?? null } };
 }
 export { A1_EXPLANATION, RULESET, cellName };

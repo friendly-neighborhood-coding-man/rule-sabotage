@@ -58,6 +58,10 @@
     "v6.1:smoke": "node --experimental-strip-types --no-warnings=ExperimentalWarning scripts/v6-1-smoke.ts",
     "v6.2:replay": "node --experimental-strip-types --no-warnings=ExperimentalWarning scripts/v6-2-replay.ts",
     "v6.2:profile": "node --experimental-strip-types --no-warnings=ExperimentalWarning scripts/v6-2-profile.ts",
-    "v6.2:fastclone": "node --experimental-strip-types --no-warnings=ExperimentalWarning scripts/v6-2-fastclone-check.ts"
+    "v6.2:fastclone": "node --experimental-strip-types --no-warnings=ExperimentalWarning scripts/v6-2-fastclone-check.ts",
+    "kane:preflight-case": "node --experimental-strip-types --no-warnings=ExperimentalWarning scripts/kane-preflight-case.ts",
+    "kane:single-call": "node --experimental-strip-types --no-warnings=ExperimentalWarning scripts/kane-single-call.ts",
+    "v6.3:latency": "node --experimental-strip-types --no-warnings=ExperimentalWarning scripts/v6-3-latency.ts",
+    "v6:pilot-summary": "node --experimental-strip-types --no-warnings=ExperimentalWarning scripts/v6-pilot-summary.ts"
   }
 }
