@@ -15,12 +15,21 @@ import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { POLICIES53, OA3, type Policy53 } from './forks/policies53.ts';
 
-export type OpponentV6 = { id: string; policy: Policy53; label: string; version: string; frozenReference: string; description: string; slow: boolean };
+export type OpponentV6 = { id: string; policy: Policy53; label: string; version: string; frozenReference: string; description: string; slow: boolean; adapter?: 'referee-aware-select@1' };
 export const OPPONENTS_V6: Record<string, OpponentV6> = {
   'v6-ev-k1.2': { id: 'v6-ev-k1.2', policy: 'ev-k1.2', label: 'EV-K1.2 (V6)', version: 'v6-ev-k1.2@1', frozenReference: 'ev-k1.2 (V5.3)', slow: false, description: 'Expected-value planner, adapted to the 13x9 board. Cannot see the hidden random state.' },
   'v6-softmax-v2': { id: 'v6-softmax-v2', policy: 'softmax-v2', label: 'Softmax-v2 (V6)', version: 'v6-softmax-v2@1', frozenReference: 'softmax-v2 (V5)', slow: false, description: 'Samples among its four best turn plans, so it varies more between games.' },
   'v6-oa-v3': { id: 'v6-oa-v3', policy: 'oa-v3', label: 'OA-v3 (V6)', version: 'v6-oa-v3@1', frozenReference: 'oa-v3 (V5.3)', slow: true, description: `Pessimistic search (assumes one of your strongest replies), work budget ${OA3.budgetSims.toLocaleString('en')} simulations. Can take several seconds.` },
 };
+/**
+ * V6.2: the same three policies behind the referee-aware selection adapter (server/v6/referee-aware.ts). Separately
+ * versioned (-ra@1); the policies' ranking is unchanged, only the choice among their ranked plans when the top plan's
+ * effect would not be placed by the referee. The v6-*@1 opponents above are not changed.
+ */
+for (const o of Object.values({ ...OPPONENTS_V6 })) {
+  const id = `${o.id}-ra`;
+  OPPONENTS_V6[id] = { ...o, id, label: o.label.replace(' (V6)', ' (V6, referee-aware)'), version: o.version.replace('@1', '-ra@1'), adapter: 'referee-aware-select@1', description: `${o.description} Referee-aware: if its chosen effect would not be placed by the referee, it plays its next-ranked plan instead (at most 3 referee pre-checks per turn).` };
+}
 export const isOpponentV6 = (x: unknown): x is string => typeof x === 'string' && Object.hasOwn(OPPONENTS_V6, x);
 export { POLICIES53 };
 const FILES = ['./engine.ts', './forks/policies53.ts', './forks/evk11.ts', './forks/evplanner.ts', './forks/ai.ts', './forks/planner52.ts', './forks/policies5.ts', './forks/ablation.ts', './forks/stream.ts'];

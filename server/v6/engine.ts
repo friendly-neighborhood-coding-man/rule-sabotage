@@ -91,7 +91,12 @@ export type State = {
 };
 
 export const key = (x: number, y: number) => `${x},${y}`;
-export const parseKey = (k: string): Pos => { const [x, y] = k.split(',').map(Number); return { x, y }; };
+/** V6.2: same result as k.split(',').map(Number) for every input, without the array allocations (hot in the planners). */
+export const parseKey = (k: string): Pos => {
+  const i = k.indexOf(',');
+  if (i < 0 || k.indexOf(',', i + 1) >= 0) { const [x, y] = k.split(',').map(Number); return { x, y }; }
+  return { x: Number(k.slice(0, i)), y: Number(k.slice(i + 1)) };
+};
 export const inside = (x: number, y: number) => x >= 0 && x < W && y >= 0 && y < H;
 export const cellName = (k: string) => { const { x, y } = parseKey(k); return COLS[x] + (y + 1); };
 export const validKey = (k: unknown): k is string => {
@@ -281,7 +286,9 @@ export type ChanceResolver = { teleport: (destinations: readonly string[]) => nu
 /** Teleport destinations: every square of the middle columns B..L holding no piece and no live effect, row-major by column. */
 export function teleportDestinations(s: State, _from: Pos): string[] {
   const opts: string[] = [];
-  for (let x = 1; x < W - 1; x++) for (let y = 0; y < H; y++) { const k = key(x, y); if (!s.cells[k] && !piecesAt(s, k).length) opts.push(k); }
+  // V6.2: occupied squares collected once (same squares and order as testing piecesAt(s, k) per square).
+  const occupied = new Set(s.pieces.filter(q => !q.scored).map(q => key(q.x, q.y)));
+  for (let x = 1; x < W - 1; x++) for (let y = 0; y < H; y++) { const k = key(x, y); if (!s.cells[k] && !occupied.has(k)) opts.push(k); }
   return opts;
 }
 /** Exact probability of each destination index under rand(s) % n (identical to server/engine.ts). */

@@ -1,0 +1,1051 @@
+{
+ "schema": "rule-sabotage/v6-2-profile@1",
+ "note": "Inclusive CPU time per function from the V8 sampling profiler (0.5 ms). Buckets overlap (nested calls): percentages do not add to 100.",
+ "selection": "3 slowest recorded decisions per policy",
+ "positions": [
+  {
+   "game": "softmax-v2/96001/human-first",
+   "turn": 14,
+   "side": "ai",
+   "policy": "softmax-v2",
+   "recordedMs": 163049,
+   "plannerMs": 53765,
+   "planningViewMs": 59671,
+   "planningViewIdentical": true,
+   "stateBytes": 6483,
+   "viewBytes": 3393,
+   "sims": 31363,
+   "candidates": 12,
+   "refereeMs": 2645,
+   "executorMs": 186,
+   "buckets": {
+    "chance enumeration (moveOutcomes)": {
+     "ms": 34785,
+     "pct": 64.6
+    },
+    "evaluation (evaluateCached)": {
+     "ms": 15498,
+     "pct": 28.8
+    },
+    "path cost Dijkstra (pieceCost)": {
+     "ms": 10823,
+     "pct": 20.1
+    },
+    "state copying (structuredClone)": {
+     "ms": 24962,
+     "pct": 46.4
+    },
+    "engine move simulation (applyMove)": {
+     "ms": 10410,
+     "pct": 19.3
+    },
+    "own greedy move loop (greedy11)": {
+     "ms": 52079,
+     "pct": 96.8
+    },
+    "candidate placements (candidatePlacements)": {
+     "ms": 17,
+     "pct": 0
+    },
+    "opponent reply model (replyValue11 / worst3)": {
+     "ms": 41034,
+     "pct": 76.3
+    },
+    "strata (stratify11)": {
+     "ms": 92,
+     "pct": 0.2
+    }
+   },
+   "topSelfTime": [
+    {
+     "fn": "structuredClone js_transferable",
+     "ms": 24515,
+     "pct": 45.6
+    },
+    {
+     "fn": "pieceCost ai.ts",
+     "ms": 6989,
+     "pct": 13
+    },
+    {
+     "fn": "parseKey engine.ts",
+     "ms": 6078,
+     "pct": 11.3
+    },
+    {
+     "fn": "teleportDestinations engine.ts",
+     "ms": 3072,
+     "pct": 5.7
+    },
+    {
+     "fn": "cost evplanner.ts",
+     "ms": 2266,
+     "pct": 4.2
+    },
+    {
+     "fn": "ruleAt engine.ts",
+     "ms": 2129,
+     "pct": 4
+    },
+    {
+     "fn": "evaluateCached evplanner.ts",
+     "ms": 1957,
+     "pct": 3.6
+    },
+    {
+     "fn": "(garbage collector) ",
+     "ms": 1288,
+     "pct": 2.4
+    },
+    {
+     "fn": "(anon) evk11.ts",
+     "ms": 577,
+     "pct": 1.1
+    },
+    {
+     "fn": "unsetCell engine.ts",
+     "ms": 554,
+     "pct": 1
+    },
+    {
+     "fn": "applyEffect engine.ts",
+     "ms": 501,
+     "pct": 0.9
+    },
+    {
+     "fn": "land engine.ts",
+     "ms": 489,
+     "pct": 0.9
+    }
+   ]
+  },
+  {
+   "game": "softmax-v2/96001/human-first",
+   "turn": 33,
+   "side": "human",
+   "policy": "softmax-v2",
+   "recordedMs": 46111,
+   "plannerMs": 44371,
+   "planningViewMs": 35456,
+   "planningViewIdentical": true,
+   "stateBytes": 13094,
+   "viewBytes": 6041,
+   "sims": 9566,
+   "candidates": 9,
+   "refereeMs": 503,
+   "executorMs": 557,
+   "buckets": {
+    "chance enumeration (moveOutcomes)": {
+     "ms": 19994,
+     "pct": 44.7
+    },
+    "evaluation (evaluateCached)": {
+     "ms": 18697,
+     "pct": 41.8
+    },
+    "path cost Dijkstra (pieceCost)": {
+     "ms": 13844,
+     "pct": 30.9
+    },
+    "state copying (structuredClone)": {
+     "ms": 18153,
+     "pct": 40.6
+    },
+    "engine move simulation (applyMove)": {
+     "ms": 3236,
+     "pct": 7.2
+    },
+    "own greedy move loop (greedy11)": {
+     "ms": 41051,
+     "pct": 91.7
+    },
+    "candidate placements (candidatePlacements)": {
+     "ms": 179,
+     "pct": 0.4
+    },
+    "opponent reply model (replyValue11 / worst3)": {
+     "ms": 2925,
+     "pct": 6.5
+    },
+    "strata (stratify11)": {
+     "ms": 938,
+     "pct": 2.1
+    }
+   },
+   "topSelfTime": [
+    {
+     "fn": "structuredClone js_transferable",
+     "ms": 17590,
+     "pct": 39.3
+    },
+    {
+     "fn": "pieceCost ai.ts",
+     "ms": 8253,
+     "pct": 18.4
+    },
+    {
+     "fn": "parseKey engine.ts",
+     "ms": 3727,
+     "pct": 8.3
+    },
+    {
+     "fn": "evaluateCached evplanner.ts",
+     "ms": 2325,
+     "pct": 5.2
+    },
+    {
+     "fn": "ruleAt engine.ts",
+     "ms": 2222,
+     "pct": 5
+    },
+    {
+     "fn": "cost evplanner.ts",
+     "ms": 1725,
+     "pct": 3.9
+    },
+    {
+     "fn": "(anon) evk11.ts",
+     "ms": 1305,
+     "pct": 2.9
+    },
+    {
+     "fn": "(garbage collector) ",
+     "ms": 1159,
+     "pct": 2.6
+    },
+    {
+     "fn": "(anon) evplanner.ts",
+     "ms": 806,
+     "pct": 1.8
+    },
+    {
+     "fn": "canonicalState evk11.ts",
+     "ms": 653,
+     "pct": 1.5
+    },
+    {
+     "fn": "structuredClone ",
+     "ms": 560,
+     "pct": 1.3
+    },
+    {
+     "fn": "teleportDestinations engine.ts",
+     "ms": 497,
+     "pct": 1.1
+    }
+   ]
+  },
+  {
+   "game": "softmax-v2/96001/human-first",
+   "turn": 36,
+   "side": "ai",
+   "policy": "softmax-v2",
+   "recordedMs": 45074,
+   "plannerMs": 25558,
+   "planningViewMs": 26220,
+   "planningViewIdentical": true,
+   "stateBytes": 13071,
+   "viewBytes": 6009,
+   "sims": 13252,
+   "candidates": 10,
+   "refereeMs": null,
+   "executorMs": 536,
+   "buckets": {
+    "chance enumeration (moveOutcomes)": {
+     "ms": 18992,
+     "pct": 73.4
+    },
+    "evaluation (evaluateCached)": {
+     "ms": 4164,
+     "pct": 16.1
+    },
+    "path cost Dijkstra (pieceCost)": {
+     "ms": 1653,
+     "pct": 6.4
+    },
+    "state copying (structuredClone)": {
+     "ms": 16052,
+     "pct": 62
+    },
+    "engine move simulation (applyMove)": {
+     "ms": 3922,
+     "pct": 15.2
+    },
+    "own greedy move loop (greedy11)": {
+     "ms": 24660,
+     "pct": 95.3
+    },
+    "candidate placements (candidatePlacements)": {
+     "ms": 54,
+     "pct": 0.2
+    },
+    "opponent reply model (replyValue11 / worst3)": {
+     "ms": 21169,
+     "pct": 81.8
+    },
+    "strata (stratify11)": {
+     "ms": 109,
+     "pct": 0.4
+    }
+   },
+   "topSelfTime": [
+    {
+     "fn": "structuredClone js_transferable",
+     "ms": 15716,
+     "pct": 60.7
+    },
+    {
+     "fn": "parseKey engine.ts",
+     "ms": 1849,
+     "pct": 7.1
+    },
+    {
+     "fn": "evaluateCached evplanner.ts",
+     "ms": 1391,
+     "pct": 5.4
+    },
+    {
+     "fn": "pieceCost ai.ts",
+     "ms": 1030,
+     "pct": 4
+    },
+    {
+     "fn": "teleportDestinations engine.ts",
+     "ms": 743,
+     "pct": 2.9
+    },
+    {
+     "fn": "land engine.ts",
+     "ms": 675,
+     "pct": 2.6
+    },
+    {
+     "fn": "cost evplanner.ts",
+     "ms": 654,
+     "pct": 2.5
+    },
+    {
+     "fn": "(anon) evk11.ts",
+     "ms": 559,
+     "pct": 2.2
+    },
+    {
+     "fn": "(anon) evplanner.ts",
+     "ms": 444,
+     "pct": 1.7
+    },
+    {
+     "fn": "applyEffect engine.ts",
+     "ms": 435,
+     "pct": 1.7
+    },
+    {
+     "fn": "structuredClone ",
+     "ms": 324,
+     "pct": 1.3
+    },
+    {
+     "fn": "post node:inspector",
+     "ms": 309,
+     "pct": 1.2
+    }
+   ]
+  },
+  {
+   "game": "ev-k1.2/96001/human-first",
+   "turn": 13,
+   "side": "human",
+   "policy": "ev-k1.2",
+   "recordedMs": 188750,
+   "plannerMs": 177559,
+   "planningViewMs": 92625,
+   "planningViewIdentical": true,
+   "stateBytes": 6331,
+   "viewBytes": 3763,
+   "sims": 68919,
+   "candidates": 12,
+   "refereeMs": 1523,
+   "executorMs": 430,
+   "buckets": {
+    "chance enumeration (moveOutcomes)": {
+     "ms": 108800,
+     "pct": 61.1
+    },
+    "evaluation (evaluateCached)": {
+     "ms": 45536,
+     "pct": 25.6
+    },
+    "path cost Dijkstra (pieceCost)": {
+     "ms": 25505,
+     "pct": 14.3
+    },
+    "state copying (structuredClone)": {
+     "ms": 75330,
+     "pct": 42.3
+    },
+    "engine move simulation (applyMove)": {
+     "ms": 34320,
+     "pct": 19.3
+    },
+    "own greedy move loop (greedy11)": {
+     "ms": 26367,
+     "pct": 14.8
+    },
+    "candidate placements (candidatePlacements)": {
+     "ms": 77,
+     "pct": 0
+    },
+    "opponent reply model (replyValue11 / worst3)": {
+     "ms": 0,
+     "pct": 0
+    },
+    "strata (stratify11)": {
+     "ms": 9654,
+     "pct": 5.4
+    }
+   },
+   "topSelfTime": [
+    {
+     "fn": "structuredClone js_transferable",
+     "ms": 73002,
+     "pct": 41
+    },
+    {
+     "fn": "parseKey engine.ts",
+     "ms": 18611,
+     "pct": 10.5
+    },
+    {
+     "fn": "pieceCost ai.ts",
+     "ms": 16609,
+     "pct": 9.3
+    },
+    {
+     "fn": "evaluateCached evplanner.ts",
+     "ms": 10209,
+     "pct": 5.7
+    },
+    {
+     "fn": "cost evplanner.ts",
+     "ms": 9422,
+     "pct": 5.3
+    },
+    {
+     "fn": "teleportDestinations engine.ts",
+     "ms": 7658,
+     "pct": 4.3
+    },
+    {
+     "fn": "canonicalState evk11.ts",
+     "ms": 6881,
+     "pct": 3.9
+    },
+    {
+     "fn": "(garbage collector) ",
+     "ms": 6648,
+     "pct": 3.7
+    },
+    {
+     "fn": "applyEffect engine.ts",
+     "ms": 4492,
+     "pct": 2.5
+    },
+    {
+     "fn": "ruleAt engine.ts",
+     "ms": 3534,
+     "pct": 2
+    },
+    {
+     "fn": "land engine.ts",
+     "ms": 2999,
+     "pct": 1.7
+    },
+    {
+     "fn": "structuredClone ",
+     "ms": 2278,
+     "pct": 1.3
+    }
+   ]
+  },
+  {
+   "game": "ev-k1.2/96001/human-first",
+   "turn": 19,
+   "side": "human",
+   "policy": "ev-k1.2",
+   "recordedMs": 39085,
+   "plannerMs": 5503,
+   "planningViewMs": 3764,
+   "planningViewIdentical": true,
+   "stateBytes": 8955,
+   "viewBytes": 4482,
+   "sims": 7222,
+   "candidates": 11,
+   "refereeMs": 365,
+   "executorMs": 72,
+   "buckets": {
+    "chance enumeration (moveOutcomes)": {
+     "ms": 2546,
+     "pct": 42.8
+    },
+    "evaluation (evaluateCached)": {
+     "ms": 1970,
+     "pct": 33.1
+    },
+    "path cost Dijkstra (pieceCost)": {
+     "ms": 1380,
+     "pct": 23.2
+    },
+    "state copying (structuredClone)": {
+     "ms": 2858,
+     "pct": 48
+    },
+    "engine move simulation (applyMove)": {
+     "ms": 321,
+     "pct": 5.4
+    },
+    "own greedy move loop (greedy11)": {
+     "ms": 3778,
+     "pct": 63.5
+    },
+    "candidate placements (candidatePlacements)": {
+     "ms": 21,
+     "pct": 0.4
+    },
+    "opponent reply model (replyValue11 / worst3)": {
+     "ms": 0,
+     "pct": 0
+    },
+    "strata (stratify11)": {
+     "ms": 62,
+     "pct": 1
+    }
+   },
+   "topSelfTime": [
+    {
+     "fn": "structuredClone js_transferable",
+     "ms": 2823,
+     "pct": 47.4
+    },
+    {
+     "fn": "pieceCost ai.ts",
+     "ms": 756,
+     "pct": 12.7
+    },
+    {
+     "fn": "parseKey engine.ts",
+     "ms": 480,
+     "pct": 8.1
+    },
+    {
+     "fn": "post node:inspector",
+     "ms": 446,
+     "pct": 7.5
+    },
+    {
+     "fn": "ruleAt engine.ts",
+     "ms": 223,
+     "pct": 3.8
+    },
+    {
+     "fn": "cost evplanner.ts",
+     "ms": 218,
+     "pct": 3.7
+    },
+    {
+     "fn": "evaluateCached evplanner.ts",
+     "ms": 211,
+     "pct": 3.5
+    },
+    {
+     "fn": "(anon) evplanner.ts",
+     "ms": 162,
+     "pct": 2.7
+    },
+    {
+     "fn": "(anon) evk11.ts",
+     "ms": 84,
+     "pct": 1.4
+    },
+    {
+     "fn": "basePenalty ai.ts",
+     "ms": 73,
+     "pct": 1.2
+    },
+    {
+     "fn": "(garbage collector) ",
+     "ms": 64,
+     "pct": 1.1
+    },
+    {
+     "fn": "land engine.ts",
+     "ms": 37,
+     "pct": 0.6
+    }
+   ]
+  },
+  {
+   "game": "ev-k1.2/96001/ai-first",
+   "turn": 10,
+   "side": "human",
+   "policy": "ev-k1.2",
+   "recordedMs": 27823,
+   "plannerMs": 8076,
+   "planningViewMs": 8990,
+   "planningViewIdentical": true,
+   "stateBytes": 4339,
+   "viewBytes": 2784,
+   "sims": 13978,
+   "candidates": 9,
+   "refereeMs": 174,
+   "executorMs": 81,
+   "buckets": {
+    "chance enumeration (moveOutcomes)": {
+     "ms": 5496,
+     "pct": 64.5
+    },
+    "evaluation (evaluateCached)": {
+     "ms": 1923,
+     "pct": 22.6
+    },
+    "path cost Dijkstra (pieceCost)": {
+     "ms": 1168,
+     "pct": 13.7
+    },
+    "state copying (structuredClone)": {
+     "ms": 3303,
+     "pct": 38.8
+    },
+    "engine move simulation (applyMove)": {
+     "ms": 2520,
+     "pct": 29.6
+    },
+    "own greedy move loop (greedy11)": {
+     "ms": 6290,
+     "pct": 73.8
+    },
+    "candidate placements (candidatePlacements)": {
+     "ms": 11,
+     "pct": 0.1
+    },
+    "opponent reply model (replyValue11 / worst3)": {
+     "ms": 0,
+     "pct": 0
+    },
+    "strata (stratify11)": {
+     "ms": 49,
+     "pct": 0.6
+    }
+   },
+   "topSelfTime": [
+    {
+     "fn": "structuredClone js_transferable",
+     "ms": 3213,
+     "pct": 37.7
+    },
+    {
+     "fn": "parseKey engine.ts",
+     "ms": 1279,
+     "pct": 15
+    },
+    {
+     "fn": "pieceCost ai.ts",
+     "ms": 752,
+     "pct": 8.8
+    },
+    {
+     "fn": "post node:inspector",
+     "ms": 445,
+     "pct": 5.2
+    },
+    {
+     "fn": "teleportDestinations engine.ts",
+     "ms": 400,
+     "pct": 4.7
+    },
+    {
+     "fn": "evaluateCached evplanner.ts",
+     "ms": 391,
+     "pct": 4.6
+    },
+    {
+     "fn": "applyEffect engine.ts",
+     "ms": 365,
+     "pct": 4.3
+    },
+    {
+     "fn": "cost evplanner.ts",
+     "ms": 344,
+     "pct": 4
+    },
+    {
+     "fn": "checkWin engine.ts",
+     "ms": 326,
+     "pct": 3.8
+    },
+    {
+     "fn": "land engine.ts",
+     "ms": 231,
+     "pct": 2.7
+    },
+    {
+     "fn": "ruleAt engine.ts",
+     "ms": 153,
+     "pct": 1.8
+    },
+    {
+     "fn": "structuredClone ",
+     "ms": 70,
+     "pct": 0.8
+    }
+   ]
+  },
+  {
+   "game": "oa-v3/96001/human-first",
+   "turn": 7,
+   "side": "human",
+   "policy": "oa-v3",
+   "recordedMs": 57334,
+   "plannerMs": 26632,
+   "planningViewMs": 22771,
+   "planningViewIdentical": true,
+   "stateBytes": 3379,
+   "viewBytes": 2268,
+   "sims": 45175,
+   "candidates": 10,
+   "refereeMs": 776,
+   "executorMs": 92,
+   "buckets": {
+    "chance enumeration (moveOutcomes)": {
+     "ms": 11920,
+     "pct": 43.7
+    },
+    "evaluation (evaluateCached)": {
+     "ms": 11979,
+     "pct": 43.9
+    },
+    "path cost Dijkstra (pieceCost)": {
+     "ms": 9379,
+     "pct": 34.4
+    },
+    "state copying (structuredClone)": {
+     "ms": 8535,
+     "pct": 31.3
+    },
+    "engine move simulation (applyMove)": {
+     "ms": 3678,
+     "pct": 13.5
+    },
+    "own greedy move loop (greedy11)": {
+     "ms": 24312,
+     "pct": 89.1
+    },
+    "candidate placements (candidatePlacements)": {
+     "ms": 723,
+     "pct": 2.7
+    },
+    "opponent reply model (replyValue11 / worst3)": {
+     "ms": 8190,
+     "pct": 30
+    },
+    "strata (stratify11)": {
+     "ms": 530,
+     "pct": 1.9
+    }
+   },
+   "topSelfTime": [
+    {
+     "fn": "structuredClone js_transferable",
+     "ms": 8333,
+     "pct": 30.5
+    },
+    {
+     "fn": "pieceCost ai.ts",
+     "ms": 6091,
+     "pct": 22.3
+    },
+    {
+     "fn": "parseKey engine.ts",
+     "ms": 3931,
+     "pct": 14.4
+    },
+    {
+     "fn": "cost evplanner.ts",
+     "ms": 1856,
+     "pct": 6.8
+    },
+    {
+     "fn": "ruleAt engine.ts",
+     "ms": 1484,
+     "pct": 5.4
+    },
+    {
+     "fn": "evaluateCached evplanner.ts",
+     "ms": 700,
+     "pct": 2.6
+    },
+    {
+     "fn": "teleportDestinations engine.ts",
+     "ms": 676,
+     "pct": 2.5
+    },
+    {
+     "fn": "post node:inspector",
+     "ms": 661,
+     "pct": 2.4
+    },
+    {
+     "fn": "applyEffect engine.ts",
+     "ms": 461,
+     "pct": 1.7
+    },
+    {
+     "fn": "(garbage collector) ",
+     "ms": 427,
+     "pct": 1.6
+    },
+    {
+     "fn": "(anon) evk11.ts",
+     "ms": 364,
+     "pct": 1.3
+    },
+    {
+     "fn": "canonicalState evk11.ts",
+     "ms": 329,
+     "pct": 1.2
+    }
+   ]
+  },
+  {
+   "game": "oa-v3/96001/human-first",
+   "turn": 16,
+   "side": "ai",
+   "policy": "oa-v3",
+   "recordedMs": 41934,
+   "plannerMs": 26012,
+   "planningViewMs": 18012,
+   "planningViewIdentical": true,
+   "stateBytes": 6794,
+   "viewBytes": 3895,
+   "sims": 26225,
+   "candidates": 12,
+   "refereeMs": 482,
+   "executorMs": 59,
+   "buckets": {
+    "chance enumeration (moveOutcomes)": {
+     "ms": 11236,
+     "pct": 42.9
+    },
+    "evaluation (evaluateCached)": {
+     "ms": 11946,
+     "pct": 45.6
+    },
+    "path cost Dijkstra (pieceCost)": {
+     "ms": 9828,
+     "pct": 37.5
+    },
+    "state copying (structuredClone)": {
+     "ms": 8561,
+     "pct": 32.7
+    },
+    "engine move simulation (applyMove)": {
+     "ms": 3056,
+     "pct": 11.7
+    },
+    "own greedy move loop (greedy11)": {
+     "ms": 23540,
+     "pct": 89.8
+    },
+    "candidate placements (candidatePlacements)": {
+     "ms": 459,
+     "pct": 1.8
+    },
+    "opponent reply model (replyValue11 / worst3)": {
+     "ms": 5250,
+     "pct": 20
+    },
+    "strata (stratify11)": {
+     "ms": 945,
+     "pct": 3.6
+    }
+   },
+   "topSelfTime": [
+    {
+     "fn": "structuredClone js_transferable",
+     "ms": 8445,
+     "pct": 32.2
+    },
+    {
+     "fn": "pieceCost ai.ts",
+     "ms": 6193,
+     "pct": 23.6
+    },
+    {
+     "fn": "parseKey engine.ts",
+     "ms": 3531,
+     "pct": 13.5
+    },
+    {
+     "fn": "ruleAt engine.ts",
+     "ms": 1447,
+     "pct": 5.5
+    },
+    {
+     "fn": "cost evplanner.ts",
+     "ms": 1243,
+     "pct": 4.7
+    },
+    {
+     "fn": "evaluateCached evplanner.ts",
+     "ms": 841,
+     "pct": 3.2
+    },
+    {
+     "fn": "teleportDestinations engine.ts",
+     "ms": 609,
+     "pct": 2.3
+    },
+    {
+     "fn": "canonicalState evk11.ts",
+     "ms": 541,
+     "pct": 2.1
+    },
+    {
+     "fn": "(garbage collector) ",
+     "ms": 394,
+     "pct": 1.5
+    },
+    {
+     "fn": "applyEffect engine.ts",
+     "ms": 372,
+     "pct": 1.4
+    },
+    {
+     "fn": "(anon) evk11.ts",
+     "ms": 356,
+     "pct": 1.4
+    },
+    {
+     "fn": "land engine.ts",
+     "ms": 287,
+     "pct": 1.1
+    }
+   ]
+  },
+  {
+   "game": "oa-v3/96001/ai-first",
+   "turn": 10,
+   "side": "human",
+   "policy": "oa-v3",
+   "recordedMs": 34588,
+   "plannerMs": 19839,
+   "planningViewMs": 18962,
+   "planningViewIdentical": true,
+   "stateBytes": 4377,
+   "viewBytes": 2776,
+   "sims": 29282,
+   "candidates": 10,
+   "refereeMs": 134,
+   "executorMs": 59,
+   "buckets": {
+    "chance enumeration (moveOutcomes)": {
+     "ms": 7359,
+     "pct": 36.6
+    },
+    "evaluation (evaluateCached)": {
+     "ms": 11057,
+     "pct": 55
+    },
+    "path cost Dijkstra (pieceCost)": {
+     "ms": 9073,
+     "pct": 45.1
+    },
+    "state copying (structuredClone)": {
+     "ms": 5183,
+     "pct": 25.8
+    },
+    "engine move simulation (applyMove)": {
+     "ms": 2427,
+     "pct": 12.1
+    },
+    "own greedy move loop (greedy11)": {
+     "ms": 18398,
+     "pct": 91.5
+    },
+    "candidate placements (candidatePlacements)": {
+     "ms": 447,
+     "pct": 2.2
+    },
+    "opponent reply model (replyValue11 / worst3)": {
+     "ms": 14993,
+     "pct": 74.6
+    },
+    "strata (stratify11)": {
+     "ms": 39,
+     "pct": 0.2
+    }
+   },
+   "topSelfTime": [
+    {
+     "fn": "pieceCost ai.ts",
+     "ms": 5521,
+     "pct": 27.5
+    },
+    {
+     "fn": "structuredClone js_transferable",
+     "ms": 5067,
+     "pct": 25.2
+    },
+    {
+     "fn": "parseKey engine.ts",
+     "ms": 3263,
+     "pct": 16.2
+    },
+    {
+     "fn": "ruleAt engine.ts",
+     "ms": 1325,
+     "pct": 6.6
+    },
+    {
+     "fn": "cost evplanner.ts",
+     "ms": 1197,
+     "pct": 6
+    },
+    {
+     "fn": "evaluateCached evplanner.ts",
+     "ms": 765,
+     "pct": 3.8
+    },
+    {
+     "fn": "teleportDestinations engine.ts",
+     "ms": 445,
+     "pct": 2.2
+    },
+    {
+     "fn": "applyEffect engine.ts",
+     "ms": 318,
+     "pct": 1.6
+    },
+    {
+     "fn": "(garbage collector) ",
+     "ms": 294,
+     "pct": 1.5
+    },
+    {
+     "fn": "basePenalty ai.ts",
+     "ms": 281,
+     "pct": 1.4
+    },
+    {
+     "fn": "post node:inspector",
+     "ms": 260,
+     "pct": 1.3
+    },
+    {
+     "fn": "land engine.ts",
+     "ms": 209,
+     "pct": 1
+    }
+   ]
+  }
+ ]
+}

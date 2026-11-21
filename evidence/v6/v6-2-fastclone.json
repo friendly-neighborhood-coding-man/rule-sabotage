@@ -1,0 +1,87 @@
+{
+ "schema": "rule-sabotage/v6-2-fastclone@1",
+ "note": "Same positions as the profile (3 slowest recorded per policy). identical = chosen plan, full ranking, sims and candidate count equal.",
+ "rows": [
+  {
+   "game": "softmax-v2/96001/human-first",
+   "turn": 14,
+   "policy": "softmax-v2",
+   "baseMs": 14450,
+   "fastMs": 11373,
+   "speedup": 1.27,
+   "identical": true
+  },
+  {
+   "game": "softmax-v2/96001/human-first",
+   "turn": 33,
+   "policy": "softmax-v2",
+   "baseMs": 10046,
+   "fastMs": 2632,
+   "speedup": 3.82,
+   "identical": true
+  },
+  {
+   "game": "softmax-v2/96001/human-first",
+   "turn": 36,
+   "policy": "softmax-v2",
+   "baseMs": 8769,
+   "fastMs": 5570,
+   "speedup": 1.57,
+   "identical": true
+  },
+  {
+   "game": "ev-k1.2/96001/human-first",
+   "turn": 13,
+   "policy": "ev-k1.2",
+   "baseMs": 37908,
+   "fastMs": 26601,
+   "speedup": 1.43,
+   "identical": true
+  },
+  {
+   "game": "ev-k1.2/96001/human-first",
+   "turn": 19,
+   "policy": "ev-k1.2",
+   "baseMs": 5352,
+   "fastMs": 2051,
+   "speedup": 2.61,
+   "identical": true
+  },
+  {
+   "game": "ev-k1.2/96001/ai-first",
+   "turn": 10,
+   "policy": "ev-k1.2",
+   "baseMs": 8276,
+   "fastMs": 2877,
+   "speedup": 2.88,
+   "identical": true
+  },
+  {
+   "game": "oa-v3/96001/human-first",
+   "turn": 7,
+   "policy": "oa-v3",
+   "baseMs": 20658,
+   "fastMs": 17718,
+   "speedup": 1.17,
+   "identical": true
+  },
+  {
+   "game": "oa-v3/96001/human-first",
+   "turn": 16,
+   "policy": "oa-v3",
+   "baseMs": 16132,
+   "fastMs": 33026,
+   "speedup": 0.49,
+   "identical": true
+  },
+  {
+   "game": "oa-v3/96001/ai-first",
+   "turn": 10,
+   "policy": "oa-v3",
+   "baseMs": 27230,
+   "fastMs": 18302,
+   "speedup": 1.49,
+   "identical": true
+  }
+ ]
+}

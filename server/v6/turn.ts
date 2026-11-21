@@ -26,18 +26,42 @@ import { selectTier, type TierDecision } from './forks/tiers.ts';
 import { planPolicy53, moves53, type Policy53, type Plan53, type Meta } from './forks/policies53.ts';
 import { evaluateCached, newCtx, moveOutcomes } from './forks/evplanner.ts';
 import { K1 } from './forks/evk11.ts';
+import { withFastClone } from './fastclone.ts';
+
+/**
+ * V6.2 latency, semantics-preserving: the copy of the state a policy plans on. The planners copy the state thousands of
+ * times per decision (once per enumerated teleport destination), and the full game state carries history no planner
+ * reads: burnt rules (no cells left), the per-turn statistics, and the rules' display text. Dropping exactly those
+ * leaves every value a decision depends on unchanged: piece positions and status, live effects (id, owner, effect,
+ * cells), turn, actions, bonus, rule ids (nextId), the RNG field and the ruleset. tests/v6-2.test.ts and
+ * scripts/v6-2-profile.ts check that decisions are identical with and without it.
+ */
+export function planningView(s: State): State {
+  const v = structuredClone(s);
+  v.rules = v.rules.filter(r => r.cells.length).map(r => ({ ...r, text: '', summary: '', interpretedBy: '', ...(r.approxNote !== undefined ? { approxNote: '' } : {}) }));
+  v.stats = { activePerTurn: [] }; v.log = [];
+  return v;
+}
 
 export type RefVerdict = {
   player: Player; ruleText: string; label: string; cells: string[];
   final: 'engine-approved' | 'rejected' | 'unverified' | 'illegal';
   /** 'rule' = rejected by validatePlacement before the trial (for example rule A1); 'engine' = trial/tier. */
   stage: 'rule' | 'engine'; code: string | null; tier: number | null; message: string; activated: boolean; placedCells: string[]; trialId: string | null;
+  /** V6.2 (additive, for telemetry and Kane shadow cases): turn, the typed effect and cell keys judged, referee wall time. */
+  turn?: number; effect?: Placement['effect']; cellKeys?: string[]; ms?: number;
 };
 export const trials = new Map<string, { trial: Trial; html: string }>();
 let trialNo = 6000;
 
 /** The one referee. Applies the placement if (and only if) it is legal and engine-approved. */
 export function refereeV6(s: State, p: Player, pl: Placement, opts: { keepTrial?: boolean } = {}): { verdict: RefVerdict; events: GameEvent[] } {
+  const t0 = performance.now();
+  const r = refereeCore(s, p, pl, opts);
+  Object.assign(r.verdict, { turn: s.turn, effect: structuredClone(pl.effect), cellKeys: Array.isArray(pl.cells) ? [...pl.cells] : [], ms: Math.round(performance.now() - t0) });
+  return r;
+}
+function refereeCore(s: State, p: Player, pl: Placement, opts: { keepTrial?: boolean }): { verdict: RefVerdict; events: GameEvent[] } {
   const base = { player: p, ruleText: pl.text, label: shortLabel(pl.effect), cells: pl.cells.map(c => (typeof c === 'string' && /^\d+,\d+$/.test(c) ? cellName(c) : String(c))) };
   const c = validatePlacement(s, p, pl);
   if (!c.ok) return { verdict: { ...base, final: 'illegal', stage: 'rule', code: c.code ?? 'invalid', tier: null, message: c.reason, activated: false, placedCells: [], trialId: null }, events: [] };
@@ -79,6 +103,8 @@ export type AITurn = {
   /** Candidate placements the policy could choose from this turn (incl. "no effect"), and cells A1 protected. */
   candidatePlacements: number; protectedCells: number; eligibleCells: number;
   zeroMoves: ZeroMove | null; error: string | null;
+  /** V6.2 referee-aware adapter metadata, when that adapter made the decision. */
+  ra?: unknown;
 };
 
 /**
@@ -89,7 +115,7 @@ export async function aiTurnV6(s: State, me: Player, policy: Policy53, w: Weight
   const t0 = performance.now();
   const prot = protectedCells(s, me).length, elig = eligibleCells(s, me).length;
   let plan: Plan53 | null = null, error: string | null = null;
-  try { plan = decide ? await decide(policy, structuredClone(s), me) : planPolicy53(policy, structuredClone(s), me, w); } catch (e) { error = `policy threw: ${(e as Error).message}`; }
+  try { plan = decide ? await decide(policy, planningView(s), me) : withFastClone(() => planPolicy53(policy, planningView(s), me, w)); } catch (e) { error = `policy threw: ${(e as Error).message}`; }
   const plannerMs = Math.round(performance.now() - t0);
   const events: GameEvent[] = [];
   let verdict: RefVerdict | null = null, blocked: string | null = null;
@@ -107,9 +133,9 @@ export async function aiTurnV6(s: State, me: Player, policy: Policy53, w: Weight
   let replans = 0;
   if (!error) {
     try {
-      let nx = moves53(s, me, w), moves = nx.moves, mi = 0, done = !nx.endsAtChance;
+      let nx = withFastClone(() => moves53(planningView(s), me, w)), moves = nx.moves, mi = 0, done = !nx.endsAtChance;
       while (mi < moves.length || (!done && !s.winner && s.current === me && s.actionsLeft > 0)) {
-        if (mi >= moves.length) { nx = moves53(s, me, w); moves = nx.moves; mi = 0; done = !nx.endsAtChance; replans++; if (!moves.length) break; }
+        if (mi >= moves.length) { nx = withFastClone(() => moves53(planningView(s), me, w)); moves = nx.moves; mi = 0; done = !nx.endsAtChance; replans++; if (!moves.length) break; }
         const m = moves[mi++];
         if (s.winner || s.current !== me) break;
         const v = validateMove(s, me, m);
@@ -126,7 +152,7 @@ export async function aiTurnV6(s: State, me: Player, policy: Policy53, w: Weight
   return {
     policy, plannerMs, executorMs, verdict, placementBlocked: blocked, events, endEvents, moves: executed, replans,
     plan: plan ? { candidates: plan.candidates, sims: plan.sims, meta: plan.meta, chosen: plan.chosen.summary, score: plan.chosen.score, ranked: plan.ranked.slice(0, 6).map(c => ({ id: c.id, summary: c.summary, score: c.score })) } : null,
-    candidatePlacements: plan?.candidates ?? 0, protectedCells: prot, eligibleCells: elig, zeroMoves, error,
+    candidatePlacements: plan?.candidates ?? 0, protectedCells: prot, eligibleCells: elig, zeroMoves, error, ...(plan && 'ra' in plan ? { ra: (plan as { ra: unknown }).ra } : {}),
   };
 }
 export type { Policy53, Meta };

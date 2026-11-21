@@ -20,3 +20,13 @@
 .ai-record .zero{margin-top:6px;padding:5px 8px;border-radius:6px;background:#1f2937;font-size:12px}
 .ai-record .zero.planner-error{background:#450a0a;color:#fecaca}
 .v6-strip button.primary{width:auto;padding:4px 14px;margin:0}
+
+/* V6.2 pilot screens */
+.pv6-overlay{z-index:40}.pv6-top{z-index:60}
+.pv6-modal{max-width:620px;text-align:left}.pv6-wide{max-width:860px;max-height:85vh;overflow:auto}
+.pv6-modal fieldset{border:1px solid var(--line);border-radius:8px;margin:8px 0;padding:6px 10px}
+.pv6-modal textarea{width:100%;background:#0b0f1c;color:inherit;border:1px solid var(--line);border-radius:6px}
+.pv6-buttons{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}.pv6-buttons .primary{width:auto}
+.pv6-warn{color:#fbbf24}.pv6-err{color:#f87171}.pv6-sub{color:var(--sub);font-size:13px}.pv6-rec{color:#a5b4fc}
+.pv6-head{display:flex;justify-content:space-between;align-items:center}
+.pv6-row{display:block;margin:10px 0}.pv6-row input{margin-left:6px}

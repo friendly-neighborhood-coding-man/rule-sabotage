@@ -1,0 +1,88 @@
+{
+ "schema": "rule-sabotage/v6-2-fastclone@1",
+ "arm": "fast state copy + planning view (+ the engine key/teleport optimisations in this build)",
+ "note": "Interleaved base/optimised/base/optimised, min of each arm. Same positions as the profile (3 slowest recorded per policy). identical = chosen plan, full ranking, sims and candidate count equal.",
+ "rows": [
+  {
+   "game": "softmax-v2/96001/human-first",
+   "turn": 14,
+   "policy": "softmax-v2",
+   "baseMs": 10251,
+   "fastMs": 5156,
+   "speedup": 1.99,
+   "identical": true
+  },
+  {
+   "game": "softmax-v2/96001/human-first",
+   "turn": 33,
+   "policy": "softmax-v2",
+   "baseMs": 7872,
+   "fastMs": 4064,
+   "speedup": 1.94,
+   "identical": true
+  },
+  {
+   "game": "softmax-v2/96001/human-first",
+   "turn": 36,
+   "policy": "softmax-v2",
+   "baseMs": 7648,
+   "fastMs": 2063,
+   "speedup": 3.71,
+   "identical": true
+  },
+  {
+   "game": "ev-k1.2/96001/human-first",
+   "turn": 13,
+   "policy": "ev-k1.2",
+   "baseMs": 32308,
+   "fastMs": 15302,
+   "speedup": 2.11,
+   "identical": true
+  },
+  {
+   "game": "ev-k1.2/96001/human-first",
+   "turn": 19,
+   "policy": "ev-k1.2",
+   "baseMs": 5773,
+   "fastMs": 2529,
+   "speedup": 2.28,
+   "identical": true
+  },
+  {
+   "game": "ev-k1.2/96001/ai-first",
+   "turn": 10,
+   "policy": "ev-k1.2",
+   "baseMs": 10876,
+   "fastMs": 3253,
+   "speedup": 3.34,
+   "identical": true
+  },
+  {
+   "game": "oa-v3/96001/human-first",
+   "turn": 7,
+   "policy": "oa-v3",
+   "baseMs": 17820,
+   "fastMs": 9994,
+   "speedup": 1.78,
+   "identical": true
+  },
+  {
+   "game": "oa-v3/96001/human-first",
+   "turn": 16,
+   "policy": "oa-v3",
+   "baseMs": 17231,
+   "fastMs": 12272,
+   "speedup": 1.4,
+   "identical": true
+  },
+  {
+   "game": "oa-v3/96001/ai-first",
+   "turn": 10,
+   "policy": "oa-v3",
+   "baseMs": 17193,
+   "fastMs": 9707,
+   "speedup": 1.77,
+   "identical": true
+  }
+ ]
+}

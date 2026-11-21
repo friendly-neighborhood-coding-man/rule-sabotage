@@ -122,3 +122,7 @@ the V1–V5.3 policies and their evidence are unchanged. See `docs/V6_GAMEPLAY_E
 
 The same page also offers **V6.1** (`rule-sabotage/v6.1-all-piece-proximity@1`, the default choice in the Ruleset menu): no new
 effect on the 8 squares around ANY piece, yours or the opponent's. Everything else is V6. See `docs/V6_1_ALL_PIECE_PROXIMITY.md`.
+
+V6.2 (`docs/V6_2_PLAYABILITY_AND_KANE_SHADOW.md`): decision-preserving opponent speed-ups, separate referee-aware
+opponents (`-ra@1`), consent-based recording with review, questionnaire and deletion (`playtest-data/v6/`), and Kane
+shadow-mode infrastructure that is prepared but never runs Kane.
