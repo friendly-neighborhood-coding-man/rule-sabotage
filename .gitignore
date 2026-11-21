@@ -11,3 +11,6 @@ evidence/balance/recordings/
 evidence/balance/current.json
 evidence/balance/.loop.lock
 !evidence/balance/**/*.log
+
+# human playtest data (local only, consent-gated; never committed)
+playtest-data/

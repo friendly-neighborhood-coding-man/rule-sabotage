@@ -47,6 +47,9 @@
     "balance:v52": "node --experimental-strip-types --no-warnings=ExperimentalWarning scripts/balance-v52.ts",
     "balance:v52:openings-check": "node --experimental-strip-types --no-warnings=ExperimentalWarning scripts/v52-openings-check.ts",
     "balance:v53:preflight": "node --experimental-strip-types --no-warnings=ExperimentalWarning scripts/v53-preflight.ts",
-    "balance:v53": "node --experimental-strip-types --no-warnings=ExperimentalWarning scripts/balance-v53.ts"
+    "balance:v53": "node --experimental-strip-types --no-warnings=ExperimentalWarning scripts/balance-v53.ts",
+    "playtest": "node --experimental-strip-types --no-warnings=ExperimentalWarning server/playtest/server.ts",
+    "playtest:latency-audit": "node --experimental-strip-types --no-warnings=ExperimentalWarning scripts/playtest-latency-audit.ts",
+    "playtest:summary": "node --experimental-strip-types --no-warnings=ExperimentalWarning scripts/playtest-summary.ts"
   }
 }

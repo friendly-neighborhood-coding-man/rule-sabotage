@@ -1,0 +1,296 @@
+{
+  "schema": "rule-sabotage/playtest-pilot-schedule@1",
+  "status": "proposed, not run",
+  "generatedBy": "server/playtest/pilot.ts",
+  "holdoutUntouched": "65001-65060",
+  "participants": [
+    {
+      "participant": "P01",
+      "order": 1,
+      "slots": [
+        {
+          "slot": 1,
+          "opponent": "ev-k1.2",
+          "first": "human",
+          "seed": 82011
+        },
+        {
+          "slot": 2,
+          "opponent": "softmax-v2",
+          "first": "ai",
+          "seed": 82012
+        },
+        {
+          "slot": 3,
+          "opponent": "oa-v3",
+          "first": "human",
+          "seed": 82013
+        }
+      ]
+    },
+    {
+      "participant": "P02",
+      "order": 1,
+      "slots": [
+        {
+          "slot": 1,
+          "opponent": "ev-k1.2",
+          "first": "ai",
+          "seed": 82021
+        },
+        {
+          "slot": 2,
+          "opponent": "softmax-v2",
+          "first": "human",
+          "seed": 82022
+        },
+        {
+          "slot": 3,
+          "opponent": "oa-v3",
+          "first": "ai",
+          "seed": 82023
+        }
+      ]
+    },
+    {
+      "participant": "P03",
+      "order": 2,
+      "slots": [
+        {
+          "slot": 1,
+          "opponent": "softmax-v2",
+          "first": "human",
+          "seed": 82031
+        },
+        {
+          "slot": 2,
+          "opponent": "oa-v3",
+          "first": "ai",
+          "seed": 82032
+        },
+        {
+          "slot": 3,
+          "opponent": "ev-k1.2",
+          "first": "human",
+          "seed": 82033
+        }
+      ]
+    },
+    {
+      "participant": "P04",
+      "order": 2,
+      "slots": [
+        {
+          "slot": 1,
+          "opponent": "softmax-v2",
+          "first": "ai",
+          "seed": 82041
+        },
+        {
+          "slot": 2,
+          "opponent": "oa-v3",
+          "first": "human",
+          "seed": 82042
+        },
+        {
+          "slot": 3,
+          "opponent": "ev-k1.2",
+          "first": "ai",
+          "seed": 82043
+        }
+      ]
+    },
+    {
+      "participant": "P05",
+      "order": 3,
+      "slots": [
+        {
+          "slot": 1,
+          "opponent": "oa-v3",
+          "first": "human",
+          "seed": 82051
+        },
+        {
+          "slot": 2,
+          "opponent": "ev-k1.2",
+          "first": "ai",
+          "seed": 82052
+        },
+        {
+          "slot": 3,
+          "opponent": "softmax-v2",
+          "first": "human",
+          "seed": 82053
+        }
+      ]
+    },
+    {
+      "participant": "P06",
+      "order": 3,
+      "slots": [
+        {
+          "slot": 1,
+          "opponent": "oa-v3",
+          "first": "ai",
+          "seed": 82061
+        },
+        {
+          "slot": 2,
+          "opponent": "ev-k1.2",
+          "first": "human",
+          "seed": 82062
+        },
+        {
+          "slot": 3,
+          "opponent": "softmax-v2",
+          "first": "ai",
+          "seed": 82063
+        }
+      ]
+    },
+    {
+      "participant": "P07",
+      "order": 4,
+      "slots": [
+        {
+          "slot": 1,
+          "opponent": "ev-k1.2",
+          "first": "human",
+          "seed": 82071
+        },
+        {
+          "slot": 2,
+          "opponent": "oa-v3",
+          "first": "ai",
+          "seed": 82072
+        },
+        {
+          "slot": 3,
+          "opponent": "softmax-v2",
+          "first": "human",
+          "seed": 82073
+        }
+      ]
+    },
+    {
+      "participant": "P08",
+      "order": 4,
+      "slots": [
+        {
+          "slot": 1,
+          "opponent": "ev-k1.2",
+          "first": "ai",
+          "seed": 82081
+        },
+        {
+          "slot": 2,
+          "opponent": "oa-v3",
+          "first": "human",
+          "seed": 82082
+        },
+        {
+          "slot": 3,
+          "opponent": "softmax-v2",
+          "first": "ai",
+          "seed": 82083
+        }
+      ]
+    },
+    {
+      "participant": "P09",
+      "order": 5,
+      "slots": [
+        {
+          "slot": 1,
+          "opponent": "oa-v3",
+          "first": "human",
+          "seed": 82091
+        },
+        {
+          "slot": 2,
+          "opponent": "softmax-v2",
+          "first": "ai",
+          "seed": 82092
+        },
+        {
+          "slot": 3,
+          "opponent": "ev-k1.2",
+          "first": "human",
+          "seed": 82093
+        }
+      ]
+    },
+    {
+      "participant": "P10",
+      "order": 5,
+      "slots": [
+        {
+          "slot": 1,
+          "opponent": "oa-v3",
+          "first": "ai",
+          "seed": 82101
+        },
+        {
+          "slot": 2,
+          "opponent": "softmax-v2",
+          "first": "human",
+          "seed": 82102
+        },
+        {
+          "slot": 3,
+          "opponent": "ev-k1.2",
+          "first": "ai",
+          "seed": 82103
+        }
+      ]
+    },
+    {
+      "participant": "P11",
+      "order": 6,
+      "slots": [
+        {
+          "slot": 1,
+          "opponent": "softmax-v2",
+          "first": "human",
+          "seed": 82111
+        },
+        {
+          "slot": 2,
+          "opponent": "ev-k1.2",
+          "first": "ai",
+          "seed": 82112
+        },
+        {
+          "slot": 3,
+          "opponent": "oa-v3",
+          "first": "human",
+          "seed": 82113
+        }
+      ]
+    },
+    {
+      "participant": "P12",
+      "order": 6,
+      "slots": [
+        {
+          "slot": 1,
+          "opponent": "softmax-v2",
+          "first": "ai",
+          "seed": 82121
+        },
+        {
+          "slot": 2,
+          "opponent": "ev-k1.2",
+          "first": "human",
+          "seed": 82122
+        },
+        {
+          "slot": 3,
+          "opponent": "oa-v3",
+          "first": "ai",
+          "seed": 82123
+        }
+      ]
+    }
+  ]
+}

@@ -106,3 +106,8 @@ client/             vanilla JS UI (renders server state, animates the event log)
 tests/              node:test suites, Kane test double, Playwright e2e
 docs/archive-v2/    the V2 handoff docs this version replaced
 ```
+
+## Human playtest (local, not production)
+
+`npm run playtest` starts an isolated playtest on http://127.0.0.1:3100 against the three experimental V5.3 opponents (EV-K1.2, Softmax-v2, OA-v3), with consent-gated recording, match review and a post-game questionnaire. No Kane, no language model, no network. See `docs/HUMAN_PLAYTEST_READINESS.md` and `docs/PLAYTEST_PILOT_PROTOCOL.md`.
+
