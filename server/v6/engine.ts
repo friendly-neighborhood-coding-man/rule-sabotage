@@ -17,6 +17,9 @@
  *      part of validatePlacement (the server-side authority) and of eligibleCells (what the UI and every AI candidate
  *      generator offer), so a human request and an AI request are judged by the same function.
  *
+ *  A2  (V6.1 ruleset only, `rule-sabotage/v6.1-all-piece-proximity@1`): A1 widened to ANY unscored piece, friendly or
+ *      opposing. Chosen per game at init({ ruleset }); V6 (A1) remains the default. Nothing else differs between V6 and V6.1.
+ *
  * Unchanged from production: actions per turn, stacking, capture, the six effects, burn-on-entry, chain cap 4,
  * max 3 cells per placement, scoring, win condition, and the 60-turn limit (MAX_TURNS) with its tie-break. The turn
  * limit is deliberately NOT changed here; see docs/V6_GAMEPLAY_EXPANSION.md for the turn-limit evidence.
@@ -26,6 +29,16 @@
 import { type Player, type Effect, PLAYERS, other, isEffect, describeEffect, shortLabel, effectIcon, MAX_CELLS_PER_TURN } from '../rules.ts';
 
 export const RULESET = 'rule-sabotage/v6-13x9-no-adjacent-effects@1' as const;
+/**
+ * V6.1 (EXPERIMENTAL, separately versioned): rule A2 replaces A1. No new effect within Chebyshev distance 1 of ANY unscored
+ * piece, whoever owns it. Everything else is the V6 ruleset unchanged (board, pieces, teleport B-L, turn limit, referee).
+ * A game's ruleset is fixed at init() and stored in its state; V6 (A1) stays the default so V6 games are unchanged.
+ */
+export const RULESET_V61 = 'rule-sabotage/v6.1-all-piece-proximity@1' as const;
+export type Ruleset = typeof RULESET | typeof RULESET_V61;
+export const RULESETS: Record<'v6' | 'v6.1', Ruleset> = { 'v6': RULESET, 'v6.1': RULESET_V61 };
+/** True when own pieces also close the squares around them (V6.1 rule A2). */
+export const allPieceProximity = (s: { ruleset: Ruleset }) => s.ruleset === RULESET_V61;
 export const V6_MODE = 'EXPERIMENTAL-V6-NOT-PRODUCTION' as const;
 
 export const W = 13;
@@ -70,7 +83,7 @@ export type GameEvent =
   | { t: 'win'; winner: Player | 'draw'; reason: string };
 
 export type State = {
-  ruleset: typeof RULESET;
+  ruleset: Ruleset;
   seed: number; rng: number; turn: number; maxTurns: number; current: Player; firstPlayer: Player;
   phase: 'place' | 'move'; actionsLeft: number; bonus: Record<Player, number>;
   pieces: Piece[]; cells: Record<string, number>; rules: Rule[]; nextId: number;
@@ -96,11 +109,12 @@ export function rand(s: State): number {
  * `first` forces who starts; omitted = seeded coin flip (same RNG sequence as production). `maxTurns` is for the
  * turn-limit MEASUREMENT script only (scripts/v6-turn-limit.ts); every playable V6 game uses MAX_TURNS.
  */
-export function init(seed: number = Date.now(), opts: { first?: Player; maxTurns?: number } = {}): State {
+export function init(seed: number = Date.now(), opts: { first?: Player; maxTurns?: number; ruleset?: Ruleset } = {}): State {
+  if (opts.ruleset !== undefined && opts.ruleset !== RULESET && opts.ruleset !== RULESET_V61) throw new Error(`Unknown V6 ruleset ${String(opts.ruleset)}`);
   const pieces: Piece[] = [];
   for (const p of PLAYERS) START_ROWS.forEach((y, i) => pieces.push({ id: `${p === 'human' ? 'h' : 'a'}${i + 1}`, owner: p, x: START_X[p], y, home: { x: START_X[p], y }, scored: false, frozen: 0, shield: false }));
   const s: State = {
-    ruleset: RULESET,
+    ruleset: opts.ruleset ?? RULESET,
     seed: seed >>> 0, rng: (seed >>> 0) || 123456789, turn: 1, maxTurns: opts.maxTurns ?? MAX_TURNS, current: 'human', firstPlayer: 'human',
     phase: 'place', actionsLeft: 0, bonus: { human: 0, ai: 0 }, pieces, cells: {}, rules: [], nextId: 1,
     winner: null, winReason: '', log: [], stats: { activePerTurn: [] },
@@ -131,18 +145,20 @@ function startTurn(s: State, events: GameEvent[]) {
 
 export type Check = { ok: true } | { ok: false; reason: string; code?: CellBlock; cell?: string };
 
-// ---------- rule A1: no new effects next to opponent pieces ----------
+// ---------- rule A1 (V6): no new effects next to opponent pieces; rule A2 (V6.1): next to ANY piece ----------
 export const chebyshev = (a: Pos, b: Pos) => Math.max(Math.abs(a.x - b.x), Math.abs(a.y - b.y));
-/** The opposing pieces (still on the board) whose 8-neighbourhood contains cell k, for a placement by p. */
+/** Pieces whose rule counts for a placement by p: opposing pieces (A1), or every piece (A2). Scored pieces never count. */
+const counts = (s: State, p: Player, q: Piece) => !q.scored && (q.owner !== p || allPieceProximity(s));
+/** The pieces (still on the board) whose 8-neighbourhood contains cell k and that close it for a placement by p. */
 export function guardsOf(s: State, p: Player, k: string): Piece[] {
   const c = parseKey(k);
-  return s.pieces.filter(q => q.owner !== p && !q.scored && chebyshev(q, c) <= NO_EFFECT_RADIUS && !(q.x === c.x && q.y === c.y));
+  return s.pieces.filter(q => counts(s, p, q) && chebyshev(q, c) <= NO_EFFECT_RADIUS && !(q.x === c.x && q.y === c.y));
 }
-/** Every cell where p may NOT place a new effect because of rule A1 (excludes the opposing pieces' own cells). */
+/** Every cell where p may NOT place a new effect because of rule A1/A2 (excludes the pieces' own cells). */
 export function protectedCells(s: State, p: Player): string[] {
   const out = new Set<string>();
   for (const q of s.pieces) {
-    if (q.owner === p || q.scored) continue;
+    if (!counts(s, p, q)) continue;
     for (let dy = -NO_EFFECT_RADIUS; dy <= NO_EFFECT_RADIUS; dy++) for (let dx = -NO_EFFECT_RADIUS; dx <= NO_EFFECT_RADIUS; dx++) {
       const x = q.x + dx, y = q.y + dy;
       if ((dx || dy) && inside(x, y)) out.add(key(x, y));
@@ -150,13 +166,15 @@ export function protectedCells(s: State, p: Player): string[] {
   }
   return [...out].sort();
 }
-export type CellBlock = 'piece' | 'opponent-effect' | 'near-opponent';
+export type CellBlock = 'piece' | 'opponent-effect' | 'near-opponent' | 'near-own';
 /** Why p cannot put a new effect on k (null = allowed). Occupancy first, then opponent effect, then rule A1. */
 export function cellBlock(s: State, p: Player, k: string): CellBlock | null {
   if (piecesAt(s, k).length) return 'piece';
   const r = ruleAt(s, k);
   if (r && r.owner !== p) return 'opponent-effect';
-  if (guardsOf(s, p, k).length) return 'near-opponent';
+  const g = guardsOf(s, p, k);
+  if (g.some(q => q.owner !== p)) return 'near-opponent';
+  if (g.length) return 'near-own'; // only possible under A2 (V6.1)
   return null;
 }
 /** Cells p may place on this turn: no piece, no opponent effect, and not next to an opposing piece (rule A1). */
@@ -175,6 +193,8 @@ export function blockedCells(s: State, p: Player): Record<string, CellBlock> {
   return out;
 }
 export const A1_EXPLANATION = 'New effects cannot be placed on the 8 squares around an opponent piece (orthogonally or diagonally next to it). Squares next to your own pieces are fine, and effects already on the board stay.';
+export const A2_EXPLANATION = 'New effects cannot be placed on the 8 squares around ANY piece, yours or your opponent’s (orthogonally or diagonally next to it). Effects already on the board stay and still fire when a piece walks onto them, and you can always remove your own.';
+export const noEffectRule = (s: { ruleset: Ruleset }) => (allPieceProximity(s) ? A2_EXPLANATION : A1_EXPLANATION);
 
 export function validatePlacement(s: State, p: Player, pl: Placement | null, remove: string[] = []): Check {
   if (s.winner) return { ok: false, reason: 'The game is over.' };
@@ -195,6 +215,11 @@ export function validatePlacement(s: State, p: Player, pl: Placement | null, rem
   }
   for (const k of pl.cells) {
     const g = guardsOf(s, p, k);
+    if (g.length && allPieceProximity(s)) {
+      const near = [...new Set(g.map(q => `${q.owner === p ? 'your' : 'the opponent’s'} piece on ${cellName(key(q.x, q.y))}`))].join(' and ');
+      const n = pl.cells.length;
+      return { ok: false, code: g.some(q => q.owner !== p) ? 'near-opponent' : 'near-own', cell: k, reason: `${cellName(k)} is next to ${near}. New effects cannot be placed on the 8 squares around any piece, yours or your opponent’s${n > 1 ? `, so this ${n}-cell placement is rejected as a whole` : ''}. Pick squares at least one square away from every piece.` };
+    }
     if (g.length) {
       const near = [...new Set(g.map(q => cellName(key(q.x, q.y))))].join(', ');
       const n = pl.cells.length;
@@ -411,8 +436,8 @@ export function publicView(s: State) {
     rules: s.rules.filter(r => r.cells.length).map(r => ({ ...r })), scored: { human: scored(s, 'human'), ai: scored(s, 'ai') },
     active: { human: activeEffects(s, 'human'), ai: activeEffects(s, 'ai') },
     eligible: s.winner ? [] : eligibleCells(s, p),
-    /** Why each other cell is not available to the player to move (piece / opponent-effect / near-opponent). */
+    /** Why each other cell is not available to the player to move (piece / opponent-effect / near-opponent / near-own). */
     blocked: s.winner ? {} : blockedCells(s, p),
-    noEffectRule: A1_EXPLANATION,
+    noEffectRule: noEffectRule(s),
   };
 }

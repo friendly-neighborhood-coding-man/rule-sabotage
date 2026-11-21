@@ -2,6 +2,8 @@
 
 Status: **READY_FOR_OPERATOR_V6_GAMEPLAY_REVIEW**
 
+> Follow-up: V6.1 (`rule-sabotage/v6.1-all-piece-proximity@1`) replaces rule A1 with A2 (no new effect next to ANY piece) as a separate, selectable ruleset. See `docs/V6_1_ALL_PIECE_PROXIMITY.md`. This V6 ruleset is unchanged and still the default.
+
 V6 is a separately versioned experimental game built on top of the PR #14 playtest branch. It answers the two problems
 from the first human playtest: the 7×7 board was too small, and players could surround opposing pieces with trap effects.
 The 7×7 game, the V1–V5.3 policies, their evidence and their hashes are unchanged (checked by tests, see §6).
