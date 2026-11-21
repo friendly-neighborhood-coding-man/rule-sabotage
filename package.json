@@ -50,6 +50,10 @@
     "balance:v53": "node --experimental-strip-types --no-warnings=ExperimentalWarning scripts/balance-v53.ts",
     "playtest": "node --experimental-strip-types --no-warnings=ExperimentalWarning server/playtest/server.ts",
     "playtest:latency-audit": "node --experimental-strip-types --no-warnings=ExperimentalWarning scripts/playtest-latency-audit.ts",
-    "playtest:summary": "node --experimental-strip-types --no-warnings=ExperimentalWarning scripts/playtest-summary.ts"
+    "playtest:summary": "node --experimental-strip-types --no-warnings=ExperimentalWarning scripts/playtest-summary.ts",
+    "v6:fork": "node --experimental-strip-types --no-warnings=ExperimentalWarning scripts/v6-fork.ts",
+    "v6:turn-limit": "node --experimental-strip-types --no-warnings=ExperimentalWarning scripts/v6-turn-limit.ts",
+    "play:v6": "node --experimental-strip-types --no-warnings=ExperimentalWarning server/v6/server.ts",
+    "test:v6": "node --experimental-strip-types --no-warnings=ExperimentalWarning --test tests/v6*.test.ts"
   }
 }
