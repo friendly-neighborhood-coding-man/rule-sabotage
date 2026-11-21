@@ -7,7 +7,7 @@ import { randomUUID, randomInt } from 'node:crypto';
 import { Worker } from 'node:worker_threads';
 import {
   type State, type Placement, type Move, type GameEvent, init, applyPlacement, applyMove, validatePlacement, validateMove, endTurn,
-  publicView, legalMoves, cellName, V6_MODE, RULESET, A1_EXPLANATION,
+  publicView, legalMoves, cellName, V6_MODE, RULESET, RULESETS, A1_EXPLANATION,
 } from './engine.ts';
 import { type Player, type Interpretation, offlineInterpret, shortLabel, MAX_CELLS_PER_TURN } from '../rules.ts';
 import { loadWeights } from '../weights.ts';
@@ -55,13 +55,16 @@ export function view(g: GameV6) {
   };
 }
 
-export async function startGame(o: { opponent: unknown; first?: unknown; seed?: unknown }) {
+export async function startGame(o: { opponent: unknown; first?: unknown; seed?: unknown; ruleset?: unknown }) {
   if (!isOpponentV6(o.opponent)) throw fail(422, 'Unknown opponent.');
+  // 'v6' = rule A1 (opponent pieces only), 'v6.1' = rule A2 (every piece). Default: V6 (A1), as before.
+  if (o.ruleset !== undefined && o.ruleset !== 'v6' && o.ruleset !== 'v6.1') throw fail(422, 'Unknown ruleset (v6 or v6.1).');
+  const ruleset = RULESETS[(o.ruleset as 'v6' | 'v6.1' | undefined) ?? 'v6'];
   const seed = Number.isInteger(o.seed) ? (o.seed as number) : freeSeed();
   if (isHoldout(seed)) throw fail(422, `Seed ${seed} is in the reserved holdout range ${HOLDOUT.from}–${HOLDOUT.to}.`);
   const first: Player = o.first === 'human' || o.first === 'ai' ? o.first : randomInt(2) === 0 ? 'human' : 'ai';
   const g: GameV6 = {
-    id: randomUUID(), state: init(seed, { first }), opponent: OPPONENTS_V6[o.opponent], busy: false, thinkingSince: null, interpretations: new Map(), turnEvents: [],
+    id: randomUUID(), state: init(seed, { first, ruleset }), opponent: OPPONENTS_V6[o.opponent], busy: false, thinkingSince: null, interpretations: new Map(), turnEvents: [],
     verdicts: [], aiTurns: [], history: [], achievements: { human: [], ai: [] }, humanRejections: [],
   };
   games.set(g.id, g);
@@ -144,7 +147,7 @@ async function aiTurn(g: GameV6) {
   const zero = r.zeroMoves ? ` It made no move: ${r.zeroMoves.kind === 'no-legal-move' ? `no legal move (${r.zeroMoves.detail})` : r.zeroMoves.kind === 'unfavorable' ? `it judged every legal move worse than standing still (${r.zeroMoves.detail})` : `planner error (${r.zeroMoves.detail})`}.` : '';
   const decision = {
     source: 'local-planner', model: null, fallbackReason: null, taunt: '',
-    rationale: `${o.label} [${o.version}] decided in ${(r.plannerMs / 1000).toFixed(1)} s from ${r.candidatePlacements} candidate turn plans; ${r.protectedCells} squares were closed to its new effects by the no-adjacent-effects rule.${r.placementBlocked ? ` Its effect was not placed (${r.placementBlocked}).` : ''}${zero}`,
+    rationale: `${o.label} [${o.version}] decided in ${(r.plannerMs / 1000).toFixed(1)} s from ${r.candidatePlacements} candidate turn plans; ${r.protectedCells} squares were closed to its new effects by the proximity rule.${r.placementBlocked ? ` Its effect was not placed (${r.placementBlocked}).` : ''}${zero}`,
     plan: { candidates: r.candidatePlacements, sims: r.plan?.sims ?? 0, ms: r.plannerMs, chosen: r.plan?.chosen ?? '(no plan)', score: Math.round((r.plan?.score ?? 0) * 100) / 100 },
     ruleText: r.verdict?.ruleText ?? null, ruleInterpretation: null, decidedAt: new Date().toISOString(), ms: r.plannerMs + r.executorMs,
   };

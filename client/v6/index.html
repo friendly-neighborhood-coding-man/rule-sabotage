@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Rule Sabotage · V6 EXPERIMENTAL (13×9, not production)</title>
+  <title>Rule Sabotage · V6 / V6.1 EXPERIMENTAL (13×9, not production)</title>
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="v6.css">
   <script src="app-v6.js" defer></script>
@@ -11,7 +11,8 @@
 <body>
 <div class="v6-strip">
   <b>V6 EXPERIMENTAL · NOT PRODUCTION</b>
-  <span>13×9 board · no new effects next to opponent pieces</span>
+  <span>13×9 board</span>
+  <label>Ruleset <select id="v6-ruleset"></select></label>
   <label>Opponent <select id="v6-opp"></select></label>
   <label>First <select id="v6-first"><option value="coin">coin flip</option><option value="human">me</option><option value="ai">opponent</option></select></label>
   <button type="button" class="primary small" id="v6-start">New game</button>
@@ -35,7 +36,11 @@
       <li><b>Goal:</b> get all 3 of your pieces from column A to column <b>M</b> (13 columns, 9 rows). The AI races its 3 pieces the other way. Turns alternate.</li>
       <li><b>Actions:</b> each turn you get one move action per piece still on the board. An action moves one piece, or a whole stack of your pieces, one square. Landing on your own piece stacks; landing on an enemy piece captures it and sends it back to its start.</li>
       <li><b>Effects:</b> before your first move you may write one effect in plain words (English or 한국어) and put it on up to <b>3 cells</b> that have no piece and no enemy effect.</li>
-      <li><b>New in V6, no effects next to opponent pieces:</b> you cannot place a new effect on any of the <b>8 squares around an opponent piece</b> (sideways, up/down or diagonal). Those squares are hatched while you pick cells. If one of your chosen cells breaks the rule, the whole placement is refused and nothing is used up, so you can pick again. Squares next to your own pieces are fine. Effects already on the board stay when a piece walks up to them, and you can still remove your own effects. The AI plays under exactly the same rule, checked by the same server code.</li>
+      <li><b>No new effects next to pieces (pick the ruleset at the top):</b>
+        <b>V6.1 (A2):</b> you cannot place a new effect on any of the <b>8 squares around ANY piece</b>, yours or your opponent's (sideways, up/down or diagonal).
+        <b>V6 (A1):</b> only the 8 squares around <b>opponent</b> pieces are closed; squares next to your own pieces are fine.
+        Closed squares are hatched while you pick cells. If one of your chosen cells breaks the rule, the whole placement is refused and nothing is used up, so you can pick again.
+        Effects already on the board stay when a piece walks up to them and still fire, and you can always remove your own effects. The AI plays under exactly the same rule, checked by the same server code.</li>
       <li><b>Fair for everyone:</b> an effect does exactly the same thing to whoever enters, including you. Directions are absolute (north, south, east, west) or relative to how the piece entered (back, forward).</li>
       <li><b>Referee:</b> your text is read by the built-in offline parser (no AI language model), and every new effect, yours or the opponent's, is checked by the engine only. Effects the engine cannot verify on its own are not placed, for both sides. The game ends after 60 turns (30 each).</li>
     </ol>
@@ -58,7 +63,7 @@
           <div class="board" id="board" aria-label="Game board"></div>
         </div>
         <div class="banner" id="banner" hidden></div>
-        <p class="v6-legend"><span class="v6-swatch"></span> Hatched squares (shown while you pick cells): next to an opponent piece, so no new effects there.</p>
+        <p class="v6-legend"><span class="v6-swatch"></span> Hatched squares (shown while you pick cells): no new effects there. V6.1: next to any piece, yours or the opponent’s. V6: next to an opponent piece.</p>
         <div class="rule-note" id="rule-note" hidden></div>
       </div>
 

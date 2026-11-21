@@ -3,7 +3,7 @@
  * evidence, smoke checks, tests); this is not a balance study and its numbers are never V5.3 claims.
  * Both sides use aiTurnV6, i.e. the same referee and executor as the playable game.
  */
-import { type State, type Placement, init, legalMoves, scored, distanceLeft, W } from './engine.ts';
+import { type State, type Placement, type Ruleset, init, legalMoves, scored, distanceLeft, W } from './engine.ts';
 import { type Player } from '../rules.ts';
 import { loadWeights } from '../weights.ts';
 import { aiTurnV6, type AITurn, type Policy53 } from './turn.ts';
@@ -19,10 +19,10 @@ export type V6Game = {
   scoreTurns: Record<Player, (number | null)[]>; rows: V6TurnRow[]; ms: number; maxDecisionMs: number;
 };
 
-export async function playGameV6(seed: number, policies: Record<Player, Policy53>, opts: { first?: Player; maxTurns?: number; onTurn?: (r: V6TurnRow, s: State) => void } = {}): Promise<V6Game> {
+export async function playGameV6(seed: number, policies: Record<Player, Policy53>, opts: { first?: Player; maxTurns?: number; ruleset?: Ruleset; onTurn?: (r: V6TurnRow, s: State) => void } = {}): Promise<V6Game> {
   if (isHoldout(seed)) throw new Error(`seed ${seed} is in the reserved holdout range`);
   const w = loadWeights();
-  const s = init(seed, { first: opts.first, maxTurns: opts.maxTurns });
+  const s = init(seed, { first: opts.first, maxTurns: opts.maxTurns, ruleset: opts.ruleset });
   const rows: V6TurnRow[] = [];
   const scoreTurns: Record<Player, (number | null)[]> = { human: [null, null, null], ai: [null, null, null] };
   const t0 = performance.now();

@@ -54,6 +54,7 @@
     "v6:fork": "node --experimental-strip-types --no-warnings=ExperimentalWarning scripts/v6-fork.ts",
     "v6:turn-limit": "node --experimental-strip-types --no-warnings=ExperimentalWarning scripts/v6-turn-limit.ts",
     "play:v6": "node --experimental-strip-types --no-warnings=ExperimentalWarning server/v6/server.ts",
-    "test:v6": "node --experimental-strip-types --no-warnings=ExperimentalWarning --test tests/v6*.test.ts"
+    "test:v6": "node --experimental-strip-types --no-warnings=ExperimentalWarning --test tests/v6*.test.ts",
+    "v6.1:smoke": "node --experimental-strip-types --no-warnings=ExperimentalWarning scripts/v6-1-smoke.ts"
   }
 }

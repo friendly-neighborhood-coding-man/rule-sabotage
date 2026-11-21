@@ -1,0 +1,148 @@
+{
+  "schema": "rule-sabotage/v6-1-smoke@1",
+  "ruleset": "rule-sabotage/v6.1-all-piece-proximity@1",
+  "createdAt": "2026-11-21T08:15:07.238Z",
+  "note": "6 games, seed 96001 x 2 first movers x 3 policies (self-play); paired with the V6 games of the same seed. Smoke only, not a balance study.",
+  "closedCellsAtStart": 22,
+  "games": [
+    {
+      "policy": "ev-k1.2",
+      "first": "human",
+      "v61": {
+        "winner": "human",
+        "turns": 33,
+        "turnLimit": false,
+        "firstAcross": 9,
+        "placements": 27,
+        "blocked": 6,
+        "blockedByProximity": 0,
+        "zeroMove": [],
+        "closedCellsMedian": 27,
+        "maxDecisionMs": 38876
+      },
+      "v6": {
+        "winner": "ai",
+        "turns": 12,
+        "turnLimit": false,
+        "firstAcross": 4
+      }
+    },
+    {
+      "policy": "ev-k1.2",
+      "first": "ai",
+      "v61": {
+        "winner": "ai",
+        "turns": 45,
+        "turnLimit": false,
+        "firstAcross": 4,
+        "placements": 21,
+        "blocked": 23,
+        "blockedByProximity": 0,
+        "zeroMove": [],
+        "closedCellsMedian": 16,
+        "maxDecisionMs": 8623
+      },
+      "v6": {
+        "winner": "human",
+        "turns": 14,
+        "turnLimit": false,
+        "firstAcross": 7
+      }
+    },
+    {
+      "policy": "softmax-v2",
+      "first": "human",
+      "v61": {
+        "winner": "human",
+        "turns": 37,
+        "turnLimit": false,
+        "firstAcross": 12,
+        "placements": 28,
+        "blocked": 8,
+        "blockedByProximity": 0,
+        "zeroMove": [],
+        "closedCellsMedian": 27,
+        "maxDecisionMs": 59287
+      },
+      "v6": {
+        "winner": "human",
+        "turns": 9,
+        "turnLimit": false,
+        "firstAcross": 4
+      }
+    },
+    {
+      "policy": "softmax-v2",
+      "first": "ai",
+      "v61": {
+        "winner": "ai",
+        "turns": 35,
+        "turnLimit": false,
+        "firstAcross": 12,
+        "placements": 25,
+        "blocked": 10,
+        "blockedByProximity": 0,
+        "zeroMove": [
+          "unfavorable",
+          "unfavorable"
+        ],
+        "closedCellsMedian": 23,
+        "maxDecisionMs": 3606
+      },
+      "v6": {
+        "winner": "ai",
+        "turns": 23,
+        "turnLimit": false,
+        "firstAcross": 5
+      }
+    },
+    {
+      "policy": "oa-v3",
+      "first": "human",
+      "v61": {
+        "winner": "human",
+        "turns": 29,
+        "turnLimit": false,
+        "firstAcross": 8,
+        "placements": 24,
+        "blocked": 4,
+        "blockedByProximity": 0,
+        "zeroMove": [
+          "unfavorable",
+          "unfavorable",
+          "unfavorable"
+        ],
+        "closedCellsMedian": 22,
+        "maxDecisionMs": 37124
+      },
+      "v6": {
+        "winner": "ai",
+        "turns": 16,
+        "turnLimit": false,
+        "firstAcross": 6
+      }
+    },
+    {
+      "policy": "oa-v3",
+      "first": "ai",
+      "v61": {
+        "winner": "ai",
+        "turns": 33,
+        "turnLimit": false,
+        "firstAcross": 4,
+        "placements": 22,
+        "blocked": 11,
+        "blockedByProximity": 0,
+        "zeroMove": [],
+        "closedCellsMedian": 24,
+        "maxDecisionMs": 21931
+      },
+      "v6": {
+        "winner": "human",
+        "turns": 14,
+        "turnLimit": false,
+        "firstAcross": 6
+      }
+    }
+  ]
+}

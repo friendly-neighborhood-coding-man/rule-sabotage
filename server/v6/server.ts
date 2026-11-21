@@ -39,9 +39,9 @@ export async function api(req: IncomingMessage, res: ServerResponse, path: strin
   let b: any = {};
   if (req.method === 'POST') { try { b = await body(req); } catch { return json(res, 400, { error: 'bad_json' }); } }
   if (path === '/api/health' && req.method === 'GET') return json(res, 200, { openrouter: { configured: false }, referee: { mode: 'engine-only', kane: { installed: false, detail: 'Kane is never called in V6' }, tiers: true }, authority: 'server', v6: true });
-  if (path === '/api/v6/info' && req.method === 'GET') return json(res, 200, { mode: E.V6_MODE, ruleset: E.RULESET, board: { w: E.W, h: E.H, cols: E.COLS }, maxTurns: E.MAX_TURNS, noEffectRule: E.A1_EXPLANATION, opponents: Object.values(O.OPPONENTS_V6), code: O.v6CodeHash() });
+  if (path === '/api/v6/info' && req.method === 'GET') return json(res, 200, { mode: E.V6_MODE, ruleset: E.RULESET, board: { w: E.W, h: E.H, cols: E.COLS }, maxTurns: E.MAX_TURNS, noEffectRule: E.A1_EXPLANATION, rulesets: [{ id: 'v6.1', ruleset: E.RULESET_V61, label: 'V6.1: no new effects next to ANY piece (A2)', noEffectRule: E.A2_EXPLANATION }, { id: 'v6', ruleset: E.RULESET, label: 'V6: no new effects next to opponent pieces (A1)', noEffectRule: E.A1_EXPLANATION }], opponents: Object.values(O.OPPONENTS_V6), code: O.v6CodeHash() });
   try {
-    if (path === '/api/game' && req.method === 'POST') return json(res, 200, await S.startGame({ opponent: b?.opponent, first: b?.first, seed: b?.seed }));
+    if (path === '/api/game' && req.method === 'POST') return json(res, 200, await S.startGame({ opponent: b?.opponent, first: b?.first, seed: b?.seed, ruleset: b?.ruleset }));
     const m = path.match(/^\/api\/game\/([0-9a-f-]{36})(\/(preview|place|move|end|progress))?$/);
     if (!m) return json(res, 404, { error: 'not_found' });
     const g = S.getGame(m[1]);
@@ -100,7 +100,7 @@ export const server = createServer(async (req, res) => {
 if (process.env.V6_NO_LISTEN !== '1') {
   server.listen(PORT, HOST, () => {
     console.log(`Rule Sabotage V6 EXPERIMENTAL (not production) on http://${HOST}:${PORT}`);
-    console.log(`  Ruleset ${E.RULESET}: ${E.W}x${E.H} board, ${E.MAX_TURNS}-turn limit, no new effects next to opponent pieces`);
+    console.log(`  Rulesets: ${E.RULESET_V61} (A2, every piece) and ${E.RULESET} (A1, opponent pieces) · ${E.W}x${E.H} board, ${E.MAX_TURNS}-turn limit`);
     console.log(`  Opponents: ${Object.keys(O.OPPONENTS_V6).join(', ')} · code ${O.v6CodeHash()}`);
     console.log('  Referee: engine-only (no Kane) · interpreter: offline parser (no LLM) · network: disabled · nothing saved');
   });

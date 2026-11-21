@@ -52,7 +52,7 @@ function renderBoard() {
     const k = c.dataset.cell, [x] = k.split(',').map(Number);
     const rid = cells[k], rule = rid ? (anim ? anim.rules.get(rid) : ruleById(rid)) : null;
     c.className = 'cell' + (x === BW - 1 ? ' goal-human' : x === 0 ? ' goal-ai' : '') + (rule ? ` trap-${rule.owner}` : '')
-      + (closed[k] === 'near-opponent' ? ' noeffect' + (pending ? ' noeffect-on' : '') : '')
+      + (closed[k] === 'near-opponent' || closed[k] === 'near-own' ? ' noeffect' + (pending ? ' noeffect-on' : '') : '')
       + (eligible.has(k) ? ' pickable' : '') + (picked.has(k) ? ' picked' : '') + (removing.has(k) ? ' removing' : '')
       + (selected === k ? ' selected' : '') + (targets.has(k) ? ' target' : '') + (anim?.flash?.has(k) ? ' boom' : '');
     const here = pieces.filter(q => !q.scored && `${q.x},${q.y}` === k);
@@ -64,8 +64,9 @@ function renderBoard() {
       html += `<span class="token ${owner}${frozen ? ' frozen' : ''}">${mine.length > 1 ? '×' + mine.length : ''}${shield ? '<i>🛡</i>' : ''}${frozen ? '<i>🧊</i>' : ''}</span>`;
     }
     c.innerHTML = html;
-    c.title = closed[k] === 'near-opponent' ? `${name(k)}: no new effects here (next to an opponent piece)` : '';
-    const label = `${name(k)}${closed[k] === 'near-opponent' ? ', closed to new effects: next to an opponent piece' : ''}${rule ? `, ${rule.owner === 'human' ? 'your' : 'AI'} effect ${rule.label}` : ''}${here.length ? `, ${here.map(q => q.owner === 'human' ? 'your piece' : 'AI piece').join(', ')}` : ''}`;
+    const nearTxt = closed[k] === 'near-opponent' ? 'next to an opponent piece' : closed[k] === 'near-own' ? 'next to your own piece' : '';
+    c.title = nearTxt ? `${name(k)}: no new effects here (${nearTxt})` : '';
+    const label = `${name(k)}${nearTxt ? `, closed to new effects: ${nearTxt}` : ''}${rule ? `, ${rule.owner === 'human' ? 'your' : 'AI'} effect ${rule.label}` : ''}${here.length ? `, ${here.map(q => q.owner === 'human' ? 'your piece' : 'AI piece').join(', ')}` : ''}`;
     c.setAttribute('aria-label', label);
   }
 }
@@ -176,7 +177,7 @@ function onCell(k) {
     return render();
   }
   if (placing() && pending && view.blocked?.[k]) {
-    const why = view.blocked[k] === 'near-opponent' ? `${name(k)} is next to an opponent piece. ${view.noEffectRule}` : view.blocked[k] === 'piece' ? `${name(k)} has a piece on it.` : `${name(k)} holds your opponent’s effect.`;
+    const why = view.blocked[k] === 'near-opponent' ? `${name(k)} is next to an opponent piece. ${view.noEffectRule}` : view.blocked[k] === 'near-own' ? `${name(k)} is next to one of your own pieces. ${view.noEffectRule}` : view.blocked[k] === 'piece' ? `${name(k)} has a piece on it.` : `${name(k)} holds your opponent’s effect.`;
     showRuleNote(why);
     if (!view.legal.some(m => m.from === k)) return;
   }
@@ -356,11 +357,13 @@ async function newGame() {
   selected = null; pending = null; picked.clear(); removing.clear(); $('preview').hidden = true; $('rule-input').value = '';
   busy = true; $('phase-banner').textContent = 'Flipping a coin…';
   try {
-    const r = await api('/api/game', { opponent: $('v6-opp').value, first: $('v6-first').value });
+    const r = await api('/api/game', { ruleset: $('v6-ruleset').value, opponent: $('v6-opp').value, first: $('v6-first').value });
     const { ai, ...v } = r;
     view = v;
     if (!built || BW !== v.board.w || BH !== v.board.h) buildBoard();
     $('v6-opp-label').textContent = `${v.opponent.label} · ${v.opponent.version}`;
+    $('v6-rule').textContent = `${v.ruleset}: ${v.noEffectRule}`;
+    document.body.dataset.ruleset = v.ruleset;
     flash(v.firstPlayer === 'human' ? 'Coin flip: you go first.' : 'Coin flip: the AI goes first.');
     if (ai) { const start = structuredClone(v); start.pieces = start.pieces.map(q => ({ ...q, x: q.home.x, y: q.home.y })); start.cells = {}; view = start; await applyAI(ai, v); }
   } finally { busy = false; render(); }
@@ -409,7 +412,9 @@ function init() {
   $('v6-start').addEventListener('click', () => newGame().catch(e => flash('Could not start: ' + e.message)));
   api('/api/v6/info').then(info => {
     $('v6-opp').replaceChildren(...info.opponents.map(o => Object.assign(document.createElement('option'), { value: o.id, textContent: `${o.label}${o.slow ? ' (slow)' : ''}` })));
-    $('v6-rule').textContent = info.noEffectRule; $('v6-code').textContent = `ruleset ${info.ruleset} · code ${info.code}`;
+    $('v6-ruleset').replaceChildren(...info.rulesets.map(r => Object.assign(document.createElement('option'), { value: r.id, textContent: r.label })));
+    const showRule = () => { const r = info.rulesets.find(x => x.id === $('v6-ruleset').value); $('v6-rule').textContent = `Selected for the next game: ${r.noEffectRule}`; };
+    $('v6-ruleset').addEventListener('change', showRule); showRule(); $('v6-code').textContent = `V6 code ${info.code}`;
     view = { board: info.board }; buildBoard(); view = null;
   }).catch(e => flash('Could not load the V6 info: ' + e.message));
   window.__ruleSabotage = { get view() { return view; }, get busy() { return busy; } };

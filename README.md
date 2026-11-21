@@ -119,3 +119,6 @@ side on rows 3/5/7, and a new placement rule: no new effect on the 8 squares aro
 code for human and AI). Opponents are V6 adaptations of the three V5.3 policies (generated forks in `server/v6/forks/`, see
 `npm run v6:fork`); no V5.3 result applies to them. No Kane, no language model, no network, nothing saved. The 7×7 game,
 the V1–V5.3 policies and their evidence are unchanged. See `docs/V6_GAMEPLAY_EXPANSION.md`; tests: `npm run test:v6`.
+
+The same page also offers **V6.1** (`rule-sabotage/v6.1-all-piece-proximity@1`, the default choice in the Ruleset menu): no new
+effect on the 8 squares around ANY piece, yours or the opponent's. Everything else is V6. See `docs/V6_1_ALL_PIECE_PROXIMITY.md`.
