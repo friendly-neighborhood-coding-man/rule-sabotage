@@ -1,13 +1,46 @@
 # Human playtest readiness and critical limitations
 
-**Status: READY_FOR_OPERATOR_HUMAN_PLAYTEST_REVIEW.** Nothing merged, deployed or promoted; the production game is unchanged.
-0 Kane calls, 0 external model calls, no new self-play batch, holdout 65001–65060 untouched. No human session was run and no
-feedback exists. The V5.3 experiment, its policies, evidence and verdicts are frozen and unchanged (P1 POLICY-DEPENDENT, P2
-INCONCLUSIVE, rule-level fairness INCONCLUSIVE).
+**Status: READY_FOR_OPERATOR_HUMAN_PILOT_EXECUTION.** Software checks done; the pilot is authorised by the operator for
+consenting adult volunteers and needs a human facilitator. No participant session has been run and no feedback exists.
+Nothing merged, deployed or promoted; the production game is unchanged. 0 Kane calls, 0 external model calls, no new
+self-play batch, holdout 65001–65060 untouched. The V5.3 experiment, its policies, evidence and verdicts are frozen and
+unchanged (P1 POLICY-DEPENDENT, P2 INCONCLUSIVE, rule-level fairness INCONCLUSIVE).
 
 The goal of this step is not another self-play result. It is a way to find out whether people can understand the game, play it,
 and want to come back.
 
+## 0. Operator decision (2026-11-21): Option A
+
+**Approved and implemented:** the production engine-only referee applies identically to the human and to the AI opponent.
+Tier 1/2 effects are engine-approved and placed; tier 3 effects are unverified and not placed; effects failing an engine safety
+check are rejected. No Kane, no external model. Option B (no referee) is **not** implemented.
+
+**The playtest is not a replication of V5.3 self-play.** V5.3 placed every chosen effect without the referee; the playtest does
+not. The V5.3 policies and results are unchanged. The retrospective blocking rates below (24–31%) were measured on V5.3 self-play
+positions; human games will reach different positions, so they **do not predict the rates participants will see**. The
+playtest records the actual rate per game.
+
+**Equal enforcement is not equal recovery.**
+- *Same for both:* one effect submission per turn. The engine's placement step ends once an effect is submitted (production rule,
+  unchanged), so neither side can place a replacement in the same turn after the referee blocks it
+  (`tests/playtest-referee.test.ts`, human and AI cases).
+- *Human:* sees the interpretation before submitting (including an "approximate" warning; approximated effects always go to tier 3), can rephrase or pick other cells while a request is merely invalid, sees the referee's reason
+  afterwards, and can choose differently on later turns.
+- *Frozen AI policies:* choose exactly one effect per turn, never a replacement when it is rejected, and do not learn from the
+  rejection: the same position leads to the same proposal. No fallback was added and the policies were not modified.
+This distinction is recorded per turn (`placement.verdict`, `placement.tier`, `ai.placementBlocked`, the human's
+`rejectedAttempts`) and summarised per game (`interactions.notPlaced`).
+
+**Final preflight (deterministic, `tests/playtest-referee.test.ts`, 5/5).** Positions are rebuilt by engine replay from the
+frozen V5.3 ev-k1.2 records (first AI-side placement of each referee class); the playtest opponent re-decides the turn and must
+re-choose the recorded effect (asserted):
+1. AI tier 1/2 effect → engine-approved and placed (place event emitted).
+2. AI tier 3 effect → unverified, no placement, no rule created.
+3. AI effect failing an engine check → rejected by the engine, no placement.
+4. After a block the AI still makes legal moves and the turn passes to the human.
+5. Telemetry (`placement.verdict`, `placed = []`, `ai.placementBlocked`, `notPlaced.ai = 1`) and the visible feedback
+   (the referee verdict and its reason in the referee panel and `view.reviews`, "its effect was not placed" in the log).
+Plus: exactly one AI proposal per turn (no fallback), and the human tier-3 case reusing the `referee-v41` fixture.
 ## 1. What was built
 
 `npm run playtest` starts a **separate local server** on http://127.0.0.1:3100 (loopback only). It serves a playtest page that
@@ -49,14 +82,14 @@ effects are not placed (no Kane). V5.3 self-play never ran the referee. Replayin
 | Softmax-v2 | 1055 | 117 | 653 | 236 | 49 | **27%** |
 | OA-v3 | 1034 | 30 | 680 | 276 | 48 | **31%** |
 
-So humans will meet opponents that lose their effect on roughly every fourth turn where they place one, and then only move.
+On V5.3 positions the opponents would have lost roughly one effect in four and then only moved. Rates in human games will differ, because the positions differ.
 The opponents are therefore **not the same observers as in V5.3**, and self-play numbers do not predict playtest outcomes. The
 policies themselves are unchanged; the rule check is the one the real game uses, applied identically to the human. Each block
 is visible in the game ("not placed") and recorded.
 
-**Operator decision needed before the pilot** (I recommend A):
-- **A (implemented):** same engine-only referee for both sides, as in the real game. Faithful to the game people would play.
-- **B:** skip the referee for both sides, as self-play did. Faithful to V5.3, but human text the engine cannot verify, and
+**Operator decision (2026-11-21): A approved** (see section 0). The options were:
+- **A (approved, implemented):** same engine-only referee for both sides, as in the real game. Faithful to the game people would play.
+- **B (not implemented):** skip the referee for both sides, as self-play did. Faithful to V5.3, but human text the engine cannot verify, and
   placements that fail engine safety checks (35–49 per policy in V5.3), would go live.
 - A separate follow-up could let a policy fall back to its best *referee-approved* placement. That changes the policies and
   needs its own validation; it is not done here.
@@ -108,7 +141,8 @@ orders used, first mover balanced per opponent, fixed seeds outside the holdout,
   API turn (no consent writes nothing; consent writes telemetry and feedback to separate files; an abandoned game is kept;
   withdraw deletes everything). The scripted turn uses a temporary directory that is deleted, and submits only a *skipped*
   questionnaire: no human answers are invented.
-- Default parallel `npm test`: **168/168** (`evidence/playtest/test-run.log`).
+- `tests/playtest-referee.test.ts` (5/5): the Option A preflight (section 0).
+- Default parallel `npm test`: **173/173** (`evidence/playtest/test-run.log`).
 - Browser check of the real page: consent screen, opponent selector, OA-v3 game with the live timer, a human turn (effect +
   moves), match review, restart, end-of-game questionnaire, pilot schedule (P02: correct opponents and first movers), end of
   session and deletion. All test data was written to a scratch directory and deleted.
