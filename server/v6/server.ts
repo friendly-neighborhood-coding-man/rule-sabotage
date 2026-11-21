@@ -12,6 +12,7 @@ globalThis.fetch = (() => Promise.reject(new Error('network disabled in the V6 s
 const { createServer } = await import('node:http');
 const { readFile } = await import('node:fs/promises');
 const { fileURLToPath } = await import('node:url');
+const PL = await import('./pilot.ts'); // sets the V6 data directory (playtest-data/v6) before the storage module loads
 const S = await import('./session.ts');
 const O = await import('./opponents.ts');
 const { trials } = await import('./turn.ts');
@@ -21,8 +22,8 @@ import type { IncomingMessage, ServerResponse } from 'node:http';
 const HOST = '127.0.0.1', PORT = Number(process.env.V6_PORT || 3106);
 const MAX_BODY = 16_000;
 
-function json(res: ServerResponse, status: number, obj: unknown) {
-  res.writeHead(status, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff' });
+function json(res: ServerResponse, status: number, obj: unknown, headers: Record<string, string> = {}) {
+  res.writeHead(status, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff', ...headers });
   res.end(JSON.stringify(obj));
 }
 async function body(req: IncomingMessage): Promise<any> {
@@ -40,12 +41,39 @@ export async function api(req: IncomingMessage, res: ServerResponse, path: strin
   if (req.method === 'POST') { try { b = await body(req); } catch { return json(res, 400, { error: 'bad_json' }); } }
   if (path === '/api/health' && req.method === 'GET') return json(res, 200, { openrouter: { configured: false }, referee: { mode: 'engine-only', kane: { installed: false, detail: 'Kane is never called in V6' }, tiers: true }, authority: 'server', v6: true });
   if (path === '/api/v6/info' && req.method === 'GET') return json(res, 200, { mode: E.V6_MODE, ruleset: E.RULESET, board: { w: E.W, h: E.H, cols: E.COLS }, maxTurns: E.MAX_TURNS, noEffectRule: E.A1_EXPLANATION, rulesets: [{ id: 'v6.1', ruleset: E.RULESET_V61, label: 'V6.1: no new effects next to ANY piece (A2)', noEffectRule: E.A2_EXPLANATION }, { id: 'v6', ruleset: E.RULESET, label: 'V6: no new effects next to opponent pieces (A1)', noEffectRule: E.A1_EXPLANATION }], opponents: Object.values(O.OPPONENTS_V6), code: O.v6CodeHash() });
+  // ---- V6.2 pilot readiness: consent session, match review, questionnaire, deletion (PR #14 storage, V6 directory) ----
+  const ck = /(?:^|;\s*)v6s=([0-9a-f-]{36})/.exec(req.headers.cookie || '');
+  const ps = PL.getSession(ck?.[1]);
+  const current = () => (ps ? ps.games.map(id => S.getGame(id)).filter(Boolean).at(-1) ?? null : null);
+  if (path === '/api/v6/consent' && req.method === 'GET') return json(res, 200, { version: PL.CONSENT_VERSION, statement: `${PL.CONSENT_STATEMENT} ${PL.SHADOW_STATEMENT}`, questionnaire: PL.QUESTIONNAIRE, session: ps ? { consented: ps.consented, participant: ps.participant, games: ps.games.length } : null });
+  if (path === '/api/v6/session' && req.method === 'POST') {
+    try {
+      const old = current(); if (old) S.abandon(old);
+      const n = PL.newSession({ consent: b?.consent, participant: b?.participant });
+      return json(res, 200, { consented: n.consented, participant: n.participant }, { 'Set-Cookie': `v6s=${n.id}; HttpOnly; SameSite=Strict; Path=/` });
+    } catch (e) { const err = e as Error & { status?: number }; return json(res, err.status ?? 422, { error: 'rejected', reason: err.message }); }
+  }
+  const rv = path.match(/^\/api\/v6\/review\/([0-9a-f-]{36})$/);
+  if (rv && req.method === 'GET') { const g = S.getGame(rv[1]); if (!g || !ps || g.session !== ps) return json(res, 404, { error: 'no_such_game' }); return json(res, 200, { ...S.record(g), recorded: ps.consented }); }
+  if (path === '/api/v6/feedback' && req.method === 'POST') {
+    const g = typeof b?.gameId === 'string' ? S.getGame(b.gameId) : undefined;
+    if (!g || !ps || g.session !== ps) return json(res, 404, { error: 'no_such_game' });
+    if (!g.endedAt) return json(res, 409, { error: 'rejected', reason: 'The questionnaire is for finished games.' });
+    if (g.feedback !== 'none') return json(res, 409, { error: 'rejected', reason: 'Already answered for this game.' });
+    const r = PL.feedback(ps, g.id, b); g.feedback = r.skipped ? 'skipped' : 'submitted';
+    return json(res, 200, { ok: true, stored: r.stored });
+  }
+  if (path === '/api/v6/withdraw' && req.method === 'POST') { if (!ps) return json(res, 404, { error: 'no_session' }); return json(res, 200, { ok: true, removedFiles: PL.withdraw(ps).length }); }
   try {
-    if (path === '/api/game' && req.method === 'POST') return json(res, 200, await S.startGame({ opponent: b?.opponent, first: b?.first, seed: b?.seed, ruleset: b?.ruleset }));
+    if (path === '/api/game' && req.method === 'POST') {
+      const old = current(); if (old?.busy) throw Object.assign(new Error('Wait until the opponent has finished its turn.'), { status: 409 });
+      if (old) S.abandon(old);
+      return json(res, 200, await S.startGame({ opponent: b?.opponent, first: b?.first, seed: b?.seed, ruleset: b?.ruleset, session: ps }));
+    }
     const m = path.match(/^\/api\/game\/([0-9a-f-]{36})(\/(preview|place|move|end|progress))?$/);
     if (!m) return json(res, 404, { error: 'not_found' });
     const g = S.getGame(m[1]);
-    if (!g) return json(res, 404, { error: 'no_such_game' });
+    if (!g || (g.session && g.session !== ps)) return json(res, 404, { error: 'no_such_game' });
     const action = m[3];
     if (!action && req.method === 'GET') return json(res, 200, S.view(g));
     if (action === 'progress' && req.method === 'GET') return json(res, 200, { busy: g.busy, progress: g.thinkingSince ? [{ at: Date.now(), text: `${g.opponent.label} is thinking (${((Date.now() - g.thinkingSince) / 1000).toFixed(1)} s)…` }] : [] });
@@ -76,6 +104,7 @@ const STATIC: Record<string, [URL, string]> = {
   '/app-v6.js': [new URL('v6/app-v6.js', CLIENT), 'text/javascript; charset=utf-8'],
   '/style.css': [new URL('style.css', CLIENT), 'text/css; charset=utf-8'],
   '/v6.css': [new URL('v6/v6.css', CLIENT), 'text/css; charset=utf-8'],
+  '/pilot-v6.js': [new URL('v6/pilot-v6.js', CLIENT), 'text/javascript; charset=utf-8'],
 };
 export const server = createServer(async (req, res) => {
   const path = (req.url || '/').split('?')[0];

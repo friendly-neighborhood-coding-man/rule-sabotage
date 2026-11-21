@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="v6.css">
   <script src="app-v6.js" defer></script>
+  <script src="pilot-v6.js" defer></script>
 </head>
 <body>
 <div class="v6-strip">
@@ -16,6 +17,9 @@
   <label>Opponent <select id="v6-opp"></select></label>
   <label>First <select id="v6-first"><option value="coin">coin flip</option><option value="human">me</option><option value="ai">opponent</option></select></label>
   <button type="button" class="primary small" id="v6-start">New game</button>
+  <span id="pv6-rec" class="pv6-rec"></span>
+  <button type="button" class="ghost" id="pv6-review-btn">Review match</button>
+  <button type="button" class="ghost" id="pv6-delete" hidden>Delete my data</button>
   <small id="v6-code"></small>
 </div>
 <p class="v6-rule" id="v6-rule"></p>
@@ -117,5 +121,27 @@
   </div>
 </div>
 
+<!-- V6.2 pilot screens (consent, questionnaire, review). Gameplay is unchanged. -->
+<div class="overlay pv6-overlay" id="pv6-consent">
+  <div class="modal pv6-modal">
+    <h2>Rule Sabotage V6 · local playtest</h2>
+    <p class="pv6-warn">An unfinished experimental game against experimental computer opponents. Not the released game.</p>
+    <p id="pv6-statement"></p>
+    <label class="pv6-row">Participant code <small>(optional, e.g. P03; never your name)</small> <input id="pv6-code" maxlength="8" autocomplete="off" placeholder="P03"></label>
+    <div class="pv6-buttons"><button type="button" class="primary" id="pv6-agree">I agree: record my games</button><button type="button" class="ghost" id="pv6-decline">Play without recording</button></div>
+    <p class="pv6-err" id="pv6-err"></p>
+  </div>
+</div>
+<div class="overlay pv6-overlay pv6-top" id="pv6-fb" hidden>
+  <div class="modal pv6-modal">
+    <h2>How did that game feel?</h2>
+    <p class="pv6-sub">Every question is optional. 1 = not at all, 5 = very much.</p>
+    <form id="pv6-form"></form>
+    <div class="pv6-buttons"><button type="button" class="primary" id="pv6-send">Send answers</button><button type="button" class="ghost" id="pv6-skip">Skip questions</button></div>
+  </div>
+</div>
+<div class="overlay pv6-overlay pv6-top" id="pv6-review" hidden>
+  <div class="modal pv6-modal pv6-wide"><div class="pv6-head"><h2>Match review</h2><button type="button" class="ghost" id="pv6-review-close">Close</button></div><div id="pv6-review-body"></div></div>
+</div>
 </body>
 </html>
