@@ -1,0 +1,80 @@
+{
+  "schema": "rule-sabotage/playtest-latency-audit@1",
+  "source": "evidence/balance/v5_3/2026-11-20T22-04-35Z-v53",
+  "games": 180,
+  "newGames": 0,
+  "externalCalls": 0,
+  "note": "Decision times were measured in V5.3 worker threads running in parallel (CPU contention); the playtest runs one decision at a time in one worker, so they are indicative only. The playtest records the real time of every decision.",
+  "policies": {
+    "ev-k1.2": {
+      "games": 60,
+      "decisions": 1535,
+      "decisionMs": {
+        "median": 80,
+        "p90": 722,
+        "p99": 2385,
+        "max": 4905,
+        "over5s": 0,
+        "over10s": 0
+      },
+      "placements": 1050,
+      "refereeTiers": {
+        "1": 120,
+        "2": 675,
+        "3": 220,
+        "rejected": 35
+      },
+      "wouldNotBePlaced": 255,
+      "wouldNotBePlacedShare": 0.243
+    },
+    "oa-v3": {
+      "games": 60,
+      "decisions": 2021,
+      "decisionMs": {
+        "median": 107,
+        "p90": 2117,
+        "p99": 7291,
+        "max": 18457,
+        "over5s": 56,
+        "over10s": 12
+      },
+      "budget": {
+        "limit": 20000,
+        "maxUsed": 27749,
+        "overLimit": 7,
+        "maxOvershoot": 7749,
+        "hits": 4
+      },
+      "placements": 1034,
+      "refereeTiers": {
+        "1": 30,
+        "2": 680,
+        "3": 276,
+        "rejected": 48
+      },
+      "wouldNotBePlaced": 324,
+      "wouldNotBePlacedShare": 0.313
+    },
+    "softmax-v2": {
+      "games": 60,
+      "decisions": 1633,
+      "decisionMs": {
+        "median": 98,
+        "p90": 849,
+        "p99": 1830,
+        "max": 3459,
+        "over5s": 0,
+        "over10s": 0
+      },
+      "placements": 1055,
+      "refereeTiers": {
+        "1": 117,
+        "2": 653,
+        "3": 236,
+        "rejected": 49
+      },
+      "wouldNotBePlaced": 285,
+      "wouldNotBePlacedShare": 0.27
+    }
+  }
+}

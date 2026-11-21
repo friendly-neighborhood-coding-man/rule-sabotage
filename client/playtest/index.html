@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Rule Sabotage · PLAYTEST (not production)</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="playtest.css">
+  <!-- playtest.js shows the consent and opponent screen first, then loads the unchanged game client (app.js). -->
+  <script src="playtest.js" defer></script>
+</head>
+<body>
+<div class="pt-strip" id="pt-strip">
+  <b>PLAYTEST · NOT PRODUCTION</b>
+  <span id="pt-opp">Opponent: —</span>
+  <span id="pt-latency" class="pt-lat"></span>
+  <span id="pt-rec"></span>
+  <span class="pt-actions">
+    <button type="button" class="ghost" id="pt-restart" disabled>Restart game</button>
+    <button type="button" class="ghost" id="pt-switch" hidden>Change opponent</button>
+    <button type="button" class="ghost" id="pt-review-btn" disabled>Review match</button>
+    <button type="button" class="ghost" id="pt-endsession">End session</button>
+  </span>
+</div>
+<div class="app">
+  <header class="top">
+    <div class="brand"><span class="logo">⚠</span><div><h1>RULE SABOTAGE</h1><p>Build the battlefield. Survive your own inventions.</p></div></div>
+    <div class="meta">
+      <div class="chip" id="turn-chip">Turn 1</div>
+      <div class="chip" id="actions-chip">—</div>
+      <div class="chip mode" id="brain-chip" title="Who is making the AI's decisions">AI brain: …</div>
+      <div class="chip mode" id="referee-chip" title="Who approves new rules">Referee: …</div>
+      <button class="ghost" id="help-btn" type="button">How to play</button>
+    </div>
+  </header>
+
+  <section class="help" id="help" hidden>
+    <ol>
+      <li><b>Goal:</b> get all 3 of your pieces from column A to column <b>G</b>. The AI races its 3 pieces the other way. Turns alternate; the playtest decides who starts.</li>
+      <li><b>Actions:</b> each turn you get one move action per piece still on the board. An action moves one piece, or a whole stack of your pieces, one square. Landing on your own piece stacks; landing on an enemy piece captures it and sends it back to its start.</li>
+      <li><b>Effects:</b> before your first move you may write one effect in plain words (English or 한국어) and put it on up to <b>3 cells</b> anywhere that has no piece and no enemy effect. It stays until something enters the cell, then that cell is used up.</li>
+      <li><b>Fair for everyone:</b> an effect does exactly the same thing to whoever enters, including you. Directions are absolute (north, south, east, west) or relative to how the piece entered (back, forward).</li>
+      <li><b>Your own effects</b> can be removed for free (click them in “Your effects”) or replaced by placing on top of them.</li>
+      <li><b>In this playtest</b> your text is read by the built-in offline parser (no AI language model), and every new effect, yours or the opponent's, is checked by the engine only. Effects the engine cannot verify on its own are not placed, for both sides. The game ends after 60 turns (30 each).</li>
+    </ol>
+  </section>
+
+  <main class="layout">
+    <aside class="side you">
+      <h2><span class="dot human"></span>YOU <small id="human-score">0/3 across</small></h2>
+      <h3 class="sub">Your effects <small id="human-count">0 cells</small></h3>
+      <div class="slots" id="human-rules"></div>
+      <p class="hint" id="remove-hint">Click one of your effect cells to mark it for removal.</p>
+    </aside>
+
+    <section class="center">
+      <div class="phase-banner" id="phase-banner">—</div>
+      <div class="board-wrap">
+        <div class="col-labels" id="col-labels"></div>
+        <div class="board-row">
+          <div class="row-labels" id="row-labels"></div>
+          <div class="board" id="board" aria-label="Game board"></div>
+        </div>
+        <div class="banner" id="banner" hidden></div>
+      </div>
+
+      <div class="referee" id="referee" hidden></div>
+      <div class="controls" id="controls">
+        <div class="trap-box">
+          <label for="rule-input">① Write an effect <small>(optional, before your first move)</small></label>
+          <div class="trap-input-row">
+            <input id="rule-input" maxlength="160" autocomplete="off" placeholder="e.g. Anything entering here is shoved two squares north">
+            <button id="interpret-btn" type="button">Interpret</button>
+          </div>
+          <div class="ideas" id="ideas"></div>
+          <div class="preview" id="preview" hidden></div>
+          <button id="place-btn" class="primary small" type="button" hidden>Place</button>
+        </div>
+        <div class="move-box">
+          <label>② Move</label>
+          <p class="hint" id="move-hint">Click one of your pieces, then a neighbouring square. Arrow keys work too.</p>
+          <label class="check"><input type="checkbox" id="single-mode"> Move only one piece of a stack</label>
+          <button id="end-btn" type="button" class="secondary">End turn <kbd>E</kbd></button>
+          <div class="ai-lock" id="ai-lock"></div>
+        </div>
+      </div>
+    </section>
+
+    <aside class="side ai">
+      <h2><span class="dot ai"></span>AI <small id="ai-score">0/3 across</small></h2>
+      <div class="pt-oppcard" id="pt-oppcard"></div>
+      <h3 class="sub">AI effects <small id="ai-count">0 cells</small></h3>
+      <div class="slots" id="ai-rules"></div>
+      <div class="speech" id="speech" hidden></div>
+      <div class="ai-record" id="ai-record"></div>
+    </aside>
+  </main>
+
+  <section class="log-wrap">
+    <h3>What happened</h3>
+    <ol class="log" id="log"></ol>
+  </section>
+</div>
+
+<!-- the production game-over dialog (its rematch button is driven by the playtest flow) -->
+<div class="overlay" id="gameover" hidden>
+  <div class="modal">
+    <div class="result-icon" id="go-icon">🏁</div>
+    <h2 id="go-title">Game over</h2>
+    <p id="go-reason"></p>
+    <div class="achievements" id="go-ach"></div>
+    <div class="go-stats" id="go-stats"></div>
+    <button id="rematch-btn" type="button" class="primary">Rematch <kbd>R</kbd></button>
+  </div>
+</div>
+
+<!-- playtest screens -->
+<div class="overlay pt-overlay" id="pt-start">
+  <div class="modal pt-modal">
+    <h2>Rule Sabotage playtest</h2>
+    <p class="pt-warn">This is a local test of an unfinished game against experimental computer opponents. It is not the released game.</p>
+    <div class="pt-consent" id="pt-consent-text"></div>
+    <label class="pt-row">Participant code <small>(optional, given by the facilitator, e.g. P03; never your name)</small>
+      <input id="pt-code" maxlength="8" autocomplete="off" placeholder="P03"></label>
+    <fieldset class="pt-row"><legend>Mode</legend>
+      <label><input type="radio" name="pt-mode" value="pilot"> Pilot schedule <small>(the facilitator's fixed order of three games)</small></label>
+      <label><input type="radio" name="pt-mode" value="free" checked> Free play <small>(choose the opponent yourself)</small></label>
+    </fieldset>
+    <div class="pt-buttons">
+      <button type="button" class="primary" id="pt-agree">I agree: record my games</button>
+      <button type="button" class="ghost" id="pt-decline">Play without recording</button>
+    </div>
+    <p class="pt-err" id="pt-start-err"></p>
+  </div>
+</div>
+
+<div class="overlay pt-overlay" id="pt-select" hidden>
+  <div class="modal pt-modal pt-wide">
+    <h2>Choose an opponent</h2>
+    <p>All three are experimental research opponents. Each one is shown by name and version for the whole game.</p>
+    <div class="pt-opps" id="pt-opps"></div>
+    <fieldset class="pt-row"><legend>Who moves first?</legend>
+      <label><input type="radio" name="pt-first" value="coin" checked> Coin flip</label>
+      <label><input type="radio" name="pt-first" value="human"> Me</label>
+      <label><input type="radio" name="pt-first" value="ai"> The opponent</label>
+    </fieldset>
+    <div class="pt-buttons"><button type="button" class="primary" id="pt-go" disabled>Start game</button><button type="button" class="ghost" id="pt-select-cancel" hidden>Cancel</button></div>
+  </div>
+</div>
+
+<div class="overlay pt-overlay" id="pt-next" hidden>
+  <div class="modal pt-modal">
+    <h2 id="pt-next-title">Next game</h2>
+    <div id="pt-next-body"></div>
+    <div class="pt-buttons"><button type="button" class="primary" id="pt-next-go">Start</button></div>
+  </div>
+</div>
+
+<div class="overlay pt-overlay" id="pt-feedback" hidden>
+  <div class="modal pt-modal pt-wide">
+    <h2>How did that game feel?</h2>
+    <p class="pt-sub" id="pt-fb-sub"></p>
+    <p class="pt-sub">There are no right answers, and every question is optional. 1 = not at all, 5 = very much.</p>
+    <form id="pt-fb-form"></form>
+    <div class="pt-buttons">
+      <button type="button" class="primary" id="pt-fb-send">Send answers</button>
+      <button type="button" class="ghost" id="pt-fb-skip">Skip questions</button>
+      <button type="button" class="ghost" id="pt-fb-review">Review match first</button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay pt-overlay" id="pt-review" hidden>
+  <div class="modal pt-modal pt-review">
+    <div class="pt-review-head"><h2>Match review</h2><button type="button" class="ghost" id="pt-review-close">Close</button></div>
+    <div id="pt-review-body"></div>
+  </div>
+</div>
+
+<div class="overlay pt-overlay" id="pt-done" hidden>
+  <div class="modal pt-modal">
+    <h2>Session finished</h2>
+    <div id="pt-done-body"></div>
+    <div class="pt-buttons">
+      <button type="button" class="ghost" id="pt-withdraw">Delete everything recorded in this session</button>
+      <button type="button" class="primary" id="pt-restart-session">Start a new session</button>
+    </div>
+  </div>
+</div>
+</body>
+</html>

@@ -1,3 +1,5 @@
+> **Superseded wording (2026-11-21):** some statements below are broader than the evidence. The corrected version is `docs/KANE_DOSSIER_V5_3_1.md`. This file is kept unchanged as issued; no experimental verdict changed.
+
 # Kane research dossier V5.3 (prepared; Kane NOT invoked)
 
 **Purpose:** let Kane investigate why self-play balance depends on the policy that plays, without being misled by known

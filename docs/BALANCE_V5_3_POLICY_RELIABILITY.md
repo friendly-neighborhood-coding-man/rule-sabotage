@@ -1,3 +1,5 @@
+> **Wording note (2026-11-21, operator review ACCEPTED WITH LIMITATIONS):** verdicts unchanged. Two statements in §4.3 and §5 are narrowed in `docs/KANE_DOSSIER_V5_3_1.md`: the earlier second-mover finding was *not reproduced* (its full attribution to the stream is not demonstrated), and a second-mover edge is not excluded for softmax-v2.
+
 # Balance Designer V5.3: reliable policy comparison
 
 **Status: READY_FOR_OPERATOR_V5_3_POLICY_RELIABILITY_REVIEW.** Nothing merged, deployed or promoted; no production change.
