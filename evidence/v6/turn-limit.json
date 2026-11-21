@@ -1,0 +1,858 @@
+{
+  "schema": "rule-sabotage/v6-turn-limit@1",
+  "mode": "EXPERIMENTAL-V6-NOT-PRODUCTION",
+  "ruleset": "rule-sabotage/v6-13x9-no-adjacent-effects@1",
+  "maxTurns": 60,
+  "commit": "8b5b4bbab6baa5115308014991bbeafea3c7d735",
+  "createdAt": "2026-11-21T07:23:28.962Z",
+  "design": {
+    "policies": [
+      "ev-k1.2",
+      "softmax-v2",
+      "oa-v3"
+    ],
+    "pairing": "self-play (same policy both sides)",
+    "seeds": [
+      96001,
+      96002,
+      96003,
+      96004
+    ],
+    "firstMovers": [
+      "human",
+      "ai"
+    ],
+    "games": 24,
+    "note": "Measurement only. The 60-turn rule was not changed. Not a balance study; no V5.3 claim carries over."
+  },
+  "overall": {
+    "games": 24,
+    "turnLimitHits": 1,
+    "turns": {
+      "min": 7,
+      "median": 14.5,
+      "p90": 24.4,
+      "max": 60
+    },
+    "shareOfLimitUsed": {
+      "median": 0.24166666666666667,
+      "max": 1
+    },
+    "firstPieceAcrossTurn": {
+      "median": 6,
+      "min": 2
+    },
+    "firstMoverWins": 10,
+    "draws": 0,
+    "zeroMoveTurns": {
+      "total": 46,
+      "noLegalMove": 0,
+      "unfavorable": 46,
+      "plannerError": 0
+    },
+    "placements": {
+      "made": 330,
+      "blocked": 84,
+      "blockedByA1": 0,
+      "blockedTier3": 77
+    },
+    "a1ProtectedCellsPerTurn": {
+      "median": 13,
+      "max": 24
+    },
+    "maxDecisionMs": 30465,
+    "budgetHits": 0
+  },
+  "byPolicy": {
+    "ev-k1.2": {
+      "games": 8,
+      "turnLimitHits": 0,
+      "turns": {
+        "min": 7,
+        "median": 13,
+        "p90": 18.099999999999998,
+        "max": 23
+      },
+      "shareOfLimitUsed": {
+        "median": 0.21666666666666667,
+        "max": 0.38333333333333336
+      },
+      "firstPieceAcrossTurn": {
+        "median": 6,
+        "min": 2
+      },
+      "firstMoverWins": 3,
+      "draws": 0,
+      "zeroMoveTurns": {
+        "total": 0,
+        "noLegalMove": 0,
+        "unfavorable": 0,
+        "plannerError": 0
+      },
+      "placements": {
+        "made": 98,
+        "blocked": 11,
+        "blockedByA1": 0,
+        "blockedTier3": 5
+      },
+      "a1ProtectedCellsPerTurn": {
+        "median": 13,
+        "max": 24
+      },
+      "maxDecisionMs": 30465,
+      "budgetHits": 0
+    },
+    "softmax-v2": {
+      "games": 8,
+      "turnLimitHits": 1,
+      "turns": {
+        "min": 9,
+        "median": 13,
+        "p90": 34.099999999999994,
+        "max": 60
+      },
+      "shareOfLimitUsed": {
+        "median": 0.21666666666666667,
+        "max": 1
+      },
+      "firstPieceAcrossTurn": {
+        "median": 5,
+        "min": 2
+      },
+      "firstMoverWins": 5,
+      "draws": 0,
+      "zeroMoveTurns": {
+        "total": 40,
+        "noLegalMove": 0,
+        "unfavorable": 40,
+        "plannerError": 0
+      },
+      "placements": {
+        "made": 108,
+        "blocked": 49,
+        "blockedByA1": 0,
+        "blockedTier3": 49
+      },
+      "a1ProtectedCellsPerTurn": {
+        "median": 13,
+        "max": 24
+      },
+      "maxDecisionMs": 3606,
+      "budgetHits": 0
+    },
+    "oa-v3": {
+      "games": 8,
+      "turnLimitHits": 0,
+      "turns": {
+        "min": 10,
+        "median": 16.5,
+        "p90": 27.099999999999998,
+        "max": 32
+      },
+      "shareOfLimitUsed": {
+        "median": 0.275,
+        "max": 0.5333333333333333
+      },
+      "firstPieceAcrossTurn": {
+        "median": 6,
+        "min": 2
+      },
+      "firstMoverWins": 2,
+      "draws": 0,
+      "zeroMoveTurns": {
+        "total": 6,
+        "noLegalMove": 0,
+        "unfavorable": 6,
+        "plannerError": 0
+      },
+      "placements": {
+        "made": 124,
+        "blocked": 24,
+        "blockedByA1": 0,
+        "blockedTier3": 23
+      },
+      "a1ProtectedCellsPerTurn": {
+        "median": 11,
+        "max": 24
+      },
+      "maxDecisionMs": 11906,
+      "budgetHits": 0
+    }
+  },
+  "zeroMoveExamples": [
+    {
+      "turn": 18,
+      "p": "human",
+      "kind": "unfavorable",
+      "detail": "3 legal move(s); the best one changes the policy's evaluation by -1 (it stops when that is below -0.25)",
+      "legalMoves": 3,
+      "frozen": 0,
+      "onBoard": 1,
+      "bestDelta": -1
+    },
+    {
+      "turn": 20,
+      "p": "human",
+      "kind": "unfavorable",
+      "detail": "3 legal move(s); the best one changes the policy's evaluation by -1 (it stops when that is below -0.25)",
+      "legalMoves": 3,
+      "frozen": 0,
+      "onBoard": 1,
+      "bestDelta": -1
+    },
+    {
+      "turn": 22,
+      "p": "human",
+      "kind": "unfavorable",
+      "detail": "3 legal move(s); the best one changes the policy's evaluation by -1 (it stops when that is below -0.25)",
+      "legalMoves": 3,
+      "frozen": 0,
+      "onBoard": 1,
+      "bestDelta": -1
+    },
+    {
+      "turn": 24,
+      "p": "human",
+      "kind": "unfavorable",
+      "detail": "3 legal move(s); the best one changes the policy's evaluation by -1 (it stops when that is below -0.25)",
+      "legalMoves": 3,
+      "frozen": 0,
+      "onBoard": 1,
+      "bestDelta": -1
+    },
+    {
+      "turn": 25,
+      "p": "ai",
+      "kind": "unfavorable",
+      "detail": "4 legal move(s); the best one changes the policy's evaluation by -1 (it stops when that is below -0.25)",
+      "legalMoves": 4,
+      "frozen": 0,
+      "onBoard": 1,
+      "bestDelta": -1
+    },
+    {
+      "turn": 26,
+      "p": "human",
+      "kind": "unfavorable",
+      "detail": "3 legal move(s); the best one changes the policy's evaluation by -1 (it stops when that is below -0.25)",
+      "legalMoves": 3,
+      "frozen": 0,
+      "onBoard": 1,
+      "bestDelta": -1
+    },
+    {
+      "turn": 27,
+      "p": "ai",
+      "kind": "unfavorable",
+      "detail": "4 legal move(s); the best one changes the policy's evaluation by -1 (it stops when that is below -0.25)",
+      "legalMoves": 4,
+      "frozen": 0,
+      "onBoard": 1,
+      "bestDelta": -1
+    },
+    {
+      "turn": 28,
+      "p": "human",
+      "kind": "unfavorable",
+      "detail": "3 legal move(s); the best one changes the policy's evaluation by -1 (it stops when that is below -0.25)",
+      "legalMoves": 3,
+      "frozen": 0,
+      "onBoard": 1,
+      "bestDelta": -1
+    },
+    {
+      "turn": 29,
+      "p": "ai",
+      "kind": "unfavorable",
+      "detail": "4 legal move(s); the best one changes the policy's evaluation by -1 (it stops when that is below -0.25)",
+      "legalMoves": 4,
+      "frozen": 0,
+      "onBoard": 1,
+      "bestDelta": -1
+    },
+    {
+      "turn": 30,
+      "p": "human",
+      "kind": "unfavorable",
+      "detail": "3 legal move(s); the best one changes the policy's evaluation by -1 (it stops when that is below -0.25)",
+      "legalMoves": 3,
+      "frozen": 0,
+      "onBoard": 1,
+      "bestDelta": -1
+    },
+    {
+      "turn": 31,
+      "p": "ai",
+      "kind": "unfavorable",
+      "detail": "4 legal move(s); the best one changes the policy's evaluation by -1 (it stops when that is below -0.25)",
+      "legalMoves": 4,
+      "frozen": 0,
+      "onBoard": 1,
+      "bestDelta": -1
+    },
+    {
+      "turn": 32,
+      "p": "human",
+      "kind": "unfavorable",
+      "detail": "3 legal move(s); the best one changes the policy's evaluation by -1 (it stops when that is below -0.25)",
+      "legalMoves": 3,
+      "frozen": 0,
+      "onBoard": 1,
+      "bestDelta": -1
+    }
+  ],
+  "games": [
+    {
+      "seed": 96001,
+      "first": "human",
+      "policy": "ev-k1.2",
+      "winner": "ai",
+      "turns": 12,
+      "turnLimit": false,
+      "reason": "The AI got all 3 pieces across.",
+      "scoreTurns": {
+        "human": [
+          7,
+          9,
+          null
+        ],
+        "ai": [
+          4,
+          8,
+          12
+        ]
+      },
+      "ms": 14908,
+      "maxDecisionMs": 4784
+    },
+    {
+      "seed": 96001,
+      "first": "ai",
+      "policy": "ev-k1.2",
+      "winner": "human",
+      "turns": 14,
+      "turnLimit": false,
+      "reason": "You got all 3 pieces across.",
+      "scoreTurns": {
+        "human": [
+          14,
+          14,
+          14
+        ],
+        "ai": [
+          7,
+          13,
+          null
+        ]
+      },
+      "ms": 42387,
+      "maxDecisionMs": 6847
+    },
+    {
+      "seed": 96002,
+      "first": "human",
+      "policy": "ev-k1.2",
+      "winner": "ai",
+      "turns": 10,
+      "turnLimit": false,
+      "reason": "The AI got all 3 pieces across.",
+      "scoreTurns": {
+        "human": [
+          5,
+          null,
+          null
+        ],
+        "ai": [
+          4,
+          4,
+          10
+        ]
+      },
+      "ms": 43543,
+      "maxDecisionMs": 13062
+    },
+    {
+      "seed": 96002,
+      "first": "ai",
+      "policy": "ev-k1.2",
+      "winner": "ai",
+      "turns": 7,
+      "turnLimit": false,
+      "reason": "The AI got all 3 pieces across.",
+      "scoreTurns": {
+        "human": [
+          null,
+          null,
+          null
+        ],
+        "ai": [
+          3,
+          5,
+          7
+        ]
+      },
+      "ms": 52507,
+      "maxDecisionMs": 18084
+    },
+    {
+      "seed": 96003,
+      "first": "human",
+      "policy": "ev-k1.2",
+      "winner": "human",
+      "turns": 15,
+      "turnLimit": false,
+      "reason": "You got all 3 pieces across.",
+      "scoreTurns": {
+        "human": [
+          3,
+          3,
+          15
+        ],
+        "ai": [
+          2,
+          4,
+          null
+        ]
+      },
+      "ms": 31760,
+      "maxDecisionMs": 14179
+    },
+    {
+      "seed": 96003,
+      "first": "ai",
+      "policy": "ev-k1.2",
+      "winner": "human",
+      "turns": 12,
+      "turnLimit": false,
+      "reason": "You got all 3 pieces across.",
+      "scoreTurns": {
+        "human": [
+          6,
+          8,
+          12
+        ],
+        "ai": [
+          5,
+          9,
+          null
+        ]
+      },
+      "ms": 22880,
+      "maxDecisionMs": 7752
+    },
+    {
+      "seed": 96004,
+      "first": "human",
+      "policy": "ev-k1.2",
+      "winner": "ai",
+      "turns": 16,
+      "turnLimit": false,
+      "reason": "The AI got all 3 pieces across.",
+      "scoreTurns": {
+        "human": [
+          7,
+          13,
+          null
+        ],
+        "ai": [
+          10,
+          12,
+          16
+        ]
+      },
+      "ms": 65932,
+      "maxDecisionMs": 13728
+    },
+    {
+      "seed": 96004,
+      "first": "ai",
+      "policy": "ev-k1.2",
+      "winner": "ai",
+      "turns": 23,
+      "turnLimit": false,
+      "reason": "The AI got all 3 pieces across.",
+      "scoreTurns": {
+        "human": [
+          12,
+          16,
+          null
+        ],
+        "ai": [
+          19,
+          21,
+          23
+        ]
+      },
+      "ms": 113625,
+      "maxDecisionMs": 30465
+    },
+    {
+      "seed": 96001,
+      "first": "human",
+      "policy": "softmax-v2",
+      "winner": "human",
+      "turns": 9,
+      "turnLimit": false,
+      "reason": "You got all 3 pieces across.",
+      "scoreTurns": {
+        "human": [
+          7,
+          9,
+          9
+        ],
+        "ai": [
+          4,
+          8,
+          null
+        ]
+      },
+      "ms": 7458,
+      "maxDecisionMs": 2171
+    },
+    {
+      "seed": 96001,
+      "first": "ai",
+      "policy": "softmax-v2",
+      "winner": "ai",
+      "turns": 23,
+      "turnLimit": false,
+      "reason": "The AI got all 3 pieces across.",
+      "scoreTurns": {
+        "human": [
+          10,
+          null,
+          null
+        ],
+        "ai": [
+          5,
+          21,
+          23
+        ]
+      },
+      "ms": 28710,
+      "maxDecisionMs": 3340
+    },
+    {
+      "seed": 96002,
+      "first": "human",
+      "policy": "softmax-v2",
+      "winner": "ai",
+      "turns": 20,
+      "turnLimit": false,
+      "reason": "The AI got all 3 pieces across.",
+      "scoreTurns": {
+        "human": [
+          null,
+          null,
+          null
+        ],
+        "ai": [
+          6,
+          20,
+          20
+        ]
+      },
+      "ms": 17578,
+      "maxDecisionMs": 2241
+    },
+    {
+      "seed": 96002,
+      "first": "ai",
+      "policy": "softmax-v2",
+      "winner": "human",
+      "turns": 10,
+      "turnLimit": false,
+      "reason": "You got all 3 pieces across.",
+      "scoreTurns": {
+        "human": [
+          6,
+          6,
+          10
+        ],
+        "ai": [
+          3,
+          5,
+          null
+        ]
+      },
+      "ms": 6992,
+      "maxDecisionMs": 2169
+    },
+    {
+      "seed": 96003,
+      "first": "human",
+      "policy": "softmax-v2",
+      "winner": "human",
+      "turns": 9,
+      "turnLimit": false,
+      "reason": "You got all 3 pieces across.",
+      "scoreTurns": {
+        "human": [
+          3,
+          3,
+          9
+        ],
+        "ai": [
+          2,
+          null,
+          null
+        ]
+      },
+      "ms": 7197,
+      "maxDecisionMs": 2107
+    },
+    {
+      "seed": 96003,
+      "first": "ai",
+      "policy": "softmax-v2",
+      "winner": "ai",
+      "turns": 11,
+      "turnLimit": false,
+      "reason": "The AI got all 3 pieces across.",
+      "scoreTurns": {
+        "human": [
+          4,
+          4,
+          null
+        ],
+        "ai": [
+          3,
+          9,
+          11
+        ]
+      },
+      "ms": 6690,
+      "maxDecisionMs": 2200
+    },
+    {
+      "seed": 96004,
+      "first": "human",
+      "policy": "softmax-v2",
+      "winner": "human",
+      "turns": 15,
+      "turnLimit": false,
+      "reason": "You got all 3 pieces across.",
+      "scoreTurns": {
+        "human": [
+          9,
+          15,
+          15
+        ],
+        "ai": [
+          8,
+          null,
+          null
+        ]
+      },
+      "ms": 30117,
+      "maxDecisionMs": 3606
+    },
+    {
+      "seed": 96004,
+      "first": "ai",
+      "policy": "softmax-v2",
+      "winner": "human",
+      "turns": 60,
+      "turnLimit": true,
+      "reason": "Turn limit. Pieces across: you 2, AI 2. Squares left: you 2, AI 5.",
+      "scoreTurns": {
+        "human": [
+          6,
+          16,
+          null
+        ],
+        "ai": [
+          3,
+          13,
+          null
+        ]
+      },
+      "ms": 104998,
+      "maxDecisionMs": 3545
+    },
+    {
+      "seed": 96001,
+      "first": "human",
+      "policy": "oa-v3",
+      "winner": "ai",
+      "turns": 16,
+      "turnLimit": false,
+      "reason": "The AI got all 3 pieces across.",
+      "scoreTurns": {
+        "human": [
+          7,
+          7,
+          null
+        ],
+        "ai": [
+          6,
+          6,
+          16
+        ]
+      },
+      "ms": 36803,
+      "maxDecisionMs": 11906
+    },
+    {
+      "seed": 96001,
+      "first": "ai",
+      "policy": "oa-v3",
+      "winner": "human",
+      "turns": 14,
+      "turnLimit": false,
+      "reason": "You got all 3 pieces across.",
+      "scoreTurns": {
+        "human": [
+          6,
+          12,
+          14
+        ],
+        "ai": [
+          9,
+          11,
+          null
+        ]
+      },
+      "ms": 50481,
+      "maxDecisionMs": 7285
+    },
+    {
+      "seed": 96002,
+      "first": "human",
+      "policy": "oa-v3",
+      "winner": "ai",
+      "turns": 12,
+      "turnLimit": false,
+      "reason": "The AI got all 3 pieces across.",
+      "scoreTurns": {
+        "human": [
+          5,
+          null,
+          null
+        ],
+        "ai": [
+          4,
+          4,
+          12
+        ]
+      },
+      "ms": 23066,
+      "maxDecisionMs": 4460
+    },
+    {
+      "seed": 96002,
+      "first": "ai",
+      "policy": "oa-v3",
+      "winner": "ai",
+      "turns": 25,
+      "turnLimit": false,
+      "reason": "The AI got all 3 pieces across.",
+      "scoreTurns": {
+        "human": [
+          12,
+          16,
+          null
+        ],
+        "ai": [
+          3,
+          11,
+          25
+        ]
+      },
+      "ms": 55095,
+      "maxDecisionMs": 8323
+    },
+    {
+      "seed": 96003,
+      "first": "human",
+      "policy": "oa-v3",
+      "winner": "ai",
+      "turns": 32,
+      "turnLimit": false,
+      "reason": "The AI got all 3 pieces across.",
+      "scoreTurns": {
+        "human": [
+          3,
+          3,
+          null
+        ],
+        "ai": [
+          2,
+          18,
+          32
+        ]
+      },
+      "ms": 19701,
+      "maxDecisionMs": 4029
+    },
+    {
+      "seed": 96003,
+      "first": "ai",
+      "policy": "oa-v3",
+      "winner": "ai",
+      "turns": 17,
+      "turnLimit": false,
+      "reason": "The AI got all 3 pieces across.",
+      "scoreTurns": {
+        "human": [
+          6,
+          16,
+          null
+        ],
+        "ai": [
+          5,
+          9,
+          17
+        ]
+      },
+      "ms": 12712,
+      "maxDecisionMs": 3115
+    },
+    {
+      "seed": 96004,
+      "first": "human",
+      "policy": "oa-v3",
+      "winner": "ai",
+      "turns": 22,
+      "turnLimit": false,
+      "reason": "The AI got all 3 pieces across.",
+      "scoreTurns": {
+        "human": [
+          7,
+          17,
+          null
+        ],
+        "ai": [
+          8,
+          10,
+          22
+        ]
+      },
+      "ms": 20352,
+      "maxDecisionMs": 3306
+    },
+    {
+      "seed": 96004,
+      "first": "ai",
+      "policy": "oa-v3",
+      "winner": "human",
+      "turns": 10,
+      "turnLimit": false,
+      "reason": "You got all 3 pieces across.",
+      "scoreTurns": {
+        "human": [
+          8,
+          10,
+          10
+        ],
+        "ai": [
+          5,
+          null,
+          null
+        ]
+      },
+      "ms": 19026,
+      "maxDecisionMs": 3145
+    }
+  ]
+}

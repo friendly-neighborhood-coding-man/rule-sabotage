@@ -1,0 +1,22 @@
+/* V6 experimental shell and 13x9 board. The game keeps the production style.css; these rules override the 7x7 grid. */
+.v6-strip{position:sticky;top:0;z-index:20;display:flex;flex-wrap:wrap;gap:12px;align-items:center;padding:7px 18px;background:#1e1b4b;border-bottom:2px solid #818cf8;color:#e0e7ff;font-size:13px}
+.v6-strip select{background:#0b0f1c;color:#e0e7ff;border:1px solid #4338ca;border-radius:6px;padding:2px 6px}
+.v6-strip small{color:#a5b4fc;margin-left:auto}
+.v6-rule{margin:6px 18px 0;color:#c7d2fe;font-size:12.5px}
+.v6-oppcard{font-size:12px;color:var(--sub);margin:-4px 0 8px}
+.board-wrap{max-width:860px}
+.col-labels{grid-template-columns:repeat(var(--bw,13),1fr)}
+.row-labels{grid-template-rows:repeat(var(--bh,9),1fr)}
+.board{grid-template-columns:repeat(var(--bw,13),1fr);grid-template-rows:repeat(var(--bh,9),1fr);aspect-ratio:calc(var(--bw,13) / var(--bh,9));gap:3px}
+.cell{border-radius:6px}
+.ticon{font-size:clamp(11px,1.8vw,19px)}
+.token{font-size:clamp(9px,1.4vw,13px)}
+.cell.noeffect{background-image:repeating-linear-gradient(45deg,#ffffff0d 0 4px,transparent 4px 8px)}
+.cell.noeffect-on{background-image:repeating-linear-gradient(45deg,#f8717140 0 4px,transparent 4px 8px);box-shadow:inset 0 0 0 1px #f8717188;cursor:not-allowed}
+.v6-legend{font-size:12px;color:var(--sub);margin:6px 0 0;text-align:center}
+.v6-swatch{display:inline-block;width:14px;height:14px;vertical-align:-3px;border-radius:3px;background:repeating-linear-gradient(45deg,#f8717166 0 3px,#141a2f 3px 6px);border:1px solid #f8717188}
+.rule-note{margin:8px auto 0;max-width:720px;padding:8px 12px;border-radius:8px;background:#3b2a05;border:1px solid #f59e0b;color:#fde68a;font-size:13px}
+.rule-note.error{background:#450a0a;border-color:#f87171;color:#fecaca}
+.ai-record .zero{margin-top:6px;padding:5px 8px;border-radius:6px;background:#1f2937;font-size:12px}
+.ai-record .zero.planner-error{background:#450a0a;color:#fecaca}
+.v6-strip button.primary{width:auto;padding:4px 14px;margin:0}

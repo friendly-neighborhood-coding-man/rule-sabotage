@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Rule Sabotage · V6 EXPERIMENTAL (13×9, not production)</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="v6.css">
+  <script src="app-v6.js" defer></script>
+</head>
+<body>
+<div class="v6-strip">
+  <b>V6 EXPERIMENTAL · NOT PRODUCTION</b>
+  <span>13×9 board · no new effects next to opponent pieces</span>
+  <label>Opponent <select id="v6-opp"></select></label>
+  <label>First <select id="v6-first"><option value="coin">coin flip</option><option value="human">me</option><option value="ai">opponent</option></select></label>
+  <button type="button" class="primary small" id="v6-start">New game</button>
+  <small id="v6-code"></small>
+</div>
+<p class="v6-rule" id="v6-rule"></p>
+<div class="app">
+  <header class="top">
+    <div class="brand"><span class="logo">⚠</span><div><h1>RULE SABOTAGE</h1><p>Build the battlefield. Survive your own inventions.</p></div></div>
+    <div class="meta">
+      <div class="chip" id="turn-chip">Turn 1</div>
+      <div class="chip" id="actions-chip">—</div>
+      <div class="chip mode" id="brain-chip" title="Who is making the AI's decisions">AI brain: …</div>
+      <div class="chip mode" id="referee-chip" title="Who approves new rules">Referee: …</div>
+      <button class="ghost" id="help-btn" type="button">How to play</button>
+    </div>
+  </header>
+
+  <section class="help" id="help" hidden>
+    <ol>
+      <li><b>Goal:</b> get all 3 of your pieces from column A to column <b>M</b> (13 columns, 9 rows). The AI races its 3 pieces the other way. Turns alternate.</li>
+      <li><b>Actions:</b> each turn you get one move action per piece still on the board. An action moves one piece, or a whole stack of your pieces, one square. Landing on your own piece stacks; landing on an enemy piece captures it and sends it back to its start.</li>
+      <li><b>Effects:</b> before your first move you may write one effect in plain words (English or 한국어) and put it on up to <b>3 cells</b> that have no piece and no enemy effect.</li>
+      <li><b>New in V6, no effects next to opponent pieces:</b> you cannot place a new effect on any of the <b>8 squares around an opponent piece</b> (sideways, up/down or diagonal). Those squares are hatched while you pick cells. If one of your chosen cells breaks the rule, the whole placement is refused and nothing is used up, so you can pick again. Squares next to your own pieces are fine. Effects already on the board stay when a piece walks up to them, and you can still remove your own effects. The AI plays under exactly the same rule, checked by the same server code.</li>
+      <li><b>Fair for everyone:</b> an effect does exactly the same thing to whoever enters, including you. Directions are absolute (north, south, east, west) or relative to how the piece entered (back, forward).</li>
+      <li><b>Referee:</b> your text is read by the built-in offline parser (no AI language model), and every new effect, yours or the opponent's, is checked by the engine only. Effects the engine cannot verify on its own are not placed, for both sides. The game ends after 60 turns (30 each).</li>
+    </ol>
+  </section>
+
+  <main class="layout">
+    <aside class="side you">
+      <h2><span class="dot human"></span>YOU <small id="human-score">0/3 across</small></h2>
+      <h3 class="sub">Your effects <small id="human-count">0 cells</small></h3>
+      <div class="slots" id="human-rules"></div>
+      <p class="hint" id="remove-hint">Click one of your effect cells to mark it for removal.</p>
+    </aside>
+
+    <section class="center">
+      <div class="phase-banner" id="phase-banner">—</div>
+      <div class="board-wrap">
+        <div class="col-labels" id="col-labels"></div>
+        <div class="board-row">
+          <div class="row-labels" id="row-labels"></div>
+          <div class="board" id="board" aria-label="Game board"></div>
+        </div>
+        <div class="banner" id="banner" hidden></div>
+        <p class="v6-legend"><span class="v6-swatch"></span> Hatched squares (shown while you pick cells): next to an opponent piece, so no new effects there.</p>
+        <div class="rule-note" id="rule-note" hidden></div>
+      </div>
+
+      <div class="referee" id="referee" hidden></div>
+      <div class="controls" id="controls">
+        <div class="trap-box">
+          <label for="rule-input">① Write an effect <small>(optional, before your first move)</small></label>
+          <div class="trap-input-row">
+            <input id="rule-input" maxlength="160" autocomplete="off" placeholder="e.g. Anything entering here is shoved two squares north">
+            <button id="interpret-btn" type="button">Interpret</button>
+          </div>
+          <div class="ideas" id="ideas"></div>
+          <div class="preview" id="preview" hidden></div>
+          <button id="place-btn" class="primary small" type="button" hidden>Place</button>
+        </div>
+        <div class="move-box">
+          <label>② Move</label>
+          <p class="hint" id="move-hint">Click one of your pieces, then a neighbouring square. Arrow keys work too.</p>
+          <label class="check"><input type="checkbox" id="single-mode"> Move only one piece of a stack</label>
+          <button id="end-btn" type="button" class="secondary">End turn <kbd>E</kbd></button>
+          <div class="ai-lock" id="ai-lock"></div>
+        </div>
+      </div>
+    </section>
+
+    <aside class="side ai">
+      <h2><span class="dot ai"></span>AI <small id="ai-score">0/3 across</small></h2>
+      <div class="v6-oppcard" id="v6-opp-label">—</div>
+      <h3 class="sub">AI effects <small id="ai-count">0 cells</small></h3>
+      <div class="slots" id="ai-rules"></div>
+      <div class="speech" id="speech" hidden></div>
+      <div class="ai-record" id="ai-record"></div>
+    </aside>
+  </main>
+
+  <section class="log-wrap">
+    <h3>What happened</h3>
+    <ol class="log" id="log"></ol>
+  </section>
+</div>
+
+<!-- game-over dialog (Rematch starts a new game against the opponent selected above) -->
+<div class="overlay" id="gameover" hidden>
+  <div class="modal">
+    <div class="result-icon" id="go-icon">🏁</div>
+    <h2 id="go-title">Game over</h2>
+    <p id="go-reason"></p>
+    <div class="achievements" id="go-ach"></div>
+    <div class="go-stats" id="go-stats"></div>
+    <button id="rematch-btn" type="button" class="primary">Rematch <kbd>R</kbd></button>
+  </div>
+</div>
+
+</body>
+</html>

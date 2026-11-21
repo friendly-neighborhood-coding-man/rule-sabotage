@@ -111,3 +111,11 @@ docs/archive-v2/    the V2 handoff docs this version replaced
 
 `npm run playtest` starts an isolated playtest on http://127.0.0.1:3100 against the three experimental V5.3 opponents (EV-K1.2, Softmax-v2, OA-v3), with consent-gated recording, match review and a post-game questionnaire. No Kane, no language model, no network. See `docs/HUMAN_PLAYTEST_READINESS.md` and `docs/PLAYTEST_PILOT_PROTOCOL.md`.
 
+
+## V6 experimental game (13×9, not production)
+
+`npm run play:v6` starts a separately versioned experimental game on http://127.0.0.1:3106: a 13×9 board, three pieces per
+side on rows 3/5/7, and a new placement rule: no new effect on the 8 squares around an opponent piece (server-enforced, same
+code for human and AI). Opponents are V6 adaptations of the three V5.3 policies (generated forks in `server/v6/forks/`, see
+`npm run v6:fork`); no V5.3 result applies to them. No Kane, no language model, no network, nothing saved. The 7×7 game,
+the V1–V5.3 policies and their evidence are unchanged. See `docs/V6_GAMEPLAY_EXPANSION.md`; tests: `npm run test:v6`.
