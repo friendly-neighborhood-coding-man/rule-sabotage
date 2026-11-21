@@ -126,3 +126,7 @@ effect on the 8 squares around ANY piece, yours or the opponent's. Everything el
 V6.2 (`docs/V6_2_PLAYABILITY_AND_KANE_SHADOW.md`): decision-preserving opponent speed-ups, separate referee-aware
 opponents (`-ra@1`), consent-based recording with review, questionnaire and deletion (`playtest-data/v6/`), and Kane
 shadow-mode infrastructure that is prepared but never runs Kane.
+
+V6.3 (`docs/V6_3_BUDGETED_AI_AND_PILOT.md`, `docs/KANE_SINGLE_CALL_PREFLIGHT.md`): pilot defaults (V6.1 + the `-ra@1`
+opponents), an 8-second latency-bounded prototype (`-ra-b@1`, not promoted), and a reviewable single-call Kane shadow
+experiment that is prepared and gated, not run.

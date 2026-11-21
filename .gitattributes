@@ -2,3 +2,4 @@ evidence/balance/** -text
 balance/journal.ndjson -text
 balance/v2/journal.ndjson -text
 balance/v3/journal.ndjson -text
+evidence/v6/** -text

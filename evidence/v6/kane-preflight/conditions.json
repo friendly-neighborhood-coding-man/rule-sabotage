@@ -1,0 +1,11 @@
+{
+ "version": "kane-conditions-v4.1",
+ "conditions": [
+  "In the 'Symmetry' table, for every scenario the Human piece row and the AI piece row show the same values in every column from 'Effect fired' to 'Effects fired in this step' and 'Effect fired' is 'yes'; the 'Frozen turns' and 'Shield' values also match unless one of the two rows says 'n/a (reached its goal)'.",
+  "In the 'Symmetry' table, every value in the 'Second visit to same cell' column is 'did not fire'.",
+  "The 'Chain reactions' section lists no chain longer than 4 effects.",
+  "In the softlock rollout, no player has 2 of their own turns in a row with pieces on the board but 0 legal moves.",
+  "The number of cells chosen in the 'Placement' section is less than or equal to the limit per turn shown there.",
+  "Taken as a whole, nothing on this page shows the rule permanently trapping a player, targeting only one player, or deciding the game by itself."
+ ]
+}

@@ -1,0 +1,296 @@
+{
+ "ruleset": "rule-sabotage/v6.1-all-piece-proximity@1",
+ "seed": 96001,
+ "rng": 1277758029,
+ "turn": 8,
+ "maxTurns": 60,
+ "current": "human",
+ "firstPlayer": "ai",
+ "phase": "place",
+ "actionsLeft": 2,
+ "bonus": {
+  "human": 0,
+  "ai": 0
+ },
+ "pieces": [
+  {
+   "id": "h1",
+   "owner": "human",
+   "x": 12,
+   "y": 1,
+   "home": {
+    "x": 0,
+    "y": 2
+   },
+   "scored": true,
+   "frozen": 0,
+   "shield": false
+  },
+  {
+   "id": "h2",
+   "owner": "human",
+   "x": 8,
+   "y": 5,
+   "home": {
+    "x": 0,
+    "y": 4
+   },
+   "scored": false,
+   "frozen": 0,
+   "shield": false
+  },
+  {
+   "id": "h3",
+   "owner": "human",
+   "x": 0,
+   "y": 6,
+   "home": {
+    "x": 0,
+    "y": 6
+   },
+   "scored": false,
+   "frozen": 0,
+   "shield": false
+  },
+  {
+   "id": "a1",
+   "owner": "ai",
+   "x": 7,
+   "y": 7,
+   "home": {
+    "x": 12,
+    "y": 2
+   },
+   "scored": false,
+   "frozen": 0,
+   "shield": false
+  },
+  {
+   "id": "a2",
+   "owner": "ai",
+   "x": 3,
+   "y": 0,
+   "home": {
+    "x": 12,
+    "y": 4
+   },
+   "scored": false,
+   "frozen": 0,
+   "shield": false
+  },
+  {
+   "id": "a3",
+   "owner": "ai",
+   "x": 12,
+   "y": 6,
+   "home": {
+    "x": 12,
+    "y": 6
+   },
+   "scored": false,
+   "frozen": 0,
+   "shield": false
+  }
+ ],
+ "cells": {
+  "10,6": 1,
+  "2,6": 2,
+  "10,5": 3,
+  "10,7": 3,
+  "6,7": 3,
+  "3,6": 4,
+  "6,1": 4,
+  "9,6": 4,
+  "5,7": 5,
+  "9,4": 5,
+  "9,7": 5,
+  "4,6": 6,
+  "5,4": 6,
+  "5,6": 6,
+  "4,7": 7,
+  "5,5": 7,
+  "6,5": 7
+ },
+ "rules": [
+  {
+   "id": 1,
+   "owner": "ai",
+   "text": "Any piece entering here is teleported to a random square.",
+   "effect": {
+    "kind": "teleport"
+   },
+   "label": "Teleport",
+   "summary": "Any piece entering this cell is teleported to a random empty middle square.",
+   "icon": "🌀",
+   "cells": [
+    "10,6"
+   ],
+   "placed": 3,
+   "turn": 1,
+   "hits": {
+    "human": 0,
+    "ai": 2
+   },
+   "interpretedBy": "engine canonical text (V6 opponent)"
+  },
+  {
+   "id": 2,
+   "owner": "human",
+   "text": "Step here and warp somewhere random. Good luck.",
+   "effect": {
+    "kind": "teleport"
+   },
+   "label": "Teleport",
+   "summary": "Any piece entering this cell is teleported to a random empty middle square.",
+   "icon": "🌀",
+   "cells": [
+    "2,6"
+   ],
+   "placed": 3,
+   "turn": 2,
+   "hits": {
+    "human": 2,
+    "ai": 0
+   },
+   "interpretedBy": "engine canonical text (V6 opponent)"
+  },
+  {
+   "id": 3,
+   "owner": "ai",
+   "text": "Whoever steps here gets an extra move action.",
+   "effect": {
+    "kind": "haste"
+   },
+   "label": "+1 action",
+   "summary": "Whoever’s piece enters this cell gets +1 move action (this turn if it is their turn, otherwise next turn).",
+   "icon": "⚡",
+   "cells": [
+    "10,5",
+    "10,7",
+    "6,7"
+   ],
+   "placed": 3,
+   "turn": 3,
+   "hits": {
+    "human": 0,
+    "ai": 0
+   },
+   "interpretedBy": "engine canonical text (V6 opponent)"
+  },
+  {
+   "id": 4,
+   "owner": "human",
+   "text": "Step here and you are pushed 2 squares east. Nothing personal.",
+   "effect": {
+    "kind": "shove",
+    "dir": "east",
+    "amount": 2
+   },
+   "label": "Shove east 2",
+   "summary": "Any piece entering this cell is forced 2 squares east (right). It can capture, stack or set off another trap where it lands.",
+   "icon": "➡️",
+   "cells": [
+    "3,6",
+    "6,1",
+    "9,6"
+   ],
+   "placed": 3,
+   "turn": 4,
+   "hits": {
+    "human": 0,
+    "ai": 0
+   },
+   "interpretedBy": "engine canonical text (V6 opponent)"
+  },
+  {
+   "id": 5,
+   "owner": "ai",
+   "text": "Any piece entering here gets shoved 2 squares west.",
+   "effect": {
+    "kind": "shove",
+    "dir": "west",
+    "amount": 2
+   },
+   "label": "Shove west 2",
+   "summary": "Any piece entering this cell is forced 2 squares west (left). It can capture, stack or set off another trap where it lands.",
+   "icon": "⬅️",
+   "cells": [
+    "5,7",
+    "9,4",
+    "9,7"
+   ],
+   "placed": 3,
+   "turn": 5,
+   "hits": {
+    "human": 0,
+    "ai": 0
+   },
+   "interpretedBy": "engine canonical text (V6 opponent)"
+  },
+  {
+   "id": 6,
+   "owner": "human",
+   "text": "Step here and you are pushed 2 squares east. Nothing personal.",
+   "effect": {
+    "kind": "shove",
+    "dir": "east",
+    "amount": 2
+   },
+   "label": "Shove east 2",
+   "summary": "Any piece entering this cell is forced 2 squares east (right). It can capture, stack or set off another trap where it lands.",
+   "icon": "➡️",
+   "cells": [
+    "4,6",
+    "5,4",
+    "5,6"
+   ],
+   "placed": 3,
+   "turn": 6,
+   "hits": {
+    "human": 0,
+    "ai": 0
+   },
+   "interpretedBy": "engine canonical text (V6 opponent)"
+  },
+  {
+   "id": 7,
+   "owner": "ai",
+   "text": "Any piece entering here gets shoved 2 squares west.",
+   "effect": {
+    "kind": "shove",
+    "dir": "west",
+    "amount": 2
+   },
+   "label": "Shove west 2",
+   "summary": "Any piece entering this cell is forced 2 squares west (left). It can capture, stack or set off another trap where it lands.",
+   "icon": "⬅️",
+   "cells": [
+    "4,7",
+    "5,5",
+    "6,5"
+   ],
+   "placed": 3,
+   "turn": 7,
+   "hits": {
+    "human": 0,
+    "ai": 0
+   },
+   "interpretedBy": "engine canonical text (V6 opponent)"
+  }
+ ],
+ "nextId": 8,
+ "winner": null,
+ "winReason": "",
+ "log": [],
+ "stats": {
+  "activePerTurn": [
+   2,
+   4,
+   6,
+   8,
+   11,
+   14,
+   17
+  ]
+ }
+}

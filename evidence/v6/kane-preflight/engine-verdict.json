@@ -1,0 +1,29 @@
+{
+ "player": "human",
+ "ruleText": "Step here and go back to the start. Bye!",
+ "label": "Send home",
+ "cells": [
+  "A1",
+  "A2",
+  "B1"
+ ],
+ "final": "unverified",
+ "stage": "engine",
+ "code": "tier-3",
+ "tier": 3,
+ "message": "Not placed. This rule needs Kane review (tier 3: a new cell could not be entered in the trial); V6 never calls Kane, so unverified rules never go live.",
+ "activated": false,
+ "placedCells": [],
+ "trialId": "T6008",
+ "turn": 8,
+ "effect": {
+  "kind": "home"
+ },
+ "cellKeys": [
+  "0,0",
+  "0,1",
+  "1,0"
+ ],
+ "ms": 71,
+ "note": "As decided by the engine-only referee during the replayed self-play turn. Preserved unchanged; Kane has no authority over it."
+}

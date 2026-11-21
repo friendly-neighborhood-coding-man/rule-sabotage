@@ -105,6 +105,8 @@ export type AITurn = {
   zeroMoves: ZeroMove | null; error: string | null;
   /** V6.2 referee-aware adapter metadata, when that adapter made the decision. */
   ra?: unknown;
+  /** V6.3 latency-bounded variant metadata (deadline outcome, fallback, pre-check), when that variant decided. */
+  budget?: unknown;
 };
 
 /**
@@ -152,7 +154,7 @@ export async function aiTurnV6(s: State, me: Player, policy: Policy53, w: Weight
   return {
     policy, plannerMs, executorMs, verdict, placementBlocked: blocked, events, endEvents, moves: executed, replans,
     plan: plan ? { candidates: plan.candidates, sims: plan.sims, meta: plan.meta, chosen: plan.chosen.summary, score: plan.chosen.score, ranked: plan.ranked.slice(0, 6).map(c => ({ id: c.id, summary: c.summary, score: c.score })) } : null,
-    candidatePlacements: plan?.candidates ?? 0, protectedCells: prot, eligibleCells: elig, zeroMoves, error, ...(plan && 'ra' in plan ? { ra: (plan as { ra: unknown }).ra } : {}),
+    candidatePlacements: plan?.candidates ?? 0, protectedCells: prot, eligibleCells: elig, zeroMoves, error, ...(plan && 'ra' in plan ? { ra: (plan as { ra: unknown }).ra } : {}), ...(plan && 'budget' in plan ? { budget: (plan as { budget: unknown }).budget } : {}),
   };
 }
 export type { Policy53, Meta };

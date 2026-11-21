@@ -411,7 +411,10 @@ function init() {
   // V6: no background Kane reviews, so no review polling.
   $('v6-start').addEventListener('click', () => newGame().catch(e => flash('Could not start: ' + e.message)));
   api('/api/v6/info').then(info => {
-    $('v6-opp').replaceChildren(...info.opponents.map(o => Object.assign(document.createElement('option'), { value: o.id, textContent: `${o.label}${o.slow ? ' (slow)' : ''}` })));
+    // V6.3 pilot defaults (operator decision D3): referee-aware opponents first; originals as baselines; prototypes last.
+    const group = o => (o.pilotDefault ? 0 : o.experimentalPrototype ? 2 : 1), names = ['Pilot opponents (referee-aware)', 'Baselines (original V6 opponents)', 'Experimental prototypes (not for the pilot)'];
+    $('v6-opp').replaceChildren(...[0, 1, 2].map(gi => { const g = document.createElement('optgroup'); g.label = names[gi]; g.append(...info.opponents.filter(o => group(o) === gi).map(o => Object.assign(document.createElement('option'), { value: o.id, textContent: `${o.label}${o.slow ? ' (slow)' : ''}` }))); return g; }));
+    if (info.pilotDefaults?.length) $('v6-opp').value = info.pilotDefaults[0];
     $('v6-ruleset').replaceChildren(...info.rulesets.map(r => Object.assign(document.createElement('option'), { value: r.id, textContent: r.label })));
     const showRule = () => { const r = info.rulesets.find(x => x.id === $('v6-ruleset').value); $('v6-rule').textContent = `Selected for the next game: ${r.noEffectRule}`; };
     $('v6-ruleset').addEventListener('change', showRule); showRule(); $('v6-code').textContent = `V6 code ${info.code}`;

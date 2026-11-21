@@ -1,0 +1,45 @@
+{
+ "runId": "KS1-v6.1-oa-v3-96001-t8",
+ "caseId": "47d4e50c00e1c54be5c0",
+ "plan": {
+  "runId": "KS1-v6.1-oa-v3-96001-t8",
+  "mode": "analyzer",
+  "calls": 1,
+  "retries": 0,
+  "parallel": false,
+  "followUp": false,
+  "ceilingCredits": 30,
+  "maxStepsForEstimate": 9,
+  "historicalAnalyzerCredits": [
+   5.125,
+   9.119,
+   5.9205
+  ],
+  "timeoutS": 180,
+  "hardKillAfterS": 210,
+  "argsTemplate": [
+   "run",
+   "--analyzer-only",
+   "--agent",
+   "--cdp-endpoint",
+   "<local headless Chrome CDP endpoint>",
+   "--timeout",
+   "180",
+   "--condition",
+   "<condition 1 of 6>",
+   "…",
+   "--condition",
+   "<condition 6 of 6>"
+  ],
+  "stopConditions": [
+   "Exactly one kane-cli run process. No retry on any failure, timeout or unparsable output; no second call, no follow-up, nothing in parallel.",
+   "Refuse before starting if: execution disabled in code; no approval / wrong run id; run id already started (ledger); a previous call exceeded or has unknown spend without operator clearance; the CLI is not the real CLI; balance unreadable; balance < 1.5 x ceiling (45); estimate > ceiling.",
+   "The process is killed at 210 s (CLI --timeout 180 s + 30 s). A timeout is NOT a credit limit: credits can be consumed until the process ends.",
+   "After the call: balance is read again. used > 30 => CEILING_EXCEEDED; unreadable => SPEND_UNKNOWN. Either blocks every further paid call until the operator clears it.",
+   "The verdict (or error) is appended to evidence/v6/kane-preflight/kane-verdict.ndjson. Nothing else is written; no game or referee decision changes."
+  ]
+ },
+ "localEstimateCredits": 27.9,
+ "estimateIsNotAHardLimit": true,
+ "warning": "kane-cli offers no provider-side or CLI spending limit. The credit ceiling is a LOCAL ESTIMATE from steps x measured cost per step; one call can consume more before it returns (V3: 107.9 against 80)."
+}

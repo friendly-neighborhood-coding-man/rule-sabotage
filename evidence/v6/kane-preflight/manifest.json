@@ -1,0 +1,52 @@
+{
+ "schema": "rule-sabotage/kane-single-call-case@1",
+ "createdAt": "2026-11-21T10:18:24.071Z",
+ "source": {
+  "game": "oa-v3/96001/ai-first",
+  "policy": "oa-v3",
+  "seed": 96001,
+  "first": "ai",
+  "turn": 8,
+  "side": "human"
+ },
+ "participantData": false,
+ "recordedVerdict": {
+  "game": "oa-v3/96001/ai-first",
+  "turn": 8,
+  "p": "human",
+  "final": "unverified",
+  "stage": "engine",
+  "code": "tier-3",
+  "tier": 3,
+  "label": "Send home",
+  "cells": [
+   "A1",
+   "A2",
+   "B1"
+  ],
+  "message": "Not placed. This rule needs Kane review (tier 3: a new cell could not be entered in the trial); V6 never calls Kane, so unverified rules never go live.",
+  "eligible": 75,
+  "candidates": 12
+ },
+ "placement": {
+  "side": "human",
+  "effect": "Send home",
+  "cells": [
+   "A1",
+   "A2",
+   "B1"
+  ]
+ },
+ "cellNames": [
+  "A1",
+  "A2",
+  "B1"
+ ],
+ "files": {
+  "state-before.json": "44075f74ae149e7492c03153fe1a49fadf8f4927b8037a6203d6ea412b4ff704",
+  "engine-verdict.json": "982d801bcb96e8e864041d81e7d9554b8b5bd93a7e25c08e18323bcde7f84354",
+  "trial-page.html": "0bf8b4791619ff1c2dc4d9ac473e3a71d519fe604da9227c8d1d5159941a3db6",
+  "case.json": "1eb5917895f3a07aa63f3930ff6097970258619b451b516393c6f544f7e2d1c4",
+  "conditions.json": "fc14ed38ecde336904e3690111deb07b4aa5771c2c2f59306301d10272c7634a"
+ }
+}
