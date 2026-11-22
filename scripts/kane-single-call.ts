@@ -20,7 +20,7 @@
  *   5. strict balance read again; 6. parse run_end, require one boolean per condition, append a structured shadow verdict
  *   (incomplete => inconclusive) and keep stdout/stderr verbatim; 7. close Chrome (process tree) and the page server.
  */
-import { readFileSync, existsSync, writeFileSync, mkdirSync } from 'node:fs';
+import { readFileSync, existsSync, writeFileSync, mkdirSync, appendFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { createHash } from 'node:crypto';
 import { createServer as createHttp } from 'node:http';
@@ -135,6 +135,8 @@ export async function prepareBrowser(page: string, chrome = process.env.KANE_CHR
 }
 
 // ------------------------------------------------------------------ the run
+const note = (dir: string, check: string, r: { code: number | null; timedOut: boolean; ms: number; stdout: string; stderr: string }, parsed: unknown) =>
+  appendFileSync(join(dir, 'preflight-checks.ndjson'), JSON.stringify({ at: new Date().toISOString(), check, cli: process.env.KANE_CLI || 'kane-cli', exitCode: r.code, timedOut: r.timedOut, ms: r.ms, parsed, stdout: r.stdout.slice(0, 600), stderr: r.stderr.slice(0, 600) }) + '\n');
 export type RunOutcome = { refused: string | null; spend: unknown; verdict: KaneShadowVerdict | null; disagreement: string | null; runDir: string | null };
 export async function executeSingleCall(o: {
   dir?: string; approval: PaidApproval | null; env?: Record<string, string | undefined>;
@@ -148,8 +150,11 @@ export async function executeSingleCall(o: {
   const out = { stdout: '', stderr: '', code: null as number | null, timedOut: false, ms: 0, firstOutputMs: null as number | null, runEndMs: null as number | null, args: [] as string[] };
   const deps: Deps = {
     ledgerFile: join(dir, 'ledger.ndjson'), env: o.env ?? process.env, ...(o.testOverrides ? { mode: o.testOverrides.mode } : {}),
-    isRealCli: async () => { const r = await capture(['--version'], 20_000); version = r.code === 0 ? strictVersion(r.stdout) : null; return version === EXPECTED_CLI_VERSION || (!!o.testOverrides?.allowTestDouble && version === '0.0.0-test-double'); },
-    balance: async () => { const r = await capture(['balance'], 30_000); return r.code === 0 ? strictBalance(r.stdout, version) : null; },
+    // Every metadata check is recorded verbatim (exit code, timeout, time, output excerpts) in preflight-checks.ndjson, so a
+    // refusal can be explained afterwards. The KS1 manual attempt of 2026-11-22 was refused at this check with no record of why.
+    // 60 s per check: kane-cli may perform an update check over the network before answering.
+    isRealCli: async () => { const r = await capture(['--version'], 60_000); version = r.code === 0 ? strictVersion(r.stdout) : null; note(dir, 'version', r, version); return version === EXPECTED_CLI_VERSION || (!!o.testOverrides?.allowTestDouble && version === '0.0.0-test-double'); },
+    balance: async () => { const r = await capture(['balance'], 60_000); const b = r.code === 0 ? strictBalance(r.stdout, version) : null; note(dir, 'balance', r, b); return b; },
     exec: async (_steps, timeoutS) => {
       out.args = ['run', '--analyzer-only', '--agent', '--cdp-endpoint', browser.cdp, '--timeout', String(timeoutS), ...c.conditions.flatMap(x => ['--condition', x])];
       mkdirSync(runDir, { recursive: true });
@@ -197,7 +202,13 @@ if (process.argv[1]?.endsWith('kane-single-call.ts')) {
     const approval = existsSync(approvalFile) ? JSON.parse(readFileSync(approvalFile, 'utf8')) as PaidApproval : null;
     // The gate is checked BEFORE the browser starts: while execution is disabled nothing at all is launched.
     if (PAID_RESEARCH_EXECUTION === 'disabled') { console.log('REFUSED before any process started: paid research execution is disabled in this workstream (PAID_RESEARCH_EXECUTION)'); process.exitCode = 2; }
-    else { const r = await executeSingleCall({ approval }); console.log(JSON.stringify(r, null, 1)); }
+    else {
+      const r = await executeSingleCall({ approval });
+      console.log(JSON.stringify(r, null, 1));
+      // a gate refusal is a failure of the attempt: exit 2 (the 2026-11-22 attempt wrongly exited 0)
+      if (r.refused) { console.log(`REFUSED by the gate before any Kane run: ${r.refused}`); process.exitCode = 2; }
+      else if (r.verdict && r.verdict.status !== 'approved' && r.verdict.status !== 'rejected') process.exitCode = 3; // ran, inconclusive
+    }
   }
   writeFileSync(join(DIR, 'plan.json'), JSON.stringify({ runId: PLAN.runId, caseId: c.case.caseId, plan: PLAN, coverage: c.coverage, localEstimateCredits: estimate, estimateEnforced: false, estimateIsNotAHardLimit: true, warning: CAP_WARNING }, null, 1) + '\n');
 }

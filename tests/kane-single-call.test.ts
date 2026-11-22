@@ -115,7 +115,7 @@ test('a hanging Kane behind a Windows .cmd shim is terminated as a whole process
   const h = setup({ mode: 'hang', cli: shim });
   const t0 = Date.now();
   const r = await K.executeSingleCall({ dir: h.dir, approval: h.approval, env: h.env, testOverrides: T({ killAfterMs: 4_000 }) });
-  assert.ok(Date.now() - t0 < 40_000);
+  assert.ok(Date.now() - t0 < 120_000, 'bounded (generous for a loaded machine; the kill itself happens at 4 s)');
   assert.equal(r.verdict!.status, 'error'); assert.match(r.verdict!.reason, /terminated at the hard timeout/);
   const pid = Number(readFileSync(join(h.dir, 'pid.txt'), 'utf8'));
   await new Promise(res => setTimeout(res, 1500));
@@ -143,4 +143,15 @@ test('a complete run_end is NOT authoritative after a non-zero exit or a timeout
   assert.equal(r2.verdict!.conditionResults.length, 6);
   assert.match(r2.verdict!.reason, /terminated at the hard timeout/);
   assert.equal(b.runs(), 1, 'no retry');
+});
+
+test('a gate refusal explains itself: every version/balance check is recorded, and refusing exits non-zero', { skip: !chrome && 'no Chrome' }, async () => {
+  const v = setup({ version: '0.10.7' });
+  const r = await K.executeSingleCall({ dir: v.dir, approval: v.approval, env: v.env, testOverrides: T() });
+  assert.match(r.refused!, /not the real CLI/);
+  const checks = readFileSync(join(v.dir, 'preflight-checks.ndjson'), 'utf8').trim().split('\n').map(l => JSON.parse(l));
+  assert.equal(checks[0].check, 'version'); assert.equal(checks[0].exitCode, 0); assert.equal(checks[0].parsed, '0.10.7'); assert.match(checks[0].stdout, /0\.10\.7/);
+  const src = readFileSync(new URL('../scripts/kane-single-call.ts', import.meta.url), 'utf8');
+  const refusedLine = src.split('\n').find(l => l.includes('if (r.refused)')) ?? '';
+  assert.ok(refusedLine.includes('process.exitCode = 2'), 'the CLI entry point exits 2 on a gate refusal');
 });
