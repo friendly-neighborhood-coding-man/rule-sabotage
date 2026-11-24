@@ -1,0 +1,63 @@
+{
+ "runId": "KS1-v6.1-oa-v3-96001-t8",
+ "caseId": "47d4e50c00e1c54be5c0",
+ "exitCode": 0,
+ "timedOut": false,
+ "ms": 81615,
+ "firstOutputMs": 843,
+ "runEndMs": 80325,
+ "cdpReadyMs": 902,
+ "spend": {
+  "before": 10503.2867,
+  "after": 10494.1899,
+  "used": 9.097,
+  "estimate": 27.9,
+  "ceiling": 30,
+  "outcome": "WITHIN_CEILING",
+  "timedOut": false,
+  "exitCode": 0,
+  "error": null,
+  "capKind": "local-estimate-not-enforced"
+ },
+ "verdict": {
+  "schema": "rule-sabotage/v6-kane-shadow@1",
+  "kind": "kane",
+  "caseId": "47d4e50c00e1c54be5c0",
+  "at": "2026-11-24T16:26:08.507Z",
+  "status": "approved",
+  "reason": "run_end with 6/6 boolean condition results, exit code 0",
+  "conditionResults": [
+   true,
+   true,
+   true,
+   true,
+   true,
+   true
+  ],
+  "elapsedMs": 81615,
+  "kaneVersion": "0.10.4",
+  "evidencePath": "D:\\Rule_Sabotage\\rule-sabotage-live\\evidence\\v6\\kane-preflight\\run\\KS1-v6.1-oa-v3-96001-t8",
+  "testDouble": false
+ },
+ "disagreement": "engine-unverified-kane-approved",
+ "conditionReasons": [
+  "Checking paired Symmetry-table outcomes: value: 'true' -> 'true'; equals 'true' -> PASS",
+  "Checking second-visit results in the Symmetry table: value: 'true' -> 'true'; equals 'true' -> PASS",
+  "Reading the chain-reaction report: value: 'true' -> 'true'; equals 'true' -> PASS",
+  "Checking softlock rollout run lengths: value: 'true' -> 'true'; equals 'true' -> PASS",
+  "Comparing chosen placement cells with the per-turn limit: value: 'true' -> 'true'; equals 'true' -> PASS",
+  "Checking the page reports for non-permanent, non-one-sided, non-decisive behavior: value: 'true' -> 'true'; equals 'true' -> PASS"
+ ],
+ "coverage": {
+  "cellsProposed": 3,
+  "cellsWithEntryScenario": 2,
+  "note": "The trial entered only the cells listed in its Symmetry table; any other proposed cell was never entered (here A1). Kane judges the six fixed conditions on this page as it is."
+ },
+ "interpretation": [
+  "Engine decision (preserved): unverified, tier 3, \"a new cell could not be entered in the trial\". Not placed.",
+  "If Kane approves all six fixed conditions: classified engine-unverified-kane-approved (a DISAGREEMENT). This does NOT show the effect is safe or executable: the trial page has entry scenarios for only 2 of the 3 cells; A1 was never entered.",
+  "If Kane rejects any condition: agree-not-approved. If run_end is missing or condition results are incomplete or non-boolean: kane-inconclusive.",
+  "A timeout or a non-zero kane-cli exit code makes the attempt inconclusive (error) even if a complete run_end appeared; the raw condition results are kept as evidence only.",
+  "Nothing is placed in any case. The six-condition protocol (kane-conditions-v4.1) is used unchanged; the coverage limitation is recorded separately."
+ ]
+}

@@ -1,0 +1,11 @@
+{
+  "runId": "KS1-v6.1-oa-v3-96001-t8",
+  "approvedBy": "Eric (account owner), project thread message cmsg_01QpPxhABZC1MVuBCYTu52Uf4Nzc9DDFXAuPJ4zCM2bAat",
+  "approvedAt": "2026-11-21T12:55:59Z",
+  "manualExecutionChosen": "2026-11-21T14:31:36Z",
+  "recordCreatedAt": "2026-11-22T18:35:18Z",
+  "maxCalls": 1,
+  "maxSteps": 9,
+  "ceilingCredits": 30,
+  "acknowledgesNoHardCap": true
+}

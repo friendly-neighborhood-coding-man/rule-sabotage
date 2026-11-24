@@ -1,0 +1,14 @@
+{
+  "runId": "KS1-v6.1-oa-v3-96001-t8",
+  "approvedBy": "Eric (account owner), project thread message cmsg_01QpPxhABZC1MVuBCYTu52Uf4Nzc9DDFXAuPJ4zCM2bAat",
+  "approvedAt": "2026-11-21T12:55:59Z",
+  "manualExecutionChosen": "2026-11-21T14:31:36Z",
+  "attempt": 2,
+  "previousAttempt": "attempt 1 on 2026-11-22T18:35:42Z was refused by the gate at the CLI version check before any Kane run; 0 credits; evidence in attempt-1-refused-2026-11-22/",
+  "secondAttemptApprovedAt": "2026-11-24T16:23:57Z",
+  "recordCreatedAt": "2026-11-24T16:24:32Z",
+  "maxCalls": 1,
+  "maxSteps": 9,
+  "ceilingCredits": 30,
+  "acknowledgesNoHardCap": true
+}
