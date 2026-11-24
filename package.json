@@ -65,6 +65,11 @@
     "v6:pilot-summary": "node --experimental-strip-types --no-warnings=ExperimentalWarning scripts/v6-pilot-summary.ts",
     "evidence:redact-ks1": "node --experimental-strip-types --no-warnings=ExperimentalWarning scripts/evidence-redact.ts",
     "ks1:coverage": "node --experimental-strip-types --no-warnings=ExperimentalWarning scripts/ks1-coverage.ts",
+    "gamewatch:evidence": "node --experimental-strip-types --no-warnings=ExperimentalWarning gamewatch/run-evidence.ts all",
+    "gamewatch:dashboard": "node --experimental-strip-types --no-warnings=ExperimentalWarning gamewatch/dashboard.ts",
+    "gamewatch:groundtruth": "node --experimental-strip-types --no-warnings=ExperimentalWarning --test gamewatch/private/groundtruth.test.ts",
+    "gamewatch:serve": "node --experimental-strip-types --no-warnings=ExperimentalWarning gamewatch/kane/serve.ts",
+    "gamewatch:kane-plan": "node --experimental-strip-types --no-warnings=ExperimentalWarning gamewatch/kane/plan.ts",
     "gameplay:freeze": "node --experimental-strip-types --no-warnings=ExperimentalWarning scripts/gameplay-freeze.ts"
   }
 }

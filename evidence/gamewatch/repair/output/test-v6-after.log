@@ -1,0 +1,54 @@
+
+> rule-sabotage@0.3.0 test:v6
+> node --experimental-strip-types --no-warnings=ExperimentalWarning --test tests/v6*.test.ts
+
+✔ V6.1 is a separate ruleset; V6 stays the default and keeps rule A1 (26.9698ms)
+✔ A2: all 8 neighbours of a FRIENDLY piece are rejected, for both sides (5.9329ms)
+✔ A2: all 8 neighbours of an OPPOSING piece are rejected, for both sides (5.002ms)
+✔ A2 at corners and edges: the closed zone is clipped to the board (9.6259ms)
+✔ A2 mirror parity: a position and its left/right mirror (sides swapped) give the same verdict on every cell (19.6296ms)
+✔ A2: a multi-cell placement with one cell next to an own piece is rejected as a whole; nothing applied (12.9098ms)
+✔ A2: existing effects survive pieces moving next to them and still fire; own removal stays legal (726.5884ms)
+✔ A2 still permits pre-positioned traps and chain reactions (539.8868ms)
+✔ A2: AI candidate generation never includes a closed cell (own or opposing neighbourhood) (2844.0661ms)
+✔ A2: an AI turn with zero eligible cells places nothing and still plays (326.9923ms)
+✔ server: ruleset v6.1 is selectable and enforced server-side with a reason naming the own piece (5128.7187ms)
+✔ shadow: disagreement classification covers every engine/Kane combination (66.1967ms)
+✔ shadow: a case records the engine decision as made; rule-stage refusals are not cases; inputs are not changed (581.8583ms)
+✔ shadow: execution is disabled in code; only a test double runs; Kane has no path to a game (295.1899ms)
+✔ adapter: skips an effect the referee would not place, takes the next placeable plan, never touches the real state (226.7195ms)
+✔ adapter: bounded trials, then the best plan without an effect; the real referee still decides (18.3929ms)
+✔ adapter: the static un-enterable check agrees with the real referee trial on 60 random placements (49501.3057ms)
+✔ pilot: consenting session records facts, answers and shadow cases separately; withdraw deletes all; no consent writes nothing (3288.2454ms)
+✔ latency: cloneState is a full deep copy equal to structuredClone; withFastClone restores the native function (28102.1157ms)
+✔ latency: the optimised parseKey and teleportDestinations give exactly the old results (4.245ms)
+✔ Kane preflight case: one AI self-play tier-3 case, no participant data, files intact and consistent (132.9298ms)
+✔ Kane single call: plan within 30 credits (local estimate, not a hard limit); the gate is disabled; not the production referee path (1163.7716ms)
+✔ budgeted prototype: the pool terminates a planner at its deadline and the warm spare serves the next decision (8482.2144ms)
+✔ budgeted prototype: deadline fallback = no new effect, legal executor moves, recorded; no other policy substituted (323.8162ms)
+✔ pilot defaults: V6.1 + the three referee-aware opponents; originals kept as baselines; prototype flagged (1005.5885ms)
+✔ board is 13 columns x 9 rows; starts are symmetric (3 per side, rows 3/5/7) (20.6692ms)
+✔ movement, board edges, scoring and the win condition on the enlarged board (24.4063ms)
+✔ turn limit: 60 turns, then most across, then fewer squares left (unchanged rule) (3.428ms)
+✔ A1: a new effect is rejected on each of the 8 squares around an opponent piece (and on the piece itself) (4.558ms)
+✔ A1: squares at Chebyshev distance 2 or more are legal; the protected zone is clipped at the board edge (2.5547ms)
+✔ A1: a multi-cell placement that partly touches the protected zone is rejected as a whole, nothing applied (9.7238ms)
+✔ A1 applies to every opposing piece, including stacks and pieces sent home, and not to scored pieces (1.5585ms)
+✔ A1 parity: the same function judges human and AI; mirrored positions give mirrored verdicts on every cell (15.5939ms)
+✔ own-piece adjacency is allowed, and own effects propel own pieces (self-propulsion) (260.8725ms)
+✔ existing effects stay live when an opponent piece walks up to them; own removal stays allowed (255.6906ms)
+✔ AI candidates never include a protected square (all three policies use eligibleCells) (3646.5588ms)
+✔ AI turn when no new effect can be placed anywhere: it plays its moves with no placement attempt (121.0494ms)
+✔ zero-move diagnosis: no legal move vs planner error vs unfavorable (739.5439ms)
+✔ engine replay: recorded actions reproduce the same final state; AI turns are deterministic for a seed (53089.3514ms)
+✔ server: the place endpoint refuses an A1 violation with 422 and a reason; nothing is used up (2279.0918ms)
+✔ frozen 7x7 game and V5.3 policies are untouched; forks are up to date and never reach server/engine.ts (202.4043ms)
+✔ frozen V5.3 implementation hashes still match the preregistered journal (702.751ms)
+ℹ tests 42
+ℹ suites 0
+ℹ pass 42
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 83851.3516

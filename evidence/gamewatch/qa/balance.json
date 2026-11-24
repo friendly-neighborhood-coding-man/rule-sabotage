@@ -1,0 +1,57 @@
+{
+ "note": "Engine statistics from real AI-vs-AI playtests, computed by GameWatch. Not a Kane result. Small samples: read p-values as indicators only.",
+ "builds": {
+  "QX-41": {
+   "games": 16,
+   "firstMoverWins": 8,
+   "decided": 16,
+   "signTestP": 1,
+   "matchedPairs": {
+    "pairs": 8,
+    "firstMoverWonBoth": 2,
+    "secondMoverWonBoth": 2,
+    "split": 4,
+    "signTestP": 1
+   },
+   "actionsMinusPieces": {
+    "firstMover": {
+     "turns": 268,
+     "meanExtraActions": 0,
+     "turnsWithExtra": 0
+    },
+    "secondMover": {
+     "turns": 260,
+     "meanExtraActions": 0,
+     "turnsWithExtra": 0
+    }
+   },
+   "medianTurns": 32
+  },
+  "QX-73": {
+   "games": 16,
+   "firstMoverWins": 10,
+   "decided": 16,
+   "signTestP": 0.454,
+   "matchedPairs": {
+    "pairs": 8,
+    "firstMoverWonBoth": 2,
+    "secondMoverWonBoth": 0,
+    "split": 6,
+    "signTestP": 0.5
+   },
+   "actionsMinusPieces": {
+    "firstMover": {
+     "turns": 200,
+     "meanExtraActions": 1,
+     "turnsWithExtra": 200
+    },
+    "secondMover": {
+     "turns": 190,
+     "meanExtraActions": 0,
+     "turnsWithExtra": 0
+    }
+   },
+   "medianTurns": 23
+  }
+ }
+}

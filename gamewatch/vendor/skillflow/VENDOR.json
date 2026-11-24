@@ -1,0 +1,9 @@
+{
+  "name": "SkillFlow",
+  "repository": "https://github.com/friendly-neighborhood-coding-man/skillflow",
+  "commit": "da9785a030dd62cc0dc7bc2ca522655c2aefdb19",
+  "version": "0.1.0",
+  "license": "MIT (LICENSE in this folder, copied unchanged)",
+  "files": { "runner.py": "315bf5539b1ad37502904a4af4cdcfc37c0cf5f595412e2980d97e1dec69ba0e", "LICENSE": "b7e08ddff56f638ad34b2b5847e184967ef060c226bce4f825f2a57b4c3570f2" },
+  "policy": "Vendored copy, byte-identical to the pinned upstream commit. Never edit here: change upstream, copy the files from the new pinned commit, update commit and checksums here, and run gamewatch/vendor/verify.py --upstream <checkout>."
+}

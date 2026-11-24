@@ -14,3 +14,6 @@ evidence/balance/.loop.lock
 
 # human playtest data (local only, consent-gated; never committed)
 playtest-data/
+server/v6-build-*/
+evidence/gamewatch/raw/
+.gw-run/

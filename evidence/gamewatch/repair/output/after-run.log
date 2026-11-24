@@ -1,0 +1,19 @@
+11 scripted cases; 16 games to play
+  done under-test 97002 human softmax-v2 in 39 s
+  done under-test 97001 human softmax-v2 in 56 s
+  done under-test 97002 ai softmax-v2 in 59 s
+  done under-test 97001 ai softmax-v2 in 73 s
+  done under-test 97003 human softmax-v2 in 54 s
+  done under-test 97003 ai softmax-v2 in 47 s
+  done under-test 97004 human softmax-v2 in 48 s
+  done under-test 97004 ai softmax-v2 in 54 s
+  done under-test 97005 ai softmax-v2 in 37 s
+  done under-test 97005 human softmax-v2 in 50 s
+  done under-test 97006 ai softmax-v2 in 46 s
+  done under-test 97007 human softmax-v2 in 48 s
+  done under-test 97007 ai softmax-v2 in 65 s
+  done under-test 97008 human softmax-v2 in 51 s
+  done under-test 97008 ai softmax-v2 in 45 s
+  done under-test 97006 human softmax-v2 in 134 s
+fatal: not a git repository (or any of the parent directories): .git
+wrote evidence/gamewatch/evidence.json: 11 cases, 16 matches

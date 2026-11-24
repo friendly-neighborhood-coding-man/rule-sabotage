@@ -1,0 +1,63 @@
+{
+ "schema": "gamewatch/repair-freeze@1",
+ "frozenAt": "2026-11-24T20:56:04.148Z",
+ "startedAt": "2026-11-24T20:45:17.508Z",
+ "ms": 635398,
+ "timedOut": false,
+ "limitS": 3300,
+ "agentExit": 0,
+ "report": true,
+ "note": "The coding agent's output, frozen when the agent exited and before any independent evaluation. output/ holds every file it changed or added; hashes are LF-normalised sha256.",
+ "changed": [
+  "server/v6/engine.ts"
+ ],
+ "added": [
+  "after-run.log",
+  "before-run.log",
+  "CLOSED_LOOP_REPORT.md",
+  "evidence/gamewatch/evidence-before.json",
+  "evidence/gamewatch/evidence.json",
+  "gamewatch/closed-loop/compare.ts",
+  "test-v6-after.log",
+  "tests/closed-loop.test.ts"
+ ],
+ "removed": [],
+ "files": {
+  "server/v6/engine.ts": {
+   "before": "d577ef580846c001eca4245a479b9e20c1a33c55dfc75c38597caeed7cbb47c0",
+   "after": "cf648cb8c1dda7faf605748499f13755349731c5e2a900a7b76d3ffd2f524a8a"
+  },
+  "after-run.log": {
+   "before": null,
+   "after": "d97847893985ab56df700d9d8537508132a940f6fd221f9d08a7cf0b6d2db802"
+  },
+  "before-run.log": {
+   "before": null,
+   "after": "96b0057caa4fe15921f63caf5434ee88c2b04f8ff5f23714cfe79be10303fa0a"
+  },
+  "CLOSED_LOOP_REPORT.md": {
+   "before": null,
+   "after": "32cc47f43665a0b85124e21b8d72744515ef1af9e5c1c84014df940b87713e70"
+  },
+  "evidence/gamewatch/evidence-before.json": {
+   "before": null,
+   "after": "7465fe82b8cf85a8a8fa78ed7f2d263c6b2583b5201548a9b7c2a00a99214e6e"
+  },
+  "evidence/gamewatch/evidence.json": {
+   "before": null,
+   "after": "1621ab10b8c4aa8adbe00d1f0092ddd3e760fddaa6169414364cac1705c229af"
+  },
+  "gamewatch/closed-loop/compare.ts": {
+   "before": null,
+   "after": "ac080ac2508731058a42028ae0d8c7104f6881778af311a7b7a11ee707230932"
+  },
+  "test-v6-after.log": {
+   "before": null,
+   "after": "1ee766a8408dfa070fac510341cdf8f62828b7a25c5b7473c3d43cd3ab646d59"
+  },
+  "tests/closed-loop.test.ts": {
+   "before": null,
+   "after": "283a3a86b290e642d698d7c0dd794a0b4891e2d9f796c4a1efbbe7fa53e8da5e"
+  }
+ }
+}

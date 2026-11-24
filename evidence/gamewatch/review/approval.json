@@ -1,0 +1,10 @@
+{
+  "runId": "GW1-blind-review",
+  "approvedBy": "Eric (account owner)",
+  "approvedAt": "2026-11-24T18:50:41.7873836Z",
+  "recordCreatedAt": "2026-11-24T18:50:43Z",
+  "maxCalls": 1,
+  "maxSteps": 80,
+  "ceilingCredits": 300,
+  "acknowledgesNoHardCap": true
+}

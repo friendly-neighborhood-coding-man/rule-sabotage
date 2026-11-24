@@ -1,0 +1,338 @@
+{
+ "rules": 15,
+ "gaps": [],
+ "coverage": {
+  "QX-41": {
+   "R1": [
+    {
+     "pattern": {
+      "type": "score"
+     },
+     "cases": 0,
+     "matches": 73
+    }
+   ],
+   "R2": [
+    {
+     "pattern": {
+      "type": "game-over"
+     },
+     "cases": 0,
+     "matches": 16
+    }
+   ],
+   "R3": [
+    {
+     "pattern": {
+      "type": "turn-start"
+     },
+     "cases": 47,
+     "matches": 0
+    }
+   ],
+   "R4": [
+    {
+     "pattern": {
+      "type": "capture"
+     },
+     "cases": 0,
+     "matches": 96
+    },
+    {
+     "pattern": {
+      "type": "stack"
+     },
+     "cases": 0,
+     "matches": 8
+    }
+   ],
+   "R5": [
+    {
+     "pattern": {
+      "type": "effect-placed"
+     },
+     "cases": 15,
+     "matches": 392
+    },
+    {
+     "pattern": {
+      "refused": "placement"
+     },
+     "cases": 1,
+     "matches": 0
+    }
+   ],
+   "R6": [
+    {
+     "pattern": {
+      "type": "effect-placed"
+     },
+     "cases": 15,
+     "matches": 392
+    }
+   ],
+   "R7": [
+    {
+     "pattern": {
+      "type": "effect-fired",
+      "side": "Human"
+     },
+     "cases": 7,
+     "matches": 226
+    },
+    {
+     "pattern": {
+      "type": "effect-fired",
+      "side": "AI"
+     },
+     "cases": 5,
+     "matches": 243
+    }
+   ],
+   "R8": [
+    {
+     "pattern": {
+      "type": "effect-fired"
+     },
+     "cases": 12,
+     "matches": 469
+    }
+   ],
+   "R9": [
+    {
+     "pattern": {
+      "type": "effect-fired",
+      "minChainDepth": 2
+     },
+     "cases": 2,
+     "matches": 127
+    }
+   ],
+   "R10": [
+    {
+     "pattern": {
+      "type": "forced-move",
+      "how": "shove"
+     },
+     "cases": 4,
+     "matches": 370
+    }
+   ],
+   "R11": [
+    {
+     "pattern": {
+      "type": "status",
+      "status": "freeze"
+     },
+     "cases": 2,
+     "matches": 0
+    }
+   ],
+   "R12": [
+    {
+     "pattern": {
+      "type": "forced-move",
+      "how": "home"
+     },
+     "cases": 0,
+     "matches": 2
+    }
+   ],
+   "R13": [
+    {
+     "pattern": {
+      "type": "forced-move",
+      "how": "teleport"
+     },
+     "cases": 1,
+     "matches": 53
+    }
+   ],
+   "R14": [
+    {
+     "pattern": {
+      "type": "status",
+      "status": "shield"
+     },
+     "cases": 2,
+     "matches": 17
+    }
+   ],
+   "R15": [
+    {
+     "pattern": {
+      "type": "extra-action"
+     },
+     "cases": 3,
+     "matches": 27
+    }
+   ]
+  },
+  "QX-73": {
+   "R1": [
+    {
+     "pattern": {
+      "type": "score"
+     },
+     "cases": 0,
+     "matches": 67
+    }
+   ],
+   "R2": [
+    {
+     "pattern": {
+      "type": "game-over"
+     },
+     "cases": 0,
+     "matches": 16
+    }
+   ],
+   "R3": [
+    {
+     "pattern": {
+      "type": "turn-start"
+     },
+     "cases": 47,
+     "matches": 0
+    }
+   ],
+   "R4": [
+    {
+     "pattern": {
+      "type": "capture"
+     },
+     "cases": 0,
+     "matches": 81
+    },
+    {
+     "pattern": {
+      "type": "stack"
+     },
+     "cases": 0,
+     "matches": 4
+    }
+   ],
+   "R5": [
+    {
+     "pattern": {
+      "type": "effect-placed"
+     },
+     "cases": 15,
+     "matches": 307
+    },
+    {
+     "pattern": {
+      "refused": "placement"
+     },
+     "cases": 1,
+     "matches": 0
+    }
+   ],
+   "R6": [
+    {
+     "pattern": {
+      "type": "effect-placed"
+     },
+     "cases": 15,
+     "matches": 307
+    }
+   ],
+   "R7": [
+    {
+     "pattern": {
+      "type": "effect-fired",
+      "side": "Human"
+     },
+     "cases": 9,
+     "matches": 232
+    },
+    {
+     "pattern": {
+      "type": "effect-fired",
+      "side": "AI"
+     },
+     "cases": 6,
+     "matches": 202
+    }
+   ],
+   "R8": [
+    {
+     "pattern": {
+      "type": "effect-fired"
+     },
+     "cases": 15,
+     "matches": 434
+    }
+   ],
+   "R9": [
+    {
+     "pattern": {
+      "type": "effect-fired",
+      "minChainDepth": 2
+     },
+     "cases": 2,
+     "matches": 112
+    }
+   ],
+   "R10": [
+    {
+     "pattern": {
+      "type": "forced-move",
+      "how": "shove"
+     },
+     "cases": 4,
+     "matches": 317
+    }
+   ],
+   "R11": [
+    {
+     "pattern": {
+      "type": "status",
+      "status": "freeze"
+     },
+     "cases": 2,
+     "matches": 0
+    }
+   ],
+   "R12": [
+    {
+     "pattern": {
+      "type": "forced-move",
+      "how": "home"
+     },
+     "cases": 1,
+     "matches": 0
+    }
+   ],
+   "R13": [
+    {
+     "pattern": {
+      "type": "forced-move",
+      "how": "teleport"
+     },
+     "cases": 1,
+     "matches": 80
+    }
+   ],
+   "R14": [
+    {
+     "pattern": {
+      "type": "status",
+      "status": "shield"
+     },
+     "cases": 2,
+     "matches": 13
+    }
+   ],
+   "R15": [
+    {
+     "pattern": {
+      "type": "extra-action"
+     },
+     "cases": 5,
+     "matches": 24
+    }
+   ]
+  }
+ }
+}

@@ -1,0 +1,23 @@
+{
+ "schema": "rule-sabotage/evidence-correction-record@1",
+ "appliedAt": "2026-11-24T22:47:24.442Z",
+ "status": "Redacted in place. Pass 2 left the share path and share identifier of the Kane test URL published; this pass replaces the whole value. The previous published version is in git history at c17bc50.",
+ "rules": [
+  {
+   "id": "kane-test-url-whole-value",
+   "reason": "Whole Kane test URL value, including the share path and share identifier."
+  }
+ ],
+ "files": [
+  {
+   "file": "evidence/gamewatch/review/run/GW1-blind-review/stdout.ndjson",
+   "beforeSha256Lf": "6e70a6c788d6a118d564d3b7014be72932784d2d2069d6878cf19e6f34e3198f",
+   "publishedSha256Lf": "dc8484aeaa06f0eedd4912d22342003924350d09ce9c5b5ba68e7c11ceb07012",
+   "redacted": true,
+   "rulesApplied": {
+    "kane-test-url-whole-value": 1
+   }
+  }
+ ],
+ "notRedactedHere": "Kane test URLs in older V2/V3 evidence (evidence/balance/v2-runs/.../kane-stdout.ndjson, evidence/balance/v3/kane/.../kane-stdout.ndjson) are hash-locked by their journals, manifests and the frozen GW1 repair baseline; left for an operator decision."
+}

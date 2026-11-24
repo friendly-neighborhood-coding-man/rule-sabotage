@@ -1,5 +1,13 @@
 # Rule Sabotage
 
+> **Hackathon submission: GameWatch**, a Kane-powered game QA SkillBook, with Rule Sabotage as its demonstration game.
+> Result of the blind experiment (GW1): one Kane call detected 2 of 3 planted defects; one coding-agent repair attempt
+> fixed all 3 (it found the third itself), verified independently after the output was frozen.
+> Start at [`docs/SUBMISSION.md`](docs/SUBMISSION.md), [`gamewatch/README.md`](gamewatch/README.md) (quick start) and
+> [`docs/GW1_FINAL_REPORT.md`](docs/GW1_FINAL_REPORT.md) (results and limitations). GameWatch runs on **SkillFlow**, a
+> separate MIT-licensed runner (https://github.com/friendly-neighborhood-coding-man/skillflow), vendored unmodified at a
+> pinned commit in `gamewatch/vendor/skillflow/` (no download needed). The playable game is the clean V6.1 baseline.
+
 **Write effects in plain English (or Korean), scatter them over the board, then survive your own inventions.**
 
 A small human-vs-AI strategy race on a 7×7 board. You move 3 pieces from column A to column G; the AI moves 3 pieces the other way. Players take turns, and a coin flip decides who starts.
