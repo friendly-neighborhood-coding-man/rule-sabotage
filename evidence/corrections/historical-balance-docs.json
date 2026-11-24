@@ -22,25 +22,34 @@
    "file": "docs/BALANCE_LOOP_RESULT.md",
    "originalSha256": "e8b0e89620a2aa172ee05e432797316554d2f898d64283af6d87a8cb9aa48de3",
    "publishedSha256": "ccd13ea8950e16390d19e9b0358677fd5b3e78b9c0c91c80e4d1c06427971084",
-   "balancesRedacted": 2
+   "balancesRedacted": 2,
+   "originalSha256LF": "e8b0e89620a2aa172ee05e432797316554d2f898d64283af6d87a8cb9aa48de3",
+   "publishedSha256LF": "ccd13ea8950e16390d19e9b0358677fd5b3e78b9c0c91c80e4d1c06427971084"
   },
   {
    "file": "docs/BALANCE_V2_KANE_RESULT.md",
    "originalSha256": "436e39f7d882b7adf7c48287e41cb47aa4d56ef2b83fc07180aea44c0eb2f912",
    "publishedSha256": "7c55820b9e4197e3b62342f6f1cbde80875d979488d62b415b126e4bdc264393",
-   "balancesRedacted": 6
+   "balancesRedacted": 6,
+   "originalSha256LF": "436e39f7d882b7adf7c48287e41cb47aa4d56ef2b83fc07180aea44c0eb2f912",
+   "publishedSha256LF": "7c55820b9e4197e3b62342f6f1cbde80875d979488d62b415b126e4bdc264393"
   },
   {
    "file": "docs/BALANCE_V3_VALIDATION_RESULT.md",
    "originalSha256": "587c2b784f3daa35818579a1d5a724e0555f45ca44e9a31b75e082ffafd791a7",
    "publishedSha256": "16ab9f6a87b0686da1470cac9798ac2dff2007d6de7c3e80b023774db49d2958",
-   "balancesRedacted": 2
+   "balancesRedacted": 2,
+   "originalSha256LF": "587c2b784f3daa35818579a1d5a724e0555f45ca44e9a31b75e082ffafd791a7",
+   "publishedSha256LF": "16ab9f6a87b0686da1470cac9798ac2dff2007d6de7c3e80b023774db49d2958"
   },
   {
    "file": "docs/EVIDENCE.md",
    "originalSha256": "d379d5f478496bd9a903df490996ac6d9d732dbbd44676bd5f28a34a3f8026c0",
    "publishedSha256": "074f735717114cbee202b98e6bd86bbf6a1fdda21e2af47dbc765266e4133c9c",
-   "balancesRedacted": 2
+   "balancesRedacted": 2,
+   "originalSha256LF": "7707f27dc56f3e953e305ce8f7f375c414f01751fc2674ad7c7aab14eeb36ecf",
+   "publishedSha256LF": "181d6e95b8f2697693746fc76c4a498ee93ef4b8dbc69ff48c6ca43106428da2"
   }
- ]
+ ],
+ "hashNote": "originalSha256 / publishedSha256 are over the Windows working-copy bytes (CRLF line endings, as copied privately); the *LF fields are over LF-normalised text, which matches the files as stored in Git."
 }
