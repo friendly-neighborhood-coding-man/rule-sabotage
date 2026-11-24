@@ -77,17 +77,22 @@ test('coverage rules: a fully entered entry-independent placement is COMPLETE; e
   assert.equal(cb.requirements.length, 8);
 });
 
-test('public evidence: every redaction rule is narrow; the originals stay unchanged; the proposal matches its correction record', () => {
+test('public evidence: every redaction rule is narrow; the published files match the APPLIED correction record and hold no sensitive values', () => {
   const r = R.redact('{"type":"recording_state","session_id":"8eaec214-8259-40a5-9b72-6d73bfb3d0f4","pid":34000} D:\\\\Rule_Sabotage\\\\rule-sabotage-live\\\\evidence C:/Program Files/Google/Chrome/Application/chrome.exe "approvedBy": "Eric (account owner), project thread message cmsg_ABC123" D:\\Temp\\rs-kane-ks1-UEPEpK D:/Tools/npm-global/kane-cli.cmd');
   assert.doesNotMatch(r.text, /8eaec214|34000|Rule_Sabotage|Program Files|cmsg_|UEPEpK|Tools/);
   assert.match(r.text, /Eric \(account owner\)/); assert.match(r.text, /recording_state/);
-  assert.equal(R.redact('{"before":10503.2867,"used":9.097}').text, '{"before":10503.2867,"used":9.097}', 'balances only by the optional rule');
-  assert.equal(execFileSync('git', ['status', '--porcelain', '--', 'evidence/v6/kane-preflight'], { cwd: ROOT, encoding: 'utf8' }).trim(), '', 'originals unchanged');
-  const rec = JSON.parse(readFileSync(new URL('../evidence/v6/kane-preflight-public-proposed/CORRECTION_RECORD.json', import.meta.url), 'utf8'));
-  assert.match(rec.status, /PROPOSED, not applied/);
+  // the applied set also redacts absolute balances, but keeps the consumption
+  assert.equal(R.redact('{"before":10503.2867,"after":10494.1899,"used":9.097} Available credits: 10503.2867', R.APPLIED_RULES).text, '{"before":"<redacted:balance>","after":"<redacted:balance>","used":9.097} Available credits: <redacted:balance>');
+  void execFileSync; void ROOT;
+  const rec = JSON.parse(readFileSync(new URL('../evidence/v6/kane-preflight/CORRECTION_RECORD.json', import.meta.url), 'utf8'));
+  assert.match(rec.status, /^APPLIED/); assert.match(rec.historyNote, /not done/);
+  assert.equal(rec.metering.consistent, true); assert.equal(rec.metering.balanceDeltaUsed, 9.097);
   for (const f of rec.files) {
-    assert.equal(createHash('sha256').update(readFileSync(new URL(`../${f.file}`, import.meta.url))).digest('hex'), f.originalSha256, f.file);
-    if (f.redacted) { const t = readFileSync(new URL(`../${f.proposedFile}`, import.meta.url), 'utf8'); assert.equal(createHash('sha256').update(t).digest('hex'), f.proposedSha256); assert.doesNotMatch(t, /session_id":"[0-9a-f]|[A-Za-z]:[\\/]+(Rule_Sabotage|Temp|Tools|Program Files)|cmsg_/, f.proposedFile); }
+    const t = readFileSync(new URL(`../${f.file}`, import.meta.url));
+    assert.equal(createHash('sha256').update(t).digest('hex'), f.publishedSha256, f.file);
+    assert.doesNotMatch(t.toString('utf8'), /session_id":"[0-9a-f]|[A-Za-z]:[\\/]+(Rule_Sabotage|Temp|Tools|Program Files)|cmsg_|"pid":\d|1\d{4}\.\d{2,}/, f.file);
   }
+  const ledger = readFileSync(new URL('../evidence/v6/kane-preflight/ledger.ndjson', import.meta.url), 'utf8').trim().split('\n').map(l => JSON.parse(l));
+  assert.equal(ledger.find(e => e.event === 'call-end').detail.used, 9.097, 'credit consumption preserved');
   assert.ok(existsSync(new URL('../evidence/v6/ks1-evaluation/ks1-evaluation-record.json', import.meta.url)));
 });

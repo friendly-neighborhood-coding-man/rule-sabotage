@@ -9,7 +9,7 @@ Status: **READY_FOR_OPERATOR_KANE_KS1_RESULT_REVIEW**
 | Engine decision (unchanged) | **unverified**, tier 3, "a new cell could not be entered in the trial"; not placed |
 | Kane result | **all six conditions true** (`run_end` status passed, 6/6 boolean results, exit code 0, no timeout) |
 | Classification | **`engine-unverified-kane-approved`** (a disagreement) |
-| Credits | **9.097** (balance 10,503.2867 → 10,494.1899); Kane's own `run_end` reports 9.0968. WITHIN the 30-credit operating ceiling, which is not a hard limit |
+| Credits | **9.097** (balance before minus balance after; absolute balances redacted, see `evidence/v6/kane-preflight/CORRECTION_RECORD.json`); Kane's own `run_end` reports 9.0968. WITHIN the 30-credit operating ceiling, which is not a hard limit |
 | Time | 81.6 s for the call (run_end after 80.3 s); Chrome showed the page in 0.9 s |
 | Process | exited normally with code 0; the 210 s process-tree kill was not needed |
 | Gate | restored to `disabled` immediately after; token cleared; gate file identical to the commit (script's final checks all True) |

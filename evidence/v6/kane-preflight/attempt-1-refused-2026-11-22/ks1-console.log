@@ -70,7 +70,7 @@
  "estimateEnforced": false,
  "warning": "kane-cli offers no provider-side or CLI spending limit. The credit ceiling is a LOCAL ESTIMATE from steps x measured cost per step; one call can consume more before it returns (V3: 107.9 against 80)."
 }
-note: temporary Chrome profile not removed (EPERM, Permission denied: 'D:\Temp\rs-kane-ks1-UEPEpK'); it is outside the repository
+note: temporary Chrome profile not removed (EPERM, Permission denied: '<local-temp>/rs-kane-ks1-<id>'); it is outside the repository
 {
  "refused": "kane-cli is not the real CLI",
  "spend": null,

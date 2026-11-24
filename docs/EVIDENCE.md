@@ -72,7 +72,7 @@ Every run exited with code 0.
 | V4 | 109–175 s |
 | 1917d6c | 82–115 s |
 
-**Credits.** This trial used about 60 Kane credits (10762.09 → 10701.78).
+**Credits.** This trial used about 60 Kane credits ([balance redacted] → [balance redacted]).
 
 **Evidence files:**
 - the report: `evidence/kane/live-2026-11-17T18-51-04-452Z.md` and `.json`

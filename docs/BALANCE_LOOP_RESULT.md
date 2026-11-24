@@ -8,7 +8,7 @@
 | Commit / engine | `d1fe2d784a552d9dd413876d244d5047b3c5c08d` / engine source `0c9d5055ebaba086` |
 | Weights | `0.3.0#ddcf941c285bd537` = Rule Space V0.3 human-prior-v0, weightMix 0.3 |
 | Seeds | training 1000–1011, held-out 5000–5011, each played twice (Human side starts, then AI side starts) |
-| Kane | kane-cli 0.10.4, 2 calls, **11.841 credits** (10677.397 → 10665.556), 150.4 s and 52.9 s |
+| Kane | kane-cli 0.10.4, 2 calls, **11.841 credits** ([balance redacted] → [balance redacted]), 150.4 s and 52.9 s |
 | Games | 168 (24 baseline + 24 held-out baseline + 5 × 24 candidates), 0 illegal moves, 0 engine errors, 0 softlocks |
 | Wall time | 14:21:47 → 14:37:28 UTC (15 min 41 s) |
 
