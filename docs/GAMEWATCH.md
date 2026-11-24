@@ -1,0 +1,107 @@
+# GameWatch: Kane-powered game QA, blind fault-injection demonstration
+
+Status: **READY_FOR_OPERATOR_GAMEWATCH_BLIND_EVALUATION**. No Kane call was made. Built on PR #20 (`7d2f34f`).
+
+GameWatch is a small, portable QA harness: it takes evidence from a game's **existing** playtests (scripted runs, AI
+self-play, human sessions), presents it as an anonymous evidence site, has Kane review it blind, and hands the findings
+to a coding agent that must reproduce, fix and re-verify them. Rule Sabotage V6.1 is the demonstration game. Nothing new
+was simulated: every record comes from the game's own engine, referee and opponents.
+
+> This document describes the experiment and is for the operator. It is excluded from the coding agent's blind
+> workspace. Kane never sees the repository; it sees only the evidence site.
+
+## The three areas in scope
+
+| Area | Files |
+|---|---|
+| 1. Evidence collection from existing playtests | `gamewatch/run-evidence.ts` (scripted playtests + matched AI-vs-AI games on the existing `softmax-v2` opponent, 4 workers), `gamewatch/scenarios.ts` |
+| 2. Portable adapter + documented input contract | `gamewatch/INPUT_CONTRACT.md`, `gamewatch/evidence.ts` (types), `gamewatch/adapters/rule-sabotage.ts` (the only file that imports the game), `gamewatch/dashboard.ts` (reads the bundle only) |
+| 3. Kane QA skill harness | `gamewatch/skill/SKILL.md`, `gamewatch/kane/serve.ts` (loopback site + findings form), `gamewatch/kane/plan.ts` (dry-run plan, never starts kane-cli), `gamewatch/closed-loop/` (blind workspace export + agent brief), `gamewatch/private/score.ts` |
+
+## Playable variants and isolation
+
+The normal playable game (`server/v6/`, `npm run play:v6`) is **unchanged**. `gamewatch/builds.ts` materializes builds as
+git-ignored copies `server/v6-build-<label>/` (siblings of `server/v6/`, so imports resolve unchanged) and applies a
+build's source changes as exact text replacements that must match once. Each change is separately switchable.
+
+| Build | Contents | Shown to Kane as |
+|---|---|---|
+| `QX-41` | clean V6.1 (byte-identical copy) | "Build QX-41" |
+| `QX-73` | three planted changes (private manifest) | "Build QX-73" |
+| `gt-clean`, `gt-B1`, `gt-B2`, `gt-B3` | one change each | never (private tests only) |
+
+Both evidence builds are fully playable through the same code paths (`aiTurnV6`, `refereeV6`, `applyMove`, `endTurn`).
+
+## Ground truth (frozen before any Kane call)
+
+Private: `gamewatch/private/` (`mutations.json` = exact source changes and intended violations, `GROUND_TRUTH.md`,
+`probes.ts`, `groundtruth.test.ts`, `score.ts`, `FREEZE.json` = sha256 of the manifest, tests, tools, scenarios, bundle
+and every site page). `npm run gamewatch:groundtruth`: **8/8 pass**: the clean build shows none of the defects, each
+single-mutation build shows exactly its own, controls match clean everywhere, and the clean build equals the playable
+engine byte for byte.
+
+**The referee does not hide the planted defects** (checked): all three appear in real play with the unchanged referee.
+An earlier candidate (an owner-dependent freeze duration) would have been caught by the referee's own symmetry check
+E2, so it was not used.
+
+## Evidence produced (real runs, `evidence/gamewatch/`)
+
+* 11 scripted playtests × 2 builds = **22 cases**; all 32 scripted placements went through the real referee: 30 engine-approved on
+  both builds alike, and the 2 placements next to a piece refused on both builds, as rule R5 requires.
+* **32 AI-vs-AI games**: seeds 97001–97008 × first mover swapped × 2 builds, `softmax-v2` in both seats (about 6–36 s
+  per game).
+* Site: 56 static pages (`evidence/gamewatch/site/`): rules R1–R15, playtest source, builds, case pages with state
+  before/after and engine events for every step, match pages per turn, aggregate balance indicators, findings form.
+  Checked for leaks: no labels, manifest ids, expected verdicts or defect counts.
+
+What the evidence shows (my reading, for the operator; Kane does not see this):
+
+| Signal | QX-41 | QX-73 |
+|---|---|---|
+| shield absorbed a trap, Human / AI pieces (16 games) | 3 / 3 | 0 / 4 |
+| effect cells that fired more than once | 0 | 36 |
+| first-mover seat: actions granted vs own pieces per turn | 2.03 vs 2.03 | 2.91 vs 1.91 |
+| games won by the first mover | 8/16 | 10/16 (not significant at this size) |
+| median turns | 32 | 21 |
+
+Each scripted case pair shows the corresponding difference step by step (case ids in `GROUND_TRUTH.md`).
+
+## Proposed Kane evaluation (prepared, NOT run)
+
+`npm run gamewatch:kane-plan` prints it and verifies the frozen inputs. One **objective-mode** call
+(`kane-cli run "<objective>" --url http://127.0.0.1:3210/index.html --agent --headless --max-steps 25 --timeout 600`)
+over the loopback site; Kane submits up to 6 findings through the report form, each with a category (confirmed
+observable anomaly / suspected bug needing reproduction / balance hypothesis / clean), cited case/match ids, a
+reproduction and a suggested fix. The objective is neutral: it names the kinds of problems to look for (rule
+violations, inconsistency, life-cycle, balance) as the brief asked, never which, where or how many.
+
+* Why not analyzer mode: it only answers fixed boolean conditions; writing conditions that can catch these defects
+  would reveal them. Analyzer mode cannot generate unrestricted bug reports and this plan does not claim it can.
+* Credits: the one earlier objective call (KX1) cost **40.09**; the gate formula gives 77.5 worst case; operating
+  ceiling 80 (not a hard cap: kane-cli 0.10.4 has no credit limit). One call, no retry, balance read before and after.
+* Risk: 25 steps cannot open all 56 pages; Kane may report only what the index aggregates show. That is measured, not
+  hidden.
+* Execution needs a runner on the operator's machine like `ks1-manual-run.ps1` (gate, approval token, strict balance
+  reads). It is not written yet: it should be prepared only once the operator approves this plan.
+
+## Closed loop (prepared)
+
+1. Operator: `node --experimental-strip-types gamewatch/closed-loop/export-workspace.ts QX-73 <dir> notes.ndjson`.
+   The workspace is a history-free copy in which `server/v6/engine.ts` is the build under test and `gamewatch/private/`,
+   this document and the evidence bundle are removed. The agent must also be run without network/repository access.
+2. Coding agent: follows `gamewatch/closed-loop/AGENT_BRIEF.md` (reproduce each finding with a scripted playtest, fix,
+   re-run the same scripts and matched games, write `CLOSED_LOOP_REPORT.md`).
+3. Operator: `node --experimental-strip-types gamewatch/private/score.ts <agent's engine.ts> notes.ndjson` re-runs the
+   frozen probes on the corrected engine (B1/B2/B3 fixed or still present, controls unchanged or regression) and prints
+   Kane's findings next to the ground truth for manual labelling: true detection, missed, false positive, unsupported.
+   (Checked on the unfixed build: all three "still present"; on the clean engine: all "fixed", controls unchanged.)
+
+## Commands
+
+```
+npm run gamewatch:evidence      # materialize builds, 22 cases + 32 games -> evidence/gamewatch/evidence.json
+npm run gamewatch:dashboard     # -> evidence/gamewatch/site/
+npm run gamewatch:groundtruth   # private reproduction tests
+npm run gamewatch:serve         # loopback review server (no Kane)
+npm run gamewatch:kane-plan     # dry-run plan + frozen-input check (no Kane)
+```
