@@ -1,0 +1,117 @@
+{
+ "schema": "rule-sabotage/ks1-evaluation-record@1",
+ "caseId": "47d4e50c00e1c54be5c0",
+ "createdAt": "2026-11-24T16:38:39.632Z",
+ "rebuiltTrialMatchesRecordedDecision": true,
+ "symmetryRows": [
+  {
+   "scenario": "T8001-S1",
+   "cell": "A2",
+   "from": "B2",
+   "dir": "left",
+   "identical": true
+  },
+  {
+   "scenario": "T8001-S2",
+   "cell": "B1",
+   "from": "C1",
+   "dir": "left",
+   "identical": true
+  }
+ ],
+ "conditionSatisfaction": {
+  "protocol": "kane-conditions-v4.1 (six fixed conditions, unchanged)",
+  "results": [
+   true,
+   true,
+   true,
+   true,
+   true,
+   true
+  ],
+  "allTrue": true,
+  "source": "Kane KS1 call 2026-11-24 (evidence/v6/kane-preflight/shadow/kane.ndjson)"
+ },
+ "trialCoverage": {
+  "status": "INCOMPLETE_EVIDENCE",
+  "requirements": [
+   {
+    "cell": "A1",
+    "side": "any",
+    "covered": false,
+    "by": null
+   },
+   {
+    "cell": "A2",
+    "side": "any",
+    "covered": true,
+    "by": "T8001-S1"
+   },
+   {
+    "cell": "B1",
+    "side": "any",
+    "covered": true,
+    "by": "T8001-S2"
+   }
+  ],
+  "missing": [
+   "A1"
+  ],
+  "entryRelative": false,
+  "note": "Some required scenarios were never run. This is missing evidence, not evidence that the effect is unsafe."
+ },
+ "refereeDecision": {
+  "by": "engine-only referee",
+  "final": "unverified",
+  "tier": 3,
+  "activated": false,
+  "unchanged": true
+ },
+ "independentSafetyEvidence": {
+  "status": "NONE",
+  "note": "Neither the six fixed conditions nor the trial scenarios are an independent safety or correctness proof."
+ },
+ "supplementaryScenarios": {
+  "method": "pre-burn: enter from the first in-board neighbour (left, right, up, down) after removing that neighbour's effect in the sandbox copy only (EXPERIMENTAL, not used by any referee)",
+  "scenarios": [
+   {
+    "cell": "A1",
+    "enteredFrom": "B1",
+    "dir": "left",
+    "preBurned": "B1",
+    "human": {
+     "fired": true,
+     "effectSeen": "Send home",
+     "endSquare": "own start square",
+     "reachedGoal": false,
+     "frozenTurns": 0,
+     "shield": false,
+     "extraActions": 0,
+     "chain": [
+      "A1"
+     ]
+    },
+    "ai": {
+     "fired": true,
+     "effectSeen": "Send home",
+     "endSquare": "own start square",
+     "reachedGoal": false,
+     "frozenTurns": 0,
+     "shield": false,
+     "extraActions": 0,
+     "chain": [
+      "A1"
+     ]
+    },
+    "identical": true,
+    "fired": true,
+    "secondVisitFired": {
+     "human": false,
+     "ai": false
+    }
+   }
+  ],
+  "status": "all supplementary scenarios symmetric, fired once"
+ },
+ "overall": "INCOMPLETE_EVIDENCE"
+}

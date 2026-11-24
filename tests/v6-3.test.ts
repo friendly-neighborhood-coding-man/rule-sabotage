@@ -45,12 +45,12 @@ test('Kane single call: plan within 30 credits (local estimate, not a hard limit
 test('budgeted prototype: the pool terminates a planner at its deadline and the warm spare serves the next decision', async () => {
   const { PlannerPool } = await import('../server/v6/budgeted.ts');
   const { planningView } = await import('../server/v6/turn.ts');
-  const slow = JSON.parse(readFileSync(new URL('../evidence/v6/v6-2-replay.json', import.meta.url), 'utf8')).positions.find((p: { policy: string }) => p.policy === 'ev-k1.2');
+  const slow = JSON.parse(readFileSync(new URL('../evidence/v6/v6-2-replay.json', import.meta.url), 'utf8')).positions.find((p: { game: string; turn: number }) => p.game === 'oa-v3/96001/human-first' && p.turn === 7); // needs > 8 s even with the V6.2 speed-ups (terminated in the V6.3 latency run)
   const pool = new PlannerPool();
   try {
     const warm = await pool.run('softmax-v2', planningView(E.init(5, { ruleset: E.RULESET_V61, first: 'ai' })), 'ai', 180_000); // generous: under the full parallel test suite a fresh worker can take long to start
     assert.ok(warm.plan, warm.error);
-    const t = await pool.run('ev-k1.2', planningView(slow.state), slow.p, 300);
+    const t = await pool.run('oa-v3', planningView(slow.state), slow.p, 300);
     assert.equal(t.timedOut, true); assert.ok(t.ms < 2_000, `terminated after ${t.ms} ms`);
     assert.equal(typeof pool.lastRespawnMs, 'number');
     const next = await pool.run('softmax-v2', planningView(E.init(6, { ruleset: E.RULESET_V61, first: 'ai' })), 'ai', 180_000); // generous: under the full parallel test suite a fresh worker can take long to start

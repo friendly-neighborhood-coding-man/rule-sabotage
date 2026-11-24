@@ -10,6 +10,8 @@ import { join } from 'node:path';
 process.env.KANE_REFEREE = 'off';
 const DATA = mkdtempSync(join(tmpdir(), 'rs-v62-'));
 process.env.PLAYTEST_DATA_DIR = DATA;
+const SHADOW = DATA + '-kane-shadow';
+process.env.V6_KANE_SHADOW_DIR = SHADOW; // Kane evaluation data lives outside the pilot data directory
 const realFetch = globalThis.fetch;
 const E = await import('../server/v6/engine.ts');
 const { makeEffect } = await import('../server/rules.ts');
@@ -20,7 +22,7 @@ const RA = await import('../server/v6/referee-aware.ts');
 type State = import('../server/v6/engine.ts').State;
 type Player = import('../server/rules.ts').Player;
 const W8 = loadWeights();
-test.after(() => rmSync(DATA, { recursive: true, force: true }));
+test.after(() => { rmSync(DATA, { recursive: true, force: true }); rmSync(SHADOW, { recursive: true, force: true }); });
 
 const k = (x: number, y: number) => `${x},${y}`;
 const pl = (cells: string[], effect = makeEffect('freeze')) => ({ text: 'test effect', effect, cells, interpretedBy: 'test' });
@@ -182,13 +184,14 @@ test('pilot: consenting session records facts, answers and shadow cases separate
     const ans = JSON.parse(readFileSync(join(DATA, 'feedback', `${sid}.ndjson`), 'utf8').trim());
     assert.deepEqual(ans.ratings, { enjoyment: 4, challenge: null, predictability: null, strategicChoice: null, playAgain: null }, 'invalid or missing answers stay null');
     assert.deepEqual(ans.tags, ['too-slow']);
-    const shadow = new K.ShadowLog(join(DATA, 'kane-shadow', sid)).read();
+    const shadow = new K.ShadowLog(join(SHADOW, sid)).read();
+    assert.ok(!existsSync(join(DATA, 'kane-shadow')), 'no Kane data inside the pilot data directory');
     assert.ok(shadow.cases.some(x => x.proposer === 'human' && x.engine.final === 'engine-approved'), 'the human placement became a shadow case');
     assert.equal(shadow.verdicts.length, 0, 'no Kane verdict exists: nothing was run');
     const rv = await call(`/api/v6/review/${g.j.gameId}`, undefined, cookie); assert.equal(rv.j.recorded, true);
     const w = await call('/api/v6/withdraw', {}, cookie);
     assert.ok(w.j.removedFiles >= 3);
-    assert.ok(!existsSync(join(DATA, 'telemetry', `${sid}.ndjson`)) && !existsSync(join(DATA, 'feedback', `${sid}.ndjson`)) && !existsSync(join(DATA, 'kane-shadow', sid)));
+    assert.ok(!existsSync(join(DATA, 'telemetry', `${sid}.ndjson`)) && !existsSync(join(DATA, 'feedback', `${sid}.ndjson`)) && !existsSync(join(SHADOW, sid)));
     // no consent: plays, writes nothing
     const n = await call('/api/v6/session', { consent: false }, '');
     const ncookie = n.setCookie!.split(';')[0], nid = ncookie.split('=')[1];

@@ -3,9 +3,9 @@
  "inspectedAt": "2026-11-21T12:30:00Z",
  "authorization": "Operator verdict on PR #18: METADATA-ONLY GO (kane-cli --version, whoami, balance, run --help). No kane-cli run with a task or page was executed.",
  "commandsRun": ["kane-cli --version", "kane-cli whoami", "kane-cli balance", "kane-cli run --help"],
- "cli": { "path": "D:/Tools/npm-global/kane-cli.cmd", "version": "0.10.4", "updateAvailable": "0.10.7 (NOT installed; the runner accepts exactly 0.10.4 and refuses any other version)" },
- "login": { "authenticated": true, "environment": "prod", "method": "oauth", "token": "valid", "identity": "redacted (not recorded)" },
- "balance": { "availableCredits": 10503.2867, "format": "one line 'Available credits: <number>' after optional update notices (parsed strictly)" },
+ "cli": { "path": "<npm-global>/kane-cli.cmd", "version": "0.10.4", "updateAvailable": "0.10.7 (NOT installed; the runner accepts exactly 0.10.4 and refuses any other version)" },
+ "login": { "authenticated": true },
+ "balance": { "availableCredits": "<redacted:balance>", "format": "one line 'Available credits: <number>' after optional update notices (parsed strictly)" },
  "analyzerMode": {
   "flag": "--analyzer-only: judge each --condition against the current page and report verdicts on run_end; no objective, no actions, nothing saved; agent mode only",
   "conditions": "--condition <text>, repeatable, order preserved in condition_results",
@@ -17,5 +17,5 @@
   "credits": "NONE: kane-cli 0.10.4 has no spending, credit or budget option. Spend is only measurable as the balance difference before/after"
  },
  "contextFiles": { "global": "~/.testmuai/kaneai/global-memory.md: absent", "local": ".testmuai/context.md in the repo: absent" },
- "chrome": "C:/Program Files/Google/Chrome/Application/chrome.exe"
+ "chrome": "<chrome>"
 }

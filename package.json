@@ -62,6 +62,9 @@
     "kane:preflight-case": "node --experimental-strip-types --no-warnings=ExperimentalWarning scripts/kane-preflight-case.ts",
     "kane:single-call": "node --experimental-strip-types --no-warnings=ExperimentalWarning scripts/kane-single-call.ts",
     "v6.3:latency": "node --experimental-strip-types --no-warnings=ExperimentalWarning scripts/v6-3-latency.ts",
-    "v6:pilot-summary": "node --experimental-strip-types --no-warnings=ExperimentalWarning scripts/v6-pilot-summary.ts"
+    "v6:pilot-summary": "node --experimental-strip-types --no-warnings=ExperimentalWarning scripts/v6-pilot-summary.ts",
+    "evidence:redact-ks1": "node --experimental-strip-types --no-warnings=ExperimentalWarning scripts/evidence-redact.ts",
+    "ks1:coverage": "node --experimental-strip-types --no-warnings=ExperimentalWarning scripts/ks1-coverage.ts",
+    "gameplay:freeze": "node --experimental-strip-types --no-warnings=ExperimentalWarning scripts/gameplay-freeze.ts"
   }
 }

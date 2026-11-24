@@ -22,9 +22,9 @@ given (11/11 agree). The one surviving correction was **REGRESSION**. Nothing wa
 
 | Call | Role | Before | After | Used | Pre-call estimate |
 |---|---|---|---|---|---|
-| KX1 | exploration (objective mode, 25 steps max) | 10665.5561 | 10625.4643 | **40.092** | 40 |
-| KC1 | challenge (analyzer, 9 conditions) | 10625.4643 | 10616.3458 | **9.119** | 15 |
-| KA1 | correction check (analyzer, 2 conditions) | 10616.3458 | 10611.2207 | **5.125** | 15 |
+| KX1 | exploration (objective mode, 25 steps max) | [balance redacted] | [balance redacted] | **40.092** | 40 |
+| KC1 | challenge (analyzer, 9 conditions) | [balance redacted] | [balance redacted] | **9.119** | 15 |
+| KA1 | correction check (analyzer, 2 conditions) | [balance redacted] | [balance redacted] | **5.125** | 15 |
 | | **total** | | | **54.336 / 80** | |
 
 The 4th call (objective-mode challenge) was not made; it is off by default. KX1's own `run_end` reported 38.011

@@ -64,7 +64,7 @@ Not used: the production referee path (`server/kane.ts` `kaneJudge`, its cache, 
 
 | Check | How | Status |
 |---|---|---|
-| kane-cli present | `where kane-cli` | done: `D:\Tools\npm-global\kane-cli(.cmd)` |
+| kane-cli present | `where kane-cli` | done: `<npm-global>/kane-cli(.cmd)` |
 | CLI version | `kane-cli --version` (last known 0.10.4) | **pending: not run (no Kane invocation authorized)** |
 | Logged in | `kane-cli whoami` | pending |
 | Account balance | `kane-cli balance` (must be ≥ 45) | pending |
@@ -97,9 +97,9 @@ Only the four authorized commands were run: `kane-cli --version`, `kane-cli whoa
 
 | | |
 |---|---|
-| CLI | **0.10.4** (`D:\Tools\npm-global\kane-cli.cmd`). 0.10.7 is available and was **not** installed; the runner now accepts exactly 0.10.4 and refuses any other version, because the version/balance/run_end formats were verified on 0.10.4 only |
+| CLI | **0.10.4** (`<npm-global>/kane-cli.cmd`). 0.10.7 is available and was **not** installed; the runner now accepts exactly 0.10.4 and refuses any other version, because the version/balance/run_end formats were verified on 0.10.4 only |
 | Login | authenticated, environment prod, OAuth, token valid (identity not recorded) |
-| Balance | **10,503.2867 credits** (line `Available credits: 10503.2867`) |
+| Balance | readable and far above the 45-credit minimum (absolute value redacted; line format `Available credits: <number>`) |
 | Analyzer mode | `--analyzer-only`: judges each `--condition` against the current page, verdicts on `run_end`, no objective, no actions, nothing saved, agent mode only; `--condition` repeatable, order preserved |
 | Time limit | `--timeout <seconds>` |
 | Step limit | `--max-steps <n>` (default 50) bounds agent steps of objective runs; an analyzer-only run takes no actions and the runner passes no `--max-steps` |
@@ -156,7 +156,7 @@ entered only 2 of the 3 cells (A1 was never entered). The six-condition protocol
 * **No enforced credit bound.** The only bounds are time (180 s CLI timeout, 210 s process-tree kill) and the single-call
   rule. The local estimate is 27.9 against a 30-credit operating ceiling; an overrun is possible and would be recorded as
   CEILING_EXCEEDED, as the earlier objective-mode call showed (107.934 against 80).
-* Balance 10,503 credits, so the call cannot fail for lack of credit; the gate's ≥ 45 rule is met.
+* The balance is far above the requirement (absolute value redacted), so the call cannot fail for lack of credit; the gate's ≥ 45 rule is met.
 
 ## E. What the final execution needs (operator actions)
 
