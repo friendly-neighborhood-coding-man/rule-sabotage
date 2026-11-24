@@ -1,12 +1,13 @@
 {
  "schema": "rule-sabotage/evidence-correction-record@1",
- "status": "RECORDED: correction applied by the operator to the external manual execution script before the GW1 Kane call",
+ "status": "RECORDED: correction applied by the operator to the external manual execution script before the GW1 Kane call; executed copy identified by its SHA-256",
  "script": "gw1-manual-run.ps1 (kept outside the repository, as for KS1)",
  "preparedVersionSha256": "0e03ca185b1ac16d6c2f34c05de1e215f0174608dd61e046ea39ea079208e1d8",
  "defect": "The SkillFlow checkpoint pre-check compared Get-FileHash of gamewatch/skillbook/book.json (raw bytes) with the book_sha256 that SkillFlow records, which SkillFlow computes after normalising CRLF to LF (runner.py sha256()). On a Windows checkout with CRLF line endings the two differ, so the script stopped at that pre-check (before any approval record, gate change or Kane process).",
  "introducedBy": "the preparing session (Claude Code), in the prepared script; the runner and the repository code were correct",
  "correction": "Hash book.json after replacing CRLF with LF, as SkillFlow does. Applied by the operator (Eric) to the executed copy on 2026-11-24; reported in the project thread with the accepted GW1 result.",
  "effectOnEvidence": "None. The defect could only stop the script before any paid step; the Kane call, its gate, approval, ledger and findings are unaffected. The repair script (gw1-repair-run.ps1) uses the LF-normalised hash from the start.",
- "executedVersionSha256": "to be added from the operator's executed copy",
- "recordedAt": "2026-11-24"
+ "executedVersionSha256": "490f20759b3647f6605f65d848331f1e7108480edcd867f35fcf9fb7e27b67e5",
+ "recordedAt": "2026-11-24",
+ "executedVersionSha256Source": "reported by the operator (Eric) in the project thread on 2026-11-24 21:38 UTC; computed on the operator's machine"
 }
