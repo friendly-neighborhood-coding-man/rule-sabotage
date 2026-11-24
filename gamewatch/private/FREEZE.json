@@ -1,6 +1,6 @@
 {
  "schema": "gamewatch/freeze@1",
- "frozenAt": "2026-11-24T17:02:15.062Z",
+ "frozenAt": "2026-11-24T17:02:49.063Z",
  "note": "Frozen before any Kane evaluation. Any change to these files after this point must be reported.",
  "files": {
   "gamewatch/private/mutations.json": "389863b0dd57bfbdcd9ede5547363e4d1a32d6ba28e9c50a3bf2b92eae2871d5",
@@ -13,7 +13,7 @@
   "gamewatch/adapters/rule-sabotage.ts": "93dcae614be429836c0b808021b139c3733386066ece20071628a48c149b7337",
   "gamewatch/rules-doc.ts": "0bf775019d874ef6ee2dc6915c5a0e4a94d4d5eb599579f0307f7cd8eddd955b",
   "gamewatch/dashboard.ts": "1251d835fdf29f05eb96905f5368ee8ade642bd04fe9218f860aa86c67e950d9",
-  "gamewatch/run-evidence.ts": "2771b4253ef8777a6f02047321a8ba6736c00f2829c7b45fefd3ae34b614ff96",
+  "gamewatch/run-evidence.ts": "5804d2131f3878465b8d8366e11e2a4ab782dd021665e4aaff26744ba54fc9c9",
   "server/v6/engine.ts": "3a98317aa576f87ba4a9a3a817d374662dc900098357cfed5ff421e7314723e2",
   "evidence/gamewatch/evidence.json": "3243b1fc58f4729957334a11cffb4fc53dcc3f4e25986f4e44760ad0018a56c0",
   "evidence/gamewatch/site/case-C-0ad0c4.html": "ed7622c5995007444121700fd55237d60e03bc1aa4c012933895facee48c7800",

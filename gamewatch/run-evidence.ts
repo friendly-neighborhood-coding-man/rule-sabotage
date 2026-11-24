@@ -6,8 +6,7 @@
  *   node --experimental-strip-types gamewatch/run-evidence.ts game <build> <seed> <first> <policy> <out.json>   one match (worker)
  *
  * Contents: every scripted playtest (gamewatch/scenarios.ts) on every build, and matched AI-vs-AI games: the same seeds
- * on every build, each seed played twice with the first mover swapped, both seats the same policy. The builds' change
- * lists are read from the private manifest only to materialize the builds; no part of it is written to the bundle.
+ * on every build, each seed played twice with the first mover swapped, both seats the same policy.
  */
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
@@ -29,11 +28,12 @@ const FIRST: Player[] = ['human', 'ai'];
 /** Anonymous id: a hash of the content key, so ids are stable but carry no meaning. */
 const anon = (prefix: string, k: string) => `${prefix}-${createHash('sha256').update('gamewatch:' + k).digest('hex').slice(0, 6)}`;
 
-function privateBuilds(): { label: string; changes: Change[] }[] {
-  // Blind workspaces have no private manifest: there the build under test is server/v6 as it stands (no changes).
+/** The builds to run: the operator's build list if present, else GW_BUILDS (default: server/v6 as it stands). */
+async function evidenceBuilds(): Promise<{ label: string; changes: Change[] }[]> {
   if (process.env.GW_BUILDS) return process.env.GW_BUILDS.split(',').map(label => ({ label, changes: [] }));
-  const m = JSON.parse(readFileSync(join(ROOT, 'gamewatch/private/mutations.json'), 'utf8'));
-  return Object.entries(m.builds.evidence as Record<string, string[]>).map(([label, ids]) => ({ label, changes: m.mutations.filter((x: Change) => ids.includes(x.id)) }));
+  const list = join(ROOT, 'gamewatch/private/evidence-builds.ts');
+  if (existsSync(list)) return (await import(new URL(`file://${list}`).href)).evidenceBuilds();
+  return [{ label: 'under-test', changes: [] }];
 }
 
 async function worker(args: string[]) {
@@ -67,7 +67,7 @@ function runPool(jobs: string[][], n: number): Promise<void> {
 
 async function all() {
   mkdirSync(RAW, { recursive: true });
-  const builds = privateBuilds();
+  const builds = await evidenceBuilds();
   for (const b of builds) materialize(b.label, b.changes);
   const cases: GWCase[] = [];
   for (const b of builds) {
