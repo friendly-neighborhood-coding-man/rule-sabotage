@@ -23,7 +23,7 @@ test.after(() => rmSync(tmp, { recursive: true, force: true, maxRetries: 5, retr
 let n = 0;
 function setup(o: { balance?: number; cost?: number; mode?: string; version?: string; cli?: string } = {}) {
   const dir = join(tmp, `case${++n}`);
-  cpSync(K.DIR, dir, { recursive: true, filter: s => !/[\\/](run|shadow)([\\/]|$)|ledger\.ndjson$|approval\.json$/.test(s) });
+  cpSync(K.DIR, dir, { recursive: true, filter: s => !/[\\/](run|shadow|attempt-[^\\/]+)([\\/]|$)|ledger\.ndjson$|approval\.json$|preflight-checks\.ndjson$|ks1-console\.log$/.test(s) }); // only the case files, never the real KS1 run's records
   const bal = join(dir, 'balance.txt'); writeFileSync(bal, String(o.balance ?? 1000));
   const count = join(dir, 'count.txt');
   Object.assign(process.env, { KANE_CLI: o.cli ?? FAKE, KS1_BALANCE_FILE: bal, KS1_COST: String(o.cost ?? 7), KS1_MODE: o.mode ?? 'approve', KS1_COUNT_FILE: count, KS1_VERSION: o.version ?? '', KS1_PID_FILE: join(dir, 'pid.txt') });

@@ -6,7 +6,7 @@
  *
  *  - Gameplay FACTS (telemetry stream) are built by the server from what happened in the engine.
  *  - SUBJECTIVE answers (feedback stream) are only what the participant typed or clicked; nothing is inferred or invented.
- *  - Kane shadow CASES (kane-shadow/<session>/) are the engine referee's decisions, captured for a later, separately
+ *  - Kane shadow CASES are the engine referee's decisions, captured for a later, separately
  *    authorized shadow evaluation. Capturing them makes no Kane call.
  *  - Nothing is written without consent; a non-consenting session still plays. withdraw() deletes every file of the
  *    session, shadow cases included.
@@ -24,6 +24,12 @@ import type { Player } from '../rules.ts';
 export const V6_TELEMETRY_SCHEMA = 'rule-sabotage/v6-telemetry@1' as const;
 export const V6_FEEDBACK_SCHEMA = 'rule-sabotage/v6-feedback@1' as const;
 export const { CONSENT_VERSION, CONSENT_STATEMENT, DATA_DIR } = T;
+/**
+ * Post-KS1 (operator verdict 2026-11-24): Kane evaluation data is kept SEPARATE from pilot telemetry. Shadow cases go to
+ * their own root (default playtest-data/v6-kane-shadow/<session>/, gitignored), never inside the pilot data directory, and
+ * the pilot summary never reads them. Withdrawal still deletes them.
+ */
+export const SHADOW_ROOT = process.env.V6_KANE_SHADOW_DIR ? resolve(process.env.V6_KANE_SHADOW_DIR) : resolve(fileURLToPath(new URL('../../playtest-data/v6-kane-shadow/', import.meta.url)));
 export const SHADOW_STATEMENT = 'If you agree, the referee decisions on effects in your games (yours and the computer opponent’s) are also kept so that they can later be compared with a second, automated reviewer. That reviewer is not run now and never changes a game.';
 
 export type PSessionV6 = { id: string; consented: boolean; participant: string | null; createdAt: number; games: string[] };
@@ -39,7 +45,7 @@ export function newSession(o: { consent: unknown; participant: unknown }): PSess
   return s;
 }
 
-export const shadowLogFor = (sessionId: string) => new ShadowLog(join(T.DATA_DIR, 'kane-shadow', sessionId));
+export const shadowLogFor = (sessionId: string) => new ShadowLog(join(SHADOW_ROOT, sessionId));
 /** Captures one engine referee decision as a shadow case (consenting sessions only). Never calls Kane. */
 export function captureShadow(ps: PSessionV6 | null, o: { ruleset: string; gameId: string; proposer: Player; verdict: RefVerdict; text: string }) {
   if (!ps?.consented || !o.verdict.trialId || !o.verdict.effect || !o.verdict.cellKeys) return null;
@@ -66,7 +72,7 @@ export function feedback(ps: PSessionV6, gameId: string, b: any) {
 }
 export function withdraw(ps: PSessionV6) {
   const removed = T.withdraw(ps.id);
-  const shadow = join(T.DATA_DIR, 'kane-shadow', ps.id);
+  const shadow = join(SHADOW_ROOT, ps.id);
   if (existsSync(shadow)) { rmSync(shadow, { recursive: true, force: true }); removed.push(shadow); }
   ps.consented = false;
   return removed;

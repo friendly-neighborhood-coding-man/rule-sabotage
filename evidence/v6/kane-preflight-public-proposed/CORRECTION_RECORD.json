@@ -1,0 +1,224 @@
+{
+ "schema": "rule-sabotage/evidence-correction-record@1",
+ "status": "PROPOSED, not applied: originals unchanged in the working tree and in Git history",
+ "provenanceCommit": "240b2bb4677af8c18ee1363c1e1c1e8902e80ee8",
+ "createdAt": "2026-11-24T16:36:06.637Z",
+ "originalsPrivateCopy": "kept by the operator outside the repository, with ORIGINALS_SHA256.json (the hashes below match it)",
+ "rules": [
+  {
+   "id": "kane-session-id",
+   "reason": "Kane account-side recording session identifier; not needed to interpret the result."
+  },
+  {
+   "id": "process-id",
+   "reason": "Local operating-system process id; no analytical value."
+  },
+  {
+   "id": "repo-absolute-path",
+   "reason": "Absolute local path of the checkout; replaced by a repository-relative marker."
+  },
+  {
+   "id": "temp-profile-path",
+   "reason": "Absolute local temporary path."
+  },
+  {
+   "id": "tool-install-path",
+   "reason": "Absolute local tool installation path."
+  },
+  {
+   "id": "browser-install-path",
+   "reason": "Absolute local browser path."
+  },
+  {
+   "id": "internal-message-id",
+   "reason": "Internal project/thread identifier; the authorization itself and its time stay."
+  },
+  {
+   "id": "account-login-metadata",
+   "reason": "Unneeded account metadata (environment, auth method, token status); only \"authenticated\" matters for the experiment."
+  }
+ ],
+ "optionalRuleNotApplied": [
+  {
+   "id": "absolute-credit-balance",
+   "reason": "OPTIONAL (operator choice): absolute account balance; the evidence needs only the delta \"used\"."
+  }
+ ],
+ "notRedacted": [
+  "credit balances (optional rule above, operator choice)",
+  "loopback CDP port (127.0.0.1, ephemeral)",
+  "Kane run_id \"run-0\" (per-process counter)",
+  "operator first name as approver (already public PR attribution)",
+  "timestamps (audit trail)"
+ ],
+ "historyNote": "The originals were published at the provenance commit and stay in Git history. Removing them from history needs a rewrite and force-push, which requires an explicit operator decision.",
+ "files": [
+  {
+   "file": "evidence/v6/kane-preflight/approval.json",
+   "originalSha256": "99eb18cd4f66db8da297033577e5fc0a55349596ed6daa5500edf5c7d7d056da",
+   "redacted": true,
+   "proposedFile": "evidence/v6/kane-preflight-public-proposed/approval.json",
+   "proposedSha256": "4e2c56efeceab813a0a5793770f958e046775547966275c958d0271f4c6e6d7b",
+   "rulesApplied": {
+    "internal-message-id": 1
+   }
+  },
+  {
+   "file": "evidence/v6/kane-preflight/attempt-1-refused-2026-11-22/approval.json",
+   "originalSha256": "09479662de64ebf106aed52989d5f6bcc357923f0485e39f1eb422a4ee61b78e",
+   "redacted": true,
+   "proposedFile": "evidence/v6/kane-preflight-public-proposed/attempt-1-refused-2026-11-22/approval.json",
+   "proposedSha256": "8ee0f36fe0693a0173ec1229f822a5e8535b75a8d53f6e796c285315cc22474f",
+   "rulesApplied": {
+    "internal-message-id": 1
+   }
+  },
+  {
+   "file": "evidence/v6/kane-preflight/attempt-1-refused-2026-11-22/ks1-console.log",
+   "originalSha256": "c3eca910844fe8e8e37694d08c3e34b611fb3c857d59c5891317d2d45c164211",
+   "redacted": true,
+   "proposedFile": "evidence/v6/kane-preflight-public-proposed/attempt-1-refused-2026-11-22/ks1-console.log",
+   "proposedSha256": "6c514df7b9a31e646f2faa70b65e0e42e6e14b908dafc720c557d0f100337649",
+   "rulesApplied": {
+    "temp-profile-path": 1
+   }
+  },
+  {
+   "file": "evidence/v6/kane-preflight/attempt-1-refused-2026-11-22/ledger.ndjson",
+   "originalSha256": "28a4707d26f0191d96f6700f960077cc9c62534e72f03c5a590b8c6cb3b8ce5b",
+   "redacted": false,
+   "note": "no sensitive content found"
+  },
+  {
+   "file": "evidence/v6/kane-preflight/case.json",
+   "originalSha256": "1eb5917895f3a07aa63f3930ff6097970258619b451b516393c6f544f7e2d1c4",
+   "redacted": false,
+   "note": "no sensitive content found"
+  },
+  {
+   "file": "evidence/v6/kane-preflight/conditions.json",
+   "originalSha256": "fc14ed38ecde336904e3690111deb07b4aa5771c2c2f59306301d10272c7634a",
+   "redacted": false,
+   "note": "no sensitive content found"
+  },
+  {
+   "file": "evidence/v6/kane-preflight/engine-verdict.json",
+   "originalSha256": "982d801bcb96e8e864041d81e7d9554b8b5bd93a7e25c08e18323bcde7f84354",
+   "redacted": false,
+   "note": "no sensitive content found"
+  },
+  {
+   "file": "evidence/v6/kane-preflight/environment.json",
+   "originalSha256": "989eb7631b15ed82ee73993411fbe48943471e409627fa08c01b3073e5499b6b",
+   "redacted": true,
+   "proposedFile": "evidence/v6/kane-preflight-public-proposed/environment.json",
+   "proposedSha256": "74b9cface903e82a5d4b4c8472707f073e9e5f9f68bad5532145dd3161e437b1",
+   "rulesApplied": {
+    "tool-install-path": 1,
+    "browser-install-path": 1,
+    "account-login-metadata": 1
+   }
+  },
+  {
+   "file": "evidence/v6/kane-preflight/ks1-console.log",
+   "originalSha256": "2d30b15e5700af5c23b7b6aeebb6dc4ff5858d716367043c97053d5a9c0f7e1c",
+   "redacted": true,
+   "proposedFile": "evidence/v6/kane-preflight-public-proposed/ks1-console.log",
+   "proposedSha256": "ef0e4f0d21020762f32ea36c38b842c6837274f0d1c838176022df0250b242b8",
+   "rulesApplied": {
+    "repo-absolute-path": 2
+   }
+  },
+  {
+   "file": "evidence/v6/kane-preflight/ledger.ndjson",
+   "originalSha256": "41c6a37887b02cb2c8e9f7e078dd4300755273dbc5680a9a2e44a24ed3d28845",
+   "redacted": false,
+   "note": "no sensitive content found"
+  },
+  {
+   "file": "evidence/v6/kane-preflight/manifest.json",
+   "originalSha256": "9e18bfdb3bc8c13552b96dc0cd11dbb78e8aec140dd59476a0f820d0af5c8958",
+   "redacted": false,
+   "note": "no sensitive content found"
+  },
+  {
+   "file": "evidence/v6/kane-preflight/plan.json",
+   "originalSha256": "04c553d3fece85296c54e81ec3bbab63bcc647f3cbf9303960211db9a5a230cf",
+   "redacted": false,
+   "note": "no sensitive content found"
+  },
+  {
+   "file": "evidence/v6/kane-preflight/preflight-checks.ndjson",
+   "originalSha256": "53e2d9b156e99bff2a4a97474d3ac2fb2dc23c968e98bcb4524e2b8d90d2e1de",
+   "redacted": false,
+   "note": "no sensitive content found"
+  },
+  {
+   "file": "evidence/v6/kane-preflight/run/KS1-v6.1-oa-v3-96001-t8/args.json",
+   "originalSha256": "1d5545fc4b3f1bf80fcf322de4f5309372dcddd69fa0e44f57c117061c3b7567",
+   "redacted": false,
+   "note": "no sensitive content found"
+  },
+  {
+   "file": "evidence/v6/kane-preflight/run/KS1-v6.1-oa-v3-96001-t8/meta.json",
+   "originalSha256": "0a93927ad4d23b5013ffd2aadabb08b0102cbdff1f04508d174b21296777075e",
+   "redacted": true,
+   "proposedFile": "evidence/v6/kane-preflight-public-proposed/run/KS1-v6.1-oa-v3-96001-t8/meta.json",
+   "proposedSha256": "3f4da208390b5ab67b894ef1428c424f61e7477a9ea2f2f1714ef63279da40df",
+   "rulesApplied": {
+    "repo-absolute-path": 1
+   }
+  },
+  {
+   "file": "evidence/v6/kane-preflight/run/KS1-v6.1-oa-v3-96001-t8/stderr.txt",
+   "originalSha256": "f247464ec1f7858ac7603ea88e0ada140b3570885c4fad16e9bfc07cbe67a34f",
+   "redacted": false,
+   "note": "no sensitive content found"
+  },
+  {
+   "file": "evidence/v6/kane-preflight/run/KS1-v6.1-oa-v3-96001-t8/stdout.ndjson",
+   "originalSha256": "8402fca2c3864980531e559721796dac2d39d19e0a6b30f3d4d1e1ef72833c38",
+   "redacted": true,
+   "proposedFile": "evidence/v6/kane-preflight-public-proposed/run/KS1-v6.1-oa-v3-96001-t8/stdout.ndjson",
+   "proposedSha256": "bf31e565dbb94b9a43aee95d005b0eb36f4b412789cf785e52545ff3ad3f1b53",
+   "rulesApplied": {
+    "kane-session-id": 1,
+    "process-id": 1
+   }
+  },
+  {
+   "file": "evidence/v6/kane-preflight/shadow/cases.ndjson",
+   "originalSha256": "bcaa989b7182f93ed3148fbe9f65579b3e86dc4fd629e368a73efda9fea4cbf0",
+   "redacted": false,
+   "note": "no sensitive content found"
+  },
+  {
+   "file": "evidence/v6/kane-preflight/shadow/kane.ndjson",
+   "originalSha256": "07ed5866fdf2c80e9c9ec87d12b4e9ade7e9b8ecf9d84ce34b9c9e1dc9458c3a",
+   "redacted": true,
+   "proposedFile": "evidence/v6/kane-preflight-public-proposed/shadow/kane.ndjson",
+   "proposedSha256": "672cb390ea75e1f272d8789426ff98022b5e951e97179a5377ad159aa5cbaf0d",
+   "rulesApplied": {
+    "repo-absolute-path": 1
+   }
+  },
+  {
+   "file": "evidence/v6/kane-preflight/shadow/pages/47d4e50c00e1c54be5c0.html",
+   "originalSha256": "0bf8b4791619ff1c2dc4d9ac473e3a71d519fe604da9227c8d1d5159941a3db6",
+   "redacted": false,
+   "note": "trial page copy: no sensitive content found"
+  },
+  {
+   "file": "evidence/v6/kane-preflight/state-before.json",
+   "originalSha256": "44075f74ae149e7492c03153fe1a49fadf8f4927b8037a6203d6ea412b4ff704",
+   "redacted": false,
+   "note": "no sensitive content found"
+  },
+  {
+   "file": "evidence/v6/kane-preflight/trial-page.html",
+   "originalSha256": "0bf8b4791619ff1c2dc4d9ac473e3a71d519fe604da9227c8d1d5159941a3db6",
+   "redacted": false,
+   "note": "no sensitive content found"
+  }
+ ]
+}
