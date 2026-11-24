@@ -12,7 +12,7 @@
  */
 import { execFileSync } from 'node:child_process';
 import { mkdirSync, rmSync, copyFileSync, existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
-import { join, resolve } from 'node:path';
+import { join, resolve, sep } from 'node:path';
 import { tmpdir } from 'node:os';
 import { pathToFileURL } from 'node:url';
 import { ROOT, materialize } from '../builds.ts';
@@ -27,7 +27,7 @@ export const BLIND_EXCLUDE = [
 const [label, target, findings] = process.argv.slice(2);
 if (!label || !target) { console.error('usage: export-workspace.ts <build-label> <target-dir> [findings.ndjson]'); process.exit(2); }
 const dst = resolve(target);
-if (dst.startsWith(resolve(ROOT))) throw new Error('target must be outside the repository');
+if (dst === resolve(ROOT) || dst.startsWith(resolve(ROOT) + sep)) throw new Error('target must be outside the repository');
 if (existsSync(dst) && readdirSync(dst).length) throw new Error('target must be empty');
 const built = join(ROOT, 'server', `v6-build-${label}`, 'engine.ts');
 if (!existsSync(built)) {
