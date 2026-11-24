@@ -1,6 +1,6 @@
 # GameWatch: Kane-powered game QA, blind fault-injection demonstration
 
-Status: **READY_FOR_OPERATOR_GW1_MANUAL_EXECUTION**. No Kane call was made. Built on PR #20 (`7d2f34f`).
+Status: **GW1 Kane run done and accepted (operator, 2026-11-24 19:06 UTC); closed-loop repair prepared, waiting for the operator run**. Built on PR #20 (`7d2f34f`).
 
 GameWatch is a small, portable QA harness: it takes evidence from a game's **existing** playtests (scripted runs, AI
 self-play, human sessions), presents it as an anonymous evidence site, has Kane review it blind, and hands the findings
@@ -104,7 +104,20 @@ What the evidence shows (my reading, for the operator; Kane does not see this):
 
 Each scripted case pair shows the corresponding difference step by step (case ids in `GROUND_TRUTH.md`).
 
-## Proposed Kane evaluation (prepared, NOT run)
+## GW1 Kane run (done, accepted by the operator)
+
+Reported by the operator (Eric) on 2026-11-24 19:06 UTC, run on the operator's machine with `gw1-manual-run.ps1`:
+Kane execution 267 s, whole workflow 286 s, **72.398 credits**, three valid submissions: two confirmed observable
+anomalies supported by the original evidence and one internally inconsistent "clean" report. The raw evidence (ledger,
+Kane output, findings, SkillFlow log) stays on the operator's machine until it is redacted (`scripts/gw1-redact.ts`) and
+published; the original bytes are preserved privately with a SHA-256 manifest. Which planted defects the findings
+correspond to is labelled only after the repair attempt is frozen (below).
+
+Correction recorded: the prepared script's SkillFlow pre-check hashed `book.json` as raw bytes while SkillFlow hashes it
+LF-normalised, so on a CRLF checkout it stopped before any paid step. The operator corrected it before the call
+(`evidence/corrections/gw1-manual-run-crlf.json`). No effect on the evidence.
+
+## Proposed Kane evaluation (as prepared before GW1)
 
 `npm run gamewatch:kane-plan` prints it and verifies the frozen inputs. One **objective-mode** call
 (`kane-cli run "<objective>" --url http://127.0.0.1:3210/index.html --agent --headless --max-steps 80 --timeout 2700`)
@@ -126,7 +139,35 @@ violations, inconsistency, life-cycle, balance) as the brief asked, never which,
 * The report page matches its path in an OS-independent way (`gamewatch/kane/serve.ts` `resolvePage`, tested for posix
   and Windows paths in `serve.test.ts` with a test-double submission that reaches the coverage audit).
 
-## Closed loop (prepared)
+## Closed loop: one repair attempt (prepared, operator run pending)
+
+Authorized by the operator on 2026-11-24 19:06 UTC: one coding-agent repair attempt through the SkillBook, no further
+paid Kane calls. Operator script `gw1-repair-run.ps1` (outside the repository). Design:
+
+* **Blind input only:** the workspace (`export-workspace.ts`) is the committed tree without history, with the build under
+  test as `server/v6/engine.ts`, the documented rules, and Kane's valid findings verbatim (all three). Removed: private
+  ground truth, this document, the Kane plan and runner, the SkillBook, the evidence bundle and site (they name the other
+  build), the gameplay-freeze hashes and test (they identify the clean engine), the submission banner, and npm scripts
+  that point at removed files. Checked by exporting a workspace and searching it: no manifest, defect names, build
+  labels, clean-engine hash or experiment description remain, and the existing V6 tests pass on the build under test, so
+  they reveal nothing either. The agent's CLI runs headless in the workspace with web tools off and shell use limited to
+  the commands the brief needs. Limitation: a permitted `node` command could still read files outside the workspace.
+* **One attempt:** `steps/fix.ts` records `evidence/gamewatch/repair/attempt.json` before the agent starts and refuses a
+  second attempt, so the regression review's loop back to the fix step goes to the report instead. Neither the
+  reference comparison nor the ground truth can guide another attempt.
+* **Agent brief:** reproduce each finding before changing the game code, minimal fixes, regression tests that fail
+  before and pass after, re-run of the same scripted playtests and matched games, `CLOSED_LOOP_REPORT.md`.
+* **Freeze:** when the agent exits (or is stopped at 3300 s, before the task's own timeout), every file it changed or
+  added is copied to `evidence/gamewatch/repair/output/` and hashed in `repair/FREEZE.json`. The book then re-runs the
+  playtests freshly on the corrected code and compares them with the reference build.
+* **Independent evaluation, after the freeze only:** `gamewatch/private/evaluate-repair.ts` verifies the freeze,
+  materializes every changed game file and runs the frozen probes against the clean baseline (each planted defect fixed
+  or still present; controls unchanged or regression), runs the agent's tests and the V6 tests, and, with the manual
+  labels of Kane's findings, reports detected, missed, repaired and remaining defects separately.
+* Rehearsed end to end in a scratch clone with a stand-in agent (a test double, labelled as such, not a real repair):
+  export, one attempt, freeze, refusal of a second attempt, fresh re-run, regression review, report, evaluation.
+
+## Closed loop (original preparation)
 
 1. Operator: `node --experimental-strip-types gamewatch/closed-loop/export-workspace.ts QX-73 <dir> notes.ndjson`.
    The workspace is a history-free copy in which `server/v6/engine.ts` is the build under test and `gamewatch/private/`,

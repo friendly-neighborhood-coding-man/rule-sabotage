@@ -50,7 +50,10 @@ const limitS = Number(process.env.GW_AGENT_TIMEOUT_S ?? 3300);
 const t0 = Date.now();
 const r = await new Promise<{ status: number | null; error?: Error; timedOut: boolean }>(res => {
   const win = process.platform === 'win32';
-  const child = spawn(cmd[0], cmd.slice(1), { cwd: dir, stdio: 'inherit', shell: win, detached: !win });
+  // Windows: the CLI is a .cmd shim, so it runs through cmd.exe, which joins arguments with spaces: quote each one that
+  // has spaces or cmd metacharacters (the brief and tool patterns contain no double quotes).
+  const q = (a: string) => (win && /[\s&|<>^()]/.test(a) ? `"${a}"` : a);
+  const child = spawn(q(cmd[0]), cmd.slice(1).map(q), { cwd: dir, stdio: 'inherit', shell: win, detached: !win });
   let timedOut = false;
   const timer = setTimeout(() => {
     timedOut = true;
