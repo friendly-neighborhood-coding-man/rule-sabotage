@@ -8,13 +8,29 @@
  */
 import { createServer } from 'node:http';
 import { readFileSync, existsSync, appendFileSync, mkdirSync } from 'node:fs';
-import { join, dirname, normalize } from 'node:path';
+import { join, dirname, resolve, sep, posix } from 'node:path';
 import { randomBytes } from 'node:crypto';
 import { ROOT } from '../builds.ts';
 
+/**
+ * Map a URL path to a page: the URL is normalised with POSIX rules (URLs always use '/'), so the page name compared with
+ * 'report.html' never depends on the OS separator (on Windows, path.normalize would turn '/report.html' into
+ * '\\report.html'). Returns null for anything outside the site directory. `pathImpl` is injectable for tests.
+ */
+export function resolvePage(urlPath: string, site: string, pathImpl: { resolve: typeof resolve; sep: string } = { resolve, sep }) {
+  let decoded: string;
+  try { decoded = decodeURIComponent(urlPath); } catch { return null; }
+  if (decoded.includes('\\') || decoded.includes('\0')) return null;
+  const page = posix.normalize(decoded === '/' ? '/index.html' : decoded).replace(/^\/+/, '');
+  if (!page || page.startsWith('..') || page.split('/').includes('..')) return null;
+  const root = pathImpl.resolve(site), file = pathImpl.resolve(root, ...page.split('/'));
+  if (!file.startsWith(root + pathImpl.sep)) return null;
+  return { page, file, isReport: page === 'report.html' };
+}
+
 const FIELDS = ['category', 'rules', 'builds', 'claim', 'evidence', 'reproduce', 'suggestion', 'confidence', 'nonce'];
 
-export function startServer(o: { port: number; site: string; notes: string; label: string }): Promise<{ nonce: string; close: () => Promise<void> }> {
+export function startServer(o: { port: number; site: string; notes: string; label: string }): Promise<{ nonce: string; port: number; close: () => Promise<void> }> {
   const { site, notes, label } = o;
   const NONCE = randomBytes(8).toString('hex');
   const srv = createServer((req, res) => {
@@ -32,17 +48,16 @@ export function startServer(o: { port: number; site: string; notes: string; labe
     });
     return;
   }
-  const p = normalize(url.pathname === '/' ? '/index.html' : url.pathname).replace(/^(\.\.[/\\])+/, '');
-  const f = join(site, p);
-  if (!f.startsWith(site) || !existsSync(f)) { res.writeHead(404); res.end('not found'); return; }
-  let html = readFileSync(f, 'utf8');
-  if (p === '/report.html') html = html.replace('__NONCE__', NONCE);
+  const r = resolvePage(url.pathname, site);
+  if (!r || !existsSync(r.file)) { res.writeHead(404); res.end('not found'); return; }
+  let html = readFileSync(r.file, 'utf8');
+  if (r.isReport) html = html.replace('__NONCE__', NONCE);
   res.writeHead(200, { 'content-type': 'text/html; charset=utf-8' });
   res.end(html);
 });
   return new Promise((resolve, reject) => {
     srv.on('error', reject);
-    srv.listen(o.port, '127.0.0.1', () => resolve({ nonce: NONCE, close: () => new Promise<void>(r => srv.close(() => r())) }));
+    srv.listen(o.port, '127.0.0.1', () => resolve({ nonce: NONCE, port: (srv.address() as { port: number }).port, close: () => new Promise<void>(r => srv.close(() => r())) }));
   });
 }
 

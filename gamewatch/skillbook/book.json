@@ -34,7 +34,7 @@
       "produces": ["{out}/balance.json"], "next": { "pass": "analyze-kane-review", "fail": "@stop" } },
     { "id": "analyze-kane-review", "title": "Analyzer: blind Kane bug discovery (ONE paid objective-mode call)", "skill": "skills/analyzer.md", "spec": "specs/kane-review.md",
       "authorization": "kane-paid",
-      "run": ["node", "--experimental-strip-types", "--no-warnings", "gamewatch/kane/run.ts", "--execute"], "timeout_s": 900,
+      "run": ["node", "--experimental-strip-types", "--no-warnings", "gamewatch/kane/run.ts", "--execute"], "timeout_s": 3300,
       "next": { "exit:0": "analyze-coverage", "exit:2": "@stop", "exit:3": "report", "pass": "analyze-coverage", "fail": "@stop" } },
     { "id": "analyze-coverage", "title": "Analyzer: coverage audit of Kane's review", "skill": "skills/analyzer.md",
       "run": ["node", "--experimental-strip-types", "--no-warnings", "gamewatch/skillbook/steps/audit.ts", "evidence/gamewatch/evidence.json", "evidence/gamewatch/review/notes.ndjson", "kane", "{out}/audit.json"],

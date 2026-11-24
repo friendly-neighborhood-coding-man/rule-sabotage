@@ -1,6 +1,6 @@
 # Spec: blind Kane review
 
-- Exactly one `kane-cli run "<objective>" --url http://127.0.0.1:3210/index.html --agent --headless --max-steps 25 --timeout 600`.
+- Exactly one `kane-cli run "<objective>" --url http://127.0.0.1:3210/index.html --agent --headless --max-steps 80 --timeout 2700` (process tree killed at 2730 s). No credit ceiling as a constraint; actual credits and time are logged.
 - Needs: the SkillFlow authorization `kane-paid` AND the code gate (`PAID_RESEARCH_EXECUTION`, single-use approval file,
   `KANE_PAID_RUN_AUTH` = run id). Either missing: stop, no Kane process.
 - Outputs: `evidence/gamewatch/review/notes.ndjson` (findings, verbatim, nonce-checked), `run/GW1-blind-review/`
