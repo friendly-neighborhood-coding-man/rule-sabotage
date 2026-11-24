@@ -23,7 +23,7 @@ ceiling, no retries, no analyzer calls), then exactly 240 offline games on fresh
 | | |
 |---|---|
 | Call | KX3, kane-cli 0.10.4 objective mode, max 35 steps, timeout 900 s; run_end **passed**, 12.6 min |
-| Credits | **107.934** by balance delta (10611.2207 → 10503.2867); run_end reported 103.232. **The 80-credit operating ceiling was exceeded by about 28 credits.** The pre-call estimate (56, from V2's 1.6 credits per step) was wrong by a factor of about 2. One call cannot be stopped part way, so the ceiling was not a cap |
+| Credits | **107.934** by balance delta ([balance redacted] → [balance redacted]); run_end reported 103.232. **The 80-credit operating ceiling was exceeded by about 28 credits.** The pre-call estimate (56, from V2's 1.6 credits per step) was wrong by a factor of about 2. One call cannot be stopped part way, so the ceiling was not a cap |
 | Raw evidence | `evidence/balance/v3/kane/2026-11-19T15-41-35Z-KX3/`: `kane-stdout.ndjson`, `kane-stderr.txt`, `kane-notes.ndjson` (every POST verbatim, sha256 `bd6f344f…`), `kane-v3-entries.json`, `kane-v3-call.json`, timestamped `terminal.log`. kane-cli reported `recording_state enabled` with `persist:false`; no video is kept by kane-cli, and I did not screen-record |
 | Provenance | real CLI (not the test double), raw-file sha256 and note ids verified (`balance/v3/kane-proposals.json`) |
 | Isolation | the loopback server served only the dataset directory; Claude's hypotheses (`balance/v3/proposals.json`) were never reachable, and the objective names none |

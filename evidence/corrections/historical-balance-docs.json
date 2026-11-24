@@ -1,0 +1,46 @@
+{
+ "schema": "rule-sabotage/evidence-correction-record@1",
+ "status": "APPLIED (operator verdict 2026-11-24): absolute account balances redacted in four historical reports; Git history NOT rewritten",
+ "provenanceCommit": "d5f2ae5e8dfd0135afa93c960af712956441ee83",
+ "appliedAt": "2026-11-24T17:20:48.548Z",
+ "rule": {
+  "id": "absolute-credit-balance",
+  "pattern": "/\\b10[0-9]{3}\\.[0-9]+\\b/g",
+  "replace": "[balance redacted]",
+  "reason": "Absolute account balance. Credit consumption values, estimates, ceilings and every experimental finding are unchanged.",
+  "note": "Plain-text marker, because an angle-bracket marker would be hidden by Markdown rendering."
+ },
+ "originalsPrivateCopy": "kept by the operator outside the repository with ORIGINALS_SHA256.json (hashes below match it)",
+ "kept": [
+  "credit consumption per call and in total (e.g. 11.841, 40.092, 9.119, 5.125, 107.934, ~60)",
+  "pre-call estimates and operating ceilings",
+  "all experimental results and conclusions"
+ ],
+ "historyNote": "The unredacted reports remain reachable in Git history; no rewrite or force-push (operator instruction).",
+ "files": [
+  {
+   "file": "docs/BALANCE_LOOP_RESULT.md",
+   "originalSha256": "e8b0e89620a2aa172ee05e432797316554d2f898d64283af6d87a8cb9aa48de3",
+   "publishedSha256": "ccd13ea8950e16390d19e9b0358677fd5b3e78b9c0c91c80e4d1c06427971084",
+   "balancesRedacted": 2
+  },
+  {
+   "file": "docs/BALANCE_V2_KANE_RESULT.md",
+   "originalSha256": "436e39f7d882b7adf7c48287e41cb47aa4d56ef2b83fc07180aea44c0eb2f912",
+   "publishedSha256": "7c55820b9e4197e3b62342f6f1cbde80875d979488d62b415b126e4bdc264393",
+   "balancesRedacted": 6
+  },
+  {
+   "file": "docs/BALANCE_V3_VALIDATION_RESULT.md",
+   "originalSha256": "587c2b784f3daa35818579a1d5a724e0555f45ca44e9a31b75e082ffafd791a7",
+   "publishedSha256": "16ab9f6a87b0686da1470cac9798ac2dff2007d6de7c3e80b023774db49d2958",
+   "balancesRedacted": 2
+  },
+  {
+   "file": "docs/EVIDENCE.md",
+   "originalSha256": "d379d5f478496bd9a903df490996ac6d9d732dbbd44676bd5f28a34a3f8026c0",
+   "publishedSha256": "074f735717114cbee202b98e6bd86bbf6a1fdda21e2af47dbc765266e4133c9c",
+   "balancesRedacted": 2
+  }
+ ]
+}

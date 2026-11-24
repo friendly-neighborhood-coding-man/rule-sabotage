@@ -92,3 +92,13 @@ No Kane call was made; Kane is not a live referee; the six-condition protocol wa
 `tests/post-ks1.test.ts` (6): KS1 coverage and evaluation record, the A1 neighbour cause, the supplementary scenario,
 reproduction of the original rows, coverage rules incl. entry-relative sides, and the redaction proposal (narrow rules,
 published files match the applied correction record, no sensitive values left, consumption kept). `tests/v6-2.test.ts` updated for the separate shadow directory.
+
+## 6. Housekeeping complete (2026-11-24)
+
+The operator accepted PR #20 at `d5f2ae5` and asked for one last cleanup: the same minimal account-balance redaction in
+four historical reports (`docs/BALANCE_LOOP_RESULT.md`, `docs/BALANCE_V2_KANE_RESULT.md`,
+`docs/BALANCE_V3_VALIDATION_RESULT.md`, `docs/EVIDENCE.md`). Done: 12 absolute balances replaced by `[balance redacted]`;
+credit consumption, estimates, ceilings and every finding unchanged. Originals copied privately with SHA-256 hashes;
+correction record `evidence/corrections/historical-balance-docs.json`. No history rewrite, no force-push, no gameplay,
+referee or Kane change. **The housekeeping workstream is now frozen; further development happens in the GameWatch
+thread.** Status: **HOUSEKEEPING_COMPLETE**.
