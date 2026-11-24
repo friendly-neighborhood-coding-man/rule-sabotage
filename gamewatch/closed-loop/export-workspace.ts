@@ -25,6 +25,6 @@ if (!existsSync(built)) throw new Error(`build ${label} not materialized (run ga
 mkdirSync(dst, { recursive: true });
 execFileSync('sh', ['-c', `git -C "${ROOT}" archive HEAD | tar -x -C "${dst}"`]);
 copyFileSync(built, join(dst, 'server/v6/engine.ts'));
-for (const p of ['gamewatch/private', 'gamewatch/closed-loop/export-workspace.ts', 'gamewatch/kane/plan.ts', 'docs/GAMEWATCH.md', 'evidence/gamewatch']) rmSync(join(dst, p), { recursive: true, force: true });
+for (const p of ['gamewatch/private', 'gamewatch/closed-loop/export-workspace.ts', 'gamewatch/kane/plan.ts', 'gamewatch/skill', 'docs/GAMEWATCH.md', 'evidence/gamewatch']) rmSync(join(dst, p), { recursive: true, force: true });
 if (findings) copyFileSync(findings, join(dst, 'KANE_FINDINGS.ndjson'));
 console.log(`blind workspace ready: ${dst}\nbrief: gamewatch/closed-loop/AGENT_BRIEF.md`);
