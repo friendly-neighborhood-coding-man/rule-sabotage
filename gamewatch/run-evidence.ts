@@ -3,6 +3,7 @@
  * submitted for QA and writes the game-independent bundle evidence/gamewatch/evidence.json.
  *
  *   node --experimental-strip-types gamewatch/run-evidence.ts all          materialize builds, run everything (4 workers)
+ *        ... all --keep-existing  keep an existing bundle (e.g. one frozen for review) instead of collecting again
  *   node --experimental-strip-types gamewatch/run-evidence.ts game <build> <seed> <first> <policy> <out.json>   one match (worker)
  *
  * Contents: every scripted playtest (gamewatch/scenarios.ts) on every build, and matched AI-vs-AI games: the same seeds
@@ -66,6 +67,11 @@ function runPool(jobs: string[][], n: number): Promise<void> {
 }
 
 async function all() {
+  if (process.argv.includes('--keep-existing') && existsSync(join(OUT, 'evidence.json'))) {
+    const b = JSON.parse(readFileSync(join(OUT, 'evidence.json'), 'utf8')) as GWBundle;
+    console.log(`keeping the existing bundle evidence/gamewatch/evidence.json (${b.cases.length} cases, ${b.matches.length} matches, generated ${b.generatedAt}); delete it to collect again`);
+    return;
+  }
   mkdirSync(RAW, { recursive: true });
   const builds = await evidenceBuilds();
   for (const b of builds) materialize(b.label, b.changes);

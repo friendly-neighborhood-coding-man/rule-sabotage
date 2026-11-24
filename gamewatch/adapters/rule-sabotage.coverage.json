@@ -1,0 +1,20 @@
+{
+  "note": "Which engine events show each documented rule being exercised (adapter-supplied; GameWatch itself is game-independent). A rule is covered when at least one listed event pattern occurs in the evidence of every build.",
+  "rules": {
+    "R1": [{ "type": "score" }],
+    "R2": [{ "type": "game-over" }],
+    "R3": [{ "type": "turn-start" }],
+    "R4": [{ "type": "capture" }, { "type": "stack" }],
+    "R5": [{ "type": "effect-placed" }, { "refused": "placement" }],
+    "R6": [{ "type": "effect-placed" }],
+    "R7": [{ "type": "effect-fired", "side": "Human" }, { "type": "effect-fired", "side": "AI" }],
+    "R8": [{ "type": "effect-fired" }],
+    "R9": [{ "type": "effect-fired", "minChainDepth": 2 }],
+    "R10": [{ "type": "forced-move", "how": "shove" }],
+    "R11": [{ "type": "status", "status": "freeze" }],
+    "R12": [{ "type": "forced-move", "how": "home" }],
+    "R13": [{ "type": "forced-move", "how": "teleport" }],
+    "R14": [{ "type": "status", "status": "shield" }],
+    "R15": [{ "type": "extra-action" }]
+  }
+}

@@ -16,3 +16,4 @@ evidence/balance/.loop.lock
 playtest-data/
 server/v6-build-*/
 evidence/gamewatch/raw/
+.gw-run/

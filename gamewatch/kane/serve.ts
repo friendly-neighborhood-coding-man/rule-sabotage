@@ -12,15 +12,12 @@ import { join, dirname, normalize } from 'node:path';
 import { randomBytes } from 'node:crypto';
 import { ROOT } from '../builds.ts';
 
-const arg = (k: string, d: string) => { const i = process.argv.indexOf(k); return i > 0 ? process.argv[i + 1] : d; };
-const port = Number(arg('--port', '3210'));
-const site = arg('--site', join(ROOT, 'evidence/gamewatch/site'));
-const notes = arg('--notes', join(ROOT, 'evidence/gamewatch/review/notes.ndjson'));
-const label = arg('--label', 'test-double');
-export const NONCE = randomBytes(8).toString('hex');
 const FIELDS = ['category', 'rules', 'builds', 'claim', 'evidence', 'reproduce', 'suggestion', 'confidence', 'nonce'];
 
-const srv = createServer((req, res) => {
+export function startServer(o: { port: number; site: string; notes: string; label: string }): Promise<{ nonce: string; close: () => Promise<void> }> {
+  const { site, notes, label } = o;
+  const NONCE = randomBytes(8).toString('hex');
+  const srv = createServer((req, res) => {
   const url = new URL(req.url ?? '/', 'http://x');
   if (req.method === 'POST' && url.pathname === '/report') {
     let body = '';
@@ -43,4 +40,15 @@ const srv = createServer((req, res) => {
   res.writeHead(200, { 'content-type': 'text/html; charset=utf-8' });
   res.end(html);
 });
-srv.listen(port, '127.0.0.1', () => console.log(`GameWatch review server on http://127.0.0.1:${port}/ (notes -> ${notes}, label ${label})`));
+  return new Promise((resolve, reject) => {
+    srv.on('error', reject);
+    srv.listen(o.port, '127.0.0.1', () => resolve({ nonce: NONCE, close: () => new Promise<void>(r => srv.close(() => r())) }));
+  });
+}
+
+if (process.argv[1]?.endsWith('serve.ts')) {
+  const arg = (k: string, d: string) => { const i = process.argv.indexOf(k); return i > 0 ? process.argv[i + 1] : d; };
+  const o = { port: Number(arg('--port', '3210')), site: arg('--site', join(ROOT, 'evidence/gamewatch/site')), notes: arg('--notes', join(ROOT, 'evidence/gamewatch/review/notes.ndjson')), label: arg('--label', 'test-double') };
+  await startServer(o);
+  console.log(`GameWatch review server on http://127.0.0.1:${o.port}/ (notes -> ${o.notes}, label ${o.label})`);
+}

@@ -4,6 +4,8 @@
   "retries": 0,
   "parallel": false,
   "followUp": false,
+  "maxSteps": 25,
+  "timeoutS": 600,
   "mode": "objective",
   "url": "http://127.0.0.1:3210/index.html (gamewatch/kane/serve.ts --label kane, loopback only)",
   "args": [
