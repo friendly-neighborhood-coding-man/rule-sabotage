@@ -1,0 +1,18 @@
+{
+ "cli": "kane-cli",
+ "version": "0.10.4",
+ "args": [
+  "run",
+  "You are a game QA reviewer. Open the GameWatch page at the given URL. It lists the documented rules (R1-R15) of a board game and evidence from playtests of two builds: scripted playtest cases (each step shows the state before and after and the engine events) and AI-vs-AI matches with aggregate statistics. Investigate whether either build violates the documented rules, behaves inconsistently (the same effect or rule giving different results in equivalent situations), handles the life cycle of pieces, effects or turns incorrectly, or shows a balance problem. Open case and match pages as needed and compare builds where the same script was run on both. For each finding, open report.html and submit one form. Choose the category: confirmed observable anomaly (you saw it directly in the evidence), suspected bug needing reproduction, balance hypothesis, or clean / no problem found. Cite case or match ids and step or turn numbers, name the rule, say how to reproduce or verify it, and suggest a fix and how to check it. Report only what the evidence supports and say when you are unsure. If you find nothing wrong, submit one \"clean / no problem found\" form saying what you checked. Submit at most 6 forms.",
+  "--url",
+  "http://127.0.0.1:3210/index.html",
+  "--agent",
+  "--headless",
+  "--max-steps",
+  "80",
+  "--timeout",
+  "2700"
+ ],
+ "nonce": "d9b7417e6ecb2a0c",
+ "startedAt": "2026-11-24T18:50:50.289Z"
+}

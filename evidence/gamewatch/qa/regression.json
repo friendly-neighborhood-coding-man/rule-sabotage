@@ -1,0 +1,78 @@
+{
+ "reference": "QX-41",
+ "before": "QX-73",
+ "after": "under-test",
+ "scripts": 11,
+ "nowMatchingReference": [
+  "Human piece walks into an AI \"Freeze\" cell, then tries to move @97100",
+  "AI piece walks into a Human \"Freeze\" cell, then tries to move @97100",
+  "Human tries to place an effect right next to its own piece @97100",
+  "Human piece walks into an AI \"shove back 2\" cell @97100",
+  "AI picks up a Shield, then walks into a Human \"Send home\" cell @97100",
+  "AI piece is shoved west onto a \"+1 action\" cell, steps off and back on @97100",
+  "Human piece is shoved east onto a \"+1 action\" cell, steps off and back on @97100",
+  "AI piece walks into a Human \"shove back 2\" cell @97100",
+  "Human walks onto its own \"+1 action\" cell, steps off and back on @97100",
+  "Human picks up a Shield, then walks into an AI \"Send home\" cell @97100",
+  "Human piece walks onto its own Teleport cell @97100"
+ ],
+ "stillDifferent": [],
+ "regressions": [],
+ "rows": [
+  {
+   "script": "Human piece walks into an AI \"Freeze\" cell, then tries to move @97100",
+   "beforeMatchesReference": false,
+   "afterMatchesReference": true
+  },
+  {
+   "script": "AI piece walks into a Human \"Freeze\" cell, then tries to move @97100",
+   "beforeMatchesReference": false,
+   "afterMatchesReference": true
+  },
+  {
+   "script": "Human tries to place an effect right next to its own piece @97100",
+   "beforeMatchesReference": false,
+   "afterMatchesReference": true
+  },
+  {
+   "script": "Human piece walks into an AI \"shove back 2\" cell @97100",
+   "beforeMatchesReference": false,
+   "afterMatchesReference": true
+  },
+  {
+   "script": "AI picks up a Shield, then walks into a Human \"Send home\" cell @97100",
+   "beforeMatchesReference": false,
+   "afterMatchesReference": true
+  },
+  {
+   "script": "AI piece is shoved west onto a \"+1 action\" cell, steps off and back on @97100",
+   "beforeMatchesReference": false,
+   "afterMatchesReference": true
+  },
+  {
+   "script": "Human piece is shoved east onto a \"+1 action\" cell, steps off and back on @97100",
+   "beforeMatchesReference": false,
+   "afterMatchesReference": true
+  },
+  {
+   "script": "AI piece walks into a Human \"shove back 2\" cell @97100",
+   "beforeMatchesReference": false,
+   "afterMatchesReference": true
+  },
+  {
+   "script": "Human walks onto its own \"+1 action\" cell, steps off and back on @97100",
+   "beforeMatchesReference": false,
+   "afterMatchesReference": true
+  },
+  {
+   "script": "Human picks up a Shield, then walks into an AI \"Send home\" cell @97100",
+   "beforeMatchesReference": false,
+   "afterMatchesReference": true
+  },
+  {
+   "script": "Human piece walks onto its own Teleport cell @97100",
+   "beforeMatchesReference": false,
+   "afterMatchesReference": true
+  }
+ ]
+}

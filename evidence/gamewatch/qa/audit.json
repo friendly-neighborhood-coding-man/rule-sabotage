@@ -1,0 +1,35 @@
+{
+ "source": "kane",
+ "findings": 3,
+ "byCategory": {
+  "clean / no problem found": 1,
+  "confirmed observable anomaly": 2
+ },
+ "rulesCited": [
+  "R3",
+  "R8"
+ ],
+ "rulesNotCited": [
+  "R1",
+  "R2",
+  "R4",
+  "R5",
+  "R6",
+  "R7",
+  "R9",
+  "R10",
+  "R11",
+  "R12",
+  "R13",
+  "R14",
+  "R15"
+ ],
+ "casesCited": [
+  "C-757669",
+  "C-9fc650"
+ ],
+ "casesNotCited": 20,
+ "matchesCited": [],
+ "matchesNotCited": 32,
+ "findingsWithoutEvidenceIds": 0
+}

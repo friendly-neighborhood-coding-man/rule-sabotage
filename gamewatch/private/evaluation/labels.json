@@ -1,0 +1,12 @@
+{
+ "labelledBy": "the preparing session (Claude Code), after the repair output was frozen and after the operator's evaluation; labels are against gamewatch/private/mutations.json",
+ "labelledAt": "2026-11-24",
+ "findings": [
+  { "finding": 1, "submittedAt": "2026-11-24T18:53:13.663Z", "category": "clean / no problem found", "label": "false negative (inconsistent clean report)", "detects": [],
+    "why": "Submitted after opening only C-0ad0c4 and C-757669; it cites C-9fc650, the QX-73 case in which Kane's own findings 2 and 3 then report two anomalies. Kane's run summary still reports this clean verdict." },
+  { "finding": 2, "submittedAt": "2026-11-24T18:54:12.815Z", "category": "confirmed observable anomaly", "label": "true detection", "detects": ["B2"],
+    "why": "Exact: a cell reached by a forced (shove) arrival is not used up and fires again (R8); correct case, steps, comparison and fix." },
+  { "finding": 3, "submittedAt": "2026-11-24T18:54:34.743Z", "category": "confirmed observable anomaly", "label": "true detection, partial characterisation", "detects": ["B3"],
+    "why": "Correct observation (4 actions granted for 3 pieces, R3) and correct comparison; attributed to the Human side because Human moves first in every script. The defect is a first-mover (odd-turn) bonus for either side; the coding agent identified that." }
+ ]
+}

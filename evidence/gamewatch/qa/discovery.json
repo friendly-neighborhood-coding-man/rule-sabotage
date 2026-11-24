@@ -1,0 +1,61 @@
+{
+ "game": "Rule Sabotage V6.1",
+ "rules": [
+  "R1",
+  "R2",
+  "R3",
+  "R4",
+  "R5",
+  "R6",
+  "R7",
+  "R8",
+  "R9",
+  "R10",
+  "R11",
+  "R12",
+  "R13",
+  "R14",
+  "R15"
+ ],
+ "playtestSources": {
+  "aiOpponents": [
+   "v6-ev-k1.2",
+   "v6-softmax-v2",
+   "v6-oa-v3",
+   "v6-ev-k1.2-ra",
+   "v6-softmax-v2-ra",
+   "v6-oa-v3-ra",
+   "v6-ev-k1.2-ra-b",
+   "v6-softmax-v2-ra-b",
+   "v6-oa-v3-ra-b"
+  ],
+  "scriptedPlaytests": [
+   "shield-human",
+   "shield-ai",
+   "shove-chain-human",
+   "shove-chain-ai",
+   "walk-twice",
+   "freeze-human",
+   "freeze-ai",
+   "shove-human",
+   "shove-ai",
+   "adjacent-placement",
+   "teleport-human"
+  ],
+  "humanPlaytestData": {
+   "dir": "playtest-data/",
+   "entries": 2,
+   "note": "consent-gated, never committed; empty in a fresh checkout"
+  },
+  "earlierKaneEvidence": {
+   "dir": "evidence/v6/kane-preflight/",
+   "entries": 16
+  }
+ },
+ "kaneCli": {
+  "found": true,
+  "version": "0.10.4"
+ },
+ "adapter": "gamewatch/adapters/rule-sabotage.ts",
+ "coverageMap": "gamewatch/adapters/rule-sabotage.coverage.json"
+}

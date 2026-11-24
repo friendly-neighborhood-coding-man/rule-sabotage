@@ -3,7 +3,8 @@
  * ended and its output was frozen (evidence/gamewatch/repair/FREEZE.json). Never shown to the coding agent, and its
  * result never guides another repair attempt in the same experiment.
  *
- *   node --experimental-strip-types --no-warnings gamewatch/private/evaluate-repair.ts [labels.json]
+ *   node --experimental-strip-types --no-warnings gamewatch/private/evaluate-repair.ts [labels.json] [--workspace <dir>]
+ *   (--workspace: a re-exported workspace with the frozen output applied, to recompute from a fresh checkout; see docs/DEMO.md)
  *
  * 1. Verifies the frozen output against FREEZE.json (stops if anything changed since the freeze).
  * 2. Materializes the frozen game code (every server/v6 file the agent changed or added) as build "repaired" and runs
@@ -26,6 +27,7 @@ const REP = join(ROOT, 'evidence/gamewatch/repair');
 const OUT = join(ROOT, 'gamewatch/private/evaluation');
 const fr = JSON.parse(readFileSync(join(REP, 'FREEZE.json'), 'utf8'));
 const attempt = JSON.parse(readFileSync(join(REP, 'attempt.json'), 'utf8'));
+const wi = process.argv.indexOf('--workspace'); if (wi > 0) attempt.workspace = process.argv[wi + 1];
 const M = JSON.parse(readFileSync(join(ROOT, 'gamewatch/private/mutations.json'), 'utf8'));
 
 // 1. frozen output unchanged
@@ -56,7 +58,7 @@ const tests = {
 };
 
 // 4. detected / missed / repaired / remaining
-const labelsF = process.argv[2];
+const labelsF = process.argv[2] && !process.argv[2].startsWith('--') ? process.argv[2] : undefined;
 const labels = labelsF && existsSync(labelsF) ? JSON.parse(readFileSync(labelsF, 'utf8')) : null;
 const ids: string[] = M.mutations.map((m: { id: string }) => m.id);
 const detected = labels ? ids.filter(id => (labels.findings as { detects: string[] }[]).some(f => f.detects.includes(id))) : null;

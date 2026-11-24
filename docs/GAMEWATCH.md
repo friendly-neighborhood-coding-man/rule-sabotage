@@ -1,6 +1,6 @@
 # GameWatch: Kane-powered game QA, blind fault-injection demonstration
 
-Status: **GW1 Kane run done and accepted (operator, 2026-11-24 19:06 UTC); closed-loop repair prepared, waiting for the operator run**. Built on PR #20 (`7d2f34f`).
+Status: **READY_FOR_HACKATHON_SUBMISSION**. The experiment is complete: results, test counts and limitations are in [`GW1_FINAL_REPORT.md`](GW1_FINAL_REPORT.md). Built on PR #20 (`7d2f34f`).
 
 GameWatch is a small, portable QA harness: it takes evidence from a game's **existing** playtests (scripted runs, AI
 self-play, human sessions), presents it as an anonymous evidence site, has Kane review it blind, and hands the findings
@@ -108,10 +108,10 @@ Each scripted case pair shows the corresponding difference step by step (case id
 
 Reported by the operator (Eric) on 2026-11-24 19:06 UTC, run on the operator's machine with `gw1-manual-run.ps1`:
 Kane execution 267 s, whole workflow 286 s, **72.398 credits**, three valid submissions: two confirmed observable
-anomalies supported by the original evidence and one internally inconsistent "clean" report. The raw evidence (ledger,
-Kane output, findings, SkillFlow log) stays on the operator's machine until it is redacted (`scripts/gw1-redact.ts`) and
-published; the original bytes are preserved privately with a SHA-256 manifest. Which planted defects the findings
-correspond to is labelled only after the repair attempt is frozen (below).
+anomalies supported by the original evidence and one internally inconsistent "clean" report. The evidence is
+published in `evidence/gamewatch/review/` after two redaction passes. The original bytes are preserved privately with a
+SHA-256 manifest. The findings were labelled against the planted defects only after the repair attempt was frozen
+(see `GW1_FINAL_REPORT.md`).
 
 Correction recorded: the prepared script's SkillFlow pre-check hashed `book.json` as raw bytes while SkillFlow hashes it
 LF-normalised, so on a CRLF checkout it stopped before any paid step. The operator corrected it before the call
@@ -139,7 +139,7 @@ violations, inconsistency, life-cycle, balance) as the brief asked, never which,
 * The report page matches its path in an OS-independent way (`gamewatch/kane/serve.ts` `resolvePage`, tested for posix
   and Windows paths in `serve.test.ts` with a test-double submission that reaches the coverage audit).
 
-## Closed loop: one repair attempt (prepared, operator run pending)
+## Closed loop: one repair attempt (done; results in GW1_FINAL_REPORT.md)
 
 Authorized by the operator on 2026-11-24 19:06 UTC: one coding-agent repair attempt through the SkillBook, no further
 paid Kane calls. Operator script `gw1-repair-run.ps1` (outside the repository). Design:

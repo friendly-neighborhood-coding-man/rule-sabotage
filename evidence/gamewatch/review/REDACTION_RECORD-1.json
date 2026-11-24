@@ -1,0 +1,201 @@
+{
+ "schema": "rule-sabotage/evidence-correction-record@1",
+ "appliedAt": "2026-11-24T21:02:53.527Z",
+ "status": "Redacted in place before publishing; originals kept privately with their sha256 (ORIGINALS_SHA256.json, not in the repository).",
+ "rules": [
+  {
+   "id": "kane-session-id",
+   "reason": "Kane account-side recording session identifier; not needed to interpret the result."
+  },
+  {
+   "id": "process-id",
+   "reason": "Local operating-system process id; no analytical value."
+  },
+  {
+   "id": "repo-absolute-path",
+   "reason": "Absolute local path of the checkout; replaced by a repository-relative marker."
+  },
+  {
+   "id": "temp-profile-path",
+   "reason": "Absolute local temporary path."
+  },
+  {
+   "id": "tool-install-path",
+   "reason": "Absolute local tool installation path."
+  },
+  {
+   "id": "browser-install-path",
+   "reason": "Absolute local browser path."
+  },
+  {
+   "id": "internal-message-id",
+   "reason": "Internal project/thread identifier; the authorization itself and its time stay."
+  },
+  {
+   "id": "account-login-metadata",
+   "reason": "Unneeded account metadata (environment, auth method, token status); only \"authenticated\" matters for the experiment."
+  },
+  {
+   "id": "absolute-credit-balance",
+   "reason": "Absolute account balance (JSON field). Consumption (\"used\", credits_consumed) is kept."
+  },
+  {
+   "id": "absolute-credit-balance-text",
+   "reason": "Absolute account balance inside captured CLI text."
+  },
+  {
+   "id": "absolute-credit-balance-console",
+   "reason": "Absolute balances in the manual script's console summary; the USED figure on the same line is kept."
+  },
+  {
+   "id": "email-address",
+   "reason": "Account email address; not needed to interpret the result."
+  },
+  {
+   "id": "gw-repo-absolute-path",
+   "reason": "Absolute local path of the operator's folders (repository, blind workspace)."
+  }
+ ],
+ "metering": {
+  "balanceDeltaUsed": 72.398,
+  "kaneRunEndCreditsConsumed": 68.02772999999999,
+  "consistent": false,
+  "checkedOn": "originals, before redaction"
+ },
+ "files": [
+  {
+   "file": "evidence/gamewatch/review/approval.json",
+   "originalSha256": "f0e297fa0b536851ccfe46c271438c14c7bdbe21e975631be490ef1aff593317",
+   "publishedSha256": "f0e297fa0b536851ccfe46c271438c14c7bdbe21e975631be490ef1aff593317",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gamewatch/review/gw1-console.log",
+   "originalSha256": "aa4d18c7595cf21e274653b7ebd42dc577b9ac21176c95f1ef02805516f02ffb",
+   "publishedSha256": "af81bc1a4de8a047529fe7f3f53a3e29c9d5f92eb6f4f1d905bc7dad2fc8bca4",
+   "redacted": true,
+   "rulesApplied": {
+    "repo-absolute-path": 1
+   }
+  },
+  {
+   "file": "evidence/gamewatch/review/kane-findings.ndjson",
+   "originalSha256": "b3cf7e47f0b3384a8626d1f9e9861c10e8bb4ebe40e613b768ef1c4bb4cacc48",
+   "publishedSha256": "b3cf7e47f0b3384a8626d1f9e9861c10e8bb4ebe40e613b768ef1c4bb4cacc48",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gamewatch/review/ledger.ndjson",
+   "originalSha256": "5429835466937f3c6e9053486a9d6d95547c91a3999de7bfe696879e76526211",
+   "publishedSha256": "03a8680f15ce09f62f7902d41d45a5f1276c6d6cab903205b68eec2b2dbdc507",
+   "redacted": true,
+   "rulesApplied": {
+    "absolute-credit-balance": 3
+   }
+  },
+  {
+   "file": "evidence/gamewatch/review/notes.ndjson",
+   "originalSha256": "b3cf7e47f0b3384a8626d1f9e9861c10e8bb4ebe40e613b768ef1c4bb4cacc48",
+   "publishedSha256": "b3cf7e47f0b3384a8626d1f9e9861c10e8bb4ebe40e613b768ef1c4bb4cacc48",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gamewatch/review/run/GW1-blind-review/args.json",
+   "originalSha256": "e6f39b146bba15b50f1be333ddf59e285ad648c5776227daa4c88f4006f1abf4",
+   "publishedSha256": "e6f39b146bba15b50f1be333ddf59e285ad648c5776227daa4c88f4006f1abf4",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gamewatch/review/run/GW1-blind-review/meta.json",
+   "originalSha256": "36ffb4c1866a29e23e781981ae13b429c424012f236fe01355f12a587373e969",
+   "publishedSha256": "5e8ca22d40c73b7474ecf2404172c5b5fec7b2a7983770e815a8d6a37ccea192",
+   "redacted": true,
+   "rulesApplied": {
+    "absolute-credit-balance": 2
+   }
+  },
+  {
+   "file": "evidence/gamewatch/review/run/GW1-blind-review/stderr.txt",
+   "originalSha256": "83834fd6d84da84265d6fa57111c262b29b7093f51f103fd19ad33097e222e50",
+   "publishedSha256": "83834fd6d84da84265d6fa57111c262b29b7093f51f103fd19ad33097e222e50",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gamewatch/review/run/GW1-blind-review/stdout.ndjson",
+   "originalSha256": "46230458d235d004172eb4d11841dd46b6d4364d44fc4d62429604ad6c5f70c8",
+   "publishedSha256": "88ba2d6a6ee1ccdb93741de75e3e6f63c1dd022fc4fa2b1a858c0e8abdb7ffdc",
+   "redacted": true,
+   "rulesApplied": {
+    "kane-session-id": 1,
+    "process-id": 1
+   }
+  },
+  {
+   "file": "evidence/gamewatch/repair/attempt.json",
+   "originalSha256": "e9c00fd3c3b494afb9c78bdb8abd100cf1650943dbcac9acc3581a79e1a81899",
+   "publishedSha256": "95f80839611101dcedc28dbafd08e75b4a0c46b31699db1f4ee6fec120b9e848",
+   "redacted": true,
+   "rulesApplied": {
+    "gw-repo-absolute-path": 2
+   }
+  },
+  {
+   "file": "evidence/gamewatch/repair/baseline.json",
+   "originalSha256": "7c80b64749364ef28b84fd5443c00d57cadcc010809b052856c6b9048e1b4fe4",
+   "publishedSha256": "d84d414e82abe458a291963c336f1c54b1518300043812a2f1172f3749939696",
+   "redacted": true,
+   "rulesApplied": {
+    "gw-repo-absolute-path": 1
+   }
+  },
+  {
+   "file": "evidence/gamewatch/repair/FREEZE.json",
+   "originalSha256": "35acb16a0c7b6ebbf71bbc11c379fe5efe19026fb22d11856803bdaabf65078d",
+   "publishedSha256": "35acb16a0c7b6ebbf71bbc11c379fe5efe19026fb22d11856803bdaabf65078d",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gamewatch/qa/audit.json",
+   "originalSha256": "8f95cea9a998625801b16a4309b19e259dde9c56c07c7311d2c314bbd24f799d",
+   "publishedSha256": "8f95cea9a998625801b16a4309b19e259dde9c56c07c7311d2c314bbd24f799d",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gamewatch/qa/balance.json",
+   "originalSha256": "84c4c0ed063c86cca44fc5c4c479070eaad04f6b605f1dc39614de0275fe9011",
+   "publishedSha256": "84c4c0ed063c86cca44fc5c4c479070eaad04f6b605f1dc39614de0275fe9011",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gamewatch/qa/discovery.json",
+   "originalSha256": "ff2cba0fc1223bd3c59f7eed48481678f9f121f3356bca70f7f119a1598a344e",
+   "publishedSha256": "ff2cba0fc1223bd3c59f7eed48481678f9f121f3356bca70f7f119a1598a344e",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gamewatch/qa/gaps.json",
+   "originalSha256": "d59aacebb35e235f6af8f22d063c14e591854622a222ebdabf5e92cab8b16241",
+   "publishedSha256": "d59aacebb35e235f6af8f22d063c14e591854622a222ebdabf5e92cab8b16241",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gamewatch/qa/porter.json",
+   "originalSha256": "93e8042c2469fd97dd694f9745b257b3f60f1f66c6ee3bb177939aca7173cead",
+   "publishedSha256": "93e8042c2469fd97dd694f9745b257b3f60f1f66c6ee3bb177939aca7173cead",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gamewatch/qa/QA_REPORT.md",
+   "originalSha256": "58f3a5630b3e78ee2acc08ab0f46735a46e8147dcb5bbed7fda1612c4532b92f",
+   "publishedSha256": "58f3a5630b3e78ee2acc08ab0f46735a46e8147dcb5bbed7fda1612c4532b92f",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gamewatch/qa/regression.json",
+   "originalSha256": "678ec38f7d299db40e534030d61e23e8a89004ccb7292ff1cbcedbba6e508d94",
+   "publishedSha256": "678ec38f7d299db40e534030d61e23e8a89004ccb7292ff1cbcedbba6e508d94",
+   "redacted": false
+  }
+ ],
+ "remainingForManualReview": []
+}

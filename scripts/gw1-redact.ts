@@ -19,7 +19,8 @@ import { RULES, redact, type Rule } from './evidence-redact.ts';
 import { ROOT } from './v6-fork.ts';
 
 export const DIRS = ['evidence/gamewatch/review', 'evidence/gamewatch/repair', 'evidence/gamewatch/qa'];
-const SKIP = /(^|\/)(PLAN\.json|REDACTION_RECORD\.json)$|^evidence\/gamewatch\/repair\/(baseline-files|output)\//;
+export const FILES = ['evidence/gamewatch/repair-console.log'];
+const SKIP = /(^|\/)(PLAN\.json|REDACTION_RECORD(-\d+)?\.json)$|^evidence\/gamewatch\/repair\/(baseline-files|output)\//;
 
 export const GW1_RULES: Rule[] = [
   ...RULES,
@@ -27,6 +28,9 @@ export const GW1_RULES: Rule[] = [
   { id: 'absolute-credit-balance-text', pattern: /(Available credits:\s*)-?\d+(?:\.\d+)?/gi, replace: '$1<redacted:balance>', reason: 'Absolute account balance inside captured CLI text.' },
   { id: 'absolute-credit-balance-console', pattern: /(before\s+)-?\d+(?:\.\d+)?(\s+after\s+)-?\d+(?:\.\d+)?/g, replace: '$1<redacted:balance>$2<redacted:balance>', reason: 'Absolute balances in the manual script\'s console summary; the USED figure on the same line is kept.' },
   { id: 'email-address', pattern: /[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/g, replace: '<redacted:email>', reason: 'Account email address; not needed to interpret the result.' },
+  { id: 'user-profile-path', pattern: /[A-Za-z]:(?:\\\\|\\|\/)Users(?:\\\\|\\|\/)[^\\\/"\s]+/g, replace: '<user-home>', reason: 'Local user profile path (contains the account user name).' },
+  { id: 'kane-local-session-id', pattern: /((?:sessions|evidence)(?:\\\\|\\|\/))[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/g, replace: '$1<redacted:kane-local-id>', reason: 'Kane local session / evidence-pack identifiers; not needed to interpret the result.' },
+  { id: 'kane-test-manager-url', pattern: /https:\/\/test-manager\.lambdatest\.com\/projects\/[A-Za-z0-9]+\/test-cases\/[A-Za-z0-9]+/g, replace: '<redacted:kane-test-manager-url>', reason: 'Account-side project and test-case identifiers of the Kane service.' },
   { id: 'gw-repo-absolute-path', pattern: /[A-Za-z]:(?:\\\\|\\|\/)Rule_Sabotage(?:\\\\|\\|\/)/g, replace: '<operator>/', reason: 'Absolute local path of the operator\'s folders (repository, blind workspace).' },
 ];
 
@@ -38,7 +42,7 @@ if (process.argv[1]?.replace(/\\/g, '/').endsWith('scripts/gw1-redact.ts')) {
   if (!priv) throw new Error('give --private <directory outside the repository>');
   if (priv === resolve(ROOT) || priv.startsWith(resolve(ROOT) + sep)) throw new Error('the private directory must be outside the repository');
   if (existsSync(join(priv, 'ORIGINALS_SHA256.json'))) throw new Error('the private directory already holds originals (single use)');
-  const files = DIRS.flatMap(list).filter(f => !SKIP.test(f) && !/\.(png|jpg|webm|tar)$/i.test(f));
+  const files = [...DIRS.flatMap(list), ...FILES.filter(f => existsSync(join(ROOT, f)))].filter(f => !SKIP.test(f) && !/\.(png|jpg|webm|tar)$/i.test(f));
   // metering consistency on the originals, before anything is redacted
   const ledgerF = join(ROOT, 'evidence/gamewatch/review/ledger.ndjson'), stdoutF = join(ROOT, 'evidence/gamewatch/review/run/GW1-blind-review/stdout.ndjson');
   let metering: unknown = 'not checked (ledger or Kane output missing)';
@@ -65,7 +69,8 @@ if (process.argv[1]?.replace(/\\/g, '/').endsWith('scripts/gw1-redact.ts')) {
     for (const m of text.matchAll(/(?<![A-Za-z])(?:balance|credits?)"?\s*[:=]\s*"?\d{3,}(?:\.\d+)?/gi)) remaining.push({ file: f, kind: 'balance-like', sample: m[0] });
     record.push({ file: f, originalSha256: manifest[f], publishedSha256: changed ? sha(text) : manifest[f], redacted: changed, ...(changed ? { rulesApplied: applied } : {}) });
   }
-  writeFileSync(join(ROOT, 'evidence/gamewatch/review/REDACTION_RECORD.json'), JSON.stringify({
+  const ri = process.argv.indexOf('--record'), recordName = ri > 0 ? process.argv[ri + 1] : 'REDACTION_RECORD.json';
+  writeFileSync(join(ROOT, 'evidence/gamewatch/review', recordName), JSON.stringify({
     schema: 'rule-sabotage/evidence-correction-record@1', appliedAt: new Date().toISOString(),
     status: 'Redacted in place before publishing; originals kept privately with their sha256 (ORIGINALS_SHA256.json, not in the repository).',
     rules: GW1_RULES.map(r => ({ id: r.id, reason: r.reason })), metering, files: record, remainingForManualReview: remaining,

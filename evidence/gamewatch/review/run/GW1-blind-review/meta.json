@@ -1,0 +1,29 @@
+{
+ "runId": "GW1-blind-review",
+ "maxSteps": 80,
+ "timeoutS": 2700,
+ "killAfterS": 2730,
+ "exitCode": 0,
+ "timedOut": false,
+ "ms": 266989,
+ "spend": {
+  "before": "<redacted:balance>",
+  "after": "<redacted:balance>",
+  "used": 72.398,
+  "estimate": 248,
+  "ceiling": 300,
+  "outcome": "WITHIN_CEILING",
+  "timedOut": false,
+  "exitCode": 0,
+  "error": null,
+  "capKind": "local-estimate-not-enforced"
+ },
+ "runEnd": {
+  "verdict": "approved",
+  "summary": "Reviewed the documented game rules and the available playtest evidence for both builds, as requested.\nChecked the recorded playtest actions and found that every logged outcome was marked as successful.\nFound no evidence-supported rule violations, inconsistent outcomes, lifecycle or turn errors, or balance issues.\nSubmitted a clean report indicating that no problem was found.",
+  "detail": ""
+ },
+ "findingsSubmitted": 3,
+ "findingsValid": 3,
+ "kaneVersion": "0.10.4"
+}
