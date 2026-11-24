@@ -15,7 +15,7 @@ First integration: **Rule Sabotage V6.1** with a blind fault-injection experimen
 
 * Node.js ≥ 22.10 (TypeScript runs with `--experimental-strip-types`; no npm install needed) and Python ≥ 3.9 (runner).
 * For the Kane step only: kane-cli **0.10.4** on PATH (or `KANE_CLI`), signed in, with Chrome available, and the
-  operator's manual gated run (`gamewatch/kane/gw1-manual-run.ps1`).
+  operator's manual gated run (`gw1-manual-run.ps1`, kept outside the repository).
 * For the coding-agent steps only: an agent CLI (default `claude -p`; override with `GW_AGENT_CMD` as a JSON argv). Its
   own permission and billing settings apply; GameWatch adds no permission flags.
 

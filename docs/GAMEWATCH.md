@@ -1,6 +1,6 @@
 # GameWatch: Kane-powered game QA, blind fault-injection demonstration
 
-Status: **READY_FOR_OPERATOR_GAMEWATCH_BLIND_EVALUATION**. No Kane call was made. Built on PR #20 (`7d2f34f`).
+Status: **READY_FOR_OPERATOR_GW1_MANUAL_EXECUTION**. No Kane call was made. Built on PR #20 (`7d2f34f`).
 
 GameWatch is a small, portable QA harness: it takes evidence from a game's **existing** playtests (scripted runs, AI
 self-play, human sessions), presents it as an anonymous evidence site, has Kane review it blind, and hands the findings
@@ -30,10 +30,16 @@ book stopped (exit 3): Kane needs both. In a second fresh clone with the bundle 
 time, per-game milliseconds), so the evidence is reproducible. The book then stopped at the Kane plan because the fresh
 bundle is not the frozen one, as designed: Kane may only review frozen inputs.
 
-Operator procedure for the one Kane call: `gamewatch/kane/gw1-manual-run.ps1` (adapted from the KS1 script). It refuses
-while its approval fields are PENDING; it writes the single-use approval, enables the gate for that process only, creates
-the SkillFlow authorization, resumes the book once (the Kane task calls kane-cli exactly once; a second call for the run
-id is refused), and restores the gate in `finally`. The book then stops at the coding-agent authorization.
+Operator procedure for the one Kane call: the manual script `gw1-manual-run.ps1`, kept **outside the repository**
+(project files, as with KS1), so filling in its approval fields cannot touch the tree it checks. It refuses while its
+approval fields are PENDING; checks HEAD and that the gate, runner, server, book, vendored runner, evidence and site are
+unmodified (tracked files only); runs the free part of the book if no run exists; requires the SkillFlow checkpoint to be
+`needs-authorization` at exactly `analyze-kane-review` and no `coding-agent` authorization (file or environment); writes
+the single-use approval, enables the gate for that process only, creates the `kane-paid` authorization and resumes the
+book once (the Kane task calls kane-cli exactly once; a second call for the run id is refused), and restores the gate and
+clears the token in `finally`. The book then stops at `analyze-fix` (coding-agent authorization), or ends with the report
+if Kane produced no valid finding. Rehearsed end to end in a scratch clone with a **fake** kane-cli (test double, no
+credits): one ledger call, one finding stored with a valid nonce, counted by the coverage audit, stop at `analyze-fix`.
 
 The freeze was refreshed once before any Kane call (only `gamewatch/run-evidence.ts` changed: an option to keep an
 existing bundle, and the build list moved into `gamewatch/private/`); evidence and site hashes are unchanged; the
@@ -101,7 +107,7 @@ Each scripted case pair shows the corresponding difference step by step (case id
 ## Proposed Kane evaluation (prepared, NOT run)
 
 `npm run gamewatch:kane-plan` prints it and verifies the frozen inputs. One **objective-mode** call
-(`kane-cli run "<objective>" --url http://127.0.0.1:3210/index.html --agent --headless --max-steps 25 --timeout 600`)
+(`kane-cli run "<objective>" --url http://127.0.0.1:3210/index.html --agent --headless --max-steps 80 --timeout 2700`)
 over the loopback site; Kane submits up to 6 findings through the report form, each with a category (confirmed
 observable anomaly / suspected bug needing reproduction / balance hypothesis / clean), cited case/match ids, a
 reproduction and a suggested fix. The objective is neutral: it names the kinds of problems to look for (rule
@@ -109,12 +115,16 @@ violations, inconsistency, life-cycle, balance) as the brief asked, never which,
 
 * Why not analyzer mode: it only answers fixed boolean conditions; writing conditions that can catch these defects
   would reveal them. Analyzer mode cannot generate unrestricted bug reports and this plan does not claim it can.
-* Credits: the one earlier objective call (KX1) cost **40.09**; the gate formula gives 77.5 worst case; operating
-  ceiling 80 (not a hard cap: kane-cli 0.10.4 has no credit limit). One call, no retry, balance read before and after.
-* Risk: 25 steps cannot open all 56 pages; Kane may report only what the index aggregates show. That is measured, not
-  hidden.
-* Execution needs a runner on the operator's machine like `ks1-manual-run.ps1` (gate, approval token, strict balance
-  reads). It is not written yet: it should be prepared only once the operator approves this plan.
+* Budget (GW1 update): **80 steps, `--timeout 2700` s, process killed at 2730 s**, so Kane can open far more of the 56
+  pages. No credit ceiling is a constraint: kane-cli 0.10.4 has no credit limit anyway. The gate still needs a ceiling
+  field; it is set to 300 for bookkeeping only (worst-case estimate 80 × 3.1 = 248 never binds), which makes the gate
+  require a balance of at least 450 before the call. Credits (balance before/after) and elapsed time are logged in
+  `ledger.ndjson` and `run/GW1-blind-review/meta.json`. One call, no retry, explicit approval and the single-run gate
+  unchanged. The one earlier objective call (KX1) cost 40.09 credits.
+* Risk: Kane may still not open every page and may report only what the index aggregates show. That is measured, not
+  hidden. All findings are kept, including partial ones and failed runs.
+* The report page matches its path in an OS-independent way (`gamewatch/kane/serve.ts` `resolvePage`, tested for posix
+  and Windows paths in `serve.test.ts` with a test-double submission that reaches the coverage audit).
 
 ## Closed loop (prepared)
 
