@@ -1,0 +1,45 @@
+{
+ "schema": "rule-sabotage/gameplay-freeze@1",
+ "frozenAt": "2026-11-24T17:01:30.298Z",
+ "reason": "Operator verdict 2026-11-24: freeze the clean V6 / V6.1 gameplay implementation; further work is the GameWatch QA harness.",
+ "defaults": {
+  "ruleset": "rule-sabotage/v6.1-all-piece-proximity@1",
+  "pilotOpponents": [
+   "v6-ev-k1.2-ra@1",
+   "v6-softmax-v2-ra@1",
+   "v6-oa-v3-ra@1"
+  ]
+ },
+ "notFrozen": [
+  "server/v6/coverage.ts (experimental coverage check, separate from the live referee)",
+  "server/v6/kaneshadow.ts, server/v6/pilot.ts (evidence collection, no gameplay effect)"
+ ],
+ "files": {
+  "client/v6/app-v6.js": "5a7cfb6240149900ced26baf0955c116296e6ca9885c37ea375ac105e008e6fe",
+  "client/v6/index.html": "6357b92202f8dfc4a672eaad6b90e13afb79e40b4187675aa01e220e1b2ae443",
+  "client/v6/pilot-v6.js": "140522923b9af997aac5ab8895f94f7a46adf80cf55548bb40ae3efcf61d8f79",
+  "client/v6/v6.css": "d30b116e67147d2a4c02cdec19aaecbfa73ff6c06f85dbd64e0061766b8f908f",
+  "server/rules.ts": "e77deece5b21d890c373a07381e4769932dc586c6b08baa7ffe4c3f6e2489a5b",
+  "server/v6/budgeted.ts": "a1917cc1b3d7e37814ca4c69a1b2f5b121f24ae8851aed74908af67536fc368a",
+  "server/v6/engine.ts": "3a98317aa576f87ba4a9a3a817d374662dc900098357cfed5ff421e7314723e2",
+  "server/v6/fastclone.ts": "7b14ebf774f22a52766694b73ece09de9b49af229f4a80d4c91c9316b3b3bb56",
+  "server/v6/forks/ablation.ts": "6c14bb9b045356b9644433eca768b96982fdf231af1fce230b779451e8ff7ab6",
+  "server/v6/forks/ai.ts": "1e20b6487d56f6eae4574d5f30bbd6acaa4f6457a496fdde082259001a41a186",
+  "server/v6/forks/evk11.ts": "3ff6073e5d09046a1e0682b0295ab6897c680a1067a6cc1be8b4c7cd5b0b2abc",
+  "server/v6/forks/evplanner.ts": "789fa82691599c626a0efdaa69b08c066b65f8c9026751086401980a476fcfe9",
+  "server/v6/forks/flavor.ts": "b6aa674e5785cd63b819b1a036ddaa3aa885ab0cb02560e3bc8d29fcd333dda3",
+  "server/v6/forks/planner52.ts": "8ab781cfc866fe8b9cf8cc4f3b68deb52abbd4d10c742ba95e5d0cfad4fc87c1",
+  "server/v6/forks/policies5.ts": "759d28ab2aec9161c6f283558b79490ffd1cd30cfe414b823fc9ad62887107b7",
+  "server/v6/forks/policies53.ts": "5f792a70a70a22ddb5e00b4381345ee688efea55989f741f05a07b10db5a469f",
+  "server/v6/forks/stream.ts": "7e2df26766d00279209addda3f1196856906e02e556a2a427c33089525a9232f",
+  "server/v6/forks/tiers.ts": "87cd685872025b44237e84da0ec8681b4bc4492d9fadbb387a2841c0e798d13c",
+  "server/v6/forks/trial.ts": "b1d58083966caa7b54b4c805507f7c13a2860f0c7e60b58399385138fed2e700",
+  "server/v6/opponents.ts": "47629fa517834b69bdaef693ecdaa1018b7ce3330d7fdd176a75eb17098e8082",
+  "server/v6/planworker.ts": "ef829710b340538b108ce178ebd67d507180d325fb5ad13c7bda7a825ea04f78",
+  "server/v6/referee-aware.ts": "0e1b0c39a68053765f504397a3d04505dd2fc24a415a89a961768c4413c831d2",
+  "server/v6/server.ts": "4ab32465cf8c4326c1b5715951c0a9ed912ba63c6161ce49192530f859cf9eb4",
+  "server/v6/session.ts": "ec7cd7d5cdb6919a6c6b7ce38f1a03f16a84a3c2e5ef3425310d2fa2ed27a66b",
+  "server/v6/turn.ts": "ce30227b8dcbcfb00cff68963c164fb219c021010edf8913b22e96271f4d5a75",
+  "server/weights.ts": "24ad2b10c0f6202bf223286d60573f0345d4bdb399140d0bceda570b8ce36b89"
+ }
+}

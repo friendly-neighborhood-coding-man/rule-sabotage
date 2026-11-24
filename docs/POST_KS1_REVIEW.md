@@ -18,19 +18,24 @@ Audited: every file published under `evidence/v6/kane-preflight/` at commit `240
 | Account login metadata (environment, auth method, token status) | `environment.json` | unneeded account metadata | keep only `authenticated: true` |
 | Absolute credit balances | ledger, preflight checks, console logs, docs, PR #19 text | account metadata | **optional, operator choice**: publish only the delta (9.097) |
 | Not changed | loopback port (127.0.0.1, ephemeral), Kane `run_id` "run-0", operator first name as approver (already the public PR attribution), timestamps | none | keep |
-| Docs | `docs/KANE_SINGLE_CALL_PREFLIGHT.md` lines with `D:\Tools\npm-global\…`; balances in that doc, `docs/KANE_KS1_RESULT.md` and the PR #19 description | as above | same replacements, if approved |
+| Docs | `docs/KANE_SINGLE_CALL_PREFLIGHT.md` (tool path, balance), `docs/KANE_KS1_RESULT.md` (balances), PR #19 description (balance) | as above | same replacements |
 
-What was done (`npm run evidence:redact-ks1 -- --private <dir>`, `scripts/evidence-redact.ts`):
-* **Originals preserved privately**: all 22 files copied byte-for-byte to a private directory on the
-  operator's machine, outside the repository (the path is deliberately not published) with `ORIGINALS_SHA256.json`.
-* **Proposed public copies**: 8 minimally redacted files in `evidence/v6/kane-preflight-public-proposed/` (same relative
-  paths), with `CORRECTION_RECORD.json`: per file the original and redacted SHA-256, each rule applied and how often, the
-  reason for every rule, what was deliberately not redacted, and the provenance commit.
-* **Nothing replaced or deleted.** The originals are unchanged in the working tree and remain in Git history at `240b2bb`.
-
-Operator decisions needed: (a) replace the 8 published files with the proposed copies in a normal, visible commit;
-(b) apply the optional balance redaction or not; (c) whether to remove the originals from Git history (rewrite +
-force-push of the PR branch; GitHub may keep cached views) — not done without approval.
+**Applied (operator verdict 2026-11-24, PR #20 accepted)** with `npm run evidence:redact-ks1 -- --apply --private <dir>`:
+* **Originals preserved privately**: all 22 files copied byte-for-byte to a private directory on the operator's machine,
+  outside the repository (path deliberately not published), with `ORIGINALS_SHA256.json`. Before redacting, every
+  published file was checked against that manifest.
+* **Published files replaced in a normal, visible commit**: 10 files redacted in place, now including the absolute
+  balances (JSON fields and captured CLI text). The credit consumption is kept: ledger `used` 9.097 and Kane's
+  `credits_consumed` 9.0968; their consistency (difference 0.0002) was checked on the originals and is recorded.
+* **Correction record**: `evidence/v6/kane-preflight/CORRECTION_RECORD.json`: per file the original and published SHA-256,
+  every rule with its reason and count, what was kept, the metering check and the provenance commit. The earlier proposal
+  folder was removed, being superseded by the applied record.
+* **Docs**: the same replacements in `docs/KANE_SINGLE_CALL_PREFLIGHT.md`, `docs/KANE_KS1_RESULT.md` and the PR #19
+  description.
+* **Git history not rewritten, no force-push**: the unredacted originals stay reachable at commit `240b2bb` and earlier.
+* **Not changed**: older research reports that already published account balances before this workstream
+  (`docs/BALANCE_LOOP_RESULT.md`, `docs/BALANCE_V2_KANE_RESULT.md`, `docs/BALANCE_V3_VALIDATION_RESULT.md`,
+  `docs/EVIDENCE.md`); they are historical V1–V3 records and are left for a separate operator decision.
 
 ## 2. Trial coverage completeness
 
@@ -86,4 +91,4 @@ No Kane call was made; Kane is not a live referee; the six-condition protocol wa
 
 `tests/post-ks1.test.ts` (6): KS1 coverage and evaluation record, the A1 neighbour cause, the supplementary scenario,
 reproduction of the original rows, coverage rules incl. entry-relative sides, and the redaction proposal (narrow rules,
-originals unchanged, hashes match the correction record). `tests/v6-2.test.ts` updated for the separate shadow directory.
+published files match the applied correction record, no sensitive values left, consumption kept). `tests/v6-2.test.ts` updated for the separate shadow directory.

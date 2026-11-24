@@ -41,8 +41,11 @@ export const RULES: Rule[] = [
  * public PR attribution), timestamps (needed for the audit trail).
  */
 export const PROPOSED_OPTIONAL: Rule[] = [
-  { id: 'absolute-credit-balance', pattern: /("?(?:before|after|availableCredits|parsed)"?\s*:\s*)(1\d{4}\.\d+)/g, replace: '$1"<redacted:balance>"', reason: 'OPTIONAL (operator choice): absolute account balance; the evidence needs only the delta "used".' },
+  { id: 'absolute-credit-balance', pattern: /("?(?:before|after|availableCredits|parsed)"?\s*:\s*)(1\d{4}\.\d+)/g, replace: '$1"<redacted:balance>"', reason: 'Absolute account balance (JSON field). The credit consumption ("used") and Kane\'s own credits_consumed are kept.' },
+  { id: 'absolute-credit-balance-text', pattern: /(Available credits:\s*)1\d{4}\.\d+/g, replace: '$1<redacted:balance>', reason: 'Absolute account balance inside captured CLI text.' },
 ];
+/** Operator verdict 2026-11-24 (PR #20 accepted): all rules INCLUDING the balance rules are applied to the published files. */
+export const APPLIED_RULES: Rule[] = [...RULES, ...PROPOSED_OPTIONAL];
 
 const sha = (b: Buffer | string) => createHash('sha256').update(b).digest('hex');
 export function redact(text: string, rules = RULES): { text: string; applied: Record<string, number> } {
@@ -52,7 +55,39 @@ export function redact(text: string, rules = RULES): { text: string; applied: Re
   return { text: t, applied };
 }
 
-if (process.argv[1]?.endsWith('evidence-redact.ts')) {
+if (process.argv[1]?.endsWith('evidence-redact.ts') && process.argv.includes('--apply')) {
+  // APPLY (operator-approved): verify the private originals first, then redact the published files IN PLACE as a normal,
+  // visible commit. Git history is not rewritten; the originals stay private with their hashes.
+  const i = process.argv.indexOf('--private'), priv = i > 0 ? process.argv[i + 1] : null;
+  if (!priv) throw new Error('give --private <directory with the private originals and ORIGINALS_SHA256.json>');
+  const privManifest = JSON.parse(readFileSync(join(priv, 'ORIGINALS_SHA256.json'), 'utf8')) as { files: Record<string, string> };
+  const files = execFileSync('git', ['ls-files', SRC], { cwd: ROOT, encoding: 'utf8' }).trim().split('\n').filter(Boolean).filter(f => !f.endsWith('CORRECTION_RECORD.json'));
+  // metering consistency, measured on the private originals before anything is redacted
+  const ledger = readFileSync(join(priv, 'ledger.ndjson'), 'utf8').trim().split('\n').map(l => JSON.parse(l)).find((e: { event: string }) => e.event === 'call-end');
+  const runEnd = readFileSync(join(priv, 'run/KS1-v6.1-oa-v3-96001-t8/stdout.ndjson'), 'utf8').split(/\r?\n/).filter(l => l.includes('"type":"run_end"')).map(l => JSON.parse(l))[0];
+  const diff = Math.abs(ledger.detail.used - runEnd.credits_consumed);
+  const metering = { balanceDeltaUsed: ledger.detail.used, kaneRunEndCreditsConsumed: Math.round(runEnd.credits_consumed * 10000) / 10000, absoluteDifference: Math.round(diff * 10000) / 10000, consistent: diff < 0.01, checkedOn: 'private originals, before redaction' };
+  const record: unknown[] = [];
+  for (const f of files) {
+    const rel = f.slice(SRC.length + 1), cur = readFileSync(join(ROOT, f));
+    if (privManifest.files[rel] !== sha(cur)) throw new Error(`${f} differs from its private original (hash mismatch); refusing to redact`);
+    const { text, applied } = redact(cur.toString('utf8'), APPLIED_RULES);
+    const changed = Object.keys(applied).length > 0;
+    if (changed) writeFileSync(join(ROOT, f), text);
+    record.push({ file: f, originalSha256: privManifest.files[rel], publishedSha256: changed ? sha(text) : privManifest.files[rel], redacted: changed, ...(changed ? { rulesApplied: applied } : {}) });
+  }
+  writeFileSync(join(ROOT, SRC, 'CORRECTION_RECORD.json'), JSON.stringify({
+    schema: 'rule-sabotage/evidence-correction-record@1', status: 'APPLIED (operator verdict 2026-11-24, PR #20 accepted): published files replaced by minimally redacted versions in a normal commit; Git history NOT rewritten',
+    provenanceCommit: PROVENANCE_COMMIT, appliedAt: new Date().toISOString(),
+    originalsPrivateCopy: 'kept by the operator outside the repository with ORIGINALS_SHA256.json; every originalSha256 below was verified against it before redaction',
+    rules: APPLIED_RULES.map(r => ({ id: r.id, reason: r.reason })),
+    kept: ['credit consumption: ledger "used" 9.097 and Kane run_end credits_consumed', 'loopback CDP port (127.0.0.1, ephemeral)', 'Kane run_id "run-0"', 'operator first name as approver (public PR attribution)', 'timestamps'],
+    metering,
+    historyNote: 'The unredacted originals remain reachable in Git history (commit 240b2bb and earlier). Removing them would need a history rewrite and force-push; not done (operator: do not rewrite history).',
+    files: record,
+  }, null, 1) + '\n');
+  console.log(`applied: ${(record as { redacted: boolean }[]).filter(r => r.redacted).length} files redacted in place; metering consistent: ${metering.consistent}`);
+} else if (process.argv[1]?.endsWith('evidence-redact.ts')) {
   const i = process.argv.indexOf('--private');
   const priv = i > 0 ? process.argv[i + 1] : null;
   if (!priv) throw new Error('give --private <directory outside the repository>');

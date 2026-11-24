@@ -8,8 +8,8 @@
  "runEndMs": 80325,
  "cdpReadyMs": 902,
  "spend": {
-  "before": 10503.2867,
-  "after": 10494.1899,
+  "before": "<redacted:balance>",
+  "after": "<redacted:balance>",
   "used": 9.097,
   "estimate": 27.9,
   "ceiling": 30,
@@ -36,7 +36,7 @@
   ],
   "elapsedMs": 81615,
   "kaneVersion": "0.10.4",
-  "evidencePath": "D:\\Rule_Sabotage\\rule-sabotage-live\\evidence\\v6\\kane-preflight\\run\\KS1-v6.1-oa-v3-96001-t8",
+  "evidencePath": "<repo>/evidence\\v6\\kane-preflight\\run\\KS1-v6.1-oa-v3-96001-t8",
   "testDouble": false
  },
  "disagreement": "engine-unverified-kane-approved",
