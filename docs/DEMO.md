@@ -67,8 +67,9 @@ node --experimental-strip-types --no-warnings gamewatch/private/evaluate-repair.
 Expected: B1, B2 and B3 fixed; controls unchanged; V6 tests 42/42; the agent's tests 7/7. Summary: detected B2 and
 B3, missed B1, repaired B1, B2 and B3, nothing remaining. The output goes to `gamewatch/private/evaluation/EVALUATION.json`.
 
-The exported workspace is exactly what the agent received. Compare it, hash for hash, with
-`evidence/gamewatch/repair/baseline.json`: 2431 files, LF-normalised SHA-256.
+The exported workspace is exactly what the agent received. To check, compare it with
+`evidence/gamewatch/repair/baseline.json` (2431 files, LF-normalised SHA-256) **before** the `cp` step. After the `cp`,
+only `server/v6/engine.ts` differs, because the frozen fix has been applied.
 
 To see the agent's tests fail on the build as received, swap the original engine into the workspace and run them:
 
