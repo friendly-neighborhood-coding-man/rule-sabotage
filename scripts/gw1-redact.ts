@@ -31,6 +31,7 @@ export const GW1_RULES: Rule[] = [
   { id: 'user-profile-path', pattern: /[A-Za-z]:(?:\\\\|\\|\/)Users(?:\\\\|\\|\/)[^\\\/"\s]+/g, replace: '<user-home>', reason: 'Local user profile path (contains the account user name).' },
   { id: 'kane-local-session-id', pattern: /((?:sessions|evidence)(?:\\\\|\\|\/))[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/g, replace: '$1<redacted:kane-local-id>', reason: 'Kane local session / evidence-pack identifiers; not needed to interpret the result.' },
   { id: 'kane-test-manager-url', pattern: /https:\/\/test-manager\.lambdatest\.com\/projects\/[A-Za-z0-9]+\/test-cases\/[A-Za-z0-9]+/g, replace: '<redacted:kane-test-manager-url>', reason: 'Account-side project and test-case identifiers of the Kane service.' },
+  { id: 'kane-test-url-whole-value', pattern: /("test_url"\s*:\s*)"[^"]*"/g, replace: '$1"<redacted:kane-test-url>"', reason: 'Whole Kane test URL value, including the share path and share identifier (added in pass 3, scripts/gw1-redact-url.ts).' },
   { id: 'gw-repo-absolute-path', pattern: /[A-Za-z]:(?:\\\\|\\|\/)Rule_Sabotage(?:\\\\|\\|\/)/g, replace: '<operator>/', reason: 'Absolute local path of the operator\'s folders (repository, blind workspace).' },
 ];
 

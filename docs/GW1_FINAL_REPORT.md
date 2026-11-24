@@ -184,6 +184,11 @@ hashes, and the rules applied:
   * the absolute path in `repair-console.log`.
 
   The redaction script now covers all of these (`scripts/gw1-redact.ts`).
+* **Pass 3** (video-production housekeeping, `review/REDACTION_RECORD-3.json`): pass 2 had replaced only the
+  project and test-case prefix of Kane's `test_url`, so the share path and its share identifier were still published.
+  The whole value is now one marker (`scripts/gw1-redact-url.ts`; the rule is also in `scripts/gw1-redact.ts`). Older
+  V2/V3 Kane outputs still carry their test URLs; they are hash-locked by their journals and the frozen repair
+  baseline, so they are left for an operator decision.
 * **Not redacted, on purpose:**
   * credit consumption, estimates, timings, nonces, timestamps and every finding;
   * the approver's first name, as in KS1;
