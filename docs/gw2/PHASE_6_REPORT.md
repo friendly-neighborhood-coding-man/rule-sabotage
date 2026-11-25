@@ -20,7 +20,7 @@ calls and no paid execution. Branch `claude/gw2-p6`, stacked on `claude/gw2-p5` 
 | `5413e2a` | P5 correction follow-up: the three-way verifier also aligns held-out builds (D88, verify.ts 2.1) |
 | `67b3f49` | P7 generated observations: 44 cases and 48 matches |
 | `af6831c` | P7 partition (unopened) and leak check |
-| last | P6: the GW2 book, Kane boundary, shim, step CLI, P7 book, tests, the committed P6 run, the P7 pre-registration draft, the operator checklist and this report |
+| `418db15` | P6: the GW2 book, Kane boundary, shim, step CLI, P7 book, tests, the committed P6 run, the P7 pre-registration draft, the operator checklist and this report |
 
 ## 2. P5 corrections (operator review)
 
