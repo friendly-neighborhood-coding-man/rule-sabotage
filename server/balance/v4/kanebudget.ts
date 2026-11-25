@@ -20,7 +20,9 @@
 import { existsSync, readFileSync, appendFileSync, mkdirSync } from 'node:fs';
 import { dirname } from 'node:path';
 
-export const PAID_RESEARCH_EXECUTION: 'disabled' | 'per-run-approval' = 'disabled';
+// GW2 P7 pilot (operator authorization 2026-11-25 17:13 UTC, D109): opened for the three pilot run ids only (PAID_RESEARCH_SCOPE),
+// every approval check kept; restored to 'disabled' in a separate commit when the pilot completes or stops.
+export const PAID_RESEARCH_EXECUTION: 'disabled' | 'per-run-approval' = 'per-run-approval';
 /**
  * Which run ids a 'per-run-approval' gate may serve (GW2 P7, D109): only the three authorized P7 pilot runs. Unrelated
  * research or production calls are refused even while the gate is open. Tests may inject another scope (Deps.scope).

@@ -13,7 +13,7 @@ import { ROOT } from '../gamewatch/gw2/paths.ts';
 import { realRoute, checkShim, BoundaryRefused, PROFILES } from '../gamewatch/gw2/kane-boundary.ts';
 import { ranksAbove, DIMENSIONS } from '../gamewatch/gw2/p6-steps.ts';
 import { kaneArgv, OBJECTIVE_P7 } from '../gamewatch/gw2/p7-plan.ts';
-import { PAID_RESEARCH_EXECUTION } from '../server/balance/v4/kanebudget.ts';
+import { PAID_RESEARCH_EXECUTION, PAID_RESEARCH_SCOPE } from '../server/balance/v4/kanebudget.ts';
 
 const PY = process.platform === 'win32' ? 'python' : 'python3';
 const RUNNER = join(ROOT, 'gamewatch/vendor/skillflow/runner.py'), BOOK = join(ROOT, 'gamewatch/gw2/book.json');
@@ -71,12 +71,14 @@ test('AC-P6.2 without authorization the book stops with exit 2 at the gated step
 });
 
 test('AC-P6.2 the real route is refused by the unchanged paid-call gate before any process, even when the runner step is authorized', async () => {
-  assert.equal(PAID_RESEARCH_EXECUTION, 'disabled', 'the gate is unchanged');
+  // the gate is disabled, or (D109) open only for the three P7 pilot run ids while the pilot runs
+  const pilotOpen = PAID_RESEARCH_EXECUTION === 'per-run-approval' && String(PAID_RESEARCH_SCOPE) === String(/^GW2-P7-pilot-[123]$/);
+  assert.ok(PAID_RESEARCH_EXECUTION === 'disabled' || pilotOpen);
   const d = mkdtempSync(join(tmpdir(), 'gw2-p6-real-'));
   try {
     mkdirSync(d, { recursive: true });
     const r = await realRoute(d);
-    assert.match(r.refused, /disabled/);
+    assert.ok('refused' in r); assert.match(r.refused, pilotOpen ? /external operator record/ : /disabled/);
     const r2 = runBook(join(d, 'book'), { authorize: true, route: 'real' });
     assert.equal(r2.code, 3, 'the boundary exits 2 and the book stops'); assert.equal(r2.state.current, 'investigate');
     assert.ok(!existsSync(r2.marker)); assert.ok(!existsSync(join(d, 'book', 'exp', 'sessions')));

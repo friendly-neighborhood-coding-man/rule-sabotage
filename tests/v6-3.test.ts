@@ -33,7 +33,8 @@ test('Kane single call: plan within 30 credits (local estimate, not a hard limit
   const B = await import('../server/balance/v4/kanebudget.ts');
   assert.equal(PLAN.calls, 1); assert.equal(PLAN.retries, 0); assert.ok(PLAN.ceilingCredits <= 30);
   assert.ok(PLAN.maxStepsForEstimate * B.MEASURED_CREDITS_PER_STEP <= PLAN.ceilingCredits);
-  assert.equal(B.PAID_RESEARCH_EXECUTION, 'disabled');
+  assert.ok(B.PAID_RESEARCH_EXECUTION === 'disabled' || (B.PAID_RESEARCH_EXECUTION === 'per-run-approval' && String(B.PAID_RESEARCH_SCOPE) === String(/^GW2-P7-pilot-[123]$/)), 'disabled, or open only for the GW2 P7 pilot run ids (D109)');
+  if (B.PAID_RESEARCH_EXECUTION !== 'disabled') assert.equal(B.PAID_RESEARCH_SCOPE!.test(PLAN.runId ?? ''), false, 'this plan is outside the pilot scope');
   // The repaired runner reuses only the generic pieces of server/kane.ts (runCapture, parseKaneOutput, kaneConfig), never the
   // referee (kaneJudge / kaneProbe / cache) or the game servers. The full execution path is tested in tests/kane-single-call.test.ts.
   const src = readFileSync(new URL('../scripts/kane-single-call.ts', import.meta.url), 'utf8');
