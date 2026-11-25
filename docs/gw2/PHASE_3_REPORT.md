@@ -1,6 +1,7 @@
 # GW2 Phase 3 report: Blind Rule Discovery evidence and submission protocol
 
-**Status: `PHASE_3_READY_FOR_REVIEW`.** P4 has not been started.
+**Status: `PHASE_3_CONDITIONALLY_APPROVED` (operator, 2026-11-25 14:22 UTC); corrections in §11.** The rest of this report
+is as submitted for review.
 
 Branch `claude/gw2-p3`, stacked on `claude/gw2-p2` (PR #24) → `claude/gw2-p1` (#23) → `claude/gw2-phase-0` (#22).
 Nothing was merged, deployed or force-pushed. No Kane call, no runtime model call, no authorization-gate change
@@ -90,9 +91,9 @@ than the others.
 **Logical separation on one machine; no OS sandbox, container or separate account.** The review server is started
 with `--site <exp>/partitions/discovery/site` and serves only files under it (GW1 path containment; `..`, encoded `..`
 and held-out ids answer 404, tested). `INPUT_BOUNDARY.json` lists exactly the served files. spec/, heldout/ and eval/
-sit on the same disk: an agent with shell or file access could read them. Reading held-out and eval files is only
+sit on the same disk: an agent with shell or file access could read them. Semantic reading of held-out and eval files is only
 *sanctioned* through `freeze.ts openEvaluation`, which is a convention enforced in code paths we control, not by the
-operating system.
+operating system. Raw-byte integrity reads are a separate category (§11.2).
 
 ## 6. Submission, import, freeze
 
@@ -157,6 +158,42 @@ counted as passes; the skip is the same Windows-only `.cmd` shim test. No new fa
 
 Q17 (add variant scripts so R5/R12 are covered in both partitions), Q18 (the referee message that nearly states R5),
 Q19 (per-experiment vs per-session freeze), and the earlier open Q3, Q4, Q6–Q9, Q11 in `DECISIONS.md`.
+
+## 11. Corrections after the Phase 3 review (separate commit)
+
+Operator decision PHASE_3_CONDITIONALLY_APPROVED (2026-11-25 14:22 UTC). Corrections D54–D58, decisions Q17–Q19
+(D51–D53). The GW1-derived fixture `evidence/gw2/p3-fixture/` is unchanged and remains non-experimental.
+
+### 11.1 What changed
+
+| Correction | Before | After | Regression test (`tests/gw2-p3-corrections.test.ts`) |
+|---|---|---|---|
+| Explicit session closure | a logging-off session counted as "ended"; a logging-on one by its journal session-end | `CLOSED.json` (`gw2-session-close@1`) written by server close (logging on and off) or declared by an operator role with a reason; seals the 4 raw output files; import and freeze need `closed` | closure ×3 (server close seals both conditions; unclosed refused; declaration keeps validity; forged server-close invalid; changed/added/removed outputs) |
+| Freeze after all declared sessions (Q19) | every session found had to be imported | `SESSIONS.json` declares the count; exactly that many closed and imported sessions; seals and plan recorded; `gw2-freeze@2` | Q19 freeze test |
+| Readers bound to the frozen manifests | the reader re-verified the *current* manifest, so a consistent replacement manifest + files passed | the reader compares the current MANIFEST.json hash to the hash accepted at freeze time, then the file to that manifest's entry | gate: consistent replacement refused; file changed under the accepted manifest refused |
+| Ledger verified before use | appended without checking the existing chain | `verifyLedger` (JSON, canonical, seq, prev, event, time, termination); nothing appended to an invalid ledger; freeze and gate refuse | gate ledger test (8 corruptions, nothing appended in each) |
+| Fail-closed freeze and ledger records | partial field checks | full shape validation before any field is used; `@1` freezes cannot open evaluation | gate malformed-freeze test (12 malformations, @1 refusal, open session refusal) |
+
+### 11.2 Raw-byte integrity reads vs semantic reads of held-out and eval files
+
+| Reader | What it does with `heldout/` and `eval/` files | Category |
+|---|---|---|
+| `partition.ts partition` | writes them (once) | creation |
+| `partition.ts verifyManifest`, `verifyPartitions` | reads each file's bytes to compute the LF-normalised SHA-256; parses only `MANIFEST.json` and `PARTITION.json` (hash lists) | raw-byte integrity |
+| `freeze.ts freezeHypotheses`, `verifyFreeze` | the same integrity reads, through `verifyPartitions` | raw-byte integrity |
+| `leak-check.ts` | parses `spec/spec.json` and `eval/eval.json` (rule texts, id maps) to build the forbidden-term list; compares served files to the hashes in the spec/heldout/eval manifests; never parses `heldout/observations.json` | semantic (spec, eval) by an operator-side tool before any session; raw-byte (heldout) |
+| `freeze.ts openEvaluation` → `read()` | returns file content for analysis, after the freeze and the ledger checks, bound to the frozen manifests | **semantic, sanctioned** |
+| tests (`gw2-blind`, `gw2-p3-corrections`) | on scratch copies of the fixture: parse `eval.json` id maps to inject leaks and probe the server; read held-out via the gate; overwrite bytes to test detection | test fixtures only |
+
+Hashing reads every byte, so "raw-byte" means the content is reduced to a hash and not interpreted, not that it is
+unread. None of this is enforced by the operating system (§5): a developer, operator or agent with file access can read
+any partition, and the GW1-derived fixture content is public GW1 evidence in any case.
+
+### 11.3 Tests after the corrections
+
+`npm run test:gw2`: 64/64 (57 + 7 correction tests). Existing tests were adapted, not weakened: scratch experiments
+declare a session plan; the import-conflict test now first asserts that the seal catches the edit, then re-seals by
+operator declaration and still asserts the graph conflict check. Full-suite numbers are in PHASE_4_REPORT.md.
 
 ## Reproduce (no Kane, no model provider)
 

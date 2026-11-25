@@ -4,7 +4,8 @@
  *   node --experimental-strip-types --no-warnings gamewatch/gw2/import-session.ts <sessionDir> <judgments.ndjson>
  *        [--completeness <completeness.json>] [--coverage <coverage.json>] [--kane-stdout <f> --kane-args <f>]
  *
- * The review server (gamewatch/gw2/serve.ts) never touches the graph. After a session has ended, this step appends:
+ * The review server (gamewatch/gw2/serve.ts) never touches the graph. Only a CLOSED session (CLOSED.json, a valid seal;
+ * gamewatch/gw2/session-close.ts) is imported, whatever its logging condition. This step appends:
  *   one `finding` node per notes.ndjson line and one `hypothesis` or `abstention` node per hypotheses.ndjson line,
  *     ALL of them: invalid-nonce, journal-mismatch and unverified submissions included. Each node quotes its line
  *     verbatim, references it by file + line hash, and records the P1 verification status, whether it counts, and the
@@ -24,6 +25,7 @@
 import { readFileSync, existsSync, writeFileSync, mkdirSync } from 'node:fs';
 import { join, dirname, basename } from 'node:path';
 import { ROOT, repoRelative, assertWritableOutput } from './paths.ts';
+import { sessionClosure } from './session-close.ts';
 import { loadSession, experimentalValidity, type SessionFinding } from './session.ts';
 import { append, verify, nodeId, fileSha256, sha256, type NodeInput, type Author } from './judgments.ts';
 
@@ -35,12 +37,13 @@ const refPath = (abs: string, root: string) => (root === ROOT ? repoRelative(abs
 /** The deterministic list of nodes this session imports to, in order. */
 export function planSessionImport(sessionDir: string, opts: ImportOptions = {}) {
   const root = opts.root ?? ROOT, s = loadSession(sessionDir), meta = s.meta as Record<string, unknown>;
-  const ended = s.journal.status === 'unavailable' ? meta.logging === 'off' : s.journal.lines.some(l => l.type === 'session-end');
-  if (!ended && s.journal.status !== 'invalid') throw new ImportError(`session ${meta.session} has not ended (no session-end in its journal); import after the review session`);
   const validity = experimentalValidity(s);
   const label = String(meta.label);
   if (!['test-double', 'kane'].includes(label)) throw new ImportError(`session label "${label}" is not importable (test-double or kane only)`);
   if (label === 'kane' && !opts.kane) throw new ImportError('a Kane session needs the stored Kane stdout and args (--kane-stdout, --kane-args); Kane-labelled submissions are never imported without provenance');
+  // P3 correction (Q19): explicit closure is required for every session, logging-disabled ones included.
+  const closure = sessionClosure(sessionDir);
+  if (closure.status !== 'closed') throw new ImportError(`session ${meta.session} is not closed (${closure.status}: ${closure.problems.join('; ')}); close it (server close, or session-close.ts declare) before import`);
   const server = meta.server as { name?: string; version?: string } | undefined;
   const lineRef = (file: string, i: number, line: string) => ({ path: refPath(file, root), sha256: fileSha256(file), line: i + 1, lineSha256: sha256(line) });
   const common = (f: SessionFinding) => ({ exp: meta.exp, session: meta.session, index: f.noteIndex, verification: f.verification, join: f.join, counted: f.counts, serverSeq: f.seq,
@@ -93,15 +96,15 @@ export function planSessionImport(sessionDir: string, opts: ImportOptions = {}) 
     } });
   };
   assess(opts.completeness, 'completeness'); assess(opts.coverage, 'coverage');
-  return { session: String(meta.session), exp: String(meta.exp), nodes, notApplicable, validity };
+  return { session: String(meta.session), exp: String(meta.exp), nodes, notApplicable, validity, seal: closure.sealSha256 };
 }
 
 /** Which notes/hypotheses lines of a session have no node in the graph (by session + verbatim line). */
 export function sessionImportStatus(sessionDir: string, graph: string) {
-  const s = loadSession(sessionDir), nodes = existsSync(graph) ? verify(graph).nodes : [];
+  const s = loadSession(sessionDir), nodes = existsSync(graph) ? verify(graph).nodes : [], closure = sessionClosure(sessionDir);
   const have = new Set(nodes.filter(n => n.body.session === s.meta.session).map(n => `${n.body.source}:${n.body.verbatim}`));
   const missing = [...s.findings.map(f => ['notes', f]), ...s.hypotheses.map(h => ['hypotheses', h])].filter(([src, f]) => !have.has(`${src}:${(f as SessionFinding).line}`)).map(([src, f]) => `${src} line ${(f as SessionFinding).noteIndex + 1}`);
-  return { session: String(s.meta.session), complete: !missing.length, missing };
+  return { session: String(s.meta.session), complete: !missing.length, missing, closure };
 }
 
 export function importSession(sessionDir: string, graph: string, opts: ImportOptions = {}) {
@@ -124,7 +127,7 @@ export function importSession(sessionDir: string, graph: string, opts: ImportOpt
   const head = verify(graph).head;
   const receiptF = assertWritableOutput(join(dirname(graph), 'imports', `${plan.session}.json`));
   mkdirSync(dirname(receiptF), { recursive: true });
-  const receipt = { schema: 'gamewatch/gw2-session-import@1', session: plan.session, exp: plan.exp, sessionDir: refPath(sessionDir, opts.root ?? ROOT), graph: basename(graph), nodes: result, notApplicable: plan.notApplicable, sessionValidity: plan.validity, graphHeadAfter: head };
+  const receipt = { schema: 'gamewatch/gw2-session-import@1', session: plan.session, exp: plan.exp, sessionDir: refPath(sessionDir, opts.root ?? ROOT), graph: basename(graph), nodes: result, notApplicable: plan.notApplicable, sessionValidity: plan.validity, sessionSeal: plan.seal, graphHeadAfter: head };
   writeFileSync(receiptF, JSON.stringify(receipt, null, 1) + '\n');
   return receipt;
 }

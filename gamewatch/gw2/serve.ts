@@ -13,6 +13,8 @@
  *
  * One server process = one review session. Output goes to <out>/sessions/<session>/: session.json (logging on/off,
  * nonce hash, paths), notes.ndjson (findings, same format as GW1 plus the session id), access.ndjson (the journal).
+ * Closing the server closes the session explicitly: CLOSED.json seals the outputs (gamewatch/gw2/session-close.ts), for
+ * logging-on and logging-off sessions alike. A session without CLOSED.json is not closed and cannot be imported.
  * <out> must be under evidence/gw2/ or outside the repository (gamewatch/gw2/paths.ts); frozen GW1 paths are refused.
  *
  * Shared with GW1: resolvePage (path normalisation and containment), the form field allow-list and the nonce check.
@@ -21,6 +23,7 @@
  * tests/gw2-compat.test.ts; report.html differs only by its per-session nonce).
  */
 import { createServer, type IncomingMessage, type ServerResponse } from 'node:http';
+import { sealSession } from './session-close.ts';
 import { readFileSync, existsSync, appendFileSync, mkdirSync, writeFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { randomBytes } from 'node:crypto';
@@ -146,7 +149,7 @@ export async function startGw2Server(o: Gw2ServerOptions): Promise<Gw2Server> {
     srv.listen(o.port ?? 0, '127.0.0.1', () => resolveP({
       port: (srv.address() as { port: number }).port, nonce: NONCE, session: SESSION, dir, journal: logging ? journalFile : null, notes,
       failures: () => j?.failures ?? 0,
-      close: () => new Promise<void>(rs => { srv.closeAllConnections?.(); srv.close(() => { j?.close(); failed(); rs(); }); }),
+      close: () => new Promise<void>(rs => { srv.closeAllConnections?.(); srv.close(() => { j?.close(); failed(); if (!existsSync(join(dir, 'CLOSED.json'))) sealSession(dir, { closure: 'server-close', by: `${SERVER_ID.name}@${SERVER_ID.version}` }); rs(); }); }),
     }));
   });
 }

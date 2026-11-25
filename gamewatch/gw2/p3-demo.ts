@@ -1,6 +1,7 @@
 /**
  * GW2 P3 demonstration with a deterministic TEST DOUBLE (no Kane, no model): one blind discovery session against an
- * experiment's partitions, then the explicit session import, then the hypothesis freeze.
+ * experiment's partitions (declared in SESSIONS.json), closed by the server, then the explicit session import, then the
+ * hypothesis freeze.
  *
  *   node --experimental-strip-types --no-warnings gamewatch/gw2/p3-demo.ts <expDir>      (expDir must hold partitions/)
  *
@@ -16,7 +17,7 @@ import { loadSession } from './session.ts';
 import { validatePolicy, evaluate } from './policy.ts';
 import { sessionCoverage } from './coverage.ts';
 import { importSession } from './import-session.ts';
-import { freezeHypotheses } from './freeze.ts';
+import { freezeHypotheses, writeSessionPlan } from './freeze.ts';
 import { assertWritableOutput } from './paths.ts';
 import type { Inventory } from './inventory.ts';
 import type { BlindObservations } from './partition.ts';
@@ -31,6 +32,7 @@ export async function runP3Demo(expDir: string, opts: { freezeAt?: string } = {}
   const exp = assertWritableOutput(expDir), site = join(exp, 'partitions/discovery/site');
   if (!existsSync(site)) throw new Error(`no discovery site in ${exp}; run partition.ts first`);
   const inv = discoveryInventory(exp), [c1, c2] = inv.cases;
+  writeSessionPlan(exp, 1, 'P3 demonstration: one test-double discovery session');
   const s = await startGw2Server({ exp: 'p3-demo', out: exp, site, label: 'test-double' });
   const base = `http://127.0.0.1:${s.port}`, ua = { 'user-agent': 'gw2-test-double/1' };
   const get = (p: string) => fetch(base + p, { headers: ua }).then(r => r.text());

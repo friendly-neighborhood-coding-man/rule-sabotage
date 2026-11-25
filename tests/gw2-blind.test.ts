@@ -15,7 +15,8 @@ import { specGuidedSite } from '../gamewatch/gw2/blind-site.ts';
 import { leakCheck } from '../gamewatch/gw2/leak-check.ts';
 import { startGw2Server } from '../gamewatch/gw2/serve.ts';
 import { importSession, planSessionImport, sessionImportStatus, ImportError } from '../gamewatch/gw2/import-session.ts';
-import { freezeHypotheses, verifyFreeze, openEvaluation, FreezeError } from '../gamewatch/gw2/freeze.ts';
+import { freezeHypotheses, verifyFreeze, openEvaluation, writeSessionPlan, FreezeError } from '../gamewatch/gw2/freeze.ts';
+import { sealSession, sessionClosure } from '../gamewatch/gw2/session-close.ts';
 import { verify, append, nodeId, canonical, sha256 } from '../gamewatch/gw2/judgments.ts';
 import { req } from './gw2-fixtures.ts';
 import type { GWBundle } from '../gamewatch/evidence.ts';
@@ -24,7 +25,7 @@ const FIX = join(ROOT, 'evidence/gw2/p3-fixture'), PROC = join(ROOT, 'evidence/g
 const scratch = () => mkdtempSync(join(tmpdir(), 'gw2-p3-'));
 const walk = (d: string): string[] => readdirSync(d).sort().flatMap(n => statSync(join(d, n)).isDirectory() ? walk(join(d, n)).map(x => `${n}/${x}`) : [n]);
 /** A scratch experiment holding a copy of the committed fixture partitions (no sessions, no graph). */
-function scratchExp() { const d = scratch(), exp = join(d, 'exp'); cpSync(join(FIX, 'partitions'), join(exp, 'partitions'), { recursive: true }); return { d, exp }; }
+function scratchExp(sessions = 1) { const d = scratch(), exp = join(d, 'exp'); cpSync(join(FIX, 'partitions'), join(exp, 'partitions'), { recursive: true }); writeSessionPlan(exp, sessions, 'test'); return { d, exp }; }
 const disc = (exp: string) => JSON.parse(readFileSync(join(exp, 'partitions/discovery/observations.json'), 'utf8'));
 
 /** One test-double session: two competing hypotheses and one abstention, plus a finding. */
@@ -159,10 +160,14 @@ test('AC-P3.3: two competing hypotheses and one abstention become three graph no
   assert.deepEqual(hyps[1].parents, [{ id: hyps[0].id, relation: 'alternative-to' }], 'declared competition is a link, not a replacement');
   assert.equal(hyps[0].parents.length, 0); assert.ok(nodes.every(n => n.author.kind === 'test-double' && !/kane/i.test(n.author.id)));
   assert.ok(nodes.every(n => n.body.verification === 'journal-verified' && (n.body.sessionValidity as { status: string }).status === 'verified'));
-  assert.deepEqual(sessionImportStatus(s.dir, graph), { session: s.session, complete: true, missing: [] });
-  // conflict: a session line changed after import is refused, nothing written
+  const st = sessionImportStatus(s.dir, graph);
+  assert.deepEqual({ ...st, closure: st.closure.status }, { session: s.session, complete: true, missing: [], closure: 'closed' });
+  // conflict: a session line changed after import is refused, nothing written. The seal catches it first; with the seal
+  // replaced (CLOSED.json removed and re-declared), the graph conflict check still catches it.
   const size = readFileSync(graph).length, hf = join(s.dir, 'hypotheses.ndjson');
   writeFileSync(hf, readFileSync(hf, 'utf8').replace('H two, competing', 'H two, edited'));
+  assert.throws(() => importSession(s.dir, graph), /not closed \(seal-violated: hypotheses.ndjson changed/);
+  rmSync(join(s.dir, 'CLOSED.json')); sealSession(s.dir, { closure: 'operator-declared', by: 'operator-01', reason: 'test: re-seal after an edit' });
   assert.throws(() => importSession(s.dir, graph), /conflict: /, "an edited session line (which also changes the session validity) is a conflict");
   assert.equal(readFileSync(graph).length, size);
   rmSync(d, { recursive: true, force: true });
