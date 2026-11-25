@@ -21,7 +21,7 @@ onward is implemented. Nothing here claims that mandatory coverage improves defe
 | `claude/project-thread-1a20hc` (GW1 submission, PR #21) | `d22d33ee…` | not touched |
 | `followup/gw1-visit-coverage` | `46ee7e6b…` | not touched; its 2 commits imported |
 | `claude/gw2-phase-0` (PR #22, draft, unmerged) | `af8b345c…` | reviewed P0 head; not touched |
-| `claude/gw2-p1` (**new**) | from `af8b345c` | `3c89568`, `063db00` (imports) + P1 commit(s); stacked draft PR targets `claude/gw2-phase-0` |
+| `claude/gw2-p1` (**new**) | from `af8b345c` | `3c89568`, `063db00` (imports), `06250b4` (P1), then this report fix-up; draft PR #23 targets `claude/gw2-phase-0` |
 
 ## 3. Architecture changes
 
@@ -185,7 +185,7 @@ and Kane's step log), because no sequence numbers exist; the report says so. Fin
 
 ## 11. Draft PR
 
-PR_URL_PLACEHOLDER
+https://github.com/friendly-neighborhood-coding-man/rule-sabotage/pull/23 (draft, base `claude/gw2-phase-0`). PR #22 stays unmerged.
 
 ## 12. Recommended P2 scope
 
