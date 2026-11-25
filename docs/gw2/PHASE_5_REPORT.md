@@ -20,7 +20,7 @@ Commits on this branch:
 | Commit | Content |
 |---|---|
 | `e81bf81` | **Freeze, before any P5 observation:** generator, P5 scripts, generation and partition procedures with build hashes, limited R5/R12 situations, encoding-2 |
-| next | Generated observations (experiment and validation runs) and the real-engine mutation validation |
+| `1ef08df` | Generated observations (experiment and validation runs) and the real-engine mutation validation |
 | last | Seal, held-out scoring, discrimination, the Q20 field, the experimental partition, the demonstration, tests and this report |
 
 ## 1. Summary
@@ -219,7 +219,7 @@ Also tested:
 
 | Suite | Result |
 |---|---|
-| `npm test` | see the PR description (full run on the final commit) |
+| `npm test` | 324 tests: 318 pass, 0 fail, 5 cancelled (baseline), 1 skipped (baseline) |
 | `npm run test:gw2` | 94 tests, 0 fail (82 after the P4 corrections + 12 P5 tests in `tests/gw2-p5.test.ts`) |
 | `npm run gw2:verify` | OK: 135 frozen files unchanged |
 
