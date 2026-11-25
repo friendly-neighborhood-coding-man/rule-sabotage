@@ -70,6 +70,12 @@
     "gamewatch:groundtruth": "node --experimental-strip-types --no-warnings=ExperimentalWarning --test gamewatch/private/groundtruth.test.ts",
     "gamewatch:serve": "node --experimental-strip-types --no-warnings=ExperimentalWarning gamewatch/kane/serve.ts",
     "gamewatch:kane-plan": "node --experimental-strip-types --no-warnings=ExperimentalWarning gamewatch/kane/plan.ts",
-    "gameplay:freeze": "node --experimental-strip-types --no-warnings=ExperimentalWarning scripts/gameplay-freeze.ts"
+    "gameplay:freeze": "node --experimental-strip-types --no-warnings=ExperimentalWarning scripts/gameplay-freeze.ts",
+    "test:gw2": "node --experimental-strip-types --no-warnings=ExperimentalWarning --test tests/gw2-*.test.ts gamewatch/kane/serve.test.ts",
+    "gw2:serve": "node --experimental-strip-types --no-warnings=ExperimentalWarning gamewatch/gw2/serve.ts",
+    "gw2:policy": "node --experimental-strip-types --no-warnings=ExperimentalWarning gamewatch/gw2/policy.ts",
+    "gw2:coverage": "node --experimental-strip-types --no-warnings=ExperimentalWarning gamewatch/gw2/coverage.ts",
+    "gw2:demo": "node --experimental-strip-types --no-warnings=ExperimentalWarning gamewatch/gw2/demo-session.ts",
+    "gw2:verify": "node scripts/gw2-baseline.mjs verify && node scripts/gw2-frozen-inventory.mjs"
   }
 }
