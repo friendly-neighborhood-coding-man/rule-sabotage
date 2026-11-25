@@ -211,7 +211,8 @@ export function verifyManifest(dir: string): string[] {
   return bad;
 }
 
-export async function partition(procFile: string, bundleFile: string, expDir: string, opts: { fixture?: boolean; root?: string } = {}) {
+/** `structuredField` (P5, Q20 / D81): the hypothesis form offers the optional structured representation field. Off by default, so P3/P4 partitions stay byte-identical. */
+export async function partition(procFile: string, bundleFile: string, expDir: string, opts: { fixture?: boolean; root?: string; structuredField?: boolean } = {}) {
   const root = opts.root ?? ROOT, proc = loadProcedure(procFile, root);
   const bundle = JSON.parse(readFileSync(bundleFile, 'utf8')) as GWBundle;
   if (bundle.schema !== 'gamewatch/evidence@1') throw new PartitionError('bundle is not gamewatch/evidence@1');
@@ -229,11 +230,11 @@ export async function partition(procFile: string, bundleFile: string, expDir: st
   if (new Set(ids).size !== ids.length || ids.some(i => orig.has(i))) throw new PartitionError('neutral id collision; change the salt in a new procedure');
   const dir = (p: Partition) => { const d = join(out, p); mkdirSync(d, { recursive: true }); return d; };
   const ref = (f: string) => ({ path: repoRelative(f) ?? f, sha256: fileSha256(f) });
-  const common = { procedure: { id: proc.id, ...ref(procFile) }, bundle: ref(bundleFile), ...(fixture ? { fixture } : {}) };
+  const common = { procedure: { id: proc.id, ...ref(procFile) }, bundle: ref(bundleFile), ...(fixture ? { fixture } : {}), ...(opts.structuredField ? { hypothesisForm: 'p5: optional structured representation field (Q20)' } : {}) };
   const dd = dir('discovery');
   writeFileSync(join(dd, 'observations.json'), json(D.obs));
   const { buildBlindSite } = await import('./blind-site.ts');
-  buildBlindSite(D.obs, join(dd, 'site'));
+  buildBlindSite(D.obs, join(dd, 'site'), { structuredField: opts.structuredField });
   writeFileSync(join(dir('spec'), 'spec.json'), json({ schema: 'gamewatch/gw2-spec@1', game: bundle.game, source: bundle.source, builds: bundle.builds }));
   writeFileSync(join(dir('heldout'), 'observations.json'), json(H.obs));
   writeFileSync(join(dir('eval'), 'eval.json'), json({
@@ -272,9 +273,9 @@ export function verifyPartitions(expDir: string): string[] {
 
 if (process.argv[1]?.endsWith('gw2/partition.ts')) {
   const [proc, bundle, exp] = process.argv.slice(2).filter(a => !a.startsWith('--'));
-  if (!exp) { console.error('usage: partition.ts <procedure.json> <bundle.json> <expDir> [--fixture]'); process.exit(2); }
+  if (!exp) { console.error('usage: partition.ts <procedure.json> <bundle.json> <expDir> [--fixture] [--structured-field]'); process.exit(2); }
   try {
-    const r = await partition(proc, bundle, exp, { fixture: process.argv.includes('--fixture') });
+    const r = await partition(proc, bundle, exp, { fixture: process.argv.includes('--fixture'), structuredField: process.argv.includes('--structured-field') });
     const c = r.split.coverage;
     console.log(`partitions written to ${r.out}\n  discovery: scripts ${r.split.discovery.scripts.join(', ')}; seeds ${r.split.discovery.seeds.join(', ')}\n  heldout:   scripts ${r.split.heldout.scripts.join(', ')}; seeds ${r.split.heldout.seeds.join(', ')}\n  discovery share ${r.split.share.discovery.toFixed(3)} (target ${r.split.share.target})\n  rules not covered in discovery: ${c.notCoveredInDiscovery.join(', ') || 'none'}; in heldout: ${c.notCoveredInHeldout.join(', ') || 'none'}`);
   } catch (e) { console.error((e as Error).message); process.exit(5); }

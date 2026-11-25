@@ -72,7 +72,7 @@ export function planSessionImport(sessionDir: string, opts: ImportOptions = {}) 
     const node: NodeInput = {
       kind: n.abstain === 'yes' ? 'abstention' : 'hypothesis', parents, ...a, ...(a.author.id === 'kane-cli' ? { provenance: kaneProv(ref) } : {}), origin: 'live', at: String(n.at), evidenceRefs: [ref],
       ...(parents.length ? { reason: `competing hypothesis declared by the submitter (competingWith: ${JSON.stringify(declared)})` } : {}),
-      body: { verbatim: h.line, source: 'hypotheses', ref: n.ref, statement: n.statement ?? '', structured, confidence: n.confidence ?? null, competingWith: declared, unresolvedCompeting: named.filter(r => !byRef.has(r)), evidence: n.evidence ?? '', abstainScope: n.abstainScope ?? '', ...common(h) },
+      body: { verbatim: h.line, source: 'hypotheses', ref: n.ref, statement: n.statement ?? '', structured, confidence: n.confidence ?? null, competingWith: declared, unresolvedCompeting: named.filter(r => !byRef.has(r)), evidence: n.evidence ?? '', abstainScope: n.abstainScope ?? '', ...(typeof n.representation === 'string' && n.representation.trim() ? { submittedRepresentation: n.representation } : {}), ...common(h) },
     };
     nodes.push({ key: `hypothesis:${h.noteIndex}`, node });
     if (typeof n.ref === 'string') byRef.set(n.ref, nodeId(node));

@@ -16,6 +16,8 @@ import { assertWritableOutput } from './paths.ts';
 import { aggregate, evLine, build as gw1Build } from '../dashboard.ts';
 import type { GWBundle, GWState } from '../evidence.ts';
 import type { BlindObservations, BlindCase, BlindMatch } from './partition.ts';
+import { SITUATION_FIELDS } from './situations.ts';
+import { OPERATORS, HYPOTHESIS_SCHEMA } from './hypothesis.ts';
 
 const esc = (v: unknown) => String(v).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const f2 = (x: number) => (Number.isFinite(x) ? x.toFixed(2) : '–');
@@ -52,7 +54,7 @@ export const REPORT_FORM = `<h1>Submit a finding</h1>
 <input type="hidden" name="nonce" value="__NONCE__">
 <p><button type="submit">Submit finding</button></p>
 </form>`;
-export const HYPOTHESIS_FIELDS = ['statement', 'trigger', 'condition', 'effect', 'confidence', 'competingWith', 'evidence', 'abstain', 'abstainScope', 'nonce'];
+export const HYPOTHESIS_FIELDS = ['statement', 'trigger', 'condition', 'effect', 'representation', 'confidence', 'competingWith', 'evidence', 'abstain', 'abstainScope', 'nonce'];
 export const HYPOTHESIS_FORM = `<h1>Submit a hypothesis</h1>
 <p>A hypothesis is a rule you think the game follows, stated in your own words. One form per hypothesis. You do not have to give a hypothesis for every aspect of the game, and you may submit competing hypotheses for the same behaviour. If you cannot decide, abstain instead: abstaining is a valid answer. Everything you submit is stored exactly as written and is never overwritten; submit a new form to revise.</p>
 <form method="post" action="/hypothesis" id="hypothesis">
@@ -70,7 +72,12 @@ export const HYPOTHESIS_FORM = `<h1>Submit a hypothesis</h1>
 <p><button type="submit">Submit</button></p>
 </form>`;
 
-export function buildBlindSite(obs: BlindObservations, outDir: string) {
+/** P5 (Q20): the optional structured representation field, inserted only when the partition asks for it. */
+const STRUCTURED_FIELD = `<p><label>Optional structured representation (JSON in the format described below the form; never required, stored exactly as written and never repaired)<br><textarea name="representation" rows="6" cols="100"></textarea></label></p>
+`;
+export const hypothesisForm = (structuredField = false) => structuredField ? HYPOTHESIS_FORM.replace('<p><label>Confidence', STRUCTURED_FIELD + '<p><label>Confidence') + '\n' + schemaPage() : HYPOTHESIS_FORM;
+
+export function buildBlindSite(obs: BlindObservations, outDir: string, o: { structuredField?: boolean } = {}) {
   const out = assertWritableOutput(outDir);
   if (existsSync(out)) throw new Error(`refusing to overwrite an existing site: ${out}`);
   mkdirSync(out, { recursive: true });
@@ -81,7 +88,7 @@ export function buildBlindSite(obs: BlindObservations, outDir: string) {
   for (const c of obs.cases) writeFileSync(join(out, `case-${c.caseId}.html`), casePage(c));
   for (const m of obs.matches) writeFileSync(join(out, `match-${m.matchId}.html`), matchPage(m));
   writeFileSync(join(out, 'report.html'), page('Submit a finding', REPORT_FORM));
-  writeFileSync(join(out, 'hypothesis.html'), page('Submit a hypothesis', HYPOTHESIS_FORM));
+  writeFileSync(join(out, 'hypothesis.html'), page('Submit a hypothesis', hypothesisForm(o.structuredField)));
   const B = obs.builds, has = obs.matches.length > 0;
   const row = (label: string, f: (a: ReturnType<typeof aggregate>) => string) => `<tr><th>${esc(label)}</th>${B.map(b => `<td>${f(agg[b])}</td>`).join('')}</tr>`;
   const effects = [...new Set(B.flatMap(b => agg[b].perEffect.map(p => p.effect)))].sort();
@@ -106,6 +113,22 @@ ${aggTable}
 <h2>Computer-vs-computer games</h2>
 <table><tr><th>Match</th><th>Build</th><th>First mover</th><th>Winner</th><th>Turns</th><th>Pieces across</th></tr>${obs.matches.map(m => `<tr><td><a href="match-${esc(m.matchId)}.html">${esc(m.matchId)}</a></td><td>${esc(m.build)}</td><td>${esc(m.firstMover)}</td><td>${esc(m.winner)}</td><td>${m.turns}</td><td>${esc(Object.entries(m.scored).map(([k, v]) => `${k} ${v}`).join(', '))}</td></tr>`).join('')}</table>`));
   return { pages: 3 + obs.cases.length + obs.matches.length };
+}
+
+/**
+ * P5 (Q20, D70): the optional structured representation format, generated from the closed field and operator sets.
+ * It names observable fields only; it states no rule and gives no rule-specific example.
+ */
+export function schemaPage() {
+  const kinds = Object.entries(SITUATION_FIELDS).map(([k, f]) => `<h4>${esc(k)}</h4><p>Input fields: ${Object.entries(f.inputs).map(([n, t]) => `<code>${esc(n)}</code> (${t})`).join(', ')}</p><p>Outcome fields: ${Object.entries(f.outcomes).map(([n, t]) => `<code>${esc(n)}</code> (${t})`).join(', ')}</p>`).join('\n');
+  return `<h2>Optional structured representation</h2>
+<p>You may add a machine-readable version of a hypothesis. It is optional: free text alone is a complete submission. What you type is stored exactly as written; it is never corrected or completed. If it cannot be read, that is recorded and only your free text remains.</p>
+<p>Format: <code>{"schema": "${HYPOTHESIS_SCHEMA}", "clauses": [ … ]}</code>. A clause is either</p>
+<ul><li>a <b>law</b>: <code>{"form": "law", "situation": KIND, "when": EXPR (optional), "expect": [{"field": OUTCOME, "equals": EXPR}, …]}</code>: in every situation of that kind where <code>when</code> holds, each outcome field equals the expression (computed from input fields only);</li>
+<li>an <b>invariance</b>: <code>{"form": "invariance", "situation": KIND, "when": EXPR (optional), "groupBy": [INPUT, …], "vary": [INPUT, …], "outcomes": [OUTCOME, …]}</code>: situations that agree on <code>groupBy</code> have the same outcomes whatever the values of <code>vary</code>.</li></ul>
+<p>Expressions: <code>{"op": "const", "value": V}</code>, <code>{"op": "field", "name": INPUT}</code>, and <code>{"op": O, "args": [EXPR, …]}</code> with O one of ${OPERATORS.filter(o => o !== 'const' && o !== 'field').map(o => `<code>${o}</code>`).join(', ')} (<code>in</code> takes one argument and <code>"values": [V, …]</code>). A field that a record does not establish is unknown; a situation with an unknown input or outcome is not counted for or against a clause.</p>
+<h3>Situation kinds and fields</h3>
+${kinds}`;
 }
 
 /** Spec-guided mode: the unchanged GW1 dashboard into a GW2 directory. */
