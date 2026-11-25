@@ -1,0 +1,31 @@
+{
+ "step": "closure",
+ "ok": true,
+ "sessions": [
+  {
+   "session": "116a8c2070a3a93d",
+   "status": "closed",
+   "closure": "server-close"
+  },
+  {
+   "session": "1d03da6df39c0f79",
+   "status": "closed",
+   "closure": "server-close"
+  },
+  {
+   "session": "631bf7f0428334c6",
+   "status": "closed",
+   "closure": "server-close"
+  },
+  {
+   "session": "b00a2e7f2d9195a9",
+   "status": "closed",
+   "closure": "server-close"
+  },
+  {
+   "session": "f3f0b801b9020917",
+   "status": "closed",
+   "closure": "server-close"
+  }
+ ]
+}

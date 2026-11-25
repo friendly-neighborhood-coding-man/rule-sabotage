@@ -1,0 +1,106 @@
+{
+ "schema": "gamewatch/gw2-representation-seal@1",
+ "at": "2026-11-25T17:00:00.000Z",
+ "freezeSha256": "ca8873958c03ab12a89341b55da5059824d47d7a008e5954a6c0b81e2856458c",
+ "graphHead": {
+  "count": 26,
+  "lastLineSha256": "4b2564751825fdf0d103643e5a95e0cc770f54bccc5f1af2d8b18704a977d6d6"
+ },
+ "ledgerEntriesAtSeal": 0,
+ "representations": [
+  {
+   "id": "6da8d22504f8218d10e3787fc8b5f507d97d394df2732414477468af779ca45b",
+   "hypothesis": "ec66a120f85f481b1a08aaec45eb3ce4200f5bdcec7d7884dabbcd6f745d41d6",
+   "origin": "submitter",
+   "authorKind": "test-double",
+   "authorId": "gw2-review-test-double",
+   "fidelity": "faithful"
+  },
+  {
+   "id": "4a51fef66ec17ea7385c74c3d80b11dcab9ce1d4174c03b9e7bae4cae9bd5b1e",
+   "hypothesis": "de22702f863fc87a4a5ed9ca508fd5a0b1baa3735a21926ecb4bb8f6f9ff8202",
+   "origin": "submitter",
+   "authorKind": "test-double",
+   "authorId": "gw2-review-test-double",
+   "fidelity": "faithful"
+  },
+  {
+   "id": "de95999840e5e59b513a7500482b66b7f09b656ecf8f2c6b58659e6d3291065e",
+   "hypothesis": "617948b7117f06ecb6c597f0e90457b7e3327cf179e0ad01525dc77b9a6e8ae1",
+   "origin": "submitter",
+   "authorKind": "test-double",
+   "authorId": "gw2-review-test-double",
+   "fidelity": "faithful"
+  },
+  {
+   "id": "b620a321b12ae1deb5bc0ec7e519cc38a4e7988b52f3d688fefa3c0ba7858fd7",
+   "hypothesis": "5d373afef9cb9142aea05a39de1ef38ece71df270738f1d419ffd08c31b72bb0",
+   "origin": "submitter",
+   "authorKind": "test-double",
+   "authorId": "gw2-review-test-double",
+   "fidelity": "faithful"
+  },
+  {
+   "id": "6beaa10c52bcf2cf29db46ef78fe09cf5164410a50b6a9e192fec3481b87bb9b",
+   "hypothesis": "fd72246ccf72a9c28a00d61f531813cf981e003beb1d9273586fa1f11eabe769",
+   "origin": "submitter",
+   "authorKind": "test-double",
+   "authorId": "gw2-review-test-double",
+   "fidelity": "faithful"
+  },
+  {
+   "id": "3c61d02f951a036e8c1a3cbf78682e2f87da80109e29ef4aa20bcd6f2b1d9a50",
+   "hypothesis": "2d2da40425a339fea23cf41fc2b63cd244c58c2a3166f82f27c609dc7631680e",
+   "origin": "submitter",
+   "authorKind": "test-double",
+   "authorId": "gw2-review-test-double",
+   "fidelity": "faithful"
+  },
+  {
+   "id": "a0c65658170fb6770b02707dd04b6d05214de4c8800933797f7f38f361068eb7",
+   "hypothesis": "c4ae8af3947e11c60cd488b44197f405b6c392db618a6eae4db689dab08e8876",
+   "origin": "submitter",
+   "authorKind": "test-double",
+   "authorId": "gw2-review-test-double",
+   "fidelity": "faithful"
+  },
+  {
+   "id": "6fe8f6588931bdde7ae9a74603b4e02bb4738b8b20d12fb13fc9cffd8a773eaa",
+   "hypothesis": "31184784851db67d637d0da075812c3e022d22a21df93def8f3adc708fcfd06c",
+   "origin": "submitter",
+   "authorKind": "test-double",
+   "authorId": "gw2-review-test-double",
+   "fidelity": "faithful"
+  },
+  {
+   "id": "9664de55b5dfcf6fdaa35f71eef6af9e1793acfc4cbbc736bf39ffa5d6b900b9",
+   "hypothesis": "7417bfebb402753a45b03e5a85aa4b397acbe456099723e6e8fdd8522f51aa17",
+   "origin": "submitter",
+   "authorKind": "test-double",
+   "authorId": "gw2-review-test-double",
+   "fidelity": "faithful"
+  },
+  {
+   "id": "16f08bf1ec720f5e4467a3ed97eba41d866472204b981c858166f86988d5b2c7",
+   "hypothesis": "095195cc9d38ef112af2e7ccae996f5cc501ad278dcec76d399e94f75f315c59",
+   "origin": "submitter",
+   "authorKind": "test-double",
+   "authorId": "gw2-review-test-double",
+   "fidelity": "faithful"
+  },
+  {
+   "id": "fba0572dc216eb045c8507640754b1db50263d4eca8f16279d6d0068f298d7f7",
+   "hypothesis": "1316038ad83437853e77e9be906f43cadf73079a6f4f15e9da4bad1caefa42f3",
+   "origin": "submitter",
+   "authorKind": "test-double",
+   "authorId": "gw2-review-test-double",
+   "fidelity": "faithful"
+  }
+ ],
+ "counts": {
+  "submitter": 11,
+  "externalTranslation": 0,
+  "frozenHypotheses": 14
+ },
+ "note": "Only these representations are used by held-out scoring and discrimination. Written before any evaluation opening."
+}

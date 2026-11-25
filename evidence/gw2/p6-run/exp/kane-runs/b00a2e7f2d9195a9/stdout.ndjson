@@ -1,0 +1,8 @@
+{"ts":"2026-11-25T16:36:45.621Z","type":"stream_start","mode":"objective","test_double":true}
+{"ts":"2026-11-25T16:36:45.622Z","type":"step","step":1,"remark":"open index.html"}
+{"ts":"2026-11-25T16:36:45.665Z","type":"step","step":2,"remark":"open hypothesis.html"}
+{"ts":"2026-11-25T16:36:45.670Z","type":"step","step":3,"remark":"submit hypothesis"}
+{"ts":"2026-11-25T16:36:45.677Z","type":"step","step":4,"remark":"submit hypothesis"}
+{"ts":"2026-11-25T16:36:45.679Z","type":"step","step":5,"remark":"submit hypothesis"}
+{"ts":"2026-11-25T16:36:45.682Z","type":"step","step":6,"remark":"submit report"}
+{"ts":"2026-11-25T16:36:45.684Z","type":"run_end","status":"passed","summary":"TEST DOUBLE (scripted): submitted 3 hypotheses and a finding citing 5 pages it did not open","steps":6}

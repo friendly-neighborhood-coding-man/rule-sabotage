@@ -1,0 +1,8 @@
+{
+ "step": "procedures",
+ "ok": true,
+ "generation": "p5-generation-1",
+ "partition": "p5-partition-1",
+ "bundleSha256": "847446234f0baa5c4f5b4ac3757ced766a8db492e1b0dfde0902c571bd9205bc",
+ "problems": []
+}

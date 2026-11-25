@@ -1,0 +1,4345 @@
+{
+ "schema": "gamewatch/gw2-heldout@1",
+ "evaluator": {
+  "id": "gamewatch/gw2/heldout.ts",
+  "version": "2"
+ },
+ "primaryAnalysis": {
+  "hypotheses": [
+   "ab01f1099e036a89539994556c1d97673a21a232f22be8b220e70812825cef89",
+   "01ad760fb5b859dcfd326e538d956720a8f19eef3a738b39ad77fc063ca4fc17",
+   "e353fcbdc7bfaf379f330cd4e81f4b4203696f787540e7549349ba762bfcbd79",
+   "ec66a120f85f481b1a08aaec45eb3ce4200f5bdcec7d7884dabbcd6f745d41d6",
+   "de22702f863fc87a4a5ed9ca508fd5a0b1baa3735a21926ecb4bb8f6f9ff8202",
+   "617948b7117f06ecb6c597f0e90457b7e3327cf179e0ad01525dc77b9a6e8ae1",
+   "5d373afef9cb9142aea05a39de1ef38ece71df270738f1d419ffd08c31b72bb0",
+   "fd72246ccf72a9c28a00d61f531813cf981e003beb1d9273586fa1f11eabe769",
+   "2d2da40425a339fea23cf41fc2b63cd244c58c2a3166f82f27c609dc7631680e",
+   "c4ae8af3947e11c60cd488b44197f405b6c392db618a6eae4db689dab08e8876",
+   "31184784851db67d637d0da075812c3e022d22a21df93def8f3adc708fcfd06c",
+   "7417bfebb402753a45b03e5a85aa4b397acbe456099723e6e8fdd8522f51aa17",
+   "095195cc9d38ef112af2e7ccae996f5cc501ad278dcec76d399e94f75f315c59",
+   "1316038ad83437853e77e9be906f43cadf73079a6f4f15e9da4bad1caefa42f3"
+  ],
+  "excluded": [],
+  "rule": "Only journal-verified, counted submissions from sessions whose experimental validity allows primary analysis enter the primary verified metrics. Everything else is preserved and reported here, never pooled into primary figures (D91)."
+ },
+ "columns": {
+  "explicitAbstentions": 3,
+  "hypotheses": 11,
+  "withSubmitterRepresentation": 11,
+  "withExternalTranslation": 0,
+  "withoutRepresentation": 0,
+  "primaryAnalysisSet": 14,
+  "preservedNotPrimary": 0,
+  "submitter": {
+   "representations": 11,
+   "represented": 11,
+   "partiallyRepresented": 0,
+   "notRepresentable": 0
+  },
+  "externalTranslation": {
+   "representations": 0,
+   "represented": 0,
+   "partiallyRepresented": 0,
+   "notRepresentable": 0
+  },
+  "note": "Abstentions are their own column: they are neither predictions nor errors and enter no accuracy figure. Submitter-authored and externally translated representations are reported separately and never pooled."
+ },
+ "hypotheses": [
+  {
+   "hypothesis": "ab01f1099e036a89539994556c1d97673a21a232f22be8b220e70812825cef89",
+   "ref": "H-1",
+   "status": "explicit-abstention",
+   "analysisSet": {
+    "eligible": true,
+    "reasons": []
+   },
+   "representations": []
+  },
+  {
+   "hypothesis": "01ad760fb5b859dcfd326e538d956720a8f19eef3a738b39ad77fc063ca4fc17",
+   "ref": "H-2",
+   "status": "explicit-abstention",
+   "analysisSet": {
+    "eligible": true,
+    "reasons": []
+   },
+   "representations": []
+  },
+  {
+   "hypothesis": "e353fcbdc7bfaf379f330cd4e81f4b4203696f787540e7549349ba762bfcbd79",
+   "ref": "H-3",
+   "status": "explicit-abstention",
+   "analysisSet": {
+    "eligible": true,
+    "reasons": []
+   },
+   "representations": []
+  },
+  {
+   "hypothesis": "ec66a120f85f481b1a08aaec45eb3ce4200f5bdcec7d7884dabbcd6f745d41d6",
+   "ref": "H-1",
+   "status": "evaluated",
+   "analysisSet": {
+    "eligible": true,
+    "reasons": []
+   },
+   "representations": [
+    {
+     "representation": "6da8d22504f8218d10e3787fc8b5f507d97d394df2732414477468af779ca45b",
+     "origin": "submitter",
+     "author": "test-double:gw2-review-test-double",
+     "fidelityDeclared": "faithful",
+     "representationStatus": "represented",
+     "notRepresentedClauses": 0,
+     "buildReferences": {
+      "named": [],
+      "resolved": [],
+      "unresolved": [],
+      "note": "build conditions are written in discovery build ids; held-out situations are aligned to them through eval/ (D88). An unresolved id names no discovery build and can never apply."
+     },
+     "byBuild": [
+      {
+       "build": "QX-41",
+       "discoveryFit": {
+        "value": "fits",
+        "evaluated": 5,
+        "support": {
+         "full": 5,
+         "partial": 0,
+         "counterExample": 0,
+         "inconclusive": 0
+        },
+        "units": {
+         "cases": 2,
+         "matches": 0
+        },
+        "counterCount": 0,
+        "statement": "fits on 5 evaluated effect-entry situation(s) from partition discovery, build QX-41: 5 with full support, 0 with partial support (some expected outcomes not recorded); no counter-example among them (finite evidence: this does not establish the rule for situations not evaluated)"
+       },
+       "heldout": {
+        "situations": 265,
+        "lawClauses": 1,
+        "invarianceClauses": 0,
+        "outcomeChecks": {
+         "matching": 1,
+         "contradicting": 0,
+         "unknown": 0,
+         "unpredicted": 0
+        },
+        "accuracy": {
+         "outcomeChecks": {
+          "k": 1,
+          "n": 1,
+          "rate": 1,
+          "wilson95": [
+           0.207,
+           1
+          ],
+          "unit": "outcome checks with a recorded outcome",
+          "note": "descriptive, conditional on recorded checks: checks within one situation and situations within one match are correlated"
+         },
+         "situations": {
+          "k": 1,
+          "n": 1,
+          "rate": 1,
+          "wilson95": [
+           0.207,
+           1
+          ],
+          "unit": "situations with at least one recorded check, all matching",
+          "note": "descriptive, conditional on recorded checks: turns of one match are not independent replicates",
+          "fullyEvaluated": {
+           "k": 1,
+           "n": 1,
+           "rate": 1,
+           "wilson95": [
+            0.207,
+            1
+           ],
+           "unit": "situations with every check recorded, none contradicting",
+           "note": "verified on every check made"
+          },
+          "partiallyEvaluated": {
+           "count": 0,
+           "contradicted": 0,
+           "noContradictionOnRecordedChecks": 0,
+           "note": "situations where some checks have no recorded outcome or an unknown input: not counted as verified successes"
+          },
+          "withoutAnyRecordedCheck": 0
+         },
+         "units": {
+          "k": 1,
+          "n": 1,
+          "rate": 1,
+          "wilson95": [
+           0.207,
+           1
+          ],
+          "unit": "cases and matches with at least one recorded check, none contradicting",
+          "cases": 1,
+          "matches": 0,
+          "note": "descriptive, conditional on recorded checks: one scripted case or one match counts once, but units are not independent replicates (matches of one seed are paired; cases of one script form a family)",
+          "fullyEvaluated": {
+           "k": 1,
+           "n": 1,
+           "rate": 1,
+           "wilson95": [
+            0.207,
+            1
+           ],
+           "unit": "units with every check recorded, none contradicting",
+           "note": "verified on every check made"
+          },
+          "partiallyEvaluated": {
+           "count": 0,
+           "contradicted": 0,
+           "noContradictionOnRecordedChecks": 0,
+           "note": "units where some checks have no recorded outcome or an unknown input: not counted as verified successes"
+          },
+          "withoutAnyRecordedCheck": 0
+         }
+        },
+        "replication": {
+         "groups": 1,
+         "consistentGroups": 1,
+         "matchSeedGroups": 0,
+         "caseScriptFamilies": 1,
+         "basis": "matches grouped by seed: the partition has the single seed 98003; cases grouped by script",
+         "note": "Independent replication is at most the number of groups, not the number of units. Wilson intervals above are descriptive summaries of these observations; they are not confidence statements about the rule, and with few groups they overstate precision."
+        },
+        "coverage": {
+         "k": 1,
+         "n": 106,
+         "rate": 0.009,
+         "wilson95": [
+          0.002,
+          0.052
+         ],
+         "unit": "situations of kind effect-entry where the representation makes at least one prediction"
+        },
+        "counterExamples": [],
+        "counterCount": 0,
+        "invariance": null
+       }
+      },
+      {
+       "build": "QX-73",
+       "discoveryFit": {
+        "value": "fits",
+        "evaluated": 5,
+        "support": {
+         "full": 5,
+         "partial": 0,
+         "counterExample": 0,
+         "inconclusive": 0
+        },
+        "units": {
+         "cases": 2,
+         "matches": 0
+        },
+        "counterCount": 0,
+        "statement": "fits on 5 evaluated effect-entry situation(s) from partition discovery, build QX-73: 5 with full support, 0 with partial support (some expected outcomes not recorded); no counter-example among them (finite evidence: this does not establish the rule for situations not evaluated)"
+       },
+       "heldout": {
+        "situations": 131,
+        "lawClauses": 1,
+        "invarianceClauses": 0,
+        "outcomeChecks": {
+         "matching": 1,
+         "contradicting": 0,
+         "unknown": 0,
+         "unpredicted": 0
+        },
+        "accuracy": {
+         "outcomeChecks": {
+          "k": 1,
+          "n": 1,
+          "rate": 1,
+          "wilson95": [
+           0.207,
+           1
+          ],
+          "unit": "outcome checks with a recorded outcome",
+          "note": "descriptive, conditional on recorded checks: checks within one situation and situations within one match are correlated"
+         },
+         "situations": {
+          "k": 1,
+          "n": 1,
+          "rate": 1,
+          "wilson95": [
+           0.207,
+           1
+          ],
+          "unit": "situations with at least one recorded check, all matching",
+          "note": "descriptive, conditional on recorded checks: turns of one match are not independent replicates",
+          "fullyEvaluated": {
+           "k": 1,
+           "n": 1,
+           "rate": 1,
+           "wilson95": [
+            0.207,
+            1
+           ],
+           "unit": "situations with every check recorded, none contradicting",
+           "note": "verified on every check made"
+          },
+          "partiallyEvaluated": {
+           "count": 0,
+           "contradicted": 0,
+           "noContradictionOnRecordedChecks": 0,
+           "note": "situations where some checks have no recorded outcome or an unknown input: not counted as verified successes"
+          },
+          "withoutAnyRecordedCheck": 0
+         },
+         "units": {
+          "k": 1,
+          "n": 1,
+          "rate": 1,
+          "wilson95": [
+           0.207,
+           1
+          ],
+          "unit": "cases and matches with at least one recorded check, none contradicting",
+          "cases": 1,
+          "matches": 0,
+          "note": "descriptive, conditional on recorded checks: one scripted case or one match counts once, but units are not independent replicates (matches of one seed are paired; cases of one script form a family)",
+          "fullyEvaluated": {
+           "k": 1,
+           "n": 1,
+           "rate": 1,
+           "wilson95": [
+            0.207,
+            1
+           ],
+           "unit": "units with every check recorded, none contradicting",
+           "note": "verified on every check made"
+          },
+          "partiallyEvaluated": {
+           "count": 0,
+           "contradicted": 0,
+           "noContradictionOnRecordedChecks": 0,
+           "note": "units where some checks have no recorded outcome or an unknown input: not counted as verified successes"
+          },
+          "withoutAnyRecordedCheck": 0
+         }
+        },
+        "replication": {
+         "groups": 1,
+         "consistentGroups": 1,
+         "matchSeedGroups": 0,
+         "caseScriptFamilies": 1,
+         "basis": "matches grouped by seed: the partition has the single seed 98003; cases grouped by script",
+         "note": "Independent replication is at most the number of groups, not the number of units. Wilson intervals above are descriptive summaries of these observations; they are not confidence statements about the rule, and with few groups they overstate precision."
+        },
+        "coverage": {
+         "k": 1,
+         "n": 48,
+         "rate": 0.021,
+         "wilson95": [
+          0.004,
+          0.109
+         ],
+         "unit": "situations of kind effect-entry where the representation makes at least one prediction"
+        },
+        "counterExamples": [],
+        "counterCount": 0,
+        "invariance": null
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "hypothesis": "de22702f863fc87a4a5ed9ca508fd5a0b1baa3735a21926ecb4bb8f6f9ff8202",
+   "ref": "H-2",
+   "status": "evaluated",
+   "analysisSet": {
+    "eligible": true,
+    "reasons": []
+   },
+   "representations": [
+    {
+     "representation": "4a51fef66ec17ea7385c74c3d80b11dcab9ce1d4174c03b9e7bae4cae9bd5b1e",
+     "origin": "submitter",
+     "author": "test-double:gw2-review-test-double",
+     "fidelityDeclared": "faithful",
+     "representationStatus": "represented",
+     "notRepresentedClauses": 0,
+     "buildReferences": {
+      "named": [],
+      "resolved": [],
+      "unresolved": [],
+      "note": "build conditions are written in discovery build ids; held-out situations are aligned to them through eval/ (D88). An unresolved id names no discovery build and can never apply."
+     },
+     "byBuild": [
+      {
+       "build": "QX-41",
+       "discoveryFit": {
+        "value": "fits",
+        "evaluated": 2,
+        "support": {
+         "full": 2,
+         "partial": 0,
+         "counterExample": 0,
+         "inconclusive": 0
+        },
+        "units": {
+         "cases": 2,
+         "matches": 0
+        },
+        "counterCount": 0,
+        "statement": "fits on 2 evaluated effect-placement situation(s) from partition discovery, build QX-41: 2 with full support, 0 with partial support (some expected outcomes not recorded); no counter-example among them (finite evidence: this does not establish the rule for situations not evaluated)"
+       },
+       "heldout": {
+        "situations": 265,
+        "lawClauses": 1,
+        "invarianceClauses": 0,
+        "outcomeChecks": {
+         "matching": 1,
+         "contradicting": 0,
+         "unknown": 0,
+         "unpredicted": 0
+        },
+        "accuracy": {
+         "outcomeChecks": {
+          "k": 1,
+          "n": 1,
+          "rate": 1,
+          "wilson95": [
+           0.207,
+           1
+          ],
+          "unit": "outcome checks with a recorded outcome",
+          "note": "descriptive, conditional on recorded checks: checks within one situation and situations within one match are correlated"
+         },
+         "situations": {
+          "k": 1,
+          "n": 1,
+          "rate": 1,
+          "wilson95": [
+           0.207,
+           1
+          ],
+          "unit": "situations with at least one recorded check, all matching",
+          "note": "descriptive, conditional on recorded checks: turns of one match are not independent replicates",
+          "fullyEvaluated": {
+           "k": 1,
+           "n": 1,
+           "rate": 1,
+           "wilson95": [
+            0.207,
+            1
+           ],
+           "unit": "situations with every check recorded, none contradicting",
+           "note": "verified on every check made"
+          },
+          "partiallyEvaluated": {
+           "count": 0,
+           "contradicted": 0,
+           "noContradictionOnRecordedChecks": 0,
+           "note": "situations where some checks have no recorded outcome or an unknown input: not counted as verified successes"
+          },
+          "withoutAnyRecordedCheck": 0
+         },
+         "units": {
+          "k": 1,
+          "n": 1,
+          "rate": 1,
+          "wilson95": [
+           0.207,
+           1
+          ],
+          "unit": "cases and matches with at least one recorded check, none contradicting",
+          "cases": 1,
+          "matches": 0,
+          "note": "descriptive, conditional on recorded checks: one scripted case or one match counts once, but units are not independent replicates (matches of one seed are paired; cases of one script form a family)",
+          "fullyEvaluated": {
+           "k": 1,
+           "n": 1,
+           "rate": 1,
+           "wilson95": [
+            0.207,
+            1
+           ],
+           "unit": "units with every check recorded, none contradicting",
+           "note": "verified on every check made"
+          },
+          "partiallyEvaluated": {
+           "count": 0,
+           "contradicted": 0,
+           "noContradictionOnRecordedChecks": 0,
+           "note": "units where some checks have no recorded outcome or an unknown input: not counted as verified successes"
+          },
+          "withoutAnyRecordedCheck": 0
+         }
+        },
+        "replication": {
+         "groups": 1,
+         "consistentGroups": 1,
+         "matchSeedGroups": 0,
+         "caseScriptFamilies": 1,
+         "basis": "matches grouped by seed: the partition has the single seed 98003; cases grouped by script",
+         "note": "Independent replication is at most the number of groups, not the number of units. Wilson intervals above are descriptive summaries of these observations; they are not confidence statements about the rule, and with few groups they overstate precision."
+        },
+        "coverage": {
+         "k": 1,
+         "n": 15,
+         "rate": 0.067,
+         "wilson95": [
+          0.012,
+          0.298
+         ],
+         "unit": "situations of kind effect-placement where the representation makes at least one prediction"
+        },
+        "counterExamples": [],
+        "counterCount": 0,
+        "invariance": null
+       }
+      },
+      {
+       "build": "QX-73",
+       "discoveryFit": {
+        "value": "fits",
+        "evaluated": 2,
+        "support": {
+         "full": 2,
+         "partial": 0,
+         "counterExample": 0,
+         "inconclusive": 0
+        },
+        "units": {
+         "cases": 2,
+         "matches": 0
+        },
+        "counterCount": 0,
+        "statement": "fits on 2 evaluated effect-placement situation(s) from partition discovery, build QX-73: 2 with full support, 0 with partial support (some expected outcomes not recorded); no counter-example among them (finite evidence: this does not establish the rule for situations not evaluated)"
+       },
+       "heldout": {
+        "situations": 131,
+        "lawClauses": 1,
+        "invarianceClauses": 0,
+        "outcomeChecks": {
+         "matching": 1,
+         "contradicting": 0,
+         "unknown": 0,
+         "unpredicted": 0
+        },
+        "accuracy": {
+         "outcomeChecks": {
+          "k": 1,
+          "n": 1,
+          "rate": 1,
+          "wilson95": [
+           0.207,
+           1
+          ],
+          "unit": "outcome checks with a recorded outcome",
+          "note": "descriptive, conditional on recorded checks: checks within one situation and situations within one match are correlated"
+         },
+         "situations": {
+          "k": 1,
+          "n": 1,
+          "rate": 1,
+          "wilson95": [
+           0.207,
+           1
+          ],
+          "unit": "situations with at least one recorded check, all matching",
+          "note": "descriptive, conditional on recorded checks: turns of one match are not independent replicates",
+          "fullyEvaluated": {
+           "k": 1,
+           "n": 1,
+           "rate": 1,
+           "wilson95": [
+            0.207,
+            1
+           ],
+           "unit": "situations with every check recorded, none contradicting",
+           "note": "verified on every check made"
+          },
+          "partiallyEvaluated": {
+           "count": 0,
+           "contradicted": 0,
+           "noContradictionOnRecordedChecks": 0,
+           "note": "situations where some checks have no recorded outcome or an unknown input: not counted as verified successes"
+          },
+          "withoutAnyRecordedCheck": 0
+         },
+         "units": {
+          "k": 1,
+          "n": 1,
+          "rate": 1,
+          "wilson95": [
+           0.207,
+           1
+          ],
+          "unit": "cases and matches with at least one recorded check, none contradicting",
+          "cases": 1,
+          "matches": 0,
+          "note": "descriptive, conditional on recorded checks: one scripted case or one match counts once, but units are not independent replicates (matches of one seed are paired; cases of one script form a family)",
+          "fullyEvaluated": {
+           "k": 1,
+           "n": 1,
+           "rate": 1,
+           "wilson95": [
+            0.207,
+            1
+           ],
+           "unit": "units with every check recorded, none contradicting",
+           "note": "verified on every check made"
+          },
+          "partiallyEvaluated": {
+           "count": 0,
+           "contradicted": 0,
+           "noContradictionOnRecordedChecks": 0,
+           "note": "units where some checks have no recorded outcome or an unknown input: not counted as verified successes"
+          },
+          "withoutAnyRecordedCheck": 0
+         }
+        },
+        "replication": {
+         "groups": 1,
+         "consistentGroups": 1,
+         "matchSeedGroups": 0,
+         "caseScriptFamilies": 1,
+         "basis": "matches grouped by seed: the partition has the single seed 98003; cases grouped by script",
+         "note": "Independent replication is at most the number of groups, not the number of units. Wilson intervals above are descriptive summaries of these observations; they are not confidence statements about the rule, and with few groups they overstate precision."
+        },
+        "coverage": {
+         "k": 1,
+         "n": 15,
+         "rate": 0.067,
+         "wilson95": [
+          0.012,
+          0.298
+         ],
+         "unit": "situations of kind effect-placement where the representation makes at least one prediction"
+        },
+        "counterExamples": [],
+        "counterCount": 0,
+        "invariance": null
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "hypothesis": "617948b7117f06ecb6c597f0e90457b7e3327cf179e0ad01525dc77b9a6e8ae1",
+   "ref": "H-3",
+   "status": "evaluated",
+   "analysisSet": {
+    "eligible": true,
+    "reasons": []
+   },
+   "representations": [
+    {
+     "representation": "de95999840e5e59b513a7500482b66b7f09b656ecf8f2c6b58659e6d3291065e",
+     "origin": "submitter",
+     "author": "test-double:gw2-review-test-double",
+     "fidelityDeclared": "faithful",
+     "representationStatus": "represented",
+     "notRepresentedClauses": 0,
+     "buildReferences": {
+      "named": [],
+      "resolved": [],
+      "unresolved": [],
+      "note": "build conditions are written in discovery build ids; held-out situations are aligned to them through eval/ (D88). An unresolved id names no discovery build and can never apply."
+     },
+     "byBuild": [
+      {
+       "build": "QX-41",
+       "discoveryFit": {
+        "value": "fits",
+        "evaluated": 205,
+        "support": {
+         "full": 205,
+         "partial": 0,
+         "counterExample": 0,
+         "inconclusive": 0
+        },
+        "units": {
+         "cases": 13,
+         "matches": 10
+        },
+        "counterCount": 0,
+        "statement": "fits on 205 evaluated turn-start situation(s) from partition discovery, build QX-41: 205 with full support, 0 with partial support (some expected outcomes not recorded); no counter-example among them (finite evidence: this does not establish the rule for situations not evaluated)"
+       },
+       "heldout": {
+        "situations": 265,
+        "lawClauses": 1,
+        "invarianceClauses": 0,
+        "outcomeChecks": {
+         "matching": 72,
+         "contradicting": 0,
+         "unknown": 0,
+         "unpredicted": 0
+        },
+        "accuracy": {
+         "outcomeChecks": {
+          "k": 72,
+          "n": 72,
+          "rate": 1,
+          "wilson95": [
+           0.949,
+           1
+          ],
+          "unit": "outcome checks with a recorded outcome",
+          "note": "descriptive, conditional on recorded checks: checks within one situation and situations within one match are correlated"
+         },
+         "situations": {
+          "k": 72,
+          "n": 72,
+          "rate": 1,
+          "wilson95": [
+           0.949,
+           1
+          ],
+          "unit": "situations with at least one recorded check, all matching",
+          "note": "descriptive, conditional on recorded checks: turns of one match are not independent replicates",
+          "fullyEvaluated": {
+           "k": 72,
+           "n": 72,
+           "rate": 1,
+           "wilson95": [
+            0.949,
+            1
+           ],
+           "unit": "situations with every check recorded, none contradicting",
+           "note": "verified on every check made"
+          },
+          "partiallyEvaluated": {
+           "count": 0,
+           "contradicted": 0,
+           "noContradictionOnRecordedChecks": 0,
+           "note": "situations where some checks have no recorded outcome or an unknown input: not counted as verified successes"
+          },
+          "withoutAnyRecordedCheck": 0
+         },
+         "units": {
+          "k": 10,
+          "n": 10,
+          "rate": 1,
+          "wilson95": [
+           0.722,
+           1
+          ],
+          "unit": "cases and matches with at least one recorded check, none contradicting",
+          "cases": 8,
+          "matches": 2,
+          "note": "descriptive, conditional on recorded checks: one scripted case or one match counts once, but units are not independent replicates (matches of one seed are paired; cases of one script form a family)",
+          "fullyEvaluated": {
+           "k": 10,
+           "n": 10,
+           "rate": 1,
+           "wilson95": [
+            0.722,
+            1
+           ],
+           "unit": "units with every check recorded, none contradicting",
+           "note": "verified on every check made"
+          },
+          "partiallyEvaluated": {
+           "count": 0,
+           "contradicted": 0,
+           "noContradictionOnRecordedChecks": 0,
+           "note": "units where some checks have no recorded outcome or an unknown input: not counted as verified successes"
+          },
+          "withoutAnyRecordedCheck": 0
+         }
+        },
+        "replication": {
+         "groups": 9,
+         "consistentGroups": 9,
+         "matchSeedGroups": 1,
+         "caseScriptFamilies": 8,
+         "basis": "matches grouped by seed: the partition has the single seed 98003; cases grouped by script",
+         "note": "Independent replication is at most the number of groups, not the number of units. Wilson intervals above are descriptive summaries of these observations; they are not confidence statements about the rule, and with few groups they overstate precision."
+        },
+        "coverage": {
+         "k": 72,
+         "n": 144,
+         "rate": 0.5,
+         "wilson95": [
+          0.419,
+          0.581
+         ],
+         "unit": "situations of kind turn-start where the representation makes at least one prediction"
+        },
+        "counterExamples": [],
+        "counterCount": 0,
+        "invariance": null
+       }
+      },
+      {
+       "build": "QX-73",
+       "discoveryFit": {
+        "value": "fits",
+        "evaluated": 142,
+        "support": {
+         "full": 142,
+         "partial": 0,
+         "counterExample": 0,
+         "inconclusive": 0
+        },
+        "units": {
+         "cases": 13,
+         "matches": 10
+        },
+        "counterCount": 0,
+        "statement": "fits on 142 evaluated turn-start situation(s) from partition discovery, build QX-73: 142 with full support, 0 with partial support (some expected outcomes not recorded); no counter-example among them (finite evidence: this does not establish the rule for situations not evaluated)"
+       },
+       "heldout": {
+        "situations": 131,
+        "lawClauses": 1,
+        "invarianceClauses": 0,
+        "outcomeChecks": {
+         "matching": 33,
+         "contradicting": 0,
+         "unknown": 0,
+         "unpredicted": 0
+        },
+        "accuracy": {
+         "outcomeChecks": {
+          "k": 33,
+          "n": 33,
+          "rate": 1,
+          "wilson95": [
+           0.896,
+           1
+          ],
+          "unit": "outcome checks with a recorded outcome",
+          "note": "descriptive, conditional on recorded checks: checks within one situation and situations within one match are correlated"
+         },
+         "situations": {
+          "k": 33,
+          "n": 33,
+          "rate": 1,
+          "wilson95": [
+           0.896,
+           1
+          ],
+          "unit": "situations with at least one recorded check, all matching",
+          "note": "descriptive, conditional on recorded checks: turns of one match are not independent replicates",
+          "fullyEvaluated": {
+           "k": 33,
+           "n": 33,
+           "rate": 1,
+           "wilson95": [
+            0.896,
+            1
+           ],
+           "unit": "situations with every check recorded, none contradicting",
+           "note": "verified on every check made"
+          },
+          "partiallyEvaluated": {
+           "count": 0,
+           "contradicted": 0,
+           "noContradictionOnRecordedChecks": 0,
+           "note": "situations where some checks have no recorded outcome or an unknown input: not counted as verified successes"
+          },
+          "withoutAnyRecordedCheck": 0
+         },
+         "units": {
+          "k": 10,
+          "n": 10,
+          "rate": 1,
+          "wilson95": [
+           0.722,
+           1
+          ],
+          "unit": "cases and matches with at least one recorded check, none contradicting",
+          "cases": 8,
+          "matches": 2,
+          "note": "descriptive, conditional on recorded checks: one scripted case or one match counts once, but units are not independent replicates (matches of one seed are paired; cases of one script form a family)",
+          "fullyEvaluated": {
+           "k": 10,
+           "n": 10,
+           "rate": 1,
+           "wilson95": [
+            0.722,
+            1
+           ],
+           "unit": "units with every check recorded, none contradicting",
+           "note": "verified on every check made"
+          },
+          "partiallyEvaluated": {
+           "count": 0,
+           "contradicted": 0,
+           "noContradictionOnRecordedChecks": 0,
+           "note": "units where some checks have no recorded outcome or an unknown input: not counted as verified successes"
+          },
+          "withoutAnyRecordedCheck": 0
+         }
+        },
+        "replication": {
+         "groups": 9,
+         "consistentGroups": 9,
+         "matchSeedGroups": 1,
+         "caseScriptFamilies": 8,
+         "basis": "matches grouped by seed: the partition has the single seed 98003; cases grouped by script",
+         "note": "Independent replication is at most the number of groups, not the number of units. Wilson intervals above are descriptive summaries of these observations; they are not confidence statements about the rule, and with few groups they overstate precision."
+        },
+        "coverage": {
+         "k": 33,
+         "n": 68,
+         "rate": 0.485,
+         "wilson95": [
+          0.371,
+          0.602
+         ],
+         "unit": "situations of kind turn-start where the representation makes at least one prediction"
+        },
+        "counterExamples": [],
+        "counterCount": 0,
+        "invariance": null
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "hypothesis": "5d373afef9cb9142aea05a39de1ef38ece71df270738f1d419ffd08c31b72bb0",
+   "ref": "H-1",
+   "status": "evaluated",
+   "analysisSet": {
+    "eligible": true,
+    "reasons": []
+   },
+   "representations": [
+    {
+     "representation": "b620a321b12ae1deb5bc0ec7e519cc38a4e7988b52f3d688fefa3c0ba7858fd7",
+     "origin": "submitter",
+     "author": "test-double:gw2-review-test-double",
+     "fidelityDeclared": "faithful",
+     "representationStatus": "represented",
+     "notRepresentedClauses": 0,
+     "buildReferences": {
+      "named": [],
+      "resolved": [],
+      "unresolved": [],
+      "note": "build conditions are written in discovery build ids; held-out situations are aligned to them through eval/ (D88). An unresolved id names no discovery build and can never apply."
+     },
+     "byBuild": [
+      {
+       "build": "QX-41",
+       "discoveryFit": {
+        "value": "contradicted",
+        "evaluated": 421,
+        "support": {
+         "full": 160,
+         "partial": 0,
+         "counterExample": 261,
+         "inconclusive": 0
+        },
+        "units": {
+         "cases": 13,
+         "matches": 10
+        },
+        "counterCount": 261,
+        "statement": "contradicted on 421 evaluated turn-start situation(s) from partition discovery, build QX-41: 261 contradicted outcome check(s) in 261 situation(s)"
+       },
+       "heldout": {
+        "situations": 265,
+        "lawClauses": 1,
+        "invarianceClauses": 0,
+        "outcomeChecks": {
+         "matching": 60,
+         "contradicting": 84,
+         "unknown": 0,
+         "unpredicted": 0
+        },
+        "accuracy": {
+         "outcomeChecks": {
+          "k": 60,
+          "n": 144,
+          "rate": 0.417,
+          "wilson95": [
+           0.339,
+           0.498
+          ],
+          "unit": "outcome checks with a recorded outcome",
+          "note": "descriptive, conditional on recorded checks: checks within one situation and situations within one match are correlated"
+         },
+         "situations": {
+          "k": 60,
+          "n": 144,
+          "rate": 0.417,
+          "wilson95": [
+           0.339,
+           0.498
+          ],
+          "unit": "situations with at least one recorded check, all matching",
+          "note": "descriptive, conditional on recorded checks: turns of one match are not independent replicates",
+          "fullyEvaluated": {
+           "k": 60,
+           "n": 144,
+           "rate": 0.417,
+           "wilson95": [
+            0.339,
+            0.498
+           ],
+           "unit": "situations with every check recorded, none contradicting",
+           "note": "verified on every check made"
+          },
+          "partiallyEvaluated": {
+           "count": 0,
+           "contradicted": 0,
+           "noContradictionOnRecordedChecks": 0,
+           "note": "situations where some checks have no recorded outcome or an unknown input: not counted as verified successes"
+          },
+          "withoutAnyRecordedCheck": 0
+         },
+         "units": {
+          "k": 8,
+          "n": 10,
+          "rate": 0.8,
+          "wilson95": [
+           0.49,
+           0.943
+          ],
+          "unit": "cases and matches with at least one recorded check, none contradicting",
+          "cases": 8,
+          "matches": 2,
+          "note": "descriptive, conditional on recorded checks: one scripted case or one match counts once, but units are not independent replicates (matches of one seed are paired; cases of one script form a family)",
+          "fullyEvaluated": {
+           "k": 8,
+           "n": 10,
+           "rate": 0.8,
+           "wilson95": [
+            0.49,
+            0.943
+           ],
+           "unit": "units with every check recorded, none contradicting",
+           "note": "verified on every check made"
+          },
+          "partiallyEvaluated": {
+           "count": 0,
+           "contradicted": 0,
+           "noContradictionOnRecordedChecks": 0,
+           "note": "units where some checks have no recorded outcome or an unknown input: not counted as verified successes"
+          },
+          "withoutAnyRecordedCheck": 0
+         }
+        },
+        "replication": {
+         "groups": 9,
+         "consistentGroups": 8,
+         "matchSeedGroups": 1,
+         "caseScriptFamilies": 8,
+         "basis": "matches grouped by seed: the partition has the single seed 98003; cases grouped by script",
+         "note": "Independent replication is at most the number of groups, not the number of units. Wilson intervals above are descriptive summaries of these observations; they are not confidence statements about the rule, and with few groups they overstate precision."
+        },
+        "coverage": {
+         "k": 144,
+         "n": 144,
+         "rate": 1,
+         "wilson95": [
+          0.974,
+          1
+         ],
+         "unit": "situations of kind turn-start where the representation makes at least one prediction"
+        },
+        "counterExamples": [
+         {
+          "id": "M-2bdabb/t11/turn-start",
+          "field": "actionsGranted",
+          "predicted": 3,
+          "observed": 2
+         },
+         {
+          "id": "M-2bdabb/t13/turn-start",
+          "field": "actionsGranted",
+          "predicted": 3,
+          "observed": 2
+         },
+         {
+          "id": "M-2bdabb/t15/turn-start",
+          "field": "actionsGranted",
+          "predicted": 3,
+          "observed": 2
+         },
+         {
+          "id": "M-2bdabb/t16/turn-start",
+          "field": "actionsGranted",
+          "predicted": 3,
+          "observed": 2
+         },
+         {
+          "id": "M-2bdabb/t17/turn-start",
+          "field": "actionsGranted",
+          "predicted": 3,
+          "observed": 2
+         },
+         {
+          "id": "M-2bdabb/t18/turn-start",
+          "field": "actionsGranted",
+          "predicted": 3,
+          "observed": 2
+         },
+         {
+          "id": "M-2bdabb/t19/turn-start",
+          "field": "actionsGranted",
+          "predicted": 3,
+          "observed": 2
+         },
+         {
+          "id": "M-2bdabb/t20/turn-start",
+          "field": "actionsGranted",
+          "predicted": 3,
+          "observed": 2
+         },
+         {
+          "id": "M-2bdabb/t21/turn-start",
+          "field": "actionsGranted",
+          "predicted": 3,
+          "observed": 2
+         },
+         {
+          "id": "M-2bdabb/t22/turn-start",
+          "field": "actionsGranted",
+          "predicted": 3,
+          "observed": 2
+         },
+         {
+          "id": "M-2bdabb/t23/turn-start",
+          "field": "actionsGranted",
+          "predicted": 3,
+          "observed": 2
+         },
+         {
+          "id": "M-2bdabb/t24/turn-start",
+          "field": "actionsGranted",
+          "predicted": 3,
+          "observed": 2
+         }
+        ],
+        "counterCount": 84,
+        "invariance": null
+       }
+      },
+      {
+       "build": "QX-73",
+       "discoveryFit": {
+        "value": "contradicted",
+        "evaluated": 300,
+        "support": {
+         "full": 125,
+         "partial": 0,
+         "counterExample": 175,
+         "inconclusive": 0
+        },
+        "units": {
+         "cases": 13,
+         "matches": 10
+        },
+        "counterCount": 175,
+        "statement": "contradicted on 300 evaluated turn-start situation(s) from partition discovery, build QX-73: 175 contradicted outcome check(s) in 175 situation(s)"
+       },
+       "heldout": {
+        "situations": 131,
+        "lawClauses": 1,
+        "invarianceClauses": 0,
+        "outcomeChecks": {
+         "matching": 34,
+         "contradicting": 34,
+         "unknown": 0,
+         "unpredicted": 0
+        },
+        "accuracy": {
+         "outcomeChecks": {
+          "k": 34,
+          "n": 68,
+          "rate": 0.5,
+          "wilson95": [
+           0.384,
+           0.616
+          ],
+          "unit": "outcome checks with a recorded outcome",
+          "note": "descriptive, conditional on recorded checks: checks within one situation and situations within one match are correlated"
+         },
+         "situations": {
+          "k": 34,
+          "n": 68,
+          "rate": 0.5,
+          "wilson95": [
+           0.384,
+           0.616
+          ],
+          "unit": "situations with at least one recorded check, all matching",
+          "note": "descriptive, conditional on recorded checks: turns of one match are not independent replicates",
+          "fullyEvaluated": {
+           "k": 34,
+           "n": 68,
+           "rate": 0.5,
+           "wilson95": [
+            0.384,
+            0.616
+           ],
+           "unit": "situations with every check recorded, none contradicting",
+           "note": "verified on every check made"
+          },
+          "partiallyEvaluated": {
+           "count": 0,
+           "contradicted": 0,
+           "noContradictionOnRecordedChecks": 0,
+           "note": "situations where some checks have no recorded outcome or an unknown input: not counted as verified successes"
+          },
+          "withoutAnyRecordedCheck": 0
+         },
+         "units": {
+          "k": 0,
+          "n": 10,
+          "rate": 0,
+          "wilson95": [
+           0,
+           0.278
+          ],
+          "unit": "cases and matches with at least one recorded check, none contradicting",
+          "cases": 8,
+          "matches": 2,
+          "note": "descriptive, conditional on recorded checks: one scripted case or one match counts once, but units are not independent replicates (matches of one seed are paired; cases of one script form a family)",
+          "fullyEvaluated": {
+           "k": 0,
+           "n": 10,
+           "rate": 0,
+           "wilson95": [
+            0,
+            0.278
+           ],
+           "unit": "units with every check recorded, none contradicting",
+           "note": "verified on every check made"
+          },
+          "partiallyEvaluated": {
+           "count": 0,
+           "contradicted": 0,
+           "noContradictionOnRecordedChecks": 0,
+           "note": "units where some checks have no recorded outcome or an unknown input: not counted as verified successes"
+          },
+          "withoutAnyRecordedCheck": 0
+         }
+        },
+        "replication": {
+         "groups": 9,
+         "consistentGroups": 0,
+         "matchSeedGroups": 1,
+         "caseScriptFamilies": 8,
+         "basis": "matches grouped by seed: the partition has the single seed 98003; cases grouped by script",
+         "note": "Independent replication is at most the number of groups, not the number of units. Wilson intervals above are descriptive summaries of these observations; they are not confidence statements about the rule, and with few groups they overstate precision."
+        },
+        "coverage": {
+         "k": 68,
+         "n": 68,
+         "rate": 1,
+         "wilson95": [
+          0.947,
+          1
+         ],
+         "unit": "situations of kind turn-start where the representation makes at least one prediction"
+        },
+        "counterExamples": [
+         {
+          "id": "C-688065/s0/turn-start",
+          "field": "actionsGranted",
+          "predicted": 3,
+          "observed": 4
+         },
+         {
+          "id": "C-688065/s6/turn-start",
+          "field": "actionsGranted",
+          "predicted": 3,
+          "observed": 4
+         },
+         {
+          "id": "C-688065/s11/turn-start",
+          "field": "actionsGranted",
+          "predicted": 3,
+          "observed": 4
+         },
+         {
+          "id": "C-688065/s16/turn-start",
+          "field": "actionsGranted",
+          "predicted": 3,
+          "observed": 4
+         },
+         {
+          "id": "C-783031/s0/turn-start",
+          "field": "actionsGranted",
+          "predicted": 3,
+          "observed": 4
+         },
+         {
+          "id": "C-783031/s9/turn-start",
+          "field": "actionsGranted",
+          "predicted": 3,
+          "observed": 4
+         },
+         {
+          "id": "C-783031/s16/turn-start",
+          "field": "actionsGranted",
+          "predicted": 3,
+          "observed": 4
+         },
+         {
+          "id": "C-7b5eb6/s0/turn-start",
+          "field": "actionsGranted",
+          "predicted": 3,
+          "observed": 4
+         },
+         {
+          "id": "C-7b5eb6/s6/turn-start",
+          "field": "actionsGranted",
+          "predicted": 3,
+          "observed": 4
+         },
+         {
+          "id": "C-93c271/s0/turn-start",
+          "field": "actionsGranted",
+          "predicted": 3,
+          "observed": 4
+         },
+         {
+          "id": "C-93c271/s8/turn-start",
+          "field": "actionsGranted",
+          "predicted": 3,
+          "observed": 4
+         },
+         {
+          "id": "C-9f9cb1/s0/turn-start",
+          "field": "actionsGranted",
+          "predicted": 3,
+          "observed": 4
+         }
+        ],
+        "counterCount": 34,
+        "invariance": null
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "hypothesis": "fd72246ccf72a9c28a00d61f531813cf981e003beb1d9273586fa1f11eabe769",
+   "ref": "H-2",
+   "status": "evaluated",
+   "analysisSet": {
+    "eligible": true,
+    "reasons": []
+   },
+   "representations": [
+    {
+     "representation": "6beaa10c52bcf2cf29db46ef78fe09cf5164410a50b6a9e192fec3481b87bb9b",
+     "origin": "submitter",
+     "author": "test-double:gw2-review-test-double",
+     "fidelityDeclared": "faithful",
+     "representationStatus": "represented",
+     "notRepresentedClauses": 0,
+     "buildReferences": {
+      "named": [],
+      "resolved": [],
+      "unresolved": [],
+      "note": "build conditions are written in discovery build ids; held-out situations are aligned to them through eval/ (D88). An unresolved id names no discovery build and can never apply."
+     },
+     "byBuild": [
+      {
+       "build": "QX-41",
+       "discoveryFit": {
+        "value": "contradicted",
+        "evaluated": 2,
+        "support": {
+         "full": 0,
+         "partial": 0,
+         "counterExample": 2,
+         "inconclusive": 0
+        },
+        "units": {
+         "cases": 2,
+         "matches": 0
+        },
+        "counterCount": 2,
+        "statement": "contradicted on 2 evaluated effect-placement situation(s) from partition discovery, build QX-41: 2 contradicted outcome check(s) in 2 situation(s)"
+       },
+       "heldout": {
+        "situations": 265,
+        "lawClauses": 1,
+        "invarianceClauses": 0,
+        "outcomeChecks": {
+         "matching": 0,
+         "contradicting": 1,
+         "unknown": 0,
+         "unpredicted": 0
+        },
+        "accuracy": {
+         "outcomeChecks": {
+          "k": 0,
+          "n": 1,
+          "rate": 0,
+          "wilson95": [
+           0,
+           0.793
+          ],
+          "unit": "outcome checks with a recorded outcome",
+          "note": "descriptive, conditional on recorded checks: checks within one situation and situations within one match are correlated"
+         },
+         "situations": {
+          "k": 0,
+          "n": 1,
+          "rate": 0,
+          "wilson95": [
+           0,
+           0.793
+          ],
+          "unit": "situations with at least one recorded check, all matching",
+          "note": "descriptive, conditional on recorded checks: turns of one match are not independent replicates",
+          "fullyEvaluated": {
+           "k": 0,
+           "n": 1,
+           "rate": 0,
+           "wilson95": [
+            0,
+            0.793
+           ],
+           "unit": "situations with every check recorded, none contradicting",
+           "note": "verified on every check made"
+          },
+          "partiallyEvaluated": {
+           "count": 0,
+           "contradicted": 0,
+           "noContradictionOnRecordedChecks": 0,
+           "note": "situations where some checks have no recorded outcome or an unknown input: not counted as verified successes"
+          },
+          "withoutAnyRecordedCheck": 0
+         },
+         "units": {
+          "k": 0,
+          "n": 1,
+          "rate": 0,
+          "wilson95": [
+           0,
+           0.793
+          ],
+          "unit": "cases and matches with at least one recorded check, none contradicting",
+          "cases": 1,
+          "matches": 0,
+          "note": "descriptive, conditional on recorded checks: one scripted case or one match counts once, but units are not independent replicates (matches of one seed are paired; cases of one script form a family)",
+          "fullyEvaluated": {
+           "k": 0,
+           "n": 1,
+           "rate": 0,
+           "wilson95": [
+            0,
+            0.793
+           ],
+           "unit": "units with every check recorded, none contradicting",
+           "note": "verified on every check made"
+          },
+          "partiallyEvaluated": {
+           "count": 0,
+           "contradicted": 0,
+           "noContradictionOnRecordedChecks": 0,
+           "note": "units where some checks have no recorded outcome or an unknown input: not counted as verified successes"
+          },
+          "withoutAnyRecordedCheck": 0
+         }
+        },
+        "replication": {
+         "groups": 1,
+         "consistentGroups": 0,
+         "matchSeedGroups": 0,
+         "caseScriptFamilies": 1,
+         "basis": "matches grouped by seed: the partition has the single seed 98003; cases grouped by script",
+         "note": "Independent replication is at most the number of groups, not the number of units. Wilson intervals above are descriptive summaries of these observations; they are not confidence statements about the rule, and with few groups they overstate precision."
+        },
+        "coverage": {
+         "k": 1,
+         "n": 15,
+         "rate": 0.067,
+         "wilson95": [
+          0.012,
+          0.298
+         ],
+         "unit": "situations of kind effect-placement where the representation makes at least one prediction"
+        },
+        "counterExamples": [
+         {
+          "id": "C-6d57eb/s2/placement",
+          "field": "placed",
+          "predicted": true,
+          "observed": false
+         }
+        ],
+        "counterCount": 1,
+        "invariance": null
+       }
+      },
+      {
+       "build": "QX-73",
+       "discoveryFit": {
+        "value": "contradicted",
+        "evaluated": 2,
+        "support": {
+         "full": 0,
+         "partial": 0,
+         "counterExample": 2,
+         "inconclusive": 0
+        },
+        "units": {
+         "cases": 2,
+         "matches": 0
+        },
+        "counterCount": 2,
+        "statement": "contradicted on 2 evaluated effect-placement situation(s) from partition discovery, build QX-73: 2 contradicted outcome check(s) in 2 situation(s)"
+       },
+       "heldout": {
+        "situations": 131,
+        "lawClauses": 1,
+        "invarianceClauses": 0,
+        "outcomeChecks": {
+         "matching": 0,
+         "contradicting": 1,
+         "unknown": 0,
+         "unpredicted": 0
+        },
+        "accuracy": {
+         "outcomeChecks": {
+          "k": 0,
+          "n": 1,
+          "rate": 0,
+          "wilson95": [
+           0,
+           0.793
+          ],
+          "unit": "outcome checks with a recorded outcome",
+          "note": "descriptive, conditional on recorded checks: checks within one situation and situations within one match are correlated"
+         },
+         "situations": {
+          "k": 0,
+          "n": 1,
+          "rate": 0,
+          "wilson95": [
+           0,
+           0.793
+          ],
+          "unit": "situations with at least one recorded check, all matching",
+          "note": "descriptive, conditional on recorded checks: turns of one match are not independent replicates",
+          "fullyEvaluated": {
+           "k": 0,
+           "n": 1,
+           "rate": 0,
+           "wilson95": [
+            0,
+            0.793
+           ],
+           "unit": "situations with every check recorded, none contradicting",
+           "note": "verified on every check made"
+          },
+          "partiallyEvaluated": {
+           "count": 0,
+           "contradicted": 0,
+           "noContradictionOnRecordedChecks": 0,
+           "note": "situations where some checks have no recorded outcome or an unknown input: not counted as verified successes"
+          },
+          "withoutAnyRecordedCheck": 0
+         },
+         "units": {
+          "k": 0,
+          "n": 1,
+          "rate": 0,
+          "wilson95": [
+           0,
+           0.793
+          ],
+          "unit": "cases and matches with at least one recorded check, none contradicting",
+          "cases": 1,
+          "matches": 0,
+          "note": "descriptive, conditional on recorded checks: one scripted case or one match counts once, but units are not independent replicates (matches of one seed are paired; cases of one script form a family)",
+          "fullyEvaluated": {
+           "k": 0,
+           "n": 1,
+           "rate": 0,
+           "wilson95": [
+            0,
+            0.793
+           ],
+           "unit": "units with every check recorded, none contradicting",
+           "note": "verified on every check made"
+          },
+          "partiallyEvaluated": {
+           "count": 0,
+           "contradicted": 0,
+           "noContradictionOnRecordedChecks": 0,
+           "note": "units where some checks have no recorded outcome or an unknown input: not counted as verified successes"
+          },
+          "withoutAnyRecordedCheck": 0
+         }
+        },
+        "replication": {
+         "groups": 1,
+         "consistentGroups": 0,
+         "matchSeedGroups": 0,
+         "caseScriptFamilies": 1,
+         "basis": "matches grouped by seed: the partition has the single seed 98003; cases grouped by script",
+         "note": "Independent replication is at most the number of groups, not the number of units. Wilson intervals above are descriptive summaries of these observations; they are not confidence statements about the rule, and with few groups they overstate precision."
+        },
+        "coverage": {
+         "k": 1,
+         "n": 15,
+         "rate": 0.067,
+         "wilson95": [
+          0.012,
+          0.298
+         ],
+         "unit": "situations of kind effect-placement where the representation makes at least one prediction"
+        },
+        "counterExamples": [
+         {
+          "id": "C-d71261/s2/placement",
+          "field": "placed",
+          "predicted": true,
+          "observed": false
+         }
+        ],
+        "counterCount": 1,
+        "invariance": null
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "hypothesis": "2d2da40425a339fea23cf41fc2b63cd244c58c2a3166f82f27c609dc7631680e",
+   "ref": "H-3",
+   "status": "evaluated",
+   "analysisSet": {
+    "eligible": true,
+    "reasons": []
+   },
+   "representations": [
+    {
+     "representation": "3c61d02f951a036e8c1a3cbf78682e2f87da80109e29ef4aa20bcd6f2b1d9a50",
+     "origin": "submitter",
+     "author": "test-double:gw2-review-test-double",
+     "fidelityDeclared": "faithful",
+     "representationStatus": "represented",
+     "notRepresentedClauses": 0,
+     "buildReferences": {
+      "named": [],
+      "resolved": [],
+      "unresolved": [],
+      "note": "build conditions are written in discovery build ids; held-out situations are aligned to them through eval/ (D88). An unresolved id names no discovery build and can never apply."
+     },
+     "byBuild": [
+      {
+       "build": "QX-41",
+       "discoveryFit": {
+        "value": "contradicted",
+        "evaluated": 8,
+        "support": {
+         "full": 3,
+         "partial": 0,
+         "counterExample": 5,
+         "inconclusive": 0
+        },
+        "units": {
+         "cases": 4,
+         "matches": 0
+        },
+        "counterCount": 5,
+        "statement": "contradicted on 8 evaluated effect-entry situation(s) from partition discovery, build QX-41: 5 contradicted outcome check(s) in 5 situation(s)"
+       },
+       "heldout": {
+        "situations": 265,
+        "lawClauses": 1,
+        "invarianceClauses": 0,
+        "outcomeChecks": {
+         "matching": 1,
+         "contradicting": 1,
+         "unknown": 0,
+         "unpredicted": 0
+        },
+        "accuracy": {
+         "outcomeChecks": {
+          "k": 1,
+          "n": 2,
+          "rate": 0.5,
+          "wilson95": [
+           0.095,
+           0.905
+          ],
+          "unit": "outcome checks with a recorded outcome",
+          "note": "descriptive, conditional on recorded checks: checks within one situation and situations within one match are correlated"
+         },
+         "situations": {
+          "k": 1,
+          "n": 2,
+          "rate": 0.5,
+          "wilson95": [
+           0.095,
+           0.905
+          ],
+          "unit": "situations with at least one recorded check, all matching",
+          "note": "descriptive, conditional on recorded checks: turns of one match are not independent replicates",
+          "fullyEvaluated": {
+           "k": 1,
+           "n": 2,
+           "rate": 0.5,
+           "wilson95": [
+            0.095,
+            0.905
+           ],
+           "unit": "situations with every check recorded, none contradicting",
+           "note": "verified on every check made"
+          },
+          "partiallyEvaluated": {
+           "count": 0,
+           "contradicted": 0,
+           "noContradictionOnRecordedChecks": 0,
+           "note": "situations where some checks have no recorded outcome or an unknown input: not counted as verified successes"
+          },
+          "withoutAnyRecordedCheck": 0
+         },
+         "units": {
+          "k": 1,
+          "n": 2,
+          "rate": 0.5,
+          "wilson95": [
+           0.095,
+           0.905
+          ],
+          "unit": "cases and matches with at least one recorded check, none contradicting",
+          "cases": 2,
+          "matches": 0,
+          "note": "descriptive, conditional on recorded checks: one scripted case or one match counts once, but units are not independent replicates (matches of one seed are paired; cases of one script form a family)",
+          "fullyEvaluated": {
+           "k": 1,
+           "n": 2,
+           "rate": 0.5,
+           "wilson95": [
+            0.095,
+            0.905
+           ],
+           "unit": "units with every check recorded, none contradicting",
+           "note": "verified on every check made"
+          },
+          "partiallyEvaluated": {
+           "count": 0,
+           "contradicted": 0,
+           "noContradictionOnRecordedChecks": 0,
+           "note": "units where some checks have no recorded outcome or an unknown input: not counted as verified successes"
+          },
+          "withoutAnyRecordedCheck": 0
+         }
+        },
+        "replication": {
+         "groups": 2,
+         "consistentGroups": 1,
+         "matchSeedGroups": 0,
+         "caseScriptFamilies": 2,
+         "basis": "matches grouped by seed: the partition has the single seed 98003; cases grouped by script",
+         "note": "Independent replication is at most the number of groups, not the number of units. Wilson intervals above are descriptive summaries of these observations; they are not confidence statements about the rule, and with few groups they overstate precision."
+        },
+        "coverage": {
+         "k": 2,
+         "n": 106,
+         "rate": 0.019,
+         "wilson95": [
+          0.005,
+          0.066
+         ],
+         "unit": "situations of kind effect-entry where the representation makes at least one prediction"
+        },
+        "counterExamples": [
+         {
+          "id": "C-4d3b41/s8/e1",
+          "field": "sentHome",
+          "predicted": false,
+          "observed": true
+         }
+        ],
+        "counterCount": 1,
+        "invariance": null
+       }
+      },
+      {
+       "build": "QX-73",
+       "discoveryFit": {
+        "value": "contradicted",
+        "evaluated": 8,
+        "support": {
+         "full": 2,
+         "partial": 0,
+         "counterExample": 6,
+         "inconclusive": 0
+        },
+        "units": {
+         "cases": 4,
+         "matches": 0
+        },
+        "counterCount": 6,
+        "statement": "contradicted on 8 evaluated effect-entry situation(s) from partition discovery, build QX-73: 6 contradicted outcome check(s) in 6 situation(s)"
+       },
+       "heldout": {
+        "situations": 131,
+        "lawClauses": 1,
+        "invarianceClauses": 0,
+        "outcomeChecks": {
+         "matching": 0,
+         "contradicting": 2,
+         "unknown": 0,
+         "unpredicted": 0
+        },
+        "accuracy": {
+         "outcomeChecks": {
+          "k": 0,
+          "n": 2,
+          "rate": 0,
+          "wilson95": [
+           0,
+           0.658
+          ],
+          "unit": "outcome checks with a recorded outcome",
+          "note": "descriptive, conditional on recorded checks: checks within one situation and situations within one match are correlated"
+         },
+         "situations": {
+          "k": 0,
+          "n": 2,
+          "rate": 0,
+          "wilson95": [
+           0,
+           0.658
+          ],
+          "unit": "situations with at least one recorded check, all matching",
+          "note": "descriptive, conditional on recorded checks: turns of one match are not independent replicates",
+          "fullyEvaluated": {
+           "k": 0,
+           "n": 2,
+           "rate": 0,
+           "wilson95": [
+            0,
+            0.658
+           ],
+           "unit": "situations with every check recorded, none contradicting",
+           "note": "verified on every check made"
+          },
+          "partiallyEvaluated": {
+           "count": 0,
+           "contradicted": 0,
+           "noContradictionOnRecordedChecks": 0,
+           "note": "situations where some checks have no recorded outcome or an unknown input: not counted as verified successes"
+          },
+          "withoutAnyRecordedCheck": 0
+         },
+         "units": {
+          "k": 0,
+          "n": 2,
+          "rate": 0,
+          "wilson95": [
+           0,
+           0.658
+          ],
+          "unit": "cases and matches with at least one recorded check, none contradicting",
+          "cases": 2,
+          "matches": 0,
+          "note": "descriptive, conditional on recorded checks: one scripted case or one match counts once, but units are not independent replicates (matches of one seed are paired; cases of one script form a family)",
+          "fullyEvaluated": {
+           "k": 0,
+           "n": 2,
+           "rate": 0,
+           "wilson95": [
+            0,
+            0.658
+           ],
+           "unit": "units with every check recorded, none contradicting",
+           "note": "verified on every check made"
+          },
+          "partiallyEvaluated": {
+           "count": 0,
+           "contradicted": 0,
+           "noContradictionOnRecordedChecks": 0,
+           "note": "units where some checks have no recorded outcome or an unknown input: not counted as verified successes"
+          },
+          "withoutAnyRecordedCheck": 0
+         }
+        },
+        "replication": {
+         "groups": 2,
+         "consistentGroups": 0,
+         "matchSeedGroups": 0,
+         "caseScriptFamilies": 2,
+         "basis": "matches grouped by seed: the partition has the single seed 98003; cases grouped by script",
+         "note": "Independent replication is at most the number of groups, not the number of units. Wilson intervals above are descriptive summaries of these observations; they are not confidence statements about the rule, and with few groups they overstate precision."
+        },
+        "coverage": {
+         "k": 2,
+         "n": 48,
+         "rate": 0.042,
+         "wilson95": [
+          0.012,
+          0.14
+         ],
+         "unit": "situations of kind effect-entry where the representation makes at least one prediction"
+        },
+        "counterExamples": [
+         {
+          "id": "C-7b5eb6/s8/e1",
+          "field": "sentHome",
+          "predicted": false,
+          "observed": true
+         },
+         {
+          "id": "C-93c271/s10/e1",
+          "field": "sentHome",
+          "predicted": false,
+          "observed": true
+         }
+        ],
+        "counterCount": 2,
+        "invariance": null
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "hypothesis": "c4ae8af3947e11c60cd488b44197f405b6c392db618a6eae4db689dab08e8876",
+   "ref": "H-1",
+   "status": "evaluated",
+   "analysisSet": {
+    "eligible": true,
+    "reasons": []
+   },
+   "representations": [
+    {
+     "representation": "a0c65658170fb6770b02707dd04b6d05214de4c8800933797f7f38f361068eb7",
+     "origin": "submitter",
+     "author": "test-double:gw2-review-test-double",
+     "fidelityDeclared": "faithful",
+     "representationStatus": "represented",
+     "notRepresentedClauses": 0,
+     "buildReferences": {
+      "named": [],
+      "resolved": [],
+      "unresolved": [],
+      "note": "build conditions are written in discovery build ids; held-out situations are aligned to them through eval/ (D88). An unresolved id names no discovery build and can never apply."
+     },
+     "byBuild": [
+      {
+       "build": "QX-41",
+       "discoveryFit": {
+        "value": "fits",
+        "evaluated": 5,
+        "support": {
+         "full": 5,
+         "partial": 0,
+         "counterExample": 0,
+         "inconclusive": 0
+        },
+        "units": {
+         "cases": 2,
+         "matches": 0
+        },
+        "counterCount": 0,
+        "statement": "fits on 5 evaluated effect-entry situation(s) from partition discovery, build QX-41: 5 with full support, 0 with partial support (some expected outcomes not recorded); no counter-example among them (finite evidence: this does not establish the rule for situations not evaluated)"
+       },
+       "heldout": {
+        "situations": 265,
+        "lawClauses": 1,
+        "invarianceClauses": 0,
+        "outcomeChecks": {
+         "matching": 1,
+         "contradicting": 0,
+         "unknown": 0,
+         "unpredicted": 0
+        },
+        "accuracy": {
+         "outcomeChecks": {
+          "k": 1,
+          "n": 1,
+          "rate": 1,
+          "wilson95": [
+           0.207,
+           1
+          ],
+          "unit": "outcome checks with a recorded outcome",
+          "note": "descriptive, conditional on recorded checks: checks within one situation and situations within one match are correlated"
+         },
+         "situations": {
+          "k": 1,
+          "n": 1,
+          "rate": 1,
+          "wilson95": [
+           0.207,
+           1
+          ],
+          "unit": "situations with at least one recorded check, all matching",
+          "note": "descriptive, conditional on recorded checks: turns of one match are not independent replicates",
+          "fullyEvaluated": {
+           "k": 1,
+           "n": 1,
+           "rate": 1,
+           "wilson95": [
+            0.207,
+            1
+           ],
+           "unit": "situations with every check recorded, none contradicting",
+           "note": "verified on every check made"
+          },
+          "partiallyEvaluated": {
+           "count": 0,
+           "contradicted": 0,
+           "noContradictionOnRecordedChecks": 0,
+           "note": "situations where some checks have no recorded outcome or an unknown input: not counted as verified successes"
+          },
+          "withoutAnyRecordedCheck": 0
+         },
+         "units": {
+          "k": 1,
+          "n": 1,
+          "rate": 1,
+          "wilson95": [
+           0.207,
+           1
+          ],
+          "unit": "cases and matches with at least one recorded check, none contradicting",
+          "cases": 1,
+          "matches": 0,
+          "note": "descriptive, conditional on recorded checks: one scripted case or one match counts once, but units are not independent replicates (matches of one seed are paired; cases of one script form a family)",
+          "fullyEvaluated": {
+           "k": 1,
+           "n": 1,
+           "rate": 1,
+           "wilson95": [
+            0.207,
+            1
+           ],
+           "unit": "units with every check recorded, none contradicting",
+           "note": "verified on every check made"
+          },
+          "partiallyEvaluated": {
+           "count": 0,
+           "contradicted": 0,
+           "noContradictionOnRecordedChecks": 0,
+           "note": "units where some checks have no recorded outcome or an unknown input: not counted as verified successes"
+          },
+          "withoutAnyRecordedCheck": 0
+         }
+        },
+        "replication": {
+         "groups": 1,
+         "consistentGroups": 1,
+         "matchSeedGroups": 0,
+         "caseScriptFamilies": 1,
+         "basis": "matches grouped by seed: the partition has the single seed 98003; cases grouped by script",
+         "note": "Independent replication is at most the number of groups, not the number of units. Wilson intervals above are descriptive summaries of these observations; they are not confidence statements about the rule, and with few groups they overstate precision."
+        },
+        "coverage": {
+         "k": 1,
+         "n": 106,
+         "rate": 0.009,
+         "wilson95": [
+          0.002,
+          0.052
+         ],
+         "unit": "situations of kind effect-entry where the representation makes at least one prediction"
+        },
+        "counterExamples": [],
+        "counterCount": 0,
+        "invariance": null
+       }
+      },
+      {
+       "build": "QX-73",
+       "discoveryFit": {
+        "value": "fits",
+        "evaluated": 5,
+        "support": {
+         "full": 5,
+         "partial": 0,
+         "counterExample": 0,
+         "inconclusive": 0
+        },
+        "units": {
+         "cases": 2,
+         "matches": 0
+        },
+        "counterCount": 0,
+        "statement": "fits on 5 evaluated effect-entry situation(s) from partition discovery, build QX-73: 5 with full support, 0 with partial support (some expected outcomes not recorded); no counter-example among them (finite evidence: this does not establish the rule for situations not evaluated)"
+       },
+       "heldout": {
+        "situations": 131,
+        "lawClauses": 1,
+        "invarianceClauses": 0,
+        "outcomeChecks": {
+         "matching": 1,
+         "contradicting": 0,
+         "unknown": 0,
+         "unpredicted": 0
+        },
+        "accuracy": {
+         "outcomeChecks": {
+          "k": 1,
+          "n": 1,
+          "rate": 1,
+          "wilson95": [
+           0.207,
+           1
+          ],
+          "unit": "outcome checks with a recorded outcome",
+          "note": "descriptive, conditional on recorded checks: checks within one situation and situations within one match are correlated"
+         },
+         "situations": {
+          "k": 1,
+          "n": 1,
+          "rate": 1,
+          "wilson95": [
+           0.207,
+           1
+          ],
+          "unit": "situations with at least one recorded check, all matching",
+          "note": "descriptive, conditional on recorded checks: turns of one match are not independent replicates",
+          "fullyEvaluated": {
+           "k": 1,
+           "n": 1,
+           "rate": 1,
+           "wilson95": [
+            0.207,
+            1
+           ],
+           "unit": "situations with every check recorded, none contradicting",
+           "note": "verified on every check made"
+          },
+          "partiallyEvaluated": {
+           "count": 0,
+           "contradicted": 0,
+           "noContradictionOnRecordedChecks": 0,
+           "note": "situations where some checks have no recorded outcome or an unknown input: not counted as verified successes"
+          },
+          "withoutAnyRecordedCheck": 0
+         },
+         "units": {
+          "k": 1,
+          "n": 1,
+          "rate": 1,
+          "wilson95": [
+           0.207,
+           1
+          ],
+          "unit": "cases and matches with at least one recorded check, none contradicting",
+          "cases": 1,
+          "matches": 0,
+          "note": "descriptive, conditional on recorded checks: one scripted case or one match counts once, but units are not independent replicates (matches of one seed are paired; cases of one script form a family)",
+          "fullyEvaluated": {
+           "k": 1,
+           "n": 1,
+           "rate": 1,
+           "wilson95": [
+            0.207,
+            1
+           ],
+           "unit": "units with every check recorded, none contradicting",
+           "note": "verified on every check made"
+          },
+          "partiallyEvaluated": {
+           "count": 0,
+           "contradicted": 0,
+           "noContradictionOnRecordedChecks": 0,
+           "note": "units where some checks have no recorded outcome or an unknown input: not counted as verified successes"
+          },
+          "withoutAnyRecordedCheck": 0
+         }
+        },
+        "replication": {
+         "groups": 1,
+         "consistentGroups": 1,
+         "matchSeedGroups": 0,
+         "caseScriptFamilies": 1,
+         "basis": "matches grouped by seed: the partition has the single seed 98003; cases grouped by script",
+         "note": "Independent replication is at most the number of groups, not the number of units. Wilson intervals above are descriptive summaries of these observations; they are not confidence statements about the rule, and with few groups they overstate precision."
+        },
+        "coverage": {
+         "k": 1,
+         "n": 48,
+         "rate": 0.021,
+         "wilson95": [
+          0.004,
+          0.109
+         ],
+         "unit": "situations of kind effect-entry where the representation makes at least one prediction"
+        },
+        "counterExamples": [],
+        "counterCount": 0,
+        "invariance": null
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "hypothesis": "31184784851db67d637d0da075812c3e022d22a21df93def8f3adc708fcfd06c",
+   "ref": "H-2",
+   "status": "evaluated",
+   "analysisSet": {
+    "eligible": true,
+    "reasons": []
+   },
+   "representations": [
+    {
+     "representation": "6fe8f6588931bdde7ae9a74603b4e02bb4738b8b20d12fb13fc9cffd8a773eaa",
+     "origin": "submitter",
+     "author": "test-double:gw2-review-test-double",
+     "fidelityDeclared": "faithful",
+     "representationStatus": "represented",
+     "notRepresentedClauses": 0,
+     "buildReferences": {
+      "named": [],
+      "resolved": [],
+      "unresolved": [],
+      "note": "build conditions are written in discovery build ids; held-out situations are aligned to them through eval/ (D88). An unresolved id names no discovery build and can never apply."
+     },
+     "byBuild": [
+      {
+       "build": "QX-41",
+       "discoveryFit": {
+        "value": "fits",
+        "evaluated": 2,
+        "support": {
+         "full": 2,
+         "partial": 0,
+         "counterExample": 0,
+         "inconclusive": 0
+        },
+        "units": {
+         "cases": 2,
+         "matches": 0
+        },
+        "counterCount": 0,
+        "statement": "fits on 2 evaluated effect-placement situation(s) from partition discovery, build QX-41: 2 with full support, 0 with partial support (some expected outcomes not recorded); no counter-example among them (finite evidence: this does not establish the rule for situations not evaluated)"
+       },
+       "heldout": {
+        "situations": 265,
+        "lawClauses": 1,
+        "invarianceClauses": 0,
+        "outcomeChecks": {
+         "matching": 1,
+         "contradicting": 0,
+         "unknown": 0,
+         "unpredicted": 0
+        },
+        "accuracy": {
+         "outcomeChecks": {
+          "k": 1,
+          "n": 1,
+          "rate": 1,
+          "wilson95": [
+           0.207,
+           1
+          ],
+          "unit": "outcome checks with a recorded outcome",
+          "note": "descriptive, conditional on recorded checks: checks within one situation and situations within one match are correlated"
+         },
+         "situations": {
+          "k": 1,
+          "n": 1,
+          "rate": 1,
+          "wilson95": [
+           0.207,
+           1
+          ],
+          "unit": "situations with at least one recorded check, all matching",
+          "note": "descriptive, conditional on recorded checks: turns of one match are not independent replicates",
+          "fullyEvaluated": {
+           "k": 1,
+           "n": 1,
+           "rate": 1,
+           "wilson95": [
+            0.207,
+            1
+           ],
+           "unit": "situations with every check recorded, none contradicting",
+           "note": "verified on every check made"
+          },
+          "partiallyEvaluated": {
+           "count": 0,
+           "contradicted": 0,
+           "noContradictionOnRecordedChecks": 0,
+           "note": "situations where some checks have no recorded outcome or an unknown input: not counted as verified successes"
+          },
+          "withoutAnyRecordedCheck": 0
+         },
+         "units": {
+          "k": 1,
+          "n": 1,
+          "rate": 1,
+          "wilson95": [
+           0.207,
+           1
+          ],
+          "unit": "cases and matches with at least one recorded check, none contradicting",
+          "cases": 1,
+          "matches": 0,
+          "note": "descriptive, conditional on recorded checks: one scripted case or one match counts once, but units are not independent replicates (matches of one seed are paired; cases of one script form a family)",
+          "fullyEvaluated": {
+           "k": 1,
+           "n": 1,
+           "rate": 1,
+           "wilson95": [
+            0.207,
+            1
+           ],
+           "unit": "units with every check recorded, none contradicting",
+           "note": "verified on every check made"
+          },
+          "partiallyEvaluated": {
+           "count": 0,
+           "contradicted": 0,
+           "noContradictionOnRecordedChecks": 0,
+           "note": "units where some checks have no recorded outcome or an unknown input: not counted as verified successes"
+          },
+          "withoutAnyRecordedCheck": 0
+         }
+        },
+        "replication": {
+         "groups": 1,
+         "consistentGroups": 1,
+         "matchSeedGroups": 0,
+         "caseScriptFamilies": 1,
+         "basis": "matches grouped by seed: the partition has the single seed 98003; cases grouped by script",
+         "note": "Independent replication is at most the number of groups, not the number of units. Wilson intervals above are descriptive summaries of these observations; they are not confidence statements about the rule, and with few groups they overstate precision."
+        },
+        "coverage": {
+         "k": 1,
+         "n": 15,
+         "rate": 0.067,
+         "wilson95": [
+          0.012,
+          0.298
+         ],
+         "unit": "situations of kind effect-placement where the representation makes at least one prediction"
+        },
+        "counterExamples": [],
+        "counterCount": 0,
+        "invariance": null
+       }
+      },
+      {
+       "build": "QX-73",
+       "discoveryFit": {
+        "value": "fits",
+        "evaluated": 2,
+        "support": {
+         "full": 2,
+         "partial": 0,
+         "counterExample": 0,
+         "inconclusive": 0
+        },
+        "units": {
+         "cases": 2,
+         "matches": 0
+        },
+        "counterCount": 0,
+        "statement": "fits on 2 evaluated effect-placement situation(s) from partition discovery, build QX-73: 2 with full support, 0 with partial support (some expected outcomes not recorded); no counter-example among them (finite evidence: this does not establish the rule for situations not evaluated)"
+       },
+       "heldout": {
+        "situations": 131,
+        "lawClauses": 1,
+        "invarianceClauses": 0,
+        "outcomeChecks": {
+         "matching": 1,
+         "contradicting": 0,
+         "unknown": 0,
+         "unpredicted": 0
+        },
+        "accuracy": {
+         "outcomeChecks": {
+          "k": 1,
+          "n": 1,
+          "rate": 1,
+          "wilson95": [
+           0.207,
+           1
+          ],
+          "unit": "outcome checks with a recorded outcome",
+          "note": "descriptive, conditional on recorded checks: checks within one situation and situations within one match are correlated"
+         },
+         "situations": {
+          "k": 1,
+          "n": 1,
+          "rate": 1,
+          "wilson95": [
+           0.207,
+           1
+          ],
+          "unit": "situations with at least one recorded check, all matching",
+          "note": "descriptive, conditional on recorded checks: turns of one match are not independent replicates",
+          "fullyEvaluated": {
+           "k": 1,
+           "n": 1,
+           "rate": 1,
+           "wilson95": [
+            0.207,
+            1
+           ],
+           "unit": "situations with every check recorded, none contradicting",
+           "note": "verified on every check made"
+          },
+          "partiallyEvaluated": {
+           "count": 0,
+           "contradicted": 0,
+           "noContradictionOnRecordedChecks": 0,
+           "note": "situations where some checks have no recorded outcome or an unknown input: not counted as verified successes"
+          },
+          "withoutAnyRecordedCheck": 0
+         },
+         "units": {
+          "k": 1,
+          "n": 1,
+          "rate": 1,
+          "wilson95": [
+           0.207,
+           1
+          ],
+          "unit": "cases and matches with at least one recorded check, none contradicting",
+          "cases": 1,
+          "matches": 0,
+          "note": "descriptive, conditional on recorded checks: one scripted case or one match counts once, but units are not independent replicates (matches of one seed are paired; cases of one script form a family)",
+          "fullyEvaluated": {
+           "k": 1,
+           "n": 1,
+           "rate": 1,
+           "wilson95": [
+            0.207,
+            1
+           ],
+           "unit": "units with every check recorded, none contradicting",
+           "note": "verified on every check made"
+          },
+          "partiallyEvaluated": {
+           "count": 0,
+           "contradicted": 0,
+           "noContradictionOnRecordedChecks": 0,
+           "note": "units where some checks have no recorded outcome or an unknown input: not counted as verified successes"
+          },
+          "withoutAnyRecordedCheck": 0
+         }
+        },
+        "replication": {
+         "groups": 1,
+         "consistentGroups": 1,
+         "matchSeedGroups": 0,
+         "caseScriptFamilies": 1,
+         "basis": "matches grouped by seed: the partition has the single seed 98003; cases grouped by script",
+         "note": "Independent replication is at most the number of groups, not the number of units. Wilson intervals above are descriptive summaries of these observations; they are not confidence statements about the rule, and with few groups they overstate precision."
+        },
+        "coverage": {
+         "k": 1,
+         "n": 15,
+         "rate": 0.067,
+         "wilson95": [
+          0.012,
+          0.298
+         ],
+         "unit": "situations of kind effect-placement where the representation makes at least one prediction"
+        },
+        "counterExamples": [],
+        "counterCount": 0,
+        "invariance": null
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "hypothesis": "7417bfebb402753a45b03e5a85aa4b397acbe456099723e6e8fdd8522f51aa17",
+   "ref": "H-3",
+   "status": "evaluated",
+   "analysisSet": {
+    "eligible": true,
+    "reasons": []
+   },
+   "representations": [
+    {
+     "representation": "9664de55b5dfcf6fdaa35f71eef6af9e1793acfc4cbbc736bf39ffa5d6b900b9",
+     "origin": "submitter",
+     "author": "test-double:gw2-review-test-double",
+     "fidelityDeclared": "faithful",
+     "representationStatus": "represented",
+     "notRepresentedClauses": 0,
+     "buildReferences": {
+      "named": [],
+      "resolved": [],
+      "unresolved": [],
+      "note": "build conditions are written in discovery build ids; held-out situations are aligned to them through eval/ (D88). An unresolved id names no discovery build and can never apply."
+     },
+     "byBuild": [
+      {
+       "build": "QX-41",
+       "discoveryFit": {
+        "value": "fits",
+        "evaluated": 205,
+        "support": {
+         "full": 205,
+         "partial": 0,
+         "counterExample": 0,
+         "inconclusive": 0
+        },
+        "units": {
+         "cases": 13,
+         "matches": 10
+        },
+        "counterCount": 0,
+        "statement": "fits on 205 evaluated turn-start situation(s) from partition discovery, build QX-41: 205 with full support, 0 with partial support (some expected outcomes not recorded); no counter-example among them (finite evidence: this does not establish the rule for situations not evaluated)"
+       },
+       "heldout": {
+        "situations": 265,
+        "lawClauses": 1,
+        "invarianceClauses": 0,
+        "outcomeChecks": {
+         "matching": 72,
+         "contradicting": 0,
+         "unknown": 0,
+         "unpredicted": 0
+        },
+        "accuracy": {
+         "outcomeChecks": {
+          "k": 72,
+          "n": 72,
+          "rate": 1,
+          "wilson95": [
+           0.949,
+           1
+          ],
+          "unit": "outcome checks with a recorded outcome",
+          "note": "descriptive, conditional on recorded checks: checks within one situation and situations within one match are correlated"
+         },
+         "situations": {
+          "k": 72,
+          "n": 72,
+          "rate": 1,
+          "wilson95": [
+           0.949,
+           1
+          ],
+          "unit": "situations with at least one recorded check, all matching",
+          "note": "descriptive, conditional on recorded checks: turns of one match are not independent replicates",
+          "fullyEvaluated": {
+           "k": 72,
+           "n": 72,
+           "rate": 1,
+           "wilson95": [
+            0.949,
+            1
+           ],
+           "unit": "situations with every check recorded, none contradicting",
+           "note": "verified on every check made"
+          },
+          "partiallyEvaluated": {
+           "count": 0,
+           "contradicted": 0,
+           "noContradictionOnRecordedChecks": 0,
+           "note": "situations where some checks have no recorded outcome or an unknown input: not counted as verified successes"
+          },
+          "withoutAnyRecordedCheck": 0
+         },
+         "units": {
+          "k": 10,
+          "n": 10,
+          "rate": 1,
+          "wilson95": [
+           0.722,
+           1
+          ],
+          "unit": "cases and matches with at least one recorded check, none contradicting",
+          "cases": 8,
+          "matches": 2,
+          "note": "descriptive, conditional on recorded checks: one scripted case or one match counts once, but units are not independent replicates (matches of one seed are paired; cases of one script form a family)",
+          "fullyEvaluated": {
+           "k": 10,
+           "n": 10,
+           "rate": 1,
+           "wilson95": [
+            0.722,
+            1
+           ],
+           "unit": "units with every check recorded, none contradicting",
+           "note": "verified on every check made"
+          },
+          "partiallyEvaluated": {
+           "count": 0,
+           "contradicted": 0,
+           "noContradictionOnRecordedChecks": 0,
+           "note": "units where some checks have no recorded outcome or an unknown input: not counted as verified successes"
+          },
+          "withoutAnyRecordedCheck": 0
+         }
+        },
+        "replication": {
+         "groups": 9,
+         "consistentGroups": 9,
+         "matchSeedGroups": 1,
+         "caseScriptFamilies": 8,
+         "basis": "matches grouped by seed: the partition has the single seed 98003; cases grouped by script",
+         "note": "Independent replication is at most the number of groups, not the number of units. Wilson intervals above are descriptive summaries of these observations; they are not confidence statements about the rule, and with few groups they overstate precision."
+        },
+        "coverage": {
+         "k": 72,
+         "n": 144,
+         "rate": 0.5,
+         "wilson95": [
+          0.419,
+          0.581
+         ],
+         "unit": "situations of kind turn-start where the representation makes at least one prediction"
+        },
+        "counterExamples": [],
+        "counterCount": 0,
+        "invariance": null
+       }
+      },
+      {
+       "build": "QX-73",
+       "discoveryFit": {
+        "value": "fits",
+        "evaluated": 142,
+        "support": {
+         "full": 142,
+         "partial": 0,
+         "counterExample": 0,
+         "inconclusive": 0
+        },
+        "units": {
+         "cases": 13,
+         "matches": 10
+        },
+        "counterCount": 0,
+        "statement": "fits on 142 evaluated turn-start situation(s) from partition discovery, build QX-73: 142 with full support, 0 with partial support (some expected outcomes not recorded); no counter-example among them (finite evidence: this does not establish the rule for situations not evaluated)"
+       },
+       "heldout": {
+        "situations": 131,
+        "lawClauses": 1,
+        "invarianceClauses": 0,
+        "outcomeChecks": {
+         "matching": 33,
+         "contradicting": 0,
+         "unknown": 0,
+         "unpredicted": 0
+        },
+        "accuracy": {
+         "outcomeChecks": {
+          "k": 33,
+          "n": 33,
+          "rate": 1,
+          "wilson95": [
+           0.896,
+           1
+          ],
+          "unit": "outcome checks with a recorded outcome",
+          "note": "descriptive, conditional on recorded checks: checks within one situation and situations within one match are correlated"
+         },
+         "situations": {
+          "k": 33,
+          "n": 33,
+          "rate": 1,
+          "wilson95": [
+           0.896,
+           1
+          ],
+          "unit": "situations with at least one recorded check, all matching",
+          "note": "descriptive, conditional on recorded checks: turns of one match are not independent replicates",
+          "fullyEvaluated": {
+           "k": 33,
+           "n": 33,
+           "rate": 1,
+           "wilson95": [
+            0.896,
+            1
+           ],
+           "unit": "situations with every check recorded, none contradicting",
+           "note": "verified on every check made"
+          },
+          "partiallyEvaluated": {
+           "count": 0,
+           "contradicted": 0,
+           "noContradictionOnRecordedChecks": 0,
+           "note": "situations where some checks have no recorded outcome or an unknown input: not counted as verified successes"
+          },
+          "withoutAnyRecordedCheck": 0
+         },
+         "units": {
+          "k": 10,
+          "n": 10,
+          "rate": 1,
+          "wilson95": [
+           0.722,
+           1
+          ],
+          "unit": "cases and matches with at least one recorded check, none contradicting",
+          "cases": 8,
+          "matches": 2,
+          "note": "descriptive, conditional on recorded checks: one scripted case or one match counts once, but units are not independent replicates (matches of one seed are paired; cases of one script form a family)",
+          "fullyEvaluated": {
+           "k": 10,
+           "n": 10,
+           "rate": 1,
+           "wilson95": [
+            0.722,
+            1
+           ],
+           "unit": "units with every check recorded, none contradicting",
+           "note": "verified on every check made"
+          },
+          "partiallyEvaluated": {
+           "count": 0,
+           "contradicted": 0,
+           "noContradictionOnRecordedChecks": 0,
+           "note": "units where some checks have no recorded outcome or an unknown input: not counted as verified successes"
+          },
+          "withoutAnyRecordedCheck": 0
+         }
+        },
+        "replication": {
+         "groups": 9,
+         "consistentGroups": 9,
+         "matchSeedGroups": 1,
+         "caseScriptFamilies": 8,
+         "basis": "matches grouped by seed: the partition has the single seed 98003; cases grouped by script",
+         "note": "Independent replication is at most the number of groups, not the number of units. Wilson intervals above are descriptive summaries of these observations; they are not confidence statements about the rule, and with few groups they overstate precision."
+        },
+        "coverage": {
+         "k": 33,
+         "n": 68,
+         "rate": 0.485,
+         "wilson95": [
+          0.371,
+          0.602
+         ],
+         "unit": "situations of kind turn-start where the representation makes at least one prediction"
+        },
+        "counterExamples": [],
+        "counterCount": 0,
+        "invariance": null
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "hypothesis": "095195cc9d38ef112af2e7ccae996f5cc501ad278dcec76d399e94f75f315c59",
+   "ref": "H-1",
+   "status": "evaluated",
+   "analysisSet": {
+    "eligible": true,
+    "reasons": []
+   },
+   "representations": [
+    {
+     "representation": "16f08bf1ec720f5e4467a3ed97eba41d866472204b981c858166f86988d5b2c7",
+     "origin": "submitter",
+     "author": "test-double:gw2-review-test-double",
+     "fidelityDeclared": "faithful",
+     "representationStatus": "represented",
+     "notRepresentedClauses": 0,
+     "buildReferences": {
+      "named": [
+       "build-a6d1"
+      ],
+      "resolved": [
+       "build-a6d1"
+      ],
+      "unresolved": [],
+      "note": "build conditions are written in discovery build ids; held-out situations are aligned to them through eval/ (D88). An unresolved id names no discovery build and can never apply."
+     },
+     "byBuild": [
+      {
+       "build": "QX-41",
+       "discoveryFit": {
+        "value": "insufficient-evidence",
+        "evaluated": 0,
+        "support": {
+         "full": 0,
+         "partial": 0,
+         "counterExample": 0,
+         "inconclusive": 0
+        },
+        "units": {
+         "cases": 0,
+         "matches": 0
+        },
+        "counterCount": 0,
+        "statement": "insufficient evidence on 0 evaluated turn-start situation(s) from partition discovery, build QX-41: 2 of 2 clause(s) had no evaluable situation"
+       },
+       "heldout": {
+        "situations": 265,
+        "lawClauses": 2,
+        "invarianceClauses": 0,
+        "outcomeChecks": {
+         "matching": 0,
+         "contradicting": 0,
+         "unknown": 0,
+         "unpredicted": 0
+        },
+        "accuracy": {
+         "outcomeChecks": {
+          "k": 0,
+          "n": 0,
+          "rate": null,
+          "wilson95": null,
+          "unit": "outcome checks with a recorded outcome",
+          "note": "descriptive, conditional on recorded checks: checks within one situation and situations within one match are correlated"
+         },
+         "situations": {
+          "k": 0,
+          "n": 0,
+          "rate": null,
+          "wilson95": null,
+          "unit": "situations with at least one recorded check, all matching",
+          "note": "descriptive, conditional on recorded checks: turns of one match are not independent replicates",
+          "fullyEvaluated": {
+           "k": 0,
+           "n": 0,
+           "rate": null,
+           "wilson95": null,
+           "unit": "situations with every check recorded, none contradicting",
+           "note": "verified on every check made"
+          },
+          "partiallyEvaluated": {
+           "count": 0,
+           "contradicted": 0,
+           "noContradictionOnRecordedChecks": 0,
+           "note": "situations where some checks have no recorded outcome or an unknown input: not counted as verified successes"
+          },
+          "withoutAnyRecordedCheck": 0
+         },
+         "units": {
+          "k": 0,
+          "n": 0,
+          "rate": null,
+          "wilson95": null,
+          "unit": "cases and matches with at least one recorded check, none contradicting",
+          "cases": 0,
+          "matches": 0,
+          "note": "descriptive, conditional on recorded checks: one scripted case or one match counts once, but units are not independent replicates (matches of one seed are paired; cases of one script form a family)",
+          "fullyEvaluated": {
+           "k": 0,
+           "n": 0,
+           "rate": null,
+           "wilson95": null,
+           "unit": "units with every check recorded, none contradicting",
+           "note": "verified on every check made"
+          },
+          "partiallyEvaluated": {
+           "count": 0,
+           "contradicted": 0,
+           "noContradictionOnRecordedChecks": 0,
+           "note": "units where some checks have no recorded outcome or an unknown input: not counted as verified successes"
+          },
+          "withoutAnyRecordedCheck": 0
+         }
+        },
+        "replication": {
+         "groups": 0,
+         "consistentGroups": 0,
+         "matchSeedGroups": 0,
+         "caseScriptFamilies": 0,
+         "basis": "matches grouped by seed: the partition has the single seed 98003; cases grouped by script",
+         "note": "Independent replication is at most the number of groups, not the number of units. Wilson intervals above are descriptive summaries of these observations; they are not confidence statements about the rule, and with few groups they overstate precision."
+        },
+        "coverage": {
+         "k": 0,
+         "n": 144,
+         "rate": 0,
+         "wilson95": [
+          0,
+          0.026
+         ],
+         "unit": "situations of kind turn-start where the representation makes at least one prediction"
+        },
+        "counterExamples": [],
+        "counterCount": 0,
+        "invariance": null
+       }
+      },
+      {
+       "build": "QX-73",
+       "discoveryFit": {
+        "value": "fits",
+        "evaluated": 300,
+        "support": {
+         "full": 300,
+         "partial": 0,
+         "counterExample": 0,
+         "inconclusive": 0
+        },
+        "units": {
+         "cases": 13,
+         "matches": 10
+        },
+        "counterCount": 0,
+        "statement": "fits on 300 evaluated turn-start situation(s) from partition discovery, build QX-73: 300 with full support, 0 with partial support (some expected outcomes not recorded); no counter-example among them (finite evidence: this does not establish the rule for situations not evaluated)"
+       },
+       "heldout": {
+        "situations": 131,
+        "lawClauses": 2,
+        "invarianceClauses": 0,
+        "outcomeChecks": {
+         "matching": 68,
+         "contradicting": 0,
+         "unknown": 0,
+         "unpredicted": 0
+        },
+        "accuracy": {
+         "outcomeChecks": {
+          "k": 68,
+          "n": 68,
+          "rate": 1,
+          "wilson95": [
+           0.947,
+           1
+          ],
+          "unit": "outcome checks with a recorded outcome",
+          "note": "descriptive, conditional on recorded checks: checks within one situation and situations within one match are correlated"
+         },
+         "situations": {
+          "k": 68,
+          "n": 68,
+          "rate": 1,
+          "wilson95": [
+           0.947,
+           1
+          ],
+          "unit": "situations with at least one recorded check, all matching",
+          "note": "descriptive, conditional on recorded checks: turns of one match are not independent replicates",
+          "fullyEvaluated": {
+           "k": 68,
+           "n": 68,
+           "rate": 1,
+           "wilson95": [
+            0.947,
+            1
+           ],
+           "unit": "situations with every check recorded, none contradicting",
+           "note": "verified on every check made"
+          },
+          "partiallyEvaluated": {
+           "count": 0,
+           "contradicted": 0,
+           "noContradictionOnRecordedChecks": 0,
+           "note": "situations where some checks have no recorded outcome or an unknown input: not counted as verified successes"
+          },
+          "withoutAnyRecordedCheck": 0
+         },
+         "units": {
+          "k": 10,
+          "n": 10,
+          "rate": 1,
+          "wilson95": [
+           0.722,
+           1
+          ],
+          "unit": "cases and matches with at least one recorded check, none contradicting",
+          "cases": 8,
+          "matches": 2,
+          "note": "descriptive, conditional on recorded checks: one scripted case or one match counts once, but units are not independent replicates (matches of one seed are paired; cases of one script form a family)",
+          "fullyEvaluated": {
+           "k": 10,
+           "n": 10,
+           "rate": 1,
+           "wilson95": [
+            0.722,
+            1
+           ],
+           "unit": "units with every check recorded, none contradicting",
+           "note": "verified on every check made"
+          },
+          "partiallyEvaluated": {
+           "count": 0,
+           "contradicted": 0,
+           "noContradictionOnRecordedChecks": 0,
+           "note": "units where some checks have no recorded outcome or an unknown input: not counted as verified successes"
+          },
+          "withoutAnyRecordedCheck": 0
+         }
+        },
+        "replication": {
+         "groups": 9,
+         "consistentGroups": 9,
+         "matchSeedGroups": 1,
+         "caseScriptFamilies": 8,
+         "basis": "matches grouped by seed: the partition has the single seed 98003; cases grouped by script",
+         "note": "Independent replication is at most the number of groups, not the number of units. Wilson intervals above are descriptive summaries of these observations; they are not confidence statements about the rule, and with few groups they overstate precision."
+        },
+        "coverage": {
+         "k": 68,
+         "n": 68,
+         "rate": 1,
+         "wilson95": [
+          0.947,
+          1
+         ],
+         "unit": "situations of kind turn-start where the representation makes at least one prediction"
+        },
+        "counterExamples": [],
+        "counterCount": 0,
+        "invariance": null
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "hypothesis": "1316038ad83437853e77e9be906f43cadf73079a6f4f15e9da4bad1caefa42f3",
+   "ref": "H-2",
+   "status": "evaluated",
+   "analysisSet": {
+    "eligible": true,
+    "reasons": []
+   },
+   "representations": [
+    {
+     "representation": "fba0572dc216eb045c8507640754b1db50263d4eca8f16279d6d0068f298d7f7",
+     "origin": "submitter",
+     "author": "test-double:gw2-review-test-double",
+     "fidelityDeclared": "faithful",
+     "representationStatus": "represented",
+     "notRepresentedClauses": 0,
+     "buildReferences": {
+      "named": [
+       "build-a94c"
+      ],
+      "resolved": [
+       "build-a94c"
+      ],
+      "unresolved": [],
+      "note": "build conditions are written in discovery build ids; held-out situations are aligned to them through eval/ (D88). An unresolved id names no discovery build and can never apply."
+     },
+     "byBuild": [
+      {
+       "build": "QX-41",
+       "discoveryFit": {
+        "value": "fits",
+        "evaluated": 421,
+        "support": {
+         "full": 421,
+         "partial": 0,
+         "counterExample": 0,
+         "inconclusive": 0
+        },
+        "units": {
+         "cases": 13,
+         "matches": 10
+        },
+        "counterCount": 0,
+        "statement": "fits on 421 evaluated turn-start situation(s) from partition discovery, build QX-41: 421 with full support, 0 with partial support (some expected outcomes not recorded); no counter-example among them (finite evidence: this does not establish the rule for situations not evaluated)"
+       },
+       "heldout": {
+        "situations": 265,
+        "lawClauses": 1,
+        "invarianceClauses": 0,
+        "outcomeChecks": {
+         "matching": 144,
+         "contradicting": 0,
+         "unknown": 0,
+         "unpredicted": 0
+        },
+        "accuracy": {
+         "outcomeChecks": {
+          "k": 144,
+          "n": 144,
+          "rate": 1,
+          "wilson95": [
+           0.974,
+           1
+          ],
+          "unit": "outcome checks with a recorded outcome",
+          "note": "descriptive, conditional on recorded checks: checks within one situation and situations within one match are correlated"
+         },
+         "situations": {
+          "k": 144,
+          "n": 144,
+          "rate": 1,
+          "wilson95": [
+           0.974,
+           1
+          ],
+          "unit": "situations with at least one recorded check, all matching",
+          "note": "descriptive, conditional on recorded checks: turns of one match are not independent replicates",
+          "fullyEvaluated": {
+           "k": 144,
+           "n": 144,
+           "rate": 1,
+           "wilson95": [
+            0.974,
+            1
+           ],
+           "unit": "situations with every check recorded, none contradicting",
+           "note": "verified on every check made"
+          },
+          "partiallyEvaluated": {
+           "count": 0,
+           "contradicted": 0,
+           "noContradictionOnRecordedChecks": 0,
+           "note": "situations where some checks have no recorded outcome or an unknown input: not counted as verified successes"
+          },
+          "withoutAnyRecordedCheck": 0
+         },
+         "units": {
+          "k": 10,
+          "n": 10,
+          "rate": 1,
+          "wilson95": [
+           0.722,
+           1
+          ],
+          "unit": "cases and matches with at least one recorded check, none contradicting",
+          "cases": 8,
+          "matches": 2,
+          "note": "descriptive, conditional on recorded checks: one scripted case or one match counts once, but units are not independent replicates (matches of one seed are paired; cases of one script form a family)",
+          "fullyEvaluated": {
+           "k": 10,
+           "n": 10,
+           "rate": 1,
+           "wilson95": [
+            0.722,
+            1
+           ],
+           "unit": "units with every check recorded, none contradicting",
+           "note": "verified on every check made"
+          },
+          "partiallyEvaluated": {
+           "count": 0,
+           "contradicted": 0,
+           "noContradictionOnRecordedChecks": 0,
+           "note": "units where some checks have no recorded outcome or an unknown input: not counted as verified successes"
+          },
+          "withoutAnyRecordedCheck": 0
+         }
+        },
+        "replication": {
+         "groups": 9,
+         "consistentGroups": 9,
+         "matchSeedGroups": 1,
+         "caseScriptFamilies": 8,
+         "basis": "matches grouped by seed: the partition has the single seed 98003; cases grouped by script",
+         "note": "Independent replication is at most the number of groups, not the number of units. Wilson intervals above are descriptive summaries of these observations; they are not confidence statements about the rule, and with few groups they overstate precision."
+        },
+        "coverage": {
+         "k": 144,
+         "n": 144,
+         "rate": 1,
+         "wilson95": [
+          0.974,
+          1
+         ],
+         "unit": "situations of kind turn-start where the representation makes at least one prediction"
+        },
+        "counterExamples": [],
+        "counterCount": 0,
+        "invariance": null
+       }
+      },
+      {
+       "build": "QX-73",
+       "discoveryFit": {
+        "value": "insufficient-evidence",
+        "evaluated": 0,
+        "support": {
+         "full": 0,
+         "partial": 0,
+         "counterExample": 0,
+         "inconclusive": 0
+        },
+        "units": {
+         "cases": 0,
+         "matches": 0
+        },
+        "counterCount": 0,
+        "statement": "insufficient evidence on 0 evaluated turn-start situation(s) from partition discovery, build QX-73: 1 of 1 clause(s) had no evaluable situation"
+       },
+       "heldout": {
+        "situations": 131,
+        "lawClauses": 1,
+        "invarianceClauses": 0,
+        "outcomeChecks": {
+         "matching": 0,
+         "contradicting": 0,
+         "unknown": 0,
+         "unpredicted": 0
+        },
+        "accuracy": {
+         "outcomeChecks": {
+          "k": 0,
+          "n": 0,
+          "rate": null,
+          "wilson95": null,
+          "unit": "outcome checks with a recorded outcome",
+          "note": "descriptive, conditional on recorded checks: checks within one situation and situations within one match are correlated"
+         },
+         "situations": {
+          "k": 0,
+          "n": 0,
+          "rate": null,
+          "wilson95": null,
+          "unit": "situations with at least one recorded check, all matching",
+          "note": "descriptive, conditional on recorded checks: turns of one match are not independent replicates",
+          "fullyEvaluated": {
+           "k": 0,
+           "n": 0,
+           "rate": null,
+           "wilson95": null,
+           "unit": "situations with every check recorded, none contradicting",
+           "note": "verified on every check made"
+          },
+          "partiallyEvaluated": {
+           "count": 0,
+           "contradicted": 0,
+           "noContradictionOnRecordedChecks": 0,
+           "note": "situations where some checks have no recorded outcome or an unknown input: not counted as verified successes"
+          },
+          "withoutAnyRecordedCheck": 0
+         },
+         "units": {
+          "k": 0,
+          "n": 0,
+          "rate": null,
+          "wilson95": null,
+          "unit": "cases and matches with at least one recorded check, none contradicting",
+          "cases": 0,
+          "matches": 0,
+          "note": "descriptive, conditional on recorded checks: one scripted case or one match counts once, but units are not independent replicates (matches of one seed are paired; cases of one script form a family)",
+          "fullyEvaluated": {
+           "k": 0,
+           "n": 0,
+           "rate": null,
+           "wilson95": null,
+           "unit": "units with every check recorded, none contradicting",
+           "note": "verified on every check made"
+          },
+          "partiallyEvaluated": {
+           "count": 0,
+           "contradicted": 0,
+           "noContradictionOnRecordedChecks": 0,
+           "note": "units where some checks have no recorded outcome or an unknown input: not counted as verified successes"
+          },
+          "withoutAnyRecordedCheck": 0
+         }
+        },
+        "replication": {
+         "groups": 0,
+         "consistentGroups": 0,
+         "matchSeedGroups": 0,
+         "caseScriptFamilies": 0,
+         "basis": "matches grouped by seed: the partition has the single seed 98003; cases grouped by script",
+         "note": "Independent replication is at most the number of groups, not the number of units. Wilson intervals above are descriptive summaries of these observations; they are not confidence statements about the rule, and with few groups they overstate precision."
+        },
+        "coverage": {
+         "k": 0,
+         "n": 68,
+         "rate": 0,
+         "wilson95": [
+          0,
+          0.053
+         ],
+         "unit": "situations of kind turn-start where the representation makes at least one prediction"
+        },
+        "counterExamples": [],
+        "counterCount": 0,
+        "invariance": null
+       }
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "caveat": "Discovery fit and held-out predictive accuracy are different measures. Held-out accuracy is over the representation as structured (fidelity declared by its author, not checked); it says nothing about situations not evaluated and does not identify a unique rule. No composite score is formed.",
+ "exp": "evidence/gw2/p6-run/exp",
+ "seal": {
+  "sha256": "24ff6acabf90cf2527805b6b5b386a02fa187eaa3e4da70fa7dea70e7b7a2f4e",
+  "representations": 11,
+  "notSealedIgnored": []
+ },
+ "freeze": {
+  "sha256": "ca8873958c03ab12a89341b55da5059824d47d7a008e5954a6c0b81e2856458c",
+  "frozen": 14
+ },
+ "buildAlignment": {
+  "discovery": {
+   "build-a94c": "QX-41",
+   "build-a6d1": "QX-73"
+  },
+  "heldout": {
+   "build-8b3e": "QX-41",
+   "build-1fa3": "QX-73"
+  }
+ },
+ "buildAlignmentToDiscovery": {
+  "discovery": {
+   "builds": {
+    "build-a94c": {
+     "original": "QX-41",
+     "discoveryId": "build-a94c"
+    },
+    "build-a6d1": {
+     "original": "QX-73",
+     "discoveryId": "build-a6d1"
+    }
+   },
+   "notInDiscovery": []
+  },
+  "heldout": {
+   "builds": {
+    "build-8b3e": {
+     "original": "QX-41",
+     "discoveryId": "build-a94c"
+    },
+    "build-1fa3": {
+     "original": "QX-73",
+     "discoveryId": "build-a6d1"
+    }
+   },
+   "notInDiscovery": []
+  }
+ },
+ "specificationReference": {
+  "encoding": "rule-sabotage-v6.1-encoding-2",
+  "sha256": "dbb4d30fe5a05880375e158ec91a1ef8e08ecacd49f39137654ba8969a410b66",
+  "review": "unreviewed",
+  "note": "provisional and unreviewed (Q3, D72): the spec records are shown as reference predictors, not as ground truth",
+  "records": [
+   {
+    "rule": "R3",
+    "byBuild": [
+     {
+      "build": "QX-41",
+      "discovery": {
+       "value": "conforms",
+       "evaluated": 421
+      },
+      "heldout": {
+       "value": "conforms",
+       "evaluated": 144
+      },
+      "heldoutPrediction": {
+       "outcomeChecks": {
+        "k": 144,
+        "n": 144,
+        "rate": 1,
+        "wilson95": [
+         0.974,
+         1
+        ],
+        "unit": "outcome checks with a recorded outcome",
+        "note": "descriptive, conditional on recorded checks: checks within one situation and situations within one match are correlated"
+       },
+       "situations": {
+        "k": 144,
+        "n": 144,
+        "rate": 1,
+        "wilson95": [
+         0.974,
+         1
+        ],
+        "unit": "situations with at least one recorded check, all matching",
+        "note": "descriptive, conditional on recorded checks: turns of one match are not independent replicates",
+        "fullyEvaluated": {
+         "k": 144,
+         "n": 144,
+         "rate": 1,
+         "wilson95": [
+          0.974,
+          1
+         ],
+         "unit": "situations with every check recorded, none contradicting",
+         "note": "verified on every check made"
+        },
+        "partiallyEvaluated": {
+         "count": 0,
+         "contradicted": 0,
+         "noContradictionOnRecordedChecks": 0,
+         "note": "situations where some checks have no recorded outcome or an unknown input: not counted as verified successes"
+        },
+        "withoutAnyRecordedCheck": 0
+       },
+       "units": {
+        "k": 10,
+        "n": 10,
+        "rate": 1,
+        "wilson95": [
+         0.722,
+         1
+        ],
+        "unit": "cases and matches with at least one recorded check, none contradicting",
+        "cases": 8,
+        "matches": 2,
+        "note": "descriptive, conditional on recorded checks: one scripted case or one match counts once, but units are not independent replicates (matches of one seed are paired; cases of one script form a family)",
+        "fullyEvaluated": {
+         "k": 10,
+         "n": 10,
+         "rate": 1,
+         "wilson95": [
+          0.722,
+          1
+         ],
+         "unit": "units with every check recorded, none contradicting",
+         "note": "verified on every check made"
+        },
+        "partiallyEvaluated": {
+         "count": 0,
+         "contradicted": 0,
+         "noContradictionOnRecordedChecks": 0,
+         "note": "units where some checks have no recorded outcome or an unknown input: not counted as verified successes"
+        },
+        "withoutAnyRecordedCheck": 0
+       }
+      }
+     },
+     {
+      "build": "QX-73",
+      "discovery": {
+       "value": "deviates",
+       "evaluated": 300
+      },
+      "heldout": {
+       "value": "deviates",
+       "evaluated": 68
+      },
+      "heldoutPrediction": {
+       "outcomeChecks": {
+        "k": 33,
+        "n": 68,
+        "rate": 0.485,
+        "wilson95": [
+         0.371,
+         0.602
+        ],
+        "unit": "outcome checks with a recorded outcome",
+        "note": "descriptive, conditional on recorded checks: checks within one situation and situations within one match are correlated"
+       },
+       "situations": {
+        "k": 33,
+        "n": 68,
+        "rate": 0.485,
+        "wilson95": [
+         0.371,
+         0.602
+        ],
+        "unit": "situations with at least one recorded check, all matching",
+        "note": "descriptive, conditional on recorded checks: turns of one match are not independent replicates",
+        "fullyEvaluated": {
+         "k": 33,
+         "n": 68,
+         "rate": 0.485,
+         "wilson95": [
+          0.371,
+          0.602
+         ],
+         "unit": "situations with every check recorded, none contradicting",
+         "note": "verified on every check made"
+        },
+        "partiallyEvaluated": {
+         "count": 0,
+         "contradicted": 0,
+         "noContradictionOnRecordedChecks": 0,
+         "note": "situations where some checks have no recorded outcome or an unknown input: not counted as verified successes"
+        },
+        "withoutAnyRecordedCheck": 0
+       },
+       "units": {
+        "k": 0,
+        "n": 10,
+        "rate": 0,
+        "wilson95": [
+         0,
+         0.278
+        ],
+        "unit": "cases and matches with at least one recorded check, none contradicting",
+        "cases": 8,
+        "matches": 2,
+        "note": "descriptive, conditional on recorded checks: one scripted case or one match counts once, but units are not independent replicates (matches of one seed are paired; cases of one script form a family)",
+        "fullyEvaluated": {
+         "k": 0,
+         "n": 10,
+         "rate": 0,
+         "wilson95": [
+          0,
+          0.278
+         ],
+         "unit": "units with every check recorded, none contradicting",
+         "note": "verified on every check made"
+        },
+        "partiallyEvaluated": {
+         "count": 0,
+         "contradicted": 0,
+         "noContradictionOnRecordedChecks": 0,
+         "note": "units where some checks have no recorded outcome or an unknown input: not counted as verified successes"
+        },
+        "withoutAnyRecordedCheck": 0
+       }
+      }
+     }
+    ]
+   },
+   {
+    "rule": "R5",
+    "byBuild": [
+     {
+      "build": "QX-41",
+      "discovery": {
+       "value": "conforms",
+       "evaluated": 3
+      },
+      "heldout": {
+       "value": "conforms",
+       "evaluated": 2
+      },
+      "heldoutPrediction": {
+       "outcomeChecks": {
+        "k": 2,
+        "n": 2,
+        "rate": 1,
+        "wilson95": [
+         0.342,
+         1
+        ],
+        "unit": "outcome checks with a recorded outcome",
+        "note": "descriptive, conditional on recorded checks: checks within one situation and situations within one match are correlated"
+       },
+       "situations": {
+        "k": 2,
+        "n": 2,
+        "rate": 1,
+        "wilson95": [
+         0.342,
+         1
+        ],
+        "unit": "situations with at least one recorded check, all matching",
+        "note": "descriptive, conditional on recorded checks: turns of one match are not independent replicates",
+        "fullyEvaluated": {
+         "k": 2,
+         "n": 2,
+         "rate": 1,
+         "wilson95": [
+          0.342,
+          1
+         ],
+         "unit": "situations with every check recorded, none contradicting",
+         "note": "verified on every check made"
+        },
+        "partiallyEvaluated": {
+         "count": 0,
+         "contradicted": 0,
+         "noContradictionOnRecordedChecks": 0,
+         "note": "situations where some checks have no recorded outcome or an unknown input: not counted as verified successes"
+        },
+        "withoutAnyRecordedCheck": 0
+       },
+       "units": {
+        "k": 1,
+        "n": 1,
+        "rate": 1,
+        "wilson95": [
+         0.207,
+         1
+        ],
+        "unit": "cases and matches with at least one recorded check, none contradicting",
+        "cases": 1,
+        "matches": 0,
+        "note": "descriptive, conditional on recorded checks: one scripted case or one match counts once, but units are not independent replicates (matches of one seed are paired; cases of one script form a family)",
+        "fullyEvaluated": {
+         "k": 1,
+         "n": 1,
+         "rate": 1,
+         "wilson95": [
+          0.207,
+          1
+         ],
+         "unit": "units with every check recorded, none contradicting",
+         "note": "verified on every check made"
+        },
+        "partiallyEvaluated": {
+         "count": 0,
+         "contradicted": 0,
+         "noContradictionOnRecordedChecks": 0,
+         "note": "units where some checks have no recorded outcome or an unknown input: not counted as verified successes"
+        },
+        "withoutAnyRecordedCheck": 0
+       }
+      }
+     },
+     {
+      "build": "QX-73",
+      "discovery": {
+       "value": "conforms",
+       "evaluated": 3
+      },
+      "heldout": {
+       "value": "conforms",
+       "evaluated": 2
+      },
+      "heldoutPrediction": {
+       "outcomeChecks": {
+        "k": 2,
+        "n": 2,
+        "rate": 1,
+        "wilson95": [
+         0.342,
+         1
+        ],
+        "unit": "outcome checks with a recorded outcome",
+        "note": "descriptive, conditional on recorded checks: checks within one situation and situations within one match are correlated"
+       },
+       "situations": {
+        "k": 2,
+        "n": 2,
+        "rate": 1,
+        "wilson95": [
+         0.342,
+         1
+        ],
+        "unit": "situations with at least one recorded check, all matching",
+        "note": "descriptive, conditional on recorded checks: turns of one match are not independent replicates",
+        "fullyEvaluated": {
+         "k": 2,
+         "n": 2,
+         "rate": 1,
+         "wilson95": [
+          0.342,
+          1
+         ],
+         "unit": "situations with every check recorded, none contradicting",
+         "note": "verified on every check made"
+        },
+        "partiallyEvaluated": {
+         "count": 0,
+         "contradicted": 0,
+         "noContradictionOnRecordedChecks": 0,
+         "note": "situations where some checks have no recorded outcome or an unknown input: not counted as verified successes"
+        },
+        "withoutAnyRecordedCheck": 0
+       },
+       "units": {
+        "k": 1,
+        "n": 1,
+        "rate": 1,
+        "wilson95": [
+         0.207,
+         1
+        ],
+        "unit": "cases and matches with at least one recorded check, none contradicting",
+        "cases": 1,
+        "matches": 0,
+        "note": "descriptive, conditional on recorded checks: one scripted case or one match counts once, but units are not independent replicates (matches of one seed are paired; cases of one script form a family)",
+        "fullyEvaluated": {
+         "k": 1,
+         "n": 1,
+         "rate": 1,
+         "wilson95": [
+          0.207,
+          1
+         ],
+         "unit": "units with every check recorded, none contradicting",
+         "note": "verified on every check made"
+        },
+        "partiallyEvaluated": {
+         "count": 0,
+         "contradicted": 0,
+         "noContradictionOnRecordedChecks": 0,
+         "note": "units where some checks have no recorded outcome or an unknown input: not counted as verified successes"
+        },
+        "withoutAnyRecordedCheck": 0
+       }
+      }
+     }
+    ]
+   },
+   {
+    "rule": "R7",
+    "byBuild": [
+     {
+      "build": "QX-41",
+      "discovery": {
+       "value": "conforms",
+       "evaluated": 19
+      },
+      "heldout": {
+       "value": "conforms",
+       "evaluated": 7
+      },
+      "heldoutPrediction": {
+       "outcomeChecks": {
+        "k": 0,
+        "n": 0,
+        "rate": null,
+        "wilson95": null,
+        "unit": "outcome checks with a recorded outcome",
+        "note": "descriptive, conditional on recorded checks: checks within one situation and situations within one match are correlated"
+       },
+       "situations": {
+        "k": 0,
+        "n": 0,
+        "rate": null,
+        "wilson95": null,
+        "unit": "situations with at least one recorded check, all matching",
+        "note": "descriptive, conditional on recorded checks: turns of one match are not independent replicates",
+        "fullyEvaluated": {
+         "k": 0,
+         "n": 0,
+         "rate": null,
+         "wilson95": null,
+         "unit": "situations with every check recorded, none contradicting",
+         "note": "verified on every check made"
+        },
+        "partiallyEvaluated": {
+         "count": 0,
+         "contradicted": 0,
+         "noContradictionOnRecordedChecks": 0,
+         "note": "situations where some checks have no recorded outcome or an unknown input: not counted as verified successes"
+        },
+        "withoutAnyRecordedCheck": 0
+       },
+       "units": {
+        "k": 0,
+        "n": 0,
+        "rate": null,
+        "wilson95": null,
+        "unit": "cases and matches with at least one recorded check, none contradicting",
+        "cases": 0,
+        "matches": 0,
+        "note": "descriptive, conditional on recorded checks: one scripted case or one match counts once, but units are not independent replicates (matches of one seed are paired; cases of one script form a family)",
+        "fullyEvaluated": {
+         "k": 0,
+         "n": 0,
+         "rate": null,
+         "wilson95": null,
+         "unit": "units with every check recorded, none contradicting",
+         "note": "verified on every check made"
+        },
+        "partiallyEvaluated": {
+         "count": 0,
+         "contradicted": 0,
+         "noContradictionOnRecordedChecks": 0,
+         "note": "units where some checks have no recorded outcome or an unknown input: not counted as verified successes"
+        },
+        "withoutAnyRecordedCheck": 0
+       }
+      }
+     },
+     {
+      "build": "QX-73",
+      "discovery": {
+       "value": "deviates",
+       "evaluated": 20
+      },
+      "heldout": {
+       "value": "conforms",
+       "evaluated": 7
+      },
+      "heldoutPrediction": {
+       "outcomeChecks": {
+        "k": 0,
+        "n": 0,
+        "rate": null,
+        "wilson95": null,
+        "unit": "outcome checks with a recorded outcome",
+        "note": "descriptive, conditional on recorded checks: checks within one situation and situations within one match are correlated"
+       },
+       "situations": {
+        "k": 0,
+        "n": 0,
+        "rate": null,
+        "wilson95": null,
+        "unit": "situations with at least one recorded check, all matching",
+        "note": "descriptive, conditional on recorded checks: turns of one match are not independent replicates",
+        "fullyEvaluated": {
+         "k": 0,
+         "n": 0,
+         "rate": null,
+         "wilson95": null,
+         "unit": "situations with every check recorded, none contradicting",
+         "note": "verified on every check made"
+        },
+        "partiallyEvaluated": {
+         "count": 0,
+         "contradicted": 0,
+         "noContradictionOnRecordedChecks": 0,
+         "note": "situations where some checks have no recorded outcome or an unknown input: not counted as verified successes"
+        },
+        "withoutAnyRecordedCheck": 0
+       },
+       "units": {
+        "k": 0,
+        "n": 0,
+        "rate": null,
+        "wilson95": null,
+        "unit": "cases and matches with at least one recorded check, none contradicting",
+        "cases": 0,
+        "matches": 0,
+        "note": "descriptive, conditional on recorded checks: one scripted case or one match counts once, but units are not independent replicates (matches of one seed are paired; cases of one script form a family)",
+        "fullyEvaluated": {
+         "k": 0,
+         "n": 0,
+         "rate": null,
+         "wilson95": null,
+         "unit": "units with every check recorded, none contradicting",
+         "note": "verified on every check made"
+        },
+        "partiallyEvaluated": {
+         "count": 0,
+         "contradicted": 0,
+         "noContradictionOnRecordedChecks": 0,
+         "note": "units where some checks have no recorded outcome or an unknown input: not counted as verified successes"
+        },
+        "withoutAnyRecordedCheck": 0
+       }
+      }
+     }
+    ]
+   },
+   {
+    "rule": "R8",
+    "byBuild": [
+     {
+      "build": "QX-41",
+      "discovery": {
+       "value": "conforms",
+       "evaluated": 22
+      },
+      "heldout": {
+       "value": "conforms",
+       "evaluated": 12
+      },
+      "heldoutPrediction": {
+       "outcomeChecks": {
+        "k": 24,
+        "n": 24,
+        "rate": 1,
+        "wilson95": [
+         0.862,
+         1
+        ],
+        "unit": "outcome checks with a recorded outcome",
+        "note": "descriptive, conditional on recorded checks: checks within one situation and situations within one match are correlated"
+       },
+       "situations": {
+        "k": 12,
+        "n": 12,
+        "rate": 1,
+        "wilson95": [
+         0.758,
+         1
+        ],
+        "unit": "situations with at least one recorded check, all matching",
+        "note": "descriptive, conditional on recorded checks: turns of one match are not independent replicates",
+        "fullyEvaluated": {
+         "k": 12,
+         "n": 12,
+         "rate": 1,
+         "wilson95": [
+          0.758,
+          1
+         ],
+         "unit": "situations with every check recorded, none contradicting",
+         "note": "verified on every check made"
+        },
+        "partiallyEvaluated": {
+         "count": 0,
+         "contradicted": 0,
+         "noContradictionOnRecordedChecks": 0,
+         "note": "situations where some checks have no recorded outcome or an unknown input: not counted as verified successes"
+        },
+        "withoutAnyRecordedCheck": 94
+       },
+       "units": {
+        "k": 7,
+        "n": 7,
+        "rate": 1,
+        "wilson95": [
+         0.646,
+         1
+        ],
+        "unit": "cases and matches with at least one recorded check, none contradicting",
+        "cases": 7,
+        "matches": 0,
+        "note": "descriptive, conditional on recorded checks: one scripted case or one match counts once, but units are not independent replicates (matches of one seed are paired; cases of one script form a family)",
+        "fullyEvaluated": {
+         "k": 7,
+         "n": 7,
+         "rate": 1,
+         "wilson95": [
+          0.646,
+          1
+         ],
+         "unit": "units with every check recorded, none contradicting",
+         "note": "verified on every check made"
+        },
+        "partiallyEvaluated": {
+         "count": 0,
+         "contradicted": 0,
+         "noContradictionOnRecordedChecks": 0,
+         "note": "units where some checks have no recorded outcome or an unknown input: not counted as verified successes"
+        },
+        "withoutAnyRecordedCheck": 2
+       }
+      }
+     },
+     {
+      "build": "QX-73",
+      "discovery": {
+       "value": "deviates",
+       "evaluated": 23
+      },
+      "heldout": {
+       "value": "deviates",
+       "evaluated": 13
+      },
+      "heldoutPrediction": {
+       "outcomeChecks": {
+        "k": 25,
+        "n": 26,
+        "rate": 0.962,
+        "wilson95": [
+         0.811,
+         0.993
+        ],
+        "unit": "outcome checks with a recorded outcome",
+        "note": "descriptive, conditional on recorded checks: checks within one situation and situations within one match are correlated"
+       },
+       "situations": {
+        "k": 12,
+        "n": 13,
+        "rate": 0.923,
+        "wilson95": [
+         0.667,
+         0.986
+        ],
+        "unit": "situations with at least one recorded check, all matching",
+        "note": "descriptive, conditional on recorded checks: turns of one match are not independent replicates",
+        "fullyEvaluated": {
+         "k": 12,
+         "n": 13,
+         "rate": 0.923,
+         "wilson95": [
+          0.667,
+          0.986
+         ],
+         "unit": "situations with every check recorded, none contradicting",
+         "note": "verified on every check made"
+        },
+        "partiallyEvaluated": {
+         "count": 0,
+         "contradicted": 0,
+         "noContradictionOnRecordedChecks": 0,
+         "note": "situations where some checks have no recorded outcome or an unknown input: not counted as verified successes"
+        },
+        "withoutAnyRecordedCheck": 35
+       },
+       "units": {
+        "k": 6,
+        "n": 7,
+        "rate": 0.857,
+        "wilson95": [
+         0.487,
+         0.974
+        ],
+        "unit": "cases and matches with at least one recorded check, none contradicting",
+        "cases": 7,
+        "matches": 0,
+        "note": "descriptive, conditional on recorded checks: one scripted case or one match counts once, but units are not independent replicates (matches of one seed are paired; cases of one script form a family)",
+        "fullyEvaluated": {
+         "k": 6,
+         "n": 7,
+         "rate": 0.857,
+         "wilson95": [
+          0.487,
+          0.974
+         ],
+         "unit": "units with every check recorded, none contradicting",
+         "note": "verified on every check made"
+        },
+        "partiallyEvaluated": {
+         "count": 0,
+         "contradicted": 0,
+         "noContradictionOnRecordedChecks": 0,
+         "note": "units where some checks have no recorded outcome or an unknown input: not counted as verified successes"
+        },
+        "withoutAnyRecordedCheck": 2
+       }
+      }
+     }
+    ]
+   },
+   {
+    "rule": "R12",
+    "byBuild": [
+     {
+      "build": "QX-41",
+      "discovery": {
+       "value": "conforms",
+       "evaluated": 5
+      },
+      "heldout": {
+       "value": "conforms",
+       "evaluated": 1
+      },
+      "heldoutPrediction": {
+       "outcomeChecks": {
+        "k": 2,
+        "n": 2,
+        "rate": 1,
+        "wilson95": [
+         0.342,
+         1
+        ],
+        "unit": "outcome checks with a recorded outcome",
+        "note": "descriptive, conditional on recorded checks: checks within one situation and situations within one match are correlated"
+       },
+       "situations": {
+        "k": 1,
+        "n": 1,
+        "rate": 1,
+        "wilson95": [
+         0.207,
+         1
+        ],
+        "unit": "situations with at least one recorded check, all matching",
+        "note": "descriptive, conditional on recorded checks: turns of one match are not independent replicates",
+        "fullyEvaluated": {
+         "k": 1,
+         "n": 1,
+         "rate": 1,
+         "wilson95": [
+          0.207,
+          1
+         ],
+         "unit": "situations with every check recorded, none contradicting",
+         "note": "verified on every check made"
+        },
+        "partiallyEvaluated": {
+         "count": 0,
+         "contradicted": 0,
+         "noContradictionOnRecordedChecks": 0,
+         "note": "situations where some checks have no recorded outcome or an unknown input: not counted as verified successes"
+        },
+        "withoutAnyRecordedCheck": 0
+       },
+       "units": {
+        "k": 1,
+        "n": 1,
+        "rate": 1,
+        "wilson95": [
+         0.207,
+         1
+        ],
+        "unit": "cases and matches with at least one recorded check, none contradicting",
+        "cases": 1,
+        "matches": 0,
+        "note": "descriptive, conditional on recorded checks: one scripted case or one match counts once, but units are not independent replicates (matches of one seed are paired; cases of one script form a family)",
+        "fullyEvaluated": {
+         "k": 1,
+         "n": 1,
+         "rate": 1,
+         "wilson95": [
+          0.207,
+          1
+         ],
+         "unit": "units with every check recorded, none contradicting",
+         "note": "verified on every check made"
+        },
+        "partiallyEvaluated": {
+         "count": 0,
+         "contradicted": 0,
+         "noContradictionOnRecordedChecks": 0,
+         "note": "units where some checks have no recorded outcome or an unknown input: not counted as verified successes"
+        },
+        "withoutAnyRecordedCheck": 0
+       }
+      }
+     },
+     {
+      "build": "QX-73",
+      "discovery": {
+       "value": "conforms",
+       "evaluated": 5
+      },
+      "heldout": {
+       "value": "conforms",
+       "evaluated": 1
+      },
+      "heldoutPrediction": {
+       "outcomeChecks": {
+        "k": 2,
+        "n": 2,
+        "rate": 1,
+        "wilson95": [
+         0.342,
+         1
+        ],
+        "unit": "outcome checks with a recorded outcome",
+        "note": "descriptive, conditional on recorded checks: checks within one situation and situations within one match are correlated"
+       },
+       "situations": {
+        "k": 1,
+        "n": 1,
+        "rate": 1,
+        "wilson95": [
+         0.207,
+         1
+        ],
+        "unit": "situations with at least one recorded check, all matching",
+        "note": "descriptive, conditional on recorded checks: turns of one match are not independent replicates",
+        "fullyEvaluated": {
+         "k": 1,
+         "n": 1,
+         "rate": 1,
+         "wilson95": [
+          0.207,
+          1
+         ],
+         "unit": "situations with every check recorded, none contradicting",
+         "note": "verified on every check made"
+        },
+        "partiallyEvaluated": {
+         "count": 0,
+         "contradicted": 0,
+         "noContradictionOnRecordedChecks": 0,
+         "note": "situations where some checks have no recorded outcome or an unknown input: not counted as verified successes"
+        },
+        "withoutAnyRecordedCheck": 0
+       },
+       "units": {
+        "k": 1,
+        "n": 1,
+        "rate": 1,
+        "wilson95": [
+         0.207,
+         1
+        ],
+        "unit": "cases and matches with at least one recorded check, none contradicting",
+        "cases": 1,
+        "matches": 0,
+        "note": "descriptive, conditional on recorded checks: one scripted case or one match counts once, but units are not independent replicates (matches of one seed are paired; cases of one script form a family)",
+        "fullyEvaluated": {
+         "k": 1,
+         "n": 1,
+         "rate": 1,
+         "wilson95": [
+          0.207,
+          1
+         ],
+         "unit": "units with every check recorded, none contradicting",
+         "note": "verified on every check made"
+        },
+        "partiallyEvaluated": {
+         "count": 0,
+         "contradicted": 0,
+         "noContradictionOnRecordedChecks": 0,
+         "note": "units where some checks have no recorded outcome or an unknown input: not counted as verified successes"
+        },
+        "withoutAnyRecordedCheck": 0
+       }
+      }
+     }
+    ]
+   },
+   {
+    "rule": "R14",
+    "byBuild": [
+     {
+      "build": "QX-41",
+      "discovery": {
+       "value": "conforms",
+       "evaluated": 3
+      },
+      "heldout": {
+       "value": "conforms",
+       "evaluated": 1
+      },
+      "heldoutPrediction": {
+       "outcomeChecks": {
+        "k": 4,
+        "n": 4,
+        "rate": 1,
+        "wilson95": [
+         0.51,
+         1
+        ],
+        "unit": "outcome checks with a recorded outcome",
+        "note": "descriptive, conditional on recorded checks: checks within one situation and situations within one match are correlated"
+       },
+       "situations": {
+        "k": 1,
+        "n": 1,
+        "rate": 1,
+        "wilson95": [
+         0.207,
+         1
+        ],
+        "unit": "situations with at least one recorded check, all matching",
+        "note": "descriptive, conditional on recorded checks: turns of one match are not independent replicates",
+        "fullyEvaluated": {
+         "k": 1,
+         "n": 1,
+         "rate": 1,
+         "wilson95": [
+          0.207,
+          1
+         ],
+         "unit": "situations with every check recorded, none contradicting",
+         "note": "verified on every check made"
+        },
+        "partiallyEvaluated": {
+         "count": 0,
+         "contradicted": 0,
+         "noContradictionOnRecordedChecks": 0,
+         "note": "situations where some checks have no recorded outcome or an unknown input: not counted as verified successes"
+        },
+        "withoutAnyRecordedCheck": 0
+       },
+       "units": {
+        "k": 1,
+        "n": 1,
+        "rate": 1,
+        "wilson95": [
+         0.207,
+         1
+        ],
+        "unit": "cases and matches with at least one recorded check, none contradicting",
+        "cases": 1,
+        "matches": 0,
+        "note": "descriptive, conditional on recorded checks: one scripted case or one match counts once, but units are not independent replicates (matches of one seed are paired; cases of one script form a family)",
+        "fullyEvaluated": {
+         "k": 1,
+         "n": 1,
+         "rate": 1,
+         "wilson95": [
+          0.207,
+          1
+         ],
+         "unit": "units with every check recorded, none contradicting",
+         "note": "verified on every check made"
+        },
+        "partiallyEvaluated": {
+         "count": 0,
+         "contradicted": 0,
+         "noContradictionOnRecordedChecks": 0,
+         "note": "units where some checks have no recorded outcome or an unknown input: not counted as verified successes"
+        },
+        "withoutAnyRecordedCheck": 0
+       }
+      }
+     },
+     {
+      "build": "QX-73",
+      "discovery": {
+       "value": "deviates",
+       "evaluated": 3
+      },
+      "heldout": {
+       "value": "deviates",
+       "evaluated": 1
+      },
+      "heldoutPrediction": {
+       "outcomeChecks": {
+        "k": 2,
+        "n": 4,
+        "rate": 0.5,
+        "wilson95": [
+         0.15,
+         0.85
+        ],
+        "unit": "outcome checks with a recorded outcome",
+        "note": "descriptive, conditional on recorded checks: checks within one situation and situations within one match are correlated"
+       },
+       "situations": {
+        "k": 0,
+        "n": 1,
+        "rate": 0,
+        "wilson95": [
+         0,
+         0.793
+        ],
+        "unit": "situations with at least one recorded check, all matching",
+        "note": "descriptive, conditional on recorded checks: turns of one match are not independent replicates",
+        "fullyEvaluated": {
+         "k": 0,
+         "n": 1,
+         "rate": 0,
+         "wilson95": [
+          0,
+          0.793
+         ],
+         "unit": "situations with every check recorded, none contradicting",
+         "note": "verified on every check made"
+        },
+        "partiallyEvaluated": {
+         "count": 0,
+         "contradicted": 0,
+         "noContradictionOnRecordedChecks": 0,
+         "note": "situations where some checks have no recorded outcome or an unknown input: not counted as verified successes"
+        },
+        "withoutAnyRecordedCheck": 0
+       },
+       "units": {
+        "k": 0,
+        "n": 1,
+        "rate": 0,
+        "wilson95": [
+         0,
+         0.793
+        ],
+        "unit": "cases and matches with at least one recorded check, none contradicting",
+        "cases": 1,
+        "matches": 0,
+        "note": "descriptive, conditional on recorded checks: one scripted case or one match counts once, but units are not independent replicates (matches of one seed are paired; cases of one script form a family)",
+        "fullyEvaluated": {
+         "k": 0,
+         "n": 1,
+         "rate": 0,
+         "wilson95": [
+          0,
+          0.793
+         ],
+         "unit": "units with every check recorded, none contradicting",
+         "note": "verified on every check made"
+        },
+        "partiallyEvaluated": {
+         "count": 0,
+         "contradicted": 0,
+         "noContradictionOnRecordedChecks": 0,
+         "note": "units where some checks have no recorded outcome or an unknown input: not counted as verified successes"
+        },
+        "withoutAnyRecordedCheck": 0
+       }
+      }
+     }
+    ]
+   }
+  ]
+ },
+ "graphNodes": [
+  "a8ca4b0367778addb03265a08f223e1cb7a1880f1c671b4065b8f47250fad2e8",
+  "caefd899eafb5ce01c0d80d52fc1076d826156dd89547fe4523701fee56fdb87",
+  "5429280b638bb652a98541aff53b842238305e82df8328ea6fbcc9233cefc530",
+  "e1bd798b9bfd2f4d53f279475fb2dd5a2dbe7f6e5c3a7e85bf1837e2f681ad12",
+  "927577b66cbaf25e4fd2bd75900c837267374375dba474c054a6baf9620afa26",
+  "10a6e9b25c9cb3d464018267456c9f9680809934e7d21387ced4487adbfadc32",
+  "c94959db925b02090bed98498fedf37b5ac0091313aa2eec326d876fa790e5f1",
+  "22e8f29c7b2c25949114bbf4fb65e133bf94cbccbfa1e26a5990a50765038795",
+  "60a4621a9020319f80cb2b0f54a013f529a1a9c1aa1e512a8645d07e52cc0879",
+  "28526dc969df5204ee7fbc74a92f26ffb8d152a7acf286ac2b58541b41af0351",
+  "a072cdb1030cda37a857abe7f6b63a1090f6985d0f6317014e29373b8e50c27c",
+  "9b4ccc61f4fd564f5d88a8c467d299461d02e16648c340a08e45e688300421d6",
+  "9f1def866339fc2c476392e8e2f7d68d02cb1d646a9042d3f86d12a55733ccdd",
+  "f3d6fdb8c6a82637122fa942f39a335b9fdbdba8d2b4ac84506831b6537f9931"
+ ]
+}

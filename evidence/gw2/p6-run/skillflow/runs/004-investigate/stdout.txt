@@ -1,0 +1,5 @@
+accurate: session 1d03da6df39c0f79 exit 0 {"verdict":"approved","summary":"TEST DOUBLE (scripted): submitted 3 hypotheses after reading 30 pages","detail":""}
+careless: session b00a2e7f2d9195a9 exit 0 {"verdict":"approved","summary":"TEST DOUBLE (scripted): submitted 3 hypotheses and a finding citing 5 pages it did not open","detail":""}
+over-abstaining: session 116a8c2070a3a93d exit 0 {"verdict":"approved","summary":"TEST DOUBLE (scripted): abstained on every question","detail":""}
+confident-wrong: session 631bf7f0428334c6 exit 0 {"verdict":"approved","summary":"TEST DOUBLE (scripted): submitted 3 confident hypotheses","detail":""}
+defect-describer: session f3f0b801b9020917 exit 0 {"verdict":"approved","summary":"TEST DOUBLE (scripted): described 1 build(s) with a first-mover extra action and 1 without","detail":""}

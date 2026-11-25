@@ -1,0 +1,49 @@
+{
+ "step": "partition",
+ "ok": true,
+ "assignment": {
+  "discovery": {
+   "scripts": [
+    "adjacent-placement",
+    "freeze-ai",
+    "matrix-haste",
+    "matrix-home",
+    "matrix-shield",
+    "multicell-ai",
+    "placement-ai",
+    "send-home-ai",
+    "shield-ai",
+    "shove-ai",
+    "shove-chain-ai",
+    "teleport-human",
+    "walk-twice"
+   ],
+   "seeds": [
+    98001,
+    98002,
+    98004,
+    98005,
+    98006
+   ]
+  },
+  "heldout": {
+   "scripts": [
+    "freeze-human",
+    "matrix-freeze",
+    "multicell-human",
+    "placement-human",
+    "send-home-human",
+    "shield-human",
+    "shove-chain-human",
+    "shove-human"
+   ],
+   "seeds": [
+    98003
+   ]
+  }
+ },
+ "leakCheck": {
+  "ok": true,
+  "files": 49
+ }
+}

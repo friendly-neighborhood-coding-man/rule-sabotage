@@ -1,0 +1,308 @@
+{
+ "schema": "gamewatch/gw2-p6-report@1",
+ "at": "2026-11-25T17:00:00.000Z",
+ "exp": "evidence/gw2/p6-run/exp",
+ "label": "All sessions are scripted TEST DOUBLES started through the Kane invocation boundary. They measure the machinery, not any agent.",
+ "dataset": "P5 development and dry-run dataset (U1, D93)",
+ "profiles": [
+  {
+   "session": "1d03da6df39c0f79",
+   "profile": "accurate",
+   "label": "TEST DOUBLE: measures the measuring machinery, not an agent",
+   "submissions": {
+    "hypotheses": 3,
+    "abstentions": 0,
+    "primary": 3,
+    "excludedFromPrimary": 0
+   },
+   "representations": {
+    "sealed": 3,
+    "hypothesesWithout": 0
+   },
+   "coverage": {
+    "k": 109,
+    "n": 396,
+    "rate": 0.275,
+    "wilson95": [
+     0.234,
+     0.321
+    ],
+    "unit": "held-out situations with at least one prediction ÷ held-out situations (assertions made ÷ opportunities)"
+   },
+   "accuracy": {
+    "k": 109,
+    "n": 109,
+    "rate": 1,
+    "wilson95": [
+     0.966,
+     1
+    ],
+    "unit": "held-out outcome checks matching ÷ checks with a recorded outcome (over assertions made; descriptive)"
+   },
+   "incorrectAssertions": {
+    "contradictingChecks": 0,
+    "unit": "held-out outcome checks contradicted by the recorded outcome (count, not netted against anything)"
+   },
+   "detection": {
+    "k": 0,
+    "n": 3,
+    "rate": 0,
+    "wilson95": [
+     0,
+     0.561
+    ],
+    "detected": [],
+    "unit": "held-out (rule, build) spec deviations with an accurate description of a defect ÷ deviations present; abstention counts as not detected"
+   },
+   "citations": {
+    "cited": 9,
+    "citedWithoutAccess": 0,
+    "pagesServed": 30,
+    "unit": "evidence ids cited in submissions; cited before the server journal records that page served to this session"
+   }
+  },
+  {
+   "session": "b00a2e7f2d9195a9",
+   "profile": "careless",
+   "label": "TEST DOUBLE: measures the measuring machinery, not an agent",
+   "submissions": {
+    "hypotheses": 3,
+    "abstentions": 0,
+    "primary": 3,
+    "excludedFromPrimary": 0
+   },
+   "representations": {
+    "sealed": 3,
+    "hypothesesWithout": 0
+   },
+   "coverage": {
+    "k": 109,
+    "n": 396,
+    "rate": 0.275,
+    "wilson95": [
+     0.234,
+     0.321
+    ],
+    "unit": "held-out situations with at least one prediction ÷ held-out situations (assertions made ÷ opportunities)"
+   },
+   "accuracy": {
+    "k": 109,
+    "n": 109,
+    "rate": 1,
+    "wilson95": [
+     0.966,
+     1
+    ],
+    "unit": "held-out outcome checks matching ÷ checks with a recorded outcome (over assertions made; descriptive)"
+   },
+   "incorrectAssertions": {
+    "contradictingChecks": 0,
+    "unit": "held-out outcome checks contradicted by the recorded outcome (count, not netted against anything)"
+   },
+   "detection": {
+    "k": 0,
+    "n": 3,
+    "rate": 0,
+    "wilson95": [
+     0,
+     0.561
+    ],
+    "detected": [],
+    "unit": "held-out (rule, build) spec deviations with an accurate description of a defect ÷ deviations present; abstention counts as not detected"
+   },
+   "citations": {
+    "cited": 20,
+    "citedWithoutAccess": 20,
+    "pagesServed": 0,
+    "unit": "evidence ids cited in submissions; cited before the server journal records that page served to this session"
+   }
+  },
+  {
+   "session": "116a8c2070a3a93d",
+   "profile": "over-abstaining",
+   "label": "TEST DOUBLE: measures the measuring machinery, not an agent",
+   "submissions": {
+    "hypotheses": 0,
+    "abstentions": 3,
+    "primary": 3,
+    "excludedFromPrimary": 0
+   },
+   "representations": {
+    "sealed": 0,
+    "hypothesesWithout": 0
+   },
+   "coverage": {
+    "k": 0,
+    "n": 396,
+    "rate": 0,
+    "wilson95": [
+     0,
+     0.01
+    ],
+    "unit": "held-out situations with at least one prediction ÷ held-out situations (assertions made ÷ opportunities)"
+   },
+   "accuracy": {
+    "k": 0,
+    "n": 0,
+    "rate": null,
+    "wilson95": null,
+    "unit": "held-out outcome checks matching ÷ checks with a recorded outcome (over assertions made; descriptive)"
+   },
+   "incorrectAssertions": {
+    "contradictingChecks": 0,
+    "unit": "held-out outcome checks contradicted by the recorded outcome (count, not netted against anything)"
+   },
+   "detection": {
+    "k": 0,
+    "n": 3,
+    "rate": 0,
+    "wilson95": [
+     0,
+     0.561
+    ],
+    "detected": [],
+    "unit": "held-out (rule, build) spec deviations with an accurate description of a defect ÷ deviations present; abstention counts as not detected"
+   },
+   "citations": {
+    "cited": 0,
+    "citedWithoutAccess": 0,
+    "pagesServed": 1,
+    "unit": "evidence ids cited in submissions; cited before the server journal records that page served to this session"
+   }
+  },
+  {
+   "session": "631bf7f0428334c6",
+   "profile": "confident-wrong",
+   "label": "TEST DOUBLE: measures the measuring machinery, not an agent",
+   "submissions": {
+    "hypotheses": 3,
+    "abstentions": 0,
+    "primary": 3,
+    "excludedFromPrimary": 0
+   },
+   "representations": {
+    "sealed": 3,
+    "hypothesesWithout": 0
+   },
+   "coverage": {
+    "k": 218,
+    "n": 396,
+    "rate": 0.551,
+    "wilson95": [
+     0.501,
+     0.599
+    ],
+    "unit": "held-out situations with at least one prediction ÷ held-out situations (assertions made ÷ opportunities)"
+   },
+   "accuracy": {
+    "k": 95,
+    "n": 218,
+    "rate": 0.436,
+    "wilson95": [
+     0.372,
+     0.502
+    ],
+    "unit": "held-out outcome checks matching ÷ checks with a recorded outcome (over assertions made; descriptive)"
+   },
+   "incorrectAssertions": {
+    "contradictingChecks": 123,
+    "unit": "held-out outcome checks contradicted by the recorded outcome (count, not netted against anything)"
+   },
+   "detection": {
+    "k": 0,
+    "n": 3,
+    "rate": 0,
+    "wilson95": [
+     0,
+     0.561
+    ],
+    "detected": [],
+    "unit": "held-out (rule, build) spec deviations with an accurate description of a defect ÷ deviations present; abstention counts as not detected"
+   },
+   "citations": {
+    "cited": 6,
+    "citedWithoutAccess": 0,
+    "pagesServed": 2,
+    "unit": "evidence ids cited in submissions; cited before the server journal records that page served to this session"
+   }
+  },
+  {
+   "session": "f3f0b801b9020917",
+   "profile": "defect-describer",
+   "label": "TEST DOUBLE: measures the measuring machinery, not an agent",
+   "submissions": {
+    "hypotheses": 2,
+    "abstentions": 0,
+    "primary": 2,
+    "excludedFromPrimary": 0
+   },
+   "representations": {
+    "sealed": 2,
+    "hypothesesWithout": 0
+   },
+   "coverage": {
+    "k": 212,
+    "n": 396,
+    "rate": 0.535,
+    "wilson95": [
+     0.486,
+     0.584
+    ],
+    "unit": "held-out situations with at least one prediction ÷ held-out situations (assertions made ÷ opportunities)"
+   },
+   "accuracy": {
+    "k": 212,
+    "n": 212,
+    "rate": 1,
+    "wilson95": [
+     0.982,
+     1
+    ],
+    "unit": "held-out outcome checks matching ÷ checks with a recorded outcome (over assertions made; descriptive)"
+   },
+   "incorrectAssertions": {
+    "contradictingChecks": 0,
+    "unit": "held-out outcome checks contradicted by the recorded outcome (count, not netted against anything)"
+   },
+   "detection": {
+    "k": 1,
+    "n": 3,
+    "rate": 0.333,
+    "wilson95": [
+     0.061,
+     0.792
+    ],
+    "detected": [
+     "R3@build-a6d1"
+    ],
+    "unit": "held-out (rule, build) spec deviations with an accurate description of a defect ÷ deviations present; abstention counts as not detected"
+   },
+   "citations": {
+    "cited": 6,
+    "citedWithoutAccess": 0,
+    "pagesServed": 20,
+    "unit": "evidence ids cited in submissions; cited before the server journal records that page served to this session"
+   }
+  }
+ ],
+ "abstentionCheck": {
+  "overAbstainingAboveAccurateOn": [],
+  "allowed": [
+   "incorrect assertions"
+  ],
+  "why": "The over-abstaining profile makes no assertion, so it has no contradicted prediction: it is \"better\" on incorrect assertions only because it asserts nothing. Its accuracy has no denominator (no rate), its coverage is 0 and its detection counts every abstention as not detected, so it never ranks above the accurate profile on those (EXPERIMENT_DESIGN §3 abstention handling)."
+ },
+ "rule": "Dimensions are reported side by side and never combined; no ranking by a single column is reported. Detection counts abstention as not detected; error counts are over assertions made.",
+ "sources": {
+  "heldout": {
+   "id": "gamewatch/gw2/heldout.ts",
+   "version": "2"
+  },
+  "threeWay": {
+   "id": "gamewatch/gw2/verify.ts",
+   "version": "2.1"
+  },
+  "seal": "24ff6acabf90cf2527805b6b5b386a02fa187eaa3e4da70fa7dea70e7b7a2f4e",
+  "freeze": "ca8873958c03ab12a89341b55da5059824d47d7a008e5954a6c0b81e2856458c"
+ }
+}

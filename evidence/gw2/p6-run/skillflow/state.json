@@ -1,0 +1,130 @@
+{
+ "skillflow": "0.1.0",
+ "book": "/home/user/gw2/gamewatch/gw2/book.json",
+ "book_sha256": "66474dd1e46aac6906af6000bd636293927cd3d8ebd468ce413f3e81048ea97a",
+ "workdir": "/home/user/gw2",
+ "vars": {
+  "out": "evidence/gw2/p6-run/verdicts",
+  "exp": "evidence/gw2/p6-run/exp",
+  "generation": "evidence/gw2/procedures/generation-p5-1.json",
+  "partition": "evidence/gw2/procedures/partition-p5-1.json",
+  "bundle": "evidence/gw2/p5-experiment/generated/bundle.json",
+  "sessions": "5",
+  "profiles": "accurate,careless,over-abstaining,confident-wrong,defect-describer",
+  "route": "test-double",
+  "at": "2026-11-25T17:00:00.000Z"
+ },
+ "current": "integrity",
+ "status": "done",
+ "steps": 13,
+ "backtracks": 0,
+ "attempts": {
+  "procedures": 1,
+  "partition": 1,
+  "session-plan": 1,
+  "investigate": 1,
+  "closure": 1,
+  "import": 1,
+  "freeze": 1,
+  "representations": 1,
+  "three-way": 1,
+  "heldout": 1,
+  "discriminate": 1,
+  "report": 1,
+  "integrity": 1
+ },
+ "history": [
+  {
+   "task": "procedures",
+   "attempt": 1,
+   "exit": 0,
+   "accepted": true,
+   "next": "partition"
+  },
+  {
+   "task": "partition",
+   "attempt": 1,
+   "exit": 0,
+   "accepted": true,
+   "next": "session-plan"
+  },
+  {
+   "task": "session-plan",
+   "attempt": 1,
+   "exit": 0,
+   "accepted": true,
+   "next": "investigate"
+  },
+  {
+   "task": "investigate",
+   "attempt": 1,
+   "exit": 0,
+   "accepted": true,
+   "next": "closure"
+  },
+  {
+   "task": "closure",
+   "attempt": 1,
+   "exit": 0,
+   "accepted": true,
+   "next": "import"
+  },
+  {
+   "task": "import",
+   "attempt": 1,
+   "exit": 0,
+   "accepted": true,
+   "next": "freeze"
+  },
+  {
+   "task": "freeze",
+   "attempt": 1,
+   "exit": 0,
+   "accepted": true,
+   "next": "representations"
+  },
+  {
+   "task": "representations",
+   "attempt": 1,
+   "exit": 0,
+   "accepted": true,
+   "next": "three-way"
+  },
+  {
+   "task": "three-way",
+   "attempt": 1,
+   "exit": 0,
+   "accepted": true,
+   "next": "heldout"
+  },
+  {
+   "task": "heldout",
+   "attempt": 1,
+   "exit": 0,
+   "accepted": true,
+   "next": "discriminate"
+  },
+  {
+   "task": "discriminate",
+   "attempt": 1,
+   "exit": 0,
+   "accepted": true,
+   "next": "report"
+  },
+  {
+   "task": "report",
+   "attempt": 1,
+   "exit": 0,
+   "accepted": true,
+   "next": "integrity"
+  },
+  {
+   "task": "integrity",
+   "attempt": 1,
+   "exit": 0,
+   "accepted": true,
+   "next": "@done"
+  }
+ ],
+ "started": "2026-11-25T16:36:39+00:00"
+}

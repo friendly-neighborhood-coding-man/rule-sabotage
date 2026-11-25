@@ -1,0 +1,37 @@
+{"ts":"2026-11-25T16:36:45.429Z","type":"stream_start","mode":"objective","test_double":true}
+{"ts":"2026-11-25T16:36:45.430Z","type":"step","step":1,"remark":"open index.html"}
+{"ts":"2026-11-25T16:36:45.488Z","type":"step","step":2,"remark":"open hypothesis.html"}
+{"ts":"2026-11-25T16:36:45.493Z","type":"step","step":3,"remark":"open case-C-078491.html"}
+{"ts":"2026-11-25T16:36:45.496Z","type":"step","step":4,"remark":"open case-C-08a29c.html"}
+{"ts":"2026-11-25T16:36:45.499Z","type":"step","step":5,"remark":"open case-C-0d8d37.html"}
+{"ts":"2026-11-25T16:36:45.501Z","type":"step","step":6,"remark":"open case-C-174eb5.html"}
+{"ts":"2026-11-25T16:36:45.503Z","type":"step","step":7,"remark":"open case-C-20c70e.html"}
+{"ts":"2026-11-25T16:36:45.504Z","type":"step","step":8,"remark":"open case-C-22b379.html"}
+{"ts":"2026-11-25T16:36:45.507Z","type":"step","step":9,"remark":"open case-C-235e76.html"}
+{"ts":"2026-11-25T16:36:45.511Z","type":"step","step":10,"remark":"open case-C-4cc4f3.html"}
+{"ts":"2026-11-25T16:36:45.514Z","type":"step","step":11,"remark":"open case-C-4cd437.html"}
+{"ts":"2026-11-25T16:36:45.516Z","type":"step","step":12,"remark":"open case-C-562440.html"}
+{"ts":"2026-11-25T16:36:45.517Z","type":"step","step":13,"remark":"open case-C-58091b.html"}
+{"ts":"2026-11-25T16:36:45.519Z","type":"step","step":14,"remark":"open case-C-5aa674.html"}
+{"ts":"2026-11-25T16:36:45.520Z","type":"step","step":15,"remark":"open case-C-749024.html"}
+{"ts":"2026-11-25T16:36:45.521Z","type":"step","step":16,"remark":"open case-C-8aa6d7.html"}
+{"ts":"2026-11-25T16:36:45.523Z","type":"step","step":17,"remark":"open case-C-984f88.html"}
+{"ts":"2026-11-25T16:36:45.525Z","type":"step","step":18,"remark":"open case-C-b4b259.html"}
+{"ts":"2026-11-25T16:36:45.526Z","type":"step","step":19,"remark":"open case-C-b51223.html"}
+{"ts":"2026-11-25T16:36:45.527Z","type":"step","step":20,"remark":"open case-C-b9903d.html"}
+{"ts":"2026-11-25T16:36:45.528Z","type":"step","step":21,"remark":"open case-C-ba736e.html"}
+{"ts":"2026-11-25T16:36:45.529Z","type":"step","step":22,"remark":"open case-C-bd9c81.html"}
+{"ts":"2026-11-25T16:36:45.530Z","type":"step","step":23,"remark":"open case-C-bec18a.html"}
+{"ts":"2026-11-25T16:36:45.531Z","type":"step","step":24,"remark":"open case-C-c9b21d.html"}
+{"ts":"2026-11-25T16:36:45.532Z","type":"step","step":25,"remark":"open case-C-ce4d71.html"}
+{"ts":"2026-11-25T16:36:45.533Z","type":"step","step":26,"remark":"open case-C-da4d2a.html"}
+{"ts":"2026-11-25T16:36:45.534Z","type":"step","step":27,"remark":"open case-C-f11ad7.html"}
+{"ts":"2026-11-25T16:36:45.535Z","type":"step","step":28,"remark":"open case-C-febff9.html"}
+{"ts":"2026-11-25T16:36:45.536Z","type":"step","step":29,"remark":"open match-M-1d8b6e.html"}
+{"ts":"2026-11-25T16:36:45.537Z","type":"step","step":30,"remark":"open match-M-2140dd.html"}
+{"ts":"2026-11-25T16:36:45.538Z","type":"step","step":31,"remark":"open match-M-26c4a7.html"}
+{"ts":"2026-11-25T16:36:45.539Z","type":"step","step":32,"remark":"open match-M-2d6e41.html"}
+{"ts":"2026-11-25T16:36:45.541Z","type":"step","step":33,"remark":"submit hypothesis"}
+{"ts":"2026-11-25T16:36:45.553Z","type":"step","step":34,"remark":"submit hypothesis"}
+{"ts":"2026-11-25T16:36:45.558Z","type":"step","step":35,"remark":"submit hypothesis"}
+{"ts":"2026-11-25T16:36:45.560Z","type":"run_end","status":"passed","summary":"TEST DOUBLE (scripted): submitted 3 hypotheses after reading 30 pages","steps":35}

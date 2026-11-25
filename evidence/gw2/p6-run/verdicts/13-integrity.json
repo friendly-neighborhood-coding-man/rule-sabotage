@@ -1,0 +1,61 @@
+{
+ "step": "integrity",
+ "ok": true,
+ "checks": [
+  {
+   "check": "partition manifests",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "session 116a8c2070a3a93d closed and sealed",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "session 1d03da6df39c0f79 closed and sealed",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "session 631bf7f0428334c6 closed and sealed",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "session b00a2e7f2d9195a9 closed and sealed",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "session f3f0b801b9020917 closed and sealed",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "judgment graph",
+   "ok": true,
+   "detail": "78 nodes"
+  },
+  {
+   "check": "hypothesis freeze",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "representation seal",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "evaluation ledger",
+   "ok": true,
+   "detail": "4 entries "
+  },
+  {
+   "check": "declared sessions all present",
+   "ok": true,
+   "detail": "5 of 5"
+  }
+ ]
+}

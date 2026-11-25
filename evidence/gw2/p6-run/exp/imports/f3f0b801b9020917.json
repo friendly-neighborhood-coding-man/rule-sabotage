@@ -1,0 +1,30 @@
+{
+ "schema": "gamewatch/gw2-session-import@1",
+ "session": "f3f0b801b9020917",
+ "exp": "p6",
+ "sessionDir": "evidence/gw2/p6-run/exp/sessions/f3f0b801b9020917",
+ "graph": "judgments.ndjson",
+ "nodes": [
+  {
+   "key": "hypothesis:0",
+   "id": "095195cc9d38ef112af2e7ccae996f5cc501ad278dcec76d399e94f75f315c59",
+   "status": "appended"
+  },
+  {
+   "key": "hypothesis:1",
+   "id": "1316038ad83437853e77e9be906f43cadf73079a6f4f15e9da4bad1caefa42f3",
+   "status": "appended"
+  }
+ ],
+ "notApplicable": [],
+ "sessionValidity": {
+  "status": "verified",
+  "primaryAnalysis": true,
+  "reasons": []
+ },
+ "sessionSeal": "255b4bee7104ed3685e07182a2e9e8d94db74eee0e47cdd4036f1890a2299ee6",
+ "graphHeadAfter": {
+  "count": 15,
+  "lastLineSha256": "dbe954c0aa2ded488b4d9ae0f9467bde76dbb969b7eac5fc88f163acada0b021"
+ }
+}
