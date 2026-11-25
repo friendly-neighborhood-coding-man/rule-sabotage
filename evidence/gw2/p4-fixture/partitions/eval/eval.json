@@ -1,0 +1,212 @@
+{
+ "schema": "gamewatch/gw2-eval@1",
+ "idMaps": {
+  "discovery": {
+   "cases": {
+    "C-ab3070": "C-15090b",
+    "C-725d18": "C-1b1498",
+    "C-7d6d44": "C-38fb95",
+    "C-178ae4": "C-464da7",
+    "C-cc40cb": "C-5dde50",
+    "C-491a31": "C-757669",
+    "C-90f2e3": "C-9fc650",
+    "C-decee4": "C-a8b9dd",
+    "C-2b6484": "C-b2467d",
+    "C-471d89": "C-b5f5b0",
+    "C-c5f3a0": "C-b805d8",
+    "C-958868": "C-cadb92",
+    "C-289f73": "C-e1fe59",
+    "C-d3e6d0": "C-ff6106"
+   },
+   "matches": {
+    "M-9abf6e": "M-0056c3",
+    "M-fa3a4a": "M-1478c7",
+    "M-2954cf": "M-1cf52d",
+    "M-770d15": "M-1df35c",
+    "M-edd424": "M-230587",
+    "M-1e5756": "M-2ba24f",
+    "M-df4ca8": "M-2e113e",
+    "M-6ae3bc": "M-3ddfba",
+    "M-02b609": "M-5681af",
+    "M-799120": "M-5910ca",
+    "M-31d479": "M-5c1248",
+    "M-52f9f3": "M-633133",
+    "M-0c3ec9": "M-6e4401",
+    "M-aeebbf": "M-7d1b47",
+    "M-badc78": "M-9af1a9",
+    "M-0579f2": "M-9c9d56",
+    "M-c8dd25": "M-9efd92",
+    "M-a0e208": "M-d04690",
+    "M-ecbf56": "M-e96215",
+    "M-749cf6": "M-eb59cf",
+    "M-74e8e8": "M-ec99b6",
+    "M-98b873": "M-f0e680",
+    "M-d584ba": "M-f23f84",
+    "M-9ddb49": "M-fad068"
+   },
+   "builds": {
+    "build-4641": "QX-41",
+    "build-d8b7": "QX-73"
+   },
+   "scripts": {
+    "S-930f": "freeze-ai",
+    "S-84e8": "adjacent-placement",
+    "S-d85c": "shove-ai",
+    "S-54b6": "shield-ai",
+    "S-3831": "shove-chain-ai",
+    "S-1488": "walk-twice",
+    "S-0d99": "teleport-human"
+   }
+  },
+  "heldout": {
+   "cases": {
+    "C-d49ed3": "C-0ad0c4",
+    "C-4982aa": "C-26d930",
+    "C-f56caa": "C-27d15a",
+    "C-f213b4": "C-389f21",
+    "C-566b69": "C-63ce45",
+    "C-73c1b0": "C-874a92",
+    "C-2fce9e": "C-ba3871",
+    "C-2f5482": "C-c34a99"
+   },
+   "matches": {
+    "M-68746a": "M-26acb3",
+    "M-252425": "M-29d5ff",
+    "M-4aaa4c": "M-5533cb",
+    "M-1e363a": "M-65b66a",
+    "M-f95490": "M-936083",
+    "M-75d6b3": "M-97d240",
+    "M-6a68f5": "M-9887ff",
+    "M-4fa3ad": "M-dcfb31"
+   },
+   "builds": {
+    "build-1da2": "QX-41",
+    "build-ddf8": "QX-73"
+   },
+   "scripts": {
+    "S-d2a1": "freeze-human",
+    "S-6579": "shove-human",
+    "S-b937": "shield-human",
+    "S-e12f": "shove-chain-human"
+   }
+  }
+ },
+ "assignment": {
+  "discovery": {
+   "scripts": [
+    "adjacent-placement",
+    "freeze-ai",
+    "shield-ai",
+    "shove-ai",
+    "shove-chain-ai",
+    "teleport-human",
+    "walk-twice"
+   ],
+   "seeds": [
+    97002,
+    97003,
+    97004,
+    97005,
+    97007,
+    97008
+   ]
+  },
+  "heldout": {
+   "scripts": [
+    "freeze-human",
+    "shield-human",
+    "shove-chain-human",
+    "shove-human"
+   ],
+   "seeds": [
+    97001,
+    97006
+   ]
+  }
+ },
+ "coverage": {
+  "semantics": "a rule is covered when every event pattern of gamewatch/adapters/rule-sabotage.coverage.json for it occurs at least once on every build (gaps.ts semantics)",
+  "wholeBundle": [
+   "R1",
+   "R2",
+   "R3",
+   "R4",
+   "R5",
+   "R6",
+   "R7",
+   "R8",
+   "R9",
+   "R10",
+   "R11",
+   "R12",
+   "R13",
+   "R14",
+   "R15"
+  ],
+  "discovery": [
+   "R1",
+   "R2",
+   "R3",
+   "R4",
+   "R5",
+   "R6",
+   "R7",
+   "R8",
+   "R9",
+   "R10",
+   "R11",
+   "R13",
+   "R14",
+   "R15"
+  ],
+  "heldout": [
+   "R1",
+   "R2",
+   "R3",
+   "R4",
+   "R6",
+   "R7",
+   "R8",
+   "R9",
+   "R10",
+   "R11",
+   "R12",
+   "R13",
+   "R14",
+   "R15"
+  ],
+  "notCoveredInDiscovery": [
+   "R12"
+  ],
+  "notCoveredInHeldout": [
+   "R5"
+  ],
+  "notCoveredAnywhere": [],
+  "missing": {
+   "discovery": {
+    "R12": [
+     "QX-41 {\"type\":\"forced-move\",\"how\":\"home\"}",
+     "QX-73 {\"type\":\"forced-move\",\"how\":\"home\"}"
+    ]
+   },
+   "heldout": {
+    "R5": [
+     "QX-41 {\"refused\":\"placement\"}",
+     "QX-73 {\"refused\":\"placement\"}"
+    ]
+   }
+  }
+ },
+ "groundTruth": [
+  {
+   "path": "gamewatch/private/mutations.json",
+   "sha256": "389863b0dd57bfbdcd9ede5547363e4d1a32d6ba28e9c50a3bf2b92eae2871d5",
+   "note": "referenced by hash, not copied; Q9: P7 ground truth is kept outside the repository"
+  },
+  {
+   "path": "gamewatch/private/evaluation/labels.json",
+   "sha256": "6bdf805aced73a63fe3beb73e4765b3882d159a4930afcc1eacc25d03125cd0d",
+   "note": "referenced by hash, not copied; Q9: P7 ground truth is kept outside the repository"
+  }
+ ]
+}

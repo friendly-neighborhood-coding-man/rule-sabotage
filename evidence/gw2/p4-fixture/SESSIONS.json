@@ -1,0 +1,5 @@
+{
+ "schema": "gamewatch/gw2-session-plan@1",
+ "expectedSessions": 1,
+ "note": "P4 demonstration: one scripted test-double discovery session"
+}

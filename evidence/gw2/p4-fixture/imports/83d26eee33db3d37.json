@@ -1,0 +1,60 @@
+{
+ "schema": "gamewatch/gw2-session-import@1",
+ "session": "83d26eee33db3d37",
+ "exp": "p4-demo",
+ "sessionDir": "evidence/gw2/p4-fixture/sessions/83d26eee33db3d37",
+ "graph": "judgments.ndjson",
+ "nodes": [
+  {
+   "key": "hypothesis:0",
+   "id": "b574df5e14b82f303282de7ee6dca66119d2723de4d5c6698b14cab4e78215ad",
+   "status": "appended"
+  },
+  {
+   "key": "hypothesis:1",
+   "id": "fb197194f36b2e935bc1b09731386eb15ad0bcbf3afdb68342324cd0cc8cdc80",
+   "status": "appended"
+  },
+  {
+   "key": "hypothesis:2",
+   "id": "f9681d0b2abea456ea69d544a3c0d6db2254373a29ad192e4449957305620738",
+   "status": "appended"
+  },
+  {
+   "key": "hypothesis:3",
+   "id": "cb0b8bc9d0c7fa634accd364c0f2fbba44137346af2da1042c61ef89ed37edf3",
+   "status": "appended"
+  },
+  {
+   "key": "hypothesis:4",
+   "id": "312e9e4a78c06c58e6a717ace4ebd0d400ba391f3ff06ad486b449b79a542cd1",
+   "status": "appended"
+  },
+  {
+   "key": "hypothesis:5",
+   "id": "9a26f7b168b0f629808fa402985d8cc3b3e2a6a54e51bfa55812a4d357c58a3c",
+   "status": "appended"
+  },
+  {
+   "key": "hypothesis:6",
+   "id": "85a51e5d3914281548505d8bdfae3a686f6554374b4d0b50b71fd964d42445ee",
+   "status": "appended"
+  },
+  {
+   "key": "hypothesis:7",
+   "id": "3dd7d67ffcd803b80852f537d638f6e5eeb88189f4a7dcce486bb867012ac7d6",
+   "status": "appended"
+  }
+ ],
+ "notApplicable": [],
+ "sessionValidity": {
+  "status": "verified",
+  "primaryAnalysis": true,
+  "reasons": []
+ },
+ "sessionSeal": "bcab40f427f0642b4fc815ca96e7ca94088fa8033ac10fc27a2841576a9fe8d9",
+ "graphHeadAfter": {
+  "count": 8,
+  "lastLineSha256": "5353b6884724427a766f794c84542e609965fbd722c8974b21a296e803a09dc3"
+ }
+}
