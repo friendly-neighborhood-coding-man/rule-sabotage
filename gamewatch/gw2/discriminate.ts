@@ -25,19 +25,27 @@ import { verifyLedger } from './freeze.ts';
 import { checkRepresentation, type Clause, type LawClause, type Value } from './hypothesis.ts';
 import type { Situation } from './situations.ts';
 import { evalLaw, observational } from './verify.ts';
-import { loadSealedInputs, type Cand, type Parts } from './heldout.ts';
+import { loadSealedInputs, primaryOf, type Cand, type Parts } from './heldout.ts';
 
 export const DISCRIMINATION_SCHEMA = 'gamewatch/gw2-discrimination@1';
-export const DISCRIMINATE_EVALUATOR = { id: 'gamewatch/gw2/discriminate.ts', version: '1' } as const;
+export const DISCRIMINATE_EVALUATOR = { id: 'gamewatch/gw2/discriminate.ts', version: '2' } as const; // v2: P5 corrections D88, D91, D92
 const MAX = 12;
 
-export type Candidate = { id: string; label: string; hypothesis: string | null; origin: string; clauses: Clause[] };
+export type Candidate = { id: string; label: string; hypothesis: string | null; origin: string; clauses: Clause[]; primary?: boolean };
 type Pred = Map<string, Map<string, Value>>;
+/** A candidate whose own clauses predict two different values for one field of one situation (P5 correction 3, D92). */
+export type SelfConflict = { conflict: Value[] };
+export const isConflict = (v: unknown): v is SelfConflict => !!v && typeof v === 'object' && Array.isArray((v as SelfConflict).conflict);
 const preds = (clauses: Clause[], sits: Situation[]): Pred => {
   const out: Pred = new Map();
   for (const c of clauses.filter((x): x is LawClause => x.form === 'law')) for (const [id, m] of evalLaw(c, sits).predictions) {
     const cur = out.get(id) ?? new Map<string, Value>();
-    for (const [k, v] of m) cur.set(k, cur.has(k) && cur.get(k) !== v ? ({ conflict: [cur.get(k), v] } as never) : v); // a self-contradictory candidate predicts a conflict
+    for (const [k, v] of m) {
+      const prev = cur.get(k);
+      if (!cur.has(k) || JSON.stringify(prev) === JSON.stringify(v)) { cur.set(k, v); continue; }
+      const vals = isConflict(prev) ? prev.conflict : [prev as Value];
+      cur.set(k, { conflict: vals.some(x => JSON.stringify(x) === JSON.stringify(v)) ? vals : [...vals, v] } as never); // never an ordinary prediction
+    }
     out.set(id, cur);
   }
   return out;
@@ -47,13 +55,19 @@ const preds = (clauses: Clause[], sits: Situation[]): Pred => {
 export function comparePair(a: Candidate, b: Candidate, sits: Situation[]) {
   const pa = preds(a.clauses, sits), pb = preds(b.clauses, sits), byId = new Map(sits.map(s => [s.id, s]));
   let identical = 0, aOnly = 0, bOnly = 0;
+  const selfContradictory: { id: string; field: string; candidate: string; values: Value[] }[] = [];
   const separating: { id: string; field: string; predictions: Record<string, Value>; recordedOutcome: Value; matches: string }[] = [], missing: { id: string; field: string; predictions: Record<string, Value> }[] = [];
   for (const id of [...new Set([...pa.keys(), ...pb.keys()])].sort()) {
     const ma = pa.get(id) ?? new Map(), mb = pb.get(id) ?? new Map();
     for (const f of [...new Set([...ma.keys(), ...mb.keys()])].sort()) {
-      if (!ma.has(f)) { bOnly++; continue; }
-      if (!mb.has(f)) { aOnly++; continue; }
+      if (!ma.has(f)) { if (isConflict(mb.get(f))) selfContradictory.push({ id, field: f, candidate: b.label, values: (mb.get(f) as SelfConflict).conflict }); else bOnly++; continue; }
+      if (!mb.has(f)) { if (isConflict(ma.get(f))) selfContradictory.push({ id, field: f, candidate: a.label, values: (ma.get(f) as SelfConflict).conflict }); else aOnly++; continue; }
       const x = ma.get(f), y = mb.get(f);
+      if (isConflict(x) || isConflict(y)) { // not compared: a candidate that predicts two values predicts nothing usable here
+        if (isConflict(x)) selfContradictory.push({ id, field: f, candidate: a.label, values: x.conflict });
+        if (isConflict(y)) selfContradictory.push({ id, field: f, candidate: b.label, values: y.conflict });
+        continue;
+      }
       if (JSON.stringify(x) === JSON.stringify(y)) { identical++; continue; }
       const o = byId.get(id)!.fields[f], predictions = { [a.label]: x as Value, [b.label]: y as Value };
       if (o === null || o === undefined) missing.push({ id, field: f, predictions });
@@ -66,7 +80,10 @@ export function comparePair(a: Candidate, b: Candidate, sits: Situation[]) {
     : missing.length ? `the two predict different values in ${missing.length} situation-field pair(s), none with a recorded outcome; identical in ${identical}` + (identical ? '' : '')
     : identical ? `identical predictions on all ${identical} situation-field pair(s) where both predict (finite evidence: this does not make them the same rule)`
     : 'they never predict the same outcome field of the same situation';
-  return { verdict, explanation: why, counts: { identical, contradictoryWithOutcome: separating.length, contradictoryWithoutOutcome: missing.length, nonOverlapping: { [a.label]: aOnly, [b.label]: bOnly } },
+  const selfBy = (l: string) => selfContradictory.filter(x => x.candidate === l).length;
+  return { verdict, explanation: why + (selfContradictory.length ? `; ${selfContradictory.length} situation-field pair(s) excluded because a candidate is self-contradictory there` : ''),
+    counts: { identical, contradictoryWithOutcome: separating.length, contradictoryWithoutOutcome: missing.length, nonOverlapping: { [a.label]: aOnly, [b.label]: bOnly }, selfContradictory: { [a.label]: selfBy(a.label), [b.label]: selfBy(b.label) } },
+    selfContradictions: selfContradictory.slice(0, MAX),
     supportedBy: { [a.label]: count(a.label), [b.label]: count(b.label), neither: count('neither') },
     separatingSituations: separating.slice(0, MAX), separatingSituationIds: [...new Set(separating.map(s => s.id))].length, missingEvidence: missing.slice(0, MAX) };
 }
@@ -76,7 +93,7 @@ export function discriminateCore(cands: Cand[], parts: Parts, spec: { rule: stri
   const candidates: Candidate[] = [];
   for (const h of cands) if (h.kind !== 'abstention') for (const r of h.representations) {
     const chk = checkRepresentation(r.representation); if (chk.status === 'not-representable') continue;
-    candidates.push({ id: r.id, label: `${h.ref}/${r.origin}/${r.id.slice(0, 8)}`, hypothesis: h.hypothesis, origin: r.origin, clauses: chk.clauses.flatMap(c => c.ok ? [c.clause] : []) });
+    candidates.push({ id: r.id, label: `${h.ref}/${r.origin}/${r.id.slice(0, 8)}`, hypothesis: h.hypothesis, origin: r.origin, clauses: chk.clauses.flatMap(c => c.ok ? [c.clause] : []), primary: primaryOf(h).eligible });
   }
   for (const s of spec) candidates.push({ id: `spec:${s.rule}`, label: `spec ${s.rule}`, hypothesis: null, origin: 'spec-encoding (provisional)', clauses: s.clauses });
   const labels = [...new Set([...Object.keys(parts.discovery), ...Object.keys(parts.heldout)])].sort();
@@ -88,17 +105,23 @@ export function discriminateCore(cands: Cand[], parts: Parts, spec: { rule: stri
       return { build: label, bothFitDiscovery: fits(a, label) && fits(b, label), discovery: d, heldout: h,
         pattern: d.verdict !== 'separated' && h.verdict === 'separated' ? 'not separated on discovery, separated on held-out' : d.verdict === 'separated' ? 'separated on discovery' : h.verdict === 'indistinguishable-on-available-evidence' && d.verdict !== 'separated' ? 'indistinguishable on the available evidence' : 'no common predictions' };
     });
-    return { candidates: [a.label, b.label], ids: [a.id, b.id], declaredCompetitors: isDeclared(a, b), involvesSpec: a.hypothesis === null || b.hypothesis === null, byBuild };
+    const primary = [a, b].every(c => c.hypothesis === null || c.primary === true);
+    return { candidates: [a.label, b.label], ids: [a.id, b.id], declaredCompetitors: isDeclared(a, b), involvesSpec: a.hypothesis === null || b.hypothesis === null, primaryAnalysis: primary, byBuild };
   }));
   const interest = (p: typeof pairs[number]) => (p.declaredCompetitors ? 0 : 2) + (p.byBuild.some(x => x.bothFitDiscovery && x.pattern === 'not separated on discovery, separated on held-out') ? 0 : 1);
   pairs.sort((x, y) => interest(x) - interest(y) || x.candidates.join().localeCompare(y.candidates.join()));
   return {
     schema: DISCRIMINATION_SCHEMA, evaluator: DISCRIMINATE_EVALUATOR,
-    candidates: candidates.map(c => ({ id: c.id, label: c.label, hypothesis: c.hypothesis, origin: c.origin })),
+    candidates: candidates.map(c => {
+      const self = labels.flatMap(l => [...(parts.discovery[l] ?? []), ...(parts.heldout[l] ?? [])]), pr = preds(c.clauses, self);
+      const conflicts = [...pr.values()].reduce((n, m) => n + [...m.values()].filter(isConflict).length, 0);
+      return { id: c.id, label: c.label, hypothesis: c.hypothesis, origin: c.origin, primaryAnalysis: c.hypothesis === null ? 'reference' : c.primary === true, selfContradictory: conflicts > 0, selfContradictorySituationFields: conflicts };
+    }),
     abstentions: cands.filter(h => h.kind === 'abstention').map(h => ({ hypothesis: h.hypothesis, ref: h.ref, note: 'explicit abstention: not a candidate and never treated as a prediction' })),
     withoutRepresentation: cands.filter(h => h.kind !== 'abstention' && !h.representations.length).map(h => h.ref),
     pairs,
-    caveat: 'Separation is by recorded outcomes on finitely many situations. "Indistinguishable on the available evidence" means these observations do not tell the candidates apart; it does not mean they are the same rule.',
+    primaryRule: 'A pair enters the primary analysis only when every hypothesis candidate in it is primary-eligible (journal-verified, counted, from a session suitable for primary analysis; D91). Other pairs are preserved and flagged.',
+    caveat: 'A self-contradictory candidate (two clauses predicting different values for one field of one situation) is flagged and those positions are never compared as predictions. Separation is by recorded outcomes on finitely many situations. "Indistinguishable on the available evidence" means these observations do not tell the candidates apart; it does not mean they are the same rule.',
   };
 }
 

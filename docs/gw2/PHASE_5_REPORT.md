@@ -289,3 +289,17 @@ A re-generation into a new directory reproduces the scripted cases exactly. Matc
 
 ---
 Reproduce, review, and stop: this is `PHASE_5_READY_FOR_REVIEW`.
+
+## 12. Corrections after the Phase 5 review (PHASE_5_CONDITIONALLY_APPROVED)
+
+These are in a separate commit, with regression tests in `tests/gw2-p5-corrections.test.ts`. The evaluator versions are now `heldout.ts` 2 and `discriminate.ts` 2.
+
+| Correction | Change | Decision |
+|---|---|---|
+| Build alignment across partitions | Held-out situations are relabelled to the discovery build id of the same original build, so a build condition no longer silently becomes inapplicable. Unresolved build ids are listed. | D88 |
+| Fully vs partially evaluated | Situation and unit rates give `fullyEvaluated` and `partiallyEvaluated` separately. The conditional rate is kept and labelled. | D89 |
+| Self-contradictory predictions | These are flagged per pair and per candidate, and never compared. | D92 |
+| Primary analysis set | Unverified submissions, uncounted submissions and sessions unsuitable for primary analysis are preserved, listed as excluded with reasons, and never put in the primary set. | D91 |
+| Descriptive vs replication | All rates are labelled descriptive. A `replication` block counts seed groups and script families. Wilson intervals are not presented as confidence statements. | D90 |
+
+The committed `evidence/gw2/p5-demo/` reports were produced by version 1 and are kept as they are. Operator decisions U1–U4 are recorded as D93–D96.
