@@ -22,10 +22,10 @@ function workspace() {
   writeFileSync(join(dir, 'evidence.json'), '{"cases":["C-1"]}\n');
   const tdNote = JSON.stringify({ at: '2026-11-25T10:00:00.000Z', source: 'test-double', nonceValid: true, category: 'confirmed observable anomaly', claim: 'x' });
   writeFileSync(join(dir, 'notes.ndjson'), tdNote + '\n');
-  const kNote = JSON.stringify({ at: '2026-11-25T10:00:00.000Z', source: 'kane', nonceValid: true, category: 'confirmed observable anomaly', claim: 'y' });
+  const kNote = JSON.stringify({ at: '2026-11-25T10:00:00.000Z', source: 'kane', nonceValid: true, category: 'confirmed observable anomaly', claim: 'y', nonce: 'n0nce' });
   writeFileSync(join(dir, 'kane-notes.ndjson'), kNote + '\n');
-  writeFileSync(join(dir, 'stdout.ndjson'), '{"type":"stream_start","cli_version":"9.9.9"}\n{"type":"run_end","verdict":"approved"}\n');
-  writeFileSync(join(dir, 'args.json'), '{"cli":"kane-cli","version":"9.9.9"}\n');
+  writeFileSync(join(dir, 'stdout.ndjson'), '{"type":"stream_start","cli_version":"9.9.9","ts":"2026-11-25T09:59:00.000Z"}\n{"type":"run_end","verdict":"approved","test_url":"http://127.0.0.1:1/index.html","ts":"2026-11-25T10:05:00.000Z"}\n');
+  writeFileSync(join(dir, 'args.json'), '{"cli":"kane-cli","version":"9.9.9","nonce":"n0nce","startedAt":"2026-11-25T09:58:00.000Z","args":["run","prompt","--url","http://127.0.0.1:1/index.html"]}\n');
   const ref = (p: string) => ({ path: p, sha256: fileSha256(join(dir, p)) });
   return { dir, file: join(dir, 'judgments.ndjson'), ref, tdNote, kNote, opts: { root: dir } };
 }
@@ -64,7 +64,7 @@ test('AC-P2.2: editing, deleting, inserting, reordering or partially writing a l
   const w = workspace();
   const a = append(w.file, hyp(w), w.opts), b = append(w.file, evaluation(w, a.id), w.opts);
   append(w.file, { ...hyp(w, 'h2'), parents: [{ id: a.id, relation: 'refines' }], reason: 'narrower' }, w.opts);
-  append(w.file, { kind: 'challenge', parents: [{ id: b.id, relation: 'challenges' }], author: { kind: 'operator', id: 'operator', version: 'n/a' }, origin: 'live', at: '2026-11-25T10:02:00.000Z', evidenceRefs: [], reason: 'step 4 is a re-entry', body: {} }, w.opts);
+  append(w.file, { kind: 'challenge', parents: [{ id: b.id, relation: 'challenges' }], author: { kind: 'operator', id: 'operator-01', version: 'n/a' }, origin: 'live', at: '2026-11-25T10:02:00.000Z', evidenceRefs: [], reason: 'step 4 is a re-entry', body: {} }, w.opts);
   const good = readFileSync(w.file, 'utf8'), L = good.trimEnd().split('\n');
   assert.equal(verify(w.file).ok, true);
   const cases: [string, string, number][] = [
@@ -91,7 +91,7 @@ test('AC-P2.2: editing, deleting, inserting, reordering or partially writing a l
 test('integrity limits: tail truncation and a full recomputed rewrite pass the file-only check; an external anchor detects both', () => {
   const w = workspace();
   const a = append(w.file, hyp(w), w.opts); append(w.file, evaluation(w, a.id), w.opts);
-  const anchor = head(w.file), L = readFileSync(w.file, 'utf8').trimEnd().split('\n');
+  const anchor = head(w.file, w.opts), L = readFileSync(w.file, 'utf8').trimEnd().split('\n');
   assert.deepEqual(anchor, { count: 2, lastLineSha256: sha256(L[1]) });
   writeFileSync(w.file, L[0] + '\n');
   const t = verify(w.file);
@@ -131,7 +131,7 @@ test('AC-P2.4: a verifier rejection is a new evaluates node; an operator challen
   const w = workspace();
   const h = append(w.file, hyp(w), w.opts);
   const rej = append(w.file, evaluation(w, h.id), w.opts);
-  const ch = append(w.file, { kind: 'challenge', parents: [{ id: rej.id, relation: 'challenges' }], author: { kind: 'operator', id: 'operator', version: 'n/a' }, origin: 'live', at: '2026-11-25T11:00:00.000Z', evidenceRefs: [w.ref('evidence.json')], reason: 'the verifier counted a re-entry as a second arrival; the encoding of R8 is wrong', body: {} }, w.opts);
+  const ch = append(w.file, { kind: 'challenge', parents: [{ id: rej.id, relation: 'challenges' }], author: { kind: 'operator', id: 'operator-01', version: 'n/a' }, origin: 'live', at: '2026-11-25T11:00:00.000Z', evidenceRefs: [w.ref('evidence.json')], reason: 'the verifier counted a re-entry as a second arrival; the encoding of R8 is wrong', body: {} }, w.opts);
   // the verifier's judgment is itself evaluated (challenged) and a corrected verifier version re-evaluates; the old one stays
   const re = append(w.file, evaluation(w, h.id, { author: { kind: 'verifier', id: 'gw2-test-verifier', version: '0.1.1' }, reason: 're-entry is a new arrival under the corrected encoding', body: { verdict: 'supported' }, parents: [{ id: h.id, relation: 'evaluates' }, { id: rej.id, relation: 'supersedes' }] }), w.opts);
   const ch2 = append(w.file, { kind: 'evaluation', parents: [{ id: re.id, relation: 'evaluates' }], author: { kind: 'verifier', id: 'gw2-encoding-check', version: '1' }, origin: 'live', at: '2026-11-25T11:05:00.000Z', evidenceRefs: [w.ref('evidence.json')], criteria: 'encoding review', reason: 'verifier judgments are evaluable too', body: { verdict: 'consistent' } }, w.opts);
@@ -232,5 +232,138 @@ test('output guard: judgment files are never written under frozen GW1 paths or o
     assert.throws(() => append(join(ROOT, p), hyp(w), w.opts), FrozenPathError, p);
   const r = node(['--experimental-strip-types', '--no-warnings', 'gamewatch/gw2/import-gw1.ts', join(ROOT, 'evidence/gamewatch/review/j.ndjson')]);
   assert.notEqual(r.status, 0); assert.match(r.stderr, /frozen GW1 path/);
+  rmSync(w.dir, { recursive: true, force: true });
+});
+
+// ---------------------------------------------------------------- P2 corrections (Phase 2 review, 2026-11-25)
+
+const kaneNode = (w: W, over: Partial<J.NodeInput> = {}, note = w.kNote, notesFile = 'kane-notes.ndjson'): J.NodeInput => {
+  const nref = { ...w.ref(notesFile), line: 1, lineSha256: sha256(note) };
+  return { kind: 'finding', parents: [], author: { kind: 'agent', id: 'kane-cli', version: '9.9.9' }, origin: 'live', at: '2026-11-25T10:00:00.000Z',
+    evidenceRefs: [nref], body: { verbatim: note }, provenance: { kaneStdout: w.ref('stdout.ndjson'), kaneArgs: w.ref('args.json'), note: nref }, ...over };
+};
+
+test('Kane execution provenance: stdout, args and note must belong to one run where the artifacts allow; historical limitations are listed, not invented', () => {
+  const w = workspace();
+  const full = J.kaneExecution(kaneNode(w), w.dir);
+  assert.equal(full.status, 'consistent', JSON.stringify(full));
+  assert.deepEqual(full.limitations, []);
+  assert.ok(full.established.includes('note nonce = args.json nonce') && full.established.includes('run_end test_url = args --url') && full.established.includes('args.startedAt <= stream_start <= note.at <= run_end'));
+  // another run's note (different nonce), a note after run_end, stdout and args from different directories
+  const other = JSON.stringify({ ...JSON.parse(w.kNote), nonce: 'other-run' }), late = JSON.stringify({ ...JSON.parse(w.kNote), at: '2026-11-25T11:00:00.000Z' });
+  writeFileSync(join(w.dir, 'other.ndjson'), other + '\n'); writeFileSync(join(w.dir, 'late.ndjson'), late + '\n');
+  assert.throws(() => append(w.file, kaneNode(w, {}, other, 'other.ndjson'), w.opts), /note belongs to another run/);
+  assert.throws(() => append(w.file, kaneNode(w, {}, late, 'late.ndjson'), w.opts), /time order violated: note.at is after run_end.ts/);
+  spawnSync('mkdir', ['-p', join(w.dir, 'run2')]); writeFileSync(join(w.dir, 'run2/args.json'), readFileSync(join(w.dir, 'args.json')));
+  const n = kaneNode(w); n.provenance = { ...n.provenance!, kaneArgs: w.ref('run2/args.json') };
+  assert.throws(() => append(w.file, n, w.opts), /different directories/);
+  writeFileSync(join(w.dir, 'url.ndjson'), readFileSync(join(w.dir, 'stdout.ndjson'), 'utf8').replace('127.0.0.1:1', '127.0.0.1:2'));
+  const u = kaneNode(w); u.provenance = { ...u.provenance!, kaneStdout: w.ref('url.ndjson') };
+  assert.throws(() => append(w.file, u, w.opts), /test_url .* differs from args --url/);
+  assert.ok(!existsSync(w.file));
+  // GW1: consistent with explicitly listed historical limitations
+  const g = verify(join(ROOT, 'evidence/gw2/gw1-import/judgments.ndjson'), { checkRefs: true });
+  assert.equal(g.levels.executionProvenance.status, 'consistent-with-historical-limitations');
+  for (const x of g.levels.executionProvenance.nodes) {
+    assert.ok(x.established.includes('note nonce = args.json nonce'), 'GW1 notes carry the run nonce');
+    assert.ok(x.established.includes('args.startedAt <= stream_start <= note.at <= run_end'));
+    assert.ok(x.limitations.some(l => /test_url is redacted/.test(l)), 'redacted stdout identifier is a stated limitation');
+  }
+  rmSync(w.dir, { recursive: true, force: true });
+});
+
+test('verification levels are reported separately: structural, references, execution provenance, external anchor', () => {
+  const w = workspace();
+  append(w.file, kaneNode(w), w.opts); append(w.file, hyp(w), w.opts);
+  const s = verify(w.file, w.opts);
+  assert.deepEqual([s.levels.structural, s.levels.references, s.levels.executionProvenance.status, s.levels.externalAnchor], ['pass', 'not-checked', 'not-checked', 'not-checked']);
+  const all = verify(w.file, { ...w.opts, checkRefs: true, anchor: head(w.file, w.opts) });
+  assert.deepEqual([all.levels.structural, all.levels.references, all.levels.executionProvenance.status, all.levels.externalAnchor], ['pass', 'pass', 'consistent', 'pass']);
+  // a referenced file changes: structure still passes, references fail
+  writeFileSync(join(w.dir, 'evidence.json'), '{"cases":["C-2"]}\n');
+  const r = verify(w.file, { ...w.opts, checkRefs: true });
+  assert.deepEqual([r.levels.structural, r.levels.references], ['pass', 'fail']); assert.equal(r.problems[0].level, 'references'); assert.equal(r.firstBadLine, 2);
+  // a structurally valid, reference-valid Kane line from another run (written without append): only provenance fails
+  const w2 = workspace(), other = JSON.stringify({ ...JSON.parse(w2.kNote), nonce: 'other-run' });
+  writeFileSync(join(w2.dir, 'other.ndjson'), other + '\n');
+  const bad = kaneNode(w2, {}, other, 'other.ndjson'), node = { ...bad, id: nodeId(bad) };
+  writeFileSync(w2.file, canonical({ schema: J.JUDGMENT_SCHEMA, seq: 1, prev: null, node }) + '\n');
+  const p = verify(w2.file, { ...w2.opts, checkRefs: true });
+  assert.deepEqual([p.levels.structural, p.levels.references, p.levels.executionProvenance.status], ['pass', 'pass', 'fail']);
+  assert.equal(p.problems[0].level, 'execution-provenance');
+  assert.throws(() => head(w2.file, w2.opts), /no anchor produced/);
+  rmSync(w.dir, { recursive: true, force: true }); rmSync(w2.dir, { recursive: true, force: true });
+});
+
+test('terminal node: editing the last node and recomputing its id passes unanchored verification; the external anchor catches it', () => {
+  const w = workspace();
+  const a = append(w.file, hyp(w), w.opts); append(w.file, evaluation(w, a.id), w.opts);
+  const anchor = head(w.file, w.opts), L = readFileSync(w.file, 'utf8').trimEnd().split('\n');
+  const last = JSON.parse(L[1]); last.node.body = { verdict: 'supported' }; last.node.id = nodeId(last.node);
+  writeFileSync(w.file, L[0] + '\n' + canonical(last) + '\n');
+  const u = verify(w.file, { ...w.opts, checkRefs: true });
+  assert.equal(u.ok, true, 'nothing follows the last line, so the chain cannot reveal the edit');
+  assert.equal(u.levels.externalAnchor, 'not-checked'); assert.equal(u.truncation, 'undetectable-without-anchor');
+  const c = verify(w.file, { ...w.opts, anchor });
+  assert.equal(c.ok, false); assert.equal(c.levels.externalAnchor, 'fail'); assert.equal(c.firstBadLine, 2);
+  // the same edit one line earlier is caught by the chain alone
+  append(w.file, { ...hyp(w, 'h3'), parents: [{ id: a.id, relation: 'alternative-to' }], reason: 'r' }, w.opts);
+  const M = readFileSync(w.file, 'utf8').trimEnd().split('\n'), mid = JSON.parse(M[1]); mid.node.reason = 'edited'; mid.node.id = nodeId(mid.node);
+  writeFileSync(w.file, [M[0], canonical(mid), M[2]].join('\n') + '\n');
+  assert.equal(verify(w.file).firstBadLine, 3);
+  rmSync(w.dir, { recursive: true, force: true });
+});
+
+test('anchors: malformed anchor arguments are rejected; no anchor is produced from an invalid graph', () => {
+  const w = workspace();
+  const a = append(w.file, hyp(w), w.opts), h = head(w.file, w.opts);
+  assert.deepEqual(J.parseAnchor(`1:${h.lastLineSha256}`), h);
+  assert.deepEqual(J.parseAnchor('0:'), { count: 0, lastLineSha256: null });
+  for (const bad of [undefined, '', '1', '1:', 'x:' + 'a'.repeat(64), '-1:' + 'a'.repeat(64), '01:' + 'a'.repeat(64), '1:' + 'A'.repeat(64), '1:' + 'a'.repeat(63), '0:' + 'a'.repeat(64), `1:${h.lastLineSha256} `])
+    assert.throws(() => J.parseAnchor(bad), J.AnchorError, String(bad));
+  for (const bad of [{ count: 1 }, { count: 1.5, lastLineSha256: h.lastLineSha256 }, { count: 1, lastLineSha256: 'zz' }, { count: 0, lastLineSha256: h.lastLineSha256 }, { ...h, extra: 1 }])
+    assert.throws(() => verify(w.file, { anchor: bad as J.Anchor }), J.AnchorError, JSON.stringify(bad));
+  const cli = node(['--experimental-strip-types', '--no-warnings', 'gamewatch/gw2/judgments.ts', 'verify', w.file, '--anchor', '6:nothex']);
+  assert.equal(cli.status, 2); assert.match(cli.stderr, /malformed anchor/);
+  const missing = node(['--experimental-strip-types', '--no-warnings', 'gamewatch/gw2/judgments.ts', 'verify', w.file, '--anchor']);
+  assert.equal(missing.status, 2);
+  append(w.file, evaluation(w, a.id), w.opts);
+  writeFileSync(w.file, readFileSync(w.file, 'utf8').replace('fired twice', 'fired once'));
+  assert.throws(() => head(w.file, w.opts), /no anchor produced: the graph fails verification at line 2/);
+  const hc = node(['--experimental-strip-types', '--no-warnings', 'gamewatch/gw2/judgments.ts', 'head', w.file]);
+  assert.notEqual(hc.status, 0); assert.equal(hc.stdout, '');
+  rmSync(w.dir, { recursive: true, force: true });
+});
+
+test('single-writer contract: a held lock or a moved head refuses the append and changes nothing', () => {
+  const w = workspace();
+  const a = append(w.file, hyp(w), w.opts);
+  assert.ok(!existsSync(w.file + '.lock'), 'lock released after a successful append');
+  const before = readFileSync(w.file);
+  writeFileSync(w.file + '.lock', '12345 held by another writer\n');
+  assert.throws(() => append(w.file, evaluation(w, a.id), w.opts), /another writer holds .*single-writer contract/);
+  assert.ok(readFileSync(w.file).equals(before)); assert.ok(existsSync(w.file + '.lock'), 'someone else\'s lock is never removed');
+  rmSync(w.file + '.lock');
+  const seen = head(w.file, w.opts);
+  append(w.file, { ...hyp(w, 'written by another process'), parents: [{ id: a.id, relation: 'alternative-to' }], reason: 'r' }, w.opts);
+  const mid = readFileSync(w.file);
+  assert.throws(() => append(w.file, evaluation(w, a.id), { ...w.opts, expect: seen }), /written by someone else since it was read/);
+  assert.ok(readFileSync(w.file).equals(mid)); assert.ok(!existsSync(w.file + '.lock'), 'lock released after a refused append');
+  append(w.file, evaluation(w, a.id), { ...w.opts, expect: head(w.file, w.opts) });
+  rmSync(w.dir, { recursive: true, force: true });
+});
+
+test('Q16 role-based identities: human authors use pseudonyms such as operator-01 or independent-reviewer-01; no special authority', () => {
+  const w = workspace();
+  const h = append(w.file, hyp(w), w.opts);
+  const human = (kind: 'operator' | 'reviewer', id: string, text: string): J.NodeInput => ({ kind: 'challenge', parents: [{ id: h.id, relation: 'challenges' }], author: { kind, id, version: 'n/a' }, origin: 'live', at: '2026-11-25T12:00:00.000Z', evidenceRefs: [], reason: text, body: {} });
+  for (const id of ['Eric', 'operator', 'Jane Doe', 'operator-1', 'operator_01', 'jane@example.com'])
+    assert.throws(() => append(w.file, human('operator', id, 'x'), w.opts), /role-based pseudonym/, id);
+  const o1 = append(w.file, human('operator', 'operator-01', 'disagree'), w.opts), o2 = append(w.file, human('operator', 'operator-02', 'disagree too'), w.opts);
+  const r1 = append(w.file, human('reviewer', 'independent-reviewer-01', 'independent view'), w.opts);
+  assert.equal(new Set([o1.id, o2.id, r1.id]).size, 3, 'distinguishable');
+  const v = view(w.file);
+  assert.equal(v.nodes.length, 4); assert.deepEqual(v.nodes[0].challengedBy, [o1.id, o2.id, r1.id]);
+  assert.equal(verify(w.file).nodes[0].body.text, hyp(w).body.text, 'the challenged hypothesis is unchanged');
   rmSync(w.dir, { recursive: true, force: true });
 });

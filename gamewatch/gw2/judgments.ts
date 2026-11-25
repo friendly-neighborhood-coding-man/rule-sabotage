@@ -14,27 +14,36 @@
  * Rules (each refused with a reason, never repaired):
  *  - append-only: an append re-verifies the whole file first, refuses to extend a file that fails verification, and
  *    only ever adds bytes at the end (the existing bytes are never rewritten);
+ *  - single writer: one writer per graph at a time. `append` holds `<file>.lock` (created exclusively) for the whole
+ *    read-verify-append step and refuses to start while it exists; `expect` (an anchor) refuses an append if the head
+ *    moved since the caller read it. This is a local advisory contract, not distributed locking: writers that bypass
+ *    `append` are not stopped, only detected by `verify` if they break the chain;
  *  - every parent must already exist in the file (so a cycle cannot be built); ids are unique;
  *  - closed sets: node kinds, relations (supersedes, challenges, refines, alternative-to, evaluates), author kinds
- *    (agent, verifier, operator, test-double), origins (historical-import, live);
+ *    (agent, verifier, operator, reviewer, test-double), origins (historical-import, live);
+ *  - human authors (operator, reviewer) use role-based pseudonyms (operator-01, independent-reviewer-01); an operator
+ *    node is an ordinary node with no authority to overwrite or settle anything;
  *  - a node with an `evaluates` parent must carry author id and version, evidence refs, criteria and reason; a node
  *    with any other parent relation must carry a reason;
  *  - Kane attribution: an author id naming Kane must be kind `agent` and carry provenance that references a stored
- *    kane-cli output (stdout with stream_start/run_end and args.json, both by hash, both naming the author's version)
- *    and the verbatim submitted note (source "kane", nonceValid). A test-double author can never name Kane, and a note
- *    whose source is not "kane" can never be attributed to Kane.
+ *    kane-cli output (stdout and args.json, by hash) and the verbatim submitted note. A test-double author can never
+ *    name Kane, and a note whose source is not "kane" can never be attributed to Kane. Execution provenance
+ *    (`kaneExecution`) checks that stdout, args and note belong to one run as far as the stored artifacts allow, and
+ *    lists what they cannot establish instead of inventing identifiers.
  *
- * What the integrity checks mean. The content-hash id makes an edited node a different node (its children then point
- * at an id that no longer exists); the per-line chain makes an edited, deleted, inserted or reordered line detectable
- * and `verify` names the first bad line. Both DETECT accidental or naive changes. Neither PREVENTS a deliberate
- * rewrite: someone who can write the file can recompute every id and hash. Removing lines from the END of the file
- * leaves a valid shorter chain and is undetectable from the file alone; it is detected only against an anchor kept
- * elsewhere (`head()` → {count, lastLineSha256}, checked with `verify(..., {anchor})`). There are no signatures.
+ * Four separate verification levels (`verify`): structural, references, execution provenance, external anchor.
+ * What the integrity checks mean. The content-hash id makes an edited node a different node; the per-line chain makes
+ * an edited, deleted, inserted or reordered line detectable when another line follows it, and `verify` names the first
+ * bad line. Both DETECT accidental or naive changes. Neither PREVENTS a deliberate rewrite: someone who can write the
+ * file can recompute every id and hash. Changes confined to the END of the file pass the file-only check: removing
+ * trailing lines, or editing the LAST node and recomputing its id (no later line points at it). They are detected
+ * only against an anchor kept elsewhere (`head()` → {count, lastLineSha256}, `verify(..., {anchor})`). `head()`
+ * refuses to anchor an invalid graph. There are no signatures.
  *
  * Nothing here decides which judgment is true. The read-only `view()` lists relations (evaluated by, challenged by,
  * superseded by, ...) and never ranks, resolves or hides a node. There is no delete or update API.
  */
-import { readFileSync, existsSync, appendFileSync, mkdirSync } from 'node:fs';
+import { readFileSync, existsSync, appendFileSync, mkdirSync, openSync, writeSync, closeSync, unlinkSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { dirname, isAbsolute, join } from 'node:path';
 import { ROOT, assertWritableOutput } from './paths.ts';
@@ -42,7 +51,7 @@ import { ROOT, assertWritableOutput } from './paths.ts';
 export const JUDGMENT_SCHEMA = 'gamewatch/gw2-judgment@1';
 export const NODE_KINDS = ['finding', 'hypothesis', 'evaluation', 'label', 'challenge', 'correction'] as const;
 export const RELATIONS = ['supersedes', 'challenges', 'refines', 'alternative-to', 'evaluates'] as const;
-export const AUTHOR_KINDS = ['agent', 'verifier', 'operator', 'test-double'] as const;
+export const AUTHOR_KINDS = ['agent', 'verifier', 'operator', 'reviewer', 'test-double'] as const;
 export const ORIGINS = ['historical-import', 'live'] as const;
 
 export type Relation = typeof RELATIONS[number];
@@ -111,43 +120,70 @@ function checkRefContent(r: EvidenceRef, at: string, root: string, bad: string[]
   return line;
 }
 
-/** Kane provenance: a stored kane-cli output, by hash, naming the author's version, and the verbatim Kane note. */
-function checkKane(n: NodeInput, root: string, checkRefs: boolean, bad: string[]) {
-  const a = n.author;
-  if (a.kind !== 'agent') bad.push(`author "${a.id}" names Kane but has kind "${a.kind}": only an agent author can be Kane${a.kind === 'test-double' ? ' (a test double can never carry the Kane label)' : ''}`);
-  const p = n.provenance;
-  if (!isObj(p)) { bad.push('Kane attribution requires provenance {kaneStdout, kaneArgs, note} referencing a stored kane-cli output'); return; }
-  for (const k of Object.keys(p)) if (!['kaneStdout', 'kaneArgs', 'note'].includes(k)) bad.push(`provenance: unknown field "${k}"`);
-  for (const k of ['kaneStdout', 'kaneArgs', 'note'] as const) checkRefShape(p[k], `provenance.${k}`, bad);
-  if (!isObj(p.note) || p.note.line === undefined) bad.push('provenance.note must reference one line (line + lineSha256)');
-  if (bad.length || !checkRefs) return;
-  const sOut = resolveRef(root, p.kaneStdout.path), sArgs = resolveRef(root, p.kaneArgs.path);
-  const before = bad.length;
-  checkRefContent(p.kaneStdout, 'provenance.kaneStdout', root, bad); checkRefContent(p.kaneArgs, 'provenance.kaneArgs', root, bad);
-  const noteLine = checkRefContent(p.note, 'provenance.note', root, bad);
-  if (bad.length > before) return;
-  const events = textLines(sOut).filter(Boolean).map(l => { try { return JSON.parse(l); } catch { return null; } });
-  const start = events.find(e => e?.type === 'stream_start');
-  if (!start) bad.push('provenance.kaneStdout: not a kane-cli output (no stream_start event)');
-  else if (start.cli_version !== a.version) bad.push(`provenance.kaneStdout: stream_start cli_version ${JSON.stringify(start.cli_version)} does not match author version "${a.version}"`);
-  if (!events.some(e => e?.type === 'run_end')) bad.push('provenance.kaneStdout: no run_end event (not a completed kane-cli run)');
-  let args: Record<string, unknown> = {};
-  try { args = JSON.parse(readFileSync(sArgs, 'utf8')); } catch { bad.push('provenance.kaneArgs: not JSON'); }
-  if (args.cli !== 'kane-cli' || args.version !== a.version) bad.push(`provenance.kaneArgs: expected cli "kane-cli" version "${a.version}", found ${JSON.stringify(args.cli)} ${JSON.stringify(args.version)}`);
-  let note: Record<string, unknown> = {};
-  try { note = JSON.parse(noteLine ?? ''); } catch { bad.push('provenance.note: referenced line is not JSON'); }
-  if (note.source !== 'kane') bad.push(`provenance.note: the submitted note's source is ${JSON.stringify(note.source)}, not "kane"; it cannot be attributed to Kane`);
-  if (note.nonceValid !== true) bad.push('provenance.note: the submitted note did not carry a valid run nonce');
-  if (n.body.verbatim !== noteLine) bad.push('body.verbatim must be the referenced note line, byte for byte');
-}
+/** Role-based pseudonymous identity for human authors (Q16): e.g. operator-01, independent-reviewer-01. */
+export const ROLE_ID = /^[a-z]+(?:-[a-z]+)*-\d{2,}$/;
+const HUMAN_KINDS = ['operator', 'reviewer'];
+const REDACTED = /^<redacted/;
+
+export type ExecutionProvenance = {
+  status: 'consistent' | 'consistent-with-historical-limitations' | 'fail';
+  established: string[]; limitations: string[]; failures: string[];
+};
 
 /**
- * Validate a node input against the graph so far. `known` maps existing ids to their nodes. Throws JudgmentError
- * with every problem found.
+ * Execution provenance of a Kane-attributed node: do the stored stdout, args and the note belong to one kane-cli run?
+ * Checks only what the stored artifacts support and lists what they cannot establish as limitations; it never invents
+ * a missing identifier. Requires the references themselves to be valid (checkReferences).
+ *   - stdout has stream_start (cli_version = author version) and run_end; args.json names kane-cli and that version
+ *   - the note was submitted by Kane (source "kane", nonceValid) and body.verbatim is that line
+ *   - same run: stdout and args in one run directory; note nonce = args nonce; run_end test_url = args --url;
+ *     args.startedAt <= stream_start.ts <= note.at <= run_end.ts
  */
-export function validateNode(n: unknown, known: Map<string, Node>, opts: { root?: string; checkRefs?: boolean } = {}): NodeInput {
-  const root = opts.root ?? ROOT, checkRefs = opts.checkRefs ?? true, bad: string[] = [];
-  if (!isObj(n)) throw new JudgmentError(['node is not an object']);
+export function kaneExecution(n: NodeInput, root = ROOT): ExecutionProvenance {
+  const established: string[] = [], limitations: string[] = [], failures: string[] = [], a = n.author, p = n.provenance!;
+  const sOut = resolveRef(root, p.kaneStdout.path), sArgs = resolveRef(root, p.kaneArgs.path), sNote = resolveRef(root, p.note.path);
+  const events = textLines(sOut).filter(Boolean).map(l => { try { return JSON.parse(l); } catch { return null; } });
+  const start = events.find(e => e?.type === 'stream_start'), end = events.find(e => e?.type === 'run_end');
+  if (!start) failures.push('kaneStdout: not a kane-cli output (no stream_start event)');
+  else if (start.cli_version !== a.version) failures.push(`kaneStdout: stream_start cli_version ${JSON.stringify(start.cli_version)} does not match author version "${a.version}"`);
+  else established.push(`stdout stream_start cli_version ${a.version}`);
+  if (!end) failures.push('kaneStdout: no run_end event (not a completed kane-cli run)'); else established.push('stdout has run_end');
+  let args: Record<string, unknown> = {};
+  try { args = JSON.parse(readFileSync(sArgs, 'utf8')); } catch { failures.push('kaneArgs: not JSON'); }
+  if (args.cli !== 'kane-cli' || args.version !== a.version) failures.push(`kaneArgs: expected cli "kane-cli" version "${a.version}", found ${JSON.stringify(args.cli)} ${JSON.stringify(args.version)}`);
+  else established.push(`args.json kane-cli ${a.version}`);
+  const noteLine = textLines(sNote)[(p.note.line ?? 0) - 1];
+  let note: Record<string, unknown> = {};
+  try { note = JSON.parse(noteLine ?? ''); } catch { failures.push('note: referenced line is not JSON'); }
+  if (note.source !== 'kane') failures.push(`note: the submitted note's source is ${JSON.stringify(note.source)}, not "kane"; it cannot be attributed to Kane`);
+  if (note.nonceValid !== true) failures.push('note: the submitted note did not carry a valid run nonce');
+  if (n.body.verbatim !== noteLine) failures.push('body.verbatim must be the referenced note line, byte for byte');
+  // same run
+  if (dirname(sOut) !== dirname(sArgs)) failures.push(`kaneStdout and kaneArgs are in different directories (${p.kaneStdout.path}, ${p.kaneArgs.path}); they are not one stored run`);
+  else established.push('stdout and args stored in one run directory');
+  if (typeof note.nonce === 'string' && typeof args.nonce === 'string') {
+    if (note.nonce !== args.nonce) failures.push('note nonce differs from the run nonce in args.json: the note belongs to another run');
+    else established.push('note nonce = args.json nonce');
+  } else limitations.push(`note↔args nonce link unavailable (${typeof note.nonce !== 'string' ? 'note' : 'args.json'} records no nonce)`);
+  const argv = Array.isArray(args.args) ? args.args as unknown[] : [], url = argv[argv.indexOf('--url') + 1];
+  const testUrl = end?.test_url;
+  if (typeof testUrl === 'string' && !REDACTED.test(testUrl) && typeof url === 'string') {
+    if (testUrl !== url) failures.push(`run_end test_url ${testUrl} differs from args --url ${url}`); else established.push('run_end test_url = args --url');
+  } else limitations.push(`stdout↔args shared identifier unavailable (${typeof testUrl === 'string' && REDACTED.test(testUrl) ? 'run_end test_url is redacted in the stored copy' : 'no test_url/--url pair'}); stdout↔args linkage rests on the run directory and time order`);
+  const t = (x: unknown) => typeof x === 'string' && !Number.isNaN(Date.parse(x)) ? Date.parse(x) : null;
+  const seq: [string, number | null][] = [['args.startedAt', t(args.startedAt)], ['stream_start.ts', t(start?.ts)], ['note.at', t(note.at)], ['run_end.ts', t(end?.ts)]];
+  const known = seq.filter(([, v]) => v !== null) as [string, number][];
+  const order = known.findIndex(([, v], i) => i > 0 && v < known[i - 1][1]);
+  if (order > 0) failures.push(`time order violated: ${known[order - 1][0]} is after ${known[order][0]}`);
+  else if (known.length === seq.length) established.push('args.startedAt <= stream_start <= note.at <= run_end');
+  if (known.length < seq.length) limitations.push(`time containment partial: ${seq.filter(([, v]) => v === null).map(([k]) => k).join(', ')} not recorded`);
+  return { status: failures.length ? 'fail' : limitations.length ? 'consistent-with-historical-limitations' : 'consistent', established, limitations, failures };
+}
+
+/** Structural rules of one node (no file access). Returns the problems. */
+export function checkStructure(n: unknown, known: Map<string, Node>): string[] {
+  const bad: string[] = [];
+  if (!isObj(n)) return ['node is not an object'];
   const allowed = ['id', 'kind', 'parents', 'author', 'origin', 'at', 'evidenceRefs', 'criteria', 'reason', 'body', 'provenance'];
   for (const k of Object.keys(n)) if (!allowed.includes(k)) bad.push(`unknown node field "${k}"`);
   if (!NODE_KINDS.includes(n.kind as NodeInput['kind'])) bad.push(`kind must be one of ${NODE_KINDS.join(', ')}`);
@@ -161,6 +197,7 @@ export function validateNode(n: unknown, known: Map<string, Node>, opts: { root?
     for (const k of Object.keys(a)) if (!['kind', 'id', 'version'].includes(k)) bad.push(`author: unknown field "${k}"`);
     if (!AUTHOR_KINDS.includes(a.kind as Author['kind'])) bad.push(`author.kind must be one of ${AUTHOR_KINDS.join(', ')}`);
     if (!str(a.id)) bad.push('author.id is required');
+    else if (HUMAN_KINDS.includes(a.kind as string) && !ROLE_ID.test(a.id as string)) bad.push(`author.id "${a.id}" for a ${a.kind} must be a role-based pseudonym such as operator-01 or independent-reviewer-01 (no names)`);
     if (!str(a.version)) bad.push('author.version is required');
   }
   if (!Array.isArray(n.evidenceRefs)) bad.push('evidenceRefs must be an array');
@@ -182,37 +219,94 @@ export function validateNode(n: unknown, known: Map<string, Node>, opts: { root?
       if (miss.length) bad.push(`an evaluates node must record ${miss.join(', ')}`);
     } else if (n.parents.length && !str(n.reason)) bad.push('a node linked to an earlier judgment must state a reason');
   }
-  if (n.provenance !== undefined && !(isObj(a) && claimsKane(a))) bad.push('provenance (Kane output reference) is only for Kane-attributed nodes; a non-Kane node must not carry a Kane reference');
-  if (!bad.length && isObj(a) && claimsKane(a)) checkKane(n as NodeInput, root, checkRefs, bad);
-  if (!bad.length && checkRefs) (n.evidenceRefs as EvidenceRef[]).forEach((r, i) => checkRefContent(r, `evidenceRefs[${i}]`, root, bad));
+  if (isObj(a) && claimsKane(a)) {
+    if (a.kind !== 'agent') bad.push(`author "${a.id}" names Kane but has kind "${a.kind}": only an agent author can be Kane${a.kind === 'test-double' ? ' (a test double can never carry the Kane label)' : ''}`);
+    const p = n.provenance;
+    if (!isObj(p)) bad.push('Kane attribution requires provenance {kaneStdout, kaneArgs, note} referencing a stored kane-cli output');
+    else {
+      for (const k of Object.keys(p)) if (!['kaneStdout', 'kaneArgs', 'note'].includes(k)) bad.push(`provenance: unknown field "${k}"`);
+      for (const k of ['kaneStdout', 'kaneArgs', 'note'] as const) checkRefShape(p[k], `provenance.${k}`, bad);
+      if (!isObj(p.note) || p.note.line === undefined) bad.push('provenance.note must reference one line (line + lineSha256)');
+    }
+  } else if (n.provenance !== undefined) bad.push('provenance (Kane output reference) is only for Kane-attributed nodes; a non-Kane node must not carry a Kane reference');
   if (n.id !== undefined && n.id !== nodeId(n as NodeInput)) bad.push('id is not the content hash of the node');
+  return bad;
+}
+
+/** Reference verification: every referenced file, line and pointer still matches its recorded hash. */
+export function checkReferences(n: NodeInput, root = ROOT): string[] {
+  const bad: string[] = [];
+  n.evidenceRefs.forEach((r, i) => checkRefContent(r, `evidenceRefs[${i}]`, root, bad));
+  if (n.provenance) for (const k of ['kaneStdout', 'kaneArgs', 'note'] as const) checkRefContent(n.provenance[k], `provenance.${k}`, root, bad);
+  return bad;
+}
+
+/**
+ * Validate a node input against the graph so far (structure, then references and Kane execution provenance when
+ * checkRefs). Throws JudgmentError with every problem found. Used by append.
+ */
+export function validateNode(n: unknown, known: Map<string, Node>, opts: { root?: string; checkRefs?: boolean } = {}): NodeInput {
+  const root = opts.root ?? ROOT, checkRefs = opts.checkRefs ?? true;
+  let bad = checkStructure(n, known);
+  if (!bad.length && checkRefs) bad = checkReferences(n as NodeInput, root);
+  if (!bad.length && checkRefs && claimsKane((n as NodeInput).author)) bad = kaneExecution(n as NodeInput, root).failures.map(f => `execution provenance: ${f}`);
   if (bad.length) throw new JudgmentError(bad);
   return n as NodeInput;
 }
 
+export class AnchorError extends Error {}
+const ANCHOR = /^(0:|[1-9]\d*:[0-9a-f]{64})$/;
+/** Parse "<count>:<lastLineSha256>" ("0:" for an empty graph). Anything else is refused. */
+export function parseAnchor(s: unknown): Anchor {
+  if (typeof s !== 'string' || !ANCHOR.test(s)) throw new AnchorError(`malformed anchor ${JSON.stringify(s)}: expected <count>:<64 hex> (or "0:" for an empty graph)`);
+  const [c, h] = s.split(':'); return { count: Number(c), lastLineSha256: h || null };
+}
+function checkAnchor(a: unknown): Anchor {
+  if (!isObj(a) || !Number.isSafeInteger(a.count) || (a.count as number) < 0 || ((a.count as number) === 0 ? a.lastLineSha256 !== null : typeof a.lastLineSha256 !== 'string' || !HEX64.test(a.lastLineSha256)) || Object.keys(a).sort().join() !== 'count,lastLineSha256')
+    throw new AnchorError(`malformed anchor ${JSON.stringify(a)}: expected {count, lastLineSha256} with a 64-hex hash (null only for count 0)`);
+  return a as Anchor;
+}
+
+export type Level = 'structural' | 'references' | 'execution-provenance' | 'external-anchor';
 export type VerifyResult = {
-  ok: boolean; count: number; head: Anchor; firstBadLine: number | null; problems: { line: number; problem: string }[];
+  ok: boolean; count: number; head: Anchor; firstBadLine: number | null;
+  problems: { line: number; level: Level; problem: string }[];
+  /** Four separate checks; each says only what it checked. */
+  levels: {
+    structural: 'pass' | 'fail';
+    references: 'pass' | 'fail' | 'not-checked';
+    executionProvenance: { status: 'not-checked' | 'not-applicable' | 'consistent' | 'consistent-with-historical-limitations' | 'fail'; nodes: ({ line: number; id: string } & ExecutionProvenance)[] };
+    externalAnchor: 'pass' | 'fail' | 'not-checked';
+  };
   truncation: 'checked-against-anchor' | 'undetectable-without-anchor';
   nodes: Node[];
 };
 
 /**
- * Verify a judgment file: line format, seq, chain, content-hash ids, closed sets, parents earlier in the file, the
- * evaluates/Kane rules, and (checkRefs) that every referenced file still has its recorded hash. With an anchor (a
- * {count, lastLineSha256} recorded elsewhere) it also detects removal of lines from the end, and any rewrite of the
- * anchored prefix. Reports the first bad line (1-based).
+ * Verify a judgment file at four separate levels:
+ *   structural            line format, canonical form, seq, prev chain, content-hash ids, closed sets, parents earlier
+ *                         in the file, evaluates/Kane/role-id rules. Detects edits, deletions, insertions, reorderings
+ *                         and partial lines, EXCEPT changes confined to the end of the file: removing trailing lines,
+ *                         or editing the LAST line and recomputing its id, leaves a valid chain (nothing follows it).
+ *   references            (checkRefs) every referenced file/line/pointer still has its recorded hash.
+ *   execution provenance  (checkRefs) Kane nodes: stdout, args and note are consistent with one kane-cli run, with
+ *                         historical limitations listed (kaneExecution).
+ *   external anchor       (anchor) the file still has at least `count` lines and line `count` has the anchored hash:
+ *                         detects tail truncation and any rewrite of the anchored prefix, including its last line.
+ * The first bad line (1-based) is reported over all levels.
  */
 export function verify(file: string, opts: { anchor?: Anchor; checkRefs?: boolean; root?: string } = {}): VerifyResult {
-  const problems: { line: number; problem: string }[] = [], nodes: Node[] = [], known = new Map<string, Node>();
+  const anchor = opts.anchor === undefined ? undefined : checkAnchor(opts.anchor);
+  const root = opts.root ?? ROOT, problems: VerifyResult['problems'] = [], nodes: Node[] = [], known = new Map<string, Node>();
   const raw = existsSync(file) ? readFileSync(file, 'utf8') : '';
   const lines = raw === '' ? [] : raw.split('\n');
-  if (lines.length && lines[lines.length - 1] === '') lines.pop(); else if (lines.length) problems.push({ line: lines.length, problem: 'last line is not newline-terminated (partial write?)' });
+  if (lines.length && lines[lines.length - 1] === '') lines.pop(); else if (lines.length) problems.push({ line: lines.length, level: 'structural', problem: 'last line is not newline-terminated (partial write?)' });
   let prev: string | null = null, broken = false;
-  const hashes: string[] = [];
+  const hashes: string[] = [], lineOf = new Map<string, number>();
   lines.forEach((l, i) => {
     const ln = i + 1, h = sha256(l); hashes.push(h);
     if (broken) { prev = h; return; }
-    const fail = (p: string) => { problems.push({ line: ln, problem: p }); broken = true; };
+    const fail = (p: string) => { problems.push({ line: ln, level: 'structural', problem: p }); broken = true; };
     let x: Record<string, unknown>;
     try { x = JSON.parse(l); } catch { fail('not JSON'); prev = h; return; }
     if (canonical(x) !== l) fail('line is not in canonical form');
@@ -224,43 +318,77 @@ export function verify(file: string, opts: { anchor?: Anchor; checkRefs?: boolea
       const n = x.node as Node;
       if (!isObj(n) || typeof n.id !== 'string') fail('node has no id');
       else if (known.has(n.id)) fail(`duplicate node id ${n.id}`);
-      else {
-        try { validateNode(n, known, { root: opts.root, checkRefs: opts.checkRefs ?? false }); known.set(n.id, n); nodes.push(n); }
-        catch (e) { fail(e instanceof JudgmentError ? e.problems.join('; ') : String(e)); }
-      }
+      else { const bad = checkStructure(n, known); if (bad.length) fail(bad.join('; ')); else { known.set(n.id, n); nodes.push(n); lineOf.set(n.id, ln); } }
     }
     prev = h;
   });
-  const head: Anchor = { count: lines.length, lastLineSha256: hashes.length ? hashes[hashes.length - 1] : null };
-  if (opts.anchor) {
-    const { count, lastLineSha256 } = opts.anchor;
-    if (lines.length < count) problems.push({ line: lines.length + 1, problem: `file has ${lines.length} lines but the external anchor records ${count}: lines removed from the end (tail truncation)` });
-    else if (count > 0 && hashes[count - 1] !== lastLineSha256) problems.push({ line: count, problem: `line ${count} does not match the external anchor (the anchored prefix was rewritten)` });
+  const structural = problems.length ? 'fail' : 'pass';
+  let references: VerifyResult['levels']['references'] = 'not-checked';
+  const prov: VerifyResult['levels']['executionProvenance'] = { status: 'not-checked', nodes: [] };
+  if (opts.checkRefs) {
+    references = 'pass';
+    for (const n of nodes) {
+      const ln = lineOf.get(n.id)!, bad = checkReferences(n, root);
+      if (bad.length) { references = 'fail'; for (const b of bad) problems.push({ line: ln, level: 'references', problem: b }); continue; }
+      if (claimsKane(n.author)) {
+        const e = kaneExecution(n, root); prov.nodes.push({ line: ln, id: n.id, ...e });
+        for (const f of e.failures) problems.push({ line: ln, level: 'execution-provenance', problem: f });
+      }
+    }
+    prov.status = !prov.nodes.length ? 'not-applicable' : prov.nodes.some(x => x.status === 'fail') ? 'fail' : prov.nodes.some(x => x.status !== 'consistent') ? 'consistent-with-historical-limitations' : 'consistent';
+  }
+  let externalAnchor: VerifyResult['levels']['externalAnchor'] = 'not-checked';
+  if (anchor) {
+    const { count, lastLineSha256 } = anchor;
+    externalAnchor = 'pass';
+    if (lines.length < count) { externalAnchor = 'fail'; problems.push({ line: lines.length + 1, level: 'external-anchor', problem: `file has ${lines.length} lines but the external anchor records ${count}: lines removed from the end (tail truncation)` }); }
+    else if (count > 0 && hashes[count - 1] !== lastLineSha256) { externalAnchor = 'fail'; problems.push({ line: count, level: 'external-anchor', problem: `line ${count} does not match the external anchor (the anchored prefix was rewritten)` }); }
   }
   problems.sort((a, b) => a.line - b.line);
-  return { ok: !problems.length, count: lines.length, head, firstBadLine: problems.length ? problems[0].line : null, problems, truncation: opts.anchor ? 'checked-against-anchor' : 'undetectable-without-anchor', nodes };
+  const headA: Anchor = { count: lines.length, lastLineSha256: hashes.length ? hashes[hashes.length - 1] : null };
+  return { ok: !problems.length, count: lines.length, head: headA, firstBadLine: problems.length ? problems[0].line : null, problems,
+    levels: { structural, references, executionProvenance: prov, externalAnchor }, truncation: anchor ? 'checked-against-anchor' : 'undetectable-without-anchor', nodes };
 }
 
-/** The current {count, lastLineSha256}: store it OUTSIDE the file (PR, report, operator note) to detect tail truncation later. */
-export const head = (file: string): Anchor => verify(file).head;
+/**
+ * The current {count, lastLineSha256}, to be stored OUTSIDE the file (an operator-controlled record, Q14) so that tail
+ * truncation and rewrites can be detected later. Refuses to produce an anchor for a graph that fails structural,
+ * reference or execution-provenance verification: an anchor of an invalid graph would look authoritative.
+ */
+export function head(file: string, opts: { root?: string } = {}): Anchor {
+  const v = verify(file, { checkRefs: true, root: opts.root });
+  if (!v.ok) throw new JudgmentError([`no anchor produced: the graph fails verification at line ${v.firstBadLine} (${v.problems[0].level}): ${v.problems[0].problem}`]);
+  return v.head;
+}
 
 /**
  * Append one node. Verifies the existing file first and refuses to extend a file that fails verification. Returns the
  * node id and its seq. Never rewrites existing bytes: the only write is one appended line.
  */
-export function append(file: string, input: NodeInput, opts: { root?: string; checkRefs?: boolean } = {}): { id: string; seq: number } {
-  const out = assertWritableOutput(file);
-  const v = verify(out, { root: opts.root });
-  if (!v.ok) throw new JudgmentError([`refusing to append: the existing file fails verification at line ${v.firstBadLine}: ${v.problems[0].problem}`]);
-  const known = new Map(v.nodes.map(n => [n.id, n]));
-  const { id: _ignored, ...clean } = input as Node;
-  validateNode(clean, known, opts);
-  const node = { ...clean, id: nodeId(clean) } as Node;
-  if (known.has(node.id)) throw new JudgmentError([`node ${node.id} already exists (identical content); nothing appended`]);
-  const line: Line = { schema: JUDGMENT_SCHEMA, seq: v.count + 1, prev: v.head.lastLineSha256, node };
+export function append(file: string, input: NodeInput, opts: { root?: string; expect?: Anchor } = {}): { id: string; seq: number } {
+  const out = assertWritableOutput(file), lock = out + '.lock';
   mkdirSync(dirname(out), { recursive: true });
-  appendFileSync(out, canonical(line) + '\n');
-  return { id: node.id, seq: line.seq };
+  let fd: number;
+  try { fd = openSync(lock, 'wx'); }
+  catch (e) {
+    if ((e as NodeJS.ErrnoException).code === 'EEXIST') throw new JudgmentError([`another writer holds ${lock} (single-writer contract: one writer per graph at a time). If no writer is running, check the graph with verify and remove the stale lock by hand.`]);
+    throw e;
+  }
+  try {
+    writeSync(fd, `${process.pid} ${new Date().toISOString()}\n`);
+    const v = verify(out, { root: opts.root });
+    if (!v.ok) throw new JudgmentError([`refusing to append: the existing file fails verification at line ${v.firstBadLine}: ${v.problems[0].problem}`]);
+    if (opts.expect && (checkAnchor(opts.expect).count !== v.head.count || opts.expect.lastLineSha256 !== v.head.lastLineSha256))
+      throw new JudgmentError([`refusing to append: the graph head is ${v.head.count}:${v.head.lastLineSha256}, not the expected ${opts.expect.count}:${opts.expect.lastLineSha256} (written by someone else since it was read)`]);
+    const known = new Map(v.nodes.map(n => [n.id, n]));
+    const { id: _ignored, ...clean } = input as Node;
+    validateNode(clean, known, { root: opts.root, checkRefs: true });
+    const node = { ...clean, id: nodeId(clean) } as Node;
+    if (known.has(node.id)) throw new JudgmentError([`node ${node.id} already exists (identical content); nothing appended`]);
+    const line: Line = { schema: JUDGMENT_SCHEMA, seq: v.count + 1, prev: v.head.lastLineSha256, node };
+    appendFileSync(out, canonical(line) + '\n');
+    return { id: node.id, seq: line.seq };
+  } finally { closeSync(fd); unlinkSync(lock); }
 }
 
 /**
@@ -286,14 +414,18 @@ export function view(file: string) {
 if (process.argv[1]?.endsWith('gw2/judgments.ts')) {
   const [cmd, file, ...rest] = process.argv.slice(2);
   if (!cmd || !file) { console.error('usage: judgments.ts verify|head|append <judgments.ndjson> [...]'); process.exit(2); }
-  if (cmd === 'head') console.log(JSON.stringify(head(file)));
-  else if (cmd === 'verify') {
-    const ai = rest.indexOf('--anchor'), a = ai >= 0 ? rest[ai + 1]?.split(':') : undefined;
-    const r = verify(file, { checkRefs: rest.includes('--check-refs'), anchor: a ? { count: Number(a[0]), lastLineSha256: a[1] || null } : undefined });
-    console.log(r.ok ? `judgments OK: ${r.count} lines, head ${r.head.count}:${r.head.lastLineSha256}; tail truncation ${r.truncation}` : `judgments INVALID at line ${r.firstBadLine}:\n  ${r.problems.map(p => `line ${p.line}: ${p.problem}`).join('\n  ')}`);
-    process.exit(r.ok ? 0 : 1);
-  } else if (cmd === 'append') {
-    try { const r = append(file, JSON.parse(readFileSync(rest[0], 'utf8'))); console.log(`appended ${r.id} as line ${r.seq}`); }
-    catch (e) { console.error((e as Error).message); process.exit(5); }
-  } else { console.error(`unknown command ${cmd}`); process.exit(2); }
+  try {
+    if (cmd === 'head') { const h = head(file); console.log(`${h.count}:${h.lastLineSha256 ?? ''}`); }
+    else if (cmd === 'verify') {
+      const ai = rest.indexOf('--anchor');
+      const anchor = ai >= 0 ? parseAnchor(rest[ai + 1]) : undefined;
+      const r = verify(file, { checkRefs: rest.includes('--check-refs'), anchor });
+      const L = r.levels, pv = L.executionProvenance;
+      console.log(`structural: ${L.structural}\nreferences: ${L.references}\nexecution provenance: ${pv.status}${pv.nodes.flatMap(x => x.limitations.map(l => `\n  line ${x.line} limitation: ${l}`)).join('')}\nexternal anchor: ${L.externalAnchor}${L.externalAnchor === 'not-checked' ? ' (tail truncation and a rewritten last line are undetectable without one)' : ''}`);
+      console.log(r.ok ? `judgments OK: ${r.count} lines, head ${r.head.count}:${r.head.lastLineSha256 ?? ''}` : `judgments INVALID at line ${r.firstBadLine}:\n  ${r.problems.map(p => `line ${p.line} [${p.level}]: ${p.problem}`).join('\n  ')}`);
+      process.exit(r.ok ? 0 : 1);
+    } else if (cmd === 'append') {
+      const r = append(file, JSON.parse(readFileSync(rest[0], 'utf8'))); console.log(`appended ${r.id} as line ${r.seq}`);
+    } else { console.error(`unknown command ${cmd}`); process.exit(2); }
+  } catch (e) { console.error((e as Error).message); process.exit(e instanceof AnchorError ? 2 : 5); }
 }

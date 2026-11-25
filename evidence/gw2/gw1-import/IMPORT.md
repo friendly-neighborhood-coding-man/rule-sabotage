@@ -29,3 +29,10 @@ node --experimental-strip-types --no-warnings gamewatch/gw2/judgments.ts verify 
 
 An anchor stored in the same repository is only as strong as the repository's history; it detects accidental
 truncation and naive edits, not a deliberate rewrite of both the file and this note.
+
+**Execution provenance (added with the P2 corrections, D35).** `verify --check-refs` reports
+`consistent-with-historical-limitations` for the three findings. Established: stdout stream_start and args.json both
+kane-cli 0.10.4; run_end present; stdout and args in one run directory; each note's `nonce` equals the args nonce
+(`d9b7417e6ecb2a0c`); args.startedAt ≤ stream_start ≤ note.at ≤ run_end. Not established: a shared identifier between
+stdout and args (run_end `test_url` is redacted in the stored copy); that link rests on the run directory and time
+order only. No identifier was added to the nodes.

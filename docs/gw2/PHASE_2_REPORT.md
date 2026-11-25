@@ -147,3 +147,31 @@ npm run -s gw2:judgments -- verify evidence/gw2/gw1-import/judgments.ndjson --ch
 npm run -s gw2:import-gw1 -- /tmp/gw1-import-check.ndjson && cmp /tmp/gw1-import-check.ndjson evidence/gw2/gw1-import/judgments.ndjson
 npm test   # expect 271: 265 pass, 0 fail, 5 cancelled (baseline), 1 skipped
 ```
+
+## 9. P2 corrections after review (appended 2026-11-25; sections 1–8 kept as submitted)
+
+Operator review, 2026-11-25 13:45 UTC: **PHASE_2_CONDITIONALLY_APPROVED**. The corrections are a separate commit on
+`claude/gw2-p2`, before any P3 work. Decisions D35–D41.
+
+* **Execution provenance (D35).** `kaneExecution` checks that a Kane node's stdout, args and note belong to one run
+  where the stored artifacts allow (run directory, note nonce = args nonce, run_end test_url = args --url, time
+  containment) and refuses contradictions (tests: another run's nonce, note after run_end, different directories,
+  different URL). For GW1 it reports `consistent-with-historical-limitations`: nonce link and time order are
+  established; no stdout↔args shared identifier exists in the stored copy (test_url redacted), and this is listed,
+  not invented. The committed GW1 import is unchanged (byte-identical regeneration still tested).
+* **Four verification levels (D36).** `verify().levels = {structural, references, executionProvenance,
+  externalAnchor}`; each says `not-checked` when not run. A test shows each level failing on its own.
+* **Terminal node (D37).** Editing the last node and recomputing its id passes unanchored verification; the anchor
+  catches it; the same edit one line earlier is caught by the chain (regression test). §3's table gains this row:
+
+  | edit the LAST node and recompute its id | **no** | yes |
+  |---|---|---|
+
+* **Anchors (D37).** Strict format, malformed anchors rejected (API `AnchorError`, CLI exit 2); `head()` and the
+  `head` CLI refuse to anchor a graph that fails any level.
+* **Single writer (D38).** `<file>.lock` exclusive for each append; refused while held (another writer's lock is never
+  removed); optional `expect` anchor refuses an append after the head moved.
+* **Role ids (D41).** `operator` / `reviewer` authors must use role pseudonyms; tests use `operator-01`,
+  `operator-02`, `independent-reviewer-01`.
+
+Tests: `tests/gw2-judgments.test.ts` now 15 (9 + 6 new). Totals for the corrected head are in `PHASE_3_REPORT.md`.
