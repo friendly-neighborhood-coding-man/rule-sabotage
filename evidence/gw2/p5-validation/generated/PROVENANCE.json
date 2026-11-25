@@ -1,0 +1,295 @@
+{
+ "schema": "gamewatch/gw2-generation-provenance@1",
+ "procedure": {
+  "id": "p5-generation-1",
+  "path": "evidence/gw2/procedures/generation-p5-1.json",
+  "sha256": "ff4d566cec51a49a57d772f427fe70941b53e85288cb03caa9211b04ddebb205",
+  "frozenAt": "2026-11-25T15:25:32.000Z"
+ },
+ "run": "validation",
+ "startedAt": "2026-11-25T15:25:56.787Z",
+ "generatedAt": "2026-11-25T15:27:23.176Z",
+ "node": "v22.23.5",
+ "platform": "linux",
+ "git": {
+  "commit": "e81bf817daa83203dadb61bdc8d923aa51337a65",
+  "note": "the generator code is identified by the frozen sha256 values in code[] (checked before the run), not by the commit"
+ },
+ "code": [
+  {
+   "path": "gamewatch/gw2/generate.ts",
+   "sha256": "25f1c1654fcd5788971e5c5ed8fa3bb5ed1b9c4746eb36ea7d5c0bcf79c13c9a"
+  },
+  {
+   "path": "gamewatch/gw2/scenarios-p5.ts",
+   "sha256": "a0c37e72e681f1bad0a920bd862ce00831f34448b28913feb7fef83838def8e9"
+  },
+  {
+   "path": "gamewatch/scenarios.ts",
+   "sha256": "11c281ce9421b3348d2e6de9831a025cbb16a45de2b12f2ade39d1e65cdc5f40"
+  },
+  {
+   "path": "gamewatch/adapters/rule-sabotage.ts",
+   "sha256": "93dcae614be429836c0b808021b139c3733386066ece20071628a48c149b7337"
+  },
+  {
+   "path": "gamewatch/builds.ts",
+   "sha256": "6eb1f5339d8c741e84648efe0503a6ffde21724cd359196cb13e125c7e63b1e8"
+  },
+  {
+   "path": "gamewatch/rules-doc.ts",
+   "sha256": "0bf775019d874ef6ee2dc6915c5a0e4a94d4d5eb599579f0307f7cd8eddd955b"
+  },
+  {
+   "path": "gamewatch/evidence.ts",
+   "sha256": "d08659d81e5ba26b4db0e021fe807ccd32f33d9c1d5bc43cbfa05530880e34c7"
+  },
+  {
+   "path": "server/weights.ts",
+   "sha256": "24ad2b10c0f6202bf223286d60573f0345d4bdb399140d0bceda570b8ce36b89"
+  }
+ ],
+ "mutations": {
+  "path": "gamewatch/private/mutations.json",
+  "sha256": "389863b0dd57bfbdcd9ede5547363e4d1a32d6ba28e9c50a3bf2b92eae2871d5"
+ },
+ "builds": [
+  {
+   "label": "gt-clean",
+   "mutationIds": [],
+   "sourceTree": "18216371b47d23e7d465fc28136cafd4376ef1fc699bbe659204ee8d2c2eda97",
+   "files": {
+    "budgeted.ts": "a1917cc1b3d7e37814ca4c69a1b2f5b121f24ae8851aed74908af67536fc368a",
+    "coverage.ts": "37735352162068a518d275f0da79d345f81b45fdff5dd144f5e1f43f04fb350b",
+    "engine.ts": "3a98317aa576f87ba4a9a3a817d374662dc900098357cfed5ff421e7314723e2",
+    "fastclone.ts": "7b14ebf774f22a52766694b73ece09de9b49af229f4a80d4c91c9316b3b3bb56",
+    "forks/ablation.ts": "6c14bb9b045356b9644433eca768b96982fdf231af1fce230b779451e8ff7ab6",
+    "forks/ai.ts": "1e20b6487d56f6eae4574d5f30bbd6acaa4f6457a496fdde082259001a41a186",
+    "forks/evk11.ts": "3ff6073e5d09046a1e0682b0295ab6897c680a1067a6cc1be8b4c7cd5b0b2abc",
+    "forks/evplanner.ts": "789fa82691599c626a0efdaa69b08c066b65f8c9026751086401980a476fcfe9",
+    "forks/flavor.ts": "b6aa674e5785cd63b819b1a036ddaa3aa885ab0cb02560e3bc8d29fcd333dda3",
+    "forks/planner52.ts": "8ab781cfc866fe8b9cf8cc4f3b68deb52abbd4d10c742ba95e5d0cfad4fc87c1",
+    "forks/policies5.ts": "759d28ab2aec9161c6f283558b79490ffd1cd30cfe414b823fc9ad62887107b7",
+    "forks/policies53.ts": "5f792a70a70a22ddb5e00b4381345ee688efea55989f741f05a07b10db5a469f",
+    "forks/stream.ts": "7e2df26766d00279209addda3f1196856906e02e556a2a427c33089525a9232f",
+    "forks/tiers.ts": "87cd685872025b44237e84da0ec8681b4bc4492d9fadbb387a2841c0e798d13c",
+    "forks/trial.ts": "b1d58083966caa7b54b4c805507f7c13a2860f0c7e60b58399385138fed2e700",
+    "kaneshadow.ts": "a254faeb1c88685864e70e36e07e719929e395db0b68a0db3236fbee7786f97e",
+    "opponents.ts": "47629fa517834b69bdaef693ecdaa1018b7ce3330d7fdd176a75eb17098e8082",
+    "pilot.ts": "8fa6df2e2846de2e9fe2f3a219e62c87ce0a714da7d3c87c1e75b398056046e8",
+    "planworker.ts": "ef829710b340538b108ce178ebd67d507180d325fb5ad13c7bda7a825ea04f78",
+    "referee-aware.ts": "0e1b0c39a68053765f504397a3d04505dd2fc24a415a89a961768c4413c831d2",
+    "selfplay.ts": "c1bb2d38f17b81ff3a1cc0ff215989c9893e1152f400940a20e701ee25e48042",
+    "server.ts": "4ab32465cf8c4326c1b5715951c0a9ed912ba63c6161ce49192530f859cf9eb4",
+    "session.ts": "ec7cd7d5cdb6919a6c6b7ce38f1a03f16a84a3c2e5ef3425310d2fa2ed27a66b",
+    "turn.ts": "ce30227b8dcbcfb00cff68963c164fb219c021010edf8913b22e96271f4d5a75"
+   },
+   "matchesFrozen": true
+  },
+  {
+   "label": "gt-B1",
+   "mutationIds": [
+    "B1"
+   ],
+   "sourceTree": "27a021847311fd05636973d91b3d4c38750524728f9acb16cdd0eb1cbe678196",
+   "files": {
+    "budgeted.ts": "a1917cc1b3d7e37814ca4c69a1b2f5b121f24ae8851aed74908af67536fc368a",
+    "coverage.ts": "37735352162068a518d275f0da79d345f81b45fdff5dd144f5e1f43f04fb350b",
+    "engine.ts": "dc2ce308b70bdf34f729bb5a30d2e57855de8dc5dc15eab3ee02e492cc0bced7",
+    "fastclone.ts": "7b14ebf774f22a52766694b73ece09de9b49af229f4a80d4c91c9316b3b3bb56",
+    "forks/ablation.ts": "6c14bb9b045356b9644433eca768b96982fdf231af1fce230b779451e8ff7ab6",
+    "forks/ai.ts": "1e20b6487d56f6eae4574d5f30bbd6acaa4f6457a496fdde082259001a41a186",
+    "forks/evk11.ts": "3ff6073e5d09046a1e0682b0295ab6897c680a1067a6cc1be8b4c7cd5b0b2abc",
+    "forks/evplanner.ts": "789fa82691599c626a0efdaa69b08c066b65f8c9026751086401980a476fcfe9",
+    "forks/flavor.ts": "b6aa674e5785cd63b819b1a036ddaa3aa885ab0cb02560e3bc8d29fcd333dda3",
+    "forks/planner52.ts": "8ab781cfc866fe8b9cf8cc4f3b68deb52abbd4d10c742ba95e5d0cfad4fc87c1",
+    "forks/policies5.ts": "759d28ab2aec9161c6f283558b79490ffd1cd30cfe414b823fc9ad62887107b7",
+    "forks/policies53.ts": "5f792a70a70a22ddb5e00b4381345ee688efea55989f741f05a07b10db5a469f",
+    "forks/stream.ts": "7e2df26766d00279209addda3f1196856906e02e556a2a427c33089525a9232f",
+    "forks/tiers.ts": "87cd685872025b44237e84da0ec8681b4bc4492d9fadbb387a2841c0e798d13c",
+    "forks/trial.ts": "b1d58083966caa7b54b4c805507f7c13a2860f0c7e60b58399385138fed2e700",
+    "kaneshadow.ts": "a254faeb1c88685864e70e36e07e719929e395db0b68a0db3236fbee7786f97e",
+    "opponents.ts": "47629fa517834b69bdaef693ecdaa1018b7ce3330d7fdd176a75eb17098e8082",
+    "pilot.ts": "8fa6df2e2846de2e9fe2f3a219e62c87ce0a714da7d3c87c1e75b398056046e8",
+    "planworker.ts": "ef829710b340538b108ce178ebd67d507180d325fb5ad13c7bda7a825ea04f78",
+    "referee-aware.ts": "0e1b0c39a68053765f504397a3d04505dd2fc24a415a89a961768c4413c831d2",
+    "selfplay.ts": "c1bb2d38f17b81ff3a1cc0ff215989c9893e1152f400940a20e701ee25e48042",
+    "server.ts": "4ab32465cf8c4326c1b5715951c0a9ed912ba63c6161ce49192530f859cf9eb4",
+    "session.ts": "ec7cd7d5cdb6919a6c6b7ce38f1a03f16a84a3c2e5ef3425310d2fa2ed27a66b",
+    "turn.ts": "ce30227b8dcbcfb00cff68963c164fb219c021010edf8913b22e96271f4d5a75"
+   },
+   "matchesFrozen": true
+  },
+  {
+   "label": "gt-B2",
+   "mutationIds": [
+    "B2"
+   ],
+   "sourceTree": "b0e2f891ea1fae8a05f4373f7c9674c5cf8720fe85e6d6c4497b089ac4599a9c",
+   "files": {
+    "budgeted.ts": "a1917cc1b3d7e37814ca4c69a1b2f5b121f24ae8851aed74908af67536fc368a",
+    "coverage.ts": "37735352162068a518d275f0da79d345f81b45fdff5dd144f5e1f43f04fb350b",
+    "engine.ts": "c88b174e7f58e77967cffdce50e654bd41f15338713fc02eed6a02bda29664f7",
+    "fastclone.ts": "7b14ebf774f22a52766694b73ece09de9b49af229f4a80d4c91c9316b3b3bb56",
+    "forks/ablation.ts": "6c14bb9b045356b9644433eca768b96982fdf231af1fce230b779451e8ff7ab6",
+    "forks/ai.ts": "1e20b6487d56f6eae4574d5f30bbd6acaa4f6457a496fdde082259001a41a186",
+    "forks/evk11.ts": "3ff6073e5d09046a1e0682b0295ab6897c680a1067a6cc1be8b4c7cd5b0b2abc",
+    "forks/evplanner.ts": "789fa82691599c626a0efdaa69b08c066b65f8c9026751086401980a476fcfe9",
+    "forks/flavor.ts": "b6aa674e5785cd63b819b1a036ddaa3aa885ab0cb02560e3bc8d29fcd333dda3",
+    "forks/planner52.ts": "8ab781cfc866fe8b9cf8cc4f3b68deb52abbd4d10c742ba95e5d0cfad4fc87c1",
+    "forks/policies5.ts": "759d28ab2aec9161c6f283558b79490ffd1cd30cfe414b823fc9ad62887107b7",
+    "forks/policies53.ts": "5f792a70a70a22ddb5e00b4381345ee688efea55989f741f05a07b10db5a469f",
+    "forks/stream.ts": "7e2df26766d00279209addda3f1196856906e02e556a2a427c33089525a9232f",
+    "forks/tiers.ts": "87cd685872025b44237e84da0ec8681b4bc4492d9fadbb387a2841c0e798d13c",
+    "forks/trial.ts": "b1d58083966caa7b54b4c805507f7c13a2860f0c7e60b58399385138fed2e700",
+    "kaneshadow.ts": "a254faeb1c88685864e70e36e07e719929e395db0b68a0db3236fbee7786f97e",
+    "opponents.ts": "47629fa517834b69bdaef693ecdaa1018b7ce3330d7fdd176a75eb17098e8082",
+    "pilot.ts": "8fa6df2e2846de2e9fe2f3a219e62c87ce0a714da7d3c87c1e75b398056046e8",
+    "planworker.ts": "ef829710b340538b108ce178ebd67d507180d325fb5ad13c7bda7a825ea04f78",
+    "referee-aware.ts": "0e1b0c39a68053765f504397a3d04505dd2fc24a415a89a961768c4413c831d2",
+    "selfplay.ts": "c1bb2d38f17b81ff3a1cc0ff215989c9893e1152f400940a20e701ee25e48042",
+    "server.ts": "4ab32465cf8c4326c1b5715951c0a9ed912ba63c6161ce49192530f859cf9eb4",
+    "session.ts": "ec7cd7d5cdb6919a6c6b7ce38f1a03f16a84a3c2e5ef3425310d2fa2ed27a66b",
+    "turn.ts": "ce30227b8dcbcfb00cff68963c164fb219c021010edf8913b22e96271f4d5a75"
+   },
+   "matchesFrozen": true
+  },
+  {
+   "label": "gt-B3",
+   "mutationIds": [
+    "B3"
+   ],
+   "sourceTree": "11112c1145debf0b8baf94759399091cdd45b7e7d786b090a46f3229cd8c22b5",
+   "files": {
+    "budgeted.ts": "a1917cc1b3d7e37814ca4c69a1b2f5b121f24ae8851aed74908af67536fc368a",
+    "coverage.ts": "37735352162068a518d275f0da79d345f81b45fdff5dd144f5e1f43f04fb350b",
+    "engine.ts": "6e3d9be5d77e4902d05698ce1e71caccfcd358cd96aee1065ff2281aac1587e1",
+    "fastclone.ts": "7b14ebf774f22a52766694b73ece09de9b49af229f4a80d4c91c9316b3b3bb56",
+    "forks/ablation.ts": "6c14bb9b045356b9644433eca768b96982fdf231af1fce230b779451e8ff7ab6",
+    "forks/ai.ts": "1e20b6487d56f6eae4574d5f30bbd6acaa4f6457a496fdde082259001a41a186",
+    "forks/evk11.ts": "3ff6073e5d09046a1e0682b0295ab6897c680a1067a6cc1be8b4c7cd5b0b2abc",
+    "forks/evplanner.ts": "789fa82691599c626a0efdaa69b08c066b65f8c9026751086401980a476fcfe9",
+    "forks/flavor.ts": "b6aa674e5785cd63b819b1a036ddaa3aa885ab0cb02560e3bc8d29fcd333dda3",
+    "forks/planner52.ts": "8ab781cfc866fe8b9cf8cc4f3b68deb52abbd4d10c742ba95e5d0cfad4fc87c1",
+    "forks/policies5.ts": "759d28ab2aec9161c6f283558b79490ffd1cd30cfe414b823fc9ad62887107b7",
+    "forks/policies53.ts": "5f792a70a70a22ddb5e00b4381345ee688efea55989f741f05a07b10db5a469f",
+    "forks/stream.ts": "7e2df26766d00279209addda3f1196856906e02e556a2a427c33089525a9232f",
+    "forks/tiers.ts": "87cd685872025b44237e84da0ec8681b4bc4492d9fadbb387a2841c0e798d13c",
+    "forks/trial.ts": "b1d58083966caa7b54b4c805507f7c13a2860f0c7e60b58399385138fed2e700",
+    "kaneshadow.ts": "a254faeb1c88685864e70e36e07e719929e395db0b68a0db3236fbee7786f97e",
+    "opponents.ts": "47629fa517834b69bdaef693ecdaa1018b7ce3330d7fdd176a75eb17098e8082",
+    "pilot.ts": "8fa6df2e2846de2e9fe2f3a219e62c87ce0a714da7d3c87c1e75b398056046e8",
+    "planworker.ts": "ef829710b340538b108ce178ebd67d507180d325fb5ad13c7bda7a825ea04f78",
+    "referee-aware.ts": "0e1b0c39a68053765f504397a3d04505dd2fc24a415a89a961768c4413c831d2",
+    "selfplay.ts": "c1bb2d38f17b81ff3a1cc0ff215989c9893e1152f400940a20e701ee25e48042",
+    "server.ts": "4ab32465cf8c4326c1b5715951c0a9ed912ba63c6161ce49192530f859cf9eb4",
+    "session.ts": "ec7cd7d5cdb6919a6c6b7ce38f1a03f16a84a3c2e5ef3425310d2fa2ed27a66b",
+    "turn.ts": "ce30227b8dcbcfb00cff68963c164fb219c021010edf8913b22e96271f4d5a75"
+   },
+   "matchesFrozen": true
+  }
+ ],
+ "scripts": [
+  {
+   "id": "shield-human",
+   "sha256": "3d18d8c699dfe0881a5f4923495837650f2bb2f8b8042539f7eb86d9ab8ddea6"
+  },
+  {
+   "id": "shield-ai",
+   "sha256": "53754b44859fa0c43eecf10f32ea857a9ddcd6718bdf114ed38f78a10e59e0ff"
+  },
+  {
+   "id": "shove-chain-human",
+   "sha256": "8ec3fad6c3d491f35ce0b285a730395d02ae4eb89bfee7743991d48c4b23a3ba"
+  },
+  {
+   "id": "shove-chain-ai",
+   "sha256": "36b22707318a5d3b7705005bbcabfd332d368b686fe629d048de720e3ba9e782"
+  },
+  {
+   "id": "walk-twice",
+   "sha256": "fd96c85694294971fd741669ed7b8c03d5f40bce8a50525972921e53f7b05ae5"
+  },
+  {
+   "id": "freeze-human",
+   "sha256": "374c16ee074f81cdd3b26d5a9578e292fb935f2b4a8764ab5b4f732cb78626e8"
+  },
+  {
+   "id": "freeze-ai",
+   "sha256": "e96d720a309546839ecd0b332cf91fe6646088f66414858f55f334fa09172c40"
+  },
+  {
+   "id": "shove-human",
+   "sha256": "a7a7d4e12f57abb592dc274f3b24eac2ba2d37dd89232485b869ff15a2655b48"
+  },
+  {
+   "id": "shove-ai",
+   "sha256": "b1d0008e58517e89056434a2f71897a6bda5613511966712745cce6bfa6342c0"
+  },
+  {
+   "id": "adjacent-placement",
+   "sha256": "31985c57a9c3f3418f53030592d0767df1cdb7107720b77ec6e3e2bde5f21732"
+  },
+  {
+   "id": "teleport-human",
+   "sha256": "a0546eb2ae463009a343fd5e16bcefd7f182aec930af4f66e66ef237ab41682e"
+  },
+  {
+   "id": "send-home-human",
+   "sha256": "25c525cc049be22c19c9979987c4548ddcb7e3e1731fd61b1dc1048a9390cef2"
+  },
+  {
+   "id": "send-home-ai",
+   "sha256": "eaf9dfb0a0cb3aa2c94dc4910a77951d921beec87cea982577b335fca6f7b602"
+  },
+  {
+   "id": "placement-human",
+   "sha256": "cb1b9754d43b0d9ecbc464b1200ddfae90d57ae6cc7083d384f0c61be5e5e4db"
+  },
+  {
+   "id": "placement-ai",
+   "sha256": "5ea565178fbc4f11e9868df2afee03fed291fe3db933a0c2bc6860592a841540"
+  },
+  {
+   "id": "multicell-human",
+   "sha256": "2668508efdc9b6e49923fa004511164193e4f7647838617f608fa911110817c9"
+  },
+  {
+   "id": "multicell-ai",
+   "sha256": "86aa97febd880749d974bfb27e0577e7f128925a9a5f4ce2e818ab22054ababf"
+  },
+  {
+   "id": "matrix-haste",
+   "sha256": "86101231fb2516e612487c25e2c721fafda21f0e73aede4317276f1993ba6dac"
+  },
+  {
+   "id": "matrix-freeze",
+   "sha256": "c850ed83e2976c4d8654d6798ff1da170083320fe16513acce3a51f2326d44bf"
+  },
+  {
+   "id": "matrix-home",
+   "sha256": "16ecdbdc420266e8161c46abd19018bb79fb2a53b95807cfc1a9529602653940"
+  },
+  {
+   "id": "matrix-shield",
+   "sha256": "234ad33fc43ce747beb5a681477e9585c99be7bb2da0546286e963353210d260"
+  }
+ ],
+ "matches": null,
+ "counts": {
+  "cases": 84,
+  "matches": 0,
+  "refusedSteps": 33
+ },
+ "bundle": {
+  "path": "bundle.json",
+  "sha256": "f1ce5cd69205358573f1d1c6a036141b1c28aab77411eb4621e51c9ccef25475"
+ },
+ "selection": [
+  "Every listed script is run once on every listed build of the run (scripts are deterministic: the build engine and referee decide every outcome).",
+  "Every seed x first mover x build of the run is played once with the listed policy in both seats.",
+  "All outputs are kept in the order defined by their anonymous ids; nothing is filtered, selected, re-run or regenerated. The run refuses an existing output directory.",
+  "No agent output, hypothesis or evaluation result is an input of generation or of the partition procedure."
+ ],
+ "note": "Every output of the run is kept. Nothing was selected, filtered or regenerated, and no agent output was an input."
+}

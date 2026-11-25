@@ -1,0 +1,1097 @@
+{
+ "schema": "gamewatch/gw2-mutation-validation@1",
+ "procedure": {
+  "id": "p5-generation-1",
+  "sha256": "ff4d566cec51a49a57d772f427fe70941b53e85288cb03caa9211b04ddebb205"
+ },
+ "bundle": {
+  "path": "evidence/gw2/p5-validation/generated/bundle.json",
+  "sha256": "f1ce5cd69205358573f1d1c6a036141b1c28aab77411eb4621e51c9ccef25475"
+ },
+ "encoding": {
+  "id": "rule-sabotage-v6.1-encoding-2",
+  "sha256": "dbb4d30fe5a05880375e158ec91a1ef8e08ecacd49f39137654ba8969a410b66",
+  "review": "unreviewed"
+ },
+ "expectedDeviations": {
+  "gt-clean": [],
+  "gt-B1": [
+   "R7",
+   "R14"
+  ],
+  "gt-B2": [
+   "R8"
+  ],
+  "gt-B3": [
+   "R3"
+  ]
+ },
+ "probes": {
+  "rows": [
+   {
+    "build": "gt-clean",
+    "side": "human",
+    "observed": {
+     "shield": {
+      "absorbed": true,
+      "fired": false,
+      "at": "6,4",
+      "shieldLeft": false,
+      "cellLive": false
+     },
+     "chain": {
+      "firedFirst": 1,
+      "liveAfter": false,
+      "firedAgain": false
+     },
+     "actions": [
+      {
+       "side": "human",
+       "actions": 3
+      },
+      {
+       "side": "ai",
+       "actions": 3
+      },
+      {
+       "side": "human",
+       "actions": 3
+      },
+      {
+       "side": "ai",
+       "actions": 3
+      },
+      {
+       "side": "human",
+       "actions": 3
+      },
+      {
+       "side": "ai",
+       "actions": 3
+      }
+     ],
+     "walk": {
+      "cellLive": false
+     },
+     "freeze": {
+      "frozen": 2
+     }
+    },
+    "expected": {
+     "shield": "same as clean (absorbed, not fired)",
+     "chain": "same as clean (used up)",
+     "actions": "same as clean (3 each)"
+    },
+    "asExpected": {
+     "shield": true,
+     "chain": true,
+     "actions": true,
+     "walk": true,
+     "freeze": true
+    }
+   },
+   {
+    "build": "gt-clean",
+    "side": "ai",
+    "observed": {
+     "shield": {
+      "absorbed": true,
+      "fired": false,
+      "at": "4,4",
+      "shieldLeft": false,
+      "cellLive": false
+     },
+     "chain": {
+      "firedFirst": 1,
+      "liveAfter": false,
+      "firedAgain": false
+     },
+     "actions": [
+      {
+       "side": "ai",
+       "actions": 3
+      },
+      {
+       "side": "human",
+       "actions": 3
+      },
+      {
+       "side": "ai",
+       "actions": 3
+      },
+      {
+       "side": "human",
+       "actions": 3
+      },
+      {
+       "side": "ai",
+       "actions": 3
+      },
+      {
+       "side": "human",
+       "actions": 3
+      }
+     ],
+     "walk": {
+      "cellLive": false
+     },
+     "freeze": {
+      "frozen": 2
+     }
+    },
+    "expected": {
+     "shield": "same as clean (absorbed, not fired)",
+     "chain": "same as clean (used up)",
+     "actions": "same as clean (3 each)"
+    },
+    "asExpected": {
+     "shield": true,
+     "chain": true,
+     "actions": true,
+     "walk": true,
+     "freeze": true
+    }
+   },
+   {
+    "build": "gt-B1",
+    "side": "human",
+    "observed": {
+     "shield": {
+      "absorbed": false,
+      "fired": true,
+      "at": "0,2",
+      "shieldLeft": false,
+      "cellLive": false
+     },
+     "chain": {
+      "firedFirst": 1,
+      "liveAfter": false,
+      "firedAgain": false
+     },
+     "actions": [
+      {
+       "side": "human",
+       "actions": 3
+      },
+      {
+       "side": "ai",
+       "actions": 3
+      },
+      {
+       "side": "human",
+       "actions": 3
+      },
+      {
+       "side": "ai",
+       "actions": 3
+      },
+      {
+       "side": "human",
+       "actions": 3
+      },
+      {
+       "side": "ai",
+       "actions": 3
+      }
+     ],
+     "walk": {
+      "cellLive": false
+     },
+     "freeze": {
+      "frozen": 2
+     }
+    },
+    "expected": {
+     "shield": "not absorbed, fired, sent home, shield used up",
+     "chain": "same as clean (used up)",
+     "actions": "same as clean (3 each)"
+    },
+    "asExpected": {
+     "shield": true,
+     "chain": true,
+     "actions": true,
+     "walk": true,
+     "freeze": true
+    }
+   },
+   {
+    "build": "gt-B1",
+    "side": "ai",
+    "observed": {
+     "shield": {
+      "absorbed": true,
+      "fired": false,
+      "at": "4,4",
+      "shieldLeft": false,
+      "cellLive": false
+     },
+     "chain": {
+      "firedFirst": 1,
+      "liveAfter": false,
+      "firedAgain": false
+     },
+     "actions": [
+      {
+       "side": "ai",
+       "actions": 3
+      },
+      {
+       "side": "human",
+       "actions": 3
+      },
+      {
+       "side": "ai",
+       "actions": 3
+      },
+      {
+       "side": "human",
+       "actions": 3
+      },
+      {
+       "side": "ai",
+       "actions": 3
+      },
+      {
+       "side": "human",
+       "actions": 3
+      }
+     ],
+     "walk": {
+      "cellLive": false
+     },
+     "freeze": {
+      "frozen": 2
+     }
+    },
+    "expected": {
+     "shield": "same as clean (absorbed, not fired)",
+     "chain": "same as clean (used up)",
+     "actions": "same as clean (3 each)"
+    },
+    "asExpected": {
+     "shield": true,
+     "chain": true,
+     "actions": true,
+     "walk": true,
+     "freeze": true
+    }
+   },
+   {
+    "build": "gt-B2",
+    "side": "human",
+    "observed": {
+     "shield": {
+      "absorbed": true,
+      "fired": false,
+      "at": "6,4",
+      "shieldLeft": false,
+      "cellLive": false
+     },
+     "chain": {
+      "firedFirst": 1,
+      "liveAfter": true,
+      "firedAgain": true
+     },
+     "actions": [
+      {
+       "side": "human",
+       "actions": 3
+      },
+      {
+       "side": "ai",
+       "actions": 3
+      },
+      {
+       "side": "human",
+       "actions": 3
+      },
+      {
+       "side": "ai",
+       "actions": 3
+      },
+      {
+       "side": "human",
+       "actions": 3
+      },
+      {
+       "side": "ai",
+       "actions": 3
+      }
+     ],
+     "walk": {
+      "cellLive": false
+     },
+     "freeze": {
+      "frozen": 2
+     }
+    },
+    "expected": {
+     "shield": "same as clean (absorbed, not fired)",
+     "chain": "forced-arrival cell stays live and fires again",
+     "actions": "same as clean (3 each)"
+    },
+    "asExpected": {
+     "shield": true,
+     "chain": true,
+     "actions": true,
+     "walk": true,
+     "freeze": true
+    }
+   },
+   {
+    "build": "gt-B2",
+    "side": "ai",
+    "observed": {
+     "shield": {
+      "absorbed": true,
+      "fired": false,
+      "at": "4,4",
+      "shieldLeft": false,
+      "cellLive": false
+     },
+     "chain": {
+      "firedFirst": 1,
+      "liveAfter": true,
+      "firedAgain": true
+     },
+     "actions": [
+      {
+       "side": "ai",
+       "actions": 3
+      },
+      {
+       "side": "human",
+       "actions": 3
+      },
+      {
+       "side": "ai",
+       "actions": 3
+      },
+      {
+       "side": "human",
+       "actions": 3
+      },
+      {
+       "side": "ai",
+       "actions": 3
+      },
+      {
+       "side": "human",
+       "actions": 3
+      }
+     ],
+     "walk": {
+      "cellLive": false
+     },
+     "freeze": {
+      "frozen": 2
+     }
+    },
+    "expected": {
+     "shield": "same as clean (absorbed, not fired)",
+     "chain": "forced-arrival cell stays live and fires again",
+     "actions": "same as clean (3 each)"
+    },
+    "asExpected": {
+     "shield": true,
+     "chain": true,
+     "actions": true,
+     "walk": true,
+     "freeze": true
+    }
+   },
+   {
+    "build": "gt-B3",
+    "side": "human",
+    "observed": {
+     "shield": {
+      "absorbed": true,
+      "fired": false,
+      "at": "6,4",
+      "shieldLeft": false,
+      "cellLive": false
+     },
+     "chain": {
+      "firedFirst": 1,
+      "liveAfter": false,
+      "firedAgain": false
+     },
+     "actions": [
+      {
+       "side": "human",
+       "actions": 4
+      },
+      {
+       "side": "ai",
+       "actions": 3
+      },
+      {
+       "side": "human",
+       "actions": 4
+      },
+      {
+       "side": "ai",
+       "actions": 3
+      },
+      {
+       "side": "human",
+       "actions": 4
+      },
+      {
+       "side": "ai",
+       "actions": 3
+      }
+     ],
+     "walk": {
+      "cellLive": false
+     },
+     "freeze": {
+      "frozen": 2
+     }
+    },
+    "expected": {
+     "shield": "same as clean (absorbed, not fired)",
+     "chain": "same as clean (used up)",
+     "actions": "first mover 4 on its turns, second mover 3"
+    },
+    "asExpected": {
+     "shield": true,
+     "chain": true,
+     "actions": true,
+     "walk": true,
+     "freeze": true
+    }
+   },
+   {
+    "build": "gt-B3",
+    "side": "ai",
+    "observed": {
+     "shield": {
+      "absorbed": true,
+      "fired": false,
+      "at": "4,4",
+      "shieldLeft": false,
+      "cellLive": false
+     },
+     "chain": {
+      "firedFirst": 1,
+      "liveAfter": false,
+      "firedAgain": false
+     },
+     "actions": [
+      {
+       "side": "ai",
+       "actions": 4
+      },
+      {
+       "side": "human",
+       "actions": 3
+      },
+      {
+       "side": "ai",
+       "actions": 4
+      },
+      {
+       "side": "human",
+       "actions": 3
+      },
+      {
+       "side": "ai",
+       "actions": 4
+      },
+      {
+       "side": "human",
+       "actions": 3
+      }
+     ],
+     "walk": {
+      "cellLive": false
+     },
+     "freeze": {
+      "frozen": 2
+     }
+    },
+    "expected": {
+     "shield": "same as clean (absorbed, not fired)",
+     "chain": "same as clean (used up)",
+     "actions": "first mover 4 on its turns, second mover 3"
+    },
+    "asExpected": {
+     "shield": true,
+     "chain": true,
+     "actions": true,
+     "walk": true,
+     "freeze": true
+    }
+   }
+  ],
+  "allAsExpected": true
+ },
+ "verifier": {
+  "matrix": [
+   {
+    "build": "gt-B1",
+    "mutations": "B1",
+    "rules": [
+     {
+      "rule": "R3",
+      "value": "conforms",
+      "expectedDeviation": false,
+      "observedDeviation": false,
+      "agreement": "as-expected",
+      "evaluated": 94,
+      "support": {
+       "full": 94,
+       "partial": 0,
+       "counterExample": 0,
+       "inconclusive": 0
+      },
+      "counterCount": 0
+     },
+     {
+      "rule": "R5",
+      "value": "conforms",
+      "expectedDeviation": false,
+      "observedDeviation": false,
+      "agreement": "as-expected",
+      "evaluated": 5,
+      "support": {
+       "full": 5,
+       "partial": 0,
+       "counterExample": 0,
+       "inconclusive": 0
+      },
+      "counterCount": 0
+     },
+     {
+      "rule": "R7",
+      "value": "deviates",
+      "expectedDeviation": true,
+      "observedDeviation": true,
+      "agreement": "as-expected",
+      "evaluated": 33,
+      "support": {
+       "full": 27,
+       "partial": 2,
+       "counterExample": 4,
+       "inconclusive": 0
+      },
+      "counterCount": 8,
+      "witnessesMatchIntendedViolation": true,
+      "counterExamples": [
+       {
+        "id": "C-8c02b1/s12/e1",
+        "field": "fired",
+        "predicted": true,
+        "observed": false,
+        "partner": "C-8d91e3/s18/e1"
+       },
+       {
+        "id": "C-8c02b1/s12/e1",
+        "field": "absorbed",
+        "predicted": false,
+        "observed": true,
+        "partner": "C-8d91e3/s18/e1"
+       },
+       {
+        "id": "C-8d91e3/s15/e1",
+        "field": "fired",
+        "predicted": true,
+        "observed": false,
+        "partner": "C-8d91e3/s18/e1"
+       },
+       {
+        "id": "C-8d91e3/s15/e1",
+        "field": "absorbed",
+        "predicted": false,
+        "observed": true,
+        "partner": "C-8d91e3/s18/e1"
+       },
+       {
+        "id": "C-8d91e3/s18/e1",
+        "field": "fired",
+        "predicted": false,
+        "observed": true,
+        "partner": "C-8c02b1/s12/e1"
+       },
+       {
+        "id": "C-8d91e3/s18/e1",
+        "field": "absorbed",
+        "predicted": true,
+        "observed": false,
+        "partner": "C-8c02b1/s12/e1"
+       },
+       {
+        "id": "C-c47345/s10/e1",
+        "field": "fired",
+        "predicted": false,
+        "observed": true,
+        "partner": "C-8c02b1/s12/e1"
+       },
+       {
+        "id": "C-c47345/s10/e1",
+        "field": "absorbed",
+        "predicted": true,
+        "observed": false,
+        "partner": "C-8c02b1/s12/e1"
+       }
+      ]
+     },
+     {
+      "rule": "R8",
+      "value": "conforms",
+      "expectedDeviation": false,
+      "observedDeviation": false,
+      "agreement": "as-expected",
+      "evaluated": 34,
+      "support": {
+       "full": 34,
+       "partial": 0,
+       "counterExample": 0,
+       "inconclusive": 0
+      },
+      "counterCount": 0
+     },
+     {
+      "rule": "R12",
+      "value": "conforms",
+      "expectedDeviation": false,
+      "observedDeviation": false,
+      "agreement": "as-expected",
+      "evaluated": 6,
+      "support": {
+       "full": 6,
+       "partial": 0,
+       "counterExample": 0,
+       "inconclusive": 0
+      },
+      "counterCount": 0
+     },
+     {
+      "rule": "R14",
+      "value": "deviates",
+      "expectedDeviation": true,
+      "observedDeviation": true,
+      "agreement": "as-expected",
+      "evaluated": 4,
+      "support": {
+       "full": 2,
+       "partial": 0,
+       "counterExample": 2,
+       "inconclusive": 0
+      },
+      "counterCount": 4,
+      "witnessesMatchIntendedViolation": true,
+      "counterExamples": [
+       {
+        "id": "C-8d91e3/s18/e1",
+        "field": "absorbed",
+        "predicted": true,
+        "observed": false
+       },
+       {
+        "id": "C-8d91e3/s18/e1",
+        "field": "fired",
+        "predicted": false,
+        "observed": true
+       },
+       {
+        "id": "C-c47345/s10/e1",
+        "field": "absorbed",
+        "predicted": true,
+        "observed": false
+       },
+       {
+        "id": "C-c47345/s10/e1",
+        "field": "fired",
+        "predicted": false,
+        "observed": true
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "build": "gt-B2",
+    "mutations": "B2",
+    "rules": [
+     {
+      "rule": "R3",
+      "value": "conforms",
+      "expectedDeviation": false,
+      "observedDeviation": false,
+      "agreement": "as-expected",
+      "evaluated": 94,
+      "support": {
+       "full": 94,
+       "partial": 0,
+       "counterExample": 0,
+       "inconclusive": 0
+      },
+      "counterCount": 0
+     },
+     {
+      "rule": "R5",
+      "value": "conforms",
+      "expectedDeviation": false,
+      "observedDeviation": false,
+      "agreement": "as-expected",
+      "evaluated": 5,
+      "support": {
+       "full": 5,
+       "partial": 0,
+       "counterExample": 0,
+       "inconclusive": 0
+      },
+      "counterCount": 0
+     },
+     {
+      "rule": "R7",
+      "value": "conforms",
+      "expectedDeviation": false,
+      "observedDeviation": false,
+      "agreement": "as-expected",
+      "evaluated": 35,
+      "support": {
+       "full": 33,
+       "partial": 2,
+       "counterExample": 0,
+       "inconclusive": 0
+      },
+      "counterCount": 0
+     },
+     {
+      "rule": "R8",
+      "value": "deviates",
+      "expectedDeviation": true,
+      "observedDeviation": true,
+      "agreement": "as-expected",
+      "evaluated": 36,
+      "support": {
+       "full": 34,
+       "partial": 0,
+       "counterExample": 2,
+       "inconclusive": 0
+      },
+      "counterCount": 2,
+      "witnessesMatchIntendedViolation": true,
+      "counterExamples": [
+       {
+        "id": "C-aa3af6/s11/e2",
+        "field": "cellUsedUp",
+        "predicted": true,
+        "observed": false
+       },
+       {
+        "id": "C-ced49a/s9/e2",
+        "field": "cellUsedUp",
+        "predicted": true,
+        "observed": false
+       }
+      ]
+     },
+     {
+      "rule": "R12",
+      "value": "conforms",
+      "expectedDeviation": false,
+      "observedDeviation": false,
+      "agreement": "as-expected",
+      "evaluated": 6,
+      "support": {
+       "full": 6,
+       "partial": 0,
+       "counterExample": 0,
+       "inconclusive": 0
+      },
+      "counterCount": 0
+     },
+     {
+      "rule": "R14",
+      "value": "conforms",
+      "expectedDeviation": false,
+      "observedDeviation": false,
+      "agreement": "as-expected",
+      "evaluated": 4,
+      "support": {
+       "full": 4,
+       "partial": 0,
+       "counterExample": 0,
+       "inconclusive": 0
+      },
+      "counterCount": 0
+     }
+    ]
+   },
+   {
+    "build": "gt-B3",
+    "mutations": "B3",
+    "rules": [
+     {
+      "rule": "R3",
+      "value": "deviates",
+      "expectedDeviation": true,
+      "observedDeviation": true,
+      "agreement": "as-expected",
+      "evaluated": 94,
+      "support": {
+       "full": 43,
+       "partial": 0,
+       "counterExample": 51,
+       "inconclusive": 0
+      },
+      "counterCount": 51,
+      "witnessesMatchIntendedViolation": true,
+      "counterExamples": [
+       {
+        "id": "C-090d89/s0/turn-start",
+        "field": "actionsGranted",
+        "predicted": 3,
+        "observed": 4
+       },
+       {
+        "id": "C-090d89/s9/turn-start",
+        "field": "actionsGranted",
+        "predicted": 3,
+        "observed": 4
+       },
+       {
+        "id": "C-090d89/s16/turn-start",
+        "field": "actionsGranted",
+        "predicted": 3,
+        "observed": 4
+       },
+       {
+        "id": "C-094d74/s0/turn-start",
+        "field": "actionsGranted",
+        "predicted": 3,
+        "observed": 4
+       },
+       {
+        "id": "C-094d74/s6/turn-start",
+        "field": "actionsGranted",
+        "predicted": 3,
+        "observed": 4
+       },
+       {
+        "id": "C-0e2ff2/s0/turn-start",
+        "field": "actionsGranted",
+        "predicted": 3,
+        "observed": 4
+       },
+       {
+        "id": "C-119345/s0/turn-start",
+        "field": "actionsGranted",
+        "predicted": 3,
+        "observed": 4
+       },
+       {
+        "id": "C-119345/s7/turn-start",
+        "field": "actionsGranted",
+        "predicted": 3,
+        "observed": 4
+       },
+       {
+        "id": "C-176341/s0/turn-start",
+        "field": "actionsGranted",
+        "predicted": 3,
+        "observed": 4
+       },
+       {
+        "id": "C-176341/s8/turn-start",
+        "field": "actionsGranted",
+        "predicted": 3,
+        "observed": 4
+       },
+       {
+        "id": "C-34a547/s0/turn-start",
+        "field": "actionsGranted",
+        "predicted": 3,
+        "observed": 4
+       },
+       {
+        "id": "C-34a547/s6/turn-start",
+        "field": "actionsGranted",
+        "predicted": 3,
+        "observed": 4
+       }
+      ]
+     },
+     {
+      "rule": "R5",
+      "value": "conforms",
+      "expectedDeviation": false,
+      "observedDeviation": false,
+      "agreement": "as-expected",
+      "evaluated": 5,
+      "support": {
+       "full": 5,
+       "partial": 0,
+       "counterExample": 0,
+       "inconclusive": 0
+      },
+      "counterCount": 0
+     },
+     {
+      "rule": "R7",
+      "value": "conforms",
+      "expectedDeviation": false,
+      "observedDeviation": false,
+      "agreement": "as-expected",
+      "evaluated": 33,
+      "support": {
+       "full": 31,
+       "partial": 2,
+       "counterExample": 0,
+       "inconclusive": 0
+      },
+      "counterCount": 0
+     },
+     {
+      "rule": "R8",
+      "value": "conforms",
+      "expectedDeviation": false,
+      "observedDeviation": false,
+      "agreement": "as-expected",
+      "evaluated": 34,
+      "support": {
+       "full": 34,
+       "partial": 0,
+       "counterExample": 0,
+       "inconclusive": 0
+      },
+      "counterCount": 0
+     },
+     {
+      "rule": "R12",
+      "value": "conforms",
+      "expectedDeviation": false,
+      "observedDeviation": false,
+      "agreement": "as-expected",
+      "evaluated": 6,
+      "support": {
+       "full": 6,
+       "partial": 0,
+       "counterExample": 0,
+       "inconclusive": 0
+      },
+      "counterCount": 0
+     },
+     {
+      "rule": "R14",
+      "value": "conforms",
+      "expectedDeviation": false,
+      "observedDeviation": false,
+      "agreement": "as-expected",
+      "evaluated": 4,
+      "support": {
+       "full": 4,
+       "partial": 0,
+       "counterExample": 0,
+       "inconclusive": 0
+      },
+      "counterCount": 0
+     }
+    ]
+   },
+   {
+    "build": "gt-clean",
+    "mutations": "clean",
+    "rules": [
+     {
+      "rule": "R3",
+      "value": "conforms",
+      "expectedDeviation": false,
+      "observedDeviation": false,
+      "agreement": "as-expected",
+      "evaluated": 94,
+      "support": {
+       "full": 94,
+       "partial": 0,
+       "counterExample": 0,
+       "inconclusive": 0
+      },
+      "counterCount": 0
+     },
+     {
+      "rule": "R5",
+      "value": "conforms",
+      "expectedDeviation": false,
+      "observedDeviation": false,
+      "agreement": "as-expected",
+      "evaluated": 5,
+      "support": {
+       "full": 5,
+       "partial": 0,
+       "counterExample": 0,
+       "inconclusive": 0
+      },
+      "counterCount": 0
+     },
+     {
+      "rule": "R7",
+      "value": "conforms",
+      "expectedDeviation": false,
+      "observedDeviation": false,
+      "agreement": "as-expected",
+      "evaluated": 33,
+      "support": {
+       "full": 31,
+       "partial": 2,
+       "counterExample": 0,
+       "inconclusive": 0
+      },
+      "counterCount": 0
+     },
+     {
+      "rule": "R8",
+      "value": "conforms",
+      "expectedDeviation": false,
+      "observedDeviation": false,
+      "agreement": "as-expected",
+      "evaluated": 34,
+      "support": {
+       "full": 34,
+       "partial": 0,
+       "counterExample": 0,
+       "inconclusive": 0
+      },
+      "counterCount": 0
+     },
+     {
+      "rule": "R12",
+      "value": "conforms",
+      "expectedDeviation": false,
+      "observedDeviation": false,
+      "agreement": "as-expected",
+      "evaluated": 6,
+      "support": {
+       "full": 6,
+       "partial": 0,
+       "counterExample": 0,
+       "inconclusive": 0
+      },
+      "counterCount": 0
+     },
+     {
+      "rule": "R14",
+      "value": "conforms",
+      "expectedDeviation": false,
+      "observedDeviation": false,
+      "agreement": "as-expected",
+      "evaluated": 4,
+      "support": {
+       "full": 4,
+       "partial": 0,
+       "counterExample": 0,
+       "inconclusive": 0
+      },
+      "counterCount": 0
+     }
+    ]
+   }
+  ],
+  "unexpected": [],
+  "allAsExpected": true
+ },
+ "note": "Real engine observations on unchanged single-defect builds. Expected deviations were declared from the documented intended violations before analysis; nothing was adjusted after."
+}
