@@ -10,7 +10,10 @@
  *   effect-entry  one per arrival of a piece on an effect cell (`effect-fired`, `shield-absorbed`, `chain-limit`)
  *     inputs   build, effect, effectKind, pieceSide, effectOwner, ownerRelation, arrival, chainDepth, capped,
  *              pieceShieldedBefore, multiCell
- *     outcomes fired, absorbed, cellUsedUp, shieldAfter, otherCellsRemain
+ *     outcomes fired, absorbed, cellUsedUp, shieldAfter, otherCellsRemain, sentHome [P5]
+ *   effect-placement [P5, Q22 limited scope: R5] one per scripted placement attempt (a case step whose action is "place …")
+ *     inputs   build, side, effect, effectKind, cellCount, nearAnyPiece, cellOccupied
+ *     outcomes placed
  * A field is null (UNKNOWN) whenever the record does not establish it. In particular match rows carry events but no
  * board states, so in matches pieceShieldedBefore, cellUsedUp, shieldAfter, otherCellsRemain and multiCell are null, and
  * a shield-absorbed event (which names no effect) has a null effect. Unknown values are reported as missing evidence.
@@ -29,10 +32,18 @@
  *   otherCellsRemain        for a multi-cell effect: every other cell of the same effect id is still present afterwards;
  *                           unknown when another cell of the same effect was entered in the same step
  *   pieceSide (matches)     the `side` of the effect-fired event (in cases it is checked against the state)
+ *   sentHome [P5]           fired, and a `forced-move` with how "home" moves the entering piece after this entry and
+ *                           before the next entry of the same event list; false when the entry did not fire (absorbed or
+ *                           capped); unknown when the entering piece is not known
+ *   nearAnyPiece [P5]       some chosen cell is one of the 8 squares around a piece on the board in the before-state
+ *   cellOccupied [P5]       some chosen cell holds a piece or an effect of the other side in the before-state
+ *   placed [P5]             the placement step's recorded outcome is "ok" (a refusal for any reason, including the
+ *                           referee's checks of R6, is false). Match rows carry no board state; placements are taken from
+ *                           scripted cases only.
  */
 import type { GWEvent, GWState, GWStep, GWTurnRow } from '../evidence.ts';
 
-export type SituationKind = 'turn-start' | 'effect-entry';
+export type SituationKind = 'turn-start' | 'effect-entry' | 'effect-placement';
 type Ty = 'number' | 'string' | 'boolean';
 export const SITUATION_FIELDS: Record<SituationKind, { inputs: Record<string, Ty>; outcomes: Record<string, Ty> }> = {
   'turn-start': {
@@ -41,7 +52,11 @@ export const SITUATION_FIELDS: Record<SituationKind, { inputs: Record<string, Ty
   },
   'effect-entry': {
     inputs: { build: 'string', effect: 'string', effectKind: 'string', pieceSide: 'string', effectOwner: 'string', ownerRelation: 'string', arrival: 'string', chainDepth: 'number', capped: 'boolean', pieceShieldedBefore: 'boolean', multiCell: 'boolean' },
-    outcomes: { fired: 'boolean', absorbed: 'boolean', cellUsedUp: 'boolean', shieldAfter: 'boolean', otherCellsRemain: 'boolean' },
+    outcomes: { fired: 'boolean', absorbed: 'boolean', cellUsedUp: 'boolean', shieldAfter: 'boolean', otherCellsRemain: 'boolean', sentHome: 'boolean' },
+  },
+  'effect-placement': {
+    inputs: { build: 'string', side: 'string', effect: 'string', effectKind: 'string', cellCount: 'number', nearAnyPiece: 'boolean', cellOccupied: 'boolean' },
+    outcomes: { placed: 'boolean' },
   },
 };
 export type V = number | string | boolean | null;
@@ -56,7 +71,7 @@ export function effectKind(name: string | null): string | null {
 const onBoard = (sq: unknown) => typeof sq === 'string' && /^[A-M][1-9]$/.test(sq);
 const strs = (x: unknown) => Array.isArray(x) ? x.filter((y): y is string => typeof y === 'string') : [];
 
-type Entry = { pieces: string[]; square: string; effect: string | null; effectId: number | null; owner: string | null; chainDepth: number | null; arrival: string | null; capped: boolean; fired: boolean; absorbed: boolean; pieceSide: string | null; shielded: boolean | null; ptr: string };
+type Entry = { k: number; sentHome: boolean | null; pieces: string[]; square: string; effect: string | null; effectId: number | null; owner: string | null; chainDepth: number | null; arrival: string | null; capped: boolean; fired: boolean; absorbed: boolean; pieceSide: string | null; shielded: boolean | null; ptr: string };
 
 /** Effect entries of one event list (one case step or one match row). States are optional (absent for matches). */
 function entries(events: GWEvent[], ptr: string, before?: GWState) {
@@ -79,7 +94,7 @@ function entries(events: GWEvent[], ptr: string, before?: GWState) {
       const shielded = ps.length ? known(ps[0]) : null;
       const pieceSide = before ? (ps.length ? sideOf.get(ps[0]) ?? null : null) : (ev.type === 'effect-fired' && typeof ev.side === 'string' ? ev.side : null);
       out.push({
-        pieces: ps, square, ptr: at, capped: ev.type === 'chain-limit', fired: ev.type === 'effect-fired', absorbed: ev.type === 'shield-absorbed', arrival, pieceSide, shielded,
+        k, sentHome: null, pieces: ps, square, ptr: at, capped: ev.type === 'chain-limit', fired: ev.type === 'effect-fired', absorbed: ev.type === 'shield-absorbed', arrival, pieceSide, shielded,
         effect: typeof ev.effect === 'string' ? ev.effect : cell?.effect ?? null,
         effectId: typeof ev.effectId === 'number' ? ev.effectId : cell?.effectId ?? null,
         owner: typeof ev.effectOwner === 'string' ? ev.effectOwner : cell?.owner ?? null,
@@ -88,7 +103,24 @@ function entries(events: GWEvent[], ptr: string, before?: GWState) {
       for (const p of ps) shield.set(p, ev.type === 'shield-absorbed' ? false : shielded === true && ev.type === 'effect-fired' ? null : known(p));
     }
   });
+  out.forEach((e, i) => {
+    const end = out[i + 1]?.k ?? events.length;
+    e.sentHome = !e.fired ? false : !e.pieces.length ? null : events.slice(e.k + 1, end).some(ev => ev.type === 'forced-move' && ev.how === 'home' && strs(ev.pieces).includes(e.pieces[0]));
+  });
   return out;
+}
+
+const COLS = 'ABCDEFGHIJKLM';
+const xy = (sq: string) => [COLS.indexOf(sq[0]), Number(sq.slice(1))] as const;
+/** P5: one placement situation per scripted placement attempt. */
+function placementSituation(c: { caseId: string; build: string }, s: GWStep, ptr: string): Situation | null {
+  const m = s.action.match(/^place "(.*)" on (.+)$/);
+  if (!m || s.actor === 'system') return null;
+  const cells = m[2].split(', ').filter(onBoard), side = s.actor;
+  const near = cells.some(q => s.before.pieces.some(p => onBoard(p.square) && p.square !== q && Math.max(Math.abs(xy(p.square)[0] - xy(q)[0]), Math.abs(xy(p.square)[1] - xy(q)[1])) === 1));
+  const occupied = cells.some(q => s.before.pieces.some(p => p.square === q) || s.before.effects.some(e => e.square === q && e.owner !== side));
+  return { id: `${c.caseId}/s${s.n}/placement`, kind: 'effect-placement', build: c.build, source: { type: 'case', id: c.caseId, pointer: ptr }, fields: {
+    build: c.build, side, effect: m[1], effectKind: effectKind(m[1]), cellCount: cells.length, nearAnyPiece: near, cellOccupied: occupied, placed: s.outcome === 'ok' } };
 }
 
 function entrySituations(es: Entry[], build: string, src: { type: 'case' | 'match'; id: string }, base: string, before?: GWState, after?: GWState): Situation[] {
@@ -108,6 +140,7 @@ function entrySituations(es: Entry[], build: string, src: { type: 'case' | 'matc
       cellUsedUp: after && e.effectId !== null && !sameCell ? !after.effects.some(x => x.square === e.square && x.effectId === e.effectId) : null,
       shieldAfter: after && lastForPiece && pAfter && onBoard(pAfter.square) ? pAfter.shield : null,
       otherCellsRemain: after && others && others.length && !otherHit ? others.every(o => after.effects.some(x => x.square === o.square && x.effectId === e.effectId)) : null,
+      sentHome: e.sentHome,
     };
     return { id: `${base}/e${i + 1}`, kind: 'effect-entry' as const, build, source: { ...src, pointer: e.ptr }, fields: f };
   });
@@ -132,6 +165,7 @@ export function extractSituations(obs: Obs): Situation[] {
           pending[side] = 0;
         }
       });
+      const pl = placementSituation(c, s, `/cases/${ci}/steps/${si}`); if (pl) out.push(pl);
       out.push(...entrySituations(entries(s.events, ptr, s.before), c.build, src, `${c.caseId}/s${s.n}`, s.before, s.after));
     });
   });

@@ -1,0 +1,185 @@
+{
+ "schema": "gamewatch/gw2-generation-procedure@1",
+ "id": "p5-generation-1",
+ "frozenAt": "2026-11-25T15:25:32.000Z",
+ "purpose": "GW2 P5 (Q6 = yes, D73): new deterministic engine observations with unchanged engine builds. Run \"experiment\": the two QA evidence builds (as in GW1), every GW1 script plus the P5 scripts (Q17 R5/R12 variants, Q21 multi-cell and matched R7 cases), and AI-vs-AI matches on new seeds. Run \"validation\": the four single-defect ground-truth builds (clean, B1, B2, B3), every script, for the real-engine mutation validation of AC-P4.6 (D69).",
+ "code": [
+  {
+   "path": "gamewatch/gw2/generate.ts",
+   "sha256": "25f1c1654fcd5788971e5c5ed8fa3bb5ed1b9c4746eb36ea7d5c0bcf79c13c9a"
+  },
+  {
+   "path": "gamewatch/gw2/scenarios-p5.ts",
+   "sha256": "a0c37e72e681f1bad0a920bd862ce00831f34448b28913feb7fef83838def8e9"
+  },
+  {
+   "path": "gamewatch/scenarios.ts",
+   "sha256": "11c281ce9421b3348d2e6de9831a025cbb16a45de2b12f2ade39d1e65cdc5f40"
+  },
+  {
+   "path": "gamewatch/adapters/rule-sabotage.ts",
+   "sha256": "93dcae614be429836c0b808021b139c3733386066ece20071628a48c149b7337"
+  },
+  {
+   "path": "gamewatch/builds.ts",
+   "sha256": "6eb1f5339d8c741e84648efe0503a6ffde21724cd359196cb13e125c7e63b1e8"
+  },
+  {
+   "path": "gamewatch/rules-doc.ts",
+   "sha256": "0bf775019d874ef6ee2dc6915c5a0e4a94d4d5eb599579f0307f7cd8eddd955b"
+  },
+  {
+   "path": "gamewatch/evidence.ts",
+   "sha256": "d08659d81e5ba26b4db0e021fe807ccd32f33d9c1d5bc43cbfa05530880e34c7"
+  },
+  {
+   "path": "server/weights.ts",
+   "sha256": "24ad2b10c0f6202bf223286d60573f0345d4bdb399140d0bceda570b8ce36b89"
+  }
+ ],
+ "mutations": {
+  "path": "gamewatch/private/mutations.json",
+  "sha256": "389863b0dd57bfbdcd9ede5547363e4d1a32d6ba28e9c50a3bf2b92eae2871d5"
+ },
+ "buildHashes": {
+  "QX-41": {
+   "tree": "18216371b47d23e7d465fc28136cafd4376ef1fc699bbe659204ee8d2c2eda97",
+   "engine.ts": "3a98317aa576f87ba4a9a3a817d374662dc900098357cfed5ff421e7314723e2"
+  },
+  "QX-73": {
+   "tree": "8907a40487c9ea18ac7ce12ce83a6fa2944a36c463082cc675c823c4f643c3db",
+   "engine.ts": "d577ef580846c001eca4245a479b9e20c1a33c55dfc75c38597caeed7cbb47c0"
+  },
+  "gt-clean": {
+   "tree": "18216371b47d23e7d465fc28136cafd4376ef1fc699bbe659204ee8d2c2eda97",
+   "engine.ts": "3a98317aa576f87ba4a9a3a817d374662dc900098357cfed5ff421e7314723e2"
+  },
+  "gt-B1": {
+   "tree": "27a021847311fd05636973d91b3d4c38750524728f9acb16cdd0eb1cbe678196",
+   "engine.ts": "dc2ce308b70bdf34f729bb5a30d2e57855de8dc5dc15eab3ee02e492cc0bced7"
+  },
+  "gt-B2": {
+   "tree": "b0e2f891ea1fae8a05f4373f7c9674c5cf8720fe85e6d6c4497b089ac4599a9c",
+   "engine.ts": "c88b174e7f58e77967cffdce50e654bd41f15338713fc02eed6a02bda29664f7"
+  },
+  "gt-B3": {
+   "tree": "11112c1145debf0b8baf94759399091cdd45b7e7d786b090a46f3229cd8c22b5",
+   "engine.ts": "6e3d9be5d77e4902d05698ce1e71caccfcd358cd96aee1065ff2281aac1587e1"
+  }
+ },
+ "runs": {
+  "experiment": {
+   "builds": [
+    {
+     "label": "QX-41",
+     "from": "evidence",
+     "key": "QX-41"
+    },
+    {
+     "label": "QX-73",
+     "from": "evidence",
+     "key": "QX-73"
+    }
+   ],
+   "scripts": [
+    "shield-human",
+    "shield-ai",
+    "shove-chain-human",
+    "shove-chain-ai",
+    "walk-twice",
+    "freeze-human",
+    "freeze-ai",
+    "shove-human",
+    "shove-ai",
+    "adjacent-placement",
+    "teleport-human",
+    "send-home-human",
+    "send-home-ai",
+    "placement-human",
+    "placement-ai",
+    "multicell-human",
+    "multicell-ai",
+    "matrix-haste",
+    "matrix-freeze",
+    "matrix-home",
+    "matrix-shield"
+   ],
+   "matches": {
+    "seeds": [
+     98001,
+     98002,
+     98003,
+     98004,
+     98005,
+     98006
+    ],
+    "firstMovers": [
+     "human",
+     "ai"
+    ],
+    "policy": "softmax-v2"
+   },
+   "idSalt": "gw2-p5-experiment-1"
+  },
+  "validation": {
+   "builds": [
+    {
+     "label": "gt-clean",
+     "from": "groundTruth",
+     "key": "clean"
+    },
+    {
+     "label": "gt-B1",
+     "from": "groundTruth",
+     "key": "B1"
+    },
+    {
+     "label": "gt-B2",
+     "from": "groundTruth",
+     "key": "B2"
+    },
+    {
+     "label": "gt-B3",
+     "from": "groundTruth",
+     "key": "B3"
+    }
+   ],
+   "scripts": [
+    "shield-human",
+    "shield-ai",
+    "shove-chain-human",
+    "shove-chain-ai",
+    "walk-twice",
+    "freeze-human",
+    "freeze-ai",
+    "shove-human",
+    "shove-ai",
+    "adjacent-placement",
+    "teleport-human",
+    "send-home-human",
+    "send-home-ai",
+    "placement-human",
+    "placement-ai",
+    "multicell-human",
+    "multicell-ai",
+    "matrix-haste",
+    "matrix-freeze",
+    "matrix-home",
+    "matrix-shield"
+   ],
+   "matches": null,
+   "idSalt": "gw2-p5-validation-1"
+  }
+ },
+ "selection": [
+  "Every listed script is run once on every listed build of the run (scripts are deterministic: the build engine and referee decide every outcome).",
+  "Every seed x first mover x build of the run is played once with the listed policy in both seats.",
+  "All outputs are kept in the order defined by their anonymous ids; nothing is filtered, selected, re-run or regenerated. The run refuses an existing output directory.",
+  "No agent output, hypothesis or evaluation result is an input of generation or of the partition procedure."
+ ],
+ "notes": [
+  "Seeds 98001-98006 are disjoint from the GW1 seeds 97001-97008; the P5 script seed is 98100 (GW1 scripts keep their own seed 97100, so their cases on QX-41/QX-73 replay the GW1 cases under new ids).",
+  "Before freezing, the P5 scripts were dry-run once on the clean evidence build QX-41 only, to check that every step is executable as intended (placement refusals in placement-* are intended). The dry-run outputs were discarded; no script was run on QX-73 or on a ground-truth build before this freeze.",
+  "buildHashes: LF-normalised SHA-256 over every .ts file of the materialized build (gamewatch/builds.ts copy of server/v6 plus the listed mutations), computed by generate.ts build-hashes before freezing."
+ ]
+}
