@@ -71,9 +71,9 @@ export function leakCheck(expDir: string, root = ROOT) {
   const mutRuns = new Set(mutations.flatMap(m => Object.values(m).filter(v => typeof v === 'string' && (v as string).split(' ').length > 8).flatMap(v => runs(v as string, 8))));
   add('8-word runs from mutation descriptions', pages.flatMap(p => runs(p.vis, 8).filter(r => mutRuns.has(r)).map(r => `${p.name}: "${r}"`)));
   // other partitions and originals
-  const maps = ev.idMaps as Record<string, Record<string, Record<string, string>>>;
+  const maps = ev.idMaps as Record<string, Record<string, Record<string, string | number>>>; // matchSeeds (P7, D90) map to numbers
   const ownIds = new Set(Object.values(maps.discovery).flatMap(m => Object.keys(m)));
-  const foreign = [...Object.values(maps.heldout).flatMap(m => Object.keys(m)), ...Object.values(maps.discovery).flatMap(m => Object.values(m)), ...Object.values(maps.heldout).flatMap(m => Object.values(m)), ...bundle.cases.map((c: { caseId: string }) => c.caseId), ...bundle.matches.map((m: { matchId: string }) => m.matchId)].filter(x => !ownIds.has(x));
+  const foreign = [...Object.values(maps.heldout).flatMap(m => Object.keys(m)), ...Object.values(maps.discovery).flatMap(m => Object.values(m)), ...Object.values(maps.heldout).flatMap(m => Object.values(m)), ...bundle.cases.map((c: { caseId: string }) => c.caseId), ...bundle.matches.map((m: { matchId: string }) => m.matchId)].map(String).filter(x => !ownIds.has(x));
   scanTokens('ids of another partition or original ids', [...new Set(foreign)]);
   // metadata
   scanTokens('seeds', [...new Set([...proc.seeds, ...bundle.cases.map((c: { seed: number }) => c.seed), ...bundle.matches.map((m: { seed: number }) => m.seed)].map(String))]);
