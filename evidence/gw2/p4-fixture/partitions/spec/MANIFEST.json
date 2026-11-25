@@ -1,0 +1,17 @@
+{
+ "schema": "gamewatch/gw2-partition-manifest@1",
+ "partition": "spec",
+ "procedure": {
+  "id": "p3-partition-1",
+  "path": "evidence/gw2/procedures/partition-p3-1.json",
+  "sha256": "ee31e1e1dd525fd4a323840f92028474ac29cc49ee4bd2e524c3216d62390d5c"
+ },
+ "bundle": {
+  "path": "evidence/gamewatch/evidence.json",
+  "sha256": "3243b1fc58f4729957334a11cffb4fc53dcc3f4e25986f4e44760ad0018a56c0"
+ },
+ "fixture": "FIXTURE: a historical bundle used as a deterministic fixture. It was generated before this procedure was frozen, so this is NOT an experimental partition.",
+ "files": {
+  "spec.json": "8ed9391b315dca3b8b050c38a8c1d5b3aff888c47459cb23aa82ae498fb07ebc"
+ }
+}

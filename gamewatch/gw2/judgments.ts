@@ -19,7 +19,7 @@
  *    moved since the caller read it. This is a local advisory contract, not distributed locking: writers that bypass
  *    `append` are not stopped, only detected by `verify` if they break the chain;
  *  - every parent must already exist in the file (so a cycle cannot be built); ids are unique;
- *  - closed sets: node kinds, relations (supersedes, challenges, refines, alternative-to, evaluates), author kinds
+ *  - closed sets: node kinds, relations (supersedes, challenges, refines, alternative-to, evaluates, represents [P4]), author kinds
  *    (agent, verifier, operator, reviewer, test-double), origins (historical-import, live);
  *  - human authors (operator, reviewer) use role-based pseudonyms (operator-01, independent-reviewer-01); an operator
  *    node is an ordinary node with no authority to overwrite or settle anything;
@@ -49,8 +49,8 @@ import { dirname, isAbsolute, join } from 'node:path';
 import { ROOT, assertWritableOutput } from './paths.ts';
 
 export const JUDGMENT_SCHEMA = 'gamewatch/gw2-judgment@1';
-export const NODE_KINDS = ['finding', 'hypothesis', 'abstention', 'evaluation', 'label', 'challenge', 'correction'] as const;
-export const RELATIONS = ['supersedes', 'challenges', 'refines', 'alternative-to', 'evaluates'] as const;
+export const NODE_KINDS = ['finding', 'hypothesis', 'abstention', 'evaluation', 'label', 'challenge', 'correction', 'representation'] as const;
+export const RELATIONS = ['supersedes', 'challenges', 'refines', 'alternative-to', 'evaluates', 'represents'] as const;
 export const AUTHOR_KINDS = ['agent', 'verifier', 'operator', 'reviewer', 'test-double'] as const;
 export const ORIGINS = ['historical-import', 'live'] as const;
 
@@ -218,6 +218,13 @@ export function checkStructure(n: unknown, known: Map<string, Node>): string[] {
       const miss = [!isObj(a) || !str(a.id) ? 'evaluator id' : '', !isObj(a) || !str(a.version) ? 'evaluator version' : '', !Array.isArray(n.evidenceRefs) || !n.evidenceRefs.length ? 'evidence refs' : '', !str(n.criteria) ? 'criteria' : '', !str(n.reason) ? 'reason' : ''].filter(Boolean);
       if (miss.length) bad.push(`an evaluates node must record ${miss.join(', ')}`);
     } else if (n.parents.length && !str(n.reason)) bad.push('a node linked to an earlier judgment must state a reason');
+    // P4: a structured representation is a separate node that represents exactly one hypothesis; the hypothesis itself
+    // is never edited. Only representation nodes may use the represents relation.
+    const reps = n.parents.filter(p => isObj(p) && p.relation === 'represents');
+    if (n.kind === 'representation') {
+      if (reps.length !== 1) bad.push('a representation node must have exactly one parent with relation "represents"');
+      else if (known.get(String(reps[0].id))?.kind !== 'hypothesis') bad.push('a representation must represent a hypothesis node');
+    } else if (reps.length) bad.push('only a representation node may use the relation "represents"');
   }
   if (isObj(a) && claimsKane(a)) {
     if (a.kind !== 'agent') bad.push(`author "${a.id}" names Kane but has kind "${a.kind}": only an agent author can be Kane${a.kind === 'test-double' ? ' (a test double can never carry the Kane label)' : ''}`);

@@ -1,0 +1,19 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Submit a hypothesis</title><style>body{font:14px/1.45 system-ui,sans-serif;margin:24px auto;max-width:1180px;padding:0 16px;color:#1b1f24}
+h1{font-size:22px}h2{font-size:18px;margin-top:28px;border-bottom:1px solid #ddd;padding-bottom:4px}table{border-collapse:collapse;margin:8px 0;width:100%}
+th,td{border:1px solid #d6d9dd;padding:4px 6px;vertical-align:top;text-align:left}th{background:#f3f5f7}code,.mono{font-family:ui-monospace,monospace;font-size:12.5px}
+.refused{background:#fff4e5}.small{font-size:12.5px;color:#444}nav a{margin-right:14px}.ev{margin:0;padding-left:16px}</style></head><body><nav><a href="index.html">Observations</a><a href="hypothesis.html">Submit a hypothesis</a><a href="report.html">Submit a finding</a></nav><h1>Submit a hypothesis</h1>
+<p>A hypothesis is a rule you think the game follows, stated in your own words. One form per hypothesis. You do not have to give a hypothesis for every aspect of the game, and you may submit competing hypotheses for the same behaviour. If you cannot decide, abstain instead: abstaining is a valid answer. Everything you submit is stored exactly as written and is never overwritten; submit a new form to revise.</p>
+<form method="post" action="/hypothesis" id="hypothesis">
+<p><label>Hypothesis, in your own words<br><textarea name="statement" rows="4" cols="100"></textarea></label></p>
+<p class="small">Optional structure (leave empty if it does not fit):</p>
+<p><label>When (trigger)<br><input name="trigger" size="80"></label></p>
+<p><label>If (condition)<br><input name="condition" size="80"></label></p>
+<p><label>Then (observable effect)<br><input name="effect" size="80"></label></p>
+<p><label>Confidence<br><select name="confidence"><option>high</option><option>medium</option><option>low</option></select></label></p>
+<p><label>Competes with your earlier hypotheses (their H- numbers, e.g. H-1)<br><input name="competingWith" size="40"></label></p>
+<p><label>Evidence: case/match ids and step/turn numbers<br><textarea name="evidence" rows="3" cols="100"></textarea></label></p>
+<p><label><input type="checkbox" name="abstain" value="yes"> I abstain: I cannot decide</label></p>
+<p><label>If abstaining: what you cannot decide, and why<br><textarea name="abstainScope" rows="2" cols="100"></textarea></label></p>
+<input type="hidden" name="nonce" value="__NONCE__">
+<p><button type="submit">Submit</button></p>
+</form></body></html>

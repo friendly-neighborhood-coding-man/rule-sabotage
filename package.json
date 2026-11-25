@@ -83,6 +83,9 @@
     "gw2:leak-check": "node --experimental-strip-types --no-warnings=ExperimentalWarning gamewatch/gw2/leak-check.ts",
     "gw2:import-session": "node --experimental-strip-types --no-warnings=ExperimentalWarning gamewatch/gw2/import-session.ts",
     "gw2:freeze": "node --experimental-strip-types --no-warnings=ExperimentalWarning gamewatch/gw2/freeze.ts",
-    "gw2:p3-demo": "node --experimental-strip-types --no-warnings=ExperimentalWarning gamewatch/gw2/p3-demo.ts"
+    "gw2:p3-demo": "node --experimental-strip-types --no-warnings=ExperimentalWarning gamewatch/gw2/p3-demo.ts",
+    "gw2:session-close": "node --experimental-strip-types --no-warnings=ExperimentalWarning gamewatch/gw2/session-close.ts",
+    "gw2:three-way": "node --experimental-strip-types --no-warnings=ExperimentalWarning gamewatch/gw2/verify.ts",
+    "gw2:p4-demo": "node --experimental-strip-types --no-warnings=ExperimentalWarning gamewatch/gw2/p4-demo.ts"
   }
 }
