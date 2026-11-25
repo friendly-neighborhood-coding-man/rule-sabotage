@@ -1,0 +1,829 @@
+{
+ "schema": "gamewatch/gw2-coverage@1",
+ "mode": "gw2-session",
+ "exp": "p1-demo",
+ "session": "0356aaa881ecb27a",
+ "accessEvidence": {
+  "journal": "valid",
+  "reasons": [],
+  "attribution": "single-client",
+  "ordering": "server sequence numbers"
+ },
+ "reconstruction": "not supplied",
+ "uncountedFindings": [],
+ "columns": [
+  {
+   "label": "Finding 1",
+   "seq": 7,
+   "at": "2026-11-25T13:00:54.838Z",
+   "category": "confirmed observable anomaly",
+   "verbatim": "{\"at\":\"2026-11-25T13:00:54.838Z\",\"source\":\"test-double\",\"nonceValid\":true,\"session\":\"0356aaa881ecb27a\",\"category\":\"confirmed observable anomaly\",\"rules\":\"R8\",\"builds\":\"QX-73\",\"claim\":\"TEST DOUBLE finding (scripted, not a review): a +1 action cell reached by a shove fires again on re-entry.\",\"evidence\":\"C-757669 steps 6-9 (reference); C-9fc650 steps 6-9; compare M-0056c3\",\"reproduce\":\"scripted\",\"suggestion\":\"none\",\"confidence\":\"low\",\"nonce\":\"cb804de3832f7d0b\"}",
+   "items": [
+    {
+     "id": "C-0ad0c4",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "C-15090b",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "C-1b1498",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "C-26d930",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "C-27d15a",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "C-389f21",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "C-38fb95",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "C-464da7",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "C-5dde50",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "C-63ce45",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "C-757669",
+     "serverAccess": "recorded",
+     "reconstructedVisit": "not-available",
+     "cited": true,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "C-874a92",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "C-9fc650",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": true,
+     "citedWithoutAccess": true
+    },
+    {
+     "id": "C-a8b9dd",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "C-b2467d",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "C-b5f5b0",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "C-b805d8",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "C-ba3871",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "C-c34a99",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "C-cadb92",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "C-e1fe59",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "C-ff6106",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "M-0056c3",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": true,
+     "citedWithoutAccess": true
+    },
+    {
+     "id": "M-1478c7",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "M-1cf52d",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "M-1df35c",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "M-230587",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "M-26acb3",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "M-29d5ff",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "M-2ba24f",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "M-2e113e",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "M-3ddfba",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "M-5533cb",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "M-5681af",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "M-5910ca",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "M-5c1248",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "M-633133",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "M-65b66a",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "M-6e4401",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "M-7d1b47",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "M-936083",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "M-97d240",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "M-9887ff",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "M-9af1a9",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "M-9c9d56",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "M-9efd92",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "M-d04690",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "M-dcfb31",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "M-e96215",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "M-eb59cf",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "M-ec99b6",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "M-f0e680",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "M-f23f84",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "M-fad068",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    }
+   ],
+   "summary": {
+    "serverRecorded": {
+     "cases": 1,
+     "matches": 0
+    },
+    "reconstructedVisits": {
+     "cases": 0,
+     "matches": 0
+    },
+    "of": {
+     "cases": 22,
+     "matches": 32
+    },
+    "cited": [
+     "C-757669",
+     "C-9fc650",
+     "M-0056c3"
+    ],
+    "citedWithoutAccess": [
+     "C-9fc650",
+     "M-0056c3"
+    ]
+   }
+  },
+  {
+   "label": "Session end",
+   "seq": 10,
+   "at": null,
+   "category": null,
+   "verbatim": null,
+   "items": [
+    {
+     "id": "C-0ad0c4",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "C-15090b",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "C-1b1498",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "C-26d930",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "C-27d15a",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "C-389f21",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "C-38fb95",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "C-464da7",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "C-5dde50",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "C-63ce45",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "C-757669",
+     "serverAccess": "recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "C-874a92",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "C-9fc650",
+     "serverAccess": "recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "C-a8b9dd",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "C-b2467d",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "C-b5f5b0",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "C-b805d8",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "C-ba3871",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "C-c34a99",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "C-cadb92",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "C-e1fe59",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "C-ff6106",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "M-0056c3",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "M-1478c7",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "M-1cf52d",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "M-1df35c",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "M-230587",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "M-26acb3",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "M-29d5ff",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "M-2ba24f",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "M-2e113e",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "M-3ddfba",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "M-5533cb",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "M-5681af",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "M-5910ca",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "M-5c1248",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "M-633133",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "M-65b66a",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "M-6e4401",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "M-7d1b47",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "M-936083",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "M-97d240",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "M-9887ff",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "M-9af1a9",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "M-9c9d56",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "M-9efd92",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "M-d04690",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "M-dcfb31",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "M-e96215",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "M-eb59cf",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "M-ec99b6",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "M-f0e680",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "M-f23f84",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    },
+    {
+     "id": "M-fad068",
+     "serverAccess": "not-recorded",
+     "reconstructedVisit": "not-available",
+     "cited": false,
+     "citedWithoutAccess": false
+    }
+   ],
+   "summary": {
+    "serverRecorded": {
+     "cases": 2,
+     "matches": 0
+    },
+    "reconstructedVisits": {
+     "cases": 0,
+     "matches": 0
+    },
+    "of": {
+     "cases": 22,
+     "matches": 32
+    },
+    "cited": [],
+    "citedWithoutAccess": []
+   }
+  }
+ ]
+}

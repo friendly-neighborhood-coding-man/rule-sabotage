@@ -1,0 +1,31 @@
+{
+ "schema": "gamewatch/gw2-policy@1",
+ "id": "p1-demo",
+ "requirements": [
+  {
+   "id": "shove-chain-cases",
+   "kind": "must-access",
+   "targets": [
+    "C-757669",
+    "C-ba3871"
+   ],
+   "reason": "Developer requires the reviewer to open the shove-chain case on the reference build and the shield case."
+  },
+  {
+   "id": "cite-burn-rule",
+   "kind": "must-cite",
+   "targets": [
+    "R8"
+   ],
+   "reason": "Any review must say whether R8 (burn on entry) holds."
+  },
+  {
+   "id": "evaluate-burn-rule",
+   "kind": "must-evaluate",
+   "targets": [
+    "R8"
+   ],
+   "reason": "R8 must be checked by the deterministic verifier."
+  }
+ ]
+}
