@@ -1,0 +1,45 @@
+{
+ "schema": "gamewatch/gw2-freeze@1",
+ "exp": "evidence/gw2/p3-fixture",
+ "frozenAt": "2026-11-25T14:00:16.810Z",
+ "graph": {
+  "file": "judgments.ndjson",
+  "anchor": {
+   "count": 6,
+   "lastLineSha256": "16cc7031638763b4f62d1e657a3807f483a19a9c56c088c036b237930e64bbd2"
+  }
+ },
+ "hypotheses": [
+  {
+   "id": "0c649b53cbc8bf65a67a7f6ea9bfa98e8f30005fa30fdb505b5b50779c66456e",
+   "kind": "hypothesis",
+   "session": "35b91b1993e9d1a6",
+   "ref": "H-1"
+  },
+  {
+   "id": "a96cdc2821bb4bccb525b00207063e6b9e4b69d056a0820ec5e4a9675e1dab13",
+   "kind": "hypothesis",
+   "session": "35b91b1993e9d1a6",
+   "ref": "H-2"
+  },
+  {
+   "id": "0a1f9b99bda26ec34695bb2b2e57c237a443ce85016cc0920c7fcf776f5f3d24",
+   "kind": "abstention",
+   "session": "35b91b1993e9d1a6",
+   "ref": "H-3"
+  }
+ ],
+ "counts": {
+  "hypotheses": 2,
+  "abstentions": 1,
+  "nodes": 6
+ },
+ "sessions": [
+  "35b91b1993e9d1a6"
+ ],
+ "partition": {
+  "file": "partitions/PARTITION.json",
+  "sha256": "528a3f643199555a4f1d18255c846f02bf2f536b46a16fb98897aa2c11016fc2"
+ },
+ "statement": "Frozen before any held-out or evaluation file was read through freeze.ts. Nothing in P3 scores hypotheses. Record the anchor and this file's hash in the operator-controlled record outside the repository (Q14)."
+}

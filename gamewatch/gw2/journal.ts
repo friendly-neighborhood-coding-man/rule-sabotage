@@ -21,9 +21,11 @@ import { appendFileSync, readFileSync, existsSync } from 'node:fs';
 
 export const ACCESS_SCHEMA = 'gamewatch/gw2-access@1';
 export const SERVER_ID = { name: 'gamewatch/gw2/serve.ts', version: '1' };
-export type Kind = 'index' | 'report-form' | 'evidence' | 'other' | 'rejected' | 'post';
+export type Kind = 'index' | 'report-form' | 'hypothesis-form' | 'evidence' | 'other' | 'rejected' | 'post';
 export type RequestEvent = { type: 'request'; method: string; path: string | null; kind: Kind; evidenceId: string | null; status: number; outcome: 'completed' | 'aborted'; bytes: number | null; sha256: string | null; client: string };
 export type FindingEvent = { type: 'finding'; noteIndex: number; noteSha256: string; nonceValid: boolean };
+/** P3: a submitted hypothesis or abstention, joined to hypotheses.ndjson line hypIndex by its hash. */
+export type HypothesisEvent = { type: 'hypothesis'; hypIndex: number; lineSha256: string; nonceValid: boolean };
 export type Line = { schema: string; exp: string; session: string; seq: number; at: string; prev: string | null; type: string; [k: string]: unknown };
 
 export const sha256 = (b: string | Buffer) => createHash('sha256').update(b).digest('hex');
@@ -81,7 +83,7 @@ export function readJournal(file: string, o: { logging?: 'on' | 'off'; session?:
   const texts = raw.split('\n');
   if (texts[texts.length - 1] !== '') reasons.push('last line is not terminated (partial write)');
   let prev: string | null = null, session: string | null = null, exp: string | null = null, gaps = 0, ended = false;
-  const types = new Set(['session-start', 'request', 'finding', 'journal-gap', 'session-end']);
+  const types = new Set(['session-start', 'request', 'finding', 'hypothesis', 'journal-gap', 'session-end']);
   for (const [i, t] of texts.filter((x, i) => !(x === '' && i === texts.length - 1)).entries()) {
     let l: Line;
     try { l = JSON.parse(t); } catch { reasons.push(`line ${i}: not JSON`); break; }

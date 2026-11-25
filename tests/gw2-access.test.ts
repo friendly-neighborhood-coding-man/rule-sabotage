@@ -134,7 +134,7 @@ test('explicit disablement: no journal file, session.json says off, the journal 
   const s = await startGw2Server({ exp: 'off', out: f.out, site: f.site, accessLog: false, loggingDisabledReason: 'test: authorized logging-off condition' });
   try { await req(s.port, '/case-C-aaaaaa.html'); await submit(s.port, { category: 'x', claim: 'y', evidence: 'C-aaaaaa', nonce: s.nonce }); } finally { await s.close(); }
   assert.equal(s.journal, null);
-  assert.deepEqual(readdirSync(s.dir).sort(), ['notes.ndjson', 'session.json']);
+  assert.deepEqual(readdirSync(s.dir).sort(), ['CLOSED.json', 'notes.ndjson', 'session.json'], 'no journal file; the session is closed explicitly (P3 correction D54)');
   const ss = loadSession(s.dir);
   assert.equal(ss.journal.status, 'unavailable'); assert.match(ss.journal.reasons[0], /disabled/);
   assert.equal(ss.findings[0].join, 'journal-unavailable'); assert.equal(ss.findings[0].counts, true, 'the finding itself still counts');

@@ -49,7 +49,7 @@ import { dirname, isAbsolute, join } from 'node:path';
 import { ROOT, assertWritableOutput } from './paths.ts';
 
 export const JUDGMENT_SCHEMA = 'gamewatch/gw2-judgment@1';
-export const NODE_KINDS = ['finding', 'hypothesis', 'evaluation', 'label', 'challenge', 'correction'] as const;
+export const NODE_KINDS = ['finding', 'hypothesis', 'abstention', 'evaluation', 'label', 'challenge', 'correction'] as const;
 export const RELATIONS = ['supersedes', 'challenges', 'refines', 'alternative-to', 'evaluates'] as const;
 export const AUTHOR_KINDS = ['agent', 'verifier', 'operator', 'reviewer', 'test-double'] as const;
 export const ORIGINS = ['historical-import', 'live'] as const;
