@@ -1,6 +1,8 @@
 # GW2 Phase 4 report: deterministic TypeScript verification and three-way comparison
 
-**Status: `PHASE_4_READY_FOR_REVIEW`.** P5 has not been started.
+**Status: `PHASE_4_CONDITIONALLY_APPROVED` (operator review 2026-11-25 15:10 UTC); P4 corrections applied in a separate
+commit (§12).** AC-P4.6: `MET_WITH_SYNTHETIC_FIXTURES — ENGINE_VALIDATION_DEFERRED` (D69). Sections 1–11 describe the
+original P4 commit `918dbf9` (verifier v1) and are kept as written, except where §12 says a value changed.
 
 Branch `claude/gw2-p4`, stacked on `claude/gw2-p3` (PR #25) → `claude/gw2-p2` (#24) → `claude/gw2-p1` (#23) →
 `claude/gw2-phase-0` (#22). Nothing was merged, deployed or force-pushed. Zero Kane calls, zero runtime model inference
@@ -135,7 +137,7 @@ scripts were split by side between partitions). Partition scoping changes what c
 | AC-P4.3 known answers | met | GW1 bundle: R3 conforms on QX-41 and deviates on QX-73 with turn rows (cases and matches) as witnesses, all on first-mover turns; first-mover +1 fits QX-73, disagrees with R3, reading accurate description of a defect, summary not "unsupported" |
 | AC-P4.4 | met | unsupported operator → not-representable; fields never recorded (cellUsedUp in matches) and zero applicable situations → insufficient-evidence; none reported as contradicted |
 | AC-P4.5 | met | every verdict carries partition, build and N; "equivalent", "proved", "always" absent from verifier output and verifier nodes |
-| AC-P4.6 | met, adapted (D67) | synthetic single-defect probe fixtures: B1 → R7, R14 only; B2 → R8 only; B3 → R3 only; clean conforms to all four. Recorded QX-73: each deviation's witnesses are the corresponding situations |
+| AC-P4.6 | **MET_WITH_SYNTHETIC_FIXTURES — ENGINE_VALIDATION_DEFERRED** (D67, D69; real-engine validation in P5) | synthetic single-defect probe fixtures: B1 → R7, R14 only; B2 → R8 only; B3 → R3 only; clean conforms to all four. Recorded QX-73: each deviation's witnesses are the corresponding situations |
 
 Also tested: contradictory and self-contradictory hypotheses; partially representable; free-text vs structured fidelity;
 non-identifiability ("3 actions" and R3 both fit and are not told apart); freeze and manifest violations refuse
@@ -179,6 +181,37 @@ logging-off directory listing now includes `CLOSED.json`).
 Q20 (who translates free text into gw2-hypothesis@1), Q21 (a multi-cell scripted case for R8), Q22 (situation kinds for
 the unencoded rules), and the earlier open Q6–Q9, Q11 in `DECISIONS.md`. Q3 and Q4 are resolved (D59, D60). Q17's
 R5/R12 variants and new observation generation are P5 work and were not started.
+
+## 12. P4 corrections after review (verifier v2, separate commit)
+
+The review found four defects in verifier v1. Each is corrected in `gamewatch/gw2/verify.ts` (version 2, report schema
+`gamewatch/gw2-three-way@2`) and has a regression test in `tests/gw2-verify-corrections.test.ts`.
+
+| # | v1 defect | v2 behaviour | Decision | Regression test |
+|---|---|---|---|---|
+| 1 | A law with several expected outcomes counted a situation as fitting when one outcome matched and the others were missing | outcome-level checks (`matching`, `contradicting`, `unknown`, `unpredicted`); full vs partial support per situation; new values `fits-partially` / `conforms-partially` and summary `partially-supported-on-evaluated-situations`; a contradicting outcome stays a counter-example | D74 | correction 1 |
+| 2 | Invariance flagged any difference within a group, including within one variant, and counted situations without outcomes as evaluated | comparisons only between different variants, on recorded values; violation only for disjoint value sets; overlap is `inconclusive`; comparison partners and outcome-specific witnesses recorded; missing outcomes excluded | D75 | correction 2 |
+| 3 | The combined reading matched H↔S disagreements to O↔S deviations at situation level | (situation, outcome field) triples with hypothesis prediction, spec prediction and recorded outcome; corresponding / non-corresponding / without recorded outcome; deviations on other fields counted, not used | D76 | correction 3 |
+| 4 | Multi-clause and multi-kind scopes took the maximum over clauses | unique situations, unique applicable / evaluated, support classes, clause checks, outcome checks, comparisons, case / match units; exclusions per clause | D77 | correction 4 |
+
+**Committed fixture.** `evidence/gw2/p4-fixture/` keeps its v1 report (`evaluations/three-way-1.json`) and v1 evaluation
+nodes unchanged. The v2 evaluation was **appended** (second ledger opening; 24 new evaluation nodes;
+`evaluations/three-way-2.json`), not regenerated. Representations are still the ones appended before the first opening.
+The fixture test recomputes the v2 report through the gate and checks the v1 report is still present.
+
+**What changed in the fixture's verdicts (v1 → v2).** All hypothesis readings keep their v1 values; the defect readings
+now state their field-level correspondence: H-1 QX-73 168 (discovery) and 58 (held-out) corresponding `actionsGranted`
+pairs, 0 non-corresponding; H-4 QX-73 1 corresponding `cellUsedUp` pair in each partition, with 80 and 32 pairs without a
+recorded outcome. **O↔S R7 changes from `conforms` to `conforms-partially`** on discovery QX-41, held-out QX-41 and
+held-out QX-73: in those partitions the cross-side comparisons cover only some of R7's four outcome fields, so no
+situation has full support. R7 stays `conforms` on discovery QX-73 (2 fully, 2 partially supported situations). O↔S R3
+on QX-73 now separates 155 (discovery) and 56 (held-out) fully supported turn starts from the counter-examples.
+
+**Tests after the corrections.** `npm run test:gw2`: 82/82 (78 + 4 correction tests). Two existing assertions in
+`tests/gw2-verify.test.ts` were updated, not weakened: the AC-P4.5 wording scan now reads `gw2-three-way@2` nodes, and
+the fixture test selects the latest report and additionally asserts the v1 report is kept. `npm test`: 312: 306 pass, 0 fail, 5 cancelled (the
+baseline `tests/playtest-referee.test.ts` cancellations, not counted as passes), 1 skipped (Windows `.cmd` shim); exit 1
+as at baseline. `npm run gw2:verify` OK.
 
 ## Reproduce (no Kane, no model provider)
 

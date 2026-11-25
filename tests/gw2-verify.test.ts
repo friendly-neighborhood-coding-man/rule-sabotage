@@ -11,7 +11,7 @@ import { join } from 'node:path';
 import { ROOT } from '../gamewatch/gw2/paths.ts';
 import { checkRepresentation, evalExpr, HYPOTHESIS_SCHEMA } from '../gamewatch/gw2/hypothesis.ts';
 import { extractSituations, type Situation } from '../gamewatch/gw2/situations.ts';
-import { threeWay, loadEncoding, evaluateExperiment, DEFAULT_ENCODING, specAgreement, observational, type HypInput } from '../gamewatch/gw2/verify.ts';
+import { threeWay, loadEncoding, evaluateExperiment, DEFAULT_ENCODING, specAgreement, observational, evalLaw, evalInvariance, type HypInput } from '../gamewatch/gw2/verify.ts';
 import { verify, append, nodeId, canonical, type NodeInput } from '../gamewatch/gw2/judgments.ts';
 import { verifyFreeze, openEvaluation, FreezeError } from '../gamewatch/gw2/freeze.ts';
 import { runP4Demo, P4_SCRIPT } from '../gamewatch/gw2/p4-demo.ts';
@@ -148,7 +148,7 @@ test('AC-P4.5 every verdict is scoped (N evaluated situations from partition P, 
     assert.ok(s.scope.partition && s.scope.build && Number.isInteger(s.scope.evaluated), s.statement);
     assert.match(s.statement, new RegExp(`partition ${s.scope.partition}, build ${s.scope.build}`), s.statement);
   }
-  const text = JSON.stringify(report) + readFileSync(join(demo!.exp, 'judgments.ndjson'), 'utf8').split('\n').filter(l => l && JSON.parse(l).node.author.kind === 'verifier' && JSON.parse(l).node.body.schema === 'gamewatch/gw2-three-way@1').join('\n');
+  const text = JSON.stringify(report) + readFileSync(join(demo!.exp, 'judgments.ndjson'), 'utf8').split('\n').filter(l => l && JSON.parse(l).node.author.kind === 'verifier' && JSON.parse(l).node.body.schema === 'gamewatch/gw2-three-way@2').join('\n');
   assert.doesNotMatch(text, /equivalent|proved|always/i);
   assert.match(report.caveat, /does not identify a unique rule/);
 });
@@ -263,8 +263,11 @@ test('committed P4 fixture: graph, freeze and three-way report verify and match 
   const FIX = join(ROOT, 'evidence/gw2/p4-fixture');
   assert.equal(verifyFreeze(FIX).ok, true, verifyFreeze(FIX).problems.join('\n'));
   assert.equal(verify(join(FIX, 'judgments.ndjson'), { checkRefs: true }).ok, true);
-  const report = JSON.parse(readFileSync(join(FIX, 'evaluations', readdirSync(join(FIX, 'evaluations'))[0]), 'utf8'));
-  assert.equal(report.schema, 'gamewatch/gw2-three-way@1');
+  // three-way-1.json is the original v1 (pre-correction) report, kept unchanged; the latest is the corrected v2 re-evaluation
+  const files = readdirSync(join(FIX, 'evaluations')).sort((a, b) => Number(a.match(/\d+/)![0]) - Number(b.match(/\d+/)![0]));
+  assert.equal(JSON.parse(readFileSync(join(FIX, 'evaluations', files[0]), 'utf8')).schema, 'gamewatch/gw2-three-way@1');
+  const report = JSON.parse(readFileSync(join(FIX, 'evaluations', files.at(-1)!), 'utf8'));
+  assert.equal(report.schema, 'gamewatch/gw2-three-way@2');
   // recompute the pure core from a copy of the committed fixture, reading the partitions through the gate
   const d = mkdtempSync(join(tmpdir(), 'gw2-p4-')), x = join(d, 'fix');
   cpSync(FIX, x, { recursive: true });
