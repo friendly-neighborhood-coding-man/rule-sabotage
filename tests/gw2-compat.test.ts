@@ -24,7 +24,7 @@ test('AC-P1.2: all 56 GW1 pages are byte-identical from the GW1 server, the GW2 
   const pages = readdirSync(site).filter(f => f.endsWith('.html')).sort();
   assert.equal(pages.length, 56);
   const legacy = await startServer({ port: 0, site, notes: join(tmp, 'legacy-notes.ndjson'), label: 'test-double' });
-  const on = await startGw2Server({ exp: 'compat-on', out: join(tmp, 'on'), site }), off = await startGw2Server({ exp: 'compat-off', out: join(tmp, 'off'), site, accessLog: false });
+  const on = await startGw2Server({ exp: 'compat-on', out: join(tmp, 'on'), site }), off = await startGw2Server({ exp: 'compat-off', out: join(tmp, 'off'), site, accessLog: false, loggingDisabledReason: 'test: authorized logging-off condition' });
   try {
     for (const p of pages) {
       const [a, b, c] = await Promise.all([legacy.port, on.port, off.port].map(port => req(port, '/' + p)));

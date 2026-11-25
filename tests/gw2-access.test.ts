@@ -131,7 +131,7 @@ test('the form cannot write the journal: extra form fields are dropped, and no f
 
 test('explicit disablement: no journal file, session.json says off, the journal reads as unavailable (not "no access")', async () => {
   const f = fixture();
-  const s = await startGw2Server({ exp: 'off', out: f.out, site: f.site, accessLog: false });
+  const s = await startGw2Server({ exp: 'off', out: f.out, site: f.site, accessLog: false, loggingDisabledReason: 'test: authorized logging-off condition' });
   try { await req(s.port, '/case-C-aaaaaa.html'); await submit(s.port, { category: 'x', claim: 'y', evidence: 'C-aaaaaa', nonce: s.nonce }); } finally { await s.close(); }
   assert.equal(s.journal, null);
   assert.deepEqual(readdirSync(s.dir).sort(), ['notes.ndjson', 'session.json']);

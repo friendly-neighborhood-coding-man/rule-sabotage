@@ -13,11 +13,15 @@
  *                  NOT an evaluation.
  * Agent-written summaries (Kane's run_end summary, a clean report's claim) are never read as evidence of anything here.
  * Findings are reported verbatim and separately; an unsatisfied requirement never hides or changes a finding.
+ * Observations stay usable on their own (an intact served record still satisfies must-access in an incomplete journal;
+ * notes still satisfy must-cite without a journal), but each result states its basis, each finding is labelled
+ * journal-verified or unverified-session-note, and a separate experimentalValidity status decides whether the session
+ * may enter the primary verified analysis. "complete" is "verifiedComplete" only when validity is "verified".
  */
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { dirname } from 'node:path';
 import { loadInventory, citations, type Inventory } from './inventory.ts';
-import { loadSession, servedIndex, type Session } from './session.ts';
+import { loadSession, servedIndex, experimentalValidity, type Session } from './session.ts';
 import { assertWritableOutput } from './paths.ts';
 
 export const POLICY_SCHEMA = 'gamewatch/gw2-policy@1';
@@ -69,6 +73,9 @@ export function evaluate(policy: Policy, inv: Inventory, s: Session) {
   const j = s.journal, { served, mismatched } = servedIndex(j);
   const counted = s.findings.filter(f => f.counts);
   const cites = counted.map(f => citations(f.note, inv));
+  const validity = experimentalValidity(s);
+  const citeBasis = (t: string[]) => counted.filter((f, k) => t.some(x => cites[k].evidence.includes(x) || cites[k].rules.includes(x))).every(f => f.verification === 'journal-verified') ? 'journal-verified findings' : 'includes unverified session-note findings';
+  const accessBasis = j.status === 'valid' ? 'server journal (valid)' : j.status === 'incomplete' ? 'server journal (incomplete: intact positive records only)' : `server journal ${j.status}`;
   const cited = new Set(cites.flatMap(c => [...c.evidence, ...c.rules]));
   const accessUsable = (j.status === 'valid' || j.status === 'incomplete') && j.attribution !== 'uncertain';
   const requirements = policy.requirements.map(r => {
@@ -76,24 +83,25 @@ export function evaluate(policy: Policy, inv: Inventory, s: Session) {
     if (r.kind === 'must-cite') {
       const missing = r.targets.filter(t => !cited.has(t));
       if (!s.findings.length && !counted.length) return { ...r, result: 'unsatisfied' as Result, missing, why: 'no findings were submitted in this session' };
-      return { ...r, result: (missing.length ? 'unsatisfied' : 'satisfied') as Result, missing, why: missing.length ? `not cited by any counted finding: ${missing.join(', ')}` : 'every target cited by at least one counted finding (exact identifier match)' };
+      return { ...r, result: (missing.length ? 'unsatisfied' : 'satisfied') as Result, missing, basis: citeBasis(r.targets), why: missing.length ? `not cited by any counted finding: ${missing.join(', ')}` : 'every target cited by at least one counted finding (exact identifier match)' };
     }
     // must-access
     const have = r.targets.filter(t => served.has(t)), missing = r.targets.filter(t => !served.has(t));
-    const firstServedSeq = Object.fromEntries(have.map(t => [t, served.get(t)!.firstSeq]));
-    if (j.status === 'unavailable' || j.status === 'invalid') return { ...r, result: 'not-evaluable' as Result, missing, why: `access journal ${j.status}: ${j.reasons.join('; ')}. Missing instrumentation is not evidence that a page was not accessed.` };
-    if (j.attribution === 'uncertain') return { ...r, result: 'not-evaluable' as Result, missing, firstServedSeq, why: `access attribution uncertain: ${j.clients.length} different clients made requests in this session` };
-    if (!missing.length) return { ...r, result: 'satisfied' as Result, missing, firstServedSeq, why: `every target served to this session${j.status === 'incomplete' ? ' (journal incomplete, but each served record is intact)' : ''}` };
-    if (j.status === 'incomplete') return { ...r, result: 'not-evaluable' as Result, missing, firstServedSeq, why: `journal incomplete (${j.reasons.join('; ')}): ${missing.join(', ')} not recorded, which does not prove they were not served` };
-    return { ...r, result: 'unsatisfied' as Result, missing, firstServedSeq, why: `not served to this session: ${missing.join(', ')}` };
+    const firstServedSeq = Object.fromEntries(have.map(t => [t, served.get(t)!.firstSeq])), basis = accessBasis;
+    if (j.status === 'unavailable' || j.status === 'invalid') return { ...r, result: 'not-evaluable' as Result, missing, basis, why: `access journal ${j.status}: ${j.reasons.join('; ')}. Missing instrumentation is not evidence that a page was not accessed.` };
+    if (j.attribution === 'uncertain') return { ...r, result: 'not-evaluable' as Result, missing, firstServedSeq, basis, why: `access attribution uncertain: ${j.clients.length} different clients made requests in this session` };
+    if (!missing.length) return { ...r, result: 'satisfied' as Result, missing, firstServedSeq, basis, why: `every target served to this session${j.status === 'incomplete' ? ' (journal incomplete, but each served record is intact)' : ''}` };
+    if (j.status === 'incomplete') return { ...r, result: 'not-evaluable' as Result, missing, firstServedSeq, basis, why: `journal incomplete (${j.reasons.join('; ')}): ${missing.join(', ')} not recorded, which does not prove they were not served` };
+    return { ...r, result: 'unsatisfied' as Result, missing, firstServedSeq, basis, why: `not served to this session: ${missing.join(', ')}` };
   });
   const res = requirements.map(r => r.result);
   const completeness = !policy.requirements.length ? 'not-declared' : res.includes('unsatisfied') ? 'incomplete' : res.includes('not-evaluable') ? 'undetermined' : 'complete';
   return {
     schema: 'gamewatch/gw2-completeness@1', policy: policy.id, exp: s.meta.exp, session: s.meta.session,
-    note: 'Five separate dimensions. Completeness concerns only the declared requirements; it says nothing about whether the findings are right, and findings are never changed by it.',
-    findings: s.findings.map(f => ({ noteIndex: f.noteIndex, seq: f.seq, counted: f.counts, join: f.join, verbatim: f.line })),
-    investigationCompleteness: { completeness, requirements },
+    note: 'Separate dimensions. Completeness concerns only the declared requirements; experimental validity says whether this session may enter the primary verified analysis. Neither says whether the findings are right, and findings are never changed, dropped or rewritten by either.',
+    findings: s.findings.map(f => ({ noteIndex: f.noteIndex, seq: f.seq, counted: f.counts, verification: f.verification, join: f.join, verbatim: f.line })),
+    investigationCompleteness: { completeness, verifiedComplete: completeness === 'complete' && validity.status === 'verified', requirements },
+    experimentalValidity: validity,
     accessCoverage: {
       journal: { status: j.status, reasons: j.reasons, attribution: j.attribution, clients: j.clients.length },
       usable: accessUsable, servedEvidence: [...served.keys()].sort(), servedCount: served.size, evidenceInInventory: inv.evidence.size,
@@ -114,5 +122,5 @@ if (process.argv[1]?.endsWith('gw2/policy.ts')) {
   const r = evaluate(policy, inv, loadSession(sd));
   mkdirSync(dirname(out), { recursive: true });
   writeFileSync(out, JSON.stringify(r, null, 1) + '\n');
-  console.log(`completeness: ${r.investigationCompleteness.completeness} (${r.investigationCompleteness.requirements.map(x => `${x.id}=${x.result}`).join(', ') || 'no requirements'}); journal ${r.accessCoverage.journal.status}; findings ${r.findings.length}`);
+  console.log(`validity: ${r.experimentalValidity.status}; completeness: ${r.investigationCompleteness.completeness}${r.investigationCompleteness.verifiedComplete ? ' (verified)' : ''} (${r.investigationCompleteness.requirements.map(x => `${x.id}=${x.result}`).join(', ') || 'no requirements'}); journal ${r.accessCoverage.journal.status}; findings ${r.findings.length}`);
 }

@@ -4,7 +4,12 @@
  * ON by default (gamewatch/gw2/journal.ts).
  *
  *   node --experimental-strip-types --no-warnings gamewatch/gw2/serve.ts --exp <id> [--out evidence/gw2/<id>]
- *        [--site dir] [--port 3210] [--label test-double|kane|human] [--no-access-log]
+ *        [--site dir] [--port 3210] [--label test-double|kane|human] [--no-access-log --reason <why>]
+ *
+ * Q13 (operator, 2026-11-25): if required logging cannot be initialized the session does not start (JournalInitError);
+ * if logging fails during the session, the server keeps serving, every observation and finding is kept, and the run is
+ * marked unsuitable for the primary verified analysis (journal-gap / missing session-end → policy.ts experimentalValidity).
+ * Logging can be disabled only as an explicitly stated condition (loggingDisabledReason).
  *
  * One server process = one review session. Output goes to <out>/sessions/<session>/: session.json (logging on/off,
  * nonce hash, paths), notes.ndjson (findings, same format as GW1 plus the session id), access.ndjson (the journal).
@@ -28,11 +33,15 @@ export const FIELDS = ['category', 'rules', 'builds', 'claim', 'evidence', 'repr
 const EVIDENCE_PAGE = /^(?:case|match)-([CM]-[0-9a-f]{6})\.html$/;
 
 export type Gw2ServerOptions = {
-  exp: string; out: string; site: string; port?: number; label?: string; accessLog?: boolean;
+  exp: string; out: string; site: string; port?: number; label?: string;
+  /** Access logging is required unless explicitly disabled; disabling needs a stated reason (an authorized condition). */
+  accessLog?: boolean; loggingDisabledReason?: string;
   /** test seams: replace the journal's append (to simulate write failures) and pause before a response is written */
   journalAppend?: (file: string, data: string) => void; beforeRespond?: (path: string, req: IncomingMessage) => Promise<void>;
 };
 export type Gw2Server = { port: number; nonce: string; session: string; dir: string; journal: string | null; notes: string; failures: () => number; close: () => Promise<void> };
+
+export class JournalInitError extends Error {}
 
 export function classify(page: string | null): { kind: Kind; evidenceId: string | null } {
   if (page === null) return { kind: 'rejected', evidenceId: null };
@@ -50,11 +59,14 @@ export async function startGw2Server(o: Gw2ServerOptions): Promise<Gw2Server> {
   const dir = assertWritableOutput(join(out, 'sessions', SESSION));
   mkdirSync(dir, { recursive: true });
   const notes = join(dir, 'notes.ndjson'), journalFile = join(dir, 'access.ndjson'), logging = o.accessLog !== false, label = o.label ?? 'test-double';
-  writeFileSync(join(dir, 'session.json'), JSON.stringify({ schema: 'gamewatch/gw2-session@1', exp: o.exp, session: SESSION, logging: logging ? 'on' : 'off', accessSchema: ACCESS_SCHEMA, journal: logging ? 'access.ndjson' : null, notes: 'notes.ndjson', label, nonceSha256: sha256(NONCE), server: SERVER_ID, startedAt: new Date().toISOString() }, null, 1) + '\n');
+  if (!logging && !o.loggingDisabledReason?.trim()) throw new Error('access logging can only be disabled as an explicitly authorized condition: give loggingDisabledReason (CLI: --no-access-log --reason "...")');
   const files: Record<string, string> = {};
   for (const f of readdirSync(o.site).filter(f => f.endsWith('.html')).sort()) files[f] = sha256(readFileSync(join(o.site, f)));
   const j = logging ? new JournalWriter({ file: journalFile, exp: o.exp, session: SESSION, append: o.journalAppend }) : null;
-  j?.event({ type: 'session-start', site: { files }, notes: 'notes.ndjson', server: SERVER_ID });
+  // Q13 (conditional fail-closed): if required logging cannot be initialized, the session does not start.
+  if (j && j.event({ type: 'session-start', site: { files }, notes: 'notes.ndjson', server: SERVER_ID }) === null)
+    throw new JournalInitError(`access journal could not be initialized (${j.lastError}); the review session was not started`);
+  writeFileSync(join(dir, 'session.json'), JSON.stringify({ schema: 'gamewatch/gw2-session@1', exp: o.exp, session: SESSION, logging: logging ? 'on' : 'off', ...(logging ? {} : { loggingDisabledReason: o.loggingDisabledReason }), accessSchema: ACCESS_SCHEMA, journal: logging ? 'access.ndjson' : null, notes: 'notes.ndjson', label, nonceSha256: sha256(NONCE), server: SERVER_ID, startedAt: new Date().toISOString() }, null, 1) + '\n');
   let noteCount = 0;
   const failed = () => { if (j && j.failures) process.stderr.write(`GW2 ACCESS JOURNAL: ${j.failures} write failure(s) (${j.lastError}); coverage for this session is incomplete\n`); };
 
@@ -120,7 +132,7 @@ if (process.argv[1]?.endsWith('gw2/serve.ts')) {
   const arg = (k: string, d?: string) => { const i = process.argv.indexOf(k); return i > 0 ? process.argv[i + 1] : d; };
   const exp = arg('--exp');
   if (!exp) { console.error('usage: serve.ts --exp <id> [--out dir] [--site dir] [--port n] [--label l] [--no-access-log]'); process.exit(2); }
-  const s = await startGw2Server({ exp, out: arg('--out', join(ROOT, 'evidence/gw2', exp))!, site: arg('--site', join(ROOT, 'evidence/gamewatch/site'))!, port: Number(arg('--port', '3210')), label: arg('--label', 'test-double'), accessLog: !process.argv.includes('--no-access-log') });
+  const s = await startGw2Server({ exp, out: arg('--out', join(ROOT, 'evidence/gw2', exp))!, site: arg('--site', join(ROOT, 'evidence/gamewatch/site'))!, port: Number(arg('--port', '3210')), label: arg('--label', 'test-double'), accessLog: !process.argv.includes('--no-access-log'), loggingDisabledReason: arg('--reason') });
   console.log(`GW2 review server on http://127.0.0.1:${s.port}/ session ${s.session} -> ${s.dir} (access log ${s.journal ? 'ON' : 'OFF'})`);
   const stop = async () => { await s.close(); process.exit(0); };
   process.on('SIGINT', stop); process.on('SIGTERM', stop);

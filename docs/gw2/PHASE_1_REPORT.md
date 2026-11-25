@@ -206,3 +206,41 @@ node --experimental-strip-types --no-warnings gamewatch/gw2/coverage.ts gw1 evid
   evidence/gamewatch/review/notes.ndjson /tmp/gw1-replay
 npm test                             # full suite (see §7 for the expected baseline cancellations)
 ```
+
+## 13. P1 corrections after review (appended 2026-11-25; sections 1–12 are kept as originally submitted)
+
+Operator review, 2026-11-25 13:13 UTC: **PHASE_1_CONDITIONALLY_APPROVED**, with a semantic clarification and decisions
+on Q12 and Q13. The corrections are a separate commit on `claude/gw2-p1`, before any Phase 2 work. Decisions D25–D27
+in `DECISIONS.md`.
+
+**What changed.**
+
+* **Verification labels (D27).** Every finding now carries `verification`: `journal-verified`,
+  `unverified-session-note` (no usable journal; the note is kept and still usable, e.g. for must-cite) or
+  `journal-mismatch` (a usable journal disagrees; reported verbatim, not counted). Each requirement result now states
+  its `basis`.
+* **Experimental validity (D27, D26).** `experimentalValidity` in `gamewatch/gw2/session.ts` is a separate status:
+  `verified` (logging on, journal valid, one client, every served page matches its session-start hash, every own
+  finding journal-verified), `unsuitable-for-primary-analysis` (anything else, with reasons) or
+  `logging-disabled-condition` (an explicitly authorized logging-off session). Only `verified` sets
+  `primaryAnalysis: true`. `investigationCompleteness.verifiedComplete` is true only for `complete` + `verified`; an
+  incomplete or invalid journal can never produce a verified complete investigation. The P1 observation rules of §5
+  are unchanged: they are now labelled instead of silently treated as verified.
+* **Q13 conditional fail-closed (D26).** `startGw2Server` writes `session-start` first and throws `JournalInitError` if
+  it cannot: no `session.json`, no port, no session. Failures during the run keep the server and all observations and
+  findings, and make the session `unsuitable-for-primary-analysis` (retained and reported, never deleted).
+  Logging off now requires a stated reason (`--no-access-log --reason <why>`, `loggingDisabledReason`), written to
+  `session.json`.
+* **Q12 deferred (D25).** No code change: the served-evidence definition (D21) and attribution rule (D20) stay for
+  P1–P6; criteria are frozen after a separately authorized P7 pilot, before confirmatory experiments.
+
+**Evidence.** The committed demo output `evidence/gw2/p1-demo/completeness.json` is left as originally produced. The
+same committed session re-evaluated with the corrected code is `evidence/gw2/p1-demo/completeness-p1-corrected.json`
+(`validity: verified; completeness: incomplete`, so `verifiedComplete: false`; the finding is unchanged).
+
+**Tests.** Five tests added to `tests/gw2-policy.test.ts`: a fully verified session; a mid-session write failure
+(must-access still satisfied from intact records, validity `unsuitable-for-primary-analysis`, `verifiedComplete`
+false, finding verbatim); an authorized logging-off condition and refusal to disable logging without a reason;
+`JournalInitError` on an unwritable journal with no session created; an edited note and a second client making the
+session unsuitable. Existing logging-off tests now pass a reason. New GW2 test count: 30 (access 9, policy 16,
+compat 5). Full-suite numbers for the corrected head are in `PHASE_2_REPORT.md`.

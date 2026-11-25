@@ -20,7 +20,7 @@ const ANOMALY = { category: 'confirmed observable anomaly', rules: 'R8', claim: 
 
 /** A session in which the double opens C-aaaaaa, submits ANOMALY, then opens C-bbbbbb. */
 async function session(f: ReturnType<typeof fixture>, o: { accessLog?: boolean; ua2?: string } = {}) {
-  const s = await startGw2Server({ exp: 'pol', out: f.out, site: f.site, accessLog: o.accessLog });
+  const s = await startGw2Server({ exp: 'pol', out: f.out, site: f.site, accessLog: o.accessLog, loggingDisabledReason: o.accessLog === false ? 'test: authorized logging-off condition' : undefined });
   try {
     await req(s.port, '/case-C-aaaaaa.html');
     await submit(s.port, { ...ANOMALY, nonce: s.nonce });
@@ -166,4 +166,69 @@ test('a note edited after submission no longer joins its journal event and stops
   const cov = sessionCoverage(inv, s.dir);
   assert.equal(cov.uncountedFindings.length, 1); assert.match(cov.uncountedFindings[0].verbatim, /step 4/);
   rmSync(f.root, { recursive: true, force: true });
+});
+
+// ---- P1 corrections (operator review 2026-11-25): verification labels, experimental validity, Q13 fail-closed ----
+import { experimentalValidity } from '../gamewatch/gw2/session.ts';
+import { JournalInitError } from '../gamewatch/gw2/serve.ts';
+import { existsSync, writeFileSync as wf } from 'node:fs';
+
+test('P1 correction: a fully journalled, single-client session is "verified" and its findings are journal-verified', async () => {
+  const f = fixture(), inv = inventoryFromBundle(f.bundle as never), s = await session(f);
+  const ss = loadSession(s.dir);
+  assert.deepEqual(experimentalValidity(ss), { status: 'verified', primaryAnalysis: true, reasons: [] });
+  const r = evaluate(validatePolicy(P([{ id: 'a', kind: 'must-access', targets: ['C-aaaaaa'], reason: 'r' }, { id: 'c', kind: 'must-cite', targets: ['R8'], reason: 'r' }]), inv), inv, ss);
+  assert.equal(r.findings[0].verification, 'journal-verified');
+  assert.equal(r.investigationCompleteness.verifiedComplete, true);
+  assert.equal(r.investigationCompleteness.requirements[0].basis, 'server journal (valid)');
+  assert.equal(r.investigationCompleteness.requirements[1].basis, 'journal-verified findings');
+  rmSync(f.root, { recursive: true, force: true });
+});
+
+test('P1 correction: logging fails mid-session → observations and findings kept, must-access may still be satisfied by intact records, but the run is unsuitable for the primary verified analysis', async () => {
+  const f = fixture(), inv = inventoryFromBundle(f.bundle as never);
+  let n = 0;
+  const s = await startGw2Server({ exp: 'midfail', out: f.out, site: f.site, journalAppend: (file, d) => { if (n++ === 2) { const e = new Error('x') as NodeJS.ErrnoException; e.code = 'EIO'; throw e; } wf(file, d, { flag: 'a' }); } });
+  try { await req(s.port, '/case-C-aaaaaa.html'); await req(s.port, '/case-C-bbbbbb.html'); await submit(s.port, { ...ANOMALY, nonce: s.nonce }); } finally { await s.close(); }
+  const ss = loadSession(s.dir), r = evaluate(validatePolicy(P([{ id: 'a', kind: 'must-access', targets: ['C-aaaaaa'], reason: 'r' }]), inv), inv, ss);
+  assert.equal(ss.journal.status, 'incomplete');
+  assert.equal(r.experimentalValidity.status, 'unsuitable-for-primary-analysis'); assert.equal(r.experimentalValidity.primaryAnalysis, false);
+  assert.match(r.experimentalValidity.reasons.join(' '), /incomplete/);
+  assert.equal(r.investigationCompleteness.requirements[0].result, 'satisfied');
+  assert.match(String(r.investigationCompleteness.requirements[0].basis), /incomplete: intact positive records only/);
+  assert.equal(r.investigationCompleteness.completeness, 'complete'); assert.equal(r.investigationCompleteness.verifiedComplete, false, 'an incomplete journal is never a fully verified investigation');
+  assert.equal(r.findings.length, 1); assert.equal(JSON.parse(r.findings[0].verbatim).claim, ANOMALY.claim, 'the finding is kept verbatim');
+  rmSync(f.root, { recursive: true, force: true });
+});
+
+test('P1 correction: logging disabled as an authorized condition → findings are unverified session notes, validity is a separate condition; disabling without a reason is refused', async () => {
+  const f = fixture(), inv = inventoryFromBundle(f.bundle as never), s = await session(f, { accessLog: false });
+  const ss = loadSession(s.dir), r = evaluate(validatePolicy(P([{ id: 'c', kind: 'must-cite', targets: ['R8'], reason: 'r' }]), inv), inv, ss);
+  assert.equal(r.findings[0].verification, 'unverified-session-note');
+  assert.equal(r.investigationCompleteness.requirements[0].result, 'satisfied', 'notes stay usable as observations');
+  assert.equal(r.investigationCompleteness.requirements[0].basis, 'includes unverified session-note findings');
+  assert.equal(r.experimentalValidity.status, 'logging-disabled-condition'); assert.match(r.experimentalValidity.reasons[0], /authorized logging-off condition/);
+  assert.equal(r.investigationCompleteness.verifiedComplete, false);
+  await assert.rejects(startGw2Server({ exp: 'noreason', out: f.out, site: f.site, accessLog: false }), /explicitly authorized condition/);
+  rmSync(f.root, { recursive: true, force: true });
+});
+
+test('P1 correction (Q13): if required logging cannot be initialized, the session does not start', async () => {
+  const f = fixture();
+  await assert.rejects(startGw2Server({ exp: 'initfail', out: f.out, site: f.site, journalAppend: () => { throw Object.assign(new Error('ro'), { code: 'EROFS' }); } }), (e: unknown) => e instanceof JournalInitError && /EROFS/.test((e as Error).message));
+  const sessions = join(f.out, 'sessions');
+  const { readdirSync } = await import('node:fs');
+  for (const d of existsSync(sessions) ? readdirSync(sessions) : []) assert.ok(!existsSync(join(sessions, d, 'session.json')), 'no session.json for a session that never started');
+  rmSync(f.root, { recursive: true, force: true });
+});
+
+test('P1 correction: an edited note or a second client makes the run unsuitable, with the reason; nothing is deleted', async () => {
+  const f = fixture(), s = await session(f, { ua2: 'other/1' });
+  assert.match(experimentalValidity(loadSession(s.dir)).reasons.join(' '), /attribution uncertain/);
+  const f2 = fixture(), t = await session(f2), nf = join(t.dir, 'notes.ndjson');
+  wf(nf, readFileSync(nf, 'utf8').replace('step 3', 'step 9'));
+  const v = experimentalValidity(loadSession(t.dir));
+  assert.equal(v.status, 'unsuitable-for-primary-analysis'); assert.match(v.reasons.join(' '), /journal-mismatch/);
+  assert.equal(loadSession(t.dir).findings.length, 1);
+  rmSync(f.root, { recursive: true, force: true }); rmSync(f2.root, { recursive: true, force: true });
 });

@@ -1,0 +1,102 @@
+{
+ "schema": "gamewatch/gw2-completeness@1",
+ "policy": "p1-demo",
+ "exp": "p1-demo",
+ "session": "0356aaa881ecb27a",
+ "note": "Separate dimensions. Completeness concerns only the declared requirements; experimental validity says whether this session may enter the primary verified analysis. Neither says whether the findings are right, and findings are never changed, dropped or rewritten by either.",
+ "findings": [
+  {
+   "noteIndex": 0,
+   "seq": 7,
+   "counted": true,
+   "verification": "journal-verified",
+   "join": "joined",
+   "verbatim": "{\"at\":\"2026-11-25T13:00:54.838Z\",\"source\":\"test-double\",\"nonceValid\":true,\"session\":\"0356aaa881ecb27a\",\"category\":\"confirmed observable anomaly\",\"rules\":\"R8\",\"builds\":\"QX-73\",\"claim\":\"TEST DOUBLE finding (scripted, not a review): a +1 action cell reached by a shove fires again on re-entry.\",\"evidence\":\"C-757669 steps 6-9 (reference); C-9fc650 steps 6-9; compare M-0056c3\",\"reproduce\":\"scripted\",\"suggestion\":\"none\",\"confidence\":\"low\",\"nonce\":\"cb804de3832f7d0b\"}"
+  }
+ ],
+ "investigationCompleteness": {
+  "completeness": "incomplete",
+  "verifiedComplete": false,
+  "requirements": [
+   {
+    "id": "shove-chain-cases",
+    "kind": "must-access",
+    "targets": [
+     "C-757669",
+     "C-ba3871"
+    ],
+    "reason": "Developer requires the reviewer to open the shove-chain case on the reference build and the shield case.",
+    "result": "unsatisfied",
+    "missing": [
+     "C-ba3871"
+    ],
+    "firstServedSeq": {
+     "C-757669": 2
+    },
+    "basis": "server journal (valid)",
+    "why": "not served to this session: C-ba3871"
+   },
+   {
+    "id": "cite-burn-rule",
+    "kind": "must-cite",
+    "targets": [
+     "R8"
+    ],
+    "reason": "Any review must say whether R8 (burn on entry) holds.",
+    "result": "satisfied",
+    "missing": [],
+    "basis": "journal-verified findings",
+    "why": "every target cited by at least one counted finding (exact identifier match)"
+   },
+   {
+    "id": "evaluate-burn-rule",
+    "kind": "must-evaluate",
+    "targets": [
+     "R8"
+    ],
+    "reason": "R8 must be checked by the deterministic verifier.",
+    "result": "not-evaluable",
+    "why": "rule evaluation is the deterministic verifier of P4; it does not exist in P1. Citing a rule or opening its evidence is not an evaluation."
+   }
+  ]
+ },
+ "experimentalValidity": {
+  "status": "verified",
+  "primaryAnalysis": true,
+  "reasons": []
+ },
+ "accessCoverage": {
+  "journal": {
+   "status": "valid",
+   "reasons": [],
+   "attribution": "single-client",
+   "clients": 1
+  },
+  "usable": true,
+  "servedEvidence": [
+   "C-757669",
+   "C-9fc650"
+  ],
+  "servedCount": 2,
+  "evidenceInInventory": 54,
+  "duplicateRequests": 1,
+  "contentMismatchSeqs": [],
+  "meaning": "served by the server to this session; not proof that the page was rendered, read or understood"
+ },
+ "citationCoverage": {
+  "countedFindings": 1,
+  "evidenceCited": [
+   "C-757669",
+   "C-9fc650",
+   "M-0056c3"
+  ],
+  "rulesCited": [
+   "R8"
+  ],
+  "unknownIdLike": []
+ },
+ "evaluationAvailability": {
+  "ruleEvaluation": "not-available",
+  "reason": "P4 (deterministic three-way verifier) is not implemented; must-evaluate requirements are not-evaluable"
+ }
+}
