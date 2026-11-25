@@ -59,6 +59,10 @@ test('correction 1 (pipeline): the committed P5 demonstration aligns every held-
     // every demonstration hypothesis came from a verified test-double session: all in the primary set
     assert.equal(r.heldout.report.primaryAnalysis.excluded.length, 0);
     assert.equal(r.heldout.report.evaluator.version, '2');
+    // the three-way verifier aligns held-out builds the same way (verify.ts 2.1)
+    const discIds = new Set(Object.keys(disc));
+    const heldBuilds = (r.threeWay.report.hypotheses as any[]).flatMap(h => (h.representations ?? []).flatMap((x: any) => (x.byPartition ?? []).filter((p: any) => p.partition === 'heldout').map((p: any) => p.build)));
+    assert.ok(heldBuilds.length > 0 && heldBuilds.every(b => discIds.has(b)), 'held-out three-way results are keyed by discovery build ids');
   } finally { rmSync(d, { recursive: true, force: true }); }
 });
 

@@ -26,7 +26,7 @@ import { ROOT, assertWritableOutput, repoRelative } from './paths.ts';
 import { verify as verifyGraph, append, fileSha256, type Node, type NodeInput } from './judgments.ts';
 import { openEvaluation, verifyLedger, FreezeError } from './freeze.ts';
 import { checkRepresentation, type Clause, type LawClause, type InvarianceClause, type Value } from './hypothesis.ts';
-import { extractSituations, type Situation } from './situations.ts';
+import { extractSituations, alignBuilds, type Situation } from './situations.ts';
 import { evalLaw, evalInvariance, observational, loadEncoding } from './verify.ts';
 import { verifyRepresentationSeal, type Origin } from './representations.ts';
 import { wilson } from '../../server/balance/v3/stats.ts';
@@ -126,18 +126,7 @@ export function buildReferences(clauses: Clause[], discoveryBuilds: string[]) {
     note: 'build conditions are written in discovery build ids; held-out situations are aligned to them through eval/ (D88). An unresolved id names no discovery build and can never apply.' };
 }
 
-/**
- * P5 correction 1 (D88): each partition has its own neutral build ids, but hypotheses are written in DISCOVERY ids. Held-out
- * situations are relabelled to the discovery id of the same original build, so a build condition stays applicable.
- * A held-out build absent from discovery keeps its own id and is reported. Pure.
- */
-export function alignBuilds(sits: Situation[], ownMap: Record<string, string>, discoveryMap: Record<string, string>) {
-  const toDisc = new Map(Object.entries(discoveryMap).map(([n, o]) => [o, n]));
-  const alignment: Record<string, { original: string; discoveryId: string | null }> = {};
-  for (const [n, o] of Object.entries(ownMap)) alignment[n] = { original: o, discoveryId: toDisc.get(o) ?? null };
-  const out = sits.map(s => { const d = alignment[s.build]?.discoveryId; return d ? { ...s, build: d, fields: { ...s.fields, build: d } } : s; });
-  return { sits: out, alignment, notInDiscovery: Object.entries(alignment).filter(([, a]) => !a.discoveryId).map(([n]) => n) };
-}
+export { alignBuilds } from './situations.ts';
 
 /** Pure and deterministic core: discovery fit and held-out prediction, per hypothesis / representation / build. */
 export type CoreCtx = { groups?: Record<string, Groups>; discoveryBuilds?: string[] };
