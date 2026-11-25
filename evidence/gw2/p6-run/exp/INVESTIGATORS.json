@@ -1,0 +1,146 @@
+{
+ "schema": "gamewatch/gw2-investigators@1",
+ "note": "operator record: which profile ran in which session; outside the agent input boundary",
+ "sessions": [
+  {
+   "session": "1d03da6df39c0f79",
+   "profile": "accurate",
+   "route": "test-double",
+   "label": "TEST DOUBLE: measures no agent",
+   "cli": "gamewatch/gw2/doubles/kane-shim.mjs",
+   "argv": [
+    "run",
+    "You are investigating a two-player board game whose rules are not shown. Open the page at the given URL. It shows observations of builds of the game: scripted playtests (each step shows the state before and after and every event the game reported) and games between two computer players. Infer which rules the game appears to follow, and where builds behave differently. Open case and match pages as needed. For each rule you infer, open hypothesis.html and submit one form: a plain statement, your confidence, the case or match ids you relied on, and, if you can, the optional structured representation described on that page. You may submit competing hypotheses, and you may abstain on questions you cannot settle. Report only what the observations support. Submit at most 8 forms.",
+    "--url",
+    "http://127.0.0.1:35559/index.html",
+    "--agent",
+    "--headless",
+    "--max-steps",
+    "80",
+    "--timeout",
+    "2700"
+   ],
+   "exitCode": 0,
+   "timedOut": false,
+   "ms": 191,
+   "runEnd": {
+    "verdict": "approved",
+    "summary": "TEST DOUBLE (scripted): submitted 3 hypotheses after reading 30 pages",
+    "detail": ""
+   },
+   "stdoutSha256": "58bc0dffd793553852ab8f91d4e6fa32140ee70faaae05110f3a0339ebe01482"
+  },
+  {
+   "session": "b00a2e7f2d9195a9",
+   "profile": "careless",
+   "route": "test-double",
+   "label": "TEST DOUBLE: measures no agent",
+   "cli": "gamewatch/gw2/doubles/kane-shim.mjs",
+   "argv": [
+    "run",
+    "You are investigating a two-player board game whose rules are not shown. Open the page at the given URL. It shows observations of builds of the game: scripted playtests (each step shows the state before and after and every event the game reported) and games between two computer players. Infer which rules the game appears to follow, and where builds behave differently. Open case and match pages as needed. For each rule you infer, open hypothesis.html and submit one form: a plain statement, your confidence, the case or match ids you relied on, and, if you can, the optional structured representation described on that page. You may submit competing hypotheses, and you may abstain on questions you cannot settle. Report only what the observations support. Submit at most 8 forms.",
+    "--url",
+    "http://127.0.0.1:44511/index.html",
+    "--agent",
+    "--headless",
+    "--max-steps",
+    "80",
+    "--timeout",
+    "2700"
+   ],
+   "exitCode": 0,
+   "timedOut": false,
+   "ms": 183,
+   "runEnd": {
+    "verdict": "approved",
+    "summary": "TEST DOUBLE (scripted): submitted 3 hypotheses and a finding citing 5 pages it did not open",
+    "detail": ""
+   },
+   "stdoutSha256": "0360f1d6f2067049a5ada4d4034bf28f18694b5df57fab60cf03107e952ebf9f"
+  },
+  {
+   "session": "116a8c2070a3a93d",
+   "profile": "over-abstaining",
+   "route": "test-double",
+   "label": "TEST DOUBLE: measures no agent",
+   "cli": "gamewatch/gw2/doubles/kane-shim.mjs",
+   "argv": [
+    "run",
+    "You are investigating a two-player board game whose rules are not shown. Open the page at the given URL. It shows observations of builds of the game: scripted playtests (each step shows the state before and after and every event the game reported) and games between two computer players. Infer which rules the game appears to follow, and where builds behave differently. Open case and match pages as needed. For each rule you infer, open hypothesis.html and submit one form: a plain statement, your confidence, the case or match ids you relied on, and, if you can, the optional structured representation described on that page. You may submit competing hypotheses, and you may abstain on questions you cannot settle. Report only what the observations support. Submit at most 8 forms.",
+    "--url",
+    "http://127.0.0.1:44063/index.html",
+    "--agent",
+    "--headless",
+    "--max-steps",
+    "80",
+    "--timeout",
+    "2700"
+   ],
+   "exitCode": 0,
+   "timedOut": false,
+   "ms": 194,
+   "runEnd": {
+    "verdict": "approved",
+    "summary": "TEST DOUBLE (scripted): abstained on every question",
+    "detail": ""
+   },
+   "stdoutSha256": "ea589c70a5223704cece105d9a7d18e90874d152246acad87b4eb8c702a59180"
+  },
+  {
+   "session": "631bf7f0428334c6",
+   "profile": "confident-wrong",
+   "route": "test-double",
+   "label": "TEST DOUBLE: measures no agent",
+   "cli": "gamewatch/gw2/doubles/kane-shim.mjs",
+   "argv": [
+    "run",
+    "You are investigating a two-player board game whose rules are not shown. Open the page at the given URL. It shows observations of builds of the game: scripted playtests (each step shows the state before and after and every event the game reported) and games between two computer players. Infer which rules the game appears to follow, and where builds behave differently. Open case and match pages as needed. For each rule you infer, open hypothesis.html and submit one form: a plain statement, your confidence, the case or match ids you relied on, and, if you can, the optional structured representation described on that page. You may submit competing hypotheses, and you may abstain on questions you cannot settle. Report only what the observations support. Submit at most 8 forms.",
+    "--url",
+    "http://127.0.0.1:33149/index.html",
+    "--agent",
+    "--headless",
+    "--max-steps",
+    "80",
+    "--timeout",
+    "2700"
+   ],
+   "exitCode": 0,
+   "timedOut": false,
+   "ms": 193,
+   "runEnd": {
+    "verdict": "approved",
+    "summary": "TEST DOUBLE (scripted): submitted 3 confident hypotheses",
+    "detail": ""
+   },
+   "stdoutSha256": "6d1309238e229d7f14860157e46d1f445ba298ac32be1e23e19907f73736fbb8"
+  },
+  {
+   "session": "f3f0b801b9020917",
+   "profile": "defect-describer",
+   "route": "test-double",
+   "label": "TEST DOUBLE: measures no agent",
+   "cli": "gamewatch/gw2/doubles/kane-shim.mjs",
+   "argv": [
+    "run",
+    "You are investigating a two-player board game whose rules are not shown. Open the page at the given URL. It shows observations of builds of the game: scripted playtests (each step shows the state before and after and every event the game reported) and games between two computer players. Infer which rules the game appears to follow, and where builds behave differently. Open case and match pages as needed. For each rule you infer, open hypothesis.html and submit one form: a plain statement, your confidence, the case or match ids you relied on, and, if you can, the optional structured representation described on that page. You may submit competing hypotheses, and you may abstain on questions you cannot settle. Report only what the observations support. Submit at most 8 forms.",
+    "--url",
+    "http://127.0.0.1:36505/index.html",
+    "--agent",
+    "--headless",
+    "--max-steps",
+    "80",
+    "--timeout",
+    "2700"
+   ],
+   "exitCode": 0,
+   "timedOut": false,
+   "ms": 164,
+   "runEnd": {
+    "verdict": "approved",
+    "summary": "TEST DOUBLE (scripted): described 1 build(s) with a first-mover extra action and 1 without",
+    "detail": ""
+   },
+   "stdoutSha256": "bb1be48ad8d169d455a025985d0f376248d11d2cdfa074e0487a78e2e95ac5f5"
+  }
+ ]
+}

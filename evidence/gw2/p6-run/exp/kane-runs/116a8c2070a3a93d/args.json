@@ -1,0 +1,17 @@
+{
+ "cli": "gamewatch/gw2/doubles/kane-shim.mjs",
+ "route": "test-double",
+ "profile": "over-abstaining",
+ "args": [
+  "run",
+  "You are investigating a two-player board game whose rules are not shown. Open the page at the given URL. It shows observations of builds of the game: scripted playtests (each step shows the state before and after and every event the game reported) and games between two computer players. Infer which rules the game appears to follow, and where builds behave differently. Open case and match pages as needed. For each rule you infer, open hypothesis.html and submit one form: a plain statement, your confidence, the case or match ids you relied on, and, if you can, the optional structured representation described on that page. You may submit competing hypotheses, and you may abstain on questions you cannot settle. Report only what the observations support. Submit at most 8 forms.",
+  "--url",
+  "http://127.0.0.1:44063/index.html",
+  "--agent",
+  "--headless",
+  "--max-steps",
+  "80",
+  "--timeout",
+  "2700"
+ ]
+}

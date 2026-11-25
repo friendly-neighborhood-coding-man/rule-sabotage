@@ -1,0 +1,40 @@
+{
+ "schema": "gamewatch/gw2-session-import@1",
+ "session": "b00a2e7f2d9195a9",
+ "exp": "p6",
+ "sessionDir": "evidence/gw2/p6-run/exp/sessions/b00a2e7f2d9195a9",
+ "graph": "judgments.ndjson",
+ "nodes": [
+  {
+   "key": "finding:0",
+   "id": "0f284573d8ee9a9d97b40d5f728d7fa36577a2fabcead768e66523e88abf4df1",
+   "status": "appended"
+  },
+  {
+   "key": "hypothesis:0",
+   "id": "c4ae8af3947e11c60cd488b44197f405b6c392db618a6eae4db689dab08e8876",
+   "status": "appended"
+  },
+  {
+   "key": "hypothesis:1",
+   "id": "31184784851db67d637d0da075812c3e022d22a21df93def8f3adc708fcfd06c",
+   "status": "appended"
+  },
+  {
+   "key": "hypothesis:2",
+   "id": "7417bfebb402753a45b03e5a85aa4b397acbe456099723e6e8fdd8522f51aa17",
+   "status": "appended"
+  }
+ ],
+ "notApplicable": [],
+ "sessionValidity": {
+  "status": "verified",
+  "primaryAnalysis": true,
+  "reasons": []
+ },
+ "sessionSeal": "a7ab98b809a01602f39ee7a379af05148cf044408523f4619e17035423edcab3",
+ "graphHeadAfter": {
+  "count": 13,
+  "lastLineSha256": "de3d38912b7a7b8ac31097199254750f21f557204c5c5e9f3080f4c9a9f021b8"
+ }
+}

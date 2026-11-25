@@ -1,0 +1,126 @@
+{
+ "schema": "gamewatch/gw2-partition@1",
+ "procedure": {
+  "id": "p7-partition-1",
+  "path": "evidence/gw2/procedures/partition-p7-1.json",
+  "sha256": "f676850665a80ae1e2f3b1119d45116cf14dd3a7d8a32f63af69c16f920c136f"
+ },
+ "bundle": {
+  "path": "evidence/gw2/p7-evidence/generated/bundle.json",
+  "sha256": "368d61699f961b77fbea86913890af5daf747c865be3d2457ae54d21ebca7bfe"
+ },
+ "hypothesisForm": "p5: optional structured representation field (Q20)",
+ "generatedBeforeFreeze": false,
+ "assignment": {
+  "discovery": {
+   "scripts": [
+    "adjacent-placement",
+    "freeze-ai",
+    "matrix-freeze",
+    "matrix-haste",
+    "matrix-home",
+    "matrix-shield-v1",
+    "multicell-ai",
+    "placement-ai",
+    "send-home-ai",
+    "shield-ai",
+    "shove-ai",
+    "shove-chain-ai",
+    "teleport-human",
+    "walk-twice"
+   ],
+   "seeds": [
+    98201,
+    98206,
+    98207,
+    98208,
+    98209,
+    98210,
+    98211,
+    98212
+   ]
+  },
+  "heldout": {
+   "scripts": [
+    "freeze-human",
+    "matrix-shield-v2",
+    "multicell-human",
+    "placement-human",
+    "send-home-human",
+    "shield-human",
+    "shove-chain-human",
+    "shove-human"
+   ],
+   "seeds": [
+    98202,
+    98203,
+    98204,
+    98205
+   ]
+  }
+ },
+ "share": {
+  "discovery": 0.6521739130434783,
+  "target": 0.7,
+  "discoveryObservations": 60,
+  "heldoutObservations": 32
+ },
+ "candidatesConsidered": 16384,
+ "coverage": {
+  "semantics": "a rule is covered when every event pattern of gamewatch/adapters/rule-sabotage.coverage.json for it occurs at least once on every build (gaps.ts semantics)",
+  "discovery": [
+   "R1",
+   "R2",
+   "R3",
+   "R4",
+   "R5",
+   "R6",
+   "R7",
+   "R8",
+   "R9",
+   "R10",
+   "R11",
+   "R12",
+   "R13",
+   "R14",
+   "R15"
+  ],
+  "heldout": [
+   "R1",
+   "R2",
+   "R3",
+   "R4",
+   "R5",
+   "R6",
+   "R7",
+   "R8",
+   "R9",
+   "R10",
+   "R11",
+   "R12",
+   "R13",
+   "R14",
+   "R15"
+  ],
+  "notCoveredInDiscovery": [],
+  "notCoveredInHeldout": [],
+  "notCoveredAnywhere": []
+ },
+ "counts": {
+  "discovery": {
+   "cases": 28,
+   "matches": 32
+  },
+  "heldout": {
+   "cases": 16,
+   "matches": 16
+  }
+ },
+ "manifests": {
+  "discovery": "178f0edb6c06d916c252bbb53a12c5496ece8b29eece8cf54247541ef826fd90",
+  "spec": "b4c22bb3ffce8fd1f349fd5ec355cf04fc6cbcf3b27401105617d51dfd313155",
+  "heldout": "8d3f89025024c08223201b39b2c022915360e393cf29caf1fe03097880dae3e6",
+  "eval": "cfcd3b9458a64e65939f73f5894b4648ceb7db8e720681341493337b0930e848"
+ },
+ "note": "Assignment and coverage name original script ids and seeds; this file is outside the input boundary. The split depends only on the frozen procedure and engine-reported events, never on agent output."
+}

@@ -182,3 +182,16 @@ export function extractSituations(obs: Obs): Situation[] {
   });
   return out;
 }
+
+/**
+ * P5 correction 1 (D88): each partition has its own neutral build ids, but hypotheses are written in DISCOVERY ids. Held-out
+ * situations are relabelled to the discovery id of the same original build, so a build condition stays applicable.
+ * A held-out build absent from discovery keeps its own id and is reported. Pure.
+ */
+export function alignBuilds(sits: Situation[], ownMap: Record<string, string>, discoveryMap: Record<string, string>) {
+  const toDisc = new Map(Object.entries(discoveryMap).map(([n, o]) => [o, n]));
+  const alignment: Record<string, { original: string; discoveryId: string | null }> = {};
+  for (const [n, o] of Object.entries(ownMap)) alignment[n] = { original: o, discoveryId: toDisc.get(o) ?? null };
+  const out = sits.map(s => { const d = alignment[s.build]?.discoveryId; return d ? { ...s, build: d, fields: { ...s.fields, build: d } } : s; });
+  return { sits: out, alignment, notInDiscovery: Object.entries(alignment).filter(([, a]) => !a.discoveryId).map(([n]) => n) };
+}

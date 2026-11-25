@@ -1,0 +1,9 @@
+{"ts":"2026-11-25T16:36:46.011Z","type":"stream_start","mode":"objective","test_double":true}
+{"ts":"2026-11-25T16:36:46.013Z","type":"step","step":1,"remark":"open index.html"}
+{"ts":"2026-11-25T16:36:46.068Z","type":"step","step":2,"remark":"open hypothesis.html"}
+{"ts":"2026-11-25T16:36:46.073Z","type":"step","step":3,"remark":"open case-C-078491.html"}
+{"ts":"2026-11-25T16:36:46.077Z","type":"step","step":4,"remark":"open case-C-08a29c.html"}
+{"ts":"2026-11-25T16:36:46.080Z","type":"step","step":5,"remark":"submit hypothesis"}
+{"ts":"2026-11-25T16:36:46.087Z","type":"step","step":6,"remark":"submit hypothesis"}
+{"ts":"2026-11-25T16:36:46.092Z","type":"step","step":7,"remark":"submit hypothesis"}
+{"ts":"2026-11-25T16:36:46.094Z","type":"run_end","status":"passed","summary":"TEST DOUBLE (scripted): submitted 3 confident hypotheses","steps":7}

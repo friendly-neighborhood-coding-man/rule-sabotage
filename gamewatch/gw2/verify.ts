@@ -34,9 +34,9 @@ import { ROOT, assertWritableOutput, repoRelative } from './paths.ts';
 import { verify as verifyGraph, append, fileSha256, sha256, type Node, type NodeInput } from './judgments.ts';
 import { openEvaluation, verifyLedger, FreezeError } from './freeze.ts';
 import { checkRepresentation, evalExpr, isUnknown, type Clause, type LawClause, type InvarianceClause, type Value } from './hypothesis.ts';
-import { extractSituations, type Situation } from './situations.ts';
+import { extractSituations, alignBuilds, type Situation } from './situations.ts';
 
-export const VERIFIER = { id: 'gamewatch/gw2/verify.ts', version: '2' } as const;
+export const VERIFIER = { id: 'gamewatch/gw2/verify.ts', version: '2.1' } as const; // 2.1: held-out builds aligned to discovery ids (D88)
 export const DEFAULT_ENCODING = join(ROOT, 'gamewatch/gw2/spec-encodings/rule-sabotage-v6.1.json');
 export const EVALUATION_SCHEMA = 'gamewatch/gw2-three-way@2';
 const MAX_LIST = 12;
@@ -396,12 +396,16 @@ export function evaluateExperiment(exp: string, o: { encoding?: string; at?: str
   const spec = JSON.parse(g.read('spec', 'spec.json')) as { game: { rules: { id: string; text: string }[] } };
   const enc = loadEncoding(encF, spec.game.rules);
   if (o.confirmatory && !enc.authoritative) throw new FreezeError(`confirmatory evaluation refused: the specification encoding ${enc.enc.id} is ${enc.enc.review?.status ?? 'unreviewed'} (Q3: only an encoding reviewed and accepted by the operator may be an authoritative reference)`);
-  const parts: PartitionInput[] = (o.partitions ?? ['discovery', 'heldout']).map(p => {
-    const obs = JSON.parse(g.read(p, 'observations.json'));
-    return { partition: p, builds: [...obs.builds].sort(), situations: extractSituations(obs) };
-  });
   const evalMap = JSON.parse(g.read('eval', 'eval.json')).idMaps as Record<string, { builds: Record<string, string> }>;
-  const buildLabels = Object.fromEntries(parts.map(p => [p.partition, evalMap[p.partition]?.builds ?? {}]));
+  // D88: hypotheses are written in discovery build ids; held-out situations are relabelled to them (same original build)
+  const buildLabels: Record<string, Record<string, string>> = {};
+  const parts: PartitionInput[] = (o.partitions ?? ['discovery', 'heldout']).map(p => {
+    const obs = JSON.parse(g.read(p, 'observations.json')), own = evalMap[p]?.builds ?? {};
+    const al = alignBuilds(extractSituations(obs), own, evalMap.discovery?.builds ?? {});
+    const ids = (obs.builds as string[]).map(b => al.alignment[b]?.discoveryId ?? b);
+    buildLabels[p] = Object.fromEntries((obs.builds as string[]).map(b => [al.alignment[b]?.discoveryId ?? b, own[b] ?? b]));
+    return { partition: p, builds: [...ids].sort(), situations: al.sits };
+  });
   // representations: only those appended before the FIRST evaluation opening, representing a frozen hypothesis
   const firstOpen = verifyLedger(join(exp, 'evaluation-ledger.ndjson')).entries.find(e => e.event === 'opened');
   const cutoff = Number(firstOpen?.graphHead?.count ?? 0);

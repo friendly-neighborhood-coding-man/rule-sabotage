@@ -1,0 +1,8 @@
+{"ts":"2026-11-25T16:36:45.818Z","type":"stream_start","mode":"objective","test_double":true}
+{"ts":"2026-11-25T16:36:45.819Z","type":"step","step":1,"remark":"open index.html"}
+{"ts":"2026-11-25T16:36:45.868Z","type":"step","step":2,"remark":"open hypothesis.html"}
+{"ts":"2026-11-25T16:36:45.872Z","type":"step","step":3,"remark":"open case-C-078491.html"}
+{"ts":"2026-11-25T16:36:45.875Z","type":"step","step":4,"remark":"submit hypothesis"}
+{"ts":"2026-11-25T16:36:45.882Z","type":"step","step":5,"remark":"submit hypothesis"}
+{"ts":"2026-11-25T16:36:45.886Z","type":"step","step":6,"remark":"submit hypothesis"}
+{"ts":"2026-11-25T16:36:45.889Z","type":"run_end","status":"passed","summary":"TEST DOUBLE (scripted): abstained on every question","steps":6}

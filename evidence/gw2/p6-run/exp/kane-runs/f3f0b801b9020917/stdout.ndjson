@@ -1,0 +1,26 @@
+{"ts":"2026-11-25T16:36:46.205Z","type":"stream_start","mode":"objective","test_double":true}
+{"ts":"2026-11-25T16:36:46.206Z","type":"step","step":1,"remark":"open index.html"}
+{"ts":"2026-11-25T16:36:46.244Z","type":"step","step":2,"remark":"open hypothesis.html"}
+{"ts":"2026-11-25T16:36:46.248Z","type":"step","step":3,"remark":"open match-M-1d8b6e.html"}
+{"ts":"2026-11-25T16:36:46.250Z","type":"step","step":4,"remark":"open match-M-2140dd.html"}
+{"ts":"2026-11-25T16:36:46.252Z","type":"step","step":5,"remark":"open match-M-26c4a7.html"}
+{"ts":"2026-11-25T16:36:46.254Z","type":"step","step":6,"remark":"open match-M-2d6e41.html"}
+{"ts":"2026-11-25T16:36:46.255Z","type":"step","step":7,"remark":"open match-M-46c265.html"}
+{"ts":"2026-11-25T16:36:46.257Z","type":"step","step":8,"remark":"open match-M-52f93f.html"}
+{"ts":"2026-11-25T16:36:46.259Z","type":"step","step":9,"remark":"open match-M-889a91.html"}
+{"ts":"2026-11-25T16:36:46.263Z","type":"step","step":10,"remark":"open match-M-a6b140.html"}
+{"ts":"2026-11-25T16:36:46.265Z","type":"step","step":11,"remark":"open match-M-ab06bc.html"}
+{"ts":"2026-11-25T16:36:46.267Z","type":"step","step":12,"remark":"open match-M-ba6bcd.html"}
+{"ts":"2026-11-25T16:36:46.269Z","type":"step","step":13,"remark":"open match-M-bdc97c.html"}
+{"ts":"2026-11-25T16:36:46.270Z","type":"step","step":14,"remark":"open match-M-beca13.html"}
+{"ts":"2026-11-25T16:36:46.271Z","type":"step","step":15,"remark":"open match-M-beffd0.html"}
+{"ts":"2026-11-25T16:36:46.273Z","type":"step","step":16,"remark":"open match-M-ca1d4d.html"}
+{"ts":"2026-11-25T16:36:46.274Z","type":"step","step":17,"remark":"open match-M-d5b4ae.html"}
+{"ts":"2026-11-25T16:36:46.276Z","type":"step","step":18,"remark":"open match-M-ddbc81.html"}
+{"ts":"2026-11-25T16:36:46.278Z","type":"step","step":19,"remark":"open match-M-e735bc.html"}
+{"ts":"2026-11-25T16:36:46.279Z","type":"step","step":20,"remark":"open match-M-ef78f7.html"}
+{"ts":"2026-11-25T16:36:46.280Z","type":"step","step":21,"remark":"open match-M-fbfb6e.html"}
+{"ts":"2026-11-25T16:36:46.281Z","type":"step","step":22,"remark":"open match-M-fc5e77.html"}
+{"ts":"2026-11-25T16:36:46.282Z","type":"step","step":23,"remark":"submit hypothesis"}
+{"ts":"2026-11-25T16:36:46.287Z","type":"step","step":24,"remark":"submit hypothesis"}
+{"ts":"2026-11-25T16:36:46.288Z","type":"run_end","status":"passed","summary":"TEST DOUBLE (scripted): described 1 build(s) with a first-mover extra action and 1 without","steps":24}

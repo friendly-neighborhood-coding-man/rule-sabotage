@@ -39,6 +39,12 @@ export type Procedure = {
   seeds: number[]; scripts: { id: string; title: string }[]; variantSuffixes: string[];
   coverageMap: { path: string; sha256: string }; groundTruth: { path: string; sha256: string }[];
   selection: string[]; notes?: string[];
+  /** P7 (D93, D96), opt-in: the first `heldout` seeds in the salt-fixed order go to held-out, the rest to discovery. */
+  seedAssignment?: { heldout: number };
+  /** P7, opt-in: hard constraints checked on the chosen split; a violation fails the partition, nothing is relaxed. */
+  constraints?: { minSeeds?: number; minHeldoutSeeds?: number; familiesInBothPartitions?: string[] };
+  /** P7 (D90), opt-in: eval/ maps each neutral match id to its seed, for replication grouping. */
+  recordMatchSeeds?: boolean;
 };
 export type BlindCase = { caseId: string; kind: 'scripted'; build: string; script: string; firstMover: string; steps: GWStep[] };
 export type BlindMatch = { matchId: string; build: string; policy: Record<string, string>; firstMover: string; winner: string; reason: string; turns: number; scored: Record<string, number>; rows: GWTurnRow[] };
@@ -67,6 +73,8 @@ export function loadProcedure(file: string, root = ROOT): Procedure {
     if (!existsSync(abs)) bad.push(`${r.path} not found`); else if (fileSha256(abs) !== r.sha256) bad.push(`${r.path} does not match its frozen sha256`);
   }
   if (!Array.isArray(p.selection) || !p.selection.length) bad.push('selection order must be stated');
+  if (p.seedAssignment !== undefined && (!isObj(p.seedAssignment) || !Number.isInteger(p.seedAssignment.heldout) || (p.seedAssignment.heldout as number) < 1 || (p.seedAssignment.heldout as number) >= (Array.isArray(p.seeds) ? p.seeds.length : 0))) bad.push('seedAssignment.heldout must be an integer in [1, seeds - 1]');
+  if (p.constraints !== undefined && !isObj(p.constraints)) bad.push('constraints must be an object');
   if (bad.length) throw new PartitionError(`invalid partition procedure ${file}:\n  ${bad.join('\n  ')}`);
   return p as Procedure;
 }
@@ -134,7 +142,9 @@ export function split(bundle: GWBundle, proc: Procedure, cov: Record<string, Pat
   const count = (m: bigint) => ruleMasks.filter(rm => (m & rm) === rm).length;
   const both = (a: bigint, b: bigint) => ruleMasks.filter(rm => (a & rm) === rm && (b & rm) === rm).length;
   let idx = 0;
-  for (let po = 0; po < 1 << pairs.length; po++) for (let so = 0; so < 1 << singles.length; so++) for (let sm = 1; sm < (1 << seeds.length) - 1; sm++) {
+  // with a frozen seed assignment (P7) only one seed mask is a candidate: the first `heldout` seeds in salt order go to held-out
+  const seedMasks = proc.seedAssignment ? [seeds.reduce((m, _, i) => i >= proc.seedAssignment!.heldout ? m | (1 << i) : m, 0)] : Array.from({ length: (1 << seeds.length) - 2 }, (_, i) => i + 1);
+  for (let po = 0; po < 1 << pairs.length; po++) for (let so = 0; so < 1 << singles.length; so++) for (const sm of seedMasks) {
     const dS: string[] = [], hS: string[] = [];
     pairs.forEach((f, i) => { const [a, b] = fams.get(f)!; if (po >> i & 1) { dS.push(b); hS.push(a); } else { dS.push(a); hS.push(b); } });
     singles.forEach((f, i) => (so >> i & 1 ? hS : dS).push(fams.get(f)![0]));
@@ -147,6 +157,15 @@ export function split(bundle: GWBundle, proc: Procedure, cov: Record<string, Pat
     if (!best || better(key, best.key)) best = { key, disc: { scripts: dS, seeds: dSeeds }, held: { scripts: hS, seeds: hSeeds }, share };
   }
   if (!best) throw new PartitionError('no candidate split');
+  const C = proc.constraints, fail: string[] = [];
+  if (C?.minSeeds !== undefined && proc.seeds.length < C.minSeeds) fail.push(`${proc.seeds.length} distinct seeds, at least ${C.minSeeds} required`);
+  if (C?.minHeldoutSeeds !== undefined && best.held.seeds.length < C.minHeldoutSeeds) fail.push(`${best.held.seeds.length} held-out seeds, at least ${C.minHeldoutSeeds} required`);
+  for (const fam of C?.familiesInBothPartitions ?? []) {
+    const inD = best.disc.scripts.filter(x => family(x, proc.variantSuffixes) === fam), inH = best.held.scripts.filter(x => family(x, proc.variantSuffixes) === fam);
+    if (!inD.length || !inH.length) fail.push(`family ${fam} must have a distinct variant in both partitions (discovery: ${inD.join(',') || 'none'}; held-out: ${inH.join(',') || 'none'})`);
+    if (inD.some(x => inH.includes(x))) fail.push(`family ${fam}: a script is in both partitions`);
+  }
+  if (fail.length) throw new PartitionError(`partition constraints of ${proc.id} not satisfied (nothing is relaxed):\n  ${fail.join('\n  ')}`);
   const units = (sel: { scripts: string[]; seeds: number[] }) => [...sel.scripts.flatMap(id => unitsByScript.get(id)!), ...sel.seeds.flatMap(x => unitsBySeed.get(x)!)];
   const covD = coverageOf(units(best.disc), cov, builds), covH = coverageOf(units(best.held), cov, builds);
   if (covD.covered.length !== count([...best.disc.scripts.map(x => sMask.get(x)!), ...best.disc.seeds.map(x => dMask.get(x)!)].reduce((a, b) => a | b, 0n))) throw new PartitionError('internal: coverage fast path disagrees');
@@ -172,8 +191,8 @@ export const neutral = (salt: string, p: string, kind: 'C' | 'M' | 'S' | 'B', or
 };
 
 /** Blind transform: keeps what the engine reported (states, events, engine/referee messages); drops everything else. */
-export function blind(bundle: GWBundle, p: 'discovery' | 'heldout', sel: { scripts: string[]; seeds: number[] }, salt: string, scriptOf: (c: GWCase) => string) {
-  const map = { cases: {} as Record<string, string>, matches: {} as Record<string, string>, builds: {} as Record<string, string>, scripts: {} as Record<string, string> };
+export function blind(bundle: GWBundle, p: 'discovery' | 'heldout', sel: { scripts: string[]; seeds: number[] }, salt: string, scriptOf: (c: GWCase) => string, o: { recordMatchSeeds?: boolean } = {}) {
+  const map = { cases: {} as Record<string, string>, matches: {} as Record<string, string>, builds: {} as Record<string, string>, scripts: {} as Record<string, string>, ...(o.recordMatchSeeds ? { matchSeeds: {} as Record<string, number> } : {}) } as { cases: Record<string, string>; matches: Record<string, string>; builds: Record<string, string>; scripts: Record<string, string>; matchSeeds?: Record<string, number> };
   for (const b of bundle.builds) map.builds[neutral(salt, p, 'B', b.label)] = b.label;
   const nb = (label: string) => neutral(salt, p, 'B', label);
   const cases: BlindCase[] = bundle.cases.filter(c => sel.scripts.includes(scriptOf(c))).map(c => {
@@ -182,7 +201,7 @@ export function blind(bundle: GWBundle, p: 'discovery' | 'heldout', sel: { scrip
     return { caseId: id, kind: 'scripted', build: nb(c.build), script: s, firstMover: c.firstMover, steps: c.steps };
   }).sort((a, b) => a.caseId.localeCompare(b.caseId));
   const matches: BlindMatch[] = bundle.matches.filter(m => sel.seeds.includes(m.seed)).map(m => {
-    const id = neutral(salt, p, 'M', m.matchId); map.matches[id] = m.matchId;
+    const id = neutral(salt, p, 'M', m.matchId); map.matches[id] = m.matchId; if (map.matchSeeds) map.matchSeeds[id] = m.seed;
     return { matchId: id, build: nb(m.build), policy: m.policy, firstMover: m.firstMover, winner: m.winner, reason: m.reason, turns: m.turns, scored: m.scored, rows: m.rows };
   }).sort((a, b) => a.matchId.localeCompare(b.matchId));
   const obs: BlindObservations = { schema: BLIND_SCHEMA, partition: p, builds: Object.keys(map.builds).sort(), cases, matches };
@@ -223,7 +242,8 @@ export async function partition(procFile: string, bundleFile: string, expDir: st
   if (existsSync(out)) throw new PartitionError(`refusing to overwrite existing partitions: ${out}`);
   const cov = JSON.parse(readFileSync(join(root, proc.coverageMap.path), 'utf8')).rules as Record<string, Pat[]>;
   const s = split(bundle, proc, cov);
-  const D = blind(bundle, 'discovery', s.discovery, proc.salt, s.scriptOf), H = blind(bundle, 'heldout', s.heldout, proc.salt, s.scriptOf);
+  const bo = { recordMatchSeeds: proc.recordMatchSeeds === true };
+  const D = blind(bundle, 'discovery', s.discovery, proc.salt, s.scriptOf, bo), H = blind(bundle, 'heldout', s.heldout, proc.salt, s.scriptOf, bo);
   // ids must be unique across partitions and never equal an original id
   const orig = new Set([...bundle.cases.map(c => c.caseId), ...bundle.matches.map(m => m.matchId)]);
   const ids = [...Object.keys(D.map.cases), ...Object.keys(D.map.matches), ...Object.keys(H.map.cases), ...Object.keys(H.map.matches)];

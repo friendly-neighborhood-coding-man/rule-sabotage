@@ -1,0 +1,146 @@
+{
+ "schema": "gamewatch/gw2-freeze@2",
+ "exp": "evidence/gw2/p6-run/exp",
+ "frozenAt": "2026-11-25T17:00:00.000Z",
+ "graph": {
+  "file": "judgments.ndjson",
+  "anchor": {
+   "count": 15,
+   "lastLineSha256": "dbe954c0aa2ded488b4d9ae0f9467bde76dbb969b7eac5fc88f163acada0b021"
+  }
+ },
+ "hypotheses": [
+  {
+   "id": "ab01f1099e036a89539994556c1d97673a21a232f22be8b220e70812825cef89",
+   "kind": "abstention",
+   "session": "116a8c2070a3a93d",
+   "ref": "H-1"
+  },
+  {
+   "id": "01ad760fb5b859dcfd326e538d956720a8f19eef3a738b39ad77fc063ca4fc17",
+   "kind": "abstention",
+   "session": "116a8c2070a3a93d",
+   "ref": "H-2"
+  },
+  {
+   "id": "e353fcbdc7bfaf379f330cd4e81f4b4203696f787540e7549349ba762bfcbd79",
+   "kind": "abstention",
+   "session": "116a8c2070a3a93d",
+   "ref": "H-3"
+  },
+  {
+   "id": "ec66a120f85f481b1a08aaec45eb3ce4200f5bdcec7d7884dabbcd6f745d41d6",
+   "kind": "hypothesis",
+   "session": "1d03da6df39c0f79",
+   "ref": "H-1"
+  },
+  {
+   "id": "de22702f863fc87a4a5ed9ca508fd5a0b1baa3735a21926ecb4bb8f6f9ff8202",
+   "kind": "hypothesis",
+   "session": "1d03da6df39c0f79",
+   "ref": "H-2"
+  },
+  {
+   "id": "617948b7117f06ecb6c597f0e90457b7e3327cf179e0ad01525dc77b9a6e8ae1",
+   "kind": "hypothesis",
+   "session": "1d03da6df39c0f79",
+   "ref": "H-3"
+  },
+  {
+   "id": "5d373afef9cb9142aea05a39de1ef38ece71df270738f1d419ffd08c31b72bb0",
+   "kind": "hypothesis",
+   "session": "631bf7f0428334c6",
+   "ref": "H-1"
+  },
+  {
+   "id": "fd72246ccf72a9c28a00d61f531813cf981e003beb1d9273586fa1f11eabe769",
+   "kind": "hypothesis",
+   "session": "631bf7f0428334c6",
+   "ref": "H-2"
+  },
+  {
+   "id": "2d2da40425a339fea23cf41fc2b63cd244c58c2a3166f82f27c609dc7631680e",
+   "kind": "hypothesis",
+   "session": "631bf7f0428334c6",
+   "ref": "H-3"
+  },
+  {
+   "id": "c4ae8af3947e11c60cd488b44197f405b6c392db618a6eae4db689dab08e8876",
+   "kind": "hypothesis",
+   "session": "b00a2e7f2d9195a9",
+   "ref": "H-1"
+  },
+  {
+   "id": "31184784851db67d637d0da075812c3e022d22a21df93def8f3adc708fcfd06c",
+   "kind": "hypothesis",
+   "session": "b00a2e7f2d9195a9",
+   "ref": "H-2"
+  },
+  {
+   "id": "7417bfebb402753a45b03e5a85aa4b397acbe456099723e6e8fdd8522f51aa17",
+   "kind": "hypothesis",
+   "session": "b00a2e7f2d9195a9",
+   "ref": "H-3"
+  },
+  {
+   "id": "095195cc9d38ef112af2e7ccae996f5cc501ad278dcec76d399e94f75f315c59",
+   "kind": "hypothesis",
+   "session": "f3f0b801b9020917",
+   "ref": "H-1"
+  },
+  {
+   "id": "1316038ad83437853e77e9be906f43cadf73079a6f4f15e9da4bad1caefa42f3",
+   "kind": "hypothesis",
+   "session": "f3f0b801b9020917",
+   "ref": "H-2"
+  }
+ ],
+ "counts": {
+  "hypotheses": 11,
+  "abstentions": 3,
+  "nodes": 15
+ },
+ "sessions": [
+  {
+   "session": "116a8c2070a3a93d",
+   "closure": "server-close",
+   "sealSha256": "ccf57b304812ab730410122447b700c5349d45b4ae457d98678db580647cdb2f"
+  },
+  {
+   "session": "1d03da6df39c0f79",
+   "closure": "server-close",
+   "sealSha256": "db58a910a223588e0c23a2457092869fd42341a06626921a7fc328630a0cbcf1"
+  },
+  {
+   "session": "631bf7f0428334c6",
+   "closure": "server-close",
+   "sealSha256": "8d169f275189df223c31c6413c3dee042f337aec0df4c039b7b2acd142b70590"
+  },
+  {
+   "session": "b00a2e7f2d9195a9",
+   "closure": "server-close",
+   "sealSha256": "a7ab98b809a01602f39ee7a379af05148cf044408523f4619e17035423edcab3"
+  },
+  {
+   "session": "f3f0b801b9020917",
+   "closure": "server-close",
+   "sealSha256": "255b4bee7104ed3685e07182a2e9e8d94db74eee0e47cdd4036f1890a2299ee6"
+  }
+ ],
+ "sessionPlan": {
+  "file": "SESSIONS.json",
+  "sha256": "7bae11a226b6fce412c338a561823a7e0e3c3db0ee1e96f4bef821e40a36a893",
+  "expectedSessions": 5
+ },
+ "partition": {
+  "file": "partitions/PARTITION.json",
+  "sha256": "9b53bd0676d6da9708b367d7583c99204b8ccc5967c1054c8413cc2b8fbb3992"
+ },
+ "manifests": {
+  "discovery": "bb853ac81c3d716066e71167260a2a24a863f91a0274b23747d8411d3ad8f58b",
+  "spec": "bbf8c7eaf93e9fd64bc11f0111cd154832ae81ffb40d498849583b686249c580",
+  "heldout": "aea781124971e1550f7930b9bc94f02c319177d8a264bd7574345482d8841704",
+  "eval": "359a16ff08c4a150c4dfd6322c11654b02c5209bf9ba552e90a98e64717b07d6"
+ },
+ "statement": "Frozen after every declared session was closed and imported, and before any held-out or evaluation file was read through freeze.ts. Evaluation readers are bound to the manifests listed here. Nothing in P3 scores hypotheses. Record the anchor and this file's hash in the operator-controlled record outside the repository (Q14)."
+}

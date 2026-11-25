@@ -1,0 +1,12 @@
+{
+ "step": "report",
+ "ok": true,
+ "profiles": 5,
+ "abstentionCheck": {
+  "overAbstainingAboveAccurateOn": [],
+  "allowed": [
+   "incorrect assertions"
+  ],
+  "why": "The over-abstaining profile makes no assertion, so it has no contradicted prediction: it is \"better\" on incorrect assertions only because it asserts nothing. Its accuracy has no denominator (no rate), its coverage is 0 and its detection counts every abstention as not detected, so it never ranks above the accurate profile on those (EXPERIMENT_DESIGN §3 abstention handling)."
+ }
+}
