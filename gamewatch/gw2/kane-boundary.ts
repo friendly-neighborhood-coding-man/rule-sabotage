@@ -158,7 +158,7 @@ export async function testDoubleRoute(exp: string, profiles: string[], o: { shim
   return out;
 }
 
-if (process.argv[1]?.endsWith('gw2/kane-boundary.ts')) {
+if (process.argv[1]?.replace(/\\/g, "/").endsWith('gw2/kane-boundary.ts')) {
   const a = process.argv.slice(2), arg = (k: string) => { const i = a.indexOf(k); return i >= 0 ? a[i + 1] : undefined; };
   const expArg = a.find((x, i) => !x.startsWith('--') && !a[i - 1]?.startsWith('--')), route = arg('--route');
   if (!expArg || !['real', 'test-double'].includes(route ?? '')) { console.error('usage: kane-boundary.ts <expDir> --route real|test-double [--profiles a,b] [--shim f]'); process.exit(2); }

@@ -422,7 +422,7 @@ export function view(file: string) {
   };
 }
 
-if (process.argv[1]?.endsWith('gw2/judgments.ts')) {
+if (process.argv[1]?.replace(/\\/g, "/").endsWith('gw2/judgments.ts')) {
   const [cmd, file, ...rest] = process.argv.slice(2);
   if (!cmd || !file) { console.error('usage: judgments.ts verify|head|append <judgments.ndjson> [...]'); process.exit(2); }
   try {

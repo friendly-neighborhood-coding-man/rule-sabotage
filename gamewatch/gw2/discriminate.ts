@@ -137,7 +137,7 @@ export function discriminate(exp: string, o: { at?: string; root?: string; encod
   return { report, file: outF };
 }
 
-if (process.argv[1]?.endsWith('gw2/discriminate.ts')) {
+if (process.argv[1]?.replace(/\\/g, "/").endsWith('gw2/discriminate.ts')) {
   const a = process.argv.slice(2), arg = (k: string) => { const i = a.indexOf(k); return i >= 0 ? a[i + 1] : undefined; };
   const exp = a.find((x, i) => !x.startsWith('--') && !a[i - 1]?.startsWith('--'));
   if (!exp) { console.error('usage: discriminate.ts <expDir> [--at ISO] [--encoding f]'); process.exit(2); }

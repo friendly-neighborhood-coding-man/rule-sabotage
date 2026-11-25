@@ -291,7 +291,7 @@ export function verifyPartitions(expDir: string): string[] {
   return bad;
 }
 
-if (process.argv[1]?.endsWith('gw2/partition.ts')) {
+if (process.argv[1]?.replace(/\\/g, "/").endsWith('gw2/partition.ts')) {
   const [proc, bundle, exp] = process.argv.slice(2).filter(a => !a.startsWith('--'));
   if (!exp) { console.error('usage: partition.ts <procedure.json> <bundle.json> <expDir> [--fixture] [--structured-field]'); process.exit(2); }
   try {

@@ -117,7 +117,7 @@ export function verifyRepresentationSeal(exp: string, o: { root?: string } = {})
   return { ok: !problems.length, problems, representations: s.representations as { id: string; hypothesis: string; origin: Origin }[], sealSha256: fileSha256(P(exp).seal), graphHead: s.graphHead };
 }
 
-if (process.argv[1]?.endsWith('gw2/representations.ts')) {
+if (process.argv[1]?.replace(/\\/g, "/").endsWith('gw2/representations.ts')) {
   const [cmd, exp] = process.argv.slice(2), ai = process.argv.indexOf('--at'), at = ai > 0 ? process.argv[ai + 1] : undefined;
   try {
     if (cmd === 'submitter' && exp) console.log(`${appendSubmitterRepresentations(exp, { at }).length} submitter representation node(s) appended`);

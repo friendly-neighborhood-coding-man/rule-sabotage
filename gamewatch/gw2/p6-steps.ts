@@ -250,7 +250,7 @@ export async function runStep(step: string, verdict: string, exp: string, o: Rec
   }
 }
 
-if (process.argv[1]?.endsWith('gw2/p6-steps.ts')) {
+if (process.argv[1]?.replace(/\\/g, "/").endsWith('gw2/p6-steps.ts')) {
   const a = process.argv.slice(2), opt: Record<string, string> = {};
   const pos: string[] = [];
   for (let i = 0; i < a.length; i++) if (a[i].startsWith('--')) opt[a[i].slice(2)] = a[++i]; else pos.push(a[i]);

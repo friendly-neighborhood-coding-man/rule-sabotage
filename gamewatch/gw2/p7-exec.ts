@@ -178,7 +178,7 @@ export function opsStatus(exp: string) {
   return sessions.map(s => Object.fromEntries(OPERATIONAL_FIELDS.filter(k => k in s).map(k => [k, s[k]])));
 }
 
-if (process.argv[1]?.endsWith('gw2/p7-exec.ts')) {
+if (process.argv[1]?.replace(/\\/g, "/").endsWith('gw2/p7-exec.ts')) {
   const [cmd, p] = process.argv.slice(2);
   if (cmd === 'ops-status' && p) { console.log(JSON.stringify(opsStatus(resolve(p)), null, 1)); process.exit(0); }
   if (cmd === 'verify-record' && p) { const l = readExecLedger(resolve(p)); console.log(JSON.stringify({ ok: l.ok, entries: l.entries.length, events: l.entries.map(e => e.event), problems: l.problems }, null, 1)); process.exit(l.ok ? 0 : 1); }

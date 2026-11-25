@@ -70,7 +70,7 @@ export function importGw1(out: string, root = ROOT) {
   return { findings: ids, labels: labelIds };
 }
 
-if (process.argv[1]?.endsWith('gw2/import-gw1.ts')) {
+if (process.argv[1]?.replace(/\\/g, "/").endsWith('gw2/import-gw1.ts')) {
   const out = process.argv[2] ?? join(ROOT, 'evidence/gw2/gw1-import/judgments.ndjson');
   try { const r = importGw1(out); console.log(`imported ${r.findings.length} findings and ${r.labels.length} labels into ${out}`); }
   catch (e) { console.error((e as Error).message); process.exit(5); }

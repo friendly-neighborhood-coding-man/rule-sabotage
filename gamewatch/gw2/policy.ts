@@ -113,7 +113,7 @@ export function evaluate(policy: Policy, inv: Inventory, s: Session) {
   };
 }
 
-if (process.argv[1]?.endsWith('gw2/policy.ts')) {
+if (process.argv[1]?.replace(/\\/g, "/").endsWith('gw2/policy.ts')) {
   const [pf, bf, sd, outF] = process.argv.slice(2);
   if (!outF) { console.error('usage: policy.ts <policy.json> <bundle.json> <sessionDir> <out.json>'); process.exit(2); }
   const out = assertWritableOutput(outF), inv = loadInventory(bf);

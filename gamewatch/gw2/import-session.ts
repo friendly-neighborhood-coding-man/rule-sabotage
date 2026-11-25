@@ -132,7 +132,7 @@ export function importSession(sessionDir: string, graph: string, opts: ImportOpt
   return receipt;
 }
 
-if (process.argv[1]?.endsWith('gw2/import-session.ts')) {
+if (process.argv[1]?.replace(/\\/g, "/").endsWith('gw2/import-session.ts')) {
   const a = process.argv.slice(2), arg = (k: string) => { const i = a.indexOf(k); return i >= 0 ? a[i + 1] : undefined; };
   const [sd, graph] = a.filter((x, i) => !x.startsWith('--') && !a[i - 1]?.startsWith('--'));
   if (!graph) { console.error('usage: import-session.ts <sessionDir> <judgments.ndjson> [--completeness f] [--coverage f] [--kane-stdout f --kane-args f]'); process.exit(2); }
