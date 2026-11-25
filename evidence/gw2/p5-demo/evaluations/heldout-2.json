@@ -1,0 +1,2432 @@
+{
+ "schema": "gamewatch/gw2-heldout@1",
+ "evaluator": {
+  "id": "gamewatch/gw2/heldout.ts",
+  "version": "1"
+ },
+ "columns": {
+  "explicitAbstentions": 1,
+  "hypotheses": 10,
+  "withSubmitterRepresentation": 7,
+  "withExternalTranslation": 2,
+  "withoutRepresentation": 1,
+  "submitter": {
+   "representations": 7,
+   "represented": 6,
+   "partiallyRepresented": 0,
+   "notRepresentable": 1
+  },
+  "externalTranslation": {
+   "representations": 2,
+   "represented": 2,
+   "partiallyRepresented": 0,
+   "notRepresentable": 0
+  },
+  "note": "Abstentions are their own column: they are neither predictions nor errors and enter no accuracy figure. Submitter-authored and externally translated representations are reported separately and never pooled."
+ },
+ "hypotheses": [
+  {
+   "hypothesis": "2db5db364dcaaf7e2ab431182752c0688aa9cea29d0bfe4f843ee5b97bbc3ce6",
+   "ref": "H-1",
+   "status": "evaluated",
+   "representations": [
+    {
+     "representation": "31886fd7b20db43e7b547273df2733d55cb92fbba587101298f5d051a5e23411",
+     "origin": "submitter",
+     "author": "test-double:gw2-review-test-double",
+     "fidelityDeclared": "faithful",
+     "representationStatus": "represented",
+     "notRepresentedClauses": 0,
+     "byBuild": [
+      {
+       "build": "QX-41",
+       "discoveryFit": {
+        "value": "contradicted",
+        "evaluated": 421,
+        "support": {
+         "full": 205,
+         "partial": 0,
+         "counterExample": 216,
+         "inconclusive": 0
+        },
+        "units": {
+         "cases": 13,
+         "matches": 10
+        },
+        "counterCount": 216,
+        "statement": "contradicted on 421 evaluated turn-start situation(s) from partition discovery, build QX-41: 216 contradicted outcome check(s) in 216 situation(s)"
+       },
+       "heldout": {
+        "situations": 265,
+        "lawClauses": 2,
+        "invarianceClauses": 0,
+        "outcomeChecks": {
+         "matching": 72,
+         "contradicting": 72,
+         "unknown": 0,
+         "unpredicted": 0
+        },
+        "accuracy": {
+         "outcomeChecks": {
+          "k": 72,
+          "n": 144,
+          "rate": 0.5,
+          "wilson95": [
+           0.419,
+           0.581
+          ],
+          "unit": "outcome checks with a recorded outcome",
+          "note": "descriptive: checks within one situation and situations within one match are correlated"
+         },
+         "situations": {
+          "k": 72,
+          "n": 144,
+          "rate": 0.5,
+          "wilson95": [
+           0.419,
+           0.581
+          ],
+          "unit": "situations with at least one recorded check, all matching",
+          "note": "descriptive: turns of one match are not independent replicates"
+         },
+         "units": {
+          "k": 0,
+          "n": 10,
+          "rate": 0,
+          "wilson95": [
+           0,
+           0.278
+          ],
+          "unit": "cases and matches with at least one recorded check, none contradicting",
+          "cases": 8,
+          "matches": 2,
+          "note": "independent units: one scripted case or one match counts once"
+         }
+        },
+        "coverage": {
+         "k": 144,
+         "n": 144,
+         "rate": 1,
+         "wilson95": [
+          0.974,
+          1
+         ],
+         "unit": "situations of kind turn-start where the representation makes at least one prediction"
+        },
+        "counterExamples": [
+         {
+          "id": "C-4101c9/s0/turn-start",
+          "field": "actionsGranted",
+          "predicted": 4,
+          "observed": 3
+         },
+         {
+          "id": "C-4101c9/s9/turn-start",
+          "field": "actionsGranted",
+          "predicted": 4,
+          "observed": 3
+         },
+         {
+          "id": "C-4101c9/s16/turn-start",
+          "field": "actionsGranted",
+          "predicted": 4,
+          "observed": 3
+         },
+         {
+          "id": "C-4d3b41/s0/turn-start",
+          "field": "actionsGranted",
+          "predicted": 4,
+          "observed": 3
+         },
+         {
+          "id": "C-4d3b41/s6/turn-start",
+          "field": "actionsGranted",
+          "predicted": 4,
+          "observed": 3
+         },
+         {
+          "id": "C-58b18b/s0/turn-start",
+          "field": "actionsGranted",
+          "predicted": 4,
+          "observed": 3
+         },
+         {
+          "id": "C-58b18b/s8/turn-start",
+          "field": "actionsGranted",
+          "predicted": 4,
+          "observed": 3
+         },
+         {
+          "id": "C-5f8a7a/s0/turn-start",
+          "field": "actionsGranted",
+          "predicted": 4,
+          "observed": 3
+         },
+         {
+          "id": "C-5f8a7a/s6/turn-start",
+          "field": "actionsGranted",
+          "predicted": 4,
+          "observed": 3
+         },
+         {
+          "id": "C-5f8a7a/s11/turn-start",
+          "field": "actionsGranted",
+          "predicted": 4,
+          "observed": 3
+         },
+         {
+          "id": "C-5f8a7a/s16/turn-start",
+          "field": "actionsGranted",
+          "predicted": 4,
+          "observed": 3
+         },
+         {
+          "id": "C-6d57eb/s0/turn-start",
+          "field": "actionsGranted",
+          "predicted": 4,
+          "observed": 3
+         }
+        ],
+        "counterCount": 72,
+        "invariance": null
+       }
+      },
+      {
+       "build": "QX-73",
+       "discoveryFit": {
+        "value": "fits",
+        "evaluated": 300,
+        "support": {
+         "full": 300,
+         "partial": 0,
+         "counterExample": 0,
+         "inconclusive": 0
+        },
+        "units": {
+         "cases": 13,
+         "matches": 10
+        },
+        "counterCount": 0,
+        "statement": "fits on 300 evaluated turn-start situation(s) from partition discovery, build QX-73: 300 with full support, 0 with partial support (some expected outcomes not recorded); no counter-example among them (finite evidence: this does not establish the rule for situations not evaluated)"
+       },
+       "heldout": {
+        "situations": 131,
+        "lawClauses": 2,
+        "invarianceClauses": 0,
+        "outcomeChecks": {
+         "matching": 68,
+         "contradicting": 0,
+         "unknown": 0,
+         "unpredicted": 0
+        },
+        "accuracy": {
+         "outcomeChecks": {
+          "k": 68,
+          "n": 68,
+          "rate": 1,
+          "wilson95": [
+           0.947,
+           1
+          ],
+          "unit": "outcome checks with a recorded outcome",
+          "note": "descriptive: checks within one situation and situations within one match are correlated"
+         },
+         "situations": {
+          "k": 68,
+          "n": 68,
+          "rate": 1,
+          "wilson95": [
+           0.947,
+           1
+          ],
+          "unit": "situations with at least one recorded check, all matching",
+          "note": "descriptive: turns of one match are not independent replicates"
+         },
+         "units": {
+          "k": 10,
+          "n": 10,
+          "rate": 1,
+          "wilson95": [
+           0.722,
+           1
+          ],
+          "unit": "cases and matches with at least one recorded check, none contradicting",
+          "cases": 8,
+          "matches": 2,
+          "note": "independent units: one scripted case or one match counts once"
+         }
+        },
+        "coverage": {
+         "k": 68,
+         "n": 68,
+         "rate": 1,
+         "wilson95": [
+          0.947,
+          1
+         ],
+         "unit": "situations of kind turn-start where the representation makes at least one prediction"
+        },
+        "counterExamples": [],
+        "counterCount": 0,
+        "invariance": null
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "hypothesis": "b350d1da5aeefbfcd4d5c4f236fcb8df4432a52f347616efeb0a1b6c10321c2a",
+   "ref": "H-2",
+   "status": "evaluated",
+   "representations": [
+    {
+     "representation": "2259e9580e218a55590098d10775d4a904cf3f68ad3de92c1fb925cb34b98780",
+     "origin": "submitter",
+     "author": "test-double:gw2-review-test-double",
+     "fidelityDeclared": "faithful",
+     "representationStatus": "represented",
+     "notRepresentedClauses": 0,
+     "byBuild": [
+      {
+       "build": "QX-41",
+       "discoveryFit": {
+        "value": "fits",
+        "evaluated": 421,
+        "support": {
+         "full": 421,
+         "partial": 0,
+         "counterExample": 0,
+         "inconclusive": 0
+        },
+        "units": {
+         "cases": 13,
+         "matches": 10
+        },
+        "counterCount": 0,
+        "statement": "fits on 421 evaluated turn-start situation(s) from partition discovery, build QX-41: 421 with full support, 0 with partial support (some expected outcomes not recorded); no counter-example among them (finite evidence: this does not establish the rule for situations not evaluated)"
+       },
+       "heldout": {
+        "situations": 265,
+        "lawClauses": 1,
+        "invarianceClauses": 0,
+        "outcomeChecks": {
+         "matching": 144,
+         "contradicting": 0,
+         "unknown": 0,
+         "unpredicted": 0
+        },
+        "accuracy": {
+         "outcomeChecks": {
+          "k": 144,
+          "n": 144,
+          "rate": 1,
+          "wilson95": [
+           0.974,
+           1
+          ],
+          "unit": "outcome checks with a recorded outcome",
+          "note": "descriptive: checks within one situation and situations within one match are correlated"
+         },
+         "situations": {
+          "k": 144,
+          "n": 144,
+          "rate": 1,
+          "wilson95": [
+           0.974,
+           1
+          ],
+          "unit": "situations with at least one recorded check, all matching",
+          "note": "descriptive: turns of one match are not independent replicates"
+         },
+         "units": {
+          "k": 10,
+          "n": 10,
+          "rate": 1,
+          "wilson95": [
+           0.722,
+           1
+          ],
+          "unit": "cases and matches with at least one recorded check, none contradicting",
+          "cases": 8,
+          "matches": 2,
+          "note": "independent units: one scripted case or one match counts once"
+         }
+        },
+        "coverage": {
+         "k": 144,
+         "n": 144,
+         "rate": 1,
+         "wilson95": [
+          0.974,
+          1
+         ],
+         "unit": "situations of kind turn-start where the representation makes at least one prediction"
+        },
+        "counterExamples": [],
+        "counterCount": 0,
+        "invariance": null
+       }
+      },
+      {
+       "build": "QX-73",
+       "discoveryFit": {
+        "value": "contradicted",
+        "evaluated": 300,
+        "support": {
+         "full": 142,
+         "partial": 0,
+         "counterExample": 158,
+         "inconclusive": 0
+        },
+        "units": {
+         "cases": 13,
+         "matches": 10
+        },
+        "counterCount": 158,
+        "statement": "contradicted on 300 evaluated turn-start situation(s) from partition discovery, build QX-73: 158 contradicted outcome check(s) in 158 situation(s)"
+       },
+       "heldout": {
+        "situations": 131,
+        "lawClauses": 1,
+        "invarianceClauses": 0,
+        "outcomeChecks": {
+         "matching": 33,
+         "contradicting": 35,
+         "unknown": 0,
+         "unpredicted": 0
+        },
+        "accuracy": {
+         "outcomeChecks": {
+          "k": 33,
+          "n": 68,
+          "rate": 0.485,
+          "wilson95": [
+           0.371,
+           0.602
+          ],
+          "unit": "outcome checks with a recorded outcome",
+          "note": "descriptive: checks within one situation and situations within one match are correlated"
+         },
+         "situations": {
+          "k": 33,
+          "n": 68,
+          "rate": 0.485,
+          "wilson95": [
+           0.371,
+           0.602
+          ],
+          "unit": "situations with at least one recorded check, all matching",
+          "note": "descriptive: turns of one match are not independent replicates"
+         },
+         "units": {
+          "k": 0,
+          "n": 10,
+          "rate": 0,
+          "wilson95": [
+           0,
+           0.278
+          ],
+          "unit": "cases and matches with at least one recorded check, none contradicting",
+          "cases": 8,
+          "matches": 2,
+          "note": "independent units: one scripted case or one match counts once"
+         }
+        },
+        "coverage": {
+         "k": 68,
+         "n": 68,
+         "rate": 1,
+         "wilson95": [
+          0.947,
+          1
+         ],
+         "unit": "situations of kind turn-start where the representation makes at least one prediction"
+        },
+        "counterExamples": [
+         {
+          "id": "C-688065/s0/turn-start",
+          "field": "actionsGranted",
+          "predicted": 3,
+          "observed": 4
+         },
+         {
+          "id": "C-688065/s6/turn-start",
+          "field": "actionsGranted",
+          "predicted": 3,
+          "observed": 4
+         },
+         {
+          "id": "C-688065/s11/turn-start",
+          "field": "actionsGranted",
+          "predicted": 3,
+          "observed": 4
+         },
+         {
+          "id": "C-688065/s16/turn-start",
+          "field": "actionsGranted",
+          "predicted": 3,
+          "observed": 4
+         },
+         {
+          "id": "C-783031/s0/turn-start",
+          "field": "actionsGranted",
+          "predicted": 3,
+          "observed": 4
+         },
+         {
+          "id": "C-783031/s9/turn-start",
+          "field": "actionsGranted",
+          "predicted": 3,
+          "observed": 4
+         },
+         {
+          "id": "C-783031/s16/turn-start",
+          "field": "actionsGranted",
+          "predicted": 3,
+          "observed": 4
+         },
+         {
+          "id": "C-7b5eb6/s0/turn-start",
+          "field": "actionsGranted",
+          "predicted": 3,
+          "observed": 4
+         },
+         {
+          "id": "C-7b5eb6/s6/turn-start",
+          "field": "actionsGranted",
+          "predicted": 3,
+          "observed": 4
+         },
+         {
+          "id": "C-93c271/s0/turn-start",
+          "field": "actionsGranted",
+          "predicted": 3,
+          "observed": 4
+         },
+         {
+          "id": "C-93c271/s8/turn-start",
+          "field": "actionsGranted",
+          "predicted": 3,
+          "observed": 4
+         },
+         {
+          "id": "C-9f9cb1/s0/turn-start",
+          "field": "actionsGranted",
+          "predicted": 3,
+          "observed": 4
+         }
+        ],
+        "counterCount": 35,
+        "invariance": null
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "hypothesis": "389df43f9c2ff724126aa6b592817534786088e5248b078f0f645b8a112156d6",
+   "ref": "H-3",
+   "status": "evaluated",
+   "representations": [
+    {
+     "representation": "6fd6c13b576030be70194279b4e78ad13c9ad97e4dda1b1e2b9453696027595d",
+     "origin": "submitter",
+     "author": "test-double:gw2-review-test-double",
+     "fidelityDeclared": "faithful",
+     "representationStatus": "represented",
+     "notRepresentedClauses": 0,
+     "byBuild": [
+      {
+       "build": "QX-41",
+       "discoveryFit": {
+        "value": "contradicted",
+        "evaluated": 421,
+        "support": {
+         "full": 160,
+         "partial": 0,
+         "counterExample": 261,
+         "inconclusive": 0
+        },
+        "units": {
+         "cases": 13,
+         "matches": 10
+        },
+        "counterCount": 261,
+        "statement": "contradicted on 421 evaluated turn-start situation(s) from partition discovery, build QX-41: 261 contradicted outcome check(s) in 261 situation(s)"
+       },
+       "heldout": {
+        "situations": 265,
+        "lawClauses": 1,
+        "invarianceClauses": 0,
+        "outcomeChecks": {
+         "matching": 60,
+         "contradicting": 84,
+         "unknown": 0,
+         "unpredicted": 0
+        },
+        "accuracy": {
+         "outcomeChecks": {
+          "k": 60,
+          "n": 144,
+          "rate": 0.417,
+          "wilson95": [
+           0.339,
+           0.498
+          ],
+          "unit": "outcome checks with a recorded outcome",
+          "note": "descriptive: checks within one situation and situations within one match are correlated"
+         },
+         "situations": {
+          "k": 60,
+          "n": 144,
+          "rate": 0.417,
+          "wilson95": [
+           0.339,
+           0.498
+          ],
+          "unit": "situations with at least one recorded check, all matching",
+          "note": "descriptive: turns of one match are not independent replicates"
+         },
+         "units": {
+          "k": 8,
+          "n": 10,
+          "rate": 0.8,
+          "wilson95": [
+           0.49,
+           0.943
+          ],
+          "unit": "cases and matches with at least one recorded check, none contradicting",
+          "cases": 8,
+          "matches": 2,
+          "note": "independent units: one scripted case or one match counts once"
+         }
+        },
+        "coverage": {
+         "k": 144,
+         "n": 144,
+         "rate": 1,
+         "wilson95": [
+          0.974,
+          1
+         ],
+         "unit": "situations of kind turn-start where the representation makes at least one prediction"
+        },
+        "counterExamples": [
+         {
+          "id": "M-2bdabb/t11/turn-start",
+          "field": "actionsGranted",
+          "predicted": 3,
+          "observed": 2
+         },
+         {
+          "id": "M-2bdabb/t13/turn-start",
+          "field": "actionsGranted",
+          "predicted": 3,
+          "observed": 2
+         },
+         {
+          "id": "M-2bdabb/t15/turn-start",
+          "field": "actionsGranted",
+          "predicted": 3,
+          "observed": 2
+         },
+         {
+          "id": "M-2bdabb/t16/turn-start",
+          "field": "actionsGranted",
+          "predicted": 3,
+          "observed": 2
+         },
+         {
+          "id": "M-2bdabb/t17/turn-start",
+          "field": "actionsGranted",
+          "predicted": 3,
+          "observed": 2
+         },
+         {
+          "id": "M-2bdabb/t18/turn-start",
+          "field": "actionsGranted",
+          "predicted": 3,
+          "observed": 2
+         },
+         {
+          "id": "M-2bdabb/t19/turn-start",
+          "field": "actionsGranted",
+          "predicted": 3,
+          "observed": 2
+         },
+         {
+          "id": "M-2bdabb/t20/turn-start",
+          "field": "actionsGranted",
+          "predicted": 3,
+          "observed": 2
+         },
+         {
+          "id": "M-2bdabb/t21/turn-start",
+          "field": "actionsGranted",
+          "predicted": 3,
+          "observed": 2
+         },
+         {
+          "id": "M-2bdabb/t22/turn-start",
+          "field": "actionsGranted",
+          "predicted": 3,
+          "observed": 2
+         },
+         {
+          "id": "M-2bdabb/t23/turn-start",
+          "field": "actionsGranted",
+          "predicted": 3,
+          "observed": 2
+         },
+         {
+          "id": "M-2bdabb/t24/turn-start",
+          "field": "actionsGranted",
+          "predicted": 3,
+          "observed": 2
+         }
+        ],
+        "counterCount": 84,
+        "invariance": null
+       }
+      },
+      {
+       "build": "QX-73",
+       "discoveryFit": {
+        "value": "contradicted",
+        "evaluated": 300,
+        "support": {
+         "full": 125,
+         "partial": 0,
+         "counterExample": 175,
+         "inconclusive": 0
+        },
+        "units": {
+         "cases": 13,
+         "matches": 10
+        },
+        "counterCount": 175,
+        "statement": "contradicted on 300 evaluated turn-start situation(s) from partition discovery, build QX-73: 175 contradicted outcome check(s) in 175 situation(s)"
+       },
+       "heldout": {
+        "situations": 131,
+        "lawClauses": 1,
+        "invarianceClauses": 0,
+        "outcomeChecks": {
+         "matching": 34,
+         "contradicting": 34,
+         "unknown": 0,
+         "unpredicted": 0
+        },
+        "accuracy": {
+         "outcomeChecks": {
+          "k": 34,
+          "n": 68,
+          "rate": 0.5,
+          "wilson95": [
+           0.384,
+           0.616
+          ],
+          "unit": "outcome checks with a recorded outcome",
+          "note": "descriptive: checks within one situation and situations within one match are correlated"
+         },
+         "situations": {
+          "k": 34,
+          "n": 68,
+          "rate": 0.5,
+          "wilson95": [
+           0.384,
+           0.616
+          ],
+          "unit": "situations with at least one recorded check, all matching",
+          "note": "descriptive: turns of one match are not independent replicates"
+         },
+         "units": {
+          "k": 0,
+          "n": 10,
+          "rate": 0,
+          "wilson95": [
+           0,
+           0.278
+          ],
+          "unit": "cases and matches with at least one recorded check, none contradicting",
+          "cases": 8,
+          "matches": 2,
+          "note": "independent units: one scripted case or one match counts once"
+         }
+        },
+        "coverage": {
+         "k": 68,
+         "n": 68,
+         "rate": 1,
+         "wilson95": [
+          0.947,
+          1
+         ],
+         "unit": "situations of kind turn-start where the representation makes at least one prediction"
+        },
+        "counterExamples": [
+         {
+          "id": "C-688065/s0/turn-start",
+          "field": "actionsGranted",
+          "predicted": 3,
+          "observed": 4
+         },
+         {
+          "id": "C-688065/s6/turn-start",
+          "field": "actionsGranted",
+          "predicted": 3,
+          "observed": 4
+         },
+         {
+          "id": "C-688065/s11/turn-start",
+          "field": "actionsGranted",
+          "predicted": 3,
+          "observed": 4
+         },
+         {
+          "id": "C-688065/s16/turn-start",
+          "field": "actionsGranted",
+          "predicted": 3,
+          "observed": 4
+         },
+         {
+          "id": "C-783031/s0/turn-start",
+          "field": "actionsGranted",
+          "predicted": 3,
+          "observed": 4
+         },
+         {
+          "id": "C-783031/s9/turn-start",
+          "field": "actionsGranted",
+          "predicted": 3,
+          "observed": 4
+         },
+         {
+          "id": "C-783031/s16/turn-start",
+          "field": "actionsGranted",
+          "predicted": 3,
+          "observed": 4
+         },
+         {
+          "id": "C-7b5eb6/s0/turn-start",
+          "field": "actionsGranted",
+          "predicted": 3,
+          "observed": 4
+         },
+         {
+          "id": "C-7b5eb6/s6/turn-start",
+          "field": "actionsGranted",
+          "predicted": 3,
+          "observed": 4
+         },
+         {
+          "id": "C-93c271/s0/turn-start",
+          "field": "actionsGranted",
+          "predicted": 3,
+          "observed": 4
+         },
+         {
+          "id": "C-93c271/s8/turn-start",
+          "field": "actionsGranted",
+          "predicted": 3,
+          "observed": 4
+         },
+         {
+          "id": "C-9f9cb1/s0/turn-start",
+          "field": "actionsGranted",
+          "predicted": 3,
+          "observed": 4
+         }
+        ],
+        "counterCount": 34,
+        "invariance": null
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "hypothesis": "9c58aa226f403e9f4bf8e75f9dd6312a6be5dcbc9e4bb8530a291853c0850601",
+   "ref": "H-4",
+   "status": "evaluated",
+   "representations": [
+    {
+     "representation": "a664bb3d0bb863d80d33b276e22c135affe43f0e40b862aebe025c5bce68bda2",
+     "origin": "submitter",
+     "author": "test-double:gw2-review-test-double",
+     "fidelityDeclared": "faithful",
+     "representationStatus": "represented",
+     "notRepresentedClauses": 0,
+     "byBuild": [
+      {
+       "build": "QX-41",
+       "discoveryFit": {
+        "value": "contradicted",
+        "evaluated": 3,
+        "support": {
+         "full": 2,
+         "partial": 0,
+         "counterExample": 1,
+         "inconclusive": 0
+        },
+        "units": {
+         "cases": 2,
+         "matches": 0
+        },
+        "counterCount": 2,
+        "statement": "contradicted on 3 evaluated effect-entry situation(s) from partition discovery, build QX-41: 2 contradicted outcome check(s) in 1 situation(s)"
+       },
+       "heldout": {
+        "situations": 265,
+        "lawClauses": 2,
+        "invarianceClauses": 0,
+        "outcomeChecks": {
+         "matching": 0,
+         "contradicting": 2,
+         "unknown": 0,
+         "unpredicted": 0
+        },
+        "accuracy": {
+         "outcomeChecks": {
+          "k": 0,
+          "n": 2,
+          "rate": 0,
+          "wilson95": [
+           0,
+           0.658
+          ],
+          "unit": "outcome checks with a recorded outcome",
+          "note": "descriptive: checks within one situation and situations within one match are correlated"
+         },
+         "situations": {
+          "k": 0,
+          "n": 1,
+          "rate": 0,
+          "wilson95": [
+           0,
+           0.793
+          ],
+          "unit": "situations with at least one recorded check, all matching",
+          "note": "descriptive: turns of one match are not independent replicates"
+         },
+         "units": {
+          "k": 0,
+          "n": 1,
+          "rate": 0,
+          "wilson95": [
+           0,
+           0.793
+          ],
+          "unit": "cases and matches with at least one recorded check, none contradicting",
+          "cases": 1,
+          "matches": 0,
+          "note": "independent units: one scripted case or one match counts once"
+         }
+        },
+        "coverage": {
+         "k": 1,
+         "n": 106,
+         "rate": 0.009,
+         "wilson95": [
+          0.002,
+          0.052
+         ],
+         "unit": "situations of kind effect-entry where the representation makes at least one prediction"
+        },
+        "counterExamples": [
+         {
+          "id": "C-58b18b/s10/e1",
+          "field": "absorbed",
+          "predicted": false,
+          "observed": true
+         },
+         {
+          "id": "C-58b18b/s10/e1",
+          "field": "fired",
+          "predicted": true,
+          "observed": false
+         }
+        ],
+        "counterCount": 2,
+        "invariance": null
+       }
+      },
+      {
+       "build": "QX-73",
+       "discoveryFit": {
+        "value": "fits",
+        "evaluated": 3,
+        "support": {
+         "full": 3,
+         "partial": 0,
+         "counterExample": 0,
+         "inconclusive": 0
+        },
+        "units": {
+         "cases": 2,
+         "matches": 0
+        },
+        "counterCount": 0,
+        "statement": "fits on 3 evaluated effect-entry situation(s) from partition discovery, build QX-73: 3 with full support, 0 with partial support (some expected outcomes not recorded); no counter-example among them (finite evidence: this does not establish the rule for situations not evaluated)"
+       },
+       "heldout": {
+        "situations": 131,
+        "lawClauses": 2,
+        "invarianceClauses": 0,
+        "outcomeChecks": {
+         "matching": 2,
+         "contradicting": 0,
+         "unknown": 0,
+         "unpredicted": 0
+        },
+        "accuracy": {
+         "outcomeChecks": {
+          "k": 2,
+          "n": 2,
+          "rate": 1,
+          "wilson95": [
+           0.342,
+           1
+          ],
+          "unit": "outcome checks with a recorded outcome",
+          "note": "descriptive: checks within one situation and situations within one match are correlated"
+         },
+         "situations": {
+          "k": 1,
+          "n": 1,
+          "rate": 1,
+          "wilson95": [
+           0.207,
+           1
+          ],
+          "unit": "situations with at least one recorded check, all matching",
+          "note": "descriptive: turns of one match are not independent replicates"
+         },
+         "units": {
+          "k": 1,
+          "n": 1,
+          "rate": 1,
+          "wilson95": [
+           0.207,
+           1
+          ],
+          "unit": "cases and matches with at least one recorded check, none contradicting",
+          "cases": 1,
+          "matches": 0,
+          "note": "independent units: one scripted case or one match counts once"
+         }
+        },
+        "coverage": {
+         "k": 1,
+         "n": 48,
+         "rate": 0.021,
+         "wilson95": [
+          0.004,
+          0.109
+         ],
+         "unit": "situations of kind effect-entry where the representation makes at least one prediction"
+        },
+        "counterExamples": [],
+        "counterCount": 0,
+        "invariance": null
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "hypothesis": "c0b1ab26679ce8a33f45ab50c56a23b577c2294e68600024fe570598adb5fc6f",
+   "ref": "H-5",
+   "status": "evaluated",
+   "representations": [
+    {
+     "representation": "6677f7544a178bc2477fd25daa1a357e1b86ba4d530ac002ec1a4255a2495b17",
+     "origin": "submitter",
+     "author": "test-double:gw2-review-test-double",
+     "fidelityDeclared": "faithful",
+     "representationStatus": "represented",
+     "notRepresentedClauses": 0,
+     "byBuild": [
+      {
+       "build": "QX-41",
+       "discoveryFit": {
+        "value": "fits",
+        "evaluated": 3,
+        "support": {
+         "full": 3,
+         "partial": 0,
+         "counterExample": 0,
+         "inconclusive": 0
+        },
+        "units": {
+         "cases": 2,
+         "matches": 0
+        },
+        "counterCount": 0,
+        "statement": "fits on 3 evaluated effect-entry situation(s) from partition discovery, build QX-41: 3 with full support, 0 with partial support (some expected outcomes not recorded); no counter-example among them (finite evidence: this does not establish the rule for situations not evaluated)"
+       },
+       "heldout": {
+        "situations": 265,
+        "lawClauses": 1,
+        "invarianceClauses": 0,
+        "outcomeChecks": {
+         "matching": 2,
+         "contradicting": 0,
+         "unknown": 0,
+         "unpredicted": 0
+        },
+        "accuracy": {
+         "outcomeChecks": {
+          "k": 2,
+          "n": 2,
+          "rate": 1,
+          "wilson95": [
+           0.342,
+           1
+          ],
+          "unit": "outcome checks with a recorded outcome",
+          "note": "descriptive: checks within one situation and situations within one match are correlated"
+         },
+         "situations": {
+          "k": 1,
+          "n": 1,
+          "rate": 1,
+          "wilson95": [
+           0.207,
+           1
+          ],
+          "unit": "situations with at least one recorded check, all matching",
+          "note": "descriptive: turns of one match are not independent replicates"
+         },
+         "units": {
+          "k": 1,
+          "n": 1,
+          "rate": 1,
+          "wilson95": [
+           0.207,
+           1
+          ],
+          "unit": "cases and matches with at least one recorded check, none contradicting",
+          "cases": 1,
+          "matches": 0,
+          "note": "independent units: one scripted case or one match counts once"
+         }
+        },
+        "coverage": {
+         "k": 1,
+         "n": 106,
+         "rate": 0.009,
+         "wilson95": [
+          0.002,
+          0.052
+         ],
+         "unit": "situations of kind effect-entry where the representation makes at least one prediction"
+        },
+        "counterExamples": [],
+        "counterCount": 0,
+        "invariance": null
+       }
+      },
+      {
+       "build": "QX-73",
+       "discoveryFit": {
+        "value": "contradicted",
+        "evaluated": 3,
+        "support": {
+         "full": 2,
+         "partial": 0,
+         "counterExample": 1,
+         "inconclusive": 0
+        },
+        "units": {
+         "cases": 2,
+         "matches": 0
+        },
+        "counterCount": 2,
+        "statement": "contradicted on 3 evaluated effect-entry situation(s) from partition discovery, build QX-73: 2 contradicted outcome check(s) in 1 situation(s)"
+       },
+       "heldout": {
+        "situations": 131,
+        "lawClauses": 1,
+        "invarianceClauses": 0,
+        "outcomeChecks": {
+         "matching": 0,
+         "contradicting": 2,
+         "unknown": 0,
+         "unpredicted": 0
+        },
+        "accuracy": {
+         "outcomeChecks": {
+          "k": 0,
+          "n": 2,
+          "rate": 0,
+          "wilson95": [
+           0,
+           0.658
+          ],
+          "unit": "outcome checks with a recorded outcome",
+          "note": "descriptive: checks within one situation and situations within one match are correlated"
+         },
+         "situations": {
+          "k": 0,
+          "n": 1,
+          "rate": 0,
+          "wilson95": [
+           0,
+           0.793
+          ],
+          "unit": "situations with at least one recorded check, all matching",
+          "note": "descriptive: turns of one match are not independent replicates"
+         },
+         "units": {
+          "k": 0,
+          "n": 1,
+          "rate": 0,
+          "wilson95": [
+           0,
+           0.793
+          ],
+          "unit": "cases and matches with at least one recorded check, none contradicting",
+          "cases": 1,
+          "matches": 0,
+          "note": "independent units: one scripted case or one match counts once"
+         }
+        },
+        "coverage": {
+         "k": 1,
+         "n": 48,
+         "rate": 0.021,
+         "wilson95": [
+          0.004,
+          0.109
+         ],
+         "unit": "situations of kind effect-entry where the representation makes at least one prediction"
+        },
+        "counterExamples": [
+         {
+          "id": "C-93c271/s10/e1",
+          "field": "absorbed",
+          "predicted": true,
+          "observed": false
+         },
+         {
+          "id": "C-93c271/s10/e1",
+          "field": "fired",
+          "predicted": false,
+          "observed": true
+         }
+        ],
+        "counterCount": 2,
+        "invariance": null
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "hypothesis": "b2509eb1a3fcf335c89c221f10d5fb8dcc55ba58d7cb5a26fd90b952ab904f49",
+   "ref": "H-6",
+   "status": "evaluated",
+   "representations": [
+    {
+     "representation": "b13994f6607c319b2bd2cdd18b26b43049ccc1eb35a47795332b09eb34aa55c9",
+     "origin": "external-translation",
+     "author": "test-double:gw2-operator-translation-test-double",
+     "fidelityDeclared": "faithful",
+     "representationStatus": "represented",
+     "notRepresentedClauses": 0,
+     "byBuild": [
+      {
+       "build": "QX-41",
+       "discoveryFit": {
+        "value": "contradicted",
+        "evaluated": 1,
+        "support": {
+         "full": 0,
+         "partial": 0,
+         "counterExample": 1,
+         "inconclusive": 0
+        },
+        "units": {
+         "cases": 1,
+         "matches": 0
+        },
+        "counterCount": 1,
+        "statement": "contradicted on 1 evaluated effect-entry situation(s) from partition discovery, build QX-41: 1 contradicted outcome check(s) in 1 situation(s)"
+       },
+       "heldout": {
+        "situations": 265,
+        "lawClauses": 1,
+        "invarianceClauses": 0,
+        "outcomeChecks": {
+         "matching": 0,
+         "contradicting": 1,
+         "unknown": 26,
+         "unpredicted": 0
+        },
+        "accuracy": {
+         "outcomeChecks": {
+          "k": 0,
+          "n": 1,
+          "rate": 0,
+          "wilson95": [
+           0,
+           0.793
+          ],
+          "unit": "outcome checks with a recorded outcome",
+          "note": "descriptive: checks within one situation and situations within one match are correlated"
+         },
+         "situations": {
+          "k": 0,
+          "n": 1,
+          "rate": 0,
+          "wilson95": [
+           0,
+           0.793
+          ],
+          "unit": "situations with at least one recorded check, all matching",
+          "note": "descriptive: turns of one match are not independent replicates"
+         },
+         "units": {
+          "k": 0,
+          "n": 1,
+          "rate": 0,
+          "wilson95": [
+           0,
+           0.793
+          ],
+          "unit": "cases and matches with at least one recorded check, none contradicting",
+          "cases": 1,
+          "matches": 0,
+          "note": "independent units: one scripted case or one match counts once"
+         }
+        },
+        "coverage": {
+         "k": 27,
+         "n": 106,
+         "rate": 0.255,
+         "wilson95": [
+          0.181,
+          0.345
+         ],
+         "unit": "situations of kind effect-entry where the representation makes at least one prediction"
+        },
+        "counterExamples": [
+         {
+          "id": "C-9516c0/s9/e2",
+          "field": "cellUsedUp",
+          "predicted": false,
+          "observed": true
+         }
+        ],
+        "counterCount": 1,
+        "invariance": null
+       }
+      },
+      {
+       "build": "QX-73",
+       "discoveryFit": {
+        "value": "fits",
+        "evaluated": 1,
+        "support": {
+         "full": 1,
+         "partial": 0,
+         "counterExample": 0,
+         "inconclusive": 0
+        },
+        "units": {
+         "cases": 1,
+         "matches": 0
+        },
+        "counterCount": 0,
+        "statement": "fits on 1 evaluated effect-entry situation(s) from partition discovery, build QX-73: 1 with full support, 0 with partial support (some expected outcomes not recorded); no counter-example among them (finite evidence: this does not establish the rule for situations not evaluated)"
+       },
+       "heldout": {
+        "situations": 131,
+        "lawClauses": 1,
+        "invarianceClauses": 0,
+        "outcomeChecks": {
+         "matching": 1,
+         "contradicting": 0,
+         "unknown": 9,
+         "unpredicted": 0
+        },
+        "accuracy": {
+         "outcomeChecks": {
+          "k": 1,
+          "n": 1,
+          "rate": 1,
+          "wilson95": [
+           0.207,
+           1
+          ],
+          "unit": "outcome checks with a recorded outcome",
+          "note": "descriptive: checks within one situation and situations within one match are correlated"
+         },
+         "situations": {
+          "k": 1,
+          "n": 1,
+          "rate": 1,
+          "wilson95": [
+           0.207,
+           1
+          ],
+          "unit": "situations with at least one recorded check, all matching",
+          "note": "descriptive: turns of one match are not independent replicates"
+         },
+         "units": {
+          "k": 1,
+          "n": 1,
+          "rate": 1,
+          "wilson95": [
+           0.207,
+           1
+          ],
+          "unit": "cases and matches with at least one recorded check, none contradicting",
+          "cases": 1,
+          "matches": 0,
+          "note": "independent units: one scripted case or one match counts once"
+         }
+        },
+        "coverage": {
+         "k": 10,
+         "n": 48,
+         "rate": 0.208,
+         "wilson95": [
+          0.117,
+          0.343
+         ],
+         "unit": "situations of kind effect-entry where the representation makes at least one prediction"
+        },
+        "counterExamples": [],
+        "counterCount": 0,
+        "invariance": null
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "hypothesis": "5996a735becf8182215f7f25bc7e59b97af007eff7df0f2de036a57840928ea3",
+   "ref": "H-7",
+   "status": "evaluated",
+   "representations": [
+    {
+     "representation": "cf0d4a965fb0299c8716951cfd7110270567d766bd9ec7cbb06c225b11489143",
+     "origin": "submitter",
+     "author": "test-double:gw2-review-test-double",
+     "fidelityDeclared": "faithful",
+     "representationStatus": "represented",
+     "notRepresentedClauses": 0,
+     "byBuild": [
+      {
+       "build": "QX-41",
+       "discoveryFit": {
+        "value": "fits",
+        "evaluated": 5,
+        "support": {
+         "full": 5,
+         "partial": 0,
+         "counterExample": 0,
+         "inconclusive": 0
+        },
+        "units": {
+         "cases": 2,
+         "matches": 0
+        },
+        "counterCount": 0,
+        "statement": "fits on 5 evaluated effect-entry situation(s) from partition discovery, build QX-41: 5 with full support, 0 with partial support (some expected outcomes not recorded); no counter-example among them (finite evidence: this does not establish the rule for situations not evaluated)"
+       },
+       "heldout": {
+        "situations": 265,
+        "lawClauses": 1,
+        "invarianceClauses": 0,
+        "outcomeChecks": {
+         "matching": 1,
+         "contradicting": 0,
+         "unknown": 0,
+         "unpredicted": 0
+        },
+        "accuracy": {
+         "outcomeChecks": {
+          "k": 1,
+          "n": 1,
+          "rate": 1,
+          "wilson95": [
+           0.207,
+           1
+          ],
+          "unit": "outcome checks with a recorded outcome",
+          "note": "descriptive: checks within one situation and situations within one match are correlated"
+         },
+         "situations": {
+          "k": 1,
+          "n": 1,
+          "rate": 1,
+          "wilson95": [
+           0.207,
+           1
+          ],
+          "unit": "situations with at least one recorded check, all matching",
+          "note": "descriptive: turns of one match are not independent replicates"
+         },
+         "units": {
+          "k": 1,
+          "n": 1,
+          "rate": 1,
+          "wilson95": [
+           0.207,
+           1
+          ],
+          "unit": "cases and matches with at least one recorded check, none contradicting",
+          "cases": 1,
+          "matches": 0,
+          "note": "independent units: one scripted case or one match counts once"
+         }
+        },
+        "coverage": {
+         "k": 1,
+         "n": 106,
+         "rate": 0.009,
+         "wilson95": [
+          0.002,
+          0.052
+         ],
+         "unit": "situations of kind effect-entry where the representation makes at least one prediction"
+        },
+        "counterExamples": [],
+        "counterCount": 0,
+        "invariance": null
+       }
+      },
+      {
+       "build": "QX-73",
+       "discoveryFit": {
+        "value": "fits",
+        "evaluated": 5,
+        "support": {
+         "full": 5,
+         "partial": 0,
+         "counterExample": 0,
+         "inconclusive": 0
+        },
+        "units": {
+         "cases": 2,
+         "matches": 0
+        },
+        "counterCount": 0,
+        "statement": "fits on 5 evaluated effect-entry situation(s) from partition discovery, build QX-73: 5 with full support, 0 with partial support (some expected outcomes not recorded); no counter-example among them (finite evidence: this does not establish the rule for situations not evaluated)"
+       },
+       "heldout": {
+        "situations": 131,
+        "lawClauses": 1,
+        "invarianceClauses": 0,
+        "outcomeChecks": {
+         "matching": 1,
+         "contradicting": 0,
+         "unknown": 0,
+         "unpredicted": 0
+        },
+        "accuracy": {
+         "outcomeChecks": {
+          "k": 1,
+          "n": 1,
+          "rate": 1,
+          "wilson95": [
+           0.207,
+           1
+          ],
+          "unit": "outcome checks with a recorded outcome",
+          "note": "descriptive: checks within one situation and situations within one match are correlated"
+         },
+         "situations": {
+          "k": 1,
+          "n": 1,
+          "rate": 1,
+          "wilson95": [
+           0.207,
+           1
+          ],
+          "unit": "situations with at least one recorded check, all matching",
+          "note": "descriptive: turns of one match are not independent replicates"
+         },
+         "units": {
+          "k": 1,
+          "n": 1,
+          "rate": 1,
+          "wilson95": [
+           0.207,
+           1
+          ],
+          "unit": "cases and matches with at least one recorded check, none contradicting",
+          "cases": 1,
+          "matches": 0,
+          "note": "independent units: one scripted case or one match counts once"
+         }
+        },
+        "coverage": {
+         "k": 1,
+         "n": 48,
+         "rate": 0.021,
+         "wilson95": [
+          0.004,
+          0.109
+         ],
+         "unit": "situations of kind effect-entry where the representation makes at least one prediction"
+        },
+        "counterExamples": [],
+        "counterCount": 0,
+        "invariance": null
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "hypothesis": "9216ad56ca87791ffdea02c39782522bba9fd4fdab4f0317c44a1b4379b7129e",
+   "ref": "H-8",
+   "status": "evaluated",
+   "representations": [
+    {
+     "representation": "6b4fb5228384e64c022e22458be4d1cf3103ed889c6c9b2aee83c1f2d94c96bf",
+     "origin": "external-translation",
+     "author": "test-double:gw2-operator-translation-test-double",
+     "fidelityDeclared": "faithful",
+     "representationStatus": "represented",
+     "notRepresentedClauses": 0,
+     "byBuild": [
+      {
+       "build": "QX-41",
+       "discoveryFit": {
+        "value": "fits",
+        "evaluated": 2,
+        "support": {
+         "full": 2,
+         "partial": 0,
+         "counterExample": 0,
+         "inconclusive": 0
+        },
+        "units": {
+         "cases": 2,
+         "matches": 0
+        },
+        "counterCount": 0,
+        "statement": "fits on 2 evaluated effect-placement situation(s) from partition discovery, build QX-41: 2 with full support, 0 with partial support (some expected outcomes not recorded); no counter-example among them (finite evidence: this does not establish the rule for situations not evaluated)"
+       },
+       "heldout": {
+        "situations": 265,
+        "lawClauses": 1,
+        "invarianceClauses": 0,
+        "outcomeChecks": {
+         "matching": 1,
+         "contradicting": 0,
+         "unknown": 0,
+         "unpredicted": 0
+        },
+        "accuracy": {
+         "outcomeChecks": {
+          "k": 1,
+          "n": 1,
+          "rate": 1,
+          "wilson95": [
+           0.207,
+           1
+          ],
+          "unit": "outcome checks with a recorded outcome",
+          "note": "descriptive: checks within one situation and situations within one match are correlated"
+         },
+         "situations": {
+          "k": 1,
+          "n": 1,
+          "rate": 1,
+          "wilson95": [
+           0.207,
+           1
+          ],
+          "unit": "situations with at least one recorded check, all matching",
+          "note": "descriptive: turns of one match are not independent replicates"
+         },
+         "units": {
+          "k": 1,
+          "n": 1,
+          "rate": 1,
+          "wilson95": [
+           0.207,
+           1
+          ],
+          "unit": "cases and matches with at least one recorded check, none contradicting",
+          "cases": 1,
+          "matches": 0,
+          "note": "independent units: one scripted case or one match counts once"
+         }
+        },
+        "coverage": {
+         "k": 1,
+         "n": 15,
+         "rate": 0.067,
+         "wilson95": [
+          0.012,
+          0.298
+         ],
+         "unit": "situations of kind effect-placement where the representation makes at least one prediction"
+        },
+        "counterExamples": [],
+        "counterCount": 0,
+        "invariance": null
+       }
+      },
+      {
+       "build": "QX-73",
+       "discoveryFit": {
+        "value": "fits",
+        "evaluated": 2,
+        "support": {
+         "full": 2,
+         "partial": 0,
+         "counterExample": 0,
+         "inconclusive": 0
+        },
+        "units": {
+         "cases": 2,
+         "matches": 0
+        },
+        "counterCount": 0,
+        "statement": "fits on 2 evaluated effect-placement situation(s) from partition discovery, build QX-73: 2 with full support, 0 with partial support (some expected outcomes not recorded); no counter-example among them (finite evidence: this does not establish the rule for situations not evaluated)"
+       },
+       "heldout": {
+        "situations": 131,
+        "lawClauses": 1,
+        "invarianceClauses": 0,
+        "outcomeChecks": {
+         "matching": 1,
+         "contradicting": 0,
+         "unknown": 0,
+         "unpredicted": 0
+        },
+        "accuracy": {
+         "outcomeChecks": {
+          "k": 1,
+          "n": 1,
+          "rate": 1,
+          "wilson95": [
+           0.207,
+           1
+          ],
+          "unit": "outcome checks with a recorded outcome",
+          "note": "descriptive: checks within one situation and situations within one match are correlated"
+         },
+         "situations": {
+          "k": 1,
+          "n": 1,
+          "rate": 1,
+          "wilson95": [
+           0.207,
+           1
+          ],
+          "unit": "situations with at least one recorded check, all matching",
+          "note": "descriptive: turns of one match are not independent replicates"
+         },
+         "units": {
+          "k": 1,
+          "n": 1,
+          "rate": 1,
+          "wilson95": [
+           0.207,
+           1
+          ],
+          "unit": "cases and matches with at least one recorded check, none contradicting",
+          "cases": 1,
+          "matches": 0,
+          "note": "independent units: one scripted case or one match counts once"
+         }
+        },
+        "coverage": {
+         "k": 1,
+         "n": 15,
+         "rate": 0.067,
+         "wilson95": [
+          0.012,
+          0.298
+         ],
+         "unit": "situations of kind effect-placement where the representation makes at least one prediction"
+        },
+        "counterExamples": [],
+        "counterCount": 0,
+        "invariance": null
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "hypothesis": "75376ce4a149faee04e15a35d7276881457ccf5058a47d05606180c421491e1a",
+   "ref": "H-9",
+   "status": "evaluated",
+   "representations": [
+    {
+     "representation": "41ee983fcbcd23595173c00e2d3e70378b86a0e0025911c57b12f26f0efe64ee",
+     "origin": "submitter",
+     "author": "test-double:gw2-review-test-double",
+     "fidelityDeclared": "faithful",
+     "representationStatus": "not-representable",
+     "notRepresentedClauses": 0,
+     "problems": [
+      "a representation must be {schema: \"gamewatch/gw2-hypothesis@1\", clauses: [...]} with at least one clause"
+     ],
+     "byBuild": []
+    }
+   ]
+  },
+  {
+   "hypothesis": "bf0426e423cda124454744f306e51986071bf32db3ac3dd7f842ecf8b9d515e5",
+   "ref": "H-10",
+   "status": "explicit-abstention",
+   "representations": []
+  },
+  {
+   "hypothesis": "fc55ff4c66a5b9b6419feb43c84fb65fba11008ccfaa3bc88e5caa10aa024002",
+   "ref": "H-11",
+   "status": "no-sealed-representation",
+   "note": "free text only; not interpreted",
+   "representations": []
+  }
+ ],
+ "caveat": "Discovery fit and held-out predictive accuracy are different measures. Held-out accuracy is over the representation as structured (fidelity declared by its author, not checked); it says nothing about situations not evaluated and does not identify a unique rule. No composite score is formed.",
+ "exp": "evidence/gw2/p5-demo",
+ "seal": {
+  "sha256": "e03af2c49c0a8052b725c99e0260af22af61db2b514c98ce8aeae60b9d704fc0",
+  "representations": 9,
+  "notSealedIgnored": []
+ },
+ "freeze": {
+  "sha256": "3f6c7ffabdac8d1aa50f12267ab0253f88b1aa3e87b2e397de3a1a8a4086b0fc",
+  "frozen": 11
+ },
+ "buildAlignment": {
+  "discovery": {
+   "build-a94c": "QX-41",
+   "build-a6d1": "QX-73"
+  },
+  "heldout": {
+   "build-8b3e": "QX-41",
+   "build-1fa3": "QX-73"
+  }
+ },
+ "specificationReference": {
+  "encoding": "rule-sabotage-v6.1-encoding-2",
+  "sha256": "dbb4d30fe5a05880375e158ec91a1ef8e08ecacd49f39137654ba8969a410b66",
+  "review": "unreviewed",
+  "note": "provisional and unreviewed (Q3, D72): the spec records are shown as reference predictors, not as ground truth",
+  "records": [
+   {
+    "rule": "R3",
+    "byBuild": [
+     {
+      "build": "QX-41",
+      "discovery": {
+       "value": "conforms",
+       "evaluated": 421
+      },
+      "heldout": {
+       "value": "conforms",
+       "evaluated": 144
+      },
+      "heldoutPrediction": {
+       "outcomeChecks": {
+        "k": 144,
+        "n": 144,
+        "rate": 1,
+        "wilson95": [
+         0.974,
+         1
+        ],
+        "unit": "outcome checks with a recorded outcome",
+        "note": "descriptive: checks within one situation and situations within one match are correlated"
+       },
+       "situations": {
+        "k": 144,
+        "n": 144,
+        "rate": 1,
+        "wilson95": [
+         0.974,
+         1
+        ],
+        "unit": "situations with at least one recorded check, all matching",
+        "note": "descriptive: turns of one match are not independent replicates"
+       },
+       "units": {
+        "k": 10,
+        "n": 10,
+        "rate": 1,
+        "wilson95": [
+         0.722,
+         1
+        ],
+        "unit": "cases and matches with at least one recorded check, none contradicting",
+        "cases": 8,
+        "matches": 2,
+        "note": "independent units: one scripted case or one match counts once"
+       }
+      }
+     },
+     {
+      "build": "QX-73",
+      "discovery": {
+       "value": "deviates",
+       "evaluated": 300
+      },
+      "heldout": {
+       "value": "deviates",
+       "evaluated": 68
+      },
+      "heldoutPrediction": {
+       "outcomeChecks": {
+        "k": 33,
+        "n": 68,
+        "rate": 0.485,
+        "wilson95": [
+         0.371,
+         0.602
+        ],
+        "unit": "outcome checks with a recorded outcome",
+        "note": "descriptive: checks within one situation and situations within one match are correlated"
+       },
+       "situations": {
+        "k": 33,
+        "n": 68,
+        "rate": 0.485,
+        "wilson95": [
+         0.371,
+         0.602
+        ],
+        "unit": "situations with at least one recorded check, all matching",
+        "note": "descriptive: turns of one match are not independent replicates"
+       },
+       "units": {
+        "k": 0,
+        "n": 10,
+        "rate": 0,
+        "wilson95": [
+         0,
+         0.278
+        ],
+        "unit": "cases and matches with at least one recorded check, none contradicting",
+        "cases": 8,
+        "matches": 2,
+        "note": "independent units: one scripted case or one match counts once"
+       }
+      }
+     }
+    ]
+   },
+   {
+    "rule": "R5",
+    "byBuild": [
+     {
+      "build": "QX-41",
+      "discovery": {
+       "value": "conforms",
+       "evaluated": 3
+      },
+      "heldout": {
+       "value": "conforms",
+       "evaluated": 2
+      },
+      "heldoutPrediction": {
+       "outcomeChecks": {
+        "k": 2,
+        "n": 2,
+        "rate": 1,
+        "wilson95": [
+         0.342,
+         1
+        ],
+        "unit": "outcome checks with a recorded outcome",
+        "note": "descriptive: checks within one situation and situations within one match are correlated"
+       },
+       "situations": {
+        "k": 2,
+        "n": 2,
+        "rate": 1,
+        "wilson95": [
+         0.342,
+         1
+        ],
+        "unit": "situations with at least one recorded check, all matching",
+        "note": "descriptive: turns of one match are not independent replicates"
+       },
+       "units": {
+        "k": 1,
+        "n": 1,
+        "rate": 1,
+        "wilson95": [
+         0.207,
+         1
+        ],
+        "unit": "cases and matches with at least one recorded check, none contradicting",
+        "cases": 1,
+        "matches": 0,
+        "note": "independent units: one scripted case or one match counts once"
+       }
+      }
+     },
+     {
+      "build": "QX-73",
+      "discovery": {
+       "value": "conforms",
+       "evaluated": 3
+      },
+      "heldout": {
+       "value": "conforms",
+       "evaluated": 2
+      },
+      "heldoutPrediction": {
+       "outcomeChecks": {
+        "k": 2,
+        "n": 2,
+        "rate": 1,
+        "wilson95": [
+         0.342,
+         1
+        ],
+        "unit": "outcome checks with a recorded outcome",
+        "note": "descriptive: checks within one situation and situations within one match are correlated"
+       },
+       "situations": {
+        "k": 2,
+        "n": 2,
+        "rate": 1,
+        "wilson95": [
+         0.342,
+         1
+        ],
+        "unit": "situations with at least one recorded check, all matching",
+        "note": "descriptive: turns of one match are not independent replicates"
+       },
+       "units": {
+        "k": 1,
+        "n": 1,
+        "rate": 1,
+        "wilson95": [
+         0.207,
+         1
+        ],
+        "unit": "cases and matches with at least one recorded check, none contradicting",
+        "cases": 1,
+        "matches": 0,
+        "note": "independent units: one scripted case or one match counts once"
+       }
+      }
+     }
+    ]
+   },
+   {
+    "rule": "R7",
+    "byBuild": [
+     {
+      "build": "QX-41",
+      "discovery": {
+       "value": "conforms",
+       "evaluated": 19
+      },
+      "heldout": {
+       "value": "conforms",
+       "evaluated": 7
+      },
+      "heldoutPrediction": {
+       "outcomeChecks": {
+        "k": 0,
+        "n": 0,
+        "rate": null,
+        "wilson95": null,
+        "unit": "outcome checks with a recorded outcome",
+        "note": "descriptive: checks within one situation and situations within one match are correlated"
+       },
+       "situations": {
+        "k": 0,
+        "n": 0,
+        "rate": null,
+        "wilson95": null,
+        "unit": "situations with at least one recorded check, all matching",
+        "note": "descriptive: turns of one match are not independent replicates"
+       },
+       "units": {
+        "k": 0,
+        "n": 0,
+        "rate": null,
+        "wilson95": null,
+        "unit": "cases and matches with at least one recorded check, none contradicting",
+        "cases": 0,
+        "matches": 0,
+        "note": "independent units: one scripted case or one match counts once"
+       }
+      }
+     },
+     {
+      "build": "QX-73",
+      "discovery": {
+       "value": "deviates",
+       "evaluated": 20
+      },
+      "heldout": {
+       "value": "conforms",
+       "evaluated": 7
+      },
+      "heldoutPrediction": {
+       "outcomeChecks": {
+        "k": 0,
+        "n": 0,
+        "rate": null,
+        "wilson95": null,
+        "unit": "outcome checks with a recorded outcome",
+        "note": "descriptive: checks within one situation and situations within one match are correlated"
+       },
+       "situations": {
+        "k": 0,
+        "n": 0,
+        "rate": null,
+        "wilson95": null,
+        "unit": "situations with at least one recorded check, all matching",
+        "note": "descriptive: turns of one match are not independent replicates"
+       },
+       "units": {
+        "k": 0,
+        "n": 0,
+        "rate": null,
+        "wilson95": null,
+        "unit": "cases and matches with at least one recorded check, none contradicting",
+        "cases": 0,
+        "matches": 0,
+        "note": "independent units: one scripted case or one match counts once"
+       }
+      }
+     }
+    ]
+   },
+   {
+    "rule": "R8",
+    "byBuild": [
+     {
+      "build": "QX-41",
+      "discovery": {
+       "value": "conforms",
+       "evaluated": 22
+      },
+      "heldout": {
+       "value": "conforms",
+       "evaluated": 12
+      },
+      "heldoutPrediction": {
+       "outcomeChecks": {
+        "k": 24,
+        "n": 24,
+        "rate": 1,
+        "wilson95": [
+         0.862,
+         1
+        ],
+        "unit": "outcome checks with a recorded outcome",
+        "note": "descriptive: checks within one situation and situations within one match are correlated"
+       },
+       "situations": {
+        "k": 12,
+        "n": 12,
+        "rate": 1,
+        "wilson95": [
+         0.758,
+         1
+        ],
+        "unit": "situations with at least one recorded check, all matching",
+        "note": "descriptive: turns of one match are not independent replicates"
+       },
+       "units": {
+        "k": 7,
+        "n": 7,
+        "rate": 1,
+        "wilson95": [
+         0.646,
+         1
+        ],
+        "unit": "cases and matches with at least one recorded check, none contradicting",
+        "cases": 7,
+        "matches": 0,
+        "note": "independent units: one scripted case or one match counts once"
+       }
+      }
+     },
+     {
+      "build": "QX-73",
+      "discovery": {
+       "value": "deviates",
+       "evaluated": 23
+      },
+      "heldout": {
+       "value": "deviates",
+       "evaluated": 13
+      },
+      "heldoutPrediction": {
+       "outcomeChecks": {
+        "k": 25,
+        "n": 26,
+        "rate": 0.962,
+        "wilson95": [
+         0.811,
+         0.993
+        ],
+        "unit": "outcome checks with a recorded outcome",
+        "note": "descriptive: checks within one situation and situations within one match are correlated"
+       },
+       "situations": {
+        "k": 12,
+        "n": 13,
+        "rate": 0.923,
+        "wilson95": [
+         0.667,
+         0.986
+        ],
+        "unit": "situations with at least one recorded check, all matching",
+        "note": "descriptive: turns of one match are not independent replicates"
+       },
+       "units": {
+        "k": 6,
+        "n": 7,
+        "rate": 0.857,
+        "wilson95": [
+         0.487,
+         0.974
+        ],
+        "unit": "cases and matches with at least one recorded check, none contradicting",
+        "cases": 7,
+        "matches": 0,
+        "note": "independent units: one scripted case or one match counts once"
+       }
+      }
+     }
+    ]
+   },
+   {
+    "rule": "R12",
+    "byBuild": [
+     {
+      "build": "QX-41",
+      "discovery": {
+       "value": "conforms",
+       "evaluated": 5
+      },
+      "heldout": {
+       "value": "conforms",
+       "evaluated": 1
+      },
+      "heldoutPrediction": {
+       "outcomeChecks": {
+        "k": 2,
+        "n": 2,
+        "rate": 1,
+        "wilson95": [
+         0.342,
+         1
+        ],
+        "unit": "outcome checks with a recorded outcome",
+        "note": "descriptive: checks within one situation and situations within one match are correlated"
+       },
+       "situations": {
+        "k": 1,
+        "n": 1,
+        "rate": 1,
+        "wilson95": [
+         0.207,
+         1
+        ],
+        "unit": "situations with at least one recorded check, all matching",
+        "note": "descriptive: turns of one match are not independent replicates"
+       },
+       "units": {
+        "k": 1,
+        "n": 1,
+        "rate": 1,
+        "wilson95": [
+         0.207,
+         1
+        ],
+        "unit": "cases and matches with at least one recorded check, none contradicting",
+        "cases": 1,
+        "matches": 0,
+        "note": "independent units: one scripted case or one match counts once"
+       }
+      }
+     },
+     {
+      "build": "QX-73",
+      "discovery": {
+       "value": "conforms",
+       "evaluated": 5
+      },
+      "heldout": {
+       "value": "conforms",
+       "evaluated": 1
+      },
+      "heldoutPrediction": {
+       "outcomeChecks": {
+        "k": 2,
+        "n": 2,
+        "rate": 1,
+        "wilson95": [
+         0.342,
+         1
+        ],
+        "unit": "outcome checks with a recorded outcome",
+        "note": "descriptive: checks within one situation and situations within one match are correlated"
+       },
+       "situations": {
+        "k": 1,
+        "n": 1,
+        "rate": 1,
+        "wilson95": [
+         0.207,
+         1
+        ],
+        "unit": "situations with at least one recorded check, all matching",
+        "note": "descriptive: turns of one match are not independent replicates"
+       },
+       "units": {
+        "k": 1,
+        "n": 1,
+        "rate": 1,
+        "wilson95": [
+         0.207,
+         1
+        ],
+        "unit": "cases and matches with at least one recorded check, none contradicting",
+        "cases": 1,
+        "matches": 0,
+        "note": "independent units: one scripted case or one match counts once"
+       }
+      }
+     }
+    ]
+   },
+   {
+    "rule": "R14",
+    "byBuild": [
+     {
+      "build": "QX-41",
+      "discovery": {
+       "value": "conforms",
+       "evaluated": 3
+      },
+      "heldout": {
+       "value": "conforms",
+       "evaluated": 1
+      },
+      "heldoutPrediction": {
+       "outcomeChecks": {
+        "k": 4,
+        "n": 4,
+        "rate": 1,
+        "wilson95": [
+         0.51,
+         1
+        ],
+        "unit": "outcome checks with a recorded outcome",
+        "note": "descriptive: checks within one situation and situations within one match are correlated"
+       },
+       "situations": {
+        "k": 1,
+        "n": 1,
+        "rate": 1,
+        "wilson95": [
+         0.207,
+         1
+        ],
+        "unit": "situations with at least one recorded check, all matching",
+        "note": "descriptive: turns of one match are not independent replicates"
+       },
+       "units": {
+        "k": 1,
+        "n": 1,
+        "rate": 1,
+        "wilson95": [
+         0.207,
+         1
+        ],
+        "unit": "cases and matches with at least one recorded check, none contradicting",
+        "cases": 1,
+        "matches": 0,
+        "note": "independent units: one scripted case or one match counts once"
+       }
+      }
+     },
+     {
+      "build": "QX-73",
+      "discovery": {
+       "value": "deviates",
+       "evaluated": 3
+      },
+      "heldout": {
+       "value": "deviates",
+       "evaluated": 1
+      },
+      "heldoutPrediction": {
+       "outcomeChecks": {
+        "k": 2,
+        "n": 4,
+        "rate": 0.5,
+        "wilson95": [
+         0.15,
+         0.85
+        ],
+        "unit": "outcome checks with a recorded outcome",
+        "note": "descriptive: checks within one situation and situations within one match are correlated"
+       },
+       "situations": {
+        "k": 0,
+        "n": 1,
+        "rate": 0,
+        "wilson95": [
+         0,
+         0.793
+        ],
+        "unit": "situations with at least one recorded check, all matching",
+        "note": "descriptive: turns of one match are not independent replicates"
+       },
+       "units": {
+        "k": 0,
+        "n": 1,
+        "rate": 0,
+        "wilson95": [
+         0,
+         0.793
+        ],
+        "unit": "cases and matches with at least one recorded check, none contradicting",
+        "cases": 1,
+        "matches": 0,
+        "note": "independent units: one scripted case or one match counts once"
+       }
+      }
+     }
+    ]
+   }
+  ]
+ },
+ "graphNodes": [
+  "34bfe9e59720cae6bb5ba08f3e5bf1a0e96ccbb03ccafbd2f48d712ff8dc817e",
+  "e048d721c321c86c93699a32b5e028e5a0c31b16ab58cba78447b7595829cca0",
+  "40575b2f19207d98052580c98b1983ebae0b1bea3f03703894355b520ebefa2f",
+  "01ec153c929758dfe9387e58f07252406854f987a1206e987606b571edf101dc",
+  "f3ae908fb220aeb21848b276fed1538239049efd42dbfe0eecbea62548cf7845",
+  "12bb3ac28f233fa29350278c580f87812bf14bb5f507458e6b9ec7443799fd17",
+  "3d61025b5bdcf3f904f43b3540d08bc746acd18828a5c56a2dcbcc8ec036fb6b",
+  "cb91f8e631bab203e596a04c535e5b91f9696c2b20515fbf4fd05cf8b782d5cc",
+  "e983468c8e4abb6d3e854cd19523c91c94a45afa8cb95e8e3887f27678fbf740",
+  "e58b5f22277822830f3469cdec0afb4ed66e67f9e7b477a91049c234388cb312",
+  "88997bc1414df592863b8a37d15adca549a9c05c8dbb0f081e796b529a225fd4"
+ ]
+}

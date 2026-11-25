@@ -1,0 +1,17 @@
+{
+ "schema": "gamewatch/gw2-partition-manifest@1",
+ "partition": "spec",
+ "procedure": {
+  "id": "p5-partition-1",
+  "path": "evidence/gw2/procedures/partition-p5-1.json",
+  "sha256": "19f1b43b0ddd84644a9994a95577fcc3e1024afb407d834aa4f66d6735df8881"
+ },
+ "bundle": {
+  "path": "evidence/gw2/p5-experiment/generated/bundle.json",
+  "sha256": "847446234f0baa5c4f5b4ac3757ced766a8db492e1b0dfde0902c571bd9205bc"
+ },
+ "hypothesisForm": "p5: optional structured representation field (Q20)",
+ "files": {
+  "spec.json": "23a8067e2926a790cd07ca447c79be66079c8fcda5d56327a32992adba9335ac"
+ }
+}

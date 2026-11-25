@@ -1,0 +1,130 @@
+{
+ "schema": "gamewatch/gw2-partition-procedure@1",
+ "id": "p5-partition-1",
+ "frozenAt": "2026-11-25T15:25:32.000Z",
+ "salt": "gw2-p5-partition-procedure-1",
+ "discoveryTarget": 0.7,
+ "seeds": [
+  98001,
+  98002,
+  98003,
+  98004,
+  98005,
+  98006
+ ],
+ "scripts": [
+  {
+   "id": "shield-human",
+   "title": "Human picks up a Shield, then walks into an AI \"Send home\" cell"
+  },
+  {
+   "id": "shield-ai",
+   "title": "AI picks up a Shield, then walks into a Human \"Send home\" cell"
+  },
+  {
+   "id": "shove-chain-human",
+   "title": "Human piece is shoved east onto a \"+1 action\" cell, steps off and back on"
+  },
+  {
+   "id": "shove-chain-ai",
+   "title": "AI piece is shoved west onto a \"+1 action\" cell, steps off and back on"
+  },
+  {
+   "id": "walk-twice",
+   "title": "Human walks onto its own \"+1 action\" cell, steps off and back on"
+  },
+  {
+   "id": "freeze-human",
+   "title": "Human piece walks into an AI \"Freeze\" cell, then tries to move"
+  },
+  {
+   "id": "freeze-ai",
+   "title": "AI piece walks into a Human \"Freeze\" cell, then tries to move"
+  },
+  {
+   "id": "shove-human",
+   "title": "Human piece walks into an AI \"shove back 2\" cell"
+  },
+  {
+   "id": "shove-ai",
+   "title": "AI piece walks into a Human \"shove back 2\" cell"
+  },
+  {
+   "id": "adjacent-placement",
+   "title": "Human tries to place an effect right next to its own piece"
+  },
+  {
+   "id": "teleport-human",
+   "title": "Human piece walks onto its own Teleport cell"
+  },
+  {
+   "id": "send-home-human",
+   "title": "Human piece walks into an AI \"Send home\" cell"
+  },
+  {
+   "id": "send-home-ai",
+   "title": "AI piece walks into a Human \"Send home\" cell"
+  },
+  {
+   "id": "placement-human",
+   "title": "Human tries to place an effect next to an AI piece, then on an AI effect cell"
+  },
+  {
+   "id": "placement-ai",
+   "title": "AI tries to place an effect next to a Human piece, then on a Human effect cell"
+  },
+  {
+   "id": "multicell-human",
+   "title": "Human piece walks onto one cell of its own two-cell \"+1 action\" effect"
+  },
+  {
+   "id": "multicell-ai",
+   "title": "AI piece walks onto one cell of its own two-cell \"+1 action\" effect"
+  },
+  {
+   "id": "matrix-haste",
+   "title": "Each side enters an own and an enemy \"+1 action\" cell"
+  },
+  {
+   "id": "matrix-freeze",
+   "title": "Each side enters an own and an enemy \"Freeze\" cell"
+  },
+  {
+   "id": "matrix-home",
+   "title": "Each side enters an own and an enemy \"Send home\" cell"
+  },
+  {
+   "id": "matrix-shield",
+   "title": "A shielded Human piece and a shielded AI piece each enter an enemy \"Send home\" cell"
+  }
+ ],
+ "variantSuffixes": [
+  "-human",
+  "-ai"
+ ],
+ "coverageMap": {
+  "path": "gamewatch/adapters/rule-sabotage.coverage.json",
+  "sha256": "0a70ecb7d48c8edd07a5ee1e12028df8c4353a3d6451e1c2667b185cea68bd71"
+ },
+ "groundTruth": [
+  {
+   "path": "gamewatch/private/mutations.json",
+   "sha256": "389863b0dd57bfbdcd9ede5547363e4d1a32d6ba28e9c50a3bf2b92eae2871d5"
+  },
+  {
+   "path": "gamewatch/private/evaluation/labels.json",
+   "sha256": "6bdf805aced73a63fe3beb73e4765b3882d159a4930afcc1eacc25d03125cd0d"
+  }
+ ],
+ "selection": [
+  "Units: a match seed (all its matches on every build and both first movers) and a case script (its cases on every build).",
+  "Scripts with a -human/-ai variant pair: one variant to discovery, the other to held-out (disjoint variants). Single-variant scripts go wholly to one partition.",
+  "Seeds: every non-empty proper subset of the frozen seeds goes to discovery, the rest to held-out (disjoint seeds).",
+  "Candidates are enumerated in an order fixed by the salt and scored lexicographically: (1) rules covered in both partitions, (2) the smaller of the two partition coverage counts, (3) closeness of the discovery share of observations (cases + matches) to discoveryTarget, (4) enumeration order.",
+  "Coverage: gaps.ts semantics over the frozen coverage map (every pattern of a rule on every build). Only engine-reported events are used; agent output is never an input."
+ ],
+ "notes": [
+  "Seeds are the AI-vs-AI seeds of the P5 generation procedure p5-generation-1 (evidence/gw2/procedures/generation-p5-1.json), frozen at the same time; scripted cases use the fixed script seeds of gamewatch/scenarios.ts (97100) and gamewatch/gw2/scenarios-p5.ts (98100).",
+  "Frozen before any P5 observation was generated (generation-p5-1 run \"experiment\"). The selection rules are unchanged from p3-partition-1; matrix-* scripts have no -human/-ai variant, so each goes wholly to one partition and keeps both sides of an R7 comparison together."
+ ]
+}

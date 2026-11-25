@@ -86,6 +86,12 @@
     "gw2:p3-demo": "node --experimental-strip-types --no-warnings=ExperimentalWarning gamewatch/gw2/p3-demo.ts",
     "gw2:session-close": "node --experimental-strip-types --no-warnings=ExperimentalWarning gamewatch/gw2/session-close.ts",
     "gw2:three-way": "node --experimental-strip-types --no-warnings=ExperimentalWarning gamewatch/gw2/verify.ts",
-    "gw2:p4-demo": "node --experimental-strip-types --no-warnings=ExperimentalWarning gamewatch/gw2/p4-demo.ts"
+    "gw2:p4-demo": "node --experimental-strip-types --no-warnings=ExperimentalWarning gamewatch/gw2/p4-demo.ts",
+    "gw2:generate": "node --experimental-strip-types --no-warnings=ExperimentalWarning gamewatch/gw2/generate.ts",
+    "gw2:validate-mutations": "node --experimental-strip-types --no-warnings=ExperimentalWarning gamewatch/gw2/validate-mutations.ts",
+    "gw2:representations": "node --experimental-strip-types --no-warnings=ExperimentalWarning gamewatch/gw2/representations.ts",
+    "gw2:heldout": "node --experimental-strip-types --no-warnings=ExperimentalWarning gamewatch/gw2/heldout.ts",
+    "gw2:discriminate": "node --experimental-strip-types --no-warnings=ExperimentalWarning gamewatch/gw2/discriminate.ts",
+    "gw2:p5-demo": "node --experimental-strip-types --no-warnings=ExperimentalWarning gamewatch/gw2/p5-demo.ts"
   }
 }

@@ -1,0 +1,75 @@
+{
+ "schema": "gamewatch/gw2-session-import@1",
+ "session": "721b991d1642378a",
+ "exp": "p5-demo",
+ "sessionDir": "evidence/gw2/p5-demo/sessions/721b991d1642378a",
+ "graph": "judgments.ndjson",
+ "nodes": [
+  {
+   "key": "hypothesis:0",
+   "id": "2db5db364dcaaf7e2ab431182752c0688aa9cea29d0bfe4f843ee5b97bbc3ce6",
+   "status": "appended"
+  },
+  {
+   "key": "hypothesis:1",
+   "id": "b350d1da5aeefbfcd4d5c4f236fcb8df4432a52f347616efeb0a1b6c10321c2a",
+   "status": "appended"
+  },
+  {
+   "key": "hypothesis:2",
+   "id": "389df43f9c2ff724126aa6b592817534786088e5248b078f0f645b8a112156d6",
+   "status": "appended"
+  },
+  {
+   "key": "hypothesis:3",
+   "id": "9c58aa226f403e9f4bf8e75f9dd6312a6be5dcbc9e4bb8530a291853c0850601",
+   "status": "appended"
+  },
+  {
+   "key": "hypothesis:4",
+   "id": "c0b1ab26679ce8a33f45ab50c56a23b577c2294e68600024fe570598adb5fc6f",
+   "status": "appended"
+  },
+  {
+   "key": "hypothesis:5",
+   "id": "b2509eb1a3fcf335c89c221f10d5fb8dcc55ba58d7cb5a26fd90b952ab904f49",
+   "status": "appended"
+  },
+  {
+   "key": "hypothesis:6",
+   "id": "5996a735becf8182215f7f25bc7e59b97af007eff7df0f2de036a57840928ea3",
+   "status": "appended"
+  },
+  {
+   "key": "hypothesis:7",
+   "id": "9216ad56ca87791ffdea02c39782522bba9fd4fdab4f0317c44a1b4379b7129e",
+   "status": "appended"
+  },
+  {
+   "key": "hypothesis:8",
+   "id": "75376ce4a149faee04e15a35d7276881457ccf5058a47d05606180c421491e1a",
+   "status": "appended"
+  },
+  {
+   "key": "hypothesis:9",
+   "id": "bf0426e423cda124454744f306e51986071bf32db3ac3dd7f842ecf8b9d515e5",
+   "status": "appended"
+  },
+  {
+   "key": "hypothesis:10",
+   "id": "fc55ff4c66a5b9b6419feb43c84fb65fba11008ccfaa3bc88e5caa10aa024002",
+   "status": "appended"
+  }
+ ],
+ "notApplicable": [],
+ "sessionValidity": {
+  "status": "verified",
+  "primaryAnalysis": true,
+  "reasons": []
+ },
+ "sessionSeal": "b62e9be43799b664309105807b8099ba6b679120c2be0eea8398391e9174662f",
+ "graphHeadAfter": {
+  "count": 11,
+  "lastLineSha256": "ba47b563f6dfe7867186982e7604fa395d31a47ce55a341ef9c9ad3957262969"
+ }
+}

@@ -1,0 +1,235 @@
+{
+ "schema": "gamewatch/gw2-eval@1",
+ "idMaps": {
+  "discovery": {
+   "cases": {
+    "C-749024": "C-00def6",
+    "C-58091b": "C-060b27",
+    "C-bd9c81": "C-08072b",
+    "C-235e76": "C-089a5d",
+    "C-b4b259": "C-18a6e9",
+    "C-08a29c": "C-21859b",
+    "C-4cc4f3": "C-301193",
+    "C-f11ad7": "C-32a6fd",
+    "C-bec18a": "C-41f692",
+    "C-22b379": "C-4a1b7c",
+    "C-ba736e": "C-61a02e",
+    "C-984f88": "C-6450ab",
+    "C-ce4d71": "C-6d2a11",
+    "C-0d8d37": "C-769e14",
+    "C-4cd437": "C-8aa29b",
+    "C-20c70e": "C-98b10e",
+    "C-078491": "C-a6b5f6",
+    "C-5aa674": "C-ba8d05",
+    "C-8aa6d7": "C-cf8681",
+    "C-174eb5": "C-d5a3fb",
+    "C-b9903d": "C-d8d6b4",
+    "C-562440": "C-e6268d",
+    "C-febff9": "C-e6d95d",
+    "C-c9b21d": "C-e6f590",
+    "C-da4d2a": "C-e922ba",
+    "C-b51223": "C-ed9758"
+   },
+   "matches": {
+    "M-2d6e41": "M-03fc25",
+    "M-26c4a7": "M-32f1b4",
+    "M-d5b4ae": "M-46857a",
+    "M-beffd0": "M-49e532",
+    "M-beca13": "M-5290f0",
+    "M-1d8b6e": "M-55aabb",
+    "M-fc5e77": "M-614763",
+    "M-fbfb6e": "M-640003",
+    "M-46c265": "M-641e66",
+    "M-ca1d4d": "M-86af17",
+    "M-ef78f7": "M-925214",
+    "M-ddbc81": "M-9c1219",
+    "M-e735bc": "M-af8a6a",
+    "M-889a91": "M-b083d2",
+    "M-52f93f": "M-b30140",
+    "M-bdc97c": "M-b8e9ae",
+    "M-ba6bcd": "M-d99282",
+    "M-a6b140": "M-e99186",
+    "M-ab06bc": "M-faaa08",
+    "M-2140dd": "M-fd367b"
+   },
+   "builds": {
+    "build-a94c": "QX-41",
+    "build-a6d1": "QX-73"
+   },
+   "scripts": {
+    "S-ffdb": "send-home-ai",
+    "S-1d9d": "freeze-ai",
+    "S-b42e": "multicell-ai",
+    "S-ae10": "matrix-shield",
+    "S-0b04": "teleport-human",
+    "S-e6ec": "matrix-home",
+    "S-8880": "shield-ai",
+    "S-34cf": "walk-twice",
+    "S-9a5e": "shove-ai",
+    "S-ab31": "placement-ai",
+    "S-23d6": "adjacent-placement",
+    "S-24b5": "matrix-haste",
+    "S-27a6": "shove-chain-ai"
+   }
+  },
+  "heldout": {
+   "cases": {
+    "C-a5ca05": "C-080c37",
+    "C-6d57eb": "C-1d828a",
+    "C-a4911d": "C-1ea384",
+    "C-4101c9": "C-295183",
+    "C-be6c35": "C-35aa8d",
+    "C-7b5eb6": "C-4b69c5",
+    "C-58b18b": "C-556cec",
+    "C-5f8a7a": "C-79d556",
+    "C-c8abbb": "C-8865a0",
+    "C-9f9cb1": "C-d253f0",
+    "C-688065": "C-d54863",
+    "C-783031": "C-d87b01",
+    "C-d71261": "C-e6c270",
+    "C-9516c0": "C-f8591f",
+    "C-4d3b41": "C-fe60bc",
+    "C-93c271": "C-fec61d"
+   },
+   "matches": {
+    "M-54b494": "M-2c9388",
+    "M-3a20d1": "M-359f36",
+    "M-27d662": "M-93ed92",
+    "M-2bdabb": "M-9bd7a3"
+   },
+   "builds": {
+    "build-8b3e": "QX-41",
+    "build-1fa3": "QX-73"
+   },
+   "scripts": {
+    "S-bb64": "shove-human",
+    "S-f99e": "placement-human",
+    "S-a63a": "multicell-human",
+    "S-885f": "matrix-freeze",
+    "S-8226": "send-home-human",
+    "S-3f06": "shield-human",
+    "S-bf74": "freeze-human",
+    "S-c9af": "shove-chain-human"
+   }
+  }
+ },
+ "assignment": {
+  "discovery": {
+   "scripts": [
+    "adjacent-placement",
+    "freeze-ai",
+    "matrix-haste",
+    "matrix-home",
+    "matrix-shield",
+    "multicell-ai",
+    "placement-ai",
+    "send-home-ai",
+    "shield-ai",
+    "shove-ai",
+    "shove-chain-ai",
+    "teleport-human",
+    "walk-twice"
+   ],
+   "seeds": [
+    98001,
+    98002,
+    98004,
+    98005,
+    98006
+   ]
+  },
+  "heldout": {
+   "scripts": [
+    "freeze-human",
+    "matrix-freeze",
+    "multicell-human",
+    "placement-human",
+    "send-home-human",
+    "shield-human",
+    "shove-chain-human",
+    "shove-human"
+   ],
+   "seeds": [
+    98003
+   ]
+  }
+ },
+ "coverage": {
+  "semantics": "a rule is covered when every event pattern of gamewatch/adapters/rule-sabotage.coverage.json for it occurs at least once on every build (gaps.ts semantics)",
+  "wholeBundle": [
+   "R1",
+   "R2",
+   "R3",
+   "R4",
+   "R5",
+   "R6",
+   "R7",
+   "R8",
+   "R9",
+   "R10",
+   "R11",
+   "R12",
+   "R13",
+   "R14",
+   "R15"
+  ],
+  "discovery": [
+   "R1",
+   "R2",
+   "R3",
+   "R4",
+   "R5",
+   "R6",
+   "R7",
+   "R8",
+   "R9",
+   "R10",
+   "R11",
+   "R12",
+   "R13",
+   "R14",
+   "R15"
+  ],
+  "heldout": [
+   "R1",
+   "R2",
+   "R3",
+   "R5",
+   "R6",
+   "R7",
+   "R8",
+   "R9",
+   "R10",
+   "R11",
+   "R12",
+   "R13",
+   "R14",
+   "R15"
+  ],
+  "notCoveredInDiscovery": [],
+  "notCoveredInHeldout": [
+   "R4"
+  ],
+  "notCoveredAnywhere": [],
+  "missing": {
+   "discovery": {},
+   "heldout": {
+    "R4": [
+     "QX-41 {\"type\":\"stack\"}"
+    ]
+   }
+  }
+ },
+ "groundTruth": [
+  {
+   "path": "gamewatch/private/mutations.json",
+   "sha256": "389863b0dd57bfbdcd9ede5547363e4d1a32d6ba28e9c50a3bf2b92eae2871d5",
+   "note": "referenced by hash, not copied; Q9: P7 ground truth is kept outside the repository"
+  },
+  {
+   "path": "gamewatch/private/evaluation/labels.json",
+   "sha256": "6bdf805aced73a63fe3beb73e4765b3882d159a4930afcc1eacc25d03125cd0d",
+   "note": "referenced by hash, not copied; Q9: P7 ground truth is kept outside the repository"
+  }
+ ]
+}

@@ -1,0 +1,211 @@
+{
+ "schema": "gamewatch/gw2-leak-check@1",
+ "exp": "evidence/gw2/p5-experiment",
+ "served": "discovery/site",
+ "files": 49,
+ "ok": true,
+ "checks": [
+  {
+   "check": "rule ids R1–R15",
+   "result": "pass",
+   "hits": []
+  },
+  {
+   "check": "8-word runs from rule texts",
+   "result": "pass",
+   "hits": []
+  },
+  {
+   "check": "original script titles",
+   "result": "pass",
+   "hits": []
+  },
+  {
+   "check": "script ids",
+   "result": "pass",
+   "hits": []
+  },
+  {
+   "check": "build labels",
+   "result": "pass",
+   "hits": []
+  },
+  {
+   "check": "build notes",
+   "result": "pass",
+   "hits": []
+  },
+  {
+   "check": "mutation ids (not shaped like a board square)",
+   "result": "pass",
+   "hits": []
+  },
+  {
+   "check": "mutation ids shaped like a board square, in a mutation context",
+   "result": "pass",
+   "hits": []
+  },
+  {
+   "check": "mutation classes",
+   "result": "pass",
+   "hits": []
+  },
+  {
+   "check": "8-word runs from mutation descriptions",
+   "result": "pass",
+   "hits": []
+  },
+  {
+   "check": "ids of another partition or original ids",
+   "result": "pass",
+   "hits": []
+  },
+  {
+   "check": "seeds",
+   "result": "pass",
+   "hits": []
+  },
+  {
+   "check": "generator metadata and source text",
+   "result": "pass",
+   "hits": []
+  },
+  {
+   "check": "game name and version",
+   "result": "pass",
+   "hits": []
+  },
+  {
+   "check": "script tags, embedded JSON, data- attributes, comments",
+   "result": "pass",
+   "hits": []
+  },
+  {
+   "check": "meta tags other than charset",
+   "result": "pass",
+   "hits": []
+  },
+  {
+   "check": "navigation stays inside the input directory",
+   "result": "pass",
+   "hits": []
+  },
+  {
+   "check": "form actions",
+   "result": "pass",
+   "hits": []
+  },
+  {
+   "check": "anonymous file names",
+   "result": "pass",
+   "hits": []
+  },
+  {
+   "check": "served directory = INPUT_BOUNDARY.json listing",
+   "result": "pass",
+   "hits": []
+  },
+  {
+   "check": "every served file is a discovery-manifest file",
+   "result": "pass",
+   "hits": []
+  },
+  {
+   "check": "no spec/heldout/eval file in the served directory",
+   "result": "pass",
+   "hits": []
+  },
+  {
+   "check": "served directory is inside the discovery partition",
+   "result": "pass",
+   "hits": []
+  }
+ ],
+ "residualSemanticClues": {
+  "note": "Observable in normal gameplay, so kept (Q10). They carry semantic hints; blind discovery does not exclude prior knowledge or these hints. Rule ids shown here are for the operator; they are not in the input boundary.",
+  "effectNames": [
+   {
+    "name": "+1 action",
+    "rule": "R15",
+    "run": "1 action"
+   },
+   {
+    "name": "Freeze",
+    "rule": "R11",
+    "run": "freeze"
+   },
+   {
+    "name": "Send home",
+    "rule": "R12",
+    "run": "send home"
+   },
+   {
+    "name": "Shield",
+    "rule": "R14",
+    "run": "shield"
+   },
+   {
+    "name": "Shove back 2",
+    "rule": "R10",
+    "run": "shove"
+   },
+   {
+    "name": "Shove back 3",
+    "rule": "R10",
+    "run": "shove"
+   },
+   {
+    "name": "Shove east 2",
+    "rule": "R10",
+    "run": "shove"
+   },
+   {
+    "name": "Shove forward 2",
+    "rule": "R10",
+    "run": "shove"
+   },
+   {
+    "name": "Shove west 1",
+    "rule": "R10",
+    "run": "shove"
+   },
+   {
+    "name": "Shove west 2",
+    "rule": "R10",
+    "run": "shove"
+   },
+   {
+    "name": "Teleport",
+    "rule": "R13",
+    "run": "teleport"
+   }
+  ],
+  "engineMessages": [
+   {
+    "message": "referee: illegal. B5 is next to your piece on A5. New effects cannot be placed on the 8 squares around any piece, yours or your opponent’s. Pick squares at least one square away from every piece.",
+    "rule": "R5",
+    "run": "the 8 squares around any piece",
+    "sharedWords": 6
+   },
+   {
+    "message": "referee: illegal. B4 is next to the opponent’s piece on B3 and the opponent’s piece on A5. New effects cannot be placed on the 8 squares around any piece, yours or your opponent’s. Pick squares at least one square away from every piece.",
+    "rule": "R5",
+    "run": "the 8 squares around any piece",
+    "sharedWords": 6
+   },
+   {
+    "message": "The AI got all 3 pieces across.",
+    "rule": "R2",
+    "run": "all 3 pieces across",
+    "sharedWords": 4
+   },
+   {
+    "message": "You got all 3 pieces across.",
+    "rule": "R2",
+    "run": "all 3 pieces across",
+    "sharedWords": 4
+   }
+  ],
+  "knownPrior": "An agent may recognise the game from its mechanics (board, effect names) and recall prior knowledge of Rule Sabotage; nothing here prevents that."
+ }
+}

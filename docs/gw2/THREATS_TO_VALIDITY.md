@@ -42,3 +42,12 @@ Status: Phase 0 inventory. Each threat names the mitigation planned and what rem
 |---|---|---|
 | T19 | One game (Rule Sabotage V6.1), one agent family (Kane), one evidence format. | Claims are limited to this setting unless P8 adds another game via the adapter contract. |
 | T20 | Scripted scenarios were written to exercise every rule on both sides; a game without such symmetric scripts gives less to go on (GW1 report §7). | Stated as a condition of any result. |
+
+## Added in Phase 5 (2026-11-25; earlier entries unchanged)
+
+| # | Threat | Mitigation / status |
+|---|---|---|
+| T21 | The operator has seen held-out outcomes of the P5 bundle (test-double demonstration in `evidence/gw2/p5-demo/`, and the mutation validation). | Generation, partition and selection were frozen before generation and cannot be changed in response (D78, D85). The experimental partition `evidence/gw2/p5-experiment/` has no session, freeze or opening. Disclosed in every P5 report. |
+| T22 | The frozen P5 partition puts one of six match seeds (2 matches per build) and 8 scripts in held-out: held-out unit counts are small (≈10 units per build) and intervals are wide. | Reported with unit-level Wilson intervals; the procedure was not changed after seeing the split (that would be selection). P7 may freeze a procedure with more seeds before generating its own observations. |
+| T23 | The structured-representation page lists the observable field names (e.g. `isFirstMover`, `pieceShieldedBefore`, `nearAnyPiece`). Names of the closed field set are a semantic clue about what the verifier can check. | No rule and no rule-specific example is given (test). Reported as observable-semantic assistance (Q18 / D52); submitter-authored and translated representations are reported separately. |
+| T24 | Turns of one match and entries of one case are correlated; situation-level rates overstate precision. | Unit-level rates (cases and matches) with Wilson intervals are reported beside the descriptive situation rates (D83). |
