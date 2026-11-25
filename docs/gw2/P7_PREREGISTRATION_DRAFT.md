@@ -1,5 +1,7 @@
 # GW2 P7 pre-registration (DRAFT, for operator review)
 
+> Superseded by the authorized [`P7_PREREGISTRATION.md`](P7_PREREGISTRATION.md) (2026-11-25). This draft is kept unchanged below.
+
 **Status: DRAFT. Not authorized. Nothing here has been executed.** P7 starts only after the operator explicitly authorizes it,
 including a separately approved change of the paid-call gate. P6 made zero Kane calls and zero model calls.
 

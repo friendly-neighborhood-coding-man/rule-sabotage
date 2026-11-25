@@ -14,17 +14,27 @@
  *                       that build's behaviour with a build-specific condition (discovery build id)
  * Every submission is labelled TEST DOUBLE and measures no agent.
  */
-import { appendFileSync } from 'node:fs';
+import { appendFileSync, readFileSync, writeFileSync, existsSync } from 'node:fs';
 
 const VERSION = '0.0.0-test-double';
 const args = process.argv.slice(2);
-if (args[0] === '--version') { console.log(`kane-cli ${VERSION}`); process.exit(0); }
+// Real-route test harness (P7 preflight tests, D104): with GW2_SHIM_BALANCE_FILE set, the shim answers `--version` with a
+// bare version line and `balance` like kane-cli 0.10.4 ("Available credits: N"), and its stream_start / run_end carry
+// cli_version, credits_consumed and a Kane-style test_url. Each run subtracts GW2_SHIM_COST (default 50) from the file.
+// GW2_SHIM_NO_RUN_END=1 exits 0 without a run_end; GW2_SHIM_LOSE_BALANCE=1 makes the balance unreadable after the run. None of this calls a model or any network beyond --url.
+const BAL = process.env.GW2_SHIM_BALANCE_FILE, harness = !!BAL;
+if (args[0] === '--version') { console.log(harness ? VERSION : `kane-cli ${VERSION}`); process.exit(0); }
+if (args[0] === 'balance' && harness) {
+  if (!existsSync(BAL) || process.env.GW2_SHIM_BALANCE_UNREADABLE === '1') { console.error('kane-shim: balance unavailable'); process.exit(1); }
+  console.log(`Available credits: ${readFileSync(BAL, 'utf8').trim()}`); process.exit(0);
+}
 if (args[0] !== 'run') { console.error(`kane-shim: unsupported command ${args[0] ?? '(none)'}`); process.exit(64); }
 const opt = k => { const i = args.indexOf(k); return i > 0 ? args[i + 1] : undefined; };
 const url = opt('--url'), maxSteps = Number(opt('--max-steps') ?? 0), profile = process.env.GW2_DOUBLE_PROFILE ?? '';
 if (process.env.GW2_SHIM_MARKER) appendFileSync(process.env.GW2_SHIM_MARKER, `${profile}\n`);
 const emit = o => process.stdout.write(JSON.stringify({ ts: new Date().toISOString(), ...o }) + '\n');
-emit({ type: 'stream_start', mode: 'objective', test_double: true });
+emit({ type: 'stream_start', mode: 'objective', test_double: true, ...(harness ? { cli_version: VERSION } : {}) });
+const spend = () => { if (!harness) return {}; const cost = Number(process.env.GW2_SHIM_COST ?? 50); writeFileSync(BAL, process.env.GW2_SHIM_LOSE_BALANCE === '1' ? 'unreadable' : String(Math.round((Number(readFileSync(BAL, 'utf8')) - cost) * 1000) / 1000)); return { credits_consumed: cost, reason_code: 'success.complete', result_code: 100, test_url: 'https://kane.example.invalid/test-manager/run-0' }; };
 if (!url || !args.includes('--agent') || !args.includes('--headless') || !(maxSteps > 0)) { emit({ type: 'error', message: 'kane-shim: incomplete objective-mode argv' }); process.exit(2); }
 const base = new URL('.', url), headers = { 'user-agent': `kane-cli-test-double/${profile}` };
 let steps = 0;
@@ -108,7 +118,9 @@ try {
     emit({ type: 'run_end', status: 'error', summary: 'unknown profile', steps });
     process.exit(3);
   }
-  emit({ type: 'run_end', status: 'passed', summary: `${TD}${summary}`, steps });
+  const extra = spend();
+  if (process.env.GW2_SHIM_NO_RUN_END === '1') process.exit(0);
+  emit({ type: 'run_end', status: 'passed', summary: `${TD}${summary}`, steps, ...extra });
 } catch (e) {
   emit({ type: 'run_end', status: 'error', summary: String(e?.message ?? e), steps });
   process.exit(3);
