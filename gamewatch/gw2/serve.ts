@@ -27,6 +27,7 @@ import { randomBytes } from 'node:crypto';
 import { resolvePage } from '../kane/serve.ts';
 import { JournalWriter, sha256, clientToken, SERVER_ID, ACCESS_SCHEMA, type Kind } from './journal.ts';
 import { assertWritableOutput, ROOT } from './paths.ts';
+import { HYPOTHESIS_FIELDS } from './blind-site.ts';
 
 /** The GW1 form field allow-list (gamewatch/kane/serve.ts FIELDS); anything else in a POST body is dropped. */
 export const FIELDS = ['category', 'rules', 'builds', 'claim', 'evidence', 'reproduce', 'suggestion', 'confidence', 'nonce'];
@@ -49,6 +50,7 @@ export function classify(page: string | null): { kind: Kind; evidenceId: string 
   if (m) return { kind: 'evidence', evidenceId: m[1] };
   if (page === 'index.html') return { kind: 'index', evidenceId: null };
   if (page === 'report.html') return { kind: 'report-form', evidenceId: null };
+  if (page === 'hypothesis.html') return { kind: 'hypothesis-form', evidenceId: null };
   return { kind: 'other', evidenceId: null };
 }
 
@@ -66,8 +68,9 @@ export async function startGw2Server(o: Gw2ServerOptions): Promise<Gw2Server> {
   // Q13 (conditional fail-closed): if required logging cannot be initialized, the session does not start.
   if (j && j.event({ type: 'session-start', site: { files }, notes: 'notes.ndjson', server: SERVER_ID }) === null)
     throw new JournalInitError(`access journal could not be initialized (${j.lastError}); the review session was not started`);
-  writeFileSync(join(dir, 'session.json'), JSON.stringify({ schema: 'gamewatch/gw2-session@1', exp: o.exp, session: SESSION, logging: logging ? 'on' : 'off', ...(logging ? {} : { loggingDisabledReason: o.loggingDisabledReason }), accessSchema: ACCESS_SCHEMA, journal: logging ? 'access.ndjson' : null, notes: 'notes.ndjson', label, nonceSha256: sha256(NONCE), server: SERVER_ID, startedAt: new Date().toISOString() }, null, 1) + '\n');
-  let noteCount = 0;
+  writeFileSync(join(dir, 'session.json'), JSON.stringify({ schema: 'gamewatch/gw2-session@1', exp: o.exp, session: SESSION, logging: logging ? 'on' : 'off', ...(logging ? {} : { loggingDisabledReason: o.loggingDisabledReason }), accessSchema: ACCESS_SCHEMA, journal: logging ? 'access.ndjson' : null, notes: 'notes.ndjson', hypotheses: 'hypotheses.ndjson', label, nonceSha256: sha256(NONCE), server: SERVER_ID, startedAt: new Date().toISOString() }, null, 1) + '\n');
+  let noteCount = 0, hypCount = 0;
+  const hypotheses = join(dir, 'hypotheses.ndjson');
   const failed = () => { if (j && j.failures) process.stderr.write(`GW2 ACCESS JOURNAL: ${j.failures} write failure(s) (${j.lastError}); coverage for this session is incomplete\n`); };
 
   /** Send a body and journal the request once the response has completed or the connection was closed first. */
@@ -102,10 +105,30 @@ export async function startGw2Server(o: Gw2ServerOptions): Promise<Gw2Server> {
         const line = JSON.stringify(note);
         mkdirSync(dir, { recursive: true });
         appendFileSync(notes, line + '\n');
-        j?.event({ type: 'finding', noteIndex: noteCount++, noteSha256: sha256(line), nonceValid });
+        const noteIndex = noteCount++; // counted even when logging is off (j?.event would skip the increment)
+        j?.event({ type: 'finding', noteIndex, noteSha256: sha256(line), nonceValid });
         failed();
         res.writeHead(200, { 'content-type': 'text/html; charset=utf-8', 'cache-control': 'no-store' });
         res.end(`<!doctype html><meta charset="utf-8"><p id="stored">Finding stored (${nonceValid ? 'valid session' : 'INVALID session nonce'}).</p><p><a href="/report.html">Submit another finding</a> · <a href="/index.html">GameWatch home</a></p>`);
+      });
+      return;
+    }
+    if (req.method === 'POST' && url.pathname === '/hypothesis') {
+      let body = '';
+      req.on('data', c => { body += c; if (body.length > 64_000) req.destroy(); });
+      req.on('end', () => {
+        // P3: stored exactly as submitted (allow-listed fields only), never validated away, never overwritten. The
+        // session-local reference H-<n> lets the submitter name competing hypotheses; the server's ordering is the
+        // journal's hypothesis event, joined by hypIndex and lineSha256.
+        const f = Object.fromEntries([...new URLSearchParams(body)].filter(([k]) => HYPOTHESIS_FIELDS.includes(k)));
+        const nonceValid = f.nonce === NONCE, hypIndex = hypCount++, ref = `H-${hypIndex + 1}`; // counted even when logging is off
+        const line = JSON.stringify({ at: new Date().toISOString(), source: label, nonceValid, session: SESSION, ref, ...f });
+        mkdirSync(dir, { recursive: true });
+        appendFileSync(hypotheses, line + '\n');
+        j?.event({ type: 'hypothesis', hypIndex, lineSha256: sha256(line), nonceValid });
+        failed();
+        res.writeHead(200, { 'content-type': 'text/html; charset=utf-8', 'cache-control': 'no-store' });
+        res.end(`<!doctype html><meta charset="utf-8"><p id="stored">${f.abstain === 'yes' ? 'Abstention' : 'Hypothesis'} stored as <b id="ref">${ref}</b> (${nonceValid ? 'valid session' : 'INVALID session nonce'}).</p><p><a href="/hypothesis.html">Submit another</a> · <a href="/index.html">Observations</a></p>`);
       });
       return;
     }
@@ -115,7 +138,7 @@ export async function startGw2Server(o: Gw2ServerOptions): Promise<Gw2Server> {
     if (o.beforeRespond) await o.beforeRespond(meta.path ?? '', req);
     if (!r || !existsSync(r.file)) { send(req, res, 404, 'not found', meta); return; }
     let html = readFileSync(r.file, 'utf8');
-    if (r.isReport) html = html.replace('__NONCE__', NONCE);
+    if (r.isReport || r.page === 'hypothesis.html') html = html.replace('__NONCE__', NONCE);
     send(req, res, 200, html, meta);
   });
   return new Promise((resolveP, reject) => {

@@ -78,6 +78,11 @@
     "gw2:demo": "node --experimental-strip-types --no-warnings=ExperimentalWarning gamewatch/gw2/demo-session.ts",
     "gw2:verify": "node scripts/gw2-baseline.mjs verify && node scripts/gw2-frozen-inventory.mjs",
     "gw2:judgments": "node --experimental-strip-types --no-warnings=ExperimentalWarning gamewatch/gw2/judgments.ts",
-    "gw2:import-gw1": "node --experimental-strip-types --no-warnings=ExperimentalWarning gamewatch/gw2/import-gw1.ts"
+    "gw2:import-gw1": "node --experimental-strip-types --no-warnings=ExperimentalWarning gamewatch/gw2/import-gw1.ts",
+    "gw2:partition": "node --experimental-strip-types --no-warnings=ExperimentalWarning gamewatch/gw2/partition.ts",
+    "gw2:leak-check": "node --experimental-strip-types --no-warnings=ExperimentalWarning gamewatch/gw2/leak-check.ts",
+    "gw2:import-session": "node --experimental-strip-types --no-warnings=ExperimentalWarning gamewatch/gw2/import-session.ts",
+    "gw2:freeze": "node --experimental-strip-types --no-warnings=ExperimentalWarning gamewatch/gw2/freeze.ts",
+    "gw2:p3-demo": "node --experimental-strip-types --no-warnings=ExperimentalWarning gamewatch/gw2/p3-demo.ts"
   }
 }

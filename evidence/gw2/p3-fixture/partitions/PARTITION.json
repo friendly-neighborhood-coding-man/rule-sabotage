@@ -1,0 +1,113 @@
+{
+ "schema": "gamewatch/gw2-partition@1",
+ "procedure": {
+  "id": "p3-partition-1",
+  "path": "evidence/gw2/procedures/partition-p3-1.json",
+  "sha256": "ee31e1e1dd525fd4a323840f92028474ac29cc49ee4bd2e524c3216d62390d5c"
+ },
+ "bundle": {
+  "path": "evidence/gamewatch/evidence.json",
+  "sha256": "3243b1fc58f4729957334a11cffb4fc53dcc3f4e25986f4e44760ad0018a56c0"
+ },
+ "fixture": "FIXTURE: a historical bundle used as a deterministic fixture. It was generated before this procedure was frozen, so this is NOT an experimental partition.",
+ "generatedBeforeFreeze": true,
+ "assignment": {
+  "discovery": {
+   "scripts": [
+    "adjacent-placement",
+    "freeze-ai",
+    "shield-ai",
+    "shove-ai",
+    "shove-chain-ai",
+    "teleport-human",
+    "walk-twice"
+   ],
+   "seeds": [
+    97002,
+    97003,
+    97004,
+    97005,
+    97007,
+    97008
+   ]
+  },
+  "heldout": {
+   "scripts": [
+    "freeze-human",
+    "shield-human",
+    "shove-chain-human",
+    "shove-human"
+   ],
+   "seeds": [
+    97001,
+    97006
+   ]
+  }
+ },
+ "share": {
+  "discovery": 0.7037037037037037,
+  "target": 0.7,
+  "discoveryObservations": 38,
+  "heldoutObservations": 16
+ },
+ "candidatesConsidered": 32512,
+ "coverage": {
+  "semantics": "a rule is covered when every event pattern of gamewatch/adapters/rule-sabotage.coverage.json for it occurs at least once on every build (gaps.ts semantics)",
+  "discovery": [
+   "R1",
+   "R2",
+   "R3",
+   "R4",
+   "R5",
+   "R6",
+   "R7",
+   "R8",
+   "R9",
+   "R10",
+   "R11",
+   "R13",
+   "R14",
+   "R15"
+  ],
+  "heldout": [
+   "R1",
+   "R2",
+   "R3",
+   "R4",
+   "R6",
+   "R7",
+   "R8",
+   "R9",
+   "R10",
+   "R11",
+   "R12",
+   "R13",
+   "R14",
+   "R15"
+  ],
+  "notCoveredInDiscovery": [
+   "R12"
+  ],
+  "notCoveredInHeldout": [
+   "R5"
+  ],
+  "notCoveredAnywhere": []
+ },
+ "counts": {
+  "discovery": {
+   "cases": 14,
+   "matches": 24
+  },
+  "heldout": {
+   "cases": 8,
+   "matches": 8
+  }
+ },
+ "manifests": {
+  "discovery": "091edb3a1e27dc558628458483f9b5daa121087c99610faaf47f87b83e1545bf",
+  "spec": "e06ae89394147b9e59c95a8fe45ac88e047f21a1c4bcd4c4505db71496310879",
+  "heldout": "af872a42c4c8fefdba6b8e4f1ac59affb97181c94a748140028755f02d6a3c10",
+  "eval": "e0f715804759a17eb27ecb5820391d87d7a422ac66e6669a00547be3b3bd9355"
+ },
+ "note": "Assignment and coverage name original script ids and seeds; this file is outside the input boundary. The split depends only on the frozen procedure and engine-reported events, never on agent output."
+}

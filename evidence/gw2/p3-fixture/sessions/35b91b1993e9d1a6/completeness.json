@@ -1,0 +1,76 @@
+{
+ "schema": "gamewatch/gw2-completeness@1",
+ "policy": "p3-demo",
+ "exp": "p3-demo",
+ "session": "35b91b1993e9d1a6",
+ "note": "Separate dimensions. Completeness concerns only the declared requirements; experimental validity says whether this session may enter the primary verified analysis. Neither says whether the findings are right, and findings are never changed, dropped or rewritten by either.",
+ "findings": [
+  {
+   "noteIndex": 0,
+   "seq": 9,
+   "counted": true,
+   "verification": "journal-verified",
+   "join": "joined",
+   "verbatim": "{\"at\":\"2026-11-25T14:00:16.773Z\",\"source\":\"test-double\",\"nonceValid\":true,\"session\":\"35b91b1993e9d1a6\",\"category\":\"suspected bug needing reproduction\",\"builds\":\"\",\"claim\":\"TEST DOUBLE finding (scripted, not a review).\",\"evidence\":\"C-178ae4\",\"confidence\":\"low\",\"nonce\":\"31ad58a6be99eb2d\"}"
+  }
+ ],
+ "investigationCompleteness": {
+  "completeness": "incomplete",
+  "verifiedComplete": false,
+  "requirements": [
+   {
+    "id": "open-two-cases",
+    "kind": "must-access",
+    "targets": [
+     "C-178ae4",
+     "C-2b6484"
+    ],
+    "reason": "demonstration: one target opened, one not",
+    "result": "unsatisfied",
+    "missing": [
+     "C-2b6484"
+    ],
+    "firstServedSeq": {
+     "C-178ae4": 2
+    },
+    "basis": "server journal (valid)",
+    "why": "not served to this session: C-2b6484"
+   }
+  ]
+ },
+ "experimentalValidity": {
+  "status": "verified",
+  "primaryAnalysis": true,
+  "reasons": []
+ },
+ "accessCoverage": {
+  "journal": {
+   "status": "valid",
+   "reasons": [],
+   "attribution": "single-client",
+   "clients": 1
+  },
+  "usable": true,
+  "servedEvidence": [
+   "C-178ae4",
+   "C-289f73"
+  ],
+  "servedCount": 2,
+  "evidenceInInventory": 38,
+  "duplicateRequests": 0,
+  "contentMismatchSeqs": [],
+  "meaning": "served by the server to this session; not proof that the page was rendered, read or understood"
+ },
+ "citationCoverage": {
+  "countedFindings": 1,
+  "evidenceCited": [
+   "C-178ae4"
+  ],
+  "rulesCited": [],
+  "unknownIdLike": []
+ },
+ "evaluationAvailability": {
+  "ruleEvaluation": "not-available",
+  "reason": "P4 (deterministic three-way verifier) is not implemented; must-evaluate requirements are not-evaluable"
+ }
+}

@@ -1,0 +1,49 @@
+{
+ "schema": "gamewatch/gw2-session-import@1",
+ "session": "35b91b1993e9d1a6",
+ "exp": "p3-demo",
+ "sessionDir": "evidence/gw2/p3-fixture/sessions/35b91b1993e9d1a6",
+ "graph": "judgments.ndjson",
+ "nodes": [
+  {
+   "key": "finding:0",
+   "id": "955049a39d9f553ae5ce75d21bcd501e53cd6c8a42ccb3af39ccba40c51c0002",
+   "status": "already-present"
+  },
+  {
+   "key": "hypothesis:0",
+   "id": "0c649b53cbc8bf65a67a7f6ea9bfa98e8f30005fa30fdb505b5b50779c66456e",
+   "status": "already-present"
+  },
+  {
+   "key": "hypothesis:1",
+   "id": "a96cdc2821bb4bccb525b00207063e6b9e4b69d056a0820ec5e4a9675e1dab13",
+   "status": "already-present"
+  },
+  {
+   "key": "hypothesis:2",
+   "id": "0a1f9b99bda26ec34695bb2b2e57c237a443ce85016cc0920c7fcf776f5f3d24",
+   "status": "already-present"
+  },
+  {
+   "key": "assessment:completeness",
+   "id": "93a9d0b201f6707aa1734f825814ed8d80c6cd953925ad57fb06cd940b3ec8eb",
+   "status": "already-present"
+  },
+  {
+   "key": "assessment:coverage",
+   "id": "5bf0c39088077ebb6a334d2f37e271af601846aff012d0aa0a8503397598ef9e",
+   "status": "already-present"
+  }
+ ],
+ "notApplicable": [],
+ "sessionValidity": {
+  "status": "verified",
+  "primaryAnalysis": true,
+  "reasons": []
+ },
+ "graphHeadAfter": {
+  "count": 6,
+  "lastLineSha256": "16cc7031638763b4f62d1e657a3807f483a19a9c56c088c036b237930e64bbd2"
+ }
+}
