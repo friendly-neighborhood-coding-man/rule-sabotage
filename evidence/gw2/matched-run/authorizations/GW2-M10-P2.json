@@ -1,0 +1,8 @@
+{
+  "runId": "GW2-M10-P2",
+  "session": "M10",
+  "arm": "treatment",
+  "phase": 2,
+  "preregSha256": "0a56b820e8f0f74775d8e7cf0931903d37f9c4ce3f6a462e14727e8260e1a420",
+  "operatorAuthorization": "I authorize the preregistered GW2 matched comparison, subject to individual approval of each call, the 4000-credit cumulative stopping threshold including P7, and the 300/150 per-call operational ceilings. I acknowledge that these are not provider-enforced hard caps. No retries, parallel calls or credit purchases. (operator Eric, 2026-11-26T15:17:22.713Z)"
+}

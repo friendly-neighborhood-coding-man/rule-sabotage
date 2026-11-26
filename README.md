@@ -1,12 +1,25 @@
 # Rule Sabotage
 
-> **Hackathon submission: GameWatch**, a Kane-powered game QA SkillBook, with Rule Sabotage as its demonstration game.
-> Result of the blind experiment (GW1): one Kane call detected 2 of 3 planted defects; one coding-agent repair attempt
-> fixed all 3 (it found the third itself), verified independently after the output was frozen.
-> Start at [`docs/SUBMISSION.md`](docs/SUBMISSION.md), [`gamewatch/README.md`](gamewatch/README.md) (quick start) and
-> [`docs/GW1_FINAL_REPORT.md`](docs/GW1_FINAL_REPORT.md) (results and limitations). GameWatch runs on **SkillFlow**, a
-> separate MIT-licensed runner (https://github.com/friendly-neighborhood-coding-man/skillflow), vendored unmodified at a
-> pinned commit in `gamewatch/vendor/skillflow/` (no download needed). The playable game is the clean V6.1 baseline.
+> **Hackathon submission: GameWatch. Kane discovers. GameWatch verifies. Together, they close the trust gap.**
+> Kane explores the game on its own and reports anomalies and hypotheses about its hidden rules. GameWatch is a
+> complementary verification layer: it checks every finding against recorded evidence, seals each step in a
+> hash-chained ledger, and separates genuine corrections from misleading improvements.
+> * **GW1:** one Kane call detected 2 of 3 planted defects. One blind coding-agent repair fixed all 3 (it found the
+>   third itself), and the fixes were verified independently after the output was frozen.
+> * **GW2 (pre-registered, 20 Kane calls):** in session M08, accuracy rose from 31.78% to 81.25% while coverage fell from
+>   12.32% to 1.00%, with zero genuine corrections. GameWatch identified a hypothesis withdrawal, not self-correction.
+>   Both treatment sessions that received contradiction feedback revised or withdrew a hypothesis, and no control
+>   session did. This is observed behavioural adaptation, not improved reasoning.
+> * **Disclosed limitations:** schema-invalid representations in 6 of 10 sessions, missing submissions in 8 of 10
+>   revision calls, and 5 sessions per arm.
+>
+> **Try it in one command, with no paid calls:** [Quick Demo](#quick-demo--one-command-zero-paid-calls).
+> Start at [`docs/SUBMISSION.md`](docs/SUBMISSION.md). The verified report is
+> [`docs/gw2/MATCHED_RESULTS_REPORT.md`](docs/gw2/MATCHED_RESULTS_REPORT.md) and the public evidence is
+> [`evidence/gw2/matched-run/`](evidence/gw2/matched-run/). See also [`docs/GW1_FINAL_REPORT.md`](docs/GW1_FINAL_REPORT.md)
+> and [`gamewatch/README.md`](gamewatch/README.md) (quick start).
+> GameWatch runs on **SkillFlow** (https://github.com/friendly-neighborhood-coding-man/skillflow, MIT), vendored
+> unmodified at a pinned commit. The playable game is the clean V6.1 baseline.
 
 **Write effects in plain English (or Korean), scatter them over the board, then survive your own inventions.**
 
@@ -138,3 +151,19 @@ shadow-mode infrastructure that is prepared but never runs Kane.
 V6.3 (`docs/V6_3_BUDGETED_AI_AND_PILOT.md`, `docs/KANE_SINGLE_CALL_PREFLIGHT.md`): pilot defaults (V6.1 + the `-ra@1`
 opponents), an 8-second latency-bounded prototype (`-ra-b@1`, not promoted), and a reviewable single-call Kane shadow
 experiment that is prepared and gated, not run.
+
+## Quick Demo — One Command, Zero Paid Calls
+
+**Requirements:** Git and Node.js 22.10+. No `npm install`, API keys, Kane account or paid calls are needed.
+
+```
+git clone --branch claude/gw2-matched-results --single-branch https://github.com/friendly-neighborhood-coding-man/rule-sabotage.git && cd rule-sabotage && npm run gamewatch:serve -- --notes demo-notes.ndjson --label human
+```
+
+Then open http://127.0.0.1:3210/.
+
+**What this is: the interactive evidence-site demo.** It is the same anonymous evidence site Kane explores: scripted playtests, AI-vs-AI matches and the findings form. You browse it as a human reviewer, and anything you submit is written to `demo-notes.ndjson` in the clone. Stop the server with Ctrl+C.
+
+**What it is not: a full experimental reproduction.** It makes no Kane call and does not re-run GW1 or GW2. To check the recorded experiments without paid calls:
+* [`docs/DEMO.md`](docs/DEMO.md) verifies the GW1 freeze and recomputes its evaluation;
+* [`docs/gw2/MATCHED_RESULTS_REPORT.md`](docs/gw2/MATCHED_RESULTS_REPORT.md) is the independently verified GW2 report, with the redacted evidence in [`evidence/gw2/matched-run/`](evidence/gw2/matched-run/).

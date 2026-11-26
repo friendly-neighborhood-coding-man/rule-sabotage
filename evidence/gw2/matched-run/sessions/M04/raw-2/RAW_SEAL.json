@@ -1,0 +1,10 @@
+{
+ "schema": "gamewatch/gw2-raw-seal@1",
+ "files": {
+  "args.json": "8828e394304b441e1cf782a63e640836acdafae712456891b89494284891530b",
+  "stdout.ndjson": "d831301092d6e2fc355a4c1475265132c62a4714b2e96ec596031c7cb8a74366",
+  "stderr.txt": "19b631e6083628c2b0b78ebaa71028bc9d9478e8c092b6c64ad78417b44b8a27",
+  "meta.json": "c2f6b4db4fac84d350147cddf96f18f3479263ed61658a231c0d08a1f393fcf1"
+ },
+ "note": "sha256 of the raw, unredacted files as written when the process ended; a published redacted copy will not match and is accompanied by a redaction record"
+}

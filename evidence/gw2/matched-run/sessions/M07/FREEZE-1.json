@@ -1,0 +1,40 @@
+{
+ "schema": "gamewatch/gw2-matched-session-freeze@1",
+ "session": "M07",
+ "arm": "control",
+ "phase": 1,
+ "runId": "GW2-M07-P1",
+ "callStatus": "completed",
+ "callReasons": [],
+ "graphHead": {
+  "count": 2,
+  "lastLineSha256": "25b2d4f90a579b19ec55f4b5033b83e9d67268abcabae23adc8ce9a0de4108de"
+ },
+ "submissions": [
+  {
+   "id": "2ae41d4f8d66adc6f7db64e737475ab93fa20644f08f29546230810e6cde090d",
+   "kind": "hypothesis",
+   "ref": "H-1",
+   "phaseRef": "P1:H-1",
+   "revision": null,
+   "nonceValid": true,
+   "author": "agent:kane-cli",
+   "representations": [
+    "be7425c24e7d3132dfc759642eeda5521c66f3259bca2ac429163e9c46a1fb26"
+   ]
+  }
+ ],
+ "validity": {
+  "submissionVerification": {
+   "verified": 1,
+   "unverified": 0,
+   "basis": "form nonce and server session"
+  },
+  "call": {
+   "status": "completed",
+   "reasons": [],
+   "basis": "exit code, timeout, run_end validity and spend (p7-exec.ts sessionOutcome)"
+  }
+ },
+ "at": "2026-11-26T16:27:43.673Z"
+}

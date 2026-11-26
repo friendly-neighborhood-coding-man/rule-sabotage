@@ -1,0 +1,3428 @@
+{
+ "schema": "gamewatch/gw2-matched-evaluation@1",
+ "preregSha256": "0a56b820e8f0f74775d8e7cf0931903d37f9c4ce3f6a462e14727e8260e1a420",
+ "openedAt": "2026-11-26T17:23:45.414Z",
+ "stopped": false,
+ "failedCalls": [],
+ "encoding": {
+  "file": "gamewatch/gw2/spec-encodings/rule-sabotage-v6.1.json",
+  "sha256": "1b8f84b5c00df68fd812ed4ee0b54726c9668fa8521050764767d1cee39d7491",
+  "authoritative": false
+ },
+ "unit": "session (outcome checks within a session are correlated and are not replications)",
+ "sessions": [
+  {
+   "session": "M01",
+   "arm": "control",
+   "block": 1,
+   "complete": true,
+   "calls": [
+    {
+     "phase": 1,
+     "exitCode": 0,
+     "timedOut": false,
+     "runEndPresent": true,
+     "runEndValid": true,
+     "used": 62.582,
+     "outcome": "WITHIN_CEILING"
+    },
+    {
+     "phase": 2,
+     "exitCode": 0,
+     "timedOut": false,
+     "runEndPresent": true,
+     "runEndValid": true,
+     "used": 22.455,
+     "outcome": "WITHIN_CEILING"
+    }
+   ],
+   "revision": {
+    "available": true
+   },
+   "heldout": {
+    "initial": {
+     "accuracy": null,
+     "coverage": 0,
+     "matching": 0,
+     "contradicting": 0
+    },
+    "final": {
+     "accuracy": null,
+     "coverage": 0,
+     "matching": 0,
+     "contradicting": 0
+    },
+    "change": {
+     "accuracy": null,
+     "coverage": 0
+    }
+   },
+   "actions": {
+    "kept": 3,
+    "revised": 0,
+    "withdrawn": 0,
+    "conflicting": 0,
+    "additions": 0
+   },
+   "revisionEffects": {
+    "basis": "prediction targets (situation, outcome field) with a recorded held-out outcome",
+    "corrections": 0,
+    "mixed": 0,
+    "harmful": 0,
+    "representationLost": 0,
+    "narrowingOnly": 0,
+    "unchanged": 0,
+    "notComparable": 0
+   },
+   "revisionEffectsByAccuracy": {
+    "basis": "held-out accuracy of the revision vs its original (the original measure, kept)",
+    "corrections": 0,
+    "harmful": 0,
+    "unchanged": 0,
+    "notComparable": 0
+   },
+   "targets": {
+    "heldout": {
+     "unit": "prediction target = (situation, outcome field) with a recorded outcome",
+     "common": {
+      "total": 0,
+      "corrected": 0,
+      "becameIncorrect": 0,
+      "stillCorrect": 0,
+      "stillIncorrect": 0
+     },
+     "added": {
+      "total": 0,
+      "matching": 0,
+      "incorrect": 0
+     },
+     "dropped": {
+      "total": 0,
+      "matching": 0,
+      "incorrect": 0
+     },
+     "situations": {
+      "before": 0,
+      "after": 0,
+      "contraction": 0,
+      "expansion": 0
+     }
+    },
+    "attribution": "no change in predictions"
+   },
+   "discoveryFit": {
+    "initial": {
+     "accuracy": null,
+     "matching": 0,
+     "contradicting": 0
+    },
+    "final": {
+     "accuracy": null,
+     "matching": 0,
+     "contradicting": 0
+    },
+    "change": null,
+    "targets": {
+     "unit": "prediction target = (situation, outcome field) with a recorded outcome",
+     "common": {
+      "total": 0,
+      "corrected": 0,
+      "becameIncorrect": 0,
+      "stillCorrect": 0,
+      "stillIncorrect": 0
+     },
+     "added": {
+      "total": 0,
+      "matching": 0,
+      "incorrect": 0
+     },
+     "dropped": {
+      "total": 0,
+      "matching": 0,
+      "incorrect": 0
+     },
+     "situations": {
+      "before": 0,
+      "after": 0,
+      "contraction": 0,
+      "expansion": 0
+     }
+    }
+   },
+   "representationLoss": [],
+   "withdrawals": [],
+   "abstentionsPhase1": [],
+   "counterexamples": {
+    "initial": {
+     "unit": "held-out situations contradicting a clause (per representation, clause and build)",
+     "total": 0,
+     "novelty": {},
+     "clauseAlreadyContradictedInDiscovery": 0,
+     "clauseNotContradictedInDiscovery": 0
+    },
+    "final": {
+     "unit": "held-out situations contradicting a clause (per representation, clause and build)",
+     "total": 0,
+     "novelty": {},
+     "clauseAlreadyContradictedInDiscovery": 0,
+     "clauseNotContradictedInDiscovery": 0
+    }
+   },
+   "cReadings": {
+    "initial": {
+     "unit": "readings over (representation, build, encoded spec rule); hypotheses without a representation counted by status",
+     "byPartition": {
+      "discovery": {
+       "not-representable": 3
+      },
+      "heldout": {
+       "not-representable": 3
+      }
+     },
+     "accurateDescriptionsOfADefect": {
+      "discovery": 0,
+      "heldout": 0
+     }
+    },
+    "final": {
+     "unit": "readings over (representation, build, encoded spec rule); hypotheses without a representation counted by status",
+     "byPartition": {
+      "discovery": {
+       "not-representable": 3
+      },
+      "heldout": {
+       "not-representable": 3
+      }
+     },
+     "accurateDescriptionsOfADefect": {
+      "discovery": 0,
+      "heldout": 0
+     }
+    }
+   },
+   "abstentions": {
+    "phase1": 0,
+    "withdrawalsPhase2": 0
+   },
+   "representationAvailability": {
+    "phase1": {
+     "hypotheses": 3,
+     "withStructuredRepresentation": 0
+    },
+    "phase2": {
+     "hypotheses": 0,
+     "withStructuredRepresentation": 0
+    }
+   },
+   "pairs": [
+    {
+     "original": "H-1",
+     "originalKind": "hypothesis",
+     "action": "kept",
+     "revisions": [],
+     "heldoutOriginal": {
+      "matching": 0,
+      "contradicting": 0,
+      "unknown": 0,
+      "predicted": 0,
+      "accuracy": null
+     },
+     "heldoutRevision": null,
+     "effect": null,
+     "accuracyEffect": null,
+     "targets": null,
+     "representationLost": false,
+     "withdrawn": false,
+     "conflictingRevisions": []
+    },
+    {
+     "original": "H-2",
+     "originalKind": "hypothesis",
+     "action": "kept",
+     "revisions": [],
+     "heldoutOriginal": {
+      "matching": 0,
+      "contradicting": 0,
+      "unknown": 0,
+      "predicted": 0,
+      "accuracy": null
+     },
+     "heldoutRevision": null,
+     "effect": null,
+     "accuracyEffect": null,
+     "targets": null,
+     "representationLost": false,
+     "withdrawn": false,
+     "conflictingRevisions": []
+    },
+    {
+     "original": "H-3",
+     "originalKind": "hypothesis",
+     "action": "kept",
+     "revisions": [],
+     "heldoutOriginal": {
+      "matching": 0,
+      "contradicting": 0,
+      "unknown": 0,
+      "predicted": 0,
+      "accuracy": null
+     },
+     "heldoutRevision": null,
+     "effect": null,
+     "accuracyEffect": null,
+     "targets": null,
+     "representationLost": false,
+     "withdrawn": false,
+     "conflictingRevisions": []
+    }
+   ]
+  },
+  {
+   "session": "M02",
+   "arm": "treatment",
+   "block": 1,
+   "complete": true,
+   "calls": [
+    {
+     "phase": 1,
+     "exitCode": 0,
+     "timedOut": false,
+     "runEndPresent": true,
+     "runEndValid": true,
+     "used": 45.278,
+     "outcome": "WITHIN_CEILING"
+    },
+    {
+     "phase": 2,
+     "exitCode": 0,
+     "timedOut": false,
+     "runEndPresent": true,
+     "runEndValid": true,
+     "used": 36.233,
+     "outcome": "WITHIN_CEILING"
+    }
+   ],
+   "revision": {
+    "available": true
+   },
+   "heldout": {
+    "initial": {
+     "accuracy": null,
+     "coverage": 0,
+     "matching": 0,
+     "contradicting": 0
+    },
+    "final": {
+     "accuracy": null,
+     "coverage": 0,
+     "matching": 0,
+     "contradicting": 0
+    },
+    "change": {
+     "accuracy": null,
+     "coverage": 0
+    }
+   },
+   "actions": {
+    "kept": 3,
+    "revised": 0,
+    "withdrawn": 0,
+    "conflicting": 0,
+    "additions": 0
+   },
+   "revisionEffects": {
+    "basis": "prediction targets (situation, outcome field) with a recorded held-out outcome",
+    "corrections": 0,
+    "mixed": 0,
+    "harmful": 0,
+    "representationLost": 0,
+    "narrowingOnly": 0,
+    "unchanged": 0,
+    "notComparable": 0
+   },
+   "revisionEffectsByAccuracy": {
+    "basis": "held-out accuracy of the revision vs its original (the original measure, kept)",
+    "corrections": 0,
+    "harmful": 0,
+    "unchanged": 0,
+    "notComparable": 0
+   },
+   "targets": {
+    "heldout": {
+     "unit": "prediction target = (situation, outcome field) with a recorded outcome",
+     "common": {
+      "total": 0,
+      "corrected": 0,
+      "becameIncorrect": 0,
+      "stillCorrect": 0,
+      "stillIncorrect": 0
+     },
+     "added": {
+      "total": 0,
+      "matching": 0,
+      "incorrect": 0
+     },
+     "dropped": {
+      "total": 0,
+      "matching": 0,
+      "incorrect": 0
+     },
+     "situations": {
+      "before": 0,
+      "after": 0,
+      "contraction": 0,
+      "expansion": 0
+     }
+    },
+    "attribution": "no change in predictions"
+   },
+   "discoveryFit": {
+    "initial": {
+     "accuracy": null,
+     "matching": 0,
+     "contradicting": 0
+    },
+    "final": {
+     "accuracy": null,
+     "matching": 0,
+     "contradicting": 0
+    },
+    "change": null,
+    "targets": {
+     "unit": "prediction target = (situation, outcome field) with a recorded outcome",
+     "common": {
+      "total": 0,
+      "corrected": 0,
+      "becameIncorrect": 0,
+      "stillCorrect": 0,
+      "stillIncorrect": 0
+     },
+     "added": {
+      "total": 0,
+      "matching": 0,
+      "incorrect": 0
+     },
+     "dropped": {
+      "total": 0,
+      "matching": 0,
+      "incorrect": 0
+     },
+     "situations": {
+      "before": 0,
+      "after": 0,
+      "contraction": 0,
+      "expansion": 0
+     }
+    }
+   },
+   "representationLoss": [],
+   "withdrawals": [],
+   "abstentionsPhase1": [],
+   "counterexamples": {
+    "initial": {
+     "unit": "held-out situations contradicting a clause (per representation, clause and build)",
+     "total": 0,
+     "novelty": {},
+     "clauseAlreadyContradictedInDiscovery": 0,
+     "clauseNotContradictedInDiscovery": 0
+    },
+    "final": {
+     "unit": "held-out situations contradicting a clause (per representation, clause and build)",
+     "total": 0,
+     "novelty": {},
+     "clauseAlreadyContradictedInDiscovery": 0,
+     "clauseNotContradictedInDiscovery": 0
+    }
+   },
+   "cReadings": {
+    "initial": {
+     "unit": "readings over (representation, build, encoded spec rule); hypotheses without a representation counted by status",
+     "byPartition": {
+      "discovery": {
+       "not-representable": 3
+      },
+      "heldout": {
+       "not-representable": 3
+      }
+     },
+     "accurateDescriptionsOfADefect": {
+      "discovery": 0,
+      "heldout": 0
+     }
+    },
+    "final": {
+     "unit": "readings over (representation, build, encoded spec rule); hypotheses without a representation counted by status",
+     "byPartition": {
+      "discovery": {
+       "not-representable": 3
+      },
+      "heldout": {
+       "not-representable": 3
+      }
+     },
+     "accurateDescriptionsOfADefect": {
+      "discovery": 0,
+      "heldout": 0
+     }
+    }
+   },
+   "abstentions": {
+    "phase1": 0,
+    "withdrawalsPhase2": 0
+   },
+   "representationAvailability": {
+    "phase1": {
+     "hypotheses": 3,
+     "withStructuredRepresentation": 0
+    },
+    "phase2": {
+     "hypotheses": 0,
+     "withStructuredRepresentation": 0
+    }
+   },
+   "pairs": [
+    {
+     "original": "H-1",
+     "originalKind": "hypothesis",
+     "action": "kept",
+     "revisions": [],
+     "heldoutOriginal": {
+      "matching": 0,
+      "contradicting": 0,
+      "unknown": 0,
+      "predicted": 0,
+      "accuracy": null
+     },
+     "heldoutRevision": null,
+     "effect": null,
+     "accuracyEffect": null,
+     "targets": null,
+     "representationLost": false,
+     "withdrawn": false,
+     "conflictingRevisions": []
+    },
+    {
+     "original": "H-2",
+     "originalKind": "hypothesis",
+     "action": "kept",
+     "revisions": [],
+     "heldoutOriginal": {
+      "matching": 0,
+      "contradicting": 0,
+      "unknown": 0,
+      "predicted": 0,
+      "accuracy": null
+     },
+     "heldoutRevision": null,
+     "effect": null,
+     "accuracyEffect": null,
+     "targets": null,
+     "representationLost": false,
+     "withdrawn": false,
+     "conflictingRevisions": []
+    },
+    {
+     "original": "H-3",
+     "originalKind": "hypothesis",
+     "action": "kept",
+     "revisions": [],
+     "heldoutOriginal": {
+      "matching": 0,
+      "contradicting": 0,
+      "unknown": 0,
+      "predicted": 0,
+      "accuracy": null
+     },
+     "heldoutRevision": null,
+     "effect": null,
+     "accuracyEffect": null,
+     "targets": null,
+     "representationLost": false,
+     "withdrawn": false,
+     "conflictingRevisions": []
+    }
+   ]
+  },
+  {
+   "session": "M03",
+   "arm": "treatment",
+   "block": 2,
+   "complete": true,
+   "calls": [
+    {
+     "phase": 1,
+     "exitCode": 0,
+     "timedOut": false,
+     "runEndPresent": true,
+     "runEndValid": true,
+     "used": 50.045,
+     "outcome": "WITHIN_CEILING"
+    },
+    {
+     "phase": 2,
+     "exitCode": 0,
+     "timedOut": false,
+     "runEndPresent": true,
+     "runEndValid": true,
+     "used": 37.799,
+     "outcome": "WITHIN_CEILING"
+    }
+   ],
+   "revision": {
+    "available": true
+   },
+   "heldout": {
+    "initial": {
+     "accuracy": null,
+     "coverage": 0,
+     "matching": 0,
+     "contradicting": 0
+    },
+    "final": {
+     "accuracy": null,
+     "coverage": 0,
+     "matching": 0,
+     "contradicting": 0
+    },
+    "change": {
+     "accuracy": null,
+     "coverage": 0
+    }
+   },
+   "actions": {
+    "kept": 3,
+    "revised": 0,
+    "withdrawn": 0,
+    "conflicting": 0,
+    "additions": 0
+   },
+   "revisionEffects": {
+    "basis": "prediction targets (situation, outcome field) with a recorded held-out outcome",
+    "corrections": 0,
+    "mixed": 0,
+    "harmful": 0,
+    "representationLost": 0,
+    "narrowingOnly": 0,
+    "unchanged": 0,
+    "notComparable": 0
+   },
+   "revisionEffectsByAccuracy": {
+    "basis": "held-out accuracy of the revision vs its original (the original measure, kept)",
+    "corrections": 0,
+    "harmful": 0,
+    "unchanged": 0,
+    "notComparable": 0
+   },
+   "targets": {
+    "heldout": {
+     "unit": "prediction target = (situation, outcome field) with a recorded outcome",
+     "common": {
+      "total": 0,
+      "corrected": 0,
+      "becameIncorrect": 0,
+      "stillCorrect": 0,
+      "stillIncorrect": 0
+     },
+     "added": {
+      "total": 0,
+      "matching": 0,
+      "incorrect": 0
+     },
+     "dropped": {
+      "total": 0,
+      "matching": 0,
+      "incorrect": 0
+     },
+     "situations": {
+      "before": 0,
+      "after": 0,
+      "contraction": 0,
+      "expansion": 0
+     }
+    },
+    "attribution": "no change in predictions"
+   },
+   "discoveryFit": {
+    "initial": {
+     "accuracy": null,
+     "matching": 0,
+     "contradicting": 0
+    },
+    "final": {
+     "accuracy": null,
+     "matching": 0,
+     "contradicting": 0
+    },
+    "change": null,
+    "targets": {
+     "unit": "prediction target = (situation, outcome field) with a recorded outcome",
+     "common": {
+      "total": 0,
+      "corrected": 0,
+      "becameIncorrect": 0,
+      "stillCorrect": 0,
+      "stillIncorrect": 0
+     },
+     "added": {
+      "total": 0,
+      "matching": 0,
+      "incorrect": 0
+     },
+     "dropped": {
+      "total": 0,
+      "matching": 0,
+      "incorrect": 0
+     },
+     "situations": {
+      "before": 0,
+      "after": 0,
+      "contraction": 0,
+      "expansion": 0
+     }
+    }
+   },
+   "representationLoss": [],
+   "withdrawals": [],
+   "abstentionsPhase1": [],
+   "counterexamples": {
+    "initial": {
+     "unit": "held-out situations contradicting a clause (per representation, clause and build)",
+     "total": 0,
+     "novelty": {},
+     "clauseAlreadyContradictedInDiscovery": 0,
+     "clauseNotContradictedInDiscovery": 0
+    },
+    "final": {
+     "unit": "held-out situations contradicting a clause (per representation, clause and build)",
+     "total": 0,
+     "novelty": {},
+     "clauseAlreadyContradictedInDiscovery": 0,
+     "clauseNotContradictedInDiscovery": 0
+    }
+   },
+   "cReadings": {
+    "initial": {
+     "unit": "readings over (representation, build, encoded spec rule); hypotheses without a representation counted by status",
+     "byPartition": {
+      "discovery": {
+       "not-representable": 3
+      },
+      "heldout": {
+       "not-representable": 3
+      }
+     },
+     "accurateDescriptionsOfADefect": {
+      "discovery": 0,
+      "heldout": 0
+     }
+    },
+    "final": {
+     "unit": "readings over (representation, build, encoded spec rule); hypotheses without a representation counted by status",
+     "byPartition": {
+      "discovery": {
+       "not-representable": 3
+      },
+      "heldout": {
+       "not-representable": 3
+      }
+     },
+     "accurateDescriptionsOfADefect": {
+      "discovery": 0,
+      "heldout": 0
+     }
+    }
+   },
+   "abstentions": {
+    "phase1": 0,
+    "withdrawalsPhase2": 0
+   },
+   "representationAvailability": {
+    "phase1": {
+     "hypotheses": 3,
+     "withStructuredRepresentation": 0
+    },
+    "phase2": {
+     "hypotheses": 0,
+     "withStructuredRepresentation": 0
+    }
+   },
+   "pairs": [
+    {
+     "original": "H-1",
+     "originalKind": "hypothesis",
+     "action": "kept",
+     "revisions": [],
+     "heldoutOriginal": {
+      "matching": 0,
+      "contradicting": 0,
+      "unknown": 0,
+      "predicted": 0,
+      "accuracy": null
+     },
+     "heldoutRevision": null,
+     "effect": null,
+     "accuracyEffect": null,
+     "targets": null,
+     "representationLost": false,
+     "withdrawn": false,
+     "conflictingRevisions": []
+    },
+    {
+     "original": "H-2",
+     "originalKind": "hypothesis",
+     "action": "kept",
+     "revisions": [],
+     "heldoutOriginal": {
+      "matching": 0,
+      "contradicting": 0,
+      "unknown": 0,
+      "predicted": 0,
+      "accuracy": null
+     },
+     "heldoutRevision": null,
+     "effect": null,
+     "accuracyEffect": null,
+     "targets": null,
+     "representationLost": false,
+     "withdrawn": false,
+     "conflictingRevisions": []
+    },
+    {
+     "original": "H-3",
+     "originalKind": "hypothesis",
+     "action": "kept",
+     "revisions": [],
+     "heldoutOriginal": {
+      "matching": 0,
+      "contradicting": 0,
+      "unknown": 0,
+      "predicted": 0,
+      "accuracy": null
+     },
+     "heldoutRevision": null,
+     "effect": null,
+     "accuracyEffect": null,
+     "targets": null,
+     "representationLost": false,
+     "withdrawn": false,
+     "conflictingRevisions": []
+    }
+   ]
+  },
+  {
+   "session": "M04",
+   "arm": "control",
+   "block": 2,
+   "complete": true,
+   "calls": [
+    {
+     "phase": 1,
+     "exitCode": 0,
+     "timedOut": false,
+     "runEndPresent": true,
+     "runEndValid": true,
+     "used": 64.882,
+     "outcome": "WITHIN_CEILING"
+    },
+    {
+     "phase": 2,
+     "exitCode": 0,
+     "timedOut": false,
+     "runEndPresent": true,
+     "runEndValid": true,
+     "used": 25.91,
+     "outcome": "WITHIN_CEILING"
+    }
+   ],
+   "revision": {
+    "available": true
+   },
+   "heldout": {
+    "initial": {
+     "accuracy": 0.3696,
+     "coverage": 0.6072,
+     "matching": 224,
+     "contradicting": 382
+    },
+    "final": {
+     "accuracy": 0.3696,
+     "coverage": 0.6072,
+     "matching": 224,
+     "contradicting": 382
+    },
+    "change": {
+     "accuracy": 0,
+     "coverage": 0
+    }
+   },
+   "actions": {
+    "kept": 3,
+    "revised": 0,
+    "withdrawn": 0,
+    "conflicting": 0,
+    "additions": 0
+   },
+   "revisionEffects": {
+    "basis": "prediction targets (situation, outcome field) with a recorded held-out outcome",
+    "corrections": 0,
+    "mixed": 0,
+    "harmful": 0,
+    "representationLost": 0,
+    "narrowingOnly": 0,
+    "unchanged": 0,
+    "notComparable": 0
+   },
+   "revisionEffectsByAccuracy": {
+    "basis": "held-out accuracy of the revision vs its original (the original measure, kept)",
+    "corrections": 0,
+    "harmful": 0,
+    "unchanged": 0,
+    "notComparable": 0
+   },
+   "targets": {
+    "heldout": {
+     "unit": "prediction target = (situation, outcome field) with a recorded outcome",
+     "common": {
+      "total": 606,
+      "corrected": 0,
+      "becameIncorrect": 0,
+      "stillCorrect": 224,
+      "stillIncorrect": 382
+     },
+     "added": {
+      "total": 0,
+      "matching": 0,
+      "incorrect": 0
+     },
+     "dropped": {
+      "total": 0,
+      "matching": 0,
+      "incorrect": 0
+     },
+     "situations": {
+      "before": 606,
+      "after": 606,
+      "contraction": 0,
+      "expansion": 0
+     }
+    },
+    "attribution": "no change in predictions"
+   },
+   "discoveryFit": {
+    "initial": {
+     "accuracy": 0.4317,
+     "matching": 480,
+     "contradicting": 632
+    },
+    "final": {
+     "accuracy": 0.4317,
+     "matching": 480,
+     "contradicting": 632
+    },
+    "change": 0,
+    "targets": {
+     "unit": "prediction target = (situation, outcome field) with a recorded outcome",
+     "common": {
+      "total": 1112,
+      "corrected": 0,
+      "becameIncorrect": 0,
+      "stillCorrect": 480,
+      "stillIncorrect": 632
+     },
+     "added": {
+      "total": 0,
+      "matching": 0,
+      "incorrect": 0
+     },
+     "dropped": {
+      "total": 0,
+      "matching": 0,
+      "incorrect": 0
+     },
+     "situations": {
+      "before": 1110,
+      "after": 1110,
+      "contraction": 0,
+      "expansion": 0
+     }
+    }
+   },
+   "representationLoss": [],
+   "withdrawals": [],
+   "abstentionsPhase1": [],
+   "counterexamples": {
+    "initial": {
+     "unit": "held-out situations contradicting a clause (per representation, clause and build)",
+     "total": 382,
+     "novelty": {
+      "novel-combination-of-observed-values": 4,
+      "observed-combination": 378
+     },
+     "clauseAlreadyContradictedInDiscovery": 382,
+     "clauseNotContradictedInDiscovery": 0
+    },
+    "final": {
+     "unit": "held-out situations contradicting a clause (per representation, clause and build)",
+     "total": 382,
+     "novelty": {
+      "novel-combination-of-observed-values": 4,
+      "observed-combination": 378
+     },
+     "clauseAlreadyContradictedInDiscovery": 382,
+     "clauseNotContradictedInDiscovery": 0
+    }
+   },
+   "cReadings": {
+    "initial": {
+     "unit": "readings over (representation, build, encoded spec rule); hypotheses without a representation counted by status",
+     "byPartition": {
+      "discovery": {
+       "consistent-with-specification-and-observations": 1,
+       "hypothesis-contradicted-by-observations": 2,
+       "not-evaluable": 1,
+       "relations-do-not-correspond": 1,
+       "unresolved-ambiguity": 2
+      },
+      "heldout": {
+       "consistent-with-specification-and-observations": 1,
+       "hypothesis-contradicted-by-observations": 2,
+       "not-evaluable": 1,
+       "relations-do-not-correspond": 1,
+       "unresolved-ambiguity": 2
+      }
+     },
+     "accurateDescriptionsOfADefect": {
+      "discovery": 0,
+      "heldout": 0
+     }
+    },
+    "final": {
+     "unit": "readings over (representation, build, encoded spec rule); hypotheses without a representation counted by status",
+     "byPartition": {
+      "discovery": {
+       "consistent-with-specification-and-observations": 1,
+       "hypothesis-contradicted-by-observations": 2,
+       "not-evaluable": 1,
+       "relations-do-not-correspond": 1,
+       "unresolved-ambiguity": 2
+      },
+      "heldout": {
+       "consistent-with-specification-and-observations": 1,
+       "hypothesis-contradicted-by-observations": 2,
+       "not-evaluable": 1,
+       "relations-do-not-correspond": 1,
+       "unresolved-ambiguity": 2
+      }
+     },
+     "accurateDescriptionsOfADefect": {
+      "discovery": 0,
+      "heldout": 0
+     }
+    }
+   },
+   "abstentions": {
+    "phase1": 0,
+    "withdrawalsPhase2": 0
+   },
+   "representationAvailability": {
+    "phase1": {
+     "hypotheses": 3,
+     "withStructuredRepresentation": 2
+    },
+    "phase2": {
+     "hypotheses": 0,
+     "withStructuredRepresentation": 0
+    }
+   },
+   "pairs": [
+    {
+     "original": "H-1",
+     "originalKind": "hypothesis",
+     "action": "kept",
+     "revisions": [],
+     "heldoutOriginal": {
+      "matching": 157,
+      "contradicting": 382,
+      "unknown": 0,
+      "predicted": 539,
+      "accuracy": 0.2913
+     },
+     "heldoutRevision": null,
+     "effect": null,
+     "accuracyEffect": null,
+     "targets": null,
+     "representationLost": false,
+     "withdrawn": false,
+     "conflictingRevisions": []
+    },
+    {
+     "original": "H-2",
+     "originalKind": "hypothesis",
+     "action": "kept",
+     "revisions": [],
+     "heldoutOriginal": {
+      "matching": 67,
+      "contradicting": 0,
+      "unknown": 67,
+      "predicted": 67,
+      "accuracy": 1
+     },
+     "heldoutRevision": null,
+     "effect": null,
+     "accuracyEffect": null,
+     "targets": null,
+     "representationLost": false,
+     "withdrawn": false,
+     "conflictingRevisions": []
+    },
+    {
+     "original": "H-3",
+     "originalKind": "hypothesis",
+     "action": "kept",
+     "revisions": [],
+     "heldoutOriginal": {
+      "matching": 0,
+      "contradicting": 0,
+      "unknown": 0,
+      "predicted": 0,
+      "accuracy": null
+     },
+     "heldoutRevision": null,
+     "effect": null,
+     "accuracyEffect": null,
+     "targets": null,
+     "representationLost": false,
+     "withdrawn": false,
+     "conflictingRevisions": []
+    }
+   ]
+  },
+  {
+   "session": "M05",
+   "arm": "control",
+   "block": 3,
+   "complete": true,
+   "calls": [
+    {
+     "phase": 1,
+     "exitCode": 0,
+     "timedOut": false,
+     "runEndPresent": true,
+     "runEndValid": true,
+     "used": 54.622,
+     "outcome": "WITHIN_CEILING"
+    },
+    {
+     "phase": 2,
+     "exitCode": 0,
+     "timedOut": false,
+     "runEndPresent": true,
+     "runEndValid": true,
+     "used": 22.792,
+     "outcome": "WITHIN_CEILING"
+    }
+   ],
+   "revision": {
+    "available": true
+   },
+   "heldout": {
+    "initial": {
+     "accuracy": null,
+     "coverage": 0,
+     "matching": 0,
+     "contradicting": 0
+    },
+    "final": {
+     "accuracy": null,
+     "coverage": 0,
+     "matching": 0,
+     "contradicting": 0
+    },
+    "change": {
+     "accuracy": null,
+     "coverage": 0
+    }
+   },
+   "actions": {
+    "kept": 3,
+    "revised": 0,
+    "withdrawn": 0,
+    "conflicting": 0,
+    "additions": 0
+   },
+   "revisionEffects": {
+    "basis": "prediction targets (situation, outcome field) with a recorded held-out outcome",
+    "corrections": 0,
+    "mixed": 0,
+    "harmful": 0,
+    "representationLost": 0,
+    "narrowingOnly": 0,
+    "unchanged": 0,
+    "notComparable": 0
+   },
+   "revisionEffectsByAccuracy": {
+    "basis": "held-out accuracy of the revision vs its original (the original measure, kept)",
+    "corrections": 0,
+    "harmful": 0,
+    "unchanged": 0,
+    "notComparable": 0
+   },
+   "targets": {
+    "heldout": {
+     "unit": "prediction target = (situation, outcome field) with a recorded outcome",
+     "common": {
+      "total": 0,
+      "corrected": 0,
+      "becameIncorrect": 0,
+      "stillCorrect": 0,
+      "stillIncorrect": 0
+     },
+     "added": {
+      "total": 0,
+      "matching": 0,
+      "incorrect": 0
+     },
+     "dropped": {
+      "total": 0,
+      "matching": 0,
+      "incorrect": 0
+     },
+     "situations": {
+      "before": 0,
+      "after": 0,
+      "contraction": 0,
+      "expansion": 0
+     }
+    },
+    "attribution": "no change in predictions"
+   },
+   "discoveryFit": {
+    "initial": {
+     "accuracy": null,
+     "matching": 0,
+     "contradicting": 0
+    },
+    "final": {
+     "accuracy": null,
+     "matching": 0,
+     "contradicting": 0
+    },
+    "change": null,
+    "targets": {
+     "unit": "prediction target = (situation, outcome field) with a recorded outcome",
+     "common": {
+      "total": 0,
+      "corrected": 0,
+      "becameIncorrect": 0,
+      "stillCorrect": 0,
+      "stillIncorrect": 0
+     },
+     "added": {
+      "total": 0,
+      "matching": 0,
+      "incorrect": 0
+     },
+     "dropped": {
+      "total": 0,
+      "matching": 0,
+      "incorrect": 0
+     },
+     "situations": {
+      "before": 0,
+      "after": 0,
+      "contraction": 0,
+      "expansion": 0
+     }
+    }
+   },
+   "representationLoss": [],
+   "withdrawals": [],
+   "abstentionsPhase1": [],
+   "counterexamples": {
+    "initial": {
+     "unit": "held-out situations contradicting a clause (per representation, clause and build)",
+     "total": 0,
+     "novelty": {},
+     "clauseAlreadyContradictedInDiscovery": 0,
+     "clauseNotContradictedInDiscovery": 0
+    },
+    "final": {
+     "unit": "held-out situations contradicting a clause (per representation, clause and build)",
+     "total": 0,
+     "novelty": {},
+     "clauseAlreadyContradictedInDiscovery": 0,
+     "clauseNotContradictedInDiscovery": 0
+    }
+   },
+   "cReadings": {
+    "initial": {
+     "unit": "readings over (representation, build, encoded spec rule); hypotheses without a representation counted by status",
+     "byPartition": {
+      "discovery": {
+       "not-representable": 3
+      },
+      "heldout": {
+       "not-representable": 3
+      }
+     },
+     "accurateDescriptionsOfADefect": {
+      "discovery": 0,
+      "heldout": 0
+     }
+    },
+    "final": {
+     "unit": "readings over (representation, build, encoded spec rule); hypotheses without a representation counted by status",
+     "byPartition": {
+      "discovery": {
+       "not-representable": 3
+      },
+      "heldout": {
+       "not-representable": 3
+      }
+     },
+     "accurateDescriptionsOfADefect": {
+      "discovery": 0,
+      "heldout": 0
+     }
+    }
+   },
+   "abstentions": {
+    "phase1": 0,
+    "withdrawalsPhase2": 0
+   },
+   "representationAvailability": {
+    "phase1": {
+     "hypotheses": 3,
+     "withStructuredRepresentation": 0
+    },
+    "phase2": {
+     "hypotheses": 0,
+     "withStructuredRepresentation": 0
+    }
+   },
+   "pairs": [
+    {
+     "original": "H-1",
+     "originalKind": "hypothesis",
+     "action": "kept",
+     "revisions": [],
+     "heldoutOriginal": {
+      "matching": 0,
+      "contradicting": 0,
+      "unknown": 0,
+      "predicted": 0,
+      "accuracy": null
+     },
+     "heldoutRevision": null,
+     "effect": null,
+     "accuracyEffect": null,
+     "targets": null,
+     "representationLost": false,
+     "withdrawn": false,
+     "conflictingRevisions": []
+    },
+    {
+     "original": "H-2",
+     "originalKind": "hypothesis",
+     "action": "kept",
+     "revisions": [],
+     "heldoutOriginal": {
+      "matching": 0,
+      "contradicting": 0,
+      "unknown": 0,
+      "predicted": 0,
+      "accuracy": null
+     },
+     "heldoutRevision": null,
+     "effect": null,
+     "accuracyEffect": null,
+     "targets": null,
+     "representationLost": false,
+     "withdrawn": false,
+     "conflictingRevisions": []
+    },
+    {
+     "original": "H-3",
+     "originalKind": "hypothesis",
+     "action": "kept",
+     "revisions": [],
+     "heldoutOriginal": {
+      "matching": 0,
+      "contradicting": 0,
+      "unknown": 0,
+      "predicted": 0,
+      "accuracy": null
+     },
+     "heldoutRevision": null,
+     "effect": null,
+     "accuracyEffect": null,
+     "targets": null,
+     "representationLost": false,
+     "withdrawn": false,
+     "conflictingRevisions": []
+    }
+   ]
+  },
+  {
+   "session": "M06",
+   "arm": "treatment",
+   "block": 3,
+   "complete": true,
+   "calls": [
+    {
+     "phase": 1,
+     "exitCode": 0,
+     "timedOut": false,
+     "runEndPresent": true,
+     "runEndValid": true,
+     "used": 35.419,
+     "outcome": "WITHIN_CEILING"
+    },
+    {
+     "phase": 2,
+     "exitCode": 0,
+     "timedOut": false,
+     "runEndPresent": true,
+     "runEndValid": true,
+     "used": 25.953,
+     "outcome": "WITHIN_CEILING"
+    }
+   ],
+   "revision": {
+    "available": true
+   },
+   "heldout": {
+    "initial": {
+     "accuracy": 0.7069,
+     "coverage": 0.0521,
+     "matching": 41,
+     "contradicting": 17
+    },
+    "final": {
+     "accuracy": 0.8125,
+     "coverage": 0.01,
+     "matching": 13,
+     "contradicting": 3
+    },
+    "change": {
+     "accuracy": 0.1056,
+     "coverage": -0.0421
+    }
+   },
+   "actions": {
+    "kept": 1,
+    "revised": 1,
+    "withdrawn": 0,
+    "conflicting": 0,
+    "additions": 0
+   },
+   "revisionEffects": {
+    "basis": "prediction targets (situation, outcome field) with a recorded held-out outcome",
+    "corrections": 0,
+    "mixed": 0,
+    "harmful": 1,
+    "representationLost": 1,
+    "narrowingOnly": 0,
+    "unchanged": 0,
+    "notComparable": 0
+   },
+   "revisionEffectsByAccuracy": {
+    "basis": "held-out accuracy of the revision vs its original (the original measure, kept)",
+    "corrections": 0,
+    "harmful": 1,
+    "unchanged": 0,
+    "notComparable": 0
+   },
+   "targets": {
+    "heldout": {
+     "unit": "prediction target = (situation, outcome field) with a recorded outcome",
+     "common": {
+      "total": 16,
+      "corrected": 0,
+      "becameIncorrect": 0,
+      "stillCorrect": 13,
+      "stillIncorrect": 3
+     },
+     "added": {
+      "total": 0,
+      "matching": 0,
+      "incorrect": 0
+     },
+     "dropped": {
+      "total": 42,
+      "matching": 28,
+      "incorrect": 14
+     },
+     "situations": {
+      "before": 52,
+      "after": 10,
+      "contraction": 42,
+      "expansion": 0
+     }
+    },
+    "attribution": "narrowing only: accuracy rose because predictions were dropped (not self-correction)"
+   },
+   "discoveryFit": {
+    "initial": {
+     "accuracy": 0.6528,
+     "matching": 94,
+     "contradicting": 50
+    },
+    "final": {
+     "accuracy": 1,
+     "matching": 28,
+     "contradicting": 0
+    },
+    "change": 0.3472,
+    "targets": {
+     "unit": "prediction target = (situation, outcome field) with a recorded outcome",
+     "common": {
+      "total": 28,
+      "corrected": 0,
+      "becameIncorrect": 0,
+      "stillCorrect": 28,
+      "stillIncorrect": 0
+     },
+     "added": {
+      "total": 0,
+      "matching": 0,
+      "incorrect": 0
+     },
+     "dropped": {
+      "total": 116,
+      "matching": 66,
+      "incorrect": 50
+     },
+     "situations": {
+      "before": 134,
+      "after": 18,
+      "contraction": 116,
+      "expansion": 0
+     }
+    }
+   },
+   "representationLoss": [
+    "H-2"
+   ],
+   "withdrawals": [],
+   "abstentionsPhase1": [],
+   "counterexamples": {
+    "initial": {
+     "unit": "held-out situations contradicting a clause (per representation, clause and build)",
+     "total": 17,
+     "novelty": {
+      "novel-individual-value": 3,
+      "observed-combination": 14
+     },
+     "clauseAlreadyContradictedInDiscovery": 14,
+     "clauseNotContradictedInDiscovery": 3
+    },
+    "final": {
+     "unit": "held-out situations contradicting a clause (per representation, clause and build)",
+     "total": 3,
+     "novelty": {
+      "novel-individual-value": 3
+     },
+     "clauseAlreadyContradictedInDiscovery": 0,
+     "clauseNotContradictedInDiscovery": 3
+    }
+   },
+   "cReadings": {
+    "initial": {
+     "unit": "readings over (representation, build, encoded spec rule); hypotheses without a representation counted by status",
+     "byPartition": {
+      "discovery": {
+       "consistent-with-specification-and-observations": 1,
+       "hypothesis-contradicted-by-observations": 1,
+       "relations-do-not-correspond": 1,
+       "unresolved-ambiguity": 3
+      },
+      "heldout": {
+       "hypothesis-contradicted-by-observations": 5,
+       "unresolved-ambiguity": 1
+      }
+     },
+     "accurateDescriptionsOfADefect": {
+      "discovery": 0,
+      "heldout": 0
+     }
+    },
+    "final": {
+     "unit": "readings over (representation, build, encoded spec rule); hypotheses without a representation counted by status",
+     "byPartition": {
+      "discovery": {
+       "consistent-with-specification-and-observations": 1,
+       "not-evaluable": 1,
+       "relations-do-not-correspond": 1,
+       "unresolved-ambiguity": 2
+      },
+      "heldout": {
+       "hypothesis-contradicted-by-observations": 4,
+       "not-evaluable": 1
+      }
+     },
+     "accurateDescriptionsOfADefect": {
+      "discovery": 0,
+      "heldout": 0
+     }
+    }
+   },
+   "abstentions": {
+    "phase1": 0,
+    "withdrawalsPhase2": 0
+   },
+   "representationAvailability": {
+    "phase1": {
+     "hypotheses": 2,
+     "withStructuredRepresentation": 2
+    },
+    "phase2": {
+     "hypotheses": 1,
+     "withStructuredRepresentation": 0
+    }
+   },
+   "pairs": [
+    {
+     "original": "H-1",
+     "originalKind": "hypothesis",
+     "action": "kept",
+     "revisions": [],
+     "heldoutOriginal": {
+      "matching": 13,
+      "contradicting": 3,
+      "unknown": 4,
+      "predicted": 10,
+      "accuracy": 0.8125
+     },
+     "heldoutRevision": null,
+     "effect": null,
+     "accuracyEffect": null,
+     "targets": null,
+     "representationLost": false,
+     "withdrawn": false,
+     "conflictingRevisions": []
+    },
+    {
+     "original": "H-2",
+     "originalKind": "hypothesis",
+     "action": "revised",
+     "revisions": [
+      "H-1"
+     ],
+     "heldoutOriginal": {
+      "matching": 28,
+      "contradicting": 14,
+      "unknown": 0,
+      "predicted": 42,
+      "accuracy": 0.6667
+     },
+     "heldoutRevision": {
+      "matching": 0,
+      "contradicting": 0,
+      "unknown": 0,
+      "predicted": 0,
+      "accuracy": null
+     },
+     "effect": "harmful (structured representation lost)",
+     "accuracyEffect": "harmful (structured representation lost)",
+     "targets": {
+      "unit": "prediction target = (situation, outcome field) with a recorded outcome",
+      "common": {
+       "total": 0,
+       "corrected": 0,
+       "becameIncorrect": 0,
+       "stillCorrect": 0,
+       "stillIncorrect": 0
+      },
+      "added": {
+       "total": 0,
+       "matching": 0,
+       "incorrect": 0
+      },
+      "dropped": {
+       "total": 42,
+       "matching": 28,
+       "incorrect": 14
+      },
+      "situations": {
+       "before": 42,
+       "after": 0,
+       "contraction": 42,
+       "expansion": 0
+      }
+     },
+     "representationLost": true,
+     "withdrawn": false,
+     "conflictingRevisions": []
+    }
+   ]
+  },
+  {
+   "session": "M07",
+   "arm": "control",
+   "block": 4,
+   "complete": true,
+   "calls": [
+    {
+     "phase": 1,
+     "exitCode": 0,
+     "timedOut": false,
+     "runEndPresent": true,
+     "runEndValid": true,
+     "used": 55.048,
+     "outcome": "WITHIN_CEILING"
+    },
+    {
+     "phase": 2,
+     "exitCode": 0,
+     "timedOut": false,
+     "runEndPresent": true,
+     "runEndValid": true,
+     "used": 20.4,
+     "outcome": "WITHIN_CEILING"
+    }
+   ],
+   "revision": {
+    "available": true
+   },
+   "heldout": {
+    "initial": {
+     "accuracy": 1,
+     "coverage": 0.024,
+     "matching": 24,
+     "contradicting": 0
+    },
+    "final": {
+     "accuracy": 1,
+     "coverage": 0.024,
+     "matching": 24,
+     "contradicting": 0
+    },
+    "change": {
+     "accuracy": 0,
+     "coverage": 0
+    }
+   },
+   "actions": {
+    "kept": 1,
+    "revised": 0,
+    "withdrawn": 0,
+    "conflicting": 0,
+    "additions": 0
+   },
+   "revisionEffects": {
+    "basis": "prediction targets (situation, outcome field) with a recorded held-out outcome",
+    "corrections": 0,
+    "mixed": 0,
+    "harmful": 0,
+    "representationLost": 0,
+    "narrowingOnly": 0,
+    "unchanged": 0,
+    "notComparable": 0
+   },
+   "revisionEffectsByAccuracy": {
+    "basis": "held-out accuracy of the revision vs its original (the original measure, kept)",
+    "corrections": 0,
+    "harmful": 0,
+    "unchanged": 0,
+    "notComparable": 0
+   },
+   "targets": {
+    "heldout": {
+     "unit": "prediction target = (situation, outcome field) with a recorded outcome",
+     "common": {
+      "total": 24,
+      "corrected": 0,
+      "becameIncorrect": 0,
+      "stillCorrect": 24,
+      "stillIncorrect": 0
+     },
+     "added": {
+      "total": 0,
+      "matching": 0,
+      "incorrect": 0
+     },
+     "dropped": {
+      "total": 0,
+      "matching": 0,
+      "incorrect": 0
+     },
+     "situations": {
+      "before": 24,
+      "after": 24,
+      "contraction": 0,
+      "expansion": 0
+     }
+    },
+    "attribution": "no change in predictions"
+   },
+   "discoveryFit": {
+    "initial": {
+     "accuracy": 1,
+     "matching": 44,
+     "contradicting": 0
+    },
+    "final": {
+     "accuracy": 1,
+     "matching": 44,
+     "contradicting": 0
+    },
+    "change": 0,
+    "targets": {
+     "unit": "prediction target = (situation, outcome field) with a recorded outcome",
+     "common": {
+      "total": 44,
+      "corrected": 0,
+      "becameIncorrect": 0,
+      "stillCorrect": 44,
+      "stillIncorrect": 0
+     },
+     "added": {
+      "total": 0,
+      "matching": 0,
+      "incorrect": 0
+     },
+     "dropped": {
+      "total": 0,
+      "matching": 0,
+      "incorrect": 0
+     },
+     "situations": {
+      "before": 44,
+      "after": 44,
+      "contraction": 0,
+      "expansion": 0
+     }
+    }
+   },
+   "representationLoss": [],
+   "withdrawals": [],
+   "abstentionsPhase1": [],
+   "counterexamples": {
+    "initial": {
+     "unit": "held-out situations contradicting a clause (per representation, clause and build)",
+     "total": 0,
+     "novelty": {},
+     "clauseAlreadyContradictedInDiscovery": 0,
+     "clauseNotContradictedInDiscovery": 0
+    },
+    "final": {
+     "unit": "held-out situations contradicting a clause (per representation, clause and build)",
+     "total": 0,
+     "novelty": {},
+     "clauseAlreadyContradictedInDiscovery": 0,
+     "clauseNotContradictedInDiscovery": 0
+    }
+   },
+   "cReadings": {
+    "initial": {
+     "unit": "readings over (representation, build, encoded spec rule); hypotheses without a representation counted by status",
+     "byPartition": {
+      "discovery": {
+       "unresolved-ambiguity": 2
+      },
+      "heldout": {
+       "unresolved-ambiguity": 2
+      }
+     },
+     "accurateDescriptionsOfADefect": {
+      "discovery": 0,
+      "heldout": 0
+     }
+    },
+    "final": {
+     "unit": "readings over (representation, build, encoded spec rule); hypotheses without a representation counted by status",
+     "byPartition": {
+      "discovery": {
+       "unresolved-ambiguity": 2
+      },
+      "heldout": {
+       "unresolved-ambiguity": 2
+      }
+     },
+     "accurateDescriptionsOfADefect": {
+      "discovery": 0,
+      "heldout": 0
+     }
+    }
+   },
+   "abstentions": {
+    "phase1": 0,
+    "withdrawalsPhase2": 0
+   },
+   "representationAvailability": {
+    "phase1": {
+     "hypotheses": 1,
+     "withStructuredRepresentation": 1
+    },
+    "phase2": {
+     "hypotheses": 0,
+     "withStructuredRepresentation": 0
+    }
+   },
+   "pairs": [
+    {
+     "original": "H-1",
+     "originalKind": "hypothesis",
+     "action": "kept",
+     "revisions": [],
+     "heldoutOriginal": {
+      "matching": 24,
+      "contradicting": 0,
+      "unknown": 0,
+      "predicted": 24,
+      "accuracy": 1
+     },
+     "heldoutRevision": null,
+     "effect": null,
+     "accuracyEffect": null,
+     "targets": null,
+     "representationLost": false,
+     "withdrawn": false,
+     "conflictingRevisions": []
+    }
+   ]
+  },
+  {
+   "session": "M08",
+   "arm": "treatment",
+   "block": 4,
+   "complete": true,
+   "calls": [
+    {
+     "phase": 1,
+     "exitCode": 0,
+     "timedOut": false,
+     "runEndPresent": true,
+     "runEndValid": true,
+     "used": 31.994,
+     "outcome": "WITHIN_CEILING"
+    },
+    {
+     "phase": 2,
+     "exitCode": 0,
+     "timedOut": false,
+     "runEndPresent": true,
+     "runEndValid": true,
+     "used": 25.837,
+     "outcome": "WITHIN_CEILING"
+    }
+   ],
+   "revision": {
+    "available": true
+   },
+   "heldout": {
+    "initial": {
+     "accuracy": 0.3178,
+     "coverage": 0.1232,
+     "matching": 41,
+     "contradicting": 88
+    },
+    "final": {
+     "accuracy": 0.8125,
+     "coverage": 0.01,
+     "matching": 13,
+     "contradicting": 3
+    },
+    "change": {
+     "accuracy": 0.4947,
+     "coverage": -0.1132
+    }
+   },
+   "actions": {
+    "kept": 1,
+    "revised": 0,
+    "withdrawn": 1,
+    "conflicting": 0,
+    "additions": 0
+   },
+   "revisionEffects": {
+    "basis": "prediction targets (situation, outcome field) with a recorded held-out outcome",
+    "corrections": 0,
+    "mixed": 0,
+    "harmful": 0,
+    "representationLost": 0,
+    "narrowingOnly": 0,
+    "unchanged": 0,
+    "notComparable": 0
+   },
+   "revisionEffectsByAccuracy": {
+    "basis": "held-out accuracy of the revision vs its original (the original measure, kept)",
+    "corrections": 0,
+    "harmful": 0,
+    "unchanged": 0,
+    "notComparable": 0
+   },
+   "targets": {
+    "heldout": {
+     "unit": "prediction target = (situation, outcome field) with a recorded outcome",
+     "common": {
+      "total": 16,
+      "corrected": 0,
+      "becameIncorrect": 0,
+      "stillCorrect": 13,
+      "stillIncorrect": 3
+     },
+     "added": {
+      "total": 0,
+      "matching": 0,
+      "incorrect": 0
+     },
+     "dropped": {
+      "total": 113,
+      "matching": 28,
+      "incorrect": 85
+     },
+     "situations": {
+      "before": 123,
+      "after": 10,
+      "contraction": 113,
+      "expansion": 0
+     }
+    },
+    "attribution": "narrowing only: accuracy rose because predictions were dropped (not self-correction)"
+   },
+   "discoveryFit": {
+    "initial": {
+     "accuracy": 0.373,
+     "matching": 94,
+     "contradicting": 158
+    },
+    "final": {
+     "accuracy": 1,
+     "matching": 28,
+     "contradicting": 0
+    },
+    "change": 0.627,
+    "targets": {
+     "unit": "prediction target = (situation, outcome field) with a recorded outcome",
+     "common": {
+      "total": 28,
+      "corrected": 0,
+      "becameIncorrect": 0,
+      "stillCorrect": 28,
+      "stillIncorrect": 0
+     },
+     "added": {
+      "total": 0,
+      "matching": 0,
+      "incorrect": 0
+     },
+     "dropped": {
+      "total": 224,
+      "matching": 66,
+      "incorrect": 158
+     },
+     "situations": {
+      "before": 242,
+      "after": 18,
+      "contraction": 224,
+      "expansion": 0
+     }
+    }
+   },
+   "representationLoss": [],
+   "withdrawals": [
+    "H-1"
+   ],
+   "abstentionsPhase1": [],
+   "counterexamples": {
+    "initial": {
+     "unit": "held-out situations contradicting a clause (per representation, clause and build)",
+     "total": 88,
+     "novelty": {
+      "novel-individual-value": 3,
+      "observed-combination": 85
+     },
+     "clauseAlreadyContradictedInDiscovery": 85,
+     "clauseNotContradictedInDiscovery": 3
+    },
+    "final": {
+     "unit": "held-out situations contradicting a clause (per representation, clause and build)",
+     "total": 3,
+     "novelty": {
+      "novel-individual-value": 3
+     },
+     "clauseAlreadyContradictedInDiscovery": 0,
+     "clauseNotContradictedInDiscovery": 3
+    }
+   },
+   "cReadings": {
+    "initial": {
+     "unit": "readings over (representation, build, encoded spec rule); hypotheses without a representation counted by status",
+     "byPartition": {
+      "discovery": {
+       "consistent-with-specification-and-observations": 1,
+       "hypothesis-contradicted-by-observations": 1,
+       "relations-do-not-correspond": 1,
+       "unresolved-ambiguity": 3
+      },
+      "heldout": {
+       "hypothesis-contradicted-by-observations": 5,
+       "unresolved-ambiguity": 1
+      }
+     },
+     "accurateDescriptionsOfADefect": {
+      "discovery": 0,
+      "heldout": 0
+     }
+    },
+    "final": {
+     "unit": "readings over (representation, build, encoded spec rule); hypotheses without a representation counted by status",
+     "byPartition": {
+      "discovery": {
+       "consistent-with-specification-and-observations": 1,
+       "relations-do-not-correspond": 1,
+       "unresolved-ambiguity": 2
+      },
+      "heldout": {
+       "hypothesis-contradicted-by-observations": 4
+      }
+     },
+     "accurateDescriptionsOfADefect": {
+      "discovery": 0,
+      "heldout": 0
+     }
+    }
+   },
+   "abstentions": {
+    "phase1": 0,
+    "withdrawalsPhase2": 1
+   },
+   "representationAvailability": {
+    "phase1": {
+     "hypotheses": 2,
+     "withStructuredRepresentation": 2
+    },
+    "phase2": {
+     "hypotheses": 0,
+     "withStructuredRepresentation": 0
+    }
+   },
+   "pairs": [
+    {
+     "original": "H-1",
+     "originalKind": "hypothesis",
+     "action": "withdrawn",
+     "revisions": [
+      "H-1"
+     ],
+     "heldoutOriginal": {
+      "matching": 28,
+      "contradicting": 85,
+      "unknown": 0,
+      "predicted": 113,
+      "accuracy": 0.2478
+     },
+     "heldoutRevision": null,
+     "effect": null,
+     "accuracyEffect": null,
+     "targets": null,
+     "representationLost": false,
+     "withdrawn": true,
+     "conflictingRevisions": []
+    },
+    {
+     "original": "H-2",
+     "originalKind": "hypothesis",
+     "action": "kept",
+     "revisions": [],
+     "heldoutOriginal": {
+      "matching": 13,
+      "contradicting": 3,
+      "unknown": 4,
+      "predicted": 10,
+      "accuracy": 0.8125
+     },
+     "heldoutRevision": null,
+     "effect": null,
+     "accuracyEffect": null,
+     "targets": null,
+     "representationLost": false,
+     "withdrawn": false,
+     "conflictingRevisions": []
+    }
+   ]
+  },
+  {
+   "session": "M09",
+   "arm": "control",
+   "block": 5,
+   "complete": true,
+   "calls": [
+    {
+     "phase": 1,
+     "exitCode": 0,
+     "timedOut": false,
+     "runEndPresent": true,
+     "runEndValid": true,
+     "used": 40.698,
+     "outcome": "WITHIN_CEILING"
+    },
+    {
+     "phase": 2,
+     "exitCode": 0,
+     "timedOut": false,
+     "runEndPresent": true,
+     "runEndValid": true,
+     "used": 18.692,
+     "outcome": "WITHIN_CEILING"
+    }
+   ],
+   "revision": {
+    "available": true
+   },
+   "heldout": {
+    "initial": {
+     "accuracy": null,
+     "coverage": 0,
+     "matching": 0,
+     "contradicting": 0
+    },
+    "final": {
+     "accuracy": null,
+     "coverage": 0,
+     "matching": 0,
+     "contradicting": 0
+    },
+    "change": {
+     "accuracy": null,
+     "coverage": 0
+    }
+   },
+   "actions": {
+    "kept": 3,
+    "revised": 0,
+    "withdrawn": 0,
+    "conflicting": 0,
+    "additions": 0
+   },
+   "revisionEffects": {
+    "basis": "prediction targets (situation, outcome field) with a recorded held-out outcome",
+    "corrections": 0,
+    "mixed": 0,
+    "harmful": 0,
+    "representationLost": 0,
+    "narrowingOnly": 0,
+    "unchanged": 0,
+    "notComparable": 0
+   },
+   "revisionEffectsByAccuracy": {
+    "basis": "held-out accuracy of the revision vs its original (the original measure, kept)",
+    "corrections": 0,
+    "harmful": 0,
+    "unchanged": 0,
+    "notComparable": 0
+   },
+   "targets": {
+    "heldout": {
+     "unit": "prediction target = (situation, outcome field) with a recorded outcome",
+     "common": {
+      "total": 0,
+      "corrected": 0,
+      "becameIncorrect": 0,
+      "stillCorrect": 0,
+      "stillIncorrect": 0
+     },
+     "added": {
+      "total": 0,
+      "matching": 0,
+      "incorrect": 0
+     },
+     "dropped": {
+      "total": 0,
+      "matching": 0,
+      "incorrect": 0
+     },
+     "situations": {
+      "before": 0,
+      "after": 0,
+      "contraction": 0,
+      "expansion": 0
+     }
+    },
+    "attribution": "no change in predictions"
+   },
+   "discoveryFit": {
+    "initial": {
+     "accuracy": null,
+     "matching": 0,
+     "contradicting": 0
+    },
+    "final": {
+     "accuracy": null,
+     "matching": 0,
+     "contradicting": 0
+    },
+    "change": null,
+    "targets": {
+     "unit": "prediction target = (situation, outcome field) with a recorded outcome",
+     "common": {
+      "total": 0,
+      "corrected": 0,
+      "becameIncorrect": 0,
+      "stillCorrect": 0,
+      "stillIncorrect": 0
+     },
+     "added": {
+      "total": 0,
+      "matching": 0,
+      "incorrect": 0
+     },
+     "dropped": {
+      "total": 0,
+      "matching": 0,
+      "incorrect": 0
+     },
+     "situations": {
+      "before": 0,
+      "after": 0,
+      "contraction": 0,
+      "expansion": 0
+     }
+    }
+   },
+   "representationLoss": [],
+   "withdrawals": [],
+   "abstentionsPhase1": [],
+   "counterexamples": {
+    "initial": {
+     "unit": "held-out situations contradicting a clause (per representation, clause and build)",
+     "total": 0,
+     "novelty": {},
+     "clauseAlreadyContradictedInDiscovery": 0,
+     "clauseNotContradictedInDiscovery": 0
+    },
+    "final": {
+     "unit": "held-out situations contradicting a clause (per representation, clause and build)",
+     "total": 0,
+     "novelty": {},
+     "clauseAlreadyContradictedInDiscovery": 0,
+     "clauseNotContradictedInDiscovery": 0
+    }
+   },
+   "cReadings": {
+    "initial": {
+     "unit": "readings over (representation, build, encoded spec rule); hypotheses without a representation counted by status",
+     "byPartition": {
+      "discovery": {
+       "not-representable": 3
+      },
+      "heldout": {
+       "not-representable": 3
+      }
+     },
+     "accurateDescriptionsOfADefect": {
+      "discovery": 0,
+      "heldout": 0
+     }
+    },
+    "final": {
+     "unit": "readings over (representation, build, encoded spec rule); hypotheses without a representation counted by status",
+     "byPartition": {
+      "discovery": {
+       "not-representable": 3
+      },
+      "heldout": {
+       "not-representable": 3
+      }
+     },
+     "accurateDescriptionsOfADefect": {
+      "discovery": 0,
+      "heldout": 0
+     }
+    }
+   },
+   "abstentions": {
+    "phase1": 0,
+    "withdrawalsPhase2": 0
+   },
+   "representationAvailability": {
+    "phase1": {
+     "hypotheses": 3,
+     "withStructuredRepresentation": 0
+    },
+    "phase2": {
+     "hypotheses": 0,
+     "withStructuredRepresentation": 0
+    }
+   },
+   "pairs": [
+    {
+     "original": "H-1",
+     "originalKind": "hypothesis",
+     "action": "kept",
+     "revisions": [],
+     "heldoutOriginal": {
+      "matching": 0,
+      "contradicting": 0,
+      "unknown": 0,
+      "predicted": 0,
+      "accuracy": null
+     },
+     "heldoutRevision": null,
+     "effect": null,
+     "accuracyEffect": null,
+     "targets": null,
+     "representationLost": false,
+     "withdrawn": false,
+     "conflictingRevisions": []
+    },
+    {
+     "original": "H-2",
+     "originalKind": "hypothesis",
+     "action": "kept",
+     "revisions": [],
+     "heldoutOriginal": {
+      "matching": 0,
+      "contradicting": 0,
+      "unknown": 0,
+      "predicted": 0,
+      "accuracy": null
+     },
+     "heldoutRevision": null,
+     "effect": null,
+     "accuracyEffect": null,
+     "targets": null,
+     "representationLost": false,
+     "withdrawn": false,
+     "conflictingRevisions": []
+    },
+    {
+     "original": "H-3",
+     "originalKind": "hypothesis",
+     "action": "kept",
+     "revisions": [],
+     "heldoutOriginal": {
+      "matching": 0,
+      "contradicting": 0,
+      "unknown": 0,
+      "predicted": 0,
+      "accuracy": null
+     },
+     "heldoutRevision": null,
+     "effect": null,
+     "accuracyEffect": null,
+     "targets": null,
+     "representationLost": false,
+     "withdrawn": false,
+     "conflictingRevisions": []
+    }
+   ]
+  },
+  {
+   "session": "M10",
+   "arm": "treatment",
+   "block": 5,
+   "complete": true,
+   "calls": [
+    {
+     "phase": 1,
+     "exitCode": 0,
+     "timedOut": false,
+     "runEndPresent": true,
+     "runEndValid": true,
+     "used": 78.051,
+     "outcome": "WITHIN_CEILING"
+    },
+    {
+     "phase": 2,
+     "exitCode": 0,
+     "timedOut": false,
+     "runEndPresent": true,
+     "runEndValid": true,
+     "used": 31.688,
+     "outcome": "WITHIN_CEILING"
+    }
+   ],
+   "revision": {
+    "available": true
+   },
+   "heldout": {
+    "initial": {
+     "accuracy": null,
+     "coverage": 0,
+     "matching": 0,
+     "contradicting": 0
+    },
+    "final": {
+     "accuracy": null,
+     "coverage": 0,
+     "matching": 0,
+     "contradicting": 0
+    },
+    "change": {
+     "accuracy": null,
+     "coverage": 0
+    }
+   },
+   "actions": {
+    "kept": 3,
+    "revised": 0,
+    "withdrawn": 0,
+    "conflicting": 0,
+    "additions": 0
+   },
+   "revisionEffects": {
+    "basis": "prediction targets (situation, outcome field) with a recorded held-out outcome",
+    "corrections": 0,
+    "mixed": 0,
+    "harmful": 0,
+    "representationLost": 0,
+    "narrowingOnly": 0,
+    "unchanged": 0,
+    "notComparable": 0
+   },
+   "revisionEffectsByAccuracy": {
+    "basis": "held-out accuracy of the revision vs its original (the original measure, kept)",
+    "corrections": 0,
+    "harmful": 0,
+    "unchanged": 0,
+    "notComparable": 0
+   },
+   "targets": {
+    "heldout": {
+     "unit": "prediction target = (situation, outcome field) with a recorded outcome",
+     "common": {
+      "total": 0,
+      "corrected": 0,
+      "becameIncorrect": 0,
+      "stillCorrect": 0,
+      "stillIncorrect": 0
+     },
+     "added": {
+      "total": 0,
+      "matching": 0,
+      "incorrect": 0
+     },
+     "dropped": {
+      "total": 0,
+      "matching": 0,
+      "incorrect": 0
+     },
+     "situations": {
+      "before": 0,
+      "after": 0,
+      "contraction": 0,
+      "expansion": 0
+     }
+    },
+    "attribution": "no change in predictions"
+   },
+   "discoveryFit": {
+    "initial": {
+     "accuracy": null,
+     "matching": 0,
+     "contradicting": 0
+    },
+    "final": {
+     "accuracy": null,
+     "matching": 0,
+     "contradicting": 0
+    },
+    "change": null,
+    "targets": {
+     "unit": "prediction target = (situation, outcome field) with a recorded outcome",
+     "common": {
+      "total": 0,
+      "corrected": 0,
+      "becameIncorrect": 0,
+      "stillCorrect": 0,
+      "stillIncorrect": 0
+     },
+     "added": {
+      "total": 0,
+      "matching": 0,
+      "incorrect": 0
+     },
+     "dropped": {
+      "total": 0,
+      "matching": 0,
+      "incorrect": 0
+     },
+     "situations": {
+      "before": 0,
+      "after": 0,
+      "contraction": 0,
+      "expansion": 0
+     }
+    }
+   },
+   "representationLoss": [],
+   "withdrawals": [],
+   "abstentionsPhase1": [],
+   "counterexamples": {
+    "initial": {
+     "unit": "held-out situations contradicting a clause (per representation, clause and build)",
+     "total": 0,
+     "novelty": {},
+     "clauseAlreadyContradictedInDiscovery": 0,
+     "clauseNotContradictedInDiscovery": 0
+    },
+    "final": {
+     "unit": "held-out situations contradicting a clause (per representation, clause and build)",
+     "total": 0,
+     "novelty": {},
+     "clauseAlreadyContradictedInDiscovery": 0,
+     "clauseNotContradictedInDiscovery": 0
+    }
+   },
+   "cReadings": {
+    "initial": {
+     "unit": "readings over (representation, build, encoded spec rule); hypotheses without a representation counted by status",
+     "byPartition": {
+      "discovery": {
+       "not-representable": 3
+      },
+      "heldout": {
+       "not-representable": 3
+      }
+     },
+     "accurateDescriptionsOfADefect": {
+      "discovery": 0,
+      "heldout": 0
+     }
+    },
+    "final": {
+     "unit": "readings over (representation, build, encoded spec rule); hypotheses without a representation counted by status",
+     "byPartition": {
+      "discovery": {
+       "not-representable": 3
+      },
+      "heldout": {
+       "not-representable": 3
+      }
+     },
+     "accurateDescriptionsOfADefect": {
+      "discovery": 0,
+      "heldout": 0
+     }
+    }
+   },
+   "abstentions": {
+    "phase1": 0,
+    "withdrawalsPhase2": 0
+   },
+   "representationAvailability": {
+    "phase1": {
+     "hypotheses": 3,
+     "withStructuredRepresentation": 0
+    },
+    "phase2": {
+     "hypotheses": 0,
+     "withStructuredRepresentation": 0
+    }
+   },
+   "pairs": [
+    {
+     "original": "H-1",
+     "originalKind": "hypothesis",
+     "action": "kept",
+     "revisions": [],
+     "heldoutOriginal": {
+      "matching": 0,
+      "contradicting": 0,
+      "unknown": 0,
+      "predicted": 0,
+      "accuracy": null
+     },
+     "heldoutRevision": null,
+     "effect": null,
+     "accuracyEffect": null,
+     "targets": null,
+     "representationLost": false,
+     "withdrawn": false,
+     "conflictingRevisions": []
+    },
+    {
+     "original": "H-2",
+     "originalKind": "hypothesis",
+     "action": "kept",
+     "revisions": [],
+     "heldoutOriginal": {
+      "matching": 0,
+      "contradicting": 0,
+      "unknown": 0,
+      "predicted": 0,
+      "accuracy": null
+     },
+     "heldoutRevision": null,
+     "effect": null,
+     "accuracyEffect": null,
+     "targets": null,
+     "representationLost": false,
+     "withdrawn": false,
+     "conflictingRevisions": []
+    },
+    {
+     "original": "H-3",
+     "originalKind": "hypothesis",
+     "action": "kept",
+     "revisions": [],
+     "heldoutOriginal": {
+      "matching": 0,
+      "contradicting": 0,
+      "unknown": 0,
+      "predicted": 0,
+      "accuracy": null
+     },
+     "heldoutRevision": null,
+     "effect": null,
+     "accuracyEffect": null,
+     "targets": null,
+     "representationLost": false,
+     "withdrawn": false,
+     "conflictingRevisions": []
+    }
+   ]
+  }
+ ],
+ "arms": [
+  {
+   "arm": "control",
+   "sessions": 5,
+   "accuracyChange": [
+    {
+     "session": "M01",
+     "value": null
+    },
+    {
+     "session": "M04",
+     "value": 0
+    },
+    {
+     "session": "M05",
+     "value": null
+    },
+    {
+     "session": "M07",
+     "value": 0
+    },
+    {
+     "session": "M09",
+     "value": null
+    }
+   ],
+   "coverageChange": [
+    {
+     "session": "M01",
+     "value": 0
+    },
+    {
+     "session": "M04",
+     "value": 0
+    },
+    {
+     "session": "M05",
+     "value": 0
+    },
+    {
+     "session": "M07",
+     "value": 0
+    },
+    {
+     "session": "M09",
+     "value": 0
+    }
+   ],
+   "corrections": [
+    {
+     "session": "M01",
+     "value": 0
+    },
+    {
+     "session": "M04",
+     "value": 0
+    },
+    {
+     "session": "M05",
+     "value": 0
+    },
+    {
+     "session": "M07",
+     "value": 0
+    },
+    {
+     "session": "M09",
+     "value": 0
+    }
+   ],
+   "harmful": [
+    {
+     "session": "M01",
+     "value": 0
+    },
+    {
+     "session": "M04",
+     "value": 0
+    },
+    {
+     "session": "M05",
+     "value": 0
+    },
+    {
+     "session": "M07",
+     "value": 0
+    },
+    {
+     "session": "M09",
+     "value": 0
+    }
+   ],
+   "narrowingOnly": [
+    {
+     "session": "M01",
+     "value": 0
+    },
+    {
+     "session": "M04",
+     "value": 0
+    },
+    {
+     "session": "M05",
+     "value": 0
+    },
+    {
+     "session": "M07",
+     "value": 0
+    },
+    {
+     "session": "M09",
+     "value": 0
+    }
+   ],
+   "correctedOnCommonTargets": [
+    {
+     "session": "M01",
+     "value": 0
+    },
+    {
+     "session": "M04",
+     "value": 0
+    },
+    {
+     "session": "M05",
+     "value": 0
+    },
+    {
+     "session": "M07",
+     "value": 0
+    },
+    {
+     "session": "M09",
+     "value": 0
+    }
+   ],
+   "newlyIncorrectPredictions": [
+    {
+     "session": "M01",
+     "value": 0
+    },
+    {
+     "session": "M04",
+     "value": 0
+    },
+    {
+     "session": "M05",
+     "value": 0
+    },
+    {
+     "session": "M07",
+     "value": 0
+    },
+    {
+     "session": "M09",
+     "value": 0
+    }
+   ],
+   "coverageContraction": [
+    {
+     "session": "M01",
+     "value": 0
+    },
+    {
+     "session": "M04",
+     "value": 0
+    },
+    {
+     "session": "M05",
+     "value": 0
+    },
+    {
+     "session": "M07",
+     "value": 0
+    },
+    {
+     "session": "M09",
+     "value": 0
+    }
+   ],
+   "coverageExpansion": [
+    {
+     "session": "M01",
+     "value": 0
+    },
+    {
+     "session": "M04",
+     "value": 0
+    },
+    {
+     "session": "M05",
+     "value": 0
+    },
+    {
+     "session": "M07",
+     "value": 0
+    },
+    {
+     "session": "M09",
+     "value": 0
+    }
+   ],
+   "attribution": [
+    {
+     "session": "M01",
+     "value": "no change in predictions"
+    },
+    {
+     "session": "M04",
+     "value": "no change in predictions"
+    },
+    {
+     "session": "M05",
+     "value": "no change in predictions"
+    },
+    {
+     "session": "M07",
+     "value": "no change in predictions"
+    },
+    {
+     "session": "M09",
+     "value": "no change in predictions"
+    }
+   ],
+   "discoveryFitChange": [
+    {
+     "session": "M01",
+     "value": null
+    },
+    {
+     "session": "M04",
+     "value": 0
+    },
+    {
+     "session": "M05",
+     "value": null
+    },
+    {
+     "session": "M07",
+     "value": 0
+    },
+    {
+     "session": "M09",
+     "value": null
+    }
+   ],
+   "representationLoss": [
+    {
+     "session": "M01",
+     "value": 0
+    },
+    {
+     "session": "M04",
+     "value": 0
+    },
+    {
+     "session": "M05",
+     "value": 0
+    },
+    {
+     "session": "M07",
+     "value": 0
+    },
+    {
+     "session": "M09",
+     "value": 0
+    }
+   ],
+   "withdrawals": [
+    {
+     "session": "M01",
+     "value": 0
+    },
+    {
+     "session": "M04",
+     "value": 0
+    },
+    {
+     "session": "M05",
+     "value": 0
+    },
+    {
+     "session": "M07",
+     "value": 0
+    },
+    {
+     "session": "M09",
+     "value": 0
+    }
+   ],
+   "abstentionsPhase1": [
+    {
+     "session": "M01",
+     "value": 0
+    },
+    {
+     "session": "M04",
+     "value": 0
+    },
+    {
+     "session": "M05",
+     "value": 0
+    },
+    {
+     "session": "M07",
+     "value": 0
+    },
+    {
+     "session": "M09",
+     "value": 0
+    }
+   ],
+   "representationAvailabilityPhase1": [
+    {
+     "session": "M01",
+     "value": 0
+    },
+    {
+     "session": "M04",
+     "value": 0.6666666666666666
+    },
+    {
+     "session": "M05",
+     "value": 0
+    },
+    {
+     "session": "M07",
+     "value": 1
+    },
+    {
+     "session": "M09",
+     "value": 0
+    }
+   ]
+  },
+  {
+   "arm": "treatment",
+   "sessions": 5,
+   "accuracyChange": [
+    {
+     "session": "M02",
+     "value": null
+    },
+    {
+     "session": "M03",
+     "value": null
+    },
+    {
+     "session": "M06",
+     "value": 0.1056
+    },
+    {
+     "session": "M08",
+     "value": 0.4947
+    },
+    {
+     "session": "M10",
+     "value": null
+    }
+   ],
+   "coverageChange": [
+    {
+     "session": "M02",
+     "value": 0
+    },
+    {
+     "session": "M03",
+     "value": 0
+    },
+    {
+     "session": "M06",
+     "value": -0.0421
+    },
+    {
+     "session": "M08",
+     "value": -0.1132
+    },
+    {
+     "session": "M10",
+     "value": 0
+    }
+   ],
+   "corrections": [
+    {
+     "session": "M02",
+     "value": 0
+    },
+    {
+     "session": "M03",
+     "value": 0
+    },
+    {
+     "session": "M06",
+     "value": 0
+    },
+    {
+     "session": "M08",
+     "value": 0
+    },
+    {
+     "session": "M10",
+     "value": 0
+    }
+   ],
+   "harmful": [
+    {
+     "session": "M02",
+     "value": 0
+    },
+    {
+     "session": "M03",
+     "value": 0
+    },
+    {
+     "session": "M06",
+     "value": 1
+    },
+    {
+     "session": "M08",
+     "value": 0
+    },
+    {
+     "session": "M10",
+     "value": 0
+    }
+   ],
+   "narrowingOnly": [
+    {
+     "session": "M02",
+     "value": 0
+    },
+    {
+     "session": "M03",
+     "value": 0
+    },
+    {
+     "session": "M06",
+     "value": 0
+    },
+    {
+     "session": "M08",
+     "value": 0
+    },
+    {
+     "session": "M10",
+     "value": 0
+    }
+   ],
+   "correctedOnCommonTargets": [
+    {
+     "session": "M02",
+     "value": 0
+    },
+    {
+     "session": "M03",
+     "value": 0
+    },
+    {
+     "session": "M06",
+     "value": 0
+    },
+    {
+     "session": "M08",
+     "value": 0
+    },
+    {
+     "session": "M10",
+     "value": 0
+    }
+   ],
+   "newlyIncorrectPredictions": [
+    {
+     "session": "M02",
+     "value": 0
+    },
+    {
+     "session": "M03",
+     "value": 0
+    },
+    {
+     "session": "M06",
+     "value": 0
+    },
+    {
+     "session": "M08",
+     "value": 0
+    },
+    {
+     "session": "M10",
+     "value": 0
+    }
+   ],
+   "coverageContraction": [
+    {
+     "session": "M02",
+     "value": 0
+    },
+    {
+     "session": "M03",
+     "value": 0
+    },
+    {
+     "session": "M06",
+     "value": 42
+    },
+    {
+     "session": "M08",
+     "value": 113
+    },
+    {
+     "session": "M10",
+     "value": 0
+    }
+   ],
+   "coverageExpansion": [
+    {
+     "session": "M02",
+     "value": 0
+    },
+    {
+     "session": "M03",
+     "value": 0
+    },
+    {
+     "session": "M06",
+     "value": 0
+    },
+    {
+     "session": "M08",
+     "value": 0
+    },
+    {
+     "session": "M10",
+     "value": 0
+    }
+   ],
+   "attribution": [
+    {
+     "session": "M02",
+     "value": "no change in predictions"
+    },
+    {
+     "session": "M03",
+     "value": "no change in predictions"
+    },
+    {
+     "session": "M06",
+     "value": "narrowing only: accuracy rose because predictions were dropped (not self-correction)"
+    },
+    {
+     "session": "M08",
+     "value": "narrowing only: accuracy rose because predictions were dropped (not self-correction)"
+    },
+    {
+     "session": "M10",
+     "value": "no change in predictions"
+    }
+   ],
+   "discoveryFitChange": [
+    {
+     "session": "M02",
+     "value": null
+    },
+    {
+     "session": "M03",
+     "value": null
+    },
+    {
+     "session": "M06",
+     "value": 0.3472
+    },
+    {
+     "session": "M08",
+     "value": 0.627
+    },
+    {
+     "session": "M10",
+     "value": null
+    }
+   ],
+   "representationLoss": [
+    {
+     "session": "M02",
+     "value": 0
+    },
+    {
+     "session": "M03",
+     "value": 0
+    },
+    {
+     "session": "M06",
+     "value": 1
+    },
+    {
+     "session": "M08",
+     "value": 0
+    },
+    {
+     "session": "M10",
+     "value": 0
+    }
+   ],
+   "withdrawals": [
+    {
+     "session": "M02",
+     "value": 0
+    },
+    {
+     "session": "M03",
+     "value": 0
+    },
+    {
+     "session": "M06",
+     "value": 0
+    },
+    {
+     "session": "M08",
+     "value": 1
+    },
+    {
+     "session": "M10",
+     "value": 0
+    }
+   ],
+   "abstentionsPhase1": [
+    {
+     "session": "M02",
+     "value": 0
+    },
+    {
+     "session": "M03",
+     "value": 0
+    },
+    {
+     "session": "M06",
+     "value": 0
+    },
+    {
+     "session": "M08",
+     "value": 0
+    },
+    {
+     "session": "M10",
+     "value": 0
+    }
+   ],
+   "representationAvailabilityPhase1": [
+    {
+     "session": "M02",
+     "value": 0
+    },
+    {
+     "session": "M03",
+     "value": 0
+    },
+    {
+     "session": "M06",
+     "value": 1
+    },
+    {
+     "session": "M08",
+     "value": 1
+    },
+    {
+     "session": "M10",
+     "value": 0
+    }
+   ]
+  }
+ ],
+ "blocks": [
+  {
+   "block": 1,
+   "complete": true,
+   "treatmentMinusControl": {
+    "accuracyChange": null,
+    "coverageChange": 0,
+    "corrections": 0,
+    "harmful": 0,
+    "correctedOnCommonTargets": 0,
+    "newlyIncorrectPredictions": 0,
+    "coverageContraction": 0,
+    "coverageExpansion": 0,
+    "discoveryFitChange": null
+   }
+  },
+  {
+   "block": 2,
+   "complete": true,
+   "treatmentMinusControl": {
+    "accuracyChange": null,
+    "coverageChange": 0,
+    "corrections": 0,
+    "harmful": 0,
+    "correctedOnCommonTargets": 0,
+    "newlyIncorrectPredictions": 0,
+    "coverageContraction": 0,
+    "coverageExpansion": 0,
+    "discoveryFitChange": null
+   }
+  },
+  {
+   "block": 3,
+   "complete": true,
+   "treatmentMinusControl": {
+    "accuracyChange": null,
+    "coverageChange": -0.0421,
+    "corrections": 0,
+    "harmful": 1,
+    "correctedOnCommonTargets": 0,
+    "newlyIncorrectPredictions": 0,
+    "coverageContraction": 42,
+    "coverageExpansion": 0,
+    "discoveryFitChange": null
+   }
+  },
+  {
+   "block": 4,
+   "complete": true,
+   "treatmentMinusControl": {
+    "accuracyChange": 0.4947,
+    "coverageChange": -0.1132,
+    "corrections": 0,
+    "harmful": 0,
+    "correctedOnCommonTargets": 0,
+    "newlyIncorrectPredictions": 0,
+    "coverageContraction": 113,
+    "coverageExpansion": 0,
+    "discoveryFitChange": 0.627
+   }
+  },
+  {
+   "block": 5,
+   "complete": true,
+   "treatmentMinusControl": {
+    "accuracyChange": null,
+    "coverageChange": 0,
+    "corrections": 0,
+    "harmful": 0,
+    "correctedOnCommonTargets": 0,
+    "newlyIncorrectPredictions": 0,
+    "coverageContraction": 0,
+    "coverageExpansion": 0,
+    "discoveryFitChange": null
+   }
+  }
+ ],
+ "claims": "descriptive only; no improvement claim unless the pre-registered block comparison supports it"
+}

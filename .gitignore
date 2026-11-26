@@ -22,3 +22,4 @@ evidence/gamewatch/raw/
 !/evidence/gw2/p7-pilot/external-record/console-session-1.log
 !/evidence/gw2/p7-pilot/external-record/console-session-2.log
 !/evidence/gw2/p7-pilot/external-record/console-session-3.log
+!/evidence/gw2/matched-run/external-record/console-GW2-M*-P*.log

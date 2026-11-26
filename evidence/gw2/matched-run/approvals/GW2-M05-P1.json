@@ -1,0 +1,9 @@
+{
+  "runId": "GW2-M05-P1",
+  "approvedBy": "Eric",
+  "approvedAt": "2026-11-26T16:07:26.077Z",
+  "maxCalls": 1,
+  "maxSteps": 80,
+  "ceilingCredits": 300,
+  "acknowledgesNoHardCap": true
+}
