@@ -1,5 +1,5 @@
 # GW2 matched comparison: operator script (Windows, PowerShell 7). Same operational pattern as gw2-p7-run.ps1.
-# PREPARED FOR FINAL REVIEW. NOT AUTHORIZED. Kept OUTSIDE the repository on purpose: editing this file cannot change the
+# EXECUTION CANDIDATE, pinned to both commits. Each paid call is authorized locally by the operator (typed RUN <runId>). Kept OUTSIDE the repository on purpose: editing this file cannot change the
 # tree that the checks below inspect.
 #
 # Two commits, checked separately (final preflight, item 6):
@@ -23,7 +23,7 @@
 #   (default) the experiment: 20 paid calls, one per approval, in the pre-registered order.
 #
 # Setup (once; nothing existing is deleted or overwritten):
-#   git -C D:\Rule_Sabotage\rule-sabotage-live fetch origin claude/gw2-matched
+#   git -C D:\Rule_Sabotage\rule-sabotage-live fetch origin claude/gw2-matched claude/gw2-matched-candidate
 #   git -C D:\Rule_Sabotage\rule-sabotage-live worktree add --detach D:\Rule_Sabotage\gw2-matched-reviewed <ReviewedHead>
 #   git -C D:\Rule_Sabotage\rule-sabotage-live worktree add --detach D:\Rule_Sabotage\gw2-matched-live     <CandidateHead>
 #   pwsh -File D:\Rule_Sabotage\gw2-matched-run.ps1 -Operator "Eric" -DryRun
@@ -51,9 +51,9 @@ $PSNativeCommandUseErrorActionPreference = $false
 Set-StrictMode -Version Latest
 
 # ---------------------------------------------------------------- fixed for this experiment
-$Branch        = 'claude/gw2-matched'
-$ReviewedHead  = '8f810711d8860c22ff0ae1eb12ff7aad06a6b93c'   # proposed reviewed commit (both gates closed); confirm at final review
-$CandidateHead = 'PENDING_CANDIDATE_HEAD'   # filled in after the candidate commit (gate lines only) is reviewed
+$Branch        = 'claude/gw2-matched'             # reviewed; the candidate is on claude/gw2-matched-candidate
+$ReviewedHead  = '8f810711d8860c22ff0ae1eb12ff7aad06a6b93c'   # reviewed commit (both gates closed); Windows validation passed
+$CandidateHead = 'f578767e8200cbcd6e820c21ff798c72f50fff95'   # candidate = reviewed + the three gate lines only
 $CliVersion    = '0.10.4'
 $Threshold     = 4000
 $Ceiling       = @{ 1 = 300; 2 = 150 }
