@@ -209,8 +209,8 @@
   }
  },
  "files": {
-  "docs/gw2/MATCHED_EXECUTION_PROCEDURE.md": "cde492825bd7dbd9207cef6e64d1d76a4d7ff018e23d2c84f9953335937d3264",
-  "docs/gw2/MATCHED_PREREGISTRATION_DRAFT.md": "cfb29d510a6c382867d308bf8b028c05221fd9b76972c038bc0b49baa8de582b",
+  "docs/gw2/MATCHED_EXECUTION_PROCEDURE.md": "8a604bdf63d735afbd1b839ddf8b225e67ba186205d966c306c67053d602f102",
+  "docs/gw2/MATCHED_PREREGISTRATION_DRAFT.md": "84720a1f7aa07d5854b9ec06e3384904fe1ff744eb2a9f3e9fa3210721bbb0c9",
   "evidence/gw2/procedures/generation-matched-2.json": "8ae61dfa12e8cf5f8e70ddfa6362bda7b832e82f2cf83db0936e315f945ec674",
   "evidence/gw2/procedures/partition-matched-2.json": "172808be415cae4d3ed71328389307a4205a0a6958f5afdf7664f1b8aa44cb99",
   "gamewatch/builds.ts": "6eb1f5339d8c741e84648efe0503a6ffde21724cd359196cb13e125c7e63b1e8",
@@ -237,7 +237,7 @@
   "gamewatch/gw2/judgments.ts": "746da1d1a52672f7b673257fd92ddcd4066fd0ad74afa2bcf3ab3c3fb58fefe4",
   "gamewatch/gw2/matched/candidate.ts": "7f45f2955b3b41b70f536ed6bc84a4296894ffcb7ee343f0d5faa4b02ca99e7c",
   "gamewatch/gw2/matched/cli.ts": "b9069e9490cd065e631ac00862244943e34160a2b4e33ed3afbffb7ec3c19fa1",
-  "gamewatch/gw2/matched/evaluate.ts": "f450e1853e0bb660ff44507ff12aeb1ff6539634586b3f1a620364043a4233b3",
+  "gamewatch/gw2/matched/evaluate.ts": "88222a65ab6341ccaa027162dc05d0baa6fccc6034b8eebe3d7e2c7fbbfbd860",
   "gamewatch/gw2/matched/feedback.ts": "f2829507f988374b382c1ba2c9f5f93bbee2681e05f9c343a9f238bffbf51480",
   "gamewatch/gw2/matched/integrity.ts": "edc53aba9cbb13dc3cba7081a1d4718327b186485cd270f93b9dabe6ec46ba52",
   "gamewatch/gw2/matched/kane-runner.ts": "2e1ab5a27389dcd366676c5586bd5653de4c4843b49ef2a37b49ecc2f3cbfc16",
@@ -286,7 +286,7 @@
   "server/weights.ts": "24ad2b10c0f6202bf223286d60573f0345d4bdb399140d0bceda570b8ce36b89"
  },
  "commit": {
-  "head": "eef84c72c0f29dcc90a5ec91c5de13205076d9db",
+  "head": "2d3857f7d46b624a78442b2ab50642c2034163df",
   "reviewed": null
  }
 }

@@ -25,8 +25,9 @@
  *     situations of the same build; and whether discovery already held a counterexample of that clause);
  *   - withdrawals, abstentions and loss of machine-evaluable representations listed per original.
  * A call that failed after call-start (recorded "call-failed", experiment stopped) is listed in failedCalls; its session is
- * incomplete. If its phase-1 call was never frozen the session has no outcomes; if only phase 2 failed before its
- * freeze, the session is evaluated on Freeze-1 alone (final = initial) and marked incomplete. Nothing is imputed.
+ * incomplete, whatever its freeze status. If its phase-1 call was never frozen the session has no outcomes. A session
+ * without Freeze-2 reports its Freeze-1 readings only: every revision measure and paired change is unavailable (null,
+ * with revision.available false), never zero. Nothing is imputed.
  * Rules fixed in advance: a withdrawn original leaves the final set; a conflicting original stays in the final set
  * unchanged and its conflicting revisions are listed, not scored as corrections or harms; a phase-2 form naming no
  * frozen original is an addition to the final set. Arm comparisons are differences of session-level values within
@@ -166,7 +167,7 @@ export function sessionOutcomes(f1: Frozen, f2: Frozen | null, sits: Sits, ctx: 
   const cov = (s: Score) => totalHeldout ? Math.round(s.predicted.length / totalHeldout * 10000) / 10000 : null;
   const avail = (hs: Hyp[]) => ({ hypotheses: hs.filter(h => h.kind === 'hypothesis').length, withStructuredRepresentation: hs.filter(represented).length });
   const count = (k: string) => pairs.filter(p => p.action === k).length, eff = (k: string) => pairs.filter(p => p.effect === k).length;
-  return {
+  const out: any = {
     heldout: { initial: { accuracy: si.accuracy, coverage: cov(si), matching: si.matching, contradicting: si.contradicting }, final: { accuracy: sf.accuracy, coverage: cov(sf), matching: sf.matching, contradicting: sf.contradicting },
       change: { accuracy: si.accuracy === null || sf.accuracy === null ? null : Math.round((sf.accuracy - si.accuracy) * 10000) / 10000, coverage: cov(si) === null ? null : Math.round((cov(sf)! - cov(si)!) * 10000) / 10000 } },
     actions: { kept: count('kept'), revised: count('revised'), withdrawn: count('withdrawn'), conflicting: count('conflicting'), additions: additions.filter(h => h.kind === 'hypothesis').length },
@@ -185,7 +186,21 @@ export function sessionOutcomes(f1: Frozen, f2: Frozen | null, sits: Sits, ctx: 
     representationAvailability: { phase1: avail(originals), phase2: avail(p2) },
     pairs,
   };
+  if (f2) return { revision: { available: true }, ...out };
+  // no Freeze-2 (final preflight follow-up): nothing was revised, so every revision measure and every paired change is
+  // UNAVAILABLE (null), never zero; only the Freeze-1 readings are reported
+  return { ...out, revision: { available: false, reason: 'no Freeze-2: the phase-2 call was not frozen' },
+    heldout: { initial: out.heldout.initial, final: null, change: { accuracy: null, coverage: null } },
+    actions: null, revisionEffects: null, revisionEffectsByAccuracy: null, targets: { heldout: null, attribution: null },
+    discoveryFit: { initial: out.discoveryFit.initial, final: null, change: null, targets: null },
+    representationLoss: null, withdrawals: null, counterexamples: { initial: out.counterexamples.initial, final: null },
+    ...(out.cReadings ? { cReadings: { initial: out.cReadings.initial, final: null } } : {}),
+    abstentions: { phase1: out.abstentions.phase1, withdrawalsPhase2: null }, representationAvailability: { phase1: out.representationAvailability.phase1, phase2: null }, pairs: null };
 }
+
+/** A session is complete only with Freeze-2, two complete calls, and no recorded call-failed anywhere in it. */
+export const sessionComplete = (session: string, hasFreeze2: boolean, calls: { phase: number }[], ledgerEntries: any[]) =>
+  hasFreeze2 && calls.length === 2 && calls.every(callComplete) && !ledgerEntries.some(e => e.event === 'call-failed' && e.data.session === session);
 
 export function evaluateMatched(evidence: string, run: string, rec: string, o: { root?: string; at?: string } = {}) {
   const pre = verifyMatchedPrereg(evidence, rec, { root: o.root }), L = readExecLedger(rec).entries as any[];
@@ -209,25 +224,25 @@ export function evaluateMatched(evidence: string, run: string, rec: string, o: {
   const sessions = sched.filter(s => frozen(s.session, 1)).map(s => {
     const f1 = loadFrozen(run, rec, s.session, 1), f2 = frozen(s.session, 2) ? loadFrozen(run, rec, s.session, 2) : null;
     const calls = L.filter(e => e.event === 'call-end' && e.data.session === s.session).map(e => ({ phase: e.data.phase, exitCode: e.data.exitCode, timedOut: e.data.timedOut, runEndPresent: e.data.runEndPresent, runEndValid: e.data.runEndValid === true, used: e.data.used, outcome: e.data.outcome }));
-    const complete = !!f2 && calls.length === 2 && calls.every(callComplete);
+    const complete = sessionComplete(s.session, !!f2, calls, L);
     return { session: s.session, arm: s.arm, block: s.block, complete, calls, ...sessionOutcomes(f1, f2, sits, { usable: enc.usable }) };
   });
   const arms = (['control', 'treatment'] as Arm[]).map(arm => {
     const ss = sessions.filter(x => x.arm === arm && x.heldout.change.accuracy !== undefined);
     const list = (f: (x: typeof sessions[number]) => number | null) => ss.map(x => ({ session: x.session, value: f(x) }));
     return { arm, sessions: ss.length, accuracyChange: list(x => x.heldout.change.accuracy), coverageChange: list(x => x.heldout.change.coverage),
-      corrections: list(x => x.revisionEffects.corrections), harmful: list(x => x.revisionEffects.harmful), narrowingOnly: list(x => x.revisionEffects.narrowingOnly),
-      correctedOnCommonTargets: list(x => x.targets.heldout.common.corrected), newlyIncorrectPredictions: list(x => x.targets.heldout.common.becameIncorrect + x.targets.heldout.added.incorrect),
-      coverageContraction: list(x => x.targets.heldout.situations.contraction), coverageExpansion: list(x => x.targets.heldout.situations.expansion), attribution: ss.map(x => ({ session: x.session, value: x.targets.attribution })),
-      discoveryFitChange: list(x => x.discoveryFit.change), representationLoss: list(x => x.representationLoss.length), withdrawals: list(x => x.abstentions.withdrawalsPhase2), abstentionsPhase1: list(x => x.abstentions.phase1),
+      corrections: list(x => x.revisionEffects?.corrections ?? null), harmful: list(x => x.revisionEffects?.harmful ?? null), narrowingOnly: list(x => x.revisionEffects?.narrowingOnly ?? null),
+      correctedOnCommonTargets: list(x => x.targets.heldout?.common.corrected ?? null), newlyIncorrectPredictions: list(x => (x.targets.heldout ? x.targets.heldout.common.becameIncorrect + x.targets.heldout.added.incorrect : null)),
+      coverageContraction: list(x => x.targets.heldout?.situations.contraction ?? null), coverageExpansion: list(x => x.targets.heldout?.situations.expansion ?? null), attribution: ss.map(x => ({ session: x.session, value: x.targets.attribution })),
+      discoveryFitChange: list(x => x.discoveryFit.change), representationLoss: list(x => x.representationLoss?.length ?? null), withdrawals: list(x => x.abstentions.withdrawalsPhase2), abstentionsPhase1: list(x => x.abstentions.phase1),
       representationAvailabilityPhase1: list(x => x.representationAvailability.phase1.hypotheses ? x.representationAvailability.phase1.withStructuredRepresentation / x.representationAvailability.phase1.hypotheses : null) };
   });
   const blocks = [...new Set(sched.map(s => s.block))].map(b => {
     const c = sessions.find(x => x.block === b && x.arm === 'control'), t = sessions.find(x => x.block === b && x.arm === 'treatment');
     const both = !!(c && t && c.complete && t.complete), d = (f: (x: any) => number | null) => both && f(t) !== null && f(c) !== null ? Math.round((f(t)! - f(c)!) * 10000) / 10000 : null;
-    return { block: b, complete: both, treatmentMinusControl: { accuracyChange: d(x => x.heldout.change.accuracy), coverageChange: d(x => x.heldout.change.coverage), corrections: d(x => x.revisionEffects.corrections), harmful: d(x => x.revisionEffects.harmful),
-      correctedOnCommonTargets: d(x => x.targets.heldout.common.corrected), newlyIncorrectPredictions: d(x => x.targets.heldout.common.becameIncorrect + x.targets.heldout.added.incorrect),
-      coverageContraction: d(x => x.targets.heldout.situations.contraction), coverageExpansion: d(x => x.targets.heldout.situations.expansion), discoveryFitChange: d(x => x.discoveryFit.change) } };
+    return { block: b, complete: both, treatmentMinusControl: { accuracyChange: d(x => x.heldout.change.accuracy), coverageChange: d(x => x.heldout.change.coverage), corrections: d(x => x.revisionEffects?.corrections ?? null), harmful: d(x => x.revisionEffects?.harmful ?? null),
+      correctedOnCommonTargets: d(x => x.targets.heldout?.common.corrected ?? null), newlyIncorrectPredictions: d(x => (x.targets.heldout ? x.targets.heldout.common.becameIncorrect + x.targets.heldout.added.incorrect : null)),
+      coverageContraction: d(x => x.targets.heldout?.situations.contraction ?? null), coverageExpansion: d(x => x.targets.heldout?.situations.expansion ?? null), discoveryFitChange: d(x => x.discoveryFit.change) } };
   });
   const failedCalls = L.filter(e => e.event === 'call-failed').map(e => ({ runId: e.data.runId, session: e.data.session, phase: e.data.phase, stage: e.data.stage, error: e.data.error, frozen: frozen(e.data.session, e.data.phase) }));
   const body = { schema: EVALUATION_SCHEMA, preregSha256: pre.preregSha256, openedAt: at, stopped, failedCalls, encoding: { file: MATCHED.encoding, sha256: enc.sha256, authoritative: enc.authoritative }, unit: 'session (outcome checks within a session are correlated and are not replications)', sessions, arms, blocks,

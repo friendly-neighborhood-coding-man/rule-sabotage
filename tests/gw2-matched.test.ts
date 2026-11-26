@@ -21,7 +21,7 @@ import { esc } from '../gamewatch/gw2/ext/html.ts';
 import { sessionFeedbackForTest } from '../gamewatch/gw2/matched/feedback-testonly.ts';
 import { activateSessionFeedback, constructSessionFeedback } from '../gamewatch/gw2/matched/feedback.ts';
 import { loadFrozen, graphOf, sessionDir, importPhase } from '../gamewatch/gw2/matched/sessions.ts';
-import { evaluateMatched, sessionOutcomes } from '../gamewatch/gw2/matched/evaluate.ts';
+import { evaluateMatched, sessionOutcomes, sessionComplete } from '../gamewatch/gw2/matched/evaluate.ts';
 import { kaneRunner } from '../gamewatch/gw2/matched/kane-runner.ts';
 import { NO_FEEDBACK } from '../gamewatch/gw2/matched/revision-page.ts';
 import { selectFeedback, renderFeedbackSection, FEEDBACK_CAP } from '../gamewatch/gw2/ext/feedback-core.ts';
@@ -374,6 +374,19 @@ test('real-runner boundary (mocked transport): Kane provenance from the sealed r
     const ev = evaluateMatched(DEV, s.run, s.rec);
     assert.deepEqual(ev.failedCalls.map(x => [x.runId, x.stage, x.frozen]), [['GW2-M02-P1', 'revision-page', true]]);
     assert.equal(ev.sessions.find(x => x.session === 'M02')!.complete, false); assert.equal(ev.sessions.find(x => x.session === 'M01')!.complete, true);
+    // without Freeze-2, every revision measure and paired change is UNAVAILABLE (null), never zero
+    const m2 = ev.sessions.find(x => x.session === 'M02')! as any;
+    assert.deepEqual(m2.revision, { available: false, reason: 'no Freeze-2: the phase-2 call was not frozen' });
+    assert.deepEqual(m2.heldout.change, { accuracy: null, coverage: null }); assert.equal(m2.heldout.final, null); assert.ok(m2.heldout.initial);
+    for (const k of ['actions', 'revisionEffects', 'revisionEffectsByAccuracy', 'representationLoss', 'withdrawals', 'pairs']) assert.equal(m2[k], null, `${k} unavailable`);
+    assert.deepEqual([m2.targets.heldout, m2.targets.attribution, m2.discoveryFit.final, m2.discoveryFit.change, m2.counterexamples.final, m2.abstentions.withdrawalsPhase2, m2.representationAvailability.phase2], [null, null, null, null, null, null, null]);
+    const ctl = ev.arms.find(a => a.arm === 'treatment')!;
+    assert.deepEqual(ctl.accuracyChange.find(x => x.session === 'M02')!.value, null); assert.deepEqual(ctl.corrections.find(x => x.session === 'M02')!.value, null, 'no zero is reported for a revision that never happened');
+    assert.equal((ev.sessions.find(x => x.session === 'M01') as any).revision.available, true);
+    // the evaluation-only path of a terminally stopped experiment opens once, and starts nothing
+    assert.equal(ledger(s.rec).filter(e => e.event === 'call-start').length, 3, 'evaluating started no call');
+    assert.throws(() => evaluateMatched(DEV, s.run, s.rec), /already opened once/);
+    assert.throws(() => nextCall(s.run, s.rec), /stopped/);
   } finally { s.done(); }
   // a session served for a Kane call is never imported as a test double, and Kane provenance never labels a double's session
   const t = setup();
@@ -533,4 +546,14 @@ test('a failed transaction must be a clean, stopped prefix: steps after the fail
     appendCheckpoint(s.rec, 'raw-seal', { runId: 'GW2-M01-P2', rawSealSha256: 'x', files: {} });
     assert.match(executionProblems(s.run, s.rec).join(), /gap in its transaction|recorded after the call failed/);
   } finally { s.done(); }
+});
+
+test('a session with a recorded call-failed is incomplete whatever its freeze status', () => {
+  const ok = { phase: 1, runEndValid: true, exitCode: 0, timedOut: false, outcome: 'completed' }, calls = [ok, { ...ok, phase: 2 }];
+  const fail = (session: string, phase: number) => ({ event: 'call-failed', data: { session, phase, runId: `GW2-${session}-P${phase}`, stage: 'freeze' } });
+  assert.equal(sessionComplete('M01', true, calls as any, []), true, 'baseline: two complete calls and Freeze-2');
+  assert.equal(sessionComplete('M01', true, calls as any, [fail('M01', 2)]), false, 'Freeze-2 present, but a call failed');
+  assert.equal(sessionComplete('M01', true, calls as any, [fail('M01', 1)]), false);
+  assert.equal(sessionComplete('M01', true, calls as any, [fail('M02', 1)]), sessionComplete('M01', true, calls as any, []), 'another session\'s failure does not touch this one');
+  assert.equal(sessionComplete('M01', false, calls as any, []), false, 'no Freeze-2');
 });

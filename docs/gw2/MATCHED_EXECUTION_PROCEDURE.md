@@ -88,7 +88,7 @@ Run `pwsh -File gw2-matched-run.ps1 -Operator "<name>" -AuthorizationText "<the 
 * The gate, the budget preflight, the site check or an authorization refuses.
 * A call ends with `CEILING_EXCEEDED` or `SPEND_UNKNOWN`, or the cumulative spend reaches 4,000. The call is imported and frozen first.
 * Any integrity problem: the pre-registration, a manifest, a raw seal, a session closure, an access journal, a freeze, a graph anchor, a phase-2 site, or an incomplete transaction.
-* Any recorded `call-failed`. The failed transaction is still verified step by step (raw seal, closure, journal, freeze, whatever it recorded) and must end in `experiment-stopped`. The evaluation can then run once: it lists the failed calls and marks their sessions incomplete.
+* Any recorded `call-failed`. The failed transaction is still verified step by step (raw seal, closure, journal, freeze, whatever it recorded) and must end in `experiment-stopped`. The evaluation can then run once, through `-EvaluateOnly` (§H): it lists the failed calls and marks every session with a failed call incomplete, whatever its freeze status. A session without Freeze-2 has its revision measures and paired changes reported as unavailable, never as zero.
 * A call that times out, exits non-zero or has no valid run_end does **not** stop the experiment. It is marked inconclusive and frozen with whatever was submitted, and the session continues to phase 2, the same in both arms. The session is reported as incomplete, and its block leaves the block comparison.
 
 ## G. What to report
@@ -105,3 +105,12 @@ Report per session, never pooled and never combined into one score (pre-registra
 * credits, steps and time per call.
 
 Also give the per-arm lists and treatment − control within complete blocks. There is no significance claim, and no claim that GW2 improves agent performance unless the pre-registered block comparison supports it. P7 is historical, not a control. Include the T25 contamination caveat, which applies to both arms.
+
+## H. Evaluation only, after a terminal stop
+
+Run `pwsh -File gw2-matched-run.ps1 -Operator "<name>" -EvaluateOnly`. It is refused unless the external ledger records `experiment-stopped`, and it takes no `-AuthorizationText`. It never runs `N next` or `N run`, never calls kane-cli, writes no approval or authorization and never sets `KANE_PAID_RUN_AUTH`. It:
+1. checks the candidate worktree (fixed head, clean, no CRLF), that the record and run directories are outside both worktrees, and that no `EVALUATION.json` exists;
+2. runs `N candidate-check`, `N ops-status` (the ledger must verify and record the stop) and `N verify` (the pre-registration and the integrity of every recorded transaction, failed ones included), which must name the same two commits as the script;
+3. shows the stop, the failed calls and the operational status only;
+4. opens the held-out evidence once, only when the operator types `EVALUATE`; anything else leaves it closed and changes nothing;
+5. confirms that the number of `call-start` events is the same before and after, then packs the results as in §D.6.

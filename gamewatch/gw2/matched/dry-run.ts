@@ -31,7 +31,7 @@ export async function dryRun(rec: string, run: string, o: { reviewed?: string; a
   const integrity = executionProblems(run, rec);
   const ev = evaluateMatched(dev, run, rec);
   return { evidence: MATCHED.devEvidence, profiles: DRY_RUN_PROFILES, calls: r.sessions.flatMap(x => x.phases).length, stopped: r.stopped, integrityProblems: integrity, ops: opsStatus(rec),
-    evaluation: { sessions: ev.sessions.map(x => ({ session: x.session, arm: x.arm, block: x.block, complete: x.complete, heldout: x.heldout, discoveryFit: { initial: x.discoveryFit.initial.accuracy, final: x.discoveryFit.final.accuracy },
+    evaluation: { sessions: ev.sessions.map(x => ({ session: x.session, arm: x.arm, block: x.block, complete: x.complete, heldout: x.heldout, revision: x.revision, discoveryFit: { initial: x.discoveryFit.initial.accuracy, final: x.discoveryFit.final?.accuracy ?? null },
       actions: x.actions, effects: x.revisionEffects, attribution: x.targets.attribution, targets: x.targets.heldout, cReadings: (x as any).cReadings?.final?.accurateDescriptionsOfADefect, counterexamples: x.counterexamples.final })), arms: ev.arms, blocks: ev.blocks } };
 }
 
