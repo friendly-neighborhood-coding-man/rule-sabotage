@@ -107,7 +107,9 @@ test('feedback partition: refused unless the externally anchored pre-registratio
     assert.equal(feedbackBinding(c.exp, c.rec).manifestSha256, sha(join(c.exp, 'partitions/feedback/MANIFEST.json')));
     const f = fb(c.exp, c.rec);
     assert.deepEqual(f.partitionsRead, ['discovery/observations.json', 'feedback/observations.json']);
-    assert.equal(f.items.filter(i => i.evidence === 'feedback').length, 390);
+    assert.equal(f.totals.differing, 780, '390 differing observations in each of discovery and feedback');
+    assert.equal(f.items.length, 25, 'capped at 25 (D137)');
+    assert.ok(f.summary.every(x => x.patternsShown === Math.min(x.patternsTotal, 25)), 'every distinct pattern shown before any repeats');
     addFeedback(c.exp, { ...obs, cases: obs.cases.slice(1) }, 'feedback'); // swapped after the pre-registration
     assert.throws(() => fb(c.exp, c.rec), /not the manifest bound by the pre-registration/);
   } finally { c.done(); }
@@ -119,20 +121,26 @@ test('feedback partition: refused unless the externally anchored pre-registratio
 test('runtime activation refuses while disabled, even with an authorization; test-only feedback is marked and never servable; the runtime never imports the test-only module', () => {
   assert.equal(AGENT_FEEDBACK_ENABLED, false);
   const preregSha256 = sha(join(PUB, 'external-record/PREREGISTRATION.json'));
-  const auth = { arm: 'treatment', runId: 'R-1', preregSha256, operatorAuthorization: 'written authorization (test double)' };
+  const auth = { arm: 'treatment', runId: 'R-1', session: S1, phase: 2, preregSha256, operatorAuthorization: 'written authorization (test double)' };
   assert.throws(() => activateAgentFeedback(EXP, { session: S1 }), /not enabled/);
   assert.throws(() => activateAgentFeedback(EXP, { session: S1, authorization: auth }), /not enabled/);
+  const run = { runId: 'R-1', session: S1, arm: 'treatment', phase: 2 };
   const pr = (runs: unknown) => ({ preregSha256, prereg: { plan: { agentFeedback: { runs } } } });
-  assert.deepEqual(activationProblems(true, auth, pr(['R-1'])), [], 'the activation rule itself, on a test double');
-  assert.match(activationProblems(false, auth, pr(['R-1'])).join(), /not enabled/);
-  assert.match(activationProblems(true, undefined, pr(['R-1'])).join(), /no authorization/);
-  assert.match(activationProblems(true, { ...auth, arm: 'control' }, pr(['R-1'])).join(), /only in the treatment arm/);
-  assert.match(activationProblems(true, { ...auth, preregSha256: '0'.repeat(64) }, pr(['R-1'])).join(), /does not name the externally anchored/);
-  assert.match(activationProblems(true, auth, pr(['R-2'])).join(), /does not list run R-1/);
-  assert.match(activationProblems(true, { ...auth, operatorAuthorization: ' ' }, pr(['R-1'])).join(), /no written operator authorization/);
+  assert.deepEqual(activationProblems(true, auth, pr([run]), { session: S1, phase: 2 }), [], 'the activation rule itself, on a test double');
+  assert.match(activationProblems(false, auth, pr([run])).join(), /not enabled/);
+  assert.match(activationProblems(true, undefined, pr([run])).join(), /no authorization/);
+  assert.match(activationProblems(true, { ...auth, arm: 'control' }, pr([{ ...run, arm: 'control' }])).join(), /only in the treatment arm/);
+  assert.match(activationProblems(true, { ...auth, preregSha256: '0'.repeat(64) }, pr([run])).join(), /does not name the externally anchored/);
+  assert.match(activationProblems(true, auth, pr([{ ...run, runId: 'R-2' }])).join(), /does not list run R-1/);
+  assert.match(activationProblems(true, auth, pr([{ ...run, session: 'other' }])).join(), /does not list run R-1/, 'session bound');
+  assert.match(activationProblems(true, auth, pr([{ ...run, phase: 1 }])).join(), /does not list run R-1/, 'phase bound');
+  assert.match(activationProblems(true, { ...auth, phase: 1 }, pr([{ ...run, phase: 1 }])).join(), /only before phase 2/);
+  assert.match(activationProblems(true, auth, pr([run]), { session: 'other', phase: 2 }).join(), /not session other/, 'the request must match the authorization');
+  assert.match(activationProblems(true, auth, pr(['R-1'])).join(), /does not list run R-1/, 'a bare run id no longer suffices');
+  assert.match(activationProblems(true, { ...auth, operatorAuthorization: ' ' }, pr([run])).join(), /no written operator authorization/);
   assert.match(activationProblems(true, auth, null).join(), /no externally anchored pre-registration/);
   const f = buildFeedbackForTest(EXP, { session: S1 });
-  assert.equal(f.testOnly, true); assert.equal(f.items.length, 390); assert.equal(f.graphPrefix, 11);
+  assert.equal(f.testOnly, true); assert.equal(f.totals.differing, 390); assert.equal(f.items.length, 25); assert.equal(f.graphPrefix, 11);
   assert.throws(() => servableFeedbackPage(f), /test-only feedback is never served/);
   const src = readFileSync(join(ROOT, 'gamewatch/gw2/ext/feedback.ts'), 'utf8'), imports = src.split('\n').filter(l => /^\s*import\b/.test(l));
   assert.ok(imports.length && imports.every(l => !/testonly/i.test(l)), 'feedback.ts imports the test-only module');

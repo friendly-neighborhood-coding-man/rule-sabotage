@@ -25,14 +25,16 @@ export { AccessRefused };
 const sha = (b: Buffer | string) => createHash('sha256').update(b).digest('hex');
 const json = (f: string) => JSON.parse(readFileSync(f, 'utf8'));
 
-export function partitionReader(exp: string, allowed: readonly Partition[], o: { rec?: string } = {}) {
-  const freeze = json(join(exp, 'hypotheses/FREEZE.json')), reads: string[] = [];
+export function partitionReader(exp: string, allowed: readonly Partition[], o: { rec?: string; manifests?: Partial<Record<Partition, string>> } = {}) {
+  // o.manifests (matched comparison, D139): manifest hashes bound by an anchored pre-registration instead of a P7 freeze
+  const freeze = o.manifests ? { manifests: o.manifests } : json(join(exp, 'hypotheses/FREEZE.json')), reads: string[] = [];
   let feedbackBound = false;
   const read = (p: Partition, file: string): string => {
     if (!allowed.includes(p)) throw new AccessRefused(`partition ${p} is not authorized for this output (allowed: ${allowed.join(', ') || 'none'})`);
     const dir = join(exp, 'partitions', p), mf = join(dir, 'MANIFEST.json');
     if (!existsSync(mf)) throw new AccessRefused(`${p}: no MANIFEST.json`);
     const m = json(mf);
+    if (p === 'feedback' && o.manifests) throw new AccessRefused('feedback: no feedback partition in the matched comparison (discovery-only feedback)');
     if (p === 'feedback') {
       if (m.role !== 'feedback') throw new AccessRefused('feedback: the manifest does not declare role "feedback"');
       if (!feedbackBound) { feedbackBinding(exp, o.rec); feedbackBound = true; } // D130: bound by the anchored pre-registration

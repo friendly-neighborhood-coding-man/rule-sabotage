@@ -75,7 +75,8 @@ test('agent feedback: disabled by default; only discovery/feedback evidence; nev
   for (const t of ruleTexts) assert.ok(!text.includes(t));
   assert.ok(!/QX-\d+|build-c1dc|build-78ff/.test(text), 'operator or held-out build ids disclosed');
   assert.ok(!/defect|bug|specification/i.test(text));
-  assert.equal(f.items.length, 390, 'H-1 discovery counterexamples only');
+  assert.equal(f.totals.differing, 390, 'H-1 discovery counterexamples only');
+  assert.equal(f.items.length, 25, 'V1 matched-comparison correction (D137): at most 25 shown per hypothesis');
   assert.ok(f.items.every(i => i.evidence === 'discovery' && i.yourHypothesis === 'H-1'));
   assert.deepEqual(f.withoutCheck, [{ yourHypothesis: 'H-4', reason: 'no structured representation: free text is not checked' }]);
   assert.equal(buildAgentFeedback(EXP, { session: 'e95f5bc28e46532c' }).items.length, 0);

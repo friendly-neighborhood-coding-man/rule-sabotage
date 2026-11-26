@@ -1,0 +1,235 @@
+{
+ "plan": {
+  "id": "gw2-matched-1",
+  "params": {
+   "id": "gw2-matched-1",
+   "sessionsPerArm": {
+    "control": 5,
+    "treatment": 5
+   },
+   "seed": 20261126,
+   "blockSize": 2,
+   "phases": {
+    "1": {
+     "maxSteps": 80,
+     "timeoutS": 2700,
+     "forms": 8,
+     "ceilingCredits": 300,
+     "objective": "You are investigating a two-player board game whose rules are not shown. Open the page at the given URL. It shows observations of builds of the game: scripted playtests (each step shows the state before and after and every event the game reported) and games between two computer players. Infer which rules the game appears to follow, and where builds behave differently. Open case and match pages as needed. For each rule you infer, open hypothesis.html and submit one form: a plain statement, your confidence, the case or match ids you relied on, and the structured representation described on that page. A hypothesis without a structured representation cannot be checked against the observations. You may submit competing hypotheses, and you may abstain on questions you cannot settle. Report only what the observations support. Submit at most 8 forms.",
+     "objectiveSha256": "9433e31374935435eecd5d12267b1ef0bb9e174b9e93365ad70fc5abf122feac"
+    },
+    "2": {
+     "maxSteps": 40,
+     "timeoutS": 1350,
+     "forms": 8,
+     "ceilingCredits": 150,
+     "objective": "You are continuing the same investigation. Open the page at the given URL, then open revision.html. It lists the hypotheses you submitted, and it may list recorded observations that differ from what your structured hypotheses predict. For each of your hypotheses you may keep it, submit a revision (a new form that names the hypothesis it revises), or withdraw it by submitting an abstention. Your original submissions are kept in every case. Report only what the observations support. Submit at most 8 revision forms.",
+     "objectiveSha256": "b391097f216b098c9ca02830db1e4900faf85861765f9859fc8561aff56437ee"
+    }
+   },
+   "callsTotal": 20,
+   "estimateCreditsPerStep": 3.1,
+   "researchThresholdCredits": 4000,
+   "priorResearchCredits": 132.043,
+   "accounting": "balance delta",
+   "retries": 0,
+   "parallelPaidCalls": false,
+   "creditPurchases": false,
+   "ceilingsAreHardCaps": false,
+   "feedback": {
+    "cap": 25,
+    "evidence": [
+     "discovery"
+    ],
+    "arm": "treatment",
+    "phase": 2
+   },
+   "specificationShownToAgent": false,
+   "cli": {
+    "name": "kane-cli",
+    "version": "0.10.4"
+   },
+   "procedures": {
+    "generation": "evidence/gw2/procedures/generation-matched-2.json",
+    "partition": "evidence/gw2/procedures/partition-matched-2.json"
+   },
+   "evidence": "evidence/gw2/matched-evidence-2",
+   "devEvidence": "evidence/gw2/matched-evidence"
+  },
+  "schedule": [
+   {
+    "order": 1,
+    "block": 1,
+    "session": "M01",
+    "arm": "control",
+    "runs": {
+     "1": "GW2-M01-P1",
+     "2": "GW2-M01-P2"
+    }
+   },
+   {
+    "order": 2,
+    "block": 1,
+    "session": "M02",
+    "arm": "treatment",
+    "runs": {
+     "1": "GW2-M02-P1",
+     "2": "GW2-M02-P2"
+    }
+   },
+   {
+    "order": 3,
+    "block": 2,
+    "session": "M03",
+    "arm": "treatment",
+    "runs": {
+     "1": "GW2-M03-P1",
+     "2": "GW2-M03-P2"
+    }
+   },
+   {
+    "order": 4,
+    "block": 2,
+    "session": "M04",
+    "arm": "control",
+    "runs": {
+     "1": "GW2-M04-P1",
+     "2": "GW2-M04-P2"
+    }
+   },
+   {
+    "order": 5,
+    "block": 3,
+    "session": "M05",
+    "arm": "control",
+    "runs": {
+     "1": "GW2-M05-P1",
+     "2": "GW2-M05-P2"
+    }
+   },
+   {
+    "order": 6,
+    "block": 3,
+    "session": "M06",
+    "arm": "treatment",
+    "runs": {
+     "1": "GW2-M06-P1",
+     "2": "GW2-M06-P2"
+    }
+   },
+   {
+    "order": 7,
+    "block": 4,
+    "session": "M07",
+    "arm": "control",
+    "runs": {
+     "1": "GW2-M07-P1",
+     "2": "GW2-M07-P2"
+    }
+   },
+   {
+    "order": 8,
+    "block": 4,
+    "session": "M08",
+    "arm": "treatment",
+    "runs": {
+     "1": "GW2-M08-P1",
+     "2": "GW2-M08-P2"
+    }
+   },
+   {
+    "order": 9,
+    "block": 5,
+    "session": "M09",
+    "arm": "control",
+    "runs": {
+     "1": "GW2-M09-P1",
+     "2": "GW2-M09-P2"
+    }
+   },
+   {
+    "order": 10,
+    "block": 5,
+    "session": "M10",
+    "arm": "treatment",
+    "runs": {
+     "1": "GW2-M10-P1",
+     "2": "GW2-M10-P2"
+    }
+   }
+  ],
+  "agentFeedback": {
+   "runs": [
+    {
+     "runId": "GW2-M02-P2",
+     "session": "M02",
+     "arm": "treatment",
+     "phase": 2
+    },
+    {
+     "runId": "GW2-M03-P2",
+     "session": "M03",
+     "arm": "treatment",
+     "phase": 2
+    },
+    {
+     "runId": "GW2-M06-P2",
+     "session": "M06",
+     "arm": "treatment",
+     "phase": 2
+    },
+    {
+     "runId": "GW2-M08-P2",
+     "session": "M08",
+     "arm": "treatment",
+     "phase": 2
+    },
+    {
+     "runId": "GW2-M10-P2",
+     "session": "M10",
+     "arm": "treatment",
+     "phase": 2
+    }
+   ],
+   "cap": 25,
+   "evidence": [
+    "discovery"
+   ]
+  },
+  "evidence": {
+   "dir": "evidence/gw2/matched-evidence-2",
+   "manifests": {
+    "discovery": "6530d004ae14406bfbea164fa86cb6a825ee00b6bf289df3b3a07da0c060d983",
+    "heldout": "21ba5bda62df2a22622b598e7bf1ecb02166df100c64588a3aa176373be976bf",
+    "spec": "2d8d312f0b4cbfa34be47c6158b53c067f8a2446c9d3c5cb3abd7f2eb9a56f8a",
+    "eval": "c5c5dc6c654014bd3f37201b7cf128289cfb8cb2ff208d126081fe44abd21202"
+   }
+  }
+ },
+ "files": {
+  "docs/gw2/MATCHED_PREREGISTRATION_DRAFT.md": "68a64bd63fb9b71d7ff2c5e0c129a382119d9eed2d82a0c4af0fb8c37b10c205",
+  "docs/gw2/MATCHED_EXECUTION_PROCEDURE.md": "ceb1ad964929829c51d03af20f43c11eae0f730a74ffe74c97491602026d6170",
+  "evidence/gw2/procedures/generation-matched-2.json": "8ae61dfa12e8cf5f8e70ddfa6362bda7b832e82f2cf83db0936e315f945ec674",
+  "evidence/gw2/procedures/partition-matched-2.json": "172808be415cae4d3ed71328389307a4205a0a6958f5afdf7664f1b8aa44cb99",
+  "gamewatch/gw2/matched/params.ts": "be21e6213552c7f177bc648f68843a76cc6f3cef4ccbd01bb0847c5035f597f1",
+  "gamewatch/gw2/matched/schedule.ts": "616085f529ab4f98a3123e2b7fd748eb8ee63b7d5b34e9e73580da51debf76a8",
+  "gamewatch/gw2/matched/prereg.ts": "54a30a71f44d66327a0c39d44ac45a72cc1ef8b1cecbe3cbb4fcd354511d8e70",
+  "gamewatch/gw2/matched/sessions.ts": "4dca1ff3f296763b62c73f19dce773a216acfda9af551f215d23f9c9bd84c689",
+  "gamewatch/gw2/matched/feedback.ts": "f2829507f988374b382c1ba2c9f5f93bbee2681e05f9c343a9f238bffbf51480",
+  "gamewatch/gw2/matched/revision-page.ts": "91432844b23f6e0f668c69082996aa108a79a07e39c844d2b92f77e6f3534ddb",
+  "gamewatch/gw2/matched/pipeline.ts": "d760e3995f715867c01a4349f660ff2da404b5fef26710faf707092bf23bed99",
+  "gamewatch/gw2/matched/evaluate.ts": "7cdf34b1acb4905081d06ac7894740c1418b687e13da31ad70f72c4acf9ace5b",
+  "gamewatch/gw2/matched/kane-runner.ts": "b8b5c2e6fb013b80a7f1d7d7acd3d7ed1cc8541df134e959236720a370166d77",
+  "gamewatch/gw2/matched/cli.ts": "27cce3eb9b5f12d0562ea8db5088139cc506c7297018b7b1dbd8b1a1b4e8383c",
+  "gamewatch/gw2/ext/feedback-core.ts": "dcf92e6e9a989020b8be55200a141752830223874a988702c6d3a922338d017d",
+  "gamewatch/gw2/ext/feedback.ts": "0cfaf8a00f119383f5b501135627a2c32c187a4cb172bc8a3dca67ad15d5089e",
+  "gamewatch/gw2/ext/anchored.ts": "e4270834d7dc84fd943f8d6c2a7e23539f9ae67339cb1104d2ef42f9b336fb4e",
+  "gamewatch/gw2/ext/inputs.ts": "8ccd5119a1e78b3661c053affeeaddfaa7e804eccd0360a109e1c96f8f1afbb3",
+  "gamewatch/gw2/ext/contradictions.ts": "ac7d798111b4e2e00a62f0c427773cb522df96bec6e1eea0467544420b13fbdf",
+  "gamewatch/gw2/ext/comparison-plan.ts": "c089f37fded7f6395d6c01afc4ded103f8d9971cec5a0dbc9aef21fc7ff0f484",
+  "gamewatch/gw2/ext/serving-guard.ts": "bd30e266501c5e8b6f0a0de2d2d9136e21bdeb22d5b2746b3ca49148df128f4d",
+  "gamewatch/gw2/serve.ts": "228392acfa5ca5d630283e441077752523438ecc124e92dcb6770c17f79ec47f",
+  "gamewatch/gw2/blind-site.ts": "3d695b1b46c98f9067a9935b8b7f047e27ca634ebdce3cfc92d4ac071cfeb64d",
+  "server/balance/v4/kanebudget.ts": "367a776c774890d080b1134bf9d936671e285c618ca3b05965ba9884bd58f7ef"
+ }
+}

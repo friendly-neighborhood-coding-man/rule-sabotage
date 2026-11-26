@@ -1,0 +1,992 @@
+{
+ "schema": "gamewatch/gw2-ext-behaviour@1",
+ "channel": "agent behavioural discovery",
+ "specification": "not used: this output is built without the specification",
+ "audience": "operator (contains held-out results)",
+ "builds": {
+  "build-06b9": {
+   "label": "QX-41",
+   "heldoutIds": [
+    "build-c1dc"
+   ]
+  },
+  "build-3caf": {
+   "label": "QX-73",
+   "heldoutIds": [
+    "build-78ff"
+   ]
+  }
+ },
+ "hypotheses": [
+  {
+   "hypothesis": "db633e8d0d2cb6474bb4fa4a4d22a352bd695cd89e47b577a713af5d9feb73e7",
+   "ref": "H-1",
+   "session": "1e26529c62afc36e",
+   "kind": "hypothesis",
+   "submitted": {
+    "statement": "In build-06b9, each observed turn start grants exactly 3 actions.",
+    "confidence": "high",
+    "citedEvidence": "C-0c6c31 steps 0, 4, 8, 11, 14, 17, 20; M-22e2f2 turns 1-7.",
+    "structured": {
+     "condition": "The observed turn-start record is from build-06b9.",
+     "effect": "actionsGranted is 3.",
+     "trigger": "At a turn start in build-06b9."
+    },
+    "verbatim": "{\"at\":\"2026-11-25T20:03:18.041Z\",\"source\":\"kane\",\"nonceValid\":true,\"session\":\"1e26529c62afc36e\",\"ref\":\"H-1\",\"statement\":\"In build-06b9, each observed turn start grants exactly 3 actions.\",\"trigger\":\"At a turn start in build-06b9.\",\"condition\":\"The observed turn-start record is from build-06b9.\",\"effect\":\"actionsGranted is 3.\",\"representation\":\"{\\\"schema\\\":\\\"gamewatch/gw2-hypothesis@1\\\",\\\"clauses\\\":[{\\\"form\\\":\\\"law\\\",\\\"situation\\\":\\\"turn-start\\\",\\\"when\\\":{\\\"op\\\":\\\"eq\\\",\\\"args\\\":[{\\\"op\\\":\\\"field\\\",\\\"name\\\":\\\"build\\\"},{\\\"op\\\":\\\"const\\\",\\\"value\\\":\\\"build-06b9\\\"}]},\\\"expect\\\":[{\\\"field\\\":\\\"actionsGranted\\\",\\\"equals\\\":{\\\"op\\\":\\\"const\\\",\\\"value\\\":3}}]}]}\",\"confidence\":\"high\",\"competingWith\":\"\",\"evidence\":\"C-0c6c31 steps 0, 4, 8, 11, 14, 17, 20; M-22e2f2 turns 1-7.\",\"abstainScope\":\"\",\"nonce\":\"eff917032b3c1c4e\"}"
+   },
+   "verificationStatus": "contradicted by discovery evidence",
+   "coverage": {
+    "discovery": {
+     "k": 628,
+     "n": 1945
+    },
+    "heldout": {
+     "k": 301,
+     "n": 914
+    },
+    "unit": "situations to which a submitted clause applies ÷ situations"
+   },
+   "representations": [
+    {
+     "representation": "9da70fa4f20f290a99a4228881b22fc859fb26908ccf41cb25f7c5557b6447b2",
+     "structured": {
+      "clauses": [
+       {
+        "expect": [
+         {
+          "equals": {
+           "op": "const",
+           "value": 3
+          },
+          "field": "actionsGranted"
+         }
+        ],
+        "form": "law",
+        "situation": "turn-start",
+        "when": {
+         "args": [
+          {
+           "name": "build",
+           "op": "field"
+          },
+          {
+           "op": "const",
+           "value": "build-06b9"
+          }
+         ],
+         "op": "eq"
+        }
+       }
+      ],
+      "schema": "gamewatch/gw2-hypothesis@1"
+     },
+     "origin": "submitter",
+     "author": "agent:kane-cli",
+     "fidelityDeclared": "faithful",
+     "fidelityChecked": false,
+     "status": "represented",
+     "byBuild": [
+      {
+       "build": "build-06b9",
+       "label": "QX-41",
+       "clauses": [
+        {
+         "clause": 0,
+         "situation": "turn-start",
+         "discovery": {
+          "applicable": 628,
+          "evaluated": 628,
+          "fullySupported": 238,
+          "partial": 0,
+          "counterexamples": 390,
+          "outcomeChecks": {
+           "matching": 238,
+           "contradicting": 390,
+           "unknown": 0,
+           "unpredicted": 0,
+           "inconclusive": 0
+          },
+          "excluded": {},
+          "listedCounterexamples": [
+           {
+            "situation": "M-22e2f2/t3/turn-start",
+            "field": "actionsGranted",
+            "predicted": 3,
+            "observed": 2
+           },
+           {
+            "situation": "M-22e2f2/t5/turn-start",
+            "field": "actionsGranted",
+            "predicted": 3,
+            "observed": 2
+           },
+           {
+            "situation": "M-22e2f2/t7/turn-start",
+            "field": "actionsGranted",
+            "predicted": 3,
+            "observed": 2
+           },
+           {
+            "situation": "M-22e2f2/t9/turn-start",
+            "field": "actionsGranted",
+            "predicted": 3,
+            "observed": 2
+           },
+           {
+            "situation": "M-22e2f2/t11/turn-start",
+            "field": "actionsGranted",
+            "predicted": 3,
+            "observed": 2
+           },
+           {
+            "situation": "M-22e2f2/t13/turn-start",
+            "field": "actionsGranted",
+            "predicted": 3,
+            "observed": 2
+           },
+           {
+            "situation": "M-22e2f2/t15/turn-start",
+            "field": "actionsGranted",
+            "predicted": 3,
+            "observed": 2
+           },
+           {
+            "situation": "M-22e2f2/t17/turn-start",
+            "field": "actionsGranted",
+            "predicted": 3,
+            "observed": 2
+           },
+           {
+            "situation": "M-22e2f2/t19/turn-start",
+            "field": "actionsGranted",
+            "predicted": 3,
+            "observed": 2
+           },
+           {
+            "situation": "M-22e2f2/t21/turn-start",
+            "field": "actionsGranted",
+            "predicted": 3,
+            "observed": 2
+           },
+           {
+            "situation": "M-22e2f2/t23/turn-start",
+            "field": "actionsGranted",
+            "predicted": 3,
+            "observed": 2
+           },
+           {
+            "situation": "M-22e2f2/t25/turn-start",
+            "field": "actionsGranted",
+            "predicted": 3,
+            "observed": 2
+           },
+           {
+            "situation": "M-22e2f2/t27/turn-start",
+            "field": "actionsGranted",
+            "predicted": 3,
+            "observed": 2
+           },
+           {
+            "situation": "M-22e2f2/t29/turn-start",
+            "field": "actionsGranted",
+            "predicted": 3,
+            "observed": 2
+           },
+           {
+            "situation": "M-22e2f2/t31/turn-start",
+            "field": "actionsGranted",
+            "predicted": 3,
+            "observed": 2
+           },
+           {
+            "situation": "M-22e2f2/t33/turn-start",
+            "field": "actionsGranted",
+            "predicted": 3,
+            "observed": 1
+           },
+           {
+            "situation": "M-22e2f2/t35/turn-start",
+            "field": "actionsGranted",
+            "predicted": 3,
+            "observed": 1
+           },
+           {
+            "situation": "M-22e2f2/t37/turn-start",
+            "field": "actionsGranted",
+            "predicted": 3,
+            "observed": 1
+           },
+           {
+            "situation": "M-22e2f2/t39/turn-start",
+            "field": "actionsGranted",
+            "predicted": 3,
+            "observed": 1
+           },
+           {
+            "situation": "M-22e2f2/t41/turn-start",
+            "field": "actionsGranted",
+            "predicted": 3,
+            "observed": 1
+           },
+           {
+            "situation": "M-22e2f2/t43/turn-start",
+            "field": "actionsGranted",
+            "predicted": 3,
+            "observed": 1
+           },
+           {
+            "situation": "M-22e2f2/t45/turn-start",
+            "field": "actionsGranted",
+            "predicted": 3,
+            "observed": 1
+           },
+           {
+            "situation": "M-22e2f2/t47/turn-start",
+            "field": "actionsGranted",
+            "predicted": 3,
+            "observed": 1
+           },
+           {
+            "situation": "M-22e2f2/t49/turn-start",
+            "field": "actionsGranted",
+            "predicted": 3,
+            "observed": 1
+           },
+           {
+            "situation": "M-22e2f2/t51/turn-start",
+            "field": "actionsGranted",
+            "predicted": 3,
+            "observed": 1
+           }
+          ]
+         },
+         "heldout": {
+          "applicable": 301,
+          "evaluated": 301,
+          "fullySupported": 114,
+          "partial": 0,
+          "counterexamples": 187,
+          "outcomeChecks": {
+           "matching": 114,
+           "contradicting": 187,
+           "unknown": 0,
+           "unpredicted": 0,
+           "inconclusive": 0
+          },
+          "excluded": {},
+          "listedCounterexamples": [
+           {
+            "situation": "M-08cf44/t13/turn-start",
+            "field": "actionsGranted",
+            "predicted": 3,
+            "observed": 2
+           },
+           {
+            "situation": "M-08cf44/t15/turn-start",
+            "field": "actionsGranted",
+            "predicted": 3,
+            "observed": 2
+           },
+           {
+            "situation": "M-08cf44/t16/turn-start",
+            "field": "actionsGranted",
+            "predicted": 3,
+            "observed": 2
+           },
+           {
+            "situation": "M-08cf44/t17/turn-start",
+            "field": "actionsGranted",
+            "predicted": 3,
+            "observed": 2
+           },
+           {
+            "situation": "M-08cf44/t18/turn-start",
+            "field": "actionsGranted",
+            "predicted": 3,
+            "observed": 2
+           },
+           {
+            "situation": "M-08cf44/t19/turn-start",
+            "field": "actionsGranted",
+            "predicted": 3,
+            "observed": 1
+           },
+           {
+            "situation": "M-08cf44/t20/turn-start",
+            "field": "actionsGranted",
+            "predicted": 3,
+            "observed": 2
+           },
+           {
+            "situation": "M-08cf44/t21/turn-start",
+            "field": "actionsGranted",
+            "predicted": 3,
+            "observed": 1
+           },
+           {
+            "situation": "M-08cf44/t22/turn-start",
+            "field": "actionsGranted",
+            "predicted": 3,
+            "observed": 2
+           },
+           {
+            "situation": "M-08cf44/t23/turn-start",
+            "field": "actionsGranted",
+            "predicted": 3,
+            "observed": 1
+           },
+           {
+            "situation": "M-08cf44/t24/turn-start",
+            "field": "actionsGranted",
+            "predicted": 3,
+            "observed": 2
+           },
+           {
+            "situation": "M-08cf44/t25/turn-start",
+            "field": "actionsGranted",
+            "predicted": 3,
+            "observed": 1
+           },
+           {
+            "situation": "M-08cf44/t26/turn-start",
+            "field": "actionsGranted",
+            "predicted": 3,
+            "observed": 1
+           },
+           {
+            "situation": "M-08cf44/t27/turn-start",
+            "field": "actionsGranted",
+            "predicted": 3,
+            "observed": 1
+           },
+           {
+            "situation": "M-08cf44/t28/turn-start",
+            "field": "actionsGranted",
+            "predicted": 3,
+            "observed": 1
+           },
+           {
+            "situation": "M-08cf44/t29/turn-start",
+            "field": "actionsGranted",
+            "predicted": 3,
+            "observed": 1
+           },
+           {
+            "situation": "M-08cf44/t30/turn-start",
+            "field": "actionsGranted",
+            "predicted": 3,
+            "observed": 1
+           },
+           {
+            "situation": "M-08cf44/t31/turn-start",
+            "field": "actionsGranted",
+            "predicted": 3,
+            "observed": 1
+           },
+           {
+            "situation": "M-08cf44/t32/turn-start",
+            "field": "actionsGranted",
+            "predicted": 3,
+            "observed": 1
+           },
+           {
+            "situation": "M-08cf44/t33/turn-start",
+            "field": "actionsGranted",
+            "predicted": 3,
+            "observed": 1
+           },
+           {
+            "situation": "M-08cf44/t34/turn-start",
+            "field": "actionsGranted",
+            "predicted": 3,
+            "observed": 1
+           },
+           {
+            "situation": "M-08cf44/t35/turn-start",
+            "field": "actionsGranted",
+            "predicted": 3,
+            "observed": 1
+           },
+           {
+            "situation": "M-0b2d3c/t14/turn-start",
+            "field": "actionsGranted",
+            "predicted": 3,
+            "observed": 2
+           },
+           {
+            "situation": "M-0b2d3c/t15/turn-start",
+            "field": "actionsGranted",
+            "predicted": 3,
+            "observed": 2
+           },
+           {
+            "situation": "M-0b2d3c/t16/turn-start",
+            "field": "actionsGranted",
+            "predicted": 3,
+            "observed": 2
+           }
+          ]
+         }
+        }
+       ]
+      },
+      {
+       "build": "build-3caf",
+       "label": "QX-73",
+       "clauses": [
+        {
+         "clause": 0,
+         "situation": "turn-start",
+         "discovery": {
+          "applicable": 0,
+          "evaluated": 0,
+          "fullySupported": 0,
+          "partial": 0,
+          "counterexamples": 0,
+          "outcomeChecks": {
+           "matching": 0,
+           "contradicting": 0,
+           "unknown": 0,
+           "unpredicted": 0,
+           "inconclusive": 0
+          },
+          "excluded": {
+           "not applicable (condition false)": 422
+          },
+          "listedCounterexamples": []
+         },
+         "heldout": {
+          "applicable": 0,
+          "evaluated": 0,
+          "fullySupported": 0,
+          "partial": 0,
+          "counterexamples": 0,
+          "outcomeChecks": {
+           "matching": 0,
+           "contradicting": 0,
+           "unknown": 0,
+           "unpredicted": 0,
+           "inconclusive": 0
+          },
+          "excluded": {
+           "not applicable (condition false)": 189
+          },
+          "listedCounterexamples": []
+         }
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "hypothesis": "eda7ae35ab80b1d447b50ff6df7e5af20870766e549b8f02e8337283b000ecb0",
+   "ref": "H-2",
+   "session": "1e26529c62afc36e",
+   "kind": "hypothesis",
+   "submitted": {
+    "statement": "In build-06b9, entering a Freeze effect square fires the effect and freezes the entering piece; the frozen piece's attempted move on its next turn is refused.",
+    "confidence": "medium",
+    "citedEvidence": "C-0c6c31 steps 7 and 11 (entry and later refused move).",
+    "structured": {
+     "condition": "The effect is Freeze.",
+     "effect": "The engine reports effect-fired and freeze status; a move by that piece on its next turn is refused as frozen.",
+     "trigger": "A piece enters a square bearing Freeze in build-06b9."
+    },
+    "verbatim": "{\"at\":\"2026-11-25T20:03:41.674Z\",\"source\":\"kane\",\"nonceValid\":true,\"session\":\"1e26529c62afc36e\",\"ref\":\"H-2\",\"statement\":\"In build-06b9, entering a Freeze effect square fires the effect and freezes the entering piece; the frozen piece's attempted move on its next turn is refused.\",\"trigger\":\"A piece enters a square bearing Freeze in build-06b9.\",\"condition\":\"The effect is Freeze.\",\"effect\":\"The engine reports effect-fired and freeze status; a move by that piece on its next turn is refused as frozen.\",\"representation\":\"{\\\"schema\\\":\\\"gamewatch/gw2-hypothesis@1\\\",\\\"clauses\\\":[{\\\"form\\\":\\\"law\\\",\\\"situation\\\":\\\"effect-entry\\\",\\\"when\\\":{\\\"op\\\":\\\"eq\\\",\\\"args\\\":[{\\\"op\\\":\\\"field\\\",\\\"name\\\":\\\"effect\\\"},{\\\"op\\\":\\\"const\\\",\\\"value\\\":\\\"Freeze\\\"}]},\\\"expect\\\":[{\\\"field\\\":\\\"fired\\\",\\\"equals\\\":{\\\"op\\\":\\\"const\\\",\\\"value\\\":true}}]}]}\",\"confidence\":\"medium\",\"competingWith\":\"\",\"evidence\":\"C-0c6c31 steps 7 and 11 (entry and later refused move).\",\"abstainScope\":\"\",\"nonce\":\"eff917032b3c1c4e\"}"
+   },
+   "verificationStatus": "consistent with discovery evidence",
+   "coverage": {
+    "discovery": {
+     "k": 13,
+     "n": 1945
+    },
+    "heldout": {
+     "k": 8,
+     "n": 914
+    },
+    "unit": "situations to which a submitted clause applies ÷ situations"
+   },
+   "representations": [
+    {
+     "representation": "38f5dfeca66809ae7cef9468131de763c8ef7796a9b046cb6f12411ac626c5b8",
+     "structured": {
+      "clauses": [
+       {
+        "expect": [
+         {
+          "equals": {
+           "op": "const",
+           "value": true
+          },
+          "field": "fired"
+         }
+        ],
+        "form": "law",
+        "situation": "effect-entry",
+        "when": {
+         "args": [
+          {
+           "name": "effect",
+           "op": "field"
+          },
+          {
+           "op": "const",
+           "value": "Freeze"
+          }
+         ],
+         "op": "eq"
+        }
+       }
+      ],
+      "schema": "gamewatch/gw2-hypothesis@1"
+     },
+     "origin": "submitter",
+     "author": "agent:kane-cli",
+     "fidelityDeclared": "faithful",
+     "fidelityChecked": false,
+     "status": "represented",
+     "byBuild": [
+      {
+       "build": "build-06b9",
+       "label": "QX-41",
+       "clauses": [
+        {
+         "clause": 0,
+         "situation": "effect-entry",
+         "discovery": {
+          "applicable": 7,
+          "evaluated": 7,
+          "fullySupported": 7,
+          "partial": 0,
+          "counterexamples": 0,
+          "outcomeChecks": {
+           "matching": 7,
+           "contradicting": 0,
+           "unknown": 0,
+           "unpredicted": 0,
+           "inconclusive": 0
+          },
+          "excluded": {
+           "not applicable (condition false)": 458,
+           "missing input (effect)": 6
+          },
+          "listedCounterexamples": []
+         },
+         "heldout": {
+          "applicable": 5,
+          "evaluated": 5,
+          "fullySupported": 3,
+          "partial": 0,
+          "counterexamples": 2,
+          "outcomeChecks": {
+           "matching": 3,
+           "contradicting": 2,
+           "unknown": 0,
+           "unpredicted": 0,
+           "inconclusive": 0
+          },
+          "excluded": {
+           "not applicable (condition false)": 218,
+           "missing input (effect)": 2
+          },
+          "listedCounterexamples": [
+           {
+            "situation": "C-0de271/s15/e1",
+            "field": "fired",
+            "predicted": true,
+            "observed": false
+           },
+           {
+            "situation": "C-0de271/s18/e1",
+            "field": "fired",
+            "predicted": true,
+            "observed": false
+           }
+          ]
+         }
+        }
+       ]
+      },
+      {
+       "build": "build-3caf",
+       "label": "QX-73",
+       "clauses": [
+        {
+         "clause": 0,
+         "situation": "effect-entry",
+         "discovery": {
+          "applicable": 6,
+          "evaluated": 6,
+          "fullySupported": 6,
+          "partial": 0,
+          "counterexamples": 0,
+          "outcomeChecks": {
+           "matching": 6,
+           "contradicting": 0,
+           "unknown": 0,
+           "unpredicted": 0,
+           "inconclusive": 0
+          },
+          "excluded": {
+           "not applicable (condition false)": 347,
+           "missing input (effect)": 9
+          },
+          "listedCounterexamples": []
+         },
+         "heldout": {
+          "applicable": 3,
+          "evaluated": 3,
+          "fullySupported": 2,
+          "partial": 0,
+          "counterexamples": 1,
+          "outcomeChecks": {
+           "matching": 2,
+           "contradicting": 1,
+           "unknown": 0,
+           "unpredicted": 0,
+           "inconclusive": 0
+          },
+          "excluded": {
+           "not applicable (condition false)": 165,
+           "missing input (effect)": 1
+          },
+          "listedCounterexamples": [
+           {
+            "situation": "C-b48898/s15/e1",
+            "field": "fired",
+            "predicted": true,
+            "observed": false
+           }
+          ]
+         }
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "hypothesis": "0328618b50e233ed45b8ff20323d876b801230848fb7f5a0f6a30209a1f4768b",
+   "ref": "H-3",
+   "session": "1e26529c62afc36e",
+   "kind": "hypothesis",
+   "submitted": {
+    "statement": "In the observed build-06b9 computer match, entering a Teleport square fired Teleport, forced the piece to B9, and the subsequent move to A9 scored that piece.",
+    "confidence": "medium",
+    "citedEvidence": "M-22e2f2 turn 1.",
+    "structured": {
+     "condition": "The effect is Teleport on K3.",
+     "effect": "The event log reports Teleport firing, a forced move from K3 to B9, then a score when the piece moves from B9 to A9.",
+     "trigger": "A piece enters a Teleport square in the observed match."
+    },
+    "verbatim": "{\"at\":\"2026-11-25T20:04:05.025Z\",\"source\":\"kane\",\"nonceValid\":true,\"session\":\"1e26529c62afc36e\",\"ref\":\"H-3\",\"statement\":\"In the observed build-06b9 computer match, entering a Teleport square fired Teleport, forced the piece to B9, and the subsequent move to A9 scored that piece.\",\"trigger\":\"A piece enters a Teleport square in the observed match.\",\"condition\":\"The effect is Teleport on K3.\",\"effect\":\"The event log reports Teleport firing, a forced move from K3 to B9, then a score when the piece moves from B9 to A9.\",\"representation\":\"{\\\"schema\\\":\\\"gamewatch/gw2-hypothesis@1\\\",\\\"clauses\\\":[{\\\"form\\\":\\\"law\\\",\\\"situation\\\":\\\"effect-entry\\\",\\\"when\\\":{\\\"op\\\":\\\"eq\\\",\\\"args\\\":[{\\\"op\\\":\\\"field\\\",\\\"name\\\":\\\"effect\\\"},{\\\"op\\\":\\\"const\\\",\\\"value\\\":\\\"Teleport\\\"}]},\\\"expect\\\":[{\\\"field\\\":\\\"fired\\\",\\\"equals\\\":{\\\"op\\\":\\\"const\\\",\\\"value\\\":true}}]}]}\",\"confidence\":\"medium\",\"competingWith\":\"\",\"evidence\":\"M-22e2f2 turn 1.\",\"abstainScope\":\"\",\"nonce\":\"eff917032b3c1c4e\"}"
+   },
+   "verificationStatus": "consistent with discovery evidence",
+   "coverage": {
+    "discovery": {
+     "k": 138,
+     "n": 1945
+    },
+    "heldout": {
+     "k": 75,
+     "n": 914
+    },
+    "unit": "situations to which a submitted clause applies ÷ situations"
+   },
+   "representations": [
+    {
+     "representation": "9923abca63235169d05b7c15f08f725f9c5f961350b766a63d11e48c98dc9b9f",
+     "structured": {
+      "clauses": [
+       {
+        "expect": [
+         {
+          "equals": {
+           "op": "const",
+           "value": true
+          },
+          "field": "fired"
+         }
+        ],
+        "form": "law",
+        "situation": "effect-entry",
+        "when": {
+         "args": [
+          {
+           "name": "effect",
+           "op": "field"
+          },
+          {
+           "op": "const",
+           "value": "Teleport"
+          }
+         ],
+         "op": "eq"
+        }
+       }
+      ],
+      "schema": "gamewatch/gw2-hypothesis@1"
+     },
+     "origin": "submitter",
+     "author": "agent:kane-cli",
+     "fidelityDeclared": "faithful",
+     "fidelityChecked": false,
+     "status": "represented",
+     "byBuild": [
+      {
+       "build": "build-06b9",
+       "label": "QX-41",
+       "clauses": [
+        {
+         "clause": 0,
+         "situation": "effect-entry",
+         "discovery": {
+          "applicable": 74,
+          "evaluated": 74,
+          "fullySupported": 74,
+          "partial": 0,
+          "counterexamples": 0,
+          "outcomeChecks": {
+           "matching": 74,
+           "contradicting": 0,
+           "unknown": 0,
+           "unpredicted": 0,
+           "inconclusive": 0
+          },
+          "excluded": {
+           "not applicable (condition false)": 391,
+           "missing input (effect)": 6
+          },
+          "listedCounterexamples": []
+         },
+         "heldout": {
+          "applicable": 34,
+          "evaluated": 34,
+          "fullySupported": 34,
+          "partial": 0,
+          "counterexamples": 0,
+          "outcomeChecks": {
+           "matching": 34,
+           "contradicting": 0,
+           "unknown": 0,
+           "unpredicted": 0,
+           "inconclusive": 0
+          },
+          "excluded": {
+           "not applicable (condition false)": 189,
+           "missing input (effect)": 2
+          },
+          "listedCounterexamples": []
+         }
+        }
+       ]
+      },
+      {
+       "build": "build-3caf",
+       "label": "QX-73",
+       "clauses": [
+        {
+         "clause": 0,
+         "situation": "effect-entry",
+         "discovery": {
+          "applicable": 64,
+          "evaluated": 64,
+          "fullySupported": 64,
+          "partial": 0,
+          "counterexamples": 0,
+          "outcomeChecks": {
+           "matching": 64,
+           "contradicting": 0,
+           "unknown": 0,
+           "unpredicted": 0,
+           "inconclusive": 0
+          },
+          "excluded": {
+           "not applicable (condition false)": 289,
+           "missing input (effect)": 9
+          },
+          "listedCounterexamples": []
+         },
+         "heldout": {
+          "applicable": 41,
+          "evaluated": 41,
+          "fullySupported": 41,
+          "partial": 0,
+          "counterexamples": 0,
+          "outcomeChecks": {
+           "matching": 41,
+           "contradicting": 0,
+           "unknown": 0,
+           "unpredicted": 0,
+           "inconclusive": 0
+          },
+          "excluded": {
+           "not applicable (condition false)": 127,
+           "missing input (effect)": 1
+          },
+          "listedCounterexamples": []
+         }
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "hypothesis": "e375ab7521d5e9eee3139ed93d07d8d0153cba898bcb8564f35303a7d2b846af",
+   "ref": "H-4",
+   "session": "1e26529c62afc36e",
+   "kind": "hypothesis",
+   "submitted": {
+    "statement": "The observed match ended when AI got all 3 of its pieces across; getting all 3 pieces across appears to be the win condition.",
+    "confidence": "medium",
+    "citedEvidence": "M-22e2f2 result after 53 turns.",
+    "structured": {
+     "condition": "The side has all 3 pieces across.",
+     "effect": "That side is reported as the match result winner.",
+     "trigger": "A side gets pieces across to the far edge."
+    },
+    "verbatim": "{\"at\":\"2026-11-25T20:04:34.419Z\",\"source\":\"kane\",\"nonceValid\":true,\"session\":\"1e26529c62afc36e\",\"ref\":\"H-4\",\"statement\":\"The observed match ended when AI got all 3 of its pieces across; getting all 3 pieces across appears to be the win condition.\",\"trigger\":\"A side gets pieces across to the far edge.\",\"condition\":\"The side has all 3 pieces across.\",\"effect\":\"That side is reported as the match result winner.\",\"representation\":\"\",\"confidence\":\"medium\",\"competingWith\":\"\",\"evidence\":\"M-22e2f2 result after 53 turns.\",\"abstainScope\":\"\",\"nonce\":\"eff917032b3c1c4e\"}"
+   },
+   "verificationStatus": "not machine-evaluable: free text only (no structured representation)",
+   "coverage": {
+    "discovery": {
+     "k": 0,
+     "n": 1945
+    },
+    "heldout": {
+     "k": 0,
+     "n": 914
+    },
+    "unit": "situations to which a submitted clause applies ÷ situations"
+   },
+   "representations": []
+  },
+  {
+   "hypothesis": "75fc5ba8aabba4c046d2653f24a8e9942a1fbf320ed55fe27d586eb839c2405c",
+   "ref": "H-1",
+   "session": "e95f5bc28e46532c",
+   "kind": "hypothesis",
+   "submitted": {
+    "statement": "The number of actions granted at the start of every turn differs by build: build-06b9 grants 3 actions, while build-3caf grants 4.",
+    "confidence": "high",
+    "citedEvidence": "C-0662fc step 0 (build-3caf, actionsGranted=4); C-0c6c31 step 0 (build-06b9, actionsGranted=3).",
+    "structured": {
+     "condition": "The build is build-06b9 or build-3caf",
+     "effect": "build-06b9 reports actionsGranted=3; build-3caf reports actionsGranted=4.",
+     "trigger": "At turn start"
+    },
+    "verbatim": "{\"at\":\"2026-11-25T19:38:41.117Z\",\"source\":\"kane\",\"nonceValid\":true,\"session\":\"e95f5bc28e46532c\",\"ref\":\"H-1\",\"statement\":\"The number of actions granted at the start of every turn differs by build: build-06b9 grants 3 actions, while build-3caf grants 4.\",\"trigger\":\"At turn start\",\"condition\":\"The build is build-06b9 or build-3caf\",\"effect\":\"build-06b9 reports actionsGranted=3; build-3caf reports actionsGranted=4.\",\"representation\":\"\",\"confidence\":\"high\",\"competingWith\":\"\",\"evidence\":\"C-0662fc step 0 (build-3caf, actionsGranted=4); C-0c6c31 step 0 (build-06b9, actionsGranted=3).\",\"abstainScope\":\"\",\"nonce\":\"615f93bf662054df\"}"
+   },
+   "verificationStatus": "not machine-evaluable: free text only (no structured representation)",
+   "coverage": {
+    "discovery": {
+     "k": 0,
+     "n": 1945
+    },
+    "heldout": {
+     "k": 0,
+     "n": 914
+    },
+    "unit": "situations to which a submitted clause applies ÷ situations"
+   },
+   "representations": []
+  },
+  {
+   "hypothesis": "d5764b4cd7a207e3dc223a1c7e86716d9d78f748919b0bae39181326f0039cf6",
+   "ref": "H-2",
+   "session": "e95f5bc28e46532c",
+   "kind": "hypothesis",
+   "submitted": {
+    "statement": "On build-06b9, a piece that enters a square with an opponent's Freeze effect becomes frozen for two turns; an attempted move while frozen is refused.",
+    "confidence": "high",
+    "citedEvidence": "C-0c6c31 steps 7 and 11: a3 enters J7, receives freeze/frozen:2, then move J7 left is refused.",
+    "structured": {
+     "condition": "The effect is owned by the opposing side",
+     "effect": "The engine reports status=freeze with frozen:2, and refuses a move by that piece on its next turn.",
+     "trigger": "A piece enters a square bearing a Freeze effect"
+    },
+    "verbatim": "{\"at\":\"2026-11-25T19:39:01.830Z\",\"source\":\"kane\",\"nonceValid\":true,\"session\":\"e95f5bc28e46532c\",\"ref\":\"H-2\",\"statement\":\"On build-06b9, a piece that enters a square with an opponent's Freeze effect becomes frozen for two turns; an attempted move while frozen is refused.\",\"trigger\":\"A piece enters a square bearing a Freeze effect\",\"condition\":\"The effect is owned by the opposing side\",\"effect\":\"The engine reports status=freeze with frozen:2, and refuses a move by that piece on its next turn.\",\"representation\":\"\",\"confidence\":\"high\",\"competingWith\":\"\",\"evidence\":\"C-0c6c31 steps 7 and 11: a3 enters J7, receives freeze/frozen:2, then move J7 left is refused.\",\"abstainScope\":\"\",\"nonce\":\"615f93bf662054df\"}"
+   },
+   "verificationStatus": "not machine-evaluable: free text only (no structured representation)",
+   "coverage": {
+    "discovery": {
+     "k": 0,
+     "n": 1945
+    },
+    "heldout": {
+     "k": 0,
+     "n": 914
+    },
+    "unit": "situations to which a submitted clause applies ÷ situations"
+   },
+   "representations": []
+  },
+  {
+   "hypothesis": "85546c64b5f6807f5ea77aa65da4fd4fe5c59e5d38f244489f3635a06c050abd",
+   "ref": "H-1",
+   "session": "f6003f7e3d5f8469",
+   "kind": "hypothesis",
+   "submitted": {
+    "statement": "Landing on a Freeze effect square freezes the entering piece for the turn, so a later move with that piece is refused.",
+    "confidence": "high",
+    "citedEvidence": "C-0662fc: Freeze fires on AI piece at J7, then move J7 left is refused; C-0c6c31: Freeze firing and frozen status at step 7.",
+    "structured": {},
+    "verbatim": "{\"at\":\"2026-11-25T19:49:07.617Z\",\"source\":\"kane\",\"nonceValid\":true,\"session\":\"f6003f7e3d5f8469\",\"ref\":\"H-1\",\"statement\":\"Landing on a Freeze effect square freezes the entering piece for the turn, so a later move with that piece is refused.\",\"trigger\":\"\",\"condition\":\"\",\"effect\":\"\",\"representation\":\"\",\"confidence\":\"high\",\"competingWith\":\"\",\"evidence\":\"C-0662fc: Freeze fires on AI piece at J7, then move J7 left is refused; C-0c6c31: Freeze firing and frozen status at step 7.\",\"abstainScope\":\"\",\"nonce\":\"01796200696f37ef\"}"
+   },
+   "verificationStatus": "not machine-evaluable: free text only (no structured representation)",
+   "coverage": {
+    "discovery": {
+     "k": 0,
+     "n": 1945
+    },
+    "heldout": {
+     "k": 0,
+     "n": 914
+    },
+    "unit": "situations to which a submitted clause applies ÷ situations"
+   },
+   "representations": []
+  },
+  {
+   "hypothesis": "121eb862a0cb8eccca580f730d524d595d24c56030440eaba4e04c5b5b62ffae",
+   "ref": "H-2",
+   "session": "f6003f7e3d5f8469",
+   "kind": "hypothesis",
+   "submitted": {
+    "statement": "The two observed builds differ in the initial Human turn for script S-2992: build-06b9 grants 3 actions, while build-3caf grants 4.",
+    "confidence": "high",
+    "citedEvidence": "C-0c6c31 (build-06b9), step 0: Human actionsGranted=3; C-0662fc (build-3caf), step 0: Human actionsGranted=4; both script S-2992.",
+    "structured": {},
+    "verbatim": "{\"at\":\"2026-11-25T19:49:24.821Z\",\"source\":\"kane\",\"nonceValid\":true,\"session\":\"f6003f7e3d5f8469\",\"ref\":\"H-2\",\"statement\":\"The two observed builds differ in the initial Human turn for script S-2992: build-06b9 grants 3 actions, while build-3caf grants 4.\",\"trigger\":\"\",\"condition\":\"\",\"effect\":\"\",\"representation\":\"\",\"confidence\":\"high\",\"competingWith\":\"\",\"evidence\":\"C-0c6c31 (build-06b9), step 0: Human actionsGranted=3; C-0662fc (build-3caf), step 0: Human actionsGranted=4; both script S-2992.\",\"abstainScope\":\"\",\"nonce\":\"01796200696f37ef\"}"
+   },
+   "verificationStatus": "not machine-evaluable: free text only (no structured representation)",
+   "coverage": {
+    "discovery": {
+     "k": 0,
+     "n": 1945
+    },
+    "heldout": {
+     "k": 0,
+     "n": 914
+    },
+    "unit": "situations to which a submitted clause applies ÷ situations"
+   },
+   "representations": []
+  }
+ ],
+ "partitionsRead": [
+  "discovery/observations.json",
+  "eval/eval.json",
+  "heldout/observations.json"
+ ],
+ "notes": [
+  "Statements are the agent's own words, kept verbatim and never interpreted.",
+  "Fidelity of a representation to its statement is declared by its author and not checked.",
+  "Counts are outcome checks and situations, not independent replications."
+ ]
+}

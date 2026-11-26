@@ -42,7 +42,10 @@ export type Gw2ServerOptions = {
   accessLog?: boolean; loggingDisabledReason?: string;
   /** test seams: replace the journal's append (to simulate write failures) and pause before a response is written */
   journalAppend?: (file: string, data: string) => void; beforeRespond?: (path: string, req: IncomingMessage) => Promise<void>;
+  /** Matched comparison phase 2 (D139): also keep these hypothesis-form fields. Only REVISION_FIELDS are allowed. */
+  extraHypothesisFields?: string[];
 };
+export const REVISION_FIELDS = ['revises'] as const;
 export type Gw2Server = { port: number; nonce: string; session: string; dir: string; journal: string | null; notes: string; failures: () => number; close: () => Promise<void> };
 
 export class JournalInitError extends Error {}
@@ -59,6 +62,9 @@ export function classify(page: string | null): { kind: Kind; evidenceId: string 
 
 export async function startGw2Server(o: Gw2ServerOptions): Promise<Gw2Server> {
   if (!/^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$/.test(o.exp)) throw new Error(`invalid experiment id: ${o.exp}`);
+  const extra = o.extraHypothesisFields ?? [];
+  for (const f of extra) if (!(REVISION_FIELDS as readonly string[]).includes(f)) throw new Error(`hypothesis field ${f} cannot be added (allowed: ${REVISION_FIELDS.join(', ')})`);
+  const hypFields = [...HYPOTHESIS_FIELDS, ...extra];
   const out = assertWritableOutput(o.out);
   const NONCE = randomBytes(8).toString('hex'), SESSION = randomBytes(8).toString('hex');
   const dir = assertWritableOutput(join(out, 'sessions', SESSION));
@@ -123,7 +129,7 @@ export async function startGw2Server(o: Gw2ServerOptions): Promise<Gw2Server> {
         // P3: stored exactly as submitted (allow-listed fields only), never validated away, never overwritten. The
         // session-local reference H-<n> lets the submitter name competing hypotheses; the server's ordering is the
         // journal's hypothesis event, joined by hypIndex and lineSha256.
-        const f = Object.fromEntries([...new URLSearchParams(body)].filter(([k]) => HYPOTHESIS_FIELDS.includes(k)));
+        const f = Object.fromEntries([...new URLSearchParams(body)].filter(([k]) => hypFields.includes(k)));
         const nonceValid = f.nonce === NONCE, hypIndex = hypCount++, ref = `H-${hypIndex + 1}`; // counted even when logging is off
         const line = JSON.stringify({ at: new Date().toISOString(), source: label, nonceValid, session: SESSION, ref, ...f });
         mkdirSync(dir, { recursive: true });
