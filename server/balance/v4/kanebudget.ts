@@ -20,9 +20,9 @@
 import { existsSync, readFileSync, appendFileSync, mkdirSync } from 'node:fs';
 import { dirname } from 'node:path';
 
-// GW2 P7 pilot (operator authorization 2026-11-25 17:13 UTC, D109): opened for the three pilot run ids only (PAID_RESEARCH_SCOPE),
-// every approval check kept; restored to 'disabled' in a separate commit when the pilot completes or stops.
-export const PAID_RESEARCH_EXECUTION: 'disabled' | 'per-run-approval' = 'per-run-approval';
+// Restored to 'disabled' after the GW2 P7 pilot completed (3/3 sessions, 2026-11-25; D111). It was 'per-run-approval' only for
+// GW2-P7-pilot-1..3 (D109, commit c46ff7e). Re-opening needs a new written operator authorization and its own commit.
+export const PAID_RESEARCH_EXECUTION: 'disabled' | 'per-run-approval' = 'disabled';
 /**
  * Which run ids a 'per-run-approval' gate may serve (GW2 P7, D109): only the three authorized P7 pilot runs. Unrelated
  * research or production calls are refused even while the gate is open. Tests may inject another scope (Deps.scope).

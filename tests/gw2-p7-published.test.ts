@@ -64,9 +64,19 @@ test('integrity of the published copy: everything passes except the checks that 
     try { node(['gamewatch/gw2/p6-steps.ts', 'integrity', join(tmp, 'int.json'), join(tmp, 'exp'), '--record', join(tmp, 'rec')]); } catch { /* exits non-zero by design */ }
     const checks: { check: string; ok: boolean; detail?: string }[] = JSON.parse(readFileSync(join(tmp, 'int.json'), 'utf8')).checks;
     const failed = checks.filter(c => !c.ok);
-    assert.deepEqual(failed.map(c => c.check).sort(), ['hypothesis freeze', 'judgment graph', 'raw seal 1e26529c62afc36e', 'raw seal e95f5bc28e46532c', 'raw seal f6003f7e3d5f8469', 'representation seal']);
-    for (const c of failed) for (const part of String(c.detail).split(/;\s*/)) assert.match(part, /(stdout\.ndjson|stderr\.txt|meta\.json) (does not match its recorded sha256|differs from its raw seal)/, `${c.check}: ${part}`);
-    assert.equal(checks.filter(c => c.ok).length, 14);
+    const redactionFailures = failed.filter(c => c.check !== 'frozen pre-registration unchanged');
+    assert.deepEqual(redactionFailures.map(c => c.check).sort(), ['hypothesis freeze', 'judgment graph', 'raw seal 1e26529c62afc36e', 'raw seal e95f5bc28e46532c', 'raw seal f6003f7e3d5f8469', 'representation seal']);
+    for (const c of redactionFailures) for (const part of String(c.detail).split(/;\s*/)) assert.match(part, /(stdout\.ndjson|stderr\.txt|meta\.json) (does not match its recorded sha256|differs from its raw seal)/, `${c.check}: ${part}`);
+    // After the pilot the gate file was restored to 'disabled' (D111), so the pre-registration, which froze it at the pilot
+    // commit c066db2, now differs in exactly that file, and its frozen hash is the file as it was at c066db2.
+    const prereg = failed.find(c => c.check === 'frozen pre-registration unchanged');
+    const gate = 'server/balance/v4/kanebudget.ts';
+    const atPilot = sha(execFileSync('git', ['show', `c066db2:${gate}`], { cwd: ROOT }));
+    const frozen = JSON.parse(readFileSync(join(ROOT, DEST, 'external-record/PREREGISTRATION.json'), 'utf8'));
+    assert.equal(JSON.stringify(frozen).includes(atPilot), true, 'the pre-registration froze the gate file as it was at c066db2');
+    if (sha(readFileSync(join(ROOT, gate))) === atPilot) assert.equal(prereg, undefined);
+    else assert.equal(prereg?.detail, `${gate} changed since the pre-registration`);
+    assert.equal(checks.filter(c => c.ok).length, prereg ? 13 : 14);
     assert.ok(existsSync(join(tmp, 'rec', 'execution-ledger.ndjson')));
   } finally { rmSync(tmp, { recursive: true, force: true }); }
 });

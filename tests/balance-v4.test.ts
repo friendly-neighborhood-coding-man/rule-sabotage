@@ -294,10 +294,8 @@ test('credit safety: disabled by default, then every pre-call rule, exceedance, 
   const ap = (o: Record<string, unknown> = {}) => ({ runId: 'R1', approvedBy: 'op', approvedAt: 'now', maxCalls: 1 as const, maxSteps: 20, ceilingCredits: 80, acknowledgesNoHardCap: true as const, ...o }) as import('../server/balance/v4/kanebudget.ts').PaidApproval;
   const plan = { maxSteps: 20, timeoutS: 600 };
   const refused = (p: Promise<unknown>, re: RegExp) => assert.rejects(p, (e: Error) => e instanceof KB.PaidCallRefused && re.test(e.message));
-  // disabled in this workstream, except while the GW2 P7 pilot holds it open for its three run ids only (D109)
-  const pilotOpen = KB.PAID_RESEARCH_EXECUTION === 'per-run-approval' && String(KB.PAID_RESEARCH_SCOPE) === String(/^GW2-P7-pilot-[123]$/);
-  assert.ok(KB.PAID_RESEARCH_EXECUTION === 'disabled' || pilotOpen, 'disabled, or open only for the P7 pilot run ids');
-  await refused(KB.runPaidCall(ap(), plan, { ...deps(), mode: undefined }), pilotOpen ? /outside the authorized scope/ : /disabled/);
+  assert.equal(KB.PAID_RESEARCH_EXECUTION, 'disabled', 'disabled in this workstream');
+  await refused(KB.runPaidCall(ap(), plan, { ...deps(), mode: undefined }), /disabled/);
   await refused(KB.runPaidCall(null, plan, deps()), /no per-run approval/);
   await refused(KB.runPaidCall(ap({ acknowledgesNoHardCap: false }), plan, deps()), /not a hard cap/);
   await refused(KB.runPaidCall(ap(), plan, deps({ env: {} })), /KANE_PAID_RUN_AUTH/);
