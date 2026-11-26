@@ -1,0 +1,458 @@
+{
+ "schema": "gamewatch/gw2-p8-reproduction@1",
+ "source": {
+  "published": "evidence/gw2/p7-pilot",
+  "note": "published redacted copy only; originals not needed; evaluation gate not opened; nothing written under the published evidence"
+ },
+ "ok": true,
+ "checks": [
+  {
+   "check": "external execution ledger verifies as a hash chain",
+   "ok": true
+  },
+  {
+   "check": "external ledger events",
+   "ok": true
+  },
+  {
+   "check": "FREEZE.json equals its external anchor",
+   "ok": true
+  },
+  {
+   "check": "REPRESENTATIONS.json equals its external anchor",
+   "ok": true
+  },
+  {
+   "check": "graph prefix at the freeze equals its external anchor",
+   "ok": true
+  },
+  {
+   "check": "graph prefix at the seal equals its external anchor",
+   "ok": true
+  },
+  {
+   "check": "graph at the integrity checkpoint equals its external anchor",
+   "ok": true
+  },
+  {
+   "check": "judgment graph structure and hash chain (references to redacted raw files not re-hashed)",
+   "ok": true
+  },
+  {
+   "check": "every published file matches its published hash",
+   "ok": true
+  },
+  {
+   "check": "raw seal e95f5bc28e46532c: equals its external anchor",
+   "ok": true
+  },
+  {
+   "check": "raw seal e95f5bc28e46532c: original hashes in the redaction record equal the seal",
+   "ok": true
+  },
+  {
+   "check": "raw seal f6003f7e3d5f8469: equals its external anchor",
+   "ok": true
+  },
+  {
+   "check": "raw seal f6003f7e3d5f8469: original hashes in the redaction record equal the seal",
+   "ok": true
+  },
+  {
+   "check": "raw seal 1e26529c62afc36e: equals its external anchor",
+   "ok": true
+  },
+  {
+   "check": "raw seal 1e26529c62afc36e: original hashes in the redaction record equal the seal",
+   "ok": true
+  },
+  {
+   "check": "graph provenance of db633e8d0d2c: original stdout hash",
+   "ok": true
+  },
+  {
+   "check": "graph provenance of eda7ae35ab80: original stdout hash",
+   "ok": true
+  },
+  {
+   "check": "graph provenance of 0328618b50e2: original stdout hash",
+   "ok": true
+  },
+  {
+   "check": "graph provenance of e375ab7521d5: original stdout hash",
+   "ok": true
+  },
+  {
+   "check": "graph provenance of 75fc5ba8aabb: original stdout hash",
+   "ok": true
+  },
+  {
+   "check": "graph provenance of d5764b4cd7a2: original stdout hash",
+   "ok": true
+  },
+  {
+   "check": "graph provenance of 85546c64b5f6: original stdout hash",
+   "ok": true
+  },
+  {
+   "check": "graph provenance of 121eb862a0cb: original stdout hash",
+   "ok": true
+  },
+  {
+   "check": "graph provenance of 9da70fa4f20f: original stdout hash",
+   "ok": true
+  },
+  {
+   "check": "graph provenance of 38f5dfeca668: original stdout hash",
+   "ok": true
+  },
+  {
+   "check": "graph provenance of 9923abca6323: original stdout hash",
+   "ok": true
+  },
+  {
+   "check": "partition files match the manifests bound by the freeze",
+   "ok": true
+  },
+  {
+   "check": "held-out evaluation re-derived: hypotheses equal heldout-2.json",
+   "ok": true
+  },
+  {
+   "check": "held-out evaluation re-derived: columns equal heldout-2.json",
+   "ok": true
+  },
+  {
+   "check": "discrimination re-derived: candidates equal discrimination-3.json",
+   "ok": true
+  },
+  {
+   "check": "discrimination re-derived: pairs equal discrimination-3.json",
+   "ok": true
+  },
+  {
+   "check": "three-way re-derived: hypotheses equal three-way-1.json",
+   "ok": true
+  },
+  {
+   "check": "three-way re-derived: implementation correctness (O↔S) equals three-way-1.json",
+   "ok": true
+  },
+  {
+   "check": "H-1 QX-41: own re-count equals the evaluator (discovery contradicted 390, held-out 114/187)",
+   "ok": true
+  },
+  {
+   "check": "H-1 QX-73: own re-count equals the evaluator (discovery contradicted 0, held-out 0/0)",
+   "ok": true
+  },
+  {
+   "check": "H-2 QX-41: own re-count equals the evaluator (discovery contradicted 0, held-out 3/2)",
+   "ok": true
+  },
+  {
+   "check": "H-2 QX-73: own re-count equals the evaluator (discovery contradicted 0, held-out 2/1)",
+   "ok": true
+  },
+  {
+   "check": "H-3 QX-41: own re-count equals the evaluator (discovery contradicted 0, held-out 34/0)",
+   "ok": true
+  },
+  {
+   "check": "H-3 QX-73: own re-count equals the evaluator (discovery contradicted 0, held-out 41/0)",
+   "ok": true
+  },
+  {
+   "check": "held-out totals 194 matching / 190 contradicting",
+   "ok": true
+  }
+ ],
+ "heldoutTotals": {
+  "matching": 194,
+  "contradicting": 190
+ },
+ "counterexamples": [
+  {
+   "hypothesis": "H-1",
+   "session": "1e26529c62afc36e",
+   "representation": "9da70fa4f20f290a99a4228881b22fc859fb26908ccf41cb25f7c5557b6447b2",
+   "openedEvidence": [
+    "C-0662fc",
+    "C-0c6c31",
+    "M-22e2f2"
+   ],
+   "byBuild": [
+    {
+     "build": "QX-41",
+     "discovery": {
+      "applicable": 628,
+      "matching": 238,
+      "contradicted": 390,
+      "contradictedInEvidenceOpenedBySession": 26,
+      "contradictedInAccessibleEvidenceNotOpened": 364,
+      "openedUnitsWithCounterexample": [
+       "M-22e2f2"
+      ],
+      "unitsWithCounterexample": 16
+     },
+     "heldout": {
+      "applicable": 301,
+      "matching": 114,
+      "contradicted": 187,
+      "alreadyExemplifiedInDiscovery": 187,
+      "absentFromDiscovery": 0,
+      "notCounterexampleInDiscoveryButValuesSeen": 0,
+      "absentCases": []
+     }
+    },
+    {
+     "build": "QX-73",
+     "discovery": {
+      "applicable": 0,
+      "matching": 0,
+      "contradicted": 0,
+      "contradictedInEvidenceOpenedBySession": 0,
+      "contradictedInAccessibleEvidenceNotOpened": 0,
+      "openedUnitsWithCounterexample": [],
+      "unitsWithCounterexample": 0
+     },
+     "heldout": {
+      "applicable": 0,
+      "matching": 0,
+      "contradicted": 0,
+      "alreadyExemplifiedInDiscovery": 0,
+      "absentFromDiscovery": 0,
+      "notCounterexampleInDiscoveryButValuesSeen": 0,
+      "absentCases": []
+     }
+    }
+   ]
+  },
+  {
+   "hypothesis": "H-2",
+   "session": "1e26529c62afc36e",
+   "representation": "38f5dfeca66809ae7cef9468131de763c8ef7796a9b046cb6f12411ac626c5b8",
+   "openedEvidence": [
+    "C-0662fc",
+    "C-0c6c31",
+    "M-22e2f2"
+   ],
+   "byBuild": [
+    {
+     "build": "QX-41",
+     "discovery": {
+      "applicable": 7,
+      "matching": 7,
+      "contradicted": 0,
+      "contradictedInEvidenceOpenedBySession": 0,
+      "contradictedInAccessibleEvidenceNotOpened": 0,
+      "openedUnitsWithCounterexample": [],
+      "unitsWithCounterexample": 0
+     },
+     "heldout": {
+      "applicable": 5,
+      "matching": 3,
+      "contradicted": 2,
+      "alreadyExemplifiedInDiscovery": 0,
+      "absentFromDiscovery": 2,
+      "notCounterexampleInDiscoveryButValuesSeen": 0,
+      "absentCases": [
+       {
+        "situation": "C-0de271/s15/e1",
+        "class": "absent-from-discovery: input values never present in the applicable discovery situations",
+        "novelInputs": [
+         "pieceShieldedBefore=true"
+        ]
+       },
+       {
+        "situation": "C-0de271/s18/e1",
+        "class": "absent-from-discovery: input values never present in the applicable discovery situations",
+        "novelInputs": [
+         "pieceShieldedBefore=true"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "build": "QX-73",
+     "discovery": {
+      "applicable": 6,
+      "matching": 6,
+      "contradicted": 0,
+      "contradictedInEvidenceOpenedBySession": 0,
+      "contradictedInAccessibleEvidenceNotOpened": 0,
+      "openedUnitsWithCounterexample": [],
+      "unitsWithCounterexample": 0
+     },
+     "heldout": {
+      "applicable": 3,
+      "matching": 2,
+      "contradicted": 1,
+      "alreadyExemplifiedInDiscovery": 0,
+      "absentFromDiscovery": 1,
+      "notCounterexampleInDiscoveryButValuesSeen": 0,
+      "absentCases": [
+       {
+        "situation": "C-b48898/s15/e1",
+        "class": "absent-from-discovery: input values never present in the applicable discovery situations",
+        "novelInputs": [
+         "pieceShieldedBefore=true"
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "hypothesis": "H-3",
+   "session": "1e26529c62afc36e",
+   "representation": "9923abca63235169d05b7c15f08f725f9c5f961350b766a63d11e48c98dc9b9f",
+   "openedEvidence": [
+    "C-0662fc",
+    "C-0c6c31",
+    "M-22e2f2"
+   ],
+   "byBuild": [
+    {
+     "build": "QX-41",
+     "discovery": {
+      "applicable": 74,
+      "matching": 74,
+      "contradicted": 0,
+      "contradictedInEvidenceOpenedBySession": 0,
+      "contradictedInAccessibleEvidenceNotOpened": 0,
+      "openedUnitsWithCounterexample": [],
+      "unitsWithCounterexample": 0
+     },
+     "heldout": {
+      "applicable": 34,
+      "matching": 34,
+      "contradicted": 0,
+      "alreadyExemplifiedInDiscovery": 0,
+      "absentFromDiscovery": 0,
+      "notCounterexampleInDiscoveryButValuesSeen": 0,
+      "absentCases": []
+     }
+    },
+    {
+     "build": "QX-73",
+     "discovery": {
+      "applicable": 64,
+      "matching": 64,
+      "contradicted": 0,
+      "contradictedInEvidenceOpenedBySession": 0,
+      "contradictedInAccessibleEvidenceNotOpened": 0,
+      "openedUnitsWithCounterexample": [],
+      "unitsWithCounterexample": 0
+     },
+     "heldout": {
+      "applicable": 41,
+      "matching": 41,
+      "contradicted": 0,
+      "alreadyExemplifiedInDiscovery": 0,
+      "absentFromDiscovery": 0,
+      "notCounterexampleInDiscoveryButValuesSeen": 0,
+      "absentCases": []
+     }
+    }
+   ]
+  }
+ ],
+ "specDeviations": [
+  {
+   "rule": "R14",
+   "byPartition": [
+    {
+     "partition": "discovery",
+     "build": "QX-73",
+     "contradictingOutcomeChecks": 2,
+     "units": 1,
+     "unitsSource": "law clauses: units re-counted here",
+     "openedBySessions": {}
+    },
+    {
+     "partition": "heldout",
+     "build": "QX-73",
+     "contradictingOutcomeChecks": 4,
+     "units": 2,
+     "unitsSource": "law clauses: units re-counted here"
+    }
+   ]
+  },
+  {
+   "rule": "R3",
+   "byPartition": [
+    {
+     "partition": "discovery",
+     "build": "QX-73",
+     "contradictingOutcomeChecks": 222,
+     "units": 30,
+     "unitsSource": "law clauses: units re-counted here",
+     "openedBySessions": {
+      "C-0662fc": [
+       "1e26529c62afc36e",
+       "e95f5bc28e46532c",
+       "f6003f7e3d5f8469"
+      ]
+     }
+    },
+    {
+     "partition": "heldout",
+     "build": "QX-73",
+     "contradictingOutcomeChecks": 98,
+     "units": 16,
+     "unitsSource": "law clauses: units re-counted here"
+    }
+   ]
+  },
+  {
+   "rule": "R7",
+   "byPartition": [
+    {
+     "partition": "discovery",
+     "build": "QX-73",
+     "contradictingOutcomeChecks": 6,
+     "units": 2,
+     "unitsSource": "invariance clause: units from the committed three-way witnesses",
+     "openedBySessions": {}
+    },
+    {
+     "partition": "heldout",
+     "build": "QX-73",
+     "contradictingOutcomeChecks": 4,
+     "units": 1,
+     "unitsSource": "invariance clause: units from the committed three-way witnesses"
+    }
+   ]
+  },
+  {
+   "rule": "R8",
+   "byPartition": [
+    {
+     "partition": "discovery",
+     "build": "QX-73",
+     "contradictingOutcomeChecks": 1,
+     "units": 1,
+     "unitsSource": "law clauses: units re-counted here",
+     "openedBySessions": {}
+    },
+    {
+     "partition": "heldout",
+     "build": "QX-73",
+     "contradictingOutcomeChecks": 1,
+     "units": 1,
+     "unitsSource": "law clauses: units re-counted here"
+    }
+   ]
+  }
+ ],
+ "definitions": {
+  "contradictedInEvidenceOpenedBySession": "discovery counterexamples inside a case or match page that the submitting session opened (access journal, HTTP 200)",
+  "contradictedInAccessibleEvidenceNotOpened": "discovery counterexamples in pages that were served to every session but this session did not open",
+  "alreadyExemplifiedInDiscovery": "held-out counterexample whose behavioural input values all occur in applicable discovery situations, where discovery already had counterexamples to the same clause",
+  "absentFromDiscovery": "held-out counterexample with at least one behavioural input value (fields other than build, turn) that never occurs among the discovery situations to which the clause applies, same build",
+  "notCounterexampleInDiscoveryButValuesSeen": "held-out counterexample whose input values each occurred in discovery, while the clause had no discovery counterexample"
+ }
+}
