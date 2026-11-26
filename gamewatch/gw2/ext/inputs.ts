@@ -4,32 +4,39 @@
  * Every partition read goes through a reader that is created with an explicit allow-list of partitions. A partition
  * outside the list is refused before any byte is read (AccessRefused); a file is returned only if its bytes match its
  * partition manifest, and that manifest matches the one bound by the freeze (or, for an optional `feedback` partition,
- * one that declares itself as feedback evidence and uses discovery build ids only). Every read is recorded, so tests
+ * one that declares itself as feedback evidence, uses discovery build ids only, and whose manifest hash the externally
+ * anchored pre-registration lists: anchored.ts feedbackBinding, D130). Every read is recorded, so tests
  * can check which partitions an output touched.
  *
- * Hypotheses and representations come from the judgment graph PREFIX up to the representation seal: evaluation nodes
- * appended afterwards (which carry held-out results) are never loaded here.
+ * Hypotheses and representations come from the judgment graph PREFIX up to the representation seal, authenticated
+ * against the external record (anchored.ts): evaluation nodes appended afterwards are never read, loaded or parsed.
  */
 import { readFileSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { createHash } from 'node:crypto';
-import { verify as verifyGraph, type Node } from '../judgments.ts';
+import { type Node } from '../judgments.ts';
+import { authenticatedPrefix, feedbackBinding } from './anchored.ts';
+import { AccessRefused } from './errors.ts';
 import { extractSituations, alignBuilds, type Situation } from '../situations.ts';
 import { checkRepresentation } from '../hypothesis.ts';
 
 export type Partition = 'discovery' | 'heldout' | 'spec' | 'eval' | 'feedback';
-export class AccessRefused extends Error {}
+export { AccessRefused };
 const sha = (b: Buffer | string) => createHash('sha256').update(b).digest('hex');
 const json = (f: string) => JSON.parse(readFileSync(f, 'utf8'));
 
-export function partitionReader(exp: string, allowed: readonly Partition[]) {
+export function partitionReader(exp: string, allowed: readonly Partition[], o: { rec?: string } = {}) {
   const freeze = json(join(exp, 'hypotheses/FREEZE.json')), reads: string[] = [];
+  let feedbackBound = false;
   const read = (p: Partition, file: string): string => {
     if (!allowed.includes(p)) throw new AccessRefused(`partition ${p} is not authorized for this output (allowed: ${allowed.join(', ') || 'none'})`);
     const dir = join(exp, 'partitions', p), mf = join(dir, 'MANIFEST.json');
     if (!existsSync(mf)) throw new AccessRefused(`${p}: no MANIFEST.json`);
     const m = json(mf);
-    if (p === 'feedback') { if (m.role !== 'feedback') throw new AccessRefused('feedback: the manifest does not declare role "feedback"'); }
+    if (p === 'feedback') {
+      if (m.role !== 'feedback') throw new AccessRefused('feedback: the manifest does not declare role "feedback"');
+      if (!feedbackBound) { feedbackBinding(exp, o.rec); feedbackBound = true; } // D130: bound by the anchored pre-registration
+    }
     else if (sha(readFileSync(mf)) !== freeze.manifests?.[p]) throw new AccessRefused(`${p}/MANIFEST.json is not the manifest bound by the freeze`);
     if (!m.files || !Object.prototype.hasOwnProperty.call(m.files, file)) throw new AccessRefused(`${p}/${file}: not in the partition manifest`);
     const buf = readFileSync(join(dir, file));
@@ -47,12 +54,17 @@ export type Hyp = {
   representations: { id: string; origin: string; fidelity: string; author: string; representation: unknown; status: string; clauses: any[] }[];
 };
 
-/** Frozen hypotheses and abstentions with their sealed representations, from the graph prefix at the seal. */
-export function loadSubmissions(exp: string): { hyps: Hyp[]; graphPrefix: number; frozen: number } {
-  const freeze = json(join(exp, 'hypotheses/FREEZE.json')), seal = json(join(exp, 'hypotheses/REPRESENTATIONS.json'));
-  const g = verifyGraph(join(exp, 'judgments.ndjson'), { checkRefs: false });
-  if (!g.ok) throw new Error(`judgment graph fails verification at line ${g.firstBadLine}`);
-  const cutoff = Number(seal.graphHead?.count ?? 0), nodes: Node[] = g.nodes.slice(0, cutoff), byId = new Map(nodes.map(n => [n.id, n]));
+/**
+ * Frozen hypotheses and abstentions with their sealed representations, from the AUTHENTICATED graph prefix at the seal
+ * (anchored.ts, D129): only the first N lines are read, N anchored externally; no later node is loaded or parsed.
+ */
+export function loadSubmissions(exp: string, rec?: string): { hyps: Hyp[]; graphPrefix: number; frozen: number; prefixBytes: number } {
+  const p = authenticatedPrefix(exp, rec);
+  return { ...submissionsFromPrefix(p.nodes, p.freeze, p.seal), graphPrefix: p.count, prefixBytes: p.bytesRead };
+}
+
+export function submissionsFromPrefix(nodes: Node[], freeze: any, seal: any): { hyps: Hyp[]; frozen: number } {
+  const byId = new Map(nodes.map(n => [n.id, n]));
   const frozen = new Set<string>(freeze.hypotheses.map((h: any) => h.id));
   const hyps = nodes.filter(n => frozen.has(n.id)).map(n => {
     const b = n.body as any;
@@ -64,7 +76,8 @@ export function loadSubmissions(exp: string): { hyps: Hyp[]; graphPrefix: number
         return { id: r.id, origin: r.origin, fidelity: rb.fidelity?.declared ?? 'unknown', author: `${x.author.kind}:${x.author.id}`, representation: rb.representation, status: chk.status, clauses: chk.clauses.flatMap(c => c.ok ? [c.clause] : []) };
       }) };
   });
-  return { hyps, graphPrefix: cutoff, frozen: frozen.size };
+  if (hyps.length !== frozen.size) throw new Error(`the graph prefix holds ${hyps.length} of ${frozen.size} frozen submissions`);
+  return { hyps, frozen: frozen.size };
 }
 
 export type Sits = Partial<Record<'discovery' | 'heldout' | 'feedback', Situation[]>>;

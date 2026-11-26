@@ -12,7 +12,8 @@ import { partitionReader, loadSubmissions, AccessRefused, type Hyp } from '../ga
 import { behaviourCore, buildBehaviour } from '../gamewatch/gw2/ext/behaviour.ts';
 import { notificationsCore, buildNotifications, CLASSIFICATION } from '../gamewatch/gw2/ext/notifications.ts';
 import { contradictionsCore, buildContradictions } from '../gamewatch/gw2/ext/contradictions.ts';
-import { buildAgentFeedback, renderAgentFeedback, AGENT_FEEDBACK_ENABLED } from '../gamewatch/gw2/ext/feedback.ts';
+import { activateAgentFeedback, AGENT_FEEDBACK_ENABLED } from '../gamewatch/gw2/ext/feedback.ts';
+import { buildFeedbackForTest as buildAgentFeedback, previewForTest as renderAgentFeedback } from '../gamewatch/gw2/ext/feedback-testonly.ts';
 import { buildAll, render, safeDashboardDir } from '../gamewatch/gw2/ext/dashboard.ts';
 import { PLAN, ARMS, MANIPULATED } from '../gamewatch/gw2/ext/control-plan.ts';
 import { PAID_RESEARCH_EXECUTION } from '../server/balance/v4/kanebudget.ts';
@@ -65,9 +66,9 @@ test('access boundaries: readers refuse partitions outside their allow-list, tam
 
 test('agent feedback: disabled by default; only discovery/feedback evidence; never held-out, spec, eval labels or a defect label', () => {
   assert.equal(AGENT_FEEDBACK_ENABLED, false);
-  assert.throws(() => buildAgentFeedback(EXP, { session: '1e26529c62afc36e' }), /not enabled/);
-  for (const p of ['heldout', 'spec', 'eval'] as any[]) assert.throws(() => buildAgentFeedback(EXP, { session: '1e26529c62afc36e', enable: true, partitions: ['discovery', p] }), /never authorized/);
-  const f = buildAgentFeedback(EXP, { session: '1e26529c62afc36e', enable: true });
+  assert.throws(() => activateAgentFeedback(EXP, { session: '1e26529c62afc36e' }), /not enabled/); // V1: runtime activation is the only non-test path
+  for (const p of ['heldout', 'spec', 'eval'] as any[]) assert.throws(() => buildAgentFeedback(EXP, { session: '1e26529c62afc36e', partitions: ['discovery', p] }), /never authorized/);
+  const f = buildAgentFeedback(EXP, { session: '1e26529c62afc36e' });
   assert.deepEqual(f.partitionsRead, ['discovery/observations.json']);
   const text = JSON.stringify(f) + renderAgentFeedback(f);
   for (const u of heldoutUnits) assert.ok(!text.includes(u), `held-out unit ${u} disclosed`);
@@ -77,27 +78,12 @@ test('agent feedback: disabled by default; only discovery/feedback evidence; nev
   assert.equal(f.items.length, 390, 'H-1 discovery counterexamples only');
   assert.ok(f.items.every(i => i.evidence === 'discovery' && i.yourHypothesis === 'H-1'));
   assert.deepEqual(f.withoutCheck, [{ yourHypothesis: 'H-4', reason: 'no structured representation: free text is not checked' }]);
-  assert.equal(buildAgentFeedback(EXP, { session: 'e95f5bc28e46532c', enable: true }).items.length, 0);
-  assert.deepEqual(buildAgentFeedback(EXP, { session: 'e95f5bc28e46532c', enable: true }).withoutCheck.map(x => x.yourHypothesis), ['H-1', 'H-2']);
+  assert.equal(buildAgentFeedback(EXP, { session: 'e95f5bc28e46532c' }).items.length, 0);
+  assert.deepEqual(buildAgentFeedback(EXP, { session: 'e95f5bc28e46532c' }).withoutCheck.map(x => x.yourHypothesis), ['H-1', 'H-2']);
 });
 
-test('agent feedback partition: must declare itself and use only builds the agent saw', () => {
-  const d = mkdtempSync(join(tmpdir(), 'gw2-ext-fb-'));
-  try {
-    cpSync(EXP, join(d, 'exp'), { recursive: true });
-    const fb = join(d, 'exp/partitions/feedback'); mkdirSync(fb);
-    const obs = JSON.parse(readFileSync(join(EXP, 'partitions/discovery/observations.json'), 'utf8'));
-    const write = (o: any, role: string | null) => { const t = JSON.stringify(o); writeFileSync(join(fb, 'observations.json'), t); writeFileSync(join(fb, 'MANIFEST.json'), JSON.stringify({ ...(role ? { role } : {}), files: { 'observations.json': createHash('sha256').update(t).digest('hex') } })); };
-    write(obs, null);
-    assert.throws(() => buildAgentFeedback(join(d, 'exp'), { session: '1e26529c62afc36e', enable: true, partitions: ['discovery', 'feedback'] }), /role "feedback"/);
-    write({ ...obs, builds: [...obs.builds, 'build-c1dc'] }, 'feedback');
-    assert.throws(() => buildAgentFeedback(join(d, 'exp'), { session: '1e26529c62afc36e', enable: true, partitions: ['discovery', 'feedback'] }), /builds the agent never saw/);
-    write(obs, 'feedback');
-    const f = buildAgentFeedback(join(d, 'exp'), { session: '1e26529c62afc36e', enable: true, partitions: ['discovery', 'feedback'] });
-    assert.deepEqual(f.partitionsRead, ['discovery/observations.json', 'feedback/observations.json']);
-    assert.equal(f.items.filter(i => i.evidence === 'feedback').length, 390);
-  } finally { rmSync(d, { recursive: true, force: true }); }
-});
+// The feedback-partition test moved to tests/gw2-ext-v1.test.ts (V1, D130): a feedback partition now also needs the
+// externally anchored pre-registration to bind its manifest, so the test builds such a record; its V0 assertions are kept there.
 
 test('the operator dashboard cannot reach a discovery session', () => {
   const site = join(EXP, 'partitions/discovery/site');
