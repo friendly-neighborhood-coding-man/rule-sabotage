@@ -20,9 +20,9 @@
  * The output is deterministic (no timestamps) so the committed REPRODUCTION.json can be checked byte for byte.
  */
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
-import { join, dirname } from 'node:path';
+import { join, dirname, resolve } from 'node:path';
 import { createHash } from 'node:crypto';
-import { ROOT } from './paths.ts';
+import { ROOT, assertWritableOutput, repoRelative } from './paths.ts';
 import { verify as verifyGraph } from './judgments.ts';
 import { readExecLedger } from './p7-exec.ts';
 import { extractSituations, alignBuilds, SITUATION_FIELDS, type Situation } from './situations.ts';
@@ -223,9 +223,32 @@ export function run() {
     } };
 }
 
+/**
+ * P8 correction 1 (D117): the --out path can never overwrite evidence. Inside the repository it must be a NEW file under
+ * evidence/gw2/p8/ (never the published P7 copy, never a frozen GW1 path); anywhere it must not exist yet (exclusive create).
+ */
+export const OUTPUT_DIR = 'evidence/gw2/p8/';
+export function safeOutputPath(f: string): string {
+  const abs = resolve(f), rel = repoRelative(abs);
+  if (rel !== null) {
+    if (!rel.startsWith(OUTPUT_DIR)) throw new Error(`refusing --out ${rel}: inside the repository, reproduction output may only be a new file under ${OUTPUT_DIR}`);
+    assertWritableOutput(abs);
+  }
+  if (existsSync(abs)) throw new Error(`refusing --out ${rel ?? abs}: the file exists; reproduction output never overwrites (write a new file and compare)`);
+  return abs;
+}
+export function writeOutput(f: string, text: string) {
+  const abs = safeOutputPath(f);
+  mkdirSync(dirname(abs), { recursive: true });
+  writeFileSync(abs, text, { flag: 'wx' });
+  return abs;
+}
+
 if (process.argv[1]?.replace(/\\/g, '/').endsWith('gw2/p8-reproduce.ts')) {
-  const i = process.argv.indexOf('--out'), out = run(), text = JSON.stringify(out, null, 1) + '\n';
-  if (i > 0) { const f = process.argv[i + 1]; mkdirSync(dirname(f), { recursive: true }); writeFileSync(f, text); }
+  const i = process.argv.indexOf('--out');
+  if (i > 0) safeOutputPath(process.argv[i + 1]); // refuse before any work
+  const out = run(), text = JSON.stringify(out, null, 1) + '\n';
+  if (i > 0) writeOutput(process.argv[i + 1], text);
   for (const c of out.checks) console.log(`${c.ok ? 'ok  ' : 'FAIL'} ${c.check}${c.detail ? ` (${c.detail})` : ''}`);
   console.log(out.ok ? `reproduction: OK (${out.checks.length} checks)` : 'reproduction: FAILED');
   process.exitCode = out.ok ? 0 : 1;

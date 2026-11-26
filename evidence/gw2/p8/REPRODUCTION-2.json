@@ -1,0 +1,364 @@
+{
+ "schema": "gamewatch/gw2-p8-reproduction@2",
+ "corrects": {
+  "file": "evidence/gw2/p8/REPRODUCTION.json",
+  "schema": "gamewatch/gw2-p8-reproduction@1",
+  "kept": "unchanged; this file adds corrected analyses and replaces no number in it"
+ },
+ "reproductionOk": true,
+ "reproductionChecks": 40,
+ "corrections": [
+  {
+   "id": "D117",
+   "what": "the reproduction CLI refuses any --out inside the repository other than a NEW file under evidence/gw2/p8/, and never overwrites an existing file"
+  },
+  {
+   "id": "D118",
+   "what": "novelty split into novel individual values and novel combinations of individually observed values, at the applicable scope and the kind scope"
+  },
+  {
+   "id": "D119",
+   "what": "page access split into delivered before submission, delivered only after submission, never delivered; delivery (HTTP 200) is not reading"
+  }
+ ],
+ "counterexamples": [
+  {
+   "hypothesis": "H-1",
+   "session": "1e26529c62afc36e",
+   "representation": "9da70fa4f20f290a99a4228881b22fc859fb26908ccf41cb25f7c5557b6447b2",
+   "submissionJournalSeq": 8,
+   "deliveredBeforeSubmission": [
+    "C-0662fc",
+    "C-0c6c31",
+    "M-22e2f2"
+   ],
+   "byBuild": [
+    {
+     "build": "QX-41",
+     "discovery": {
+      "applicable": 628,
+      "contradicted": 390,
+      "byDelivery": {
+       "delivered-before-submission": 26,
+       "never-delivered": 364
+      },
+      "unitsDeliveredBeforeSubmissionWithCounterexample": [
+       "M-22e2f2"
+      ]
+     },
+     "heldout": {
+      "applicable": 301,
+      "contradicted": 187,
+      "delivery": "never delivered: held-out pages are not served to discovery sessions",
+      "noveltyApplicableScope": {
+       "observed-combination": 187
+      },
+      "noveltyKindScope": {
+       "observed-combination": 187
+      },
+      "counterexamples": []
+     }
+    },
+    {
+     "build": "QX-73",
+     "discovery": {
+      "applicable": 0,
+      "contradicted": 0,
+      "byDelivery": {},
+      "unitsDeliveredBeforeSubmissionWithCounterexample": []
+     },
+     "heldout": {
+      "applicable": 0,
+      "contradicted": 0,
+      "delivery": "never delivered: held-out pages are not served to discovery sessions",
+      "noveltyApplicableScope": {},
+      "noveltyKindScope": {},
+      "counterexamples": []
+     }
+    }
+   ]
+  },
+  {
+   "hypothesis": "H-2",
+   "session": "1e26529c62afc36e",
+   "representation": "38f5dfeca66809ae7cef9468131de763c8ef7796a9b046cb6f12411ac626c5b8",
+   "submissionJournalSeq": 10,
+   "deliveredBeforeSubmission": [
+    "C-0662fc",
+    "C-0c6c31",
+    "M-22e2f2"
+   ],
+   "byBuild": [
+    {
+     "build": "QX-41",
+     "discovery": {
+      "applicable": 7,
+      "contradicted": 0,
+      "byDelivery": {},
+      "unitsDeliveredBeforeSubmissionWithCounterexample": []
+     },
+     "heldout": {
+      "applicable": 5,
+      "contradicted": 2,
+      "delivery": "never delivered: held-out pages are not served to discovery sessions",
+      "noveltyApplicableScope": {
+       "novel-individual-value": 2
+      },
+      "noveltyKindScope": {
+       "novel-combination-of-observed-values": 2
+      },
+      "counterexamples": [
+       {
+        "situation": "C-0de271/s15/e1",
+        "applicableScope": {
+         "class": "novel-individual-value",
+         "individual": [
+          "pieceShieldedBefore=true"
+         ],
+         "combinations": [],
+         "unknownFields": [],
+         "poolSize": 7
+        },
+        "kindScope": {
+         "class": "novel-combination-of-observed-values",
+         "individual": [],
+         "combinations": [
+          [
+           "effect=\"Freeze\"",
+           "pieceShieldedBefore=true"
+          ],
+          [
+           "effectKind=\"freeze\"",
+           "pieceShieldedBefore=true"
+          ]
+         ],
+         "unknownFields": [],
+         "poolSize": 471
+        }
+       },
+       {
+        "situation": "C-0de271/s18/e1",
+        "applicableScope": {
+         "class": "novel-individual-value",
+         "individual": [
+          "pieceShieldedBefore=true"
+         ],
+         "combinations": [],
+         "unknownFields": [],
+         "poolSize": 7
+        },
+        "kindScope": {
+         "class": "novel-combination-of-observed-values",
+         "individual": [],
+         "combinations": [
+          [
+           "effect=\"Freeze\"",
+           "pieceShieldedBefore=true"
+          ],
+          [
+           "effectKind=\"freeze\"",
+           "pieceShieldedBefore=true"
+          ]
+         ],
+         "unknownFields": [],
+         "poolSize": 471
+        }
+       }
+      ]
+     }
+    },
+    {
+     "build": "QX-73",
+     "discovery": {
+      "applicable": 6,
+      "contradicted": 0,
+      "byDelivery": {},
+      "unitsDeliveredBeforeSubmissionWithCounterexample": []
+     },
+     "heldout": {
+      "applicable": 3,
+      "contradicted": 1,
+      "delivery": "never delivered: held-out pages are not served to discovery sessions",
+      "noveltyApplicableScope": {
+       "novel-individual-value": 1
+      },
+      "noveltyKindScope": {
+       "novel-combination-of-observed-values": 1
+      },
+      "counterexamples": [
+       {
+        "situation": "C-b48898/s15/e1",
+        "applicableScope": {
+         "class": "novel-individual-value",
+         "individual": [
+          "pieceShieldedBefore=true"
+         ],
+         "combinations": [],
+         "unknownFields": [],
+         "poolSize": 6
+        },
+        "kindScope": {
+         "class": "novel-combination-of-observed-values",
+         "individual": [],
+         "combinations": [
+          [
+           "effect=\"Freeze\"",
+           "pieceShieldedBefore=true"
+          ],
+          [
+           "effectKind=\"freeze\"",
+           "pieceShieldedBefore=true"
+          ]
+         ],
+         "unknownFields": [],
+         "poolSize": 362
+        }
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "hypothesis": "H-3",
+   "session": "1e26529c62afc36e",
+   "representation": "9923abca63235169d05b7c15f08f725f9c5f961350b766a63d11e48c98dc9b9f",
+   "submissionJournalSeq": 12,
+   "deliveredBeforeSubmission": [
+    "C-0662fc",
+    "C-0c6c31",
+    "M-22e2f2"
+   ],
+   "byBuild": [
+    {
+     "build": "QX-41",
+     "discovery": {
+      "applicable": 74,
+      "contradicted": 0,
+      "byDelivery": {},
+      "unitsDeliveredBeforeSubmissionWithCounterexample": []
+     },
+     "heldout": {
+      "applicable": 34,
+      "contradicted": 0,
+      "delivery": "never delivered: held-out pages are not served to discovery sessions",
+      "noveltyApplicableScope": {},
+      "noveltyKindScope": {},
+      "counterexamples": []
+     }
+    },
+    {
+     "build": "QX-73",
+     "discovery": {
+      "applicable": 64,
+      "contradicted": 0,
+      "byDelivery": {},
+      "unitsDeliveredBeforeSubmissionWithCounterexample": []
+     },
+     "heldout": {
+      "applicable": 41,
+      "contradicted": 0,
+      "delivery": "never delivered: held-out pages are not served to discovery sessions",
+      "noveltyApplicableScope": {},
+      "noveltyKindScope": {},
+      "counterexamples": []
+     }
+    }
+   ]
+  }
+ ],
+ "specDeviations": [
+  {
+   "rule": "R14",
+   "byPartition": [
+    {
+     "partition": "discovery",
+     "build": "QX-73",
+     "units": 1,
+     "deliveredBeforeFirstSubmission": {},
+     "deliveredOnlyAfterFirstSubmission": {}
+    },
+    {
+     "partition": "heldout",
+     "build": "QX-73",
+     "units": 2,
+     "delivery": "held-out: never delivered"
+    }
+   ]
+  },
+  {
+   "rule": "R3",
+   "byPartition": [
+    {
+     "partition": "discovery",
+     "build": "QX-73",
+     "units": 30,
+     "deliveredBeforeFirstSubmission": {
+      "C-0662fc": [
+       "1e26529c62afc36e",
+       "e95f5bc28e46532c",
+       "f6003f7e3d5f8469"
+      ]
+     },
+     "deliveredOnlyAfterFirstSubmission": {}
+    },
+    {
+     "partition": "heldout",
+     "build": "QX-73",
+     "units": 16,
+     "delivery": "held-out: never delivered"
+    }
+   ]
+  },
+  {
+   "rule": "R7",
+   "byPartition": [
+    {
+     "partition": "discovery",
+     "build": "QX-73",
+     "units": 2,
+     "deliveredBeforeFirstSubmission": {},
+     "deliveredOnlyAfterFirstSubmission": {}
+    },
+    {
+     "partition": "heldout",
+     "build": "QX-73",
+     "units": 1,
+     "delivery": "held-out: never delivered"
+    }
+   ]
+  },
+  {
+   "rule": "R8",
+   "byPartition": [
+    {
+     "partition": "discovery",
+     "build": "QX-73",
+     "units": 1,
+     "deliveredBeforeFirstSubmission": {},
+     "deliveredOnlyAfterFirstSubmission": {}
+    },
+    {
+     "partition": "heldout",
+     "build": "QX-73",
+     "units": 1,
+     "delivery": "held-out: never delivered"
+    }
+   ]
+  }
+ ],
+ "definitions": {
+  "novel-individual-value": "at least one behavioural input value of the situation never occurs in the pool",
+  "novel-combination-of-observed-values": "every behavioural input value occurs somewhere in the pool, but not together; the smallest unseen sub-combinations (2-3 fields) are listed",
+  "observed-combination": "the full behavioural input tuple occurs in the pool",
+  "applicableScope": "pool = discovery situations of the same build to which the clause applies",
+  "kindScope": "pool = all discovery situations of the same kind and build",
+  "notCompared": [
+   "build",
+   "turn"
+  ],
+  "delivered-before-submission": "the server delivered the page (HTTP 200) to the submitting session before the journal recorded this hypothesis; says nothing about which part was read",
+  "delivered-only-after-submission": "first delivered after this hypothesis was recorded",
+  "never-delivered": "never delivered to the submitting session"
+ }
+}
