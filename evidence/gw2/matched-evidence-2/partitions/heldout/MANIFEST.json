@@ -1,0 +1,17 @@
+{
+ "schema": "gamewatch/gw2-partition-manifest@1",
+ "partition": "heldout",
+ "procedure": {
+  "id": "matched-partition-2",
+  "path": "evidence/gw2/procedures/partition-matched-2.json",
+  "sha256": "172808be415cae4d3ed71328389307a4205a0a6958f5afdf7664f1b8aa44cb99"
+ },
+ "bundle": {
+  "path": "evidence/gw2/matched-evidence-2/generated/bundle.json",
+  "sha256": "d9d6f6e43344db5febd6b7a89b7e0e6d26f1736ce2e3b502aa6b3bd8ee6c06d4"
+ },
+ "hypothesisForm": "p5: optional structured representation field (Q20)",
+ "files": {
+  "observations.json": "2c65891b9a600cc1aab8f173e4d46249410464103bd61de4437140edde8a02eb"
+ }
+}

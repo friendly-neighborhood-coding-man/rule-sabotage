@@ -35,8 +35,8 @@ const FILTER_JS = `<script>function gwFilter(){var on={};document.querySelectorA
   + `document.querySelectorAll('tr[data-partition]').forEach(function(r){r.hidden=!on[r.dataset.partition]});`
   + `document.querySelectorAll('[data-partitions]').forEach(function(g){g.hidden=!g.dataset.partitions.split(' ').some(function(p){return on[p]})})}</script>`;
 
-export function renderUnmatchedGrouped(B: any, allBuilds: { id: string; label: string | null }[]) {
-  const groups = groupNotifications(B.notifications, allBuilds);
+export function renderUnmatchedGrouped(B: any, allBuilds: { id: string; label: string | null }[], o: Parameters<typeof groupNotifications>[2] = {}) {
+  const groups = groupNotifications(B.notifications, allBuilds, o);
   const bname = (b: { id: string; label: string | null }) => esc(b.label ? `${b.id} (${b.label})` : b.id);
   const head = (cells: string[]) => `<tr>${cells.map(c => `<th>${esc(c)}</th>`).join('')}</tr>`;
   const countCells = (g: any) => `<td>${g.observations}</td><td>${esc(pp(g.observationsByPartition))}</td><td>${g.situations}</td><td>${g.units}</td>`;
@@ -64,7 +64,7 @@ export function renderUnmatchedGrouped(B: any, allBuilds: { id: string; label: s
 const GROUP_CSS = 'details{border:1px solid #d6d9dd;border-radius:4px;margin:6px 0;padding:4px 8px}details.g2{margin-left:14px}details.g3{margin-left:14px;background:#fafbfc}summary{cursor:pointer}h4{margin:8px 0 2px}.filters{background:#f3f5f7;padding:6px 10px}';
 const NAV = `<nav><a href="index.html">Overview</a><a href="behaviour.html">A. How the game actually works</a><a href="unmatched-actions.html">B. Unmatched actions</a><a href="contradictions.html">C. Hypothesis contradictions</a><a href="measures.html">Measures</a></nav>`;
 const BANNER = `<p class="banner">Operator view. Contains specification-derived information (B) and held-out results (A, C). Never serve these pages to a discovery session.</p>`;
-const pageV1 = (title: string, body: string) => `<!doctype html><meta charset="utf-8">${AUDIENCE_META}<title>${esc(title)}</title><style>${CSS}${GROUP_CSS}</style>${NAV}${BANNER}<h1>${esc(title)}</h1>${body}\n`;
+export const pageV1 = (title: string, body: string) => `<!doctype html><meta charset="utf-8">${AUDIENCE_META}<title>${esc(title)}</title><style>${CSS}${GROUP_CSS}</style>${NAV}${BANNER}<h1>${esc(title)}</h1>${body}\n`;
 const tagOperator = (html: string) => html.replace('<!doctype html><meta charset="utf-8">', `<!doctype html><meta charset="utf-8">${AUDIENCE_META}`);
 
 export function renderV1(x: ReturnType<typeof buildAll>, label: string): Record<string, string> {

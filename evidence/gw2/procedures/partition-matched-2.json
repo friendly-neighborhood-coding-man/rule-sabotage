@@ -1,0 +1,160 @@
+{
+ "schema": "gamewatch/gw2-partition-procedure@1",
+ "id": "matched-partition-2",
+ "frozenAt": "2026-11-26T07:52:07.000Z",
+ "salt": "gw2-matched-partition-procedure-2",
+ "discoveryTarget": 0.7,
+ "seeds": [
+  98501,
+  98502,
+  98503,
+  98504,
+  98505,
+  98506,
+  98507,
+  98508,
+  98509,
+  98510,
+  98511,
+  98512
+ ],
+ "scripts": [
+  {
+   "id": "shield-human",
+   "title": "Human picks up a Shield, then walks into an AI \"Send home\" cell"
+  },
+  {
+   "id": "shield-ai",
+   "title": "AI picks up a Shield, then walks into a Human \"Send home\" cell"
+  },
+  {
+   "id": "shove-chain-human",
+   "title": "Human piece is shoved east onto a \"+1 action\" cell, steps off and back on"
+  },
+  {
+   "id": "shove-chain-ai",
+   "title": "AI piece is shoved west onto a \"+1 action\" cell, steps off and back on"
+  },
+  {
+   "id": "walk-twice",
+   "title": "Human walks onto its own \"+1 action\" cell, steps off and back on"
+  },
+  {
+   "id": "freeze-human",
+   "title": "Human piece walks into an AI \"Freeze\" cell, then tries to move"
+  },
+  {
+   "id": "freeze-ai",
+   "title": "AI piece walks into a Human \"Freeze\" cell, then tries to move"
+  },
+  {
+   "id": "shove-human",
+   "title": "Human piece walks into an AI \"shove back 2\" cell"
+  },
+  {
+   "id": "shove-ai",
+   "title": "AI piece walks into a Human \"shove back 2\" cell"
+  },
+  {
+   "id": "adjacent-placement",
+   "title": "Human tries to place an effect right next to its own piece"
+  },
+  {
+   "id": "teleport-human",
+   "title": "Human piece walks onto its own Teleport cell"
+  },
+  {
+   "id": "send-home-human",
+   "title": "Human piece walks into an AI \"Send home\" cell"
+  },
+  {
+   "id": "send-home-ai",
+   "title": "AI piece walks into a Human \"Send home\" cell"
+  },
+  {
+   "id": "placement-human",
+   "title": "Human tries to place an effect next to an AI piece, then on an AI effect cell"
+  },
+  {
+   "id": "placement-ai",
+   "title": "AI tries to place an effect next to a Human piece, then on a Human effect cell"
+  },
+  {
+   "id": "multicell-human",
+   "title": "Human piece walks onto one cell of its own two-cell \"+1 action\" effect"
+  },
+  {
+   "id": "multicell-ai",
+   "title": "AI piece walks onto one cell of its own two-cell \"+1 action\" effect"
+  },
+  {
+   "id": "matrix-haste",
+   "title": "Each side enters an own and an enemy \"+1 action\" cell"
+  },
+  {
+   "id": "matrix-freeze",
+   "title": "Each side enters an own and an enemy \"Freeze\" cell"
+  },
+  {
+   "id": "matrix-home",
+   "title": "Each side enters an own and an enemy \"Send home\" cell"
+  },
+  {
+   "id": "matrix-shield-v1",
+   "title": "A shielded Human piece and a shielded AI piece each enter an enemy \"Send home\" cell"
+  },
+  {
+   "id": "matrix-shield-v2",
+   "title": "A shielded Human piece and a shielded AI piece each enter an enemy \"Freeze\" cell"
+  }
+ ],
+ "variantSuffixes": [
+  "-human",
+  "-ai",
+  "-v1",
+  "-v2"
+ ],
+ "coverageMap": {
+  "path": "gamewatch/adapters/rule-sabotage.coverage.json",
+  "sha256": "0a70ecb7d48c8edd07a5ee1e12028df8c4353a3d6451e1c2667b185cea68bd71"
+ },
+ "groundTruth": [
+  {
+   "path": "gamewatch/private/mutations.json",
+   "sha256": "389863b0dd57bfbdcd9ede5547363e4d1a32d6ba28e9c50a3bf2b92eae2871d5"
+  },
+  {
+   "path": "gamewatch/private/evaluation/labels.json",
+   "sha256": "6bdf805aced73a63fe3beb73e4765b3882d159a4930afcc1eacc25d03125cd0d"
+  }
+ ],
+ "seedAssignment": {
+  "heldout": 4
+ },
+ "constraints": {
+  "minSeeds": 12,
+  "minHeldoutSeeds": 4,
+  "familiesInBothPartitions": [
+   "matrix-shield"
+  ]
+ },
+ "recordMatchSeeds": true,
+ "selection": [
+  "Units: a match seed (all its matches on every build and both first movers) and a case script (its cases on every build).",
+  "Scripts with a variant pair (-human/-ai, or -v1/-v2): one variant to discovery, the other to held-out (disjoint variants). Single-variant scripts go wholly to one partition.",
+  "Seeds (seedAssignment, D93): the 12 frozen seeds are ordered by sha256(salt:seed:<seed>); the first 4 go to held-out, the other 8 to discovery (disjoint seeds). Seeds are not optimized for coverage.",
+  "Script candidates are enumerated in an order fixed by the salt and scored lexicographically: (1) rules covered in both partitions, (2) the smaller of the two partition coverage counts, (3) closeness of the discovery share of observations (cases + matches) to discoveryTarget, (4) enumeration order.",
+  "Hard constraints (constraints): at least 12 seeds, at least 4 held-out seeds, and a distinct matrix-shield variant in each partition (D96). A violated constraint fails the partition with the reason; nothing is relaxed.",
+  "Coverage: gaps.ts semantics over the frozen coverage map (every pattern of a rule on every build). Only engine-reported events are used; agent output is never an input."
+ ],
+ "notes": [
+  "Frozen in the same commit as matched-generation-2, before any of its observations was generated.",
+  "recordMatchSeeds: eval/ maps each neutral match id to its seed, so held-out replication is counted in seed groups (D90).",
+  {
+   "partitionCode": {
+    "path": "gamewatch/gw2/partition.ts",
+    "sha256": "7c9cc57b640565a21d9aa2017461ac0d6a1a96b203a4522a7603b3fddae9a8f3"
+   }
+  }
+ ]
+}

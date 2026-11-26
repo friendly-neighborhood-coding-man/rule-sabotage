@@ -1,0 +1,62 @@
+<!doctype html><meta charset="utf-8"><meta name="gamewatch-audience" content="operator-only"><title>Measures (separate, never combined)</title><style>body{font:14px/1.45 system-ui,sans-serif;margin:24px auto;max-width:1180px;padding:0 16px;color:#1b1f24}table{border-collapse:collapse;margin:8px 0;width:100%}th,td{border:1px solid #d6d9dd;padding:4px 6px;vertical-align:top;text-align:left}th{background:#f3f5f7}.mono{font-family:ui-monospace,monospace;font-size:12.5px}.banner{background:#fff4e5;border:1px solid #e8c48a;padding:8px 12px}nav a{margin-right:14px}.small{font-size:12.5px;color:#444}</style><nav><a href="index.html">Overview</a><a href="behaviour.html">A. How the game actually works</a><a href="unmatched-actions.html">B. Unmatched actions</a><a href="contradictions.html">C. Hypothesis contradictions</a><a href="measures.html">Measures</a></nav><p class="banner">Operator view. Contains specification-derived information (B) and held-out results (A, C). Never serve these pages to a discovery session.</p><h1>Measures (separate, never combined)</h1><h2>systemDiscrepancyDetection</h2><pre class="mono">{
+ &quot;unit&quot;: &quot;unmatched actions (situation × outcome field) found by the verifier against the encoded specification; a system result, not an agent result&quot;,
+ &quot;specificationStatus&quot;: &quot;PROVISIONAL: the encoding is not reviewed or accepted; an unmatched action may reflect the encoding rather than the build&quot;,
+ &quot;unmatchedActions&quot;: 338,
+ &quot;rulesWithUnmatchedActions&quot;: 4,
+ &quot;byRule&quot;: {
+  &quot;R3&quot;: {
+   &quot;discovery:build-3caf&quot;: 222,
+   &quot;heldout:build-3caf&quot;: 98
+  },
+  &quot;R7&quot;: {
+   &quot;discovery:build-3caf&quot;: 6,
+   &quot;heldout:build-3caf&quot;: 4
+  },
+  &quot;R8&quot;: {
+   &quot;discovery:build-3caf&quot;: 1,
+   &quot;heldout:build-3caf&quot;: 1
+  },
+  &quot;R14&quot;: {
+   &quot;discovery:build-3caf&quot;: 2,
+   &quot;heldout:build-3caf&quot;: 4
+  }
+ },
+ &quot;rulesNotEncoded&quot;: 9
+}</pre><h2>agentBehaviouralDiscovery</h2><pre class="mono">{
+ &quot;unit&quot;: &quot;agent submissions and what their structured representations predict; no specification involved&quot;,
+ &quot;hypotheses&quot;: 8,
+ &quot;abstentions&quot;: 0,
+ &quot;withStructuredRepresentation&quot;: 3,
+ &quot;freeTextOnly&quot;: 5,
+ &quot;contradictedByDiscovery&quot;: 1,
+ &quot;heldoutOutcomeChecks&quot;: {
+  &quot;matching&quot;: 194,
+  &quot;contradicting&quot;: 190,
+  &quot;unknown&quot;: 0,
+  &quot;note&quot;: &quot;outcome checks, correlated; not replications&quot;
+ },
+ &quot;hypothesisContradictions&quot;: 580,
+ &quot;conflictsBetweenHypotheses&quot;: 0
+}</pre><h2>machineVerifiableDescriptions</h2><pre class="mono">{
+ &quot;unit&quot;: &quot;held-out (rule, build) readings \&quot;accurate-description-of-a-defect\&quot; from the committed three-way evaluation; requires a structured representation, not the agent knowing the spec&quot;,
+ &quot;source&quot;: &quot;evaluations/three-way-1.json&quot;,
+ &quot;accurateDescriptions&quot;: 0,
+ &quot;readings&quot;: [
+  {
+   &quot;reading&quot;: &quot;consistent-with-specification-and-observations&quot;,
+   &quot;n&quot;: 2
+  },
+  {
+   &quot;reading&quot;: &quot;hypothesis-contradicted-by-observations&quot;,
+   &quot;n&quot;: 8
+  },
+  {
+   &quot;reading&quot;: &quot;relations-do-not-correspond&quot;,
+   &quot;n&quot;: 2
+  },
+  {
+   &quot;reading&quot;: &quot;unresolved-ambiguity&quot;,
+   &quot;n&quot;: 16
+  }
+ ]
+}</pre>

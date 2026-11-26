@@ -1,0 +1,67 @@
+{
+ "systemDiscrepancyDetection": {
+  "unit": "unmatched actions (situation × outcome field) found by the verifier against the encoded specification; a system result, not an agent result",
+  "specificationStatus": "PROVISIONAL: the encoding is not reviewed or accepted; an unmatched action may reflect the encoding rather than the build",
+  "unmatchedActions": 338,
+  "rulesWithUnmatchedActions": 4,
+  "byRule": {
+   "R3": {
+    "discovery:build-3caf": 222,
+    "heldout:build-3caf": 98
+   },
+   "R7": {
+    "discovery:build-3caf": 6,
+    "heldout:build-3caf": 4
+   },
+   "R8": {
+    "discovery:build-3caf": 1,
+    "heldout:build-3caf": 1
+   },
+   "R14": {
+    "discovery:build-3caf": 2,
+    "heldout:build-3caf": 4
+   }
+  },
+  "rulesNotEncoded": 9
+ },
+ "agentBehaviouralDiscovery": {
+  "unit": "agent submissions and what their structured representations predict; no specification involved",
+  "hypotheses": 8,
+  "abstentions": 0,
+  "withStructuredRepresentation": 3,
+  "freeTextOnly": 5,
+  "contradictedByDiscovery": 1,
+  "heldoutOutcomeChecks": {
+   "matching": 194,
+   "contradicting": 190,
+   "unknown": 0,
+   "note": "outcome checks, correlated; not replications"
+  },
+  "hypothesisContradictions": 580,
+  "conflictsBetweenHypotheses": 0
+ },
+ "machineVerifiableDescriptions": {
+  "unit": "held-out (rule, build) readings \"accurate-description-of-a-defect\" from the committed three-way evaluation; requires a structured representation, not the agent knowing the spec",
+  "source": "evaluations/three-way-1.json",
+  "accurateDescriptions": 0,
+  "readings": [
+   {
+    "reading": "consistent-with-specification-and-observations",
+    "n": 2
+   },
+   {
+    "reading": "hypothesis-contradicted-by-observations",
+    "n": 8
+   },
+   {
+    "reading": "relations-do-not-correspond",
+    "n": 2
+   },
+   {
+    "reading": "unresolved-ambiguity",
+    "n": 16
+   }
+  ]
+ },
+ "combined": "never: the three blocks answer different questions and have different units"
+}
