@@ -88,7 +88,7 @@ export function sessionClosure(dir: string): Closure {
   return violated.length ? { status: 'seal-violated', closure, problems: violated, sealSha256: fileSha256(f) } : { status: 'closed', closure, problems: [], sealSha256: fileSha256(f) };
 }
 
-if (process.argv[1]?.endsWith('gw2/session-close.ts')) {
+if (process.argv[1]?.replace(/\\/g, "/").endsWith('gw2/session-close.ts')) {
   const [cmd, dir] = process.argv.slice(2), arg = (k: string) => { const i = process.argv.indexOf(k); return i > 0 ? process.argv[i + 1] : undefined; };
   if (!cmd || !dir) { console.error('usage: session-close.ts status <sessionDir> | declare <sessionDir> --by <role-id> --reason "<why>"'); process.exit(2); }
   try {

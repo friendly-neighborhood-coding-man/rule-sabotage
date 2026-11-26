@@ -17,7 +17,7 @@ import { execFileSync } from 'node:child_process';
 import { ROOT } from '../builds.ts';
 import { PLAN, OBJECTIVE, KILL_AFTER_S } from './plan-data.ts';
 import { startServer } from './serve.ts';
-import { runPaidCall, PaidCallRefused, PAID_RESEARCH_EXECUTION, CAP_WARNING, type PaidApproval, type Deps } from '../../server/balance/v4/kanebudget.ts';
+import { runPaidCall, PaidCallRefused, PAID_RESEARCH_EXECUTION, PAID_RESEARCH_SCOPE, CAP_WARNING, type PaidApproval, type Deps } from '../../server/balance/v4/kanebudget.ts';
 import { runCapture, parseKaneOutput } from '../../server/kane.ts';
 import { strictVersion, strictBalance, EXPECTED_CLI_VERSION } from '../../scripts/kane-single-call.ts';
 
@@ -46,6 +46,8 @@ if (existsSync(join(RUN, 'meta.json'))) {
   process.exit(!m.timedOut && m.exitCode === 0 && m.findingsValid ? 0 : 3);
 }
 if (PAID_RESEARCH_EXECUTION === 'disabled') { console.log('REFUSED before any process started: paid research execution is disabled (PAID_RESEARCH_EXECUTION)'); process.exit(2); }
+// D109: while the gate is open for the GW2 P7 pilot only, this run id is outside its scope: refuse before anything starts or is written
+if (PAID_RESEARCH_SCOPE && !PAID_RESEARCH_SCOPE.test(PLAN.runId)) { console.log(`REFUSED before any process started: run id ${PLAN.runId} is outside the authorized scope of the paid-call gate (${PAID_RESEARCH_SCOPE})`); process.exit(2); }
 
 const approvalFile = join(DIR, 'approval.json');
 const approval = existsSync(approvalFile) ? JSON.parse(readFileSync(approvalFile, 'utf8')) as PaidApproval : null;

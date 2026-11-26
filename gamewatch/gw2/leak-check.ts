@@ -108,10 +108,10 @@ export function leakCheck(expDir: string, root = ROOT) {
     knownPrior: 'An agent may recognise the game from its mechanics (board, effect names) and recall prior knowledge of Rule Sabotage; nothing here prevents that.',
   };
   const fails = checks.filter(c => c.result === 'fail');
-  return { schema: 'gamewatch/gw2-leak-check@1', exp: relative(root, expDir) || expDir, served: boundary.served, files: files.length, ok: !fails.length, checks, residualSemanticClues: residual };
+  return { schema: 'gamewatch/gw2-leak-check@1', exp: relative(root, expDir).split('\\').join('/') || expDir, served: boundary.served, files: files.length, ok: !fails.length, checks, residualSemanticClues: residual };
 }
 
-if (process.argv[1]?.endsWith('gw2/leak-check.ts')) {
+if (process.argv[1]?.replace(/\\/g, "/").endsWith('gw2/leak-check.ts')) {
   const [exp, out] = process.argv.slice(2);
   if (!exp) { console.error('usage: leak-check.ts <expDir> [out.json]'); process.exit(2); }
   const r = leakCheck(exp);

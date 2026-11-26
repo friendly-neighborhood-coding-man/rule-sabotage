@@ -58,7 +58,7 @@ export async function runDemo(outDir: string, bundle = join(ROOT, 'evidence/game
   return { dir: s.dir, completeness, coverage };
 }
 
-if (process.argv[1]?.endsWith('gw2/demo-session.ts')) {
+if (process.argv[1]?.replace(/\\/g, "/").endsWith('gw2/demo-session.ts')) {
   const r = await runDemo(process.argv[2] ?? join(ROOT, 'evidence/gw2/p1-demo'));
   console.log(`session ${r.dir}\ncompleteness: ${r.completeness.investigationCompleteness.completeness}; ${r.completeness.investigationCompleteness.requirements.map(x => `${x.id}=${x.result}`).join(', ')}`);
   for (const c of r.coverage.columns) { const x = c.summary as { serverRecorded: { cases: number; matches: number }; citedWithoutAccess: string[] }; console.log(`${c.label}: served ${x.serverRecorded.cases} cases, ${x.serverRecorded.matches} matches; cited without access: ${x.citedWithoutAccess.join(', ') || 'none'}`); }

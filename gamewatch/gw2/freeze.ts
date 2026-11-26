@@ -111,7 +111,7 @@ export function freezeHypotheses(exp: string, opts: { at?: string; root?: string
   const hyps = v.nodes.filter(n => HYP.has(n.kind));
   const PART = JSON.parse(readFileSync(join(P.partitions, 'PARTITION.json'), 'utf8'));
   const rec = {
-    schema: FREEZE_SCHEMA, exp: relative(opts.root ?? ROOT, exp).startsWith('..') ? exp : relative(opts.root ?? ROOT, exp), frozenAt: opts.at ?? new Date().toISOString(),
+    schema: FREEZE_SCHEMA, exp: relative(opts.root ?? ROOT, exp).startsWith('..') ? exp : relative(opts.root ?? ROOT, exp).split('\\').join('/'), frozenAt: opts.at ?? new Date().toISOString(),
     graph: { file: 'judgments.ndjson', anchor: v.head },
     hypotheses: hyps.map(n => ({ id: n.id, kind: n.kind, session: n.body.session ?? null, ref: n.body.ref ?? null })),
     counts: { hypotheses: hyps.filter(n => n.kind === 'hypothesis').length, abstentions: hyps.filter(n => n.kind === 'abstention').length, nodes: v.count },
@@ -217,7 +217,7 @@ export function openEvaluation(exp: string, evaluator: { id: string; version: st
   return { frozen: r.frozen, notCovered: r.notCovered, freezeSha256: r.freezeSha256!, graphHead: graphHead!, read };
 }
 
-if (process.argv[1]?.endsWith('gw2/freeze.ts')) {
+if (process.argv[1]?.replace(/\\/g, "/").endsWith('gw2/freeze.ts')) {
   const [cmd, exp] = process.argv.slice(2), ai = process.argv.indexOf('--at');
   if (!cmd || !exp) { console.error('usage: freeze.ts freeze|verify <expDir> [--at ISO]'); process.exit(2); }
   try {

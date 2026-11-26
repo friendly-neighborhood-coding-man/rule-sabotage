@@ -132,7 +132,7 @@ export function renderMarkdown(r: ReturnType<typeof sessionCoverage> | ReturnTyp
   return L.join('\n') + '\n';
 }
 
-if (process.argv[1]?.endsWith('gw2/coverage.ts')) {
+if (process.argv[1]?.replace(/\\/g, "/").endsWith('gw2/coverage.ts')) {
   const [mode, ...a] = process.argv.slice(2);
   const opt = (k: string) => { const i = a.indexOf(k); return i >= 0 ? a[i + 1] : undefined; };
   let r, outDir: string;

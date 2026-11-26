@@ -57,7 +57,9 @@ export function appendSubmitterRepresentations(exp: string, o: { at?: string; ro
       kind: 'representation', parents: [{ id: h.id, relation: 'represents' }], author: h.author, ...(h.provenance ? { provenance: h.provenance } : {}), origin: 'live', at: o.at ?? new Date().toISOString(), evidenceRefs: h.evidenceRefs,
       reason: 'structured representation submitted by the hypothesis author with the free text (Q20); extracted verbatim, not repaired',
       body: { schema: REPRESENTATION_SCHEMA, origin: 'submitter', representation, ...(parseError ? { parseError } : {}), rawSha256: sha256(raw), fidelity: { declared: 'faithful', notes: 'authored by the submitter together with the free text' },
-        translatedFrom: { ref: h.body.ref, statementSha256: sha256(String(h.body.statement ?? '')) }, method: 'JSON.parse of the stored submission field; nothing added, removed or corrected' },
+        translatedFrom: { ref: h.body.ref, statementSha256: sha256(String(h.body.statement ?? '')) }, method: 'JSON.parse of the stored submission field; nothing added, removed or corrected',
+        // a Kane-authored submission keeps its Kane provenance, which requires the note line verbatim (P7 preflight, D104)
+        ...(h.provenance && typeof h.body.verbatim === 'string' ? { verbatim: h.body.verbatim } : {}) },
     };
     out.push(append(P(exp).graph, node, { root }).id);
   }
@@ -115,7 +117,7 @@ export function verifyRepresentationSeal(exp: string, o: { root?: string } = {})
   return { ok: !problems.length, problems, representations: s.representations as { id: string; hypothesis: string; origin: Origin }[], sealSha256: fileSha256(P(exp).seal), graphHead: s.graphHead };
 }
 
-if (process.argv[1]?.endsWith('gw2/representations.ts')) {
+if (process.argv[1]?.replace(/\\/g, "/").endsWith('gw2/representations.ts')) {
   const [cmd, exp] = process.argv.slice(2), ai = process.argv.indexOf('--at'), at = ai > 0 ? process.argv[ai + 1] : undefined;
   try {
     if (cmd === 'submitter' && exp) console.log(`${appendSubmitterRepresentations(exp, { at }).length} submitter representation node(s) appended`);

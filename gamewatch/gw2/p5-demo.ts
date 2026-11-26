@@ -83,7 +83,7 @@ export async function runP5Demo(bundleFile: string, expDir: string, o: { at?: st
   return { session: s.session, partition: part, freeze, submitter, translations, seal, threeWay, heldout, discrimination: disc };
 }
 
-if (process.argv[1]?.endsWith('gw2/p5-demo.ts')) {
+if (process.argv[1]?.replace(/\\/g, "/").endsWith('gw2/p5-demo.ts')) {
   const [bundle, exp] = process.argv.slice(2), i = process.argv.indexOf('--at');
   if (!bundle || !exp) { console.error('usage: p5-demo.ts <bundle.json> <expDir> [--at ISO]'); process.exit(2); }
   const r = await runP5Demo(bundle, exp, { at: i > 0 ? process.argv[i + 1] : undefined });

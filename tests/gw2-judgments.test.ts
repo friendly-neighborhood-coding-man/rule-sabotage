@@ -4,7 +4,7 @@
  */
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, readFileSync, writeFileSync, rmSync, existsSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, readFileSync, writeFileSync, rmSync, existsSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { spawnSync } from 'node:child_process';
@@ -254,7 +254,7 @@ test('Kane execution provenance: stdout, args and note must belong to one run wh
   writeFileSync(join(w.dir, 'other.ndjson'), other + '\n'); writeFileSync(join(w.dir, 'late.ndjson'), late + '\n');
   assert.throws(() => append(w.file, kaneNode(w, {}, other, 'other.ndjson'), w.opts), /note belongs to another run/);
   assert.throws(() => append(w.file, kaneNode(w, {}, late, 'late.ndjson'), w.opts), /time order violated: note.at is after run_end.ts/);
-  spawnSync('mkdir', ['-p', join(w.dir, 'run2')]); writeFileSync(join(w.dir, 'run2/args.json'), readFileSync(join(w.dir, 'args.json')));
+  mkdirSync(join(w.dir, 'run2'), { recursive: true }); writeFileSync(join(w.dir, 'run2/args.json'), readFileSync(join(w.dir, 'args.json')));
   const n = kaneNode(w); n.provenance = { ...n.provenance!, kaneArgs: w.ref('run2/args.json') };
   assert.throws(() => append(w.file, n, w.opts), /different directories/);
   writeFileSync(join(w.dir, 'url.ndjson'), readFileSync(join(w.dir, 'stdout.ndjson'), 'utf8').replace('127.0.0.1:1', '127.0.0.1:2'));

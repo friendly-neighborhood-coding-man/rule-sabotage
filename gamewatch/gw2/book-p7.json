@@ -1,6 +1,6 @@
 {
  "skillflow": 1,
- "name": "GameWatch GW2 P7 exploratory pilot: three blind real-Kane discovery sessions (PREPARED, NOT AUTHORIZED)",
+ "name": "GameWatch GW2 P7 exploratory pilot: three blind real-Kane discovery sessions (authorized 2026-11-25; each call gated)",
  "start": "procedures",
  "limits": {
   "max_steps": 20,
@@ -104,6 +104,45 @@
     }
    ],
    "next": {
+    "pass": "preregister",
+    "fail": "@stop"
+   }
+  },
+  {
+   "id": "preregister",
+   "title": "Collector: freeze the pre-registration into the operator's external record (Q14), verify the evidence is unopened and the partition is the committed one",
+   "skill": "skills/collector.md",
+   "run": [
+    "node",
+    "--experimental-strip-types",
+    "--no-warnings",
+    "gamewatch/gw2/p6-steps.ts",
+    "preregister",
+    "{out}/03b-preregister.json",
+    "{exp}",
+    "--record",
+    "{record}",
+    "--run1",
+    "{run1}",
+    "--run2",
+    "{run2}",
+    "--run3",
+    "{run3}",
+    "--committed-partition",
+    "evidence/gw2/p7-evidence/partitions/PARTITION.json"
+   ],
+   "produces": [
+    "{out}/03b-preregister.json"
+   ],
+   "accept": [
+    {
+     "json": "{out}/03b-preregister.json",
+     "path": "ok",
+     "op": "==",
+     "value": true
+    }
+   ],
+   "next": {
     "pass": "investigate-1",
     "fail": "@stop"
    }
@@ -123,7 +162,9 @@
     "--route",
     "real",
     "--run-id",
-    "{run1}"
+    "{run1}",
+    "--record",
+    "{record}"
    ],
    "next": {
     "exit:0": "investigate-2",
@@ -148,7 +189,9 @@
     "--route",
     "real",
     "--run-id",
-    "{run2}"
+    "{run2}",
+    "--record",
+    "{record}"
    ],
    "next": {
     "exit:0": "investigate-3",
@@ -173,7 +216,9 @@
     "--route",
     "real",
     "--run-id",
-    "{run3}"
+    "{run3}",
+    "--record",
+    "{record}"
    ],
    "next": {
     "exit:0": "closure",
@@ -254,7 +299,9 @@
     "{out}/07-freeze.json",
     "{exp}",
     "--at",
-    "{at}"
+    "{at}",
+    "--record",
+    "{record}"
    ],
    "produces": [
     "{out}/07-freeze.json"
@@ -285,7 +332,9 @@
     "{out}/08-representations.json",
     "{exp}",
     "--at",
-    "{at}"
+    "{at}",
+    "--record",
+    "{record}"
    ],
    "produces": [
     "{out}/08-representations.json"
@@ -438,7 +487,9 @@
     "gamewatch/gw2/p6-steps.ts",
     "integrity",
     "{out}/13-integrity.json",
-    "{exp}"
+    "{exp}",
+    "--record",
+    "{record}"
    ],
    "produces": [
     "{out}/13-integrity.json"

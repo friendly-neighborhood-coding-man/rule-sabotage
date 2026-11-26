@@ -1,0 +1,106 @@
+{
+ "step": "integrity",
+ "ok": true,
+ "checks": [
+  {
+   "check": "partition manifests",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "session 1e26529c62afc36e closed and sealed",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "session e95f5bc28e46532c closed and sealed",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "session f6003f7e3d5f8469 closed and sealed",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "judgment graph",
+   "ok": true,
+   "detail": "51 nodes"
+  },
+  {
+   "check": "hypothesis freeze",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "representation seal",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "evaluation ledger",
+   "ok": true,
+   "detail": "4 entries "
+  },
+  {
+   "check": "declared sessions all present",
+   "ok": true,
+   "detail": "3 of 3"
+  },
+  {
+   "check": "raw seal e95f5bc28e46532c",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "raw seal f6003f7e3d5f8469",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "raw seal 1e26529c62afc36e",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "external execution ledger (Q14)",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "frozen pre-registration unchanged",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "external anchor of raw seal e95f5bc28e46532c",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "external anchor of raw seal f6003f7e3d5f8469",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "external anchor of raw seal 1e26529c62afc36e",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "external anchor of the hypothesis freeze",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "external anchor of the representation seal",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "judgment graph extends its externally anchored prefix",
+   "ok": true,
+   "detail": ""
+  }
+ ]
+}

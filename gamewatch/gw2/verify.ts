@@ -452,7 +452,7 @@ export function evaluateExperiment(exp: string, o: { encoding?: string; at?: str
   return { report, nodes: appended, file: outF };
 }
 
-if (process.argv[1]?.endsWith('gw2/verify.ts')) {
+if (process.argv[1]?.replace(/\\/g, "/").endsWith('gw2/verify.ts')) {
   const a = process.argv.slice(2), arg = (k: string) => { const i = a.indexOf(k); return i >= 0 ? a[i + 1] : undefined; };
   const exp = a.find((x, i) => !x.startsWith('--') && !a[i - 1]?.startsWith('--'));
   if (!exp) { console.error('usage: verify.ts <expDir> [--encoding f] [--at ISO] [--confirmatory]'); process.exit(2); }

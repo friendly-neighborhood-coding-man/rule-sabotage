@@ -1,0 +1,42 @@
+{
+ "schema": "gamewatch/gw2-representation-seal@1",
+ "at": "2026-11-25T20:05:08.084Z",
+ "freezeSha256": "464ed8c7fecc072797dbdf21715756c3c25c8032e1b7bbb64eddef94de55c1d9",
+ "graphHead": {
+  "count": 11,
+  "lastLineSha256": "3b823f4e6a1cd56eff2739aa6cf1b84fd0af82b2260a780b6a21ca73bc6acd19"
+ },
+ "ledgerEntriesAtSeal": 0,
+ "representations": [
+  {
+   "id": "9da70fa4f20f290a99a4228881b22fc859fb26908ccf41cb25f7c5557b6447b2",
+   "hypothesis": "db633e8d0d2cb6474bb4fa4a4d22a352bd695cd89e47b577a713af5d9feb73e7",
+   "origin": "submitter",
+   "authorKind": "agent",
+   "authorId": "kane-cli",
+   "fidelity": "faithful"
+  },
+  {
+   "id": "38f5dfeca66809ae7cef9468131de763c8ef7796a9b046cb6f12411ac626c5b8",
+   "hypothesis": "eda7ae35ab80b1d447b50ff6df7e5af20870766e549b8f02e8337283b000ecb0",
+   "origin": "submitter",
+   "authorKind": "agent",
+   "authorId": "kane-cli",
+   "fidelity": "faithful"
+  },
+  {
+   "id": "9923abca63235169d05b7c15f08f725f9c5f961350b766a63d11e48c98dc9b9f",
+   "hypothesis": "0328618b50e233ed45b8ff20323d876b801230848fb7f5a0f6a30209a1f4768b",
+   "origin": "submitter",
+   "authorKind": "agent",
+   "authorId": "kane-cli",
+   "fidelity": "faithful"
+  }
+ ],
+ "counts": {
+  "submitter": 3,
+  "externalTranslation": 0,
+  "frozenHypotheses": 8
+ },
+ "note": "Only these representations are used by held-out scoring and discrimination. Written before any evaluation opening."
+}

@@ -29,7 +29,7 @@ import { spawn } from 'node:child_process';
 import { mkdtempSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { ROOT } from './v6-fork.ts';
-import { runPaidCall, PaidCallRefused, PAID_RESEARCH_EXECUTION, MEASURED_CREDITS_PER_STEP, CAP_WARNING, type PaidApproval, type Deps } from '../server/balance/v4/kanebudget.ts';
+import { runPaidCall, PaidCallRefused, PAID_RESEARCH_EXECUTION, PAID_RESEARCH_SCOPE, MEASURED_CREDITS_PER_STEP, CAP_WARNING, type PaidApproval, type Deps } from '../server/balance/v4/kanebudget.ts';
 import { runCapture, parseKaneOutput, kaneConfig } from '../server/kane.ts';
 import { ShadowLog, classify, SHADOW_SCHEMA, type ShadowCase, type KaneShadowVerdict } from '../server/v6/kaneshadow.ts';
 
@@ -202,6 +202,8 @@ if (process.argv[1]?.endsWith('kane-single-call.ts')) {
     const approval = existsSync(approvalFile) ? JSON.parse(readFileSync(approvalFile, 'utf8')) as PaidApproval : null;
     // The gate is checked BEFORE the browser starts: while execution is disabled nothing at all is launched.
     if (PAID_RESEARCH_EXECUTION === 'disabled') { console.log('REFUSED before any process started: paid research execution is disabled in this workstream (PAID_RESEARCH_EXECUTION)'); process.exitCode = 2; }
+    // D109: the gate may be open for the GW2 P7 pilot only; this run id is outside that scope, so refuse before the browser starts
+    else if (PAID_RESEARCH_SCOPE && !PAID_RESEARCH_SCOPE.test(PLAN.runId)) { console.log(`REFUSED before any process started: run id ${PLAN.runId} is outside the authorized scope of the paid-call gate (${PAID_RESEARCH_SCOPE})`); process.exitCode = 2; }
     else {
       const r = await executeSingleCall({ approval });
       console.log(JSON.stringify(r, null, 1));

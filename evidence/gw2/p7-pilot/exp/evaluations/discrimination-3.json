@@ -1,0 +1,3107 @@
+{
+ "schema": "gamewatch/gw2-discrimination@1",
+ "evaluator": {
+  "id": "gamewatch/gw2/discriminate.ts",
+  "version": "2"
+ },
+ "candidates": [
+  {
+   "id": "9da70fa4f20f290a99a4228881b22fc859fb26908ccf41cb25f7c5557b6447b2",
+   "label": "H-1/submitter/9da70fa4",
+   "hypothesis": "db633e8d0d2cb6474bb4fa4a4d22a352bd695cd89e47b577a713af5d9feb73e7",
+   "origin": "submitter",
+   "primaryAnalysis": true,
+   "selfContradictory": false,
+   "selfContradictorySituationFields": 0
+  },
+  {
+   "id": "38f5dfeca66809ae7cef9468131de763c8ef7796a9b046cb6f12411ac626c5b8",
+   "label": "H-2/submitter/38f5dfec",
+   "hypothesis": "eda7ae35ab80b1d447b50ff6df7e5af20870766e549b8f02e8337283b000ecb0",
+   "origin": "submitter",
+   "primaryAnalysis": true,
+   "selfContradictory": false,
+   "selfContradictorySituationFields": 0
+  },
+  {
+   "id": "9923abca63235169d05b7c15f08f725f9c5f961350b766a63d11e48c98dc9b9f",
+   "label": "H-3/submitter/9923abca",
+   "hypothesis": "0328618b50e233ed45b8ff20323d876b801230848fb7f5a0f6a30209a1f4768b",
+   "origin": "submitter",
+   "primaryAnalysis": true,
+   "selfContradictory": false,
+   "selfContradictorySituationFields": 0
+  },
+  {
+   "id": "spec:R3",
+   "label": "spec R3",
+   "hypothesis": null,
+   "origin": "spec-encoding (provisional)",
+   "primaryAnalysis": "reference",
+   "selfContradictory": false,
+   "selfContradictorySituationFields": 0
+  },
+  {
+   "id": "spec:R5",
+   "label": "spec R5",
+   "hypothesis": null,
+   "origin": "spec-encoding (provisional)",
+   "primaryAnalysis": "reference",
+   "selfContradictory": false,
+   "selfContradictorySituationFields": 0
+  },
+  {
+   "id": "spec:R7",
+   "label": "spec R7",
+   "hypothesis": null,
+   "origin": "spec-encoding (provisional)",
+   "primaryAnalysis": "reference",
+   "selfContradictory": false,
+   "selfContradictorySituationFields": 0
+  },
+  {
+   "id": "spec:R8",
+   "label": "spec R8",
+   "hypothesis": null,
+   "origin": "spec-encoding (provisional)",
+   "primaryAnalysis": "reference",
+   "selfContradictory": false,
+   "selfContradictorySituationFields": 0
+  },
+  {
+   "id": "spec:R12",
+   "label": "spec R12",
+   "hypothesis": null,
+   "origin": "spec-encoding (provisional)",
+   "primaryAnalysis": "reference",
+   "selfContradictory": false,
+   "selfContradictorySituationFields": 0
+  },
+  {
+   "id": "spec:R14",
+   "label": "spec R14",
+   "hypothesis": null,
+   "origin": "spec-encoding (provisional)",
+   "primaryAnalysis": "reference",
+   "selfContradictory": false,
+   "selfContradictorySituationFields": 0
+  }
+ ],
+ "abstentions": [],
+ "withoutRepresentation": [
+  "H-4",
+  "H-1",
+  "H-2",
+  "H-1",
+  "H-2"
+ ],
+ "pairs": [
+  {
+   "candidates": [
+    "H-2/submitter/38f5dfec",
+    "spec R14"
+   ],
+   "ids": [
+    "38f5dfeca66809ae7cef9468131de763c8ef7796a9b046cb6f12411ac626c5b8",
+    "spec:R14"
+   ],
+   "declaredCompetitors": false,
+   "involvesSpec": true,
+   "primaryAnalysis": true,
+   "byBuild": [
+    {
+     "build": "QX-41",
+     "bothFitDiscovery": true,
+     "discovery": {
+      "verdict": "no-common-predictions",
+      "explanation": "they never predict the same outcome field of the same situation",
+      "counts": {
+       "identical": 0,
+       "contradictoryWithOutcome": 0,
+       "contradictoryWithoutOutcome": 0,
+       "nonOverlapping": {
+        "H-2/submitter/38f5dfec": 7,
+        "spec R14": 12
+       },
+       "selfContradictory": {
+        "H-2/submitter/38f5dfec": 0,
+        "spec R14": 0
+       }
+      },
+      "selfContradictions": [],
+      "supportedBy": {
+       "H-2/submitter/38f5dfec": 0,
+       "spec R14": 0,
+       "neither": 0
+      },
+      "separatingSituations": [],
+      "separatingSituationIds": 0,
+      "missingEvidence": []
+     },
+     "heldout": {
+      "verdict": "separated",
+      "explanation": "2 situation-field pair(s) where the two predict different values and the outcome is recorded: the outcome matches H-2/submitter/38f5dfec in 0, spec R14 in 2, neither in 0",
+      "counts": {
+       "identical": 0,
+       "contradictoryWithOutcome": 2,
+       "contradictoryWithoutOutcome": 0,
+       "nonOverlapping": {
+        "H-2/submitter/38f5dfec": 3,
+        "spec R14": 10
+       },
+       "selfContradictory": {
+        "H-2/submitter/38f5dfec": 0,
+        "spec R14": 0
+       }
+      },
+      "selfContradictions": [],
+      "supportedBy": {
+       "H-2/submitter/38f5dfec": 0,
+       "spec R14": 2,
+       "neither": 0
+      },
+      "separatingSituations": [
+       {
+        "id": "C-0de271/s15/e1",
+        "field": "fired",
+        "predictions": {
+         "H-2/submitter/38f5dfec": true,
+         "spec R14": false
+        },
+        "recordedOutcome": false,
+        "matches": "spec R14"
+       },
+       {
+        "id": "C-0de271/s18/e1",
+        "field": "fired",
+        "predictions": {
+         "H-2/submitter/38f5dfec": true,
+         "spec R14": false
+        },
+        "recordedOutcome": false,
+        "matches": "spec R14"
+       }
+      ],
+      "separatingSituationIds": 2,
+      "missingEvidence": []
+     },
+     "pattern": "not separated on discovery, separated on held-out"
+    },
+    {
+     "build": "QX-73",
+     "bothFitDiscovery": false,
+     "discovery": {
+      "verdict": "no-common-predictions",
+      "explanation": "they never predict the same outcome field of the same situation",
+      "counts": {
+       "identical": 0,
+       "contradictoryWithOutcome": 0,
+       "contradictoryWithoutOutcome": 0,
+       "nonOverlapping": {
+        "H-2/submitter/38f5dfec": 6,
+        "spec R14": 12
+       },
+       "selfContradictory": {
+        "H-2/submitter/38f5dfec": 0,
+        "spec R14": 0
+       }
+      },
+      "selfContradictions": [],
+      "supportedBy": {
+       "H-2/submitter/38f5dfec": 0,
+       "spec R14": 0,
+       "neither": 0
+      },
+      "separatingSituations": [],
+      "separatingSituationIds": 0,
+      "missingEvidence": []
+     },
+     "heldout": {
+      "verdict": "separated",
+      "explanation": "2 situation-field pair(s) where the two predict different values and the outcome is recorded: the outcome matches H-2/submitter/38f5dfec in 1, spec R14 in 1, neither in 0",
+      "counts": {
+       "identical": 0,
+       "contradictoryWithOutcome": 2,
+       "contradictoryWithoutOutcome": 0,
+       "nonOverlapping": {
+        "H-2/submitter/38f5dfec": 1,
+        "spec R14": 10
+       },
+       "selfContradictory": {
+        "H-2/submitter/38f5dfec": 0,
+        "spec R14": 0
+       }
+      },
+      "selfContradictions": [],
+      "supportedBy": {
+       "H-2/submitter/38f5dfec": 1,
+       "spec R14": 1,
+       "neither": 0
+      },
+      "separatingSituations": [
+       {
+        "id": "C-b48898/s15/e1",
+        "field": "fired",
+        "predictions": {
+         "H-2/submitter/38f5dfec": true,
+         "spec R14": false
+        },
+        "recordedOutcome": false,
+        "matches": "spec R14"
+       },
+       {
+        "id": "C-b48898/s18/e1",
+        "field": "fired",
+        "predictions": {
+         "H-2/submitter/38f5dfec": true,
+         "spec R14": false
+        },
+        "recordedOutcome": true,
+        "matches": "H-2/submitter/38f5dfec"
+       }
+      ],
+      "separatingSituationIds": 2,
+      "missingEvidence": []
+     },
+     "pattern": "not separated on discovery, separated on held-out"
+    }
+   ]
+  },
+  {
+   "candidates": [
+    "H-1/submitter/9da70fa4",
+    "H-2/submitter/38f5dfec"
+   ],
+   "ids": [
+    "9da70fa4f20f290a99a4228881b22fc859fb26908ccf41cb25f7c5557b6447b2",
+    "38f5dfeca66809ae7cef9468131de763c8ef7796a9b046cb6f12411ac626c5b8"
+   ],
+   "declaredCompetitors": false,
+   "involvesSpec": false,
+   "primaryAnalysis": true,
+   "byBuild": [
+    {
+     "build": "QX-41",
+     "bothFitDiscovery": false,
+     "discovery": {
+      "verdict": "no-common-predictions",
+      "explanation": "they never predict the same outcome field of the same situation",
+      "counts": {
+       "identical": 0,
+       "contradictoryWithOutcome": 0,
+       "contradictoryWithoutOutcome": 0,
+       "nonOverlapping": {
+        "H-1/submitter/9da70fa4": 628,
+        "H-2/submitter/38f5dfec": 7
+       },
+       "selfContradictory": {
+        "H-1/submitter/9da70fa4": 0,
+        "H-2/submitter/38f5dfec": 0
+       }
+      },
+      "selfContradictions": [],
+      "supportedBy": {
+       "H-1/submitter/9da70fa4": 0,
+       "H-2/submitter/38f5dfec": 0,
+       "neither": 0
+      },
+      "separatingSituations": [],
+      "separatingSituationIds": 0,
+      "missingEvidence": []
+     },
+     "heldout": {
+      "verdict": "no-common-predictions",
+      "explanation": "they never predict the same outcome field of the same situation",
+      "counts": {
+       "identical": 0,
+       "contradictoryWithOutcome": 0,
+       "contradictoryWithoutOutcome": 0,
+       "nonOverlapping": {
+        "H-1/submitter/9da70fa4": 301,
+        "H-2/submitter/38f5dfec": 5
+       },
+       "selfContradictory": {
+        "H-1/submitter/9da70fa4": 0,
+        "H-2/submitter/38f5dfec": 0
+       }
+      },
+      "selfContradictions": [],
+      "supportedBy": {
+       "H-1/submitter/9da70fa4": 0,
+       "H-2/submitter/38f5dfec": 0,
+       "neither": 0
+      },
+      "separatingSituations": [],
+      "separatingSituationIds": 0,
+      "missingEvidence": []
+     },
+     "pattern": "no common predictions"
+    },
+    {
+     "build": "QX-73",
+     "bothFitDiscovery": false,
+     "discovery": {
+      "verdict": "no-common-predictions",
+      "explanation": "they never predict the same outcome field of the same situation",
+      "counts": {
+       "identical": 0,
+       "contradictoryWithOutcome": 0,
+       "contradictoryWithoutOutcome": 0,
+       "nonOverlapping": {
+        "H-1/submitter/9da70fa4": 0,
+        "H-2/submitter/38f5dfec": 6
+       },
+       "selfContradictory": {
+        "H-1/submitter/9da70fa4": 0,
+        "H-2/submitter/38f5dfec": 0
+       }
+      },
+      "selfContradictions": [],
+      "supportedBy": {
+       "H-1/submitter/9da70fa4": 0,
+       "H-2/submitter/38f5dfec": 0,
+       "neither": 0
+      },
+      "separatingSituations": [],
+      "separatingSituationIds": 0,
+      "missingEvidence": []
+     },
+     "heldout": {
+      "verdict": "no-common-predictions",
+      "explanation": "they never predict the same outcome field of the same situation",
+      "counts": {
+       "identical": 0,
+       "contradictoryWithOutcome": 0,
+       "contradictoryWithoutOutcome": 0,
+       "nonOverlapping": {
+        "H-1/submitter/9da70fa4": 0,
+        "H-2/submitter/38f5dfec": 3
+       },
+       "selfContradictory": {
+        "H-1/submitter/9da70fa4": 0,
+        "H-2/submitter/38f5dfec": 0
+       }
+      },
+      "selfContradictions": [],
+      "supportedBy": {
+       "H-1/submitter/9da70fa4": 0,
+       "H-2/submitter/38f5dfec": 0,
+       "neither": 0
+      },
+      "separatingSituations": [],
+      "separatingSituationIds": 0,
+      "missingEvidence": []
+     },
+     "pattern": "no common predictions"
+    }
+   ]
+  },
+  {
+   "candidates": [
+    "H-1/submitter/9da70fa4",
+    "H-3/submitter/9923abca"
+   ],
+   "ids": [
+    "9da70fa4f20f290a99a4228881b22fc859fb26908ccf41cb25f7c5557b6447b2",
+    "9923abca63235169d05b7c15f08f725f9c5f961350b766a63d11e48c98dc9b9f"
+   ],
+   "declaredCompetitors": false,
+   "involvesSpec": false,
+   "primaryAnalysis": true,
+   "byBuild": [
+    {
+     "build": "QX-41",
+     "bothFitDiscovery": false,
+     "discovery": {
+      "verdict": "no-common-predictions",
+      "explanation": "they never predict the same outcome field of the same situation",
+      "counts": {
+       "identical": 0,
+       "contradictoryWithOutcome": 0,
+       "contradictoryWithoutOutcome": 0,
+       "nonOverlapping": {
+        "H-1/submitter/9da70fa4": 628,
+        "H-3/submitter/9923abca": 74
+       },
+       "selfContradictory": {
+        "H-1/submitter/9da70fa4": 0,
+        "H-3/submitter/9923abca": 0
+       }
+      },
+      "selfContradictions": [],
+      "supportedBy": {
+       "H-1/submitter/9da70fa4": 0,
+       "H-3/submitter/9923abca": 0,
+       "neither": 0
+      },
+      "separatingSituations": [],
+      "separatingSituationIds": 0,
+      "missingEvidence": []
+     },
+     "heldout": {
+      "verdict": "no-common-predictions",
+      "explanation": "they never predict the same outcome field of the same situation",
+      "counts": {
+       "identical": 0,
+       "contradictoryWithOutcome": 0,
+       "contradictoryWithoutOutcome": 0,
+       "nonOverlapping": {
+        "H-1/submitter/9da70fa4": 301,
+        "H-3/submitter/9923abca": 34
+       },
+       "selfContradictory": {
+        "H-1/submitter/9da70fa4": 0,
+        "H-3/submitter/9923abca": 0
+       }
+      },
+      "selfContradictions": [],
+      "supportedBy": {
+       "H-1/submitter/9da70fa4": 0,
+       "H-3/submitter/9923abca": 0,
+       "neither": 0
+      },
+      "separatingSituations": [],
+      "separatingSituationIds": 0,
+      "missingEvidence": []
+     },
+     "pattern": "no common predictions"
+    },
+    {
+     "build": "QX-73",
+     "bothFitDiscovery": false,
+     "discovery": {
+      "verdict": "no-common-predictions",
+      "explanation": "they never predict the same outcome field of the same situation",
+      "counts": {
+       "identical": 0,
+       "contradictoryWithOutcome": 0,
+       "contradictoryWithoutOutcome": 0,
+       "nonOverlapping": {
+        "H-1/submitter/9da70fa4": 0,
+        "H-3/submitter/9923abca": 64
+       },
+       "selfContradictory": {
+        "H-1/submitter/9da70fa4": 0,
+        "H-3/submitter/9923abca": 0
+       }
+      },
+      "selfContradictions": [],
+      "supportedBy": {
+       "H-1/submitter/9da70fa4": 0,
+       "H-3/submitter/9923abca": 0,
+       "neither": 0
+      },
+      "separatingSituations": [],
+      "separatingSituationIds": 0,
+      "missingEvidence": []
+     },
+     "heldout": {
+      "verdict": "no-common-predictions",
+      "explanation": "they never predict the same outcome field of the same situation",
+      "counts": {
+       "identical": 0,
+       "contradictoryWithOutcome": 0,
+       "contradictoryWithoutOutcome": 0,
+       "nonOverlapping": {
+        "H-1/submitter/9da70fa4": 0,
+        "H-3/submitter/9923abca": 41
+       },
+       "selfContradictory": {
+        "H-1/submitter/9da70fa4": 0,
+        "H-3/submitter/9923abca": 0
+       }
+      },
+      "selfContradictions": [],
+      "supportedBy": {
+       "H-1/submitter/9da70fa4": 0,
+       "H-3/submitter/9923abca": 0,
+       "neither": 0
+      },
+      "separatingSituations": [],
+      "separatingSituationIds": 0,
+      "missingEvidence": []
+     },
+     "pattern": "no common predictions"
+    }
+   ]
+  },
+  {
+   "candidates": [
+    "H-1/submitter/9da70fa4",
+    "spec R12"
+   ],
+   "ids": [
+    "9da70fa4f20f290a99a4228881b22fc859fb26908ccf41cb25f7c5557b6447b2",
+    "spec:R12"
+   ],
+   "declaredCompetitors": false,
+   "involvesSpec": true,
+   "primaryAnalysis": true,
+   "byBuild": [
+    {
+     "build": "QX-41",
+     "bothFitDiscovery": false,
+     "discovery": {
+      "verdict": "no-common-predictions",
+      "explanation": "they never predict the same outcome field of the same situation",
+      "counts": {
+       "identical": 0,
+       "contradictoryWithOutcome": 0,
+       "contradictoryWithoutOutcome": 0,
+       "nonOverlapping": {
+        "H-1/submitter/9da70fa4": 628,
+        "spec R12": 10
+       },
+       "selfContradictory": {
+        "H-1/submitter/9da70fa4": 0,
+        "spec R12": 0
+       }
+      },
+      "selfContradictions": [],
+      "supportedBy": {
+       "H-1/submitter/9da70fa4": 0,
+       "spec R12": 0,
+       "neither": 0
+      },
+      "separatingSituations": [],
+      "separatingSituationIds": 0,
+      "missingEvidence": []
+     },
+     "heldout": {
+      "verdict": "no-common-predictions",
+      "explanation": "they never predict the same outcome field of the same situation",
+      "counts": {
+       "identical": 0,
+       "contradictoryWithOutcome": 0,
+       "contradictoryWithoutOutcome": 0,
+       "nonOverlapping": {
+        "H-1/submitter/9da70fa4": 301,
+        "spec R12": 2
+       },
+       "selfContradictory": {
+        "H-1/submitter/9da70fa4": 0,
+        "spec R12": 0
+       }
+      },
+      "selfContradictions": [],
+      "supportedBy": {
+       "H-1/submitter/9da70fa4": 0,
+       "spec R12": 0,
+       "neither": 0
+      },
+      "separatingSituations": [],
+      "separatingSituationIds": 0,
+      "missingEvidence": []
+     },
+     "pattern": "no common predictions"
+    },
+    {
+     "build": "QX-73",
+     "bothFitDiscovery": false,
+     "discovery": {
+      "verdict": "no-common-predictions",
+      "explanation": "they never predict the same outcome field of the same situation",
+      "counts": {
+       "identical": 0,
+       "contradictoryWithOutcome": 0,
+       "contradictoryWithoutOutcome": 0,
+       "nonOverlapping": {
+        "H-1/submitter/9da70fa4": 0,
+        "spec R12": 10
+       },
+       "selfContradictory": {
+        "H-1/submitter/9da70fa4": 0,
+        "spec R12": 0
+       }
+      },
+      "selfContradictions": [],
+      "supportedBy": {
+       "H-1/submitter/9da70fa4": 0,
+       "spec R12": 0,
+       "neither": 0
+      },
+      "separatingSituations": [],
+      "separatingSituationIds": 0,
+      "missingEvidence": []
+     },
+     "heldout": {
+      "verdict": "no-common-predictions",
+      "explanation": "they never predict the same outcome field of the same situation",
+      "counts": {
+       "identical": 0,
+       "contradictoryWithOutcome": 0,
+       "contradictoryWithoutOutcome": 0,
+       "nonOverlapping": {
+        "H-1/submitter/9da70fa4": 0,
+        "spec R12": 2
+       },
+       "selfContradictory": {
+        "H-1/submitter/9da70fa4": 0,
+        "spec R12": 0
+       }
+      },
+      "selfContradictions": [],
+      "supportedBy": {
+       "H-1/submitter/9da70fa4": 0,
+       "spec R12": 0,
+       "neither": 0
+      },
+      "separatingSituations": [],
+      "separatingSituationIds": 0,
+      "missingEvidence": []
+     },
+     "pattern": "no common predictions"
+    }
+   ]
+  },
+  {
+   "candidates": [
+    "H-1/submitter/9da70fa4",
+    "spec R14"
+   ],
+   "ids": [
+    "9da70fa4f20f290a99a4228881b22fc859fb26908ccf41cb25f7c5557b6447b2",
+    "spec:R14"
+   ],
+   "declaredCompetitors": false,
+   "involvesSpec": true,
+   "primaryAnalysis": true,
+   "byBuild": [
+    {
+     "build": "QX-41",
+     "bothFitDiscovery": false,
+     "discovery": {
+      "verdict": "no-common-predictions",
+      "explanation": "they never predict the same outcome field of the same situation",
+      "counts": {
+       "identical": 0,
+       "contradictoryWithOutcome": 0,
+       "contradictoryWithoutOutcome": 0,
+       "nonOverlapping": {
+        "H-1/submitter/9da70fa4": 628,
+        "spec R14": 12
+       },
+       "selfContradictory": {
+        "H-1/submitter/9da70fa4": 0,
+        "spec R14": 0
+       }
+      },
+      "selfContradictions": [],
+      "supportedBy": {
+       "H-1/submitter/9da70fa4": 0,
+       "spec R14": 0,
+       "neither": 0
+      },
+      "separatingSituations": [],
+      "separatingSituationIds": 0,
+      "missingEvidence": []
+     },
+     "heldout": {
+      "verdict": "no-common-predictions",
+      "explanation": "they never predict the same outcome field of the same situation",
+      "counts": {
+       "identical": 0,
+       "contradictoryWithOutcome": 0,
+       "contradictoryWithoutOutcome": 0,
+       "nonOverlapping": {
+        "H-1/submitter/9da70fa4": 301,
+        "spec R14": 12
+       },
+       "selfContradictory": {
+        "H-1/submitter/9da70fa4": 0,
+        "spec R14": 0
+       }
+      },
+      "selfContradictions": [],
+      "supportedBy": {
+       "H-1/submitter/9da70fa4": 0,
+       "spec R14": 0,
+       "neither": 0
+      },
+      "separatingSituations": [],
+      "separatingSituationIds": 0,
+      "missingEvidence": []
+     },
+     "pattern": "no common predictions"
+    },
+    {
+     "build": "QX-73",
+     "bothFitDiscovery": false,
+     "discovery": {
+      "verdict": "no-common-predictions",
+      "explanation": "they never predict the same outcome field of the same situation",
+      "counts": {
+       "identical": 0,
+       "contradictoryWithOutcome": 0,
+       "contradictoryWithoutOutcome": 0,
+       "nonOverlapping": {
+        "H-1/submitter/9da70fa4": 0,
+        "spec R14": 12
+       },
+       "selfContradictory": {
+        "H-1/submitter/9da70fa4": 0,
+        "spec R14": 0
+       }
+      },
+      "selfContradictions": [],
+      "supportedBy": {
+       "H-1/submitter/9da70fa4": 0,
+       "spec R14": 0,
+       "neither": 0
+      },
+      "separatingSituations": [],
+      "separatingSituationIds": 0,
+      "missingEvidence": []
+     },
+     "heldout": {
+      "verdict": "no-common-predictions",
+      "explanation": "they never predict the same outcome field of the same situation",
+      "counts": {
+       "identical": 0,
+       "contradictoryWithOutcome": 0,
+       "contradictoryWithoutOutcome": 0,
+       "nonOverlapping": {
+        "H-1/submitter/9da70fa4": 0,
+        "spec R14": 12
+       },
+       "selfContradictory": {
+        "H-1/submitter/9da70fa4": 0,
+        "spec R14": 0
+       }
+      },
+      "selfContradictions": [],
+      "supportedBy": {
+       "H-1/submitter/9da70fa4": 0,
+       "spec R14": 0,
+       "neither": 0
+      },
+      "separatingSituations": [],
+      "separatingSituationIds": 0,
+      "missingEvidence": []
+     },
+     "pattern": "no common predictions"
+    }
+   ]
+  },
+  {
+   "candidates": [
+    "H-1/submitter/9da70fa4",
+    "spec R3"
+   ],
+   "ids": [
+    "9da70fa4f20f290a99a4228881b22fc859fb26908ccf41cb25f7c5557b6447b2",
+    "spec:R3"
+   ],
+   "declaredCompetitors": false,
+   "involvesSpec": true,
+   "primaryAnalysis": true,
+   "byBuild": [
+    {
+     "build": "QX-41",
+     "bothFitDiscovery": false,
+     "discovery": {
+      "verdict": "separated",
+      "explanation": "390 situation-field pair(s) where the two predict different values and the outcome is recorded: the outcome matches H-1/submitter/9da70fa4 in 0, spec R3 in 390, neither in 0",
+      "counts": {
+       "identical": 238,
+       "contradictoryWithOutcome": 390,
+       "contradictoryWithoutOutcome": 0,
+       "nonOverlapping": {
+        "H-1/submitter/9da70fa4": 0,
+        "spec R3": 0
+       },
+       "selfContradictory": {
+        "H-1/submitter/9da70fa4": 0,
+        "spec R3": 0
+       }
+      },
+      "selfContradictions": [],
+      "supportedBy": {
+       "H-1/submitter/9da70fa4": 0,
+       "spec R3": 390,
+       "neither": 0
+      },
+      "separatingSituations": [
+       {
+        "id": "M-22e2f2/t11/turn-start",
+        "field": "actionsGranted",
+        "predictions": {
+         "H-1/submitter/9da70fa4": 3,
+         "spec R3": 2
+        },
+        "recordedOutcome": 2,
+        "matches": "spec R3"
+       },
+       {
+        "id": "M-22e2f2/t13/turn-start",
+        "field": "actionsGranted",
+        "predictions": {
+         "H-1/submitter/9da70fa4": 3,
+         "spec R3": 2
+        },
+        "recordedOutcome": 2,
+        "matches": "spec R3"
+       },
+       {
+        "id": "M-22e2f2/t15/turn-start",
+        "field": "actionsGranted",
+        "predictions": {
+         "H-1/submitter/9da70fa4": 3,
+         "spec R3": 2
+        },
+        "recordedOutcome": 2,
+        "matches": "spec R3"
+       },
+       {
+        "id": "M-22e2f2/t17/turn-start",
+        "field": "actionsGranted",
+        "predictions": {
+         "H-1/submitter/9da70fa4": 3,
+         "spec R3": 2
+        },
+        "recordedOutcome": 2,
+        "matches": "spec R3"
+       },
+       {
+        "id": "M-22e2f2/t19/turn-start",
+        "field": "actionsGranted",
+        "predictions": {
+         "H-1/submitter/9da70fa4": 3,
+         "spec R3": 2
+        },
+        "recordedOutcome": 2,
+        "matches": "spec R3"
+       },
+       {
+        "id": "M-22e2f2/t21/turn-start",
+        "field": "actionsGranted",
+        "predictions": {
+         "H-1/submitter/9da70fa4": 3,
+         "spec R3": 2
+        },
+        "recordedOutcome": 2,
+        "matches": "spec R3"
+       },
+       {
+        "id": "M-22e2f2/t23/turn-start",
+        "field": "actionsGranted",
+        "predictions": {
+         "H-1/submitter/9da70fa4": 3,
+         "spec R3": 2
+        },
+        "recordedOutcome": 2,
+        "matches": "spec R3"
+       },
+       {
+        "id": "M-22e2f2/t25/turn-start",
+        "field": "actionsGranted",
+        "predictions": {
+         "H-1/submitter/9da70fa4": 3,
+         "spec R3": 2
+        },
+        "recordedOutcome": 2,
+        "matches": "spec R3"
+       },
+       {
+        "id": "M-22e2f2/t27/turn-start",
+        "field": "actionsGranted",
+        "predictions": {
+         "H-1/submitter/9da70fa4": 3,
+         "spec R3": 2
+        },
+        "recordedOutcome": 2,
+        "matches": "spec R3"
+       },
+       {
+        "id": "M-22e2f2/t29/turn-start",
+        "field": "actionsGranted",
+        "predictions": {
+         "H-1/submitter/9da70fa4": 3,
+         "spec R3": 2
+        },
+        "recordedOutcome": 2,
+        "matches": "spec R3"
+       },
+       {
+        "id": "M-22e2f2/t3/turn-start",
+        "field": "actionsGranted",
+        "predictions": {
+         "H-1/submitter/9da70fa4": 3,
+         "spec R3": 2
+        },
+        "recordedOutcome": 2,
+        "matches": "spec R3"
+       },
+       {
+        "id": "M-22e2f2/t31/turn-start",
+        "field": "actionsGranted",
+        "predictions": {
+         "H-1/submitter/9da70fa4": 3,
+         "spec R3": 2
+        },
+        "recordedOutcome": 2,
+        "matches": "spec R3"
+       }
+      ],
+      "separatingSituationIds": 390,
+      "missingEvidence": []
+     },
+     "heldout": {
+      "verdict": "separated",
+      "explanation": "187 situation-field pair(s) where the two predict different values and the outcome is recorded: the outcome matches H-1/submitter/9da70fa4 in 0, spec R3 in 187, neither in 0",
+      "counts": {
+       "identical": 114,
+       "contradictoryWithOutcome": 187,
+       "contradictoryWithoutOutcome": 0,
+       "nonOverlapping": {
+        "H-1/submitter/9da70fa4": 0,
+        "spec R3": 0
+       },
+       "selfContradictory": {
+        "H-1/submitter/9da70fa4": 0,
+        "spec R3": 0
+       }
+      },
+      "selfContradictions": [],
+      "supportedBy": {
+       "H-1/submitter/9da70fa4": 0,
+       "spec R3": 187,
+       "neither": 0
+      },
+      "separatingSituations": [
+       {
+        "id": "M-08cf44/t13/turn-start",
+        "field": "actionsGranted",
+        "predictions": {
+         "H-1/submitter/9da70fa4": 3,
+         "spec R3": 2
+        },
+        "recordedOutcome": 2,
+        "matches": "spec R3"
+       },
+       {
+        "id": "M-08cf44/t15/turn-start",
+        "field": "actionsGranted",
+        "predictions": {
+         "H-1/submitter/9da70fa4": 3,
+         "spec R3": 2
+        },
+        "recordedOutcome": 2,
+        "matches": "spec R3"
+       },
+       {
+        "id": "M-08cf44/t16/turn-start",
+        "field": "actionsGranted",
+        "predictions": {
+         "H-1/submitter/9da70fa4": 3,
+         "spec R3": 2
+        },
+        "recordedOutcome": 2,
+        "matches": "spec R3"
+       },
+       {
+        "id": "M-08cf44/t17/turn-start",
+        "field": "actionsGranted",
+        "predictions": {
+         "H-1/submitter/9da70fa4": 3,
+         "spec R3": 2
+        },
+        "recordedOutcome": 2,
+        "matches": "spec R3"
+       },
+       {
+        "id": "M-08cf44/t18/turn-start",
+        "field": "actionsGranted",
+        "predictions": {
+         "H-1/submitter/9da70fa4": 3,
+         "spec R3": 2
+        },
+        "recordedOutcome": 2,
+        "matches": "spec R3"
+       },
+       {
+        "id": "M-08cf44/t19/turn-start",
+        "field": "actionsGranted",
+        "predictions": {
+         "H-1/submitter/9da70fa4": 3,
+         "spec R3": 1
+        },
+        "recordedOutcome": 1,
+        "matches": "spec R3"
+       },
+       {
+        "id": "M-08cf44/t20/turn-start",
+        "field": "actionsGranted",
+        "predictions": {
+         "H-1/submitter/9da70fa4": 3,
+         "spec R3": 2
+        },
+        "recordedOutcome": 2,
+        "matches": "spec R3"
+       },
+       {
+        "id": "M-08cf44/t21/turn-start",
+        "field": "actionsGranted",
+        "predictions": {
+         "H-1/submitter/9da70fa4": 3,
+         "spec R3": 1
+        },
+        "recordedOutcome": 1,
+        "matches": "spec R3"
+       },
+       {
+        "id": "M-08cf44/t22/turn-start",
+        "field": "actionsGranted",
+        "predictions": {
+         "H-1/submitter/9da70fa4": 3,
+         "spec R3": 2
+        },
+        "recordedOutcome": 2,
+        "matches": "spec R3"
+       },
+       {
+        "id": "M-08cf44/t23/turn-start",
+        "field": "actionsGranted",
+        "predictions": {
+         "H-1/submitter/9da70fa4": 3,
+         "spec R3": 1
+        },
+        "recordedOutcome": 1,
+        "matches": "spec R3"
+       },
+       {
+        "id": "M-08cf44/t24/turn-start",
+        "field": "actionsGranted",
+        "predictions": {
+         "H-1/submitter/9da70fa4": 3,
+         "spec R3": 2
+        },
+        "recordedOutcome": 2,
+        "matches": "spec R3"
+       },
+       {
+        "id": "M-08cf44/t25/turn-start",
+        "field": "actionsGranted",
+        "predictions": {
+         "H-1/submitter/9da70fa4": 3,
+         "spec R3": 1
+        },
+        "recordedOutcome": 1,
+        "matches": "spec R3"
+       }
+      ],
+      "separatingSituationIds": 187,
+      "missingEvidence": []
+     },
+     "pattern": "separated on discovery"
+    },
+    {
+     "build": "QX-73",
+     "bothFitDiscovery": false,
+     "discovery": {
+      "verdict": "no-common-predictions",
+      "explanation": "they never predict the same outcome field of the same situation",
+      "counts": {
+       "identical": 0,
+       "contradictoryWithOutcome": 0,
+       "contradictoryWithoutOutcome": 0,
+       "nonOverlapping": {
+        "H-1/submitter/9da70fa4": 0,
+        "spec R3": 422
+       },
+       "selfContradictory": {
+        "H-1/submitter/9da70fa4": 0,
+        "spec R3": 0
+       }
+      },
+      "selfContradictions": [],
+      "supportedBy": {
+       "H-1/submitter/9da70fa4": 0,
+       "spec R3": 0,
+       "neither": 0
+      },
+      "separatingSituations": [],
+      "separatingSituationIds": 0,
+      "missingEvidence": []
+     },
+     "heldout": {
+      "verdict": "no-common-predictions",
+      "explanation": "they never predict the same outcome field of the same situation",
+      "counts": {
+       "identical": 0,
+       "contradictoryWithOutcome": 0,
+       "contradictoryWithoutOutcome": 0,
+       "nonOverlapping": {
+        "H-1/submitter/9da70fa4": 0,
+        "spec R3": 189
+       },
+       "selfContradictory": {
+        "H-1/submitter/9da70fa4": 0,
+        "spec R3": 0
+       }
+      },
+      "selfContradictions": [],
+      "supportedBy": {
+       "H-1/submitter/9da70fa4": 0,
+       "spec R3": 0,
+       "neither": 0
+      },
+      "separatingSituations": [],
+      "separatingSituationIds": 0,
+      "missingEvidence": []
+     },
+     "pattern": "no common predictions"
+    }
+   ]
+  },
+  {
+   "candidates": [
+    "H-1/submitter/9da70fa4",
+    "spec R5"
+   ],
+   "ids": [
+    "9da70fa4f20f290a99a4228881b22fc859fb26908ccf41cb25f7c5557b6447b2",
+    "spec:R5"
+   ],
+   "declaredCompetitors": false,
+   "involvesSpec": true,
+   "primaryAnalysis": true,
+   "byBuild": [
+    {
+     "build": "QX-41",
+     "bothFitDiscovery": false,
+     "discovery": {
+      "verdict": "no-common-predictions",
+      "explanation": "they never predict the same outcome field of the same situation",
+      "counts": {
+       "identical": 0,
+       "contradictoryWithOutcome": 0,
+       "contradictoryWithoutOutcome": 0,
+       "nonOverlapping": {
+        "H-1/submitter/9da70fa4": 628,
+        "spec R5": 3
+       },
+       "selfContradictory": {
+        "H-1/submitter/9da70fa4": 0,
+        "spec R5": 0
+       }
+      },
+      "selfContradictions": [],
+      "supportedBy": {
+       "H-1/submitter/9da70fa4": 0,
+       "spec R5": 0,
+       "neither": 0
+      },
+      "separatingSituations": [],
+      "separatingSituationIds": 0,
+      "missingEvidence": []
+     },
+     "heldout": {
+      "verdict": "no-common-predictions",
+      "explanation": "they never predict the same outcome field of the same situation",
+      "counts": {
+       "identical": 0,
+       "contradictoryWithOutcome": 0,
+       "contradictoryWithoutOutcome": 0,
+       "nonOverlapping": {
+        "H-1/submitter/9da70fa4": 301,
+        "spec R5": 2
+       },
+       "selfContradictory": {
+        "H-1/submitter/9da70fa4": 0,
+        "spec R5": 0
+       }
+      },
+      "selfContradictions": [],
+      "supportedBy": {
+       "H-1/submitter/9da70fa4": 0,
+       "spec R5": 0,
+       "neither": 0
+      },
+      "separatingSituations": [],
+      "separatingSituationIds": 0,
+      "missingEvidence": []
+     },
+     "pattern": "no common predictions"
+    },
+    {
+     "build": "QX-73",
+     "bothFitDiscovery": false,
+     "discovery": {
+      "verdict": "no-common-predictions",
+      "explanation": "they never predict the same outcome field of the same situation",
+      "counts": {
+       "identical": 0,
+       "contradictoryWithOutcome": 0,
+       "contradictoryWithoutOutcome": 0,
+       "nonOverlapping": {
+        "H-1/submitter/9da70fa4": 0,
+        "spec R5": 3
+       },
+       "selfContradictory": {
+        "H-1/submitter/9da70fa4": 0,
+        "spec R5": 0
+       }
+      },
+      "selfContradictions": [],
+      "supportedBy": {
+       "H-1/submitter/9da70fa4": 0,
+       "spec R5": 0,
+       "neither": 0
+      },
+      "separatingSituations": [],
+      "separatingSituationIds": 0,
+      "missingEvidence": []
+     },
+     "heldout": {
+      "verdict": "no-common-predictions",
+      "explanation": "they never predict the same outcome field of the same situation",
+      "counts": {
+       "identical": 0,
+       "contradictoryWithOutcome": 0,
+       "contradictoryWithoutOutcome": 0,
+       "nonOverlapping": {
+        "H-1/submitter/9da70fa4": 0,
+        "spec R5": 2
+       },
+       "selfContradictory": {
+        "H-1/submitter/9da70fa4": 0,
+        "spec R5": 0
+       }
+      },
+      "selfContradictions": [],
+      "supportedBy": {
+       "H-1/submitter/9da70fa4": 0,
+       "spec R5": 0,
+       "neither": 0
+      },
+      "separatingSituations": [],
+      "separatingSituationIds": 0,
+      "missingEvidence": []
+     },
+     "pattern": "no common predictions"
+    }
+   ]
+  },
+  {
+   "candidates": [
+    "H-1/submitter/9da70fa4",
+    "spec R7"
+   ],
+   "ids": [
+    "9da70fa4f20f290a99a4228881b22fc859fb26908ccf41cb25f7c5557b6447b2",
+    "spec:R7"
+   ],
+   "declaredCompetitors": false,
+   "involvesSpec": true,
+   "primaryAnalysis": true,
+   "byBuild": [
+    {
+     "build": "QX-41",
+     "bothFitDiscovery": false,
+     "discovery": {
+      "verdict": "no-common-predictions",
+      "explanation": "they never predict the same outcome field of the same situation",
+      "counts": {
+       "identical": 0,
+       "contradictoryWithOutcome": 0,
+       "contradictoryWithoutOutcome": 0,
+       "nonOverlapping": {
+        "H-1/submitter/9da70fa4": 628,
+        "spec R7": 0
+       },
+       "selfContradictory": {
+        "H-1/submitter/9da70fa4": 0,
+        "spec R7": 0
+       }
+      },
+      "selfContradictions": [],
+      "supportedBy": {
+       "H-1/submitter/9da70fa4": 0,
+       "spec R7": 0,
+       "neither": 0
+      },
+      "separatingSituations": [],
+      "separatingSituationIds": 0,
+      "missingEvidence": []
+     },
+     "heldout": {
+      "verdict": "no-common-predictions",
+      "explanation": "they never predict the same outcome field of the same situation",
+      "counts": {
+       "identical": 0,
+       "contradictoryWithOutcome": 0,
+       "contradictoryWithoutOutcome": 0,
+       "nonOverlapping": {
+        "H-1/submitter/9da70fa4": 301,
+        "spec R7": 0
+       },
+       "selfContradictory": {
+        "H-1/submitter/9da70fa4": 0,
+        "spec R7": 0
+       }
+      },
+      "selfContradictions": [],
+      "supportedBy": {
+       "H-1/submitter/9da70fa4": 0,
+       "spec R7": 0,
+       "neither": 0
+      },
+      "separatingSituations": [],
+      "separatingSituationIds": 0,
+      "missingEvidence": []
+     },
+     "pattern": "no common predictions"
+    },
+    {
+     "build": "QX-73",
+     "bothFitDiscovery": false,
+     "discovery": {
+      "verdict": "no-common-predictions",
+      "explanation": "they never predict the same outcome field of the same situation",
+      "counts": {
+       "identical": 0,
+       "contradictoryWithOutcome": 0,
+       "contradictoryWithoutOutcome": 0,
+       "nonOverlapping": {
+        "H-1/submitter/9da70fa4": 0,
+        "spec R7": 0
+       },
+       "selfContradictory": {
+        "H-1/submitter/9da70fa4": 0,
+        "spec R7": 0
+       }
+      },
+      "selfContradictions": [],
+      "supportedBy": {
+       "H-1/submitter/9da70fa4": 0,
+       "spec R7": 0,
+       "neither": 0
+      },
+      "separatingSituations": [],
+      "separatingSituationIds": 0,
+      "missingEvidence": []
+     },
+     "heldout": {
+      "verdict": "no-common-predictions",
+      "explanation": "they never predict the same outcome field of the same situation",
+      "counts": {
+       "identical": 0,
+       "contradictoryWithOutcome": 0,
+       "contradictoryWithoutOutcome": 0,
+       "nonOverlapping": {
+        "H-1/submitter/9da70fa4": 0,
+        "spec R7": 0
+       },
+       "selfContradictory": {
+        "H-1/submitter/9da70fa4": 0,
+        "spec R7": 0
+       }
+      },
+      "selfContradictions": [],
+      "supportedBy": {
+       "H-1/submitter/9da70fa4": 0,
+       "spec R7": 0,
+       "neither": 0
+      },
+      "separatingSituations": [],
+      "separatingSituationIds": 0,
+      "missingEvidence": []
+     },
+     "pattern": "no common predictions"
+    }
+   ]
+  },
+  {
+   "candidates": [
+    "H-1/submitter/9da70fa4",
+    "spec R8"
+   ],
+   "ids": [
+    "9da70fa4f20f290a99a4228881b22fc859fb26908ccf41cb25f7c5557b6447b2",
+    "spec:R8"
+   ],
+   "declaredCompetitors": false,
+   "involvesSpec": true,
+   "primaryAnalysis": true,
+   "byBuild": [
+    {
+     "build": "QX-41",
+     "bothFitDiscovery": false,
+     "discovery": {
+      "verdict": "no-common-predictions",
+      "explanation": "they never predict the same outcome field of the same situation",
+      "counts": {
+       "identical": 0,
+       "contradictoryWithOutcome": 0,
+       "contradictoryWithoutOutcome": 0,
+       "nonOverlapping": {
+        "H-1/submitter/9da70fa4": 628,
+        "spec R8": 494
+       },
+       "selfContradictory": {
+        "H-1/submitter/9da70fa4": 0,
+        "spec R8": 0
+       }
+      },
+      "selfContradictions": [],
+      "supportedBy": {
+       "H-1/submitter/9da70fa4": 0,
+       "spec R8": 0,
+       "neither": 0
+      },
+      "separatingSituations": [],
+      "separatingSituationIds": 0,
+      "missingEvidence": []
+     },
+     "heldout": {
+      "verdict": "no-common-predictions",
+      "explanation": "they never predict the same outcome field of the same situation",
+      "counts": {
+       "identical": 0,
+       "contradictoryWithOutcome": 0,
+       "contradictoryWithoutOutcome": 0,
+       "nonOverlapping": {
+        "H-1/submitter/9da70fa4": 301,
+        "spec R8": 235
+       },
+       "selfContradictory": {
+        "H-1/submitter/9da70fa4": 0,
+        "spec R8": 0
+       }
+      },
+      "selfContradictions": [],
+      "supportedBy": {
+       "H-1/submitter/9da70fa4": 0,
+       "spec R8": 0,
+       "neither": 0
+      },
+      "separatingSituations": [],
+      "separatingSituationIds": 0,
+      "missingEvidence": []
+     },
+     "pattern": "no common predictions"
+    },
+    {
+     "build": "QX-73",
+     "bothFitDiscovery": false,
+     "discovery": {
+      "verdict": "no-common-predictions",
+      "explanation": "they never predict the same outcome field of the same situation",
+      "counts": {
+       "identical": 0,
+       "contradictoryWithOutcome": 0,
+       "contradictoryWithoutOutcome": 0,
+       "nonOverlapping": {
+        "H-1/submitter/9da70fa4": 0,
+        "spec R8": 380
+       },
+       "selfContradictory": {
+        "H-1/submitter/9da70fa4": 0,
+        "spec R8": 0
+       }
+      },
+      "selfContradictions": [],
+      "supportedBy": {
+       "H-1/submitter/9da70fa4": 0,
+       "spec R8": 0,
+       "neither": 0
+      },
+      "separatingSituations": [],
+      "separatingSituationIds": 0,
+      "missingEvidence": []
+     },
+     "heldout": {
+      "verdict": "no-common-predictions",
+      "explanation": "they never predict the same outcome field of the same situation",
+      "counts": {
+       "identical": 0,
+       "contradictoryWithOutcome": 0,
+       "contradictoryWithoutOutcome": 0,
+       "nonOverlapping": {
+        "H-1/submitter/9da70fa4": 0,
+        "spec R8": 179
+       },
+       "selfContradictory": {
+        "H-1/submitter/9da70fa4": 0,
+        "spec R8": 0
+       }
+      },
+      "selfContradictions": [],
+      "supportedBy": {
+       "H-1/submitter/9da70fa4": 0,
+       "spec R8": 0,
+       "neither": 0
+      },
+      "separatingSituations": [],
+      "separatingSituationIds": 0,
+      "missingEvidence": []
+     },
+     "pattern": "no common predictions"
+    }
+   ]
+  },
+  {
+   "candidates": [
+    "H-2/submitter/38f5dfec",
+    "H-3/submitter/9923abca"
+   ],
+   "ids": [
+    "38f5dfeca66809ae7cef9468131de763c8ef7796a9b046cb6f12411ac626c5b8",
+    "9923abca63235169d05b7c15f08f725f9c5f961350b766a63d11e48c98dc9b9f"
+   ],
+   "declaredCompetitors": false,
+   "involvesSpec": false,
+   "primaryAnalysis": true,
+   "byBuild": [
+    {
+     "build": "QX-41",
+     "bothFitDiscovery": true,
+     "discovery": {
+      "verdict": "no-common-predictions",
+      "explanation": "they never predict the same outcome field of the same situation",
+      "counts": {
+       "identical": 0,
+       "contradictoryWithOutcome": 0,
+       "contradictoryWithoutOutcome": 0,
+       "nonOverlapping": {
+        "H-2/submitter/38f5dfec": 7,
+        "H-3/submitter/9923abca": 74
+       },
+       "selfContradictory": {
+        "H-2/submitter/38f5dfec": 0,
+        "H-3/submitter/9923abca": 0
+       }
+      },
+      "selfContradictions": [],
+      "supportedBy": {
+       "H-2/submitter/38f5dfec": 0,
+       "H-3/submitter/9923abca": 0,
+       "neither": 0
+      },
+      "separatingSituations": [],
+      "separatingSituationIds": 0,
+      "missingEvidence": []
+     },
+     "heldout": {
+      "verdict": "no-common-predictions",
+      "explanation": "they never predict the same outcome field of the same situation",
+      "counts": {
+       "identical": 0,
+       "contradictoryWithOutcome": 0,
+       "contradictoryWithoutOutcome": 0,
+       "nonOverlapping": {
+        "H-2/submitter/38f5dfec": 5,
+        "H-3/submitter/9923abca": 34
+       },
+       "selfContradictory": {
+        "H-2/submitter/38f5dfec": 0,
+        "H-3/submitter/9923abca": 0
+       }
+      },
+      "selfContradictions": [],
+      "supportedBy": {
+       "H-2/submitter/38f5dfec": 0,
+       "H-3/submitter/9923abca": 0,
+       "neither": 0
+      },
+      "separatingSituations": [],
+      "separatingSituationIds": 0,
+      "missingEvidence": []
+     },
+     "pattern": "no common predictions"
+    },
+    {
+     "build": "QX-73",
+     "bothFitDiscovery": true,
+     "discovery": {
+      "verdict": "no-common-predictions",
+      "explanation": "they never predict the same outcome field of the same situation",
+      "counts": {
+       "identical": 0,
+       "contradictoryWithOutcome": 0,
+       "contradictoryWithoutOutcome": 0,
+       "nonOverlapping": {
+        "H-2/submitter/38f5dfec": 6,
+        "H-3/submitter/9923abca": 64
+       },
+       "selfContradictory": {
+        "H-2/submitter/38f5dfec": 0,
+        "H-3/submitter/9923abca": 0
+       }
+      },
+      "selfContradictions": [],
+      "supportedBy": {
+       "H-2/submitter/38f5dfec": 0,
+       "H-3/submitter/9923abca": 0,
+       "neither": 0
+      },
+      "separatingSituations": [],
+      "separatingSituationIds": 0,
+      "missingEvidence": []
+     },
+     "heldout": {
+      "verdict": "no-common-predictions",
+      "explanation": "they never predict the same outcome field of the same situation",
+      "counts": {
+       "identical": 0,
+       "contradictoryWithOutcome": 0,
+       "contradictoryWithoutOutcome": 0,
+       "nonOverlapping": {
+        "H-2/submitter/38f5dfec": 3,
+        "H-3/submitter/9923abca": 41
+       },
+       "selfContradictory": {
+        "H-2/submitter/38f5dfec": 0,
+        "H-3/submitter/9923abca": 0
+       }
+      },
+      "selfContradictions": [],
+      "supportedBy": {
+       "H-2/submitter/38f5dfec": 0,
+       "H-3/submitter/9923abca": 0,
+       "neither": 0
+      },
+      "separatingSituations": [],
+      "separatingSituationIds": 0,
+      "missingEvidence": []
+     },
+     "pattern": "no common predictions"
+    }
+   ]
+  },
+  {
+   "candidates": [
+    "H-2/submitter/38f5dfec",
+    "spec R12"
+   ],
+   "ids": [
+    "38f5dfeca66809ae7cef9468131de763c8ef7796a9b046cb6f12411ac626c5b8",
+    "spec:R12"
+   ],
+   "declaredCompetitors": false,
+   "involvesSpec": true,
+   "primaryAnalysis": true,
+   "byBuild": [
+    {
+     "build": "QX-41",
+     "bothFitDiscovery": true,
+     "discovery": {
+      "verdict": "no-common-predictions",
+      "explanation": "they never predict the same outcome field of the same situation",
+      "counts": {
+       "identical": 0,
+       "contradictoryWithOutcome": 0,
+       "contradictoryWithoutOutcome": 0,
+       "nonOverlapping": {
+        "H-2/submitter/38f5dfec": 7,
+        "spec R12": 10
+       },
+       "selfContradictory": {
+        "H-2/submitter/38f5dfec": 0,
+        "spec R12": 0
+       }
+      },
+      "selfContradictions": [],
+      "supportedBy": {
+       "H-2/submitter/38f5dfec": 0,
+       "spec R12": 0,
+       "neither": 0
+      },
+      "separatingSituations": [],
+      "separatingSituationIds": 0,
+      "missingEvidence": []
+     },
+     "heldout": {
+      "verdict": "no-common-predictions",
+      "explanation": "they never predict the same outcome field of the same situation",
+      "counts": {
+       "identical": 0,
+       "contradictoryWithOutcome": 0,
+       "contradictoryWithoutOutcome": 0,
+       "nonOverlapping": {
+        "H-2/submitter/38f5dfec": 5,
+        "spec R12": 2
+       },
+       "selfContradictory": {
+        "H-2/submitter/38f5dfec": 0,
+        "spec R12": 0
+       }
+      },
+      "selfContradictions": [],
+      "supportedBy": {
+       "H-2/submitter/38f5dfec": 0,
+       "spec R12": 0,
+       "neither": 0
+      },
+      "separatingSituations": [],
+      "separatingSituationIds": 0,
+      "missingEvidence": []
+     },
+     "pattern": "no common predictions"
+    },
+    {
+     "build": "QX-73",
+     "bothFitDiscovery": true,
+     "discovery": {
+      "verdict": "no-common-predictions",
+      "explanation": "they never predict the same outcome field of the same situation",
+      "counts": {
+       "identical": 0,
+       "contradictoryWithOutcome": 0,
+       "contradictoryWithoutOutcome": 0,
+       "nonOverlapping": {
+        "H-2/submitter/38f5dfec": 6,
+        "spec R12": 10
+       },
+       "selfContradictory": {
+        "H-2/submitter/38f5dfec": 0,
+        "spec R12": 0
+       }
+      },
+      "selfContradictions": [],
+      "supportedBy": {
+       "H-2/submitter/38f5dfec": 0,
+       "spec R12": 0,
+       "neither": 0
+      },
+      "separatingSituations": [],
+      "separatingSituationIds": 0,
+      "missingEvidence": []
+     },
+     "heldout": {
+      "verdict": "no-common-predictions",
+      "explanation": "they never predict the same outcome field of the same situation",
+      "counts": {
+       "identical": 0,
+       "contradictoryWithOutcome": 0,
+       "contradictoryWithoutOutcome": 0,
+       "nonOverlapping": {
+        "H-2/submitter/38f5dfec": 3,
+        "spec R12": 2
+       },
+       "selfContradictory": {
+        "H-2/submitter/38f5dfec": 0,
+        "spec R12": 0
+       }
+      },
+      "selfContradictions": [],
+      "supportedBy": {
+       "H-2/submitter/38f5dfec": 0,
+       "spec R12": 0,
+       "neither": 0
+      },
+      "separatingSituations": [],
+      "separatingSituationIds": 0,
+      "missingEvidence": []
+     },
+     "pattern": "no common predictions"
+    }
+   ]
+  },
+  {
+   "candidates": [
+    "H-2/submitter/38f5dfec",
+    "spec R3"
+   ],
+   "ids": [
+    "38f5dfeca66809ae7cef9468131de763c8ef7796a9b046cb6f12411ac626c5b8",
+    "spec:R3"
+   ],
+   "declaredCompetitors": false,
+   "involvesSpec": true,
+   "primaryAnalysis": true,
+   "byBuild": [
+    {
+     "build": "QX-41",
+     "bothFitDiscovery": true,
+     "discovery": {
+      "verdict": "no-common-predictions",
+      "explanation": "they never predict the same outcome field of the same situation",
+      "counts": {
+       "identical": 0,
+       "contradictoryWithOutcome": 0,
+       "contradictoryWithoutOutcome": 0,
+       "nonOverlapping": {
+        "H-2/submitter/38f5dfec": 7,
+        "spec R3": 628
+       },
+       "selfContradictory": {
+        "H-2/submitter/38f5dfec": 0,
+        "spec R3": 0
+       }
+      },
+      "selfContradictions": [],
+      "supportedBy": {
+       "H-2/submitter/38f5dfec": 0,
+       "spec R3": 0,
+       "neither": 0
+      },
+      "separatingSituations": [],
+      "separatingSituationIds": 0,
+      "missingEvidence": []
+     },
+     "heldout": {
+      "verdict": "no-common-predictions",
+      "explanation": "they never predict the same outcome field of the same situation",
+      "counts": {
+       "identical": 0,
+       "contradictoryWithOutcome": 0,
+       "contradictoryWithoutOutcome": 0,
+       "nonOverlapping": {
+        "H-2/submitter/38f5dfec": 5,
+        "spec R3": 301
+       },
+       "selfContradictory": {
+        "H-2/submitter/38f5dfec": 0,
+        "spec R3": 0
+       }
+      },
+      "selfContradictions": [],
+      "supportedBy": {
+       "H-2/submitter/38f5dfec": 0,
+       "spec R3": 0,
+       "neither": 0
+      },
+      "separatingSituations": [],
+      "separatingSituationIds": 0,
+      "missingEvidence": []
+     },
+     "pattern": "no common predictions"
+    },
+    {
+     "build": "QX-73",
+     "bothFitDiscovery": false,
+     "discovery": {
+      "verdict": "no-common-predictions",
+      "explanation": "they never predict the same outcome field of the same situation",
+      "counts": {
+       "identical": 0,
+       "contradictoryWithOutcome": 0,
+       "contradictoryWithoutOutcome": 0,
+       "nonOverlapping": {
+        "H-2/submitter/38f5dfec": 6,
+        "spec R3": 422
+       },
+       "selfContradictory": {
+        "H-2/submitter/38f5dfec": 0,
+        "spec R3": 0
+       }
+      },
+      "selfContradictions": [],
+      "supportedBy": {
+       "H-2/submitter/38f5dfec": 0,
+       "spec R3": 0,
+       "neither": 0
+      },
+      "separatingSituations": [],
+      "separatingSituationIds": 0,
+      "missingEvidence": []
+     },
+     "heldout": {
+      "verdict": "no-common-predictions",
+      "explanation": "they never predict the same outcome field of the same situation",
+      "counts": {
+       "identical": 0,
+       "contradictoryWithOutcome": 0,
+       "contradictoryWithoutOutcome": 0,
+       "nonOverlapping": {
+        "H-2/submitter/38f5dfec": 3,
+        "spec R3": 189
+       },
+       "selfContradictory": {
+        "H-2/submitter/38f5dfec": 0,
+        "spec R3": 0
+       }
+      },
+      "selfContradictions": [],
+      "supportedBy": {
+       "H-2/submitter/38f5dfec": 0,
+       "spec R3": 0,
+       "neither": 0
+      },
+      "separatingSituations": [],
+      "separatingSituationIds": 0,
+      "missingEvidence": []
+     },
+     "pattern": "no common predictions"
+    }
+   ]
+  },
+  {
+   "candidates": [
+    "H-2/submitter/38f5dfec",
+    "spec R5"
+   ],
+   "ids": [
+    "38f5dfeca66809ae7cef9468131de763c8ef7796a9b046cb6f12411ac626c5b8",
+    "spec:R5"
+   ],
+   "declaredCompetitors": false,
+   "involvesSpec": true,
+   "primaryAnalysis": true,
+   "byBuild": [
+    {
+     "build": "QX-41",
+     "bothFitDiscovery": true,
+     "discovery": {
+      "verdict": "no-common-predictions",
+      "explanation": "they never predict the same outcome field of the same situation",
+      "counts": {
+       "identical": 0,
+       "contradictoryWithOutcome": 0,
+       "contradictoryWithoutOutcome": 0,
+       "nonOverlapping": {
+        "H-2/submitter/38f5dfec": 7,
+        "spec R5": 3
+       },
+       "selfContradictory": {
+        "H-2/submitter/38f5dfec": 0,
+        "spec R5": 0
+       }
+      },
+      "selfContradictions": [],
+      "supportedBy": {
+       "H-2/submitter/38f5dfec": 0,
+       "spec R5": 0,
+       "neither": 0
+      },
+      "separatingSituations": [],
+      "separatingSituationIds": 0,
+      "missingEvidence": []
+     },
+     "heldout": {
+      "verdict": "no-common-predictions",
+      "explanation": "they never predict the same outcome field of the same situation",
+      "counts": {
+       "identical": 0,
+       "contradictoryWithOutcome": 0,
+       "contradictoryWithoutOutcome": 0,
+       "nonOverlapping": {
+        "H-2/submitter/38f5dfec": 5,
+        "spec R5": 2
+       },
+       "selfContradictory": {
+        "H-2/submitter/38f5dfec": 0,
+        "spec R5": 0
+       }
+      },
+      "selfContradictions": [],
+      "supportedBy": {
+       "H-2/submitter/38f5dfec": 0,
+       "spec R5": 0,
+       "neither": 0
+      },
+      "separatingSituations": [],
+      "separatingSituationIds": 0,
+      "missingEvidence": []
+     },
+     "pattern": "no common predictions"
+    },
+    {
+     "build": "QX-73",
+     "bothFitDiscovery": true,
+     "discovery": {
+      "verdict": "no-common-predictions",
+      "explanation": "they never predict the same outcome field of the same situation",
+      "counts": {
+       "identical": 0,
+       "contradictoryWithOutcome": 0,
+       "contradictoryWithoutOutcome": 0,
+       "nonOverlapping": {
+        "H-2/submitter/38f5dfec": 6,
+        "spec R5": 3
+       },
+       "selfContradictory": {
+        "H-2/submitter/38f5dfec": 0,
+        "spec R5": 0
+       }
+      },
+      "selfContradictions": [],
+      "supportedBy": {
+       "H-2/submitter/38f5dfec": 0,
+       "spec R5": 0,
+       "neither": 0
+      },
+      "separatingSituations": [],
+      "separatingSituationIds": 0,
+      "missingEvidence": []
+     },
+     "heldout": {
+      "verdict": "no-common-predictions",
+      "explanation": "they never predict the same outcome field of the same situation",
+      "counts": {
+       "identical": 0,
+       "contradictoryWithOutcome": 0,
+       "contradictoryWithoutOutcome": 0,
+       "nonOverlapping": {
+        "H-2/submitter/38f5dfec": 3,
+        "spec R5": 2
+       },
+       "selfContradictory": {
+        "H-2/submitter/38f5dfec": 0,
+        "spec R5": 0
+       }
+      },
+      "selfContradictions": [],
+      "supportedBy": {
+       "H-2/submitter/38f5dfec": 0,
+       "spec R5": 0,
+       "neither": 0
+      },
+      "separatingSituations": [],
+      "separatingSituationIds": 0,
+      "missingEvidence": []
+     },
+     "pattern": "no common predictions"
+    }
+   ]
+  },
+  {
+   "candidates": [
+    "H-2/submitter/38f5dfec",
+    "spec R7"
+   ],
+   "ids": [
+    "38f5dfeca66809ae7cef9468131de763c8ef7796a9b046cb6f12411ac626c5b8",
+    "spec:R7"
+   ],
+   "declaredCompetitors": false,
+   "involvesSpec": true,
+   "primaryAnalysis": true,
+   "byBuild": [
+    {
+     "build": "QX-41",
+     "bothFitDiscovery": true,
+     "discovery": {
+      "verdict": "no-common-predictions",
+      "explanation": "they never predict the same outcome field of the same situation",
+      "counts": {
+       "identical": 0,
+       "contradictoryWithOutcome": 0,
+       "contradictoryWithoutOutcome": 0,
+       "nonOverlapping": {
+        "H-2/submitter/38f5dfec": 7,
+        "spec R7": 0
+       },
+       "selfContradictory": {
+        "H-2/submitter/38f5dfec": 0,
+        "spec R7": 0
+       }
+      },
+      "selfContradictions": [],
+      "supportedBy": {
+       "H-2/submitter/38f5dfec": 0,
+       "spec R7": 0,
+       "neither": 0
+      },
+      "separatingSituations": [],
+      "separatingSituationIds": 0,
+      "missingEvidence": []
+     },
+     "heldout": {
+      "verdict": "no-common-predictions",
+      "explanation": "they never predict the same outcome field of the same situation",
+      "counts": {
+       "identical": 0,
+       "contradictoryWithOutcome": 0,
+       "contradictoryWithoutOutcome": 0,
+       "nonOverlapping": {
+        "H-2/submitter/38f5dfec": 5,
+        "spec R7": 0
+       },
+       "selfContradictory": {
+        "H-2/submitter/38f5dfec": 0,
+        "spec R7": 0
+       }
+      },
+      "selfContradictions": [],
+      "supportedBy": {
+       "H-2/submitter/38f5dfec": 0,
+       "spec R7": 0,
+       "neither": 0
+      },
+      "separatingSituations": [],
+      "separatingSituationIds": 0,
+      "missingEvidence": []
+     },
+     "pattern": "no common predictions"
+    },
+    {
+     "build": "QX-73",
+     "bothFitDiscovery": false,
+     "discovery": {
+      "verdict": "no-common-predictions",
+      "explanation": "they never predict the same outcome field of the same situation",
+      "counts": {
+       "identical": 0,
+       "contradictoryWithOutcome": 0,
+       "contradictoryWithoutOutcome": 0,
+       "nonOverlapping": {
+        "H-2/submitter/38f5dfec": 6,
+        "spec R7": 0
+       },
+       "selfContradictory": {
+        "H-2/submitter/38f5dfec": 0,
+        "spec R7": 0
+       }
+      },
+      "selfContradictions": [],
+      "supportedBy": {
+       "H-2/submitter/38f5dfec": 0,
+       "spec R7": 0,
+       "neither": 0
+      },
+      "separatingSituations": [],
+      "separatingSituationIds": 0,
+      "missingEvidence": []
+     },
+     "heldout": {
+      "verdict": "no-common-predictions",
+      "explanation": "they never predict the same outcome field of the same situation",
+      "counts": {
+       "identical": 0,
+       "contradictoryWithOutcome": 0,
+       "contradictoryWithoutOutcome": 0,
+       "nonOverlapping": {
+        "H-2/submitter/38f5dfec": 3,
+        "spec R7": 0
+       },
+       "selfContradictory": {
+        "H-2/submitter/38f5dfec": 0,
+        "spec R7": 0
+       }
+      },
+      "selfContradictions": [],
+      "supportedBy": {
+       "H-2/submitter/38f5dfec": 0,
+       "spec R7": 0,
+       "neither": 0
+      },
+      "separatingSituations": [],
+      "separatingSituationIds": 0,
+      "missingEvidence": []
+     },
+     "pattern": "no common predictions"
+    }
+   ]
+  },
+  {
+   "candidates": [
+    "H-2/submitter/38f5dfec",
+    "spec R8"
+   ],
+   "ids": [
+    "38f5dfeca66809ae7cef9468131de763c8ef7796a9b046cb6f12411ac626c5b8",
+    "spec:R8"
+   ],
+   "declaredCompetitors": false,
+   "involvesSpec": true,
+   "primaryAnalysis": true,
+   "byBuild": [
+    {
+     "build": "QX-41",
+     "bothFitDiscovery": true,
+     "discovery": {
+      "verdict": "indistinguishable-on-available-evidence",
+      "explanation": "identical predictions on all 5 situation-field pair(s) where both predict (finite evidence: this does not make them the same rule)",
+      "counts": {
+       "identical": 5,
+       "contradictoryWithOutcome": 0,
+       "contradictoryWithoutOutcome": 0,
+       "nonOverlapping": {
+        "H-2/submitter/38f5dfec": 2,
+        "spec R8": 489
+       },
+       "selfContradictory": {
+        "H-2/submitter/38f5dfec": 0,
+        "spec R8": 0
+       }
+      },
+      "selfContradictions": [],
+      "supportedBy": {
+       "H-2/submitter/38f5dfec": 0,
+       "spec R8": 0,
+       "neither": 0
+      },
+      "separatingSituations": [],
+      "separatingSituationIds": 0,
+      "missingEvidence": []
+     },
+     "heldout": {
+      "verdict": "indistinguishable-on-available-evidence",
+      "explanation": "identical predictions on all 1 situation-field pair(s) where both predict (finite evidence: this does not make them the same rule)",
+      "counts": {
+       "identical": 1,
+       "contradictoryWithOutcome": 0,
+       "contradictoryWithoutOutcome": 0,
+       "nonOverlapping": {
+        "H-2/submitter/38f5dfec": 4,
+        "spec R8": 234
+       },
+       "selfContradictory": {
+        "H-2/submitter/38f5dfec": 0,
+        "spec R8": 0
+       }
+      },
+      "selfContradictions": [],
+      "supportedBy": {
+       "H-2/submitter/38f5dfec": 0,
+       "spec R8": 0,
+       "neither": 0
+      },
+      "separatingSituations": [],
+      "separatingSituationIds": 0,
+      "missingEvidence": []
+     },
+     "pattern": "indistinguishable on the available evidence"
+    },
+    {
+     "build": "QX-73",
+     "bothFitDiscovery": false,
+     "discovery": {
+      "verdict": "indistinguishable-on-available-evidence",
+      "explanation": "identical predictions on all 5 situation-field pair(s) where both predict (finite evidence: this does not make them the same rule)",
+      "counts": {
+       "identical": 5,
+       "contradictoryWithOutcome": 0,
+       "contradictoryWithoutOutcome": 0,
+       "nonOverlapping": {
+        "H-2/submitter/38f5dfec": 1,
+        "spec R8": 375
+       },
+       "selfContradictory": {
+        "H-2/submitter/38f5dfec": 0,
+        "spec R8": 0
+       }
+      },
+      "selfContradictions": [],
+      "supportedBy": {
+       "H-2/submitter/38f5dfec": 0,
+       "spec R8": 0,
+       "neither": 0
+      },
+      "separatingSituations": [],
+      "separatingSituationIds": 0,
+      "missingEvidence": []
+     },
+     "heldout": {
+      "verdict": "indistinguishable-on-available-evidence",
+      "explanation": "identical predictions on all 1 situation-field pair(s) where both predict (finite evidence: this does not make them the same rule)",
+      "counts": {
+       "identical": 1,
+       "contradictoryWithOutcome": 0,
+       "contradictoryWithoutOutcome": 0,
+       "nonOverlapping": {
+        "H-2/submitter/38f5dfec": 2,
+        "spec R8": 178
+       },
+       "selfContradictory": {
+        "H-2/submitter/38f5dfec": 0,
+        "spec R8": 0
+       }
+      },
+      "selfContradictions": [],
+      "supportedBy": {
+       "H-2/submitter/38f5dfec": 0,
+       "spec R8": 0,
+       "neither": 0
+      },
+      "separatingSituations": [],
+      "separatingSituationIds": 0,
+      "missingEvidence": []
+     },
+     "pattern": "indistinguishable on the available evidence"
+    }
+   ]
+  },
+  {
+   "candidates": [
+    "H-3/submitter/9923abca",
+    "spec R12"
+   ],
+   "ids": [
+    "9923abca63235169d05b7c15f08f725f9c5f961350b766a63d11e48c98dc9b9f",
+    "spec:R12"
+   ],
+   "declaredCompetitors": false,
+   "involvesSpec": true,
+   "primaryAnalysis": true,
+   "byBuild": [
+    {
+     "build": "QX-41",
+     "bothFitDiscovery": true,
+     "discovery": {
+      "verdict": "no-common-predictions",
+      "explanation": "they never predict the same outcome field of the same situation",
+      "counts": {
+       "identical": 0,
+       "contradictoryWithOutcome": 0,
+       "contradictoryWithoutOutcome": 0,
+       "nonOverlapping": {
+        "H-3/submitter/9923abca": 74,
+        "spec R12": 10
+       },
+       "selfContradictory": {
+        "H-3/submitter/9923abca": 0,
+        "spec R12": 0
+       }
+      },
+      "selfContradictions": [],
+      "supportedBy": {
+       "H-3/submitter/9923abca": 0,
+       "spec R12": 0,
+       "neither": 0
+      },
+      "separatingSituations": [],
+      "separatingSituationIds": 0,
+      "missingEvidence": []
+     },
+     "heldout": {
+      "verdict": "no-common-predictions",
+      "explanation": "they never predict the same outcome field of the same situation",
+      "counts": {
+       "identical": 0,
+       "contradictoryWithOutcome": 0,
+       "contradictoryWithoutOutcome": 0,
+       "nonOverlapping": {
+        "H-3/submitter/9923abca": 34,
+        "spec R12": 2
+       },
+       "selfContradictory": {
+        "H-3/submitter/9923abca": 0,
+        "spec R12": 0
+       }
+      },
+      "selfContradictions": [],
+      "supportedBy": {
+       "H-3/submitter/9923abca": 0,
+       "spec R12": 0,
+       "neither": 0
+      },
+      "separatingSituations": [],
+      "separatingSituationIds": 0,
+      "missingEvidence": []
+     },
+     "pattern": "no common predictions"
+    },
+    {
+     "build": "QX-73",
+     "bothFitDiscovery": true,
+     "discovery": {
+      "verdict": "no-common-predictions",
+      "explanation": "they never predict the same outcome field of the same situation",
+      "counts": {
+       "identical": 0,
+       "contradictoryWithOutcome": 0,
+       "contradictoryWithoutOutcome": 0,
+       "nonOverlapping": {
+        "H-3/submitter/9923abca": 64,
+        "spec R12": 10
+       },
+       "selfContradictory": {
+        "H-3/submitter/9923abca": 0,
+        "spec R12": 0
+       }
+      },
+      "selfContradictions": [],
+      "supportedBy": {
+       "H-3/submitter/9923abca": 0,
+       "spec R12": 0,
+       "neither": 0
+      },
+      "separatingSituations": [],
+      "separatingSituationIds": 0,
+      "missingEvidence": []
+     },
+     "heldout": {
+      "verdict": "no-common-predictions",
+      "explanation": "they never predict the same outcome field of the same situation",
+      "counts": {
+       "identical": 0,
+       "contradictoryWithOutcome": 0,
+       "contradictoryWithoutOutcome": 0,
+       "nonOverlapping": {
+        "H-3/submitter/9923abca": 41,
+        "spec R12": 2
+       },
+       "selfContradictory": {
+        "H-3/submitter/9923abca": 0,
+        "spec R12": 0
+       }
+      },
+      "selfContradictions": [],
+      "supportedBy": {
+       "H-3/submitter/9923abca": 0,
+       "spec R12": 0,
+       "neither": 0
+      },
+      "separatingSituations": [],
+      "separatingSituationIds": 0,
+      "missingEvidence": []
+     },
+     "pattern": "no common predictions"
+    }
+   ]
+  },
+  {
+   "candidates": [
+    "H-3/submitter/9923abca",
+    "spec R14"
+   ],
+   "ids": [
+    "9923abca63235169d05b7c15f08f725f9c5f961350b766a63d11e48c98dc9b9f",
+    "spec:R14"
+   ],
+   "declaredCompetitors": false,
+   "involvesSpec": true,
+   "primaryAnalysis": true,
+   "byBuild": [
+    {
+     "build": "QX-41",
+     "bothFitDiscovery": true,
+     "discovery": {
+      "verdict": "no-common-predictions",
+      "explanation": "they never predict the same outcome field of the same situation",
+      "counts": {
+       "identical": 0,
+       "contradictoryWithOutcome": 0,
+       "contradictoryWithoutOutcome": 0,
+       "nonOverlapping": {
+        "H-3/submitter/9923abca": 74,
+        "spec R14": 12
+       },
+       "selfContradictory": {
+        "H-3/submitter/9923abca": 0,
+        "spec R14": 0
+       }
+      },
+      "selfContradictions": [],
+      "supportedBy": {
+       "H-3/submitter/9923abca": 0,
+       "spec R14": 0,
+       "neither": 0
+      },
+      "separatingSituations": [],
+      "separatingSituationIds": 0,
+      "missingEvidence": []
+     },
+     "heldout": {
+      "verdict": "no-common-predictions",
+      "explanation": "they never predict the same outcome field of the same situation",
+      "counts": {
+       "identical": 0,
+       "contradictoryWithOutcome": 0,
+       "contradictoryWithoutOutcome": 0,
+       "nonOverlapping": {
+        "H-3/submitter/9923abca": 34,
+        "spec R14": 12
+       },
+       "selfContradictory": {
+        "H-3/submitter/9923abca": 0,
+        "spec R14": 0
+       }
+      },
+      "selfContradictions": [],
+      "supportedBy": {
+       "H-3/submitter/9923abca": 0,
+       "spec R14": 0,
+       "neither": 0
+      },
+      "separatingSituations": [],
+      "separatingSituationIds": 0,
+      "missingEvidence": []
+     },
+     "pattern": "no common predictions"
+    },
+    {
+     "build": "QX-73",
+     "bothFitDiscovery": false,
+     "discovery": {
+      "verdict": "no-common-predictions",
+      "explanation": "they never predict the same outcome field of the same situation",
+      "counts": {
+       "identical": 0,
+       "contradictoryWithOutcome": 0,
+       "contradictoryWithoutOutcome": 0,
+       "nonOverlapping": {
+        "H-3/submitter/9923abca": 64,
+        "spec R14": 12
+       },
+       "selfContradictory": {
+        "H-3/submitter/9923abca": 0,
+        "spec R14": 0
+       }
+      },
+      "selfContradictions": [],
+      "supportedBy": {
+       "H-3/submitter/9923abca": 0,
+       "spec R14": 0,
+       "neither": 0
+      },
+      "separatingSituations": [],
+      "separatingSituationIds": 0,
+      "missingEvidence": []
+     },
+     "heldout": {
+      "verdict": "no-common-predictions",
+      "explanation": "they never predict the same outcome field of the same situation",
+      "counts": {
+       "identical": 0,
+       "contradictoryWithOutcome": 0,
+       "contradictoryWithoutOutcome": 0,
+       "nonOverlapping": {
+        "H-3/submitter/9923abca": 41,
+        "spec R14": 12
+       },
+       "selfContradictory": {
+        "H-3/submitter/9923abca": 0,
+        "spec R14": 0
+       }
+      },
+      "selfContradictions": [],
+      "supportedBy": {
+       "H-3/submitter/9923abca": 0,
+       "spec R14": 0,
+       "neither": 0
+      },
+      "separatingSituations": [],
+      "separatingSituationIds": 0,
+      "missingEvidence": []
+     },
+     "pattern": "no common predictions"
+    }
+   ]
+  },
+  {
+   "candidates": [
+    "H-3/submitter/9923abca",
+    "spec R3"
+   ],
+   "ids": [
+    "9923abca63235169d05b7c15f08f725f9c5f961350b766a63d11e48c98dc9b9f",
+    "spec:R3"
+   ],
+   "declaredCompetitors": false,
+   "involvesSpec": true,
+   "primaryAnalysis": true,
+   "byBuild": [
+    {
+     "build": "QX-41",
+     "bothFitDiscovery": true,
+     "discovery": {
+      "verdict": "no-common-predictions",
+      "explanation": "they never predict the same outcome field of the same situation",
+      "counts": {
+       "identical": 0,
+       "contradictoryWithOutcome": 0,
+       "contradictoryWithoutOutcome": 0,
+       "nonOverlapping": {
+        "H-3/submitter/9923abca": 74,
+        "spec R3": 628
+       },
+       "selfContradictory": {
+        "H-3/submitter/9923abca": 0,
+        "spec R3": 0
+       }
+      },
+      "selfContradictions": [],
+      "supportedBy": {
+       "H-3/submitter/9923abca": 0,
+       "spec R3": 0,
+       "neither": 0
+      },
+      "separatingSituations": [],
+      "separatingSituationIds": 0,
+      "missingEvidence": []
+     },
+     "heldout": {
+      "verdict": "no-common-predictions",
+      "explanation": "they never predict the same outcome field of the same situation",
+      "counts": {
+       "identical": 0,
+       "contradictoryWithOutcome": 0,
+       "contradictoryWithoutOutcome": 0,
+       "nonOverlapping": {
+        "H-3/submitter/9923abca": 34,
+        "spec R3": 301
+       },
+       "selfContradictory": {
+        "H-3/submitter/9923abca": 0,
+        "spec R3": 0
+       }
+      },
+      "selfContradictions": [],
+      "supportedBy": {
+       "H-3/submitter/9923abca": 0,
+       "spec R3": 0,
+       "neither": 0
+      },
+      "separatingSituations": [],
+      "separatingSituationIds": 0,
+      "missingEvidence": []
+     },
+     "pattern": "no common predictions"
+    },
+    {
+     "build": "QX-73",
+     "bothFitDiscovery": false,
+     "discovery": {
+      "verdict": "no-common-predictions",
+      "explanation": "they never predict the same outcome field of the same situation",
+      "counts": {
+       "identical": 0,
+       "contradictoryWithOutcome": 0,
+       "contradictoryWithoutOutcome": 0,
+       "nonOverlapping": {
+        "H-3/submitter/9923abca": 64,
+        "spec R3": 422
+       },
+       "selfContradictory": {
+        "H-3/submitter/9923abca": 0,
+        "spec R3": 0
+       }
+      },
+      "selfContradictions": [],
+      "supportedBy": {
+       "H-3/submitter/9923abca": 0,
+       "spec R3": 0,
+       "neither": 0
+      },
+      "separatingSituations": [],
+      "separatingSituationIds": 0,
+      "missingEvidence": []
+     },
+     "heldout": {
+      "verdict": "no-common-predictions",
+      "explanation": "they never predict the same outcome field of the same situation",
+      "counts": {
+       "identical": 0,
+       "contradictoryWithOutcome": 0,
+       "contradictoryWithoutOutcome": 0,
+       "nonOverlapping": {
+        "H-3/submitter/9923abca": 41,
+        "spec R3": 189
+       },
+       "selfContradictory": {
+        "H-3/submitter/9923abca": 0,
+        "spec R3": 0
+       }
+      },
+      "selfContradictions": [],
+      "supportedBy": {
+       "H-3/submitter/9923abca": 0,
+       "spec R3": 0,
+       "neither": 0
+      },
+      "separatingSituations": [],
+      "separatingSituationIds": 0,
+      "missingEvidence": []
+     },
+     "pattern": "no common predictions"
+    }
+   ]
+  },
+  {
+   "candidates": [
+    "H-3/submitter/9923abca",
+    "spec R5"
+   ],
+   "ids": [
+    "9923abca63235169d05b7c15f08f725f9c5f961350b766a63d11e48c98dc9b9f",
+    "spec:R5"
+   ],
+   "declaredCompetitors": false,
+   "involvesSpec": true,
+   "primaryAnalysis": true,
+   "byBuild": [
+    {
+     "build": "QX-41",
+     "bothFitDiscovery": true,
+     "discovery": {
+      "verdict": "no-common-predictions",
+      "explanation": "they never predict the same outcome field of the same situation",
+      "counts": {
+       "identical": 0,
+       "contradictoryWithOutcome": 0,
+       "contradictoryWithoutOutcome": 0,
+       "nonOverlapping": {
+        "H-3/submitter/9923abca": 74,
+        "spec R5": 3
+       },
+       "selfContradictory": {
+        "H-3/submitter/9923abca": 0,
+        "spec R5": 0
+       }
+      },
+      "selfContradictions": [],
+      "supportedBy": {
+       "H-3/submitter/9923abca": 0,
+       "spec R5": 0,
+       "neither": 0
+      },
+      "separatingSituations": [],
+      "separatingSituationIds": 0,
+      "missingEvidence": []
+     },
+     "heldout": {
+      "verdict": "no-common-predictions",
+      "explanation": "they never predict the same outcome field of the same situation",
+      "counts": {
+       "identical": 0,
+       "contradictoryWithOutcome": 0,
+       "contradictoryWithoutOutcome": 0,
+       "nonOverlapping": {
+        "H-3/submitter/9923abca": 34,
+        "spec R5": 2
+       },
+       "selfContradictory": {
+        "H-3/submitter/9923abca": 0,
+        "spec R5": 0
+       }
+      },
+      "selfContradictions": [],
+      "supportedBy": {
+       "H-3/submitter/9923abca": 0,
+       "spec R5": 0,
+       "neither": 0
+      },
+      "separatingSituations": [],
+      "separatingSituationIds": 0,
+      "missingEvidence": []
+     },
+     "pattern": "no common predictions"
+    },
+    {
+     "build": "QX-73",
+     "bothFitDiscovery": true,
+     "discovery": {
+      "verdict": "no-common-predictions",
+      "explanation": "they never predict the same outcome field of the same situation",
+      "counts": {
+       "identical": 0,
+       "contradictoryWithOutcome": 0,
+       "contradictoryWithoutOutcome": 0,
+       "nonOverlapping": {
+        "H-3/submitter/9923abca": 64,
+        "spec R5": 3
+       },
+       "selfContradictory": {
+        "H-3/submitter/9923abca": 0,
+        "spec R5": 0
+       }
+      },
+      "selfContradictions": [],
+      "supportedBy": {
+       "H-3/submitter/9923abca": 0,
+       "spec R5": 0,
+       "neither": 0
+      },
+      "separatingSituations": [],
+      "separatingSituationIds": 0,
+      "missingEvidence": []
+     },
+     "heldout": {
+      "verdict": "no-common-predictions",
+      "explanation": "they never predict the same outcome field of the same situation",
+      "counts": {
+       "identical": 0,
+       "contradictoryWithOutcome": 0,
+       "contradictoryWithoutOutcome": 0,
+       "nonOverlapping": {
+        "H-3/submitter/9923abca": 41,
+        "spec R5": 2
+       },
+       "selfContradictory": {
+        "H-3/submitter/9923abca": 0,
+        "spec R5": 0
+       }
+      },
+      "selfContradictions": [],
+      "supportedBy": {
+       "H-3/submitter/9923abca": 0,
+       "spec R5": 0,
+       "neither": 0
+      },
+      "separatingSituations": [],
+      "separatingSituationIds": 0,
+      "missingEvidence": []
+     },
+     "pattern": "no common predictions"
+    }
+   ]
+  },
+  {
+   "candidates": [
+    "H-3/submitter/9923abca",
+    "spec R7"
+   ],
+   "ids": [
+    "9923abca63235169d05b7c15f08f725f9c5f961350b766a63d11e48c98dc9b9f",
+    "spec:R7"
+   ],
+   "declaredCompetitors": false,
+   "involvesSpec": true,
+   "primaryAnalysis": true,
+   "byBuild": [
+    {
+     "build": "QX-41",
+     "bothFitDiscovery": true,
+     "discovery": {
+      "verdict": "no-common-predictions",
+      "explanation": "they never predict the same outcome field of the same situation",
+      "counts": {
+       "identical": 0,
+       "contradictoryWithOutcome": 0,
+       "contradictoryWithoutOutcome": 0,
+       "nonOverlapping": {
+        "H-3/submitter/9923abca": 74,
+        "spec R7": 0
+       },
+       "selfContradictory": {
+        "H-3/submitter/9923abca": 0,
+        "spec R7": 0
+       }
+      },
+      "selfContradictions": [],
+      "supportedBy": {
+       "H-3/submitter/9923abca": 0,
+       "spec R7": 0,
+       "neither": 0
+      },
+      "separatingSituations": [],
+      "separatingSituationIds": 0,
+      "missingEvidence": []
+     },
+     "heldout": {
+      "verdict": "no-common-predictions",
+      "explanation": "they never predict the same outcome field of the same situation",
+      "counts": {
+       "identical": 0,
+       "contradictoryWithOutcome": 0,
+       "contradictoryWithoutOutcome": 0,
+       "nonOverlapping": {
+        "H-3/submitter/9923abca": 34,
+        "spec R7": 0
+       },
+       "selfContradictory": {
+        "H-3/submitter/9923abca": 0,
+        "spec R7": 0
+       }
+      },
+      "selfContradictions": [],
+      "supportedBy": {
+       "H-3/submitter/9923abca": 0,
+       "spec R7": 0,
+       "neither": 0
+      },
+      "separatingSituations": [],
+      "separatingSituationIds": 0,
+      "missingEvidence": []
+     },
+     "pattern": "no common predictions"
+    },
+    {
+     "build": "QX-73",
+     "bothFitDiscovery": false,
+     "discovery": {
+      "verdict": "no-common-predictions",
+      "explanation": "they never predict the same outcome field of the same situation",
+      "counts": {
+       "identical": 0,
+       "contradictoryWithOutcome": 0,
+       "contradictoryWithoutOutcome": 0,
+       "nonOverlapping": {
+        "H-3/submitter/9923abca": 64,
+        "spec R7": 0
+       },
+       "selfContradictory": {
+        "H-3/submitter/9923abca": 0,
+        "spec R7": 0
+       }
+      },
+      "selfContradictions": [],
+      "supportedBy": {
+       "H-3/submitter/9923abca": 0,
+       "spec R7": 0,
+       "neither": 0
+      },
+      "separatingSituations": [],
+      "separatingSituationIds": 0,
+      "missingEvidence": []
+     },
+     "heldout": {
+      "verdict": "no-common-predictions",
+      "explanation": "they never predict the same outcome field of the same situation",
+      "counts": {
+       "identical": 0,
+       "contradictoryWithOutcome": 0,
+       "contradictoryWithoutOutcome": 0,
+       "nonOverlapping": {
+        "H-3/submitter/9923abca": 41,
+        "spec R7": 0
+       },
+       "selfContradictory": {
+        "H-3/submitter/9923abca": 0,
+        "spec R7": 0
+       }
+      },
+      "selfContradictions": [],
+      "supportedBy": {
+       "H-3/submitter/9923abca": 0,
+       "spec R7": 0,
+       "neither": 0
+      },
+      "separatingSituations": [],
+      "separatingSituationIds": 0,
+      "missingEvidence": []
+     },
+     "pattern": "no common predictions"
+    }
+   ]
+  },
+  {
+   "candidates": [
+    "H-3/submitter/9923abca",
+    "spec R8"
+   ],
+   "ids": [
+    "9923abca63235169d05b7c15f08f725f9c5f961350b766a63d11e48c98dc9b9f",
+    "spec:R8"
+   ],
+   "declaredCompetitors": false,
+   "involvesSpec": true,
+   "primaryAnalysis": true,
+   "byBuild": [
+    {
+     "build": "QX-41",
+     "bothFitDiscovery": true,
+     "discovery": {
+      "verdict": "indistinguishable-on-available-evidence",
+      "explanation": "identical predictions on all 1 situation-field pair(s) where both predict (finite evidence: this does not make them the same rule)",
+      "counts": {
+       "identical": 1,
+       "contradictoryWithOutcome": 0,
+       "contradictoryWithoutOutcome": 0,
+       "nonOverlapping": {
+        "H-3/submitter/9923abca": 73,
+        "spec R8": 493
+       },
+       "selfContradictory": {
+        "H-3/submitter/9923abca": 0,
+        "spec R8": 0
+       }
+      },
+      "selfContradictions": [],
+      "supportedBy": {
+       "H-3/submitter/9923abca": 0,
+       "spec R8": 0,
+       "neither": 0
+      },
+      "separatingSituations": [],
+      "separatingSituationIds": 0,
+      "missingEvidence": []
+     },
+     "heldout": {
+      "verdict": "no-common-predictions",
+      "explanation": "they never predict the same outcome field of the same situation",
+      "counts": {
+       "identical": 0,
+       "contradictoryWithOutcome": 0,
+       "contradictoryWithoutOutcome": 0,
+       "nonOverlapping": {
+        "H-3/submitter/9923abca": 34,
+        "spec R8": 235
+       },
+       "selfContradictory": {
+        "H-3/submitter/9923abca": 0,
+        "spec R8": 0
+       }
+      },
+      "selfContradictions": [],
+      "supportedBy": {
+       "H-3/submitter/9923abca": 0,
+       "spec R8": 0,
+       "neither": 0
+      },
+      "separatingSituations": [],
+      "separatingSituationIds": 0,
+      "missingEvidence": []
+     },
+     "pattern": "no common predictions"
+    },
+    {
+     "build": "QX-73",
+     "bothFitDiscovery": false,
+     "discovery": {
+      "verdict": "indistinguishable-on-available-evidence",
+      "explanation": "identical predictions on all 1 situation-field pair(s) where both predict (finite evidence: this does not make them the same rule)",
+      "counts": {
+       "identical": 1,
+       "contradictoryWithOutcome": 0,
+       "contradictoryWithoutOutcome": 0,
+       "nonOverlapping": {
+        "H-3/submitter/9923abca": 63,
+        "spec R8": 379
+       },
+       "selfContradictory": {
+        "H-3/submitter/9923abca": 0,
+        "spec R8": 0
+       }
+      },
+      "selfContradictions": [],
+      "supportedBy": {
+       "H-3/submitter/9923abca": 0,
+       "spec R8": 0,
+       "neither": 0
+      },
+      "separatingSituations": [],
+      "separatingSituationIds": 0,
+      "missingEvidence": []
+     },
+     "heldout": {
+      "verdict": "no-common-predictions",
+      "explanation": "they never predict the same outcome field of the same situation",
+      "counts": {
+       "identical": 0,
+       "contradictoryWithOutcome": 0,
+       "contradictoryWithoutOutcome": 0,
+       "nonOverlapping": {
+        "H-3/submitter/9923abca": 41,
+        "spec R8": 179
+       },
+       "selfContradictory": {
+        "H-3/submitter/9923abca": 0,
+        "spec R8": 0
+       }
+      },
+      "selfContradictions": [],
+      "supportedBy": {
+       "H-3/submitter/9923abca": 0,
+       "spec R8": 0,
+       "neither": 0
+      },
+      "separatingSituations": [],
+      "separatingSituationIds": 0,
+      "missingEvidence": []
+     },
+     "pattern": "no common predictions"
+    }
+   ]
+  }
+ ],
+ "primaryRule": "A pair enters the primary analysis only when every hypothesis candidate in it is primary-eligible (journal-verified, counted, from a session suitable for primary analysis; D91). Other pairs are preserved and flagged.",
+ "caveat": "A self-contradictory candidate (two clauses predicting different values for one field of one situation) is flagged and those positions are never compared as predictions. Separation is by recorded outcomes on finitely many situations. \"Indistinguishable on the available evidence\" means these observations do not tell the candidates apart; it does not mean they are the same rule.",
+ "at": "2026-11-25T20:05:13.045Z",
+ "exp": "evidence/gw2/p7-pilot/exp",
+ "seal": {
+  "sha256": "2dbaa1e3606ca97d59a4464756faf64f58ffa291b1f2257c9520974284cc5970"
+ },
+ "freeze": {
+  "sha256": "464ed8c7fecc072797dbdf21715756c3c25c8032e1b7bbb64eddef94de55c1d9"
+ },
+ "specificationReference": {
+  "encoding": "rule-sabotage-v6.1-encoding-2",
+  "review": "unreviewed"
+ }
+}

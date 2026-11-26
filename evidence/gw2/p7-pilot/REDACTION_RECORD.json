@@ -1,0 +1,1594 @@
+{
+ "schema": "rule-sabotage/evidence-correction-record@1",
+ "appliedAt": "2026-11-26T00:42:24.123Z",
+ "pack": {
+  "head": "c066db210171b53df58b97f40c7f5703d194b698",
+  "packedAt": "2026-11-25T20:05:29.3020969Z",
+  "operator": "Eric"
+ },
+ "status": "Published copy of the P7 pilot evidence, redacted before commit. The originals stay with the operator (results pack) and are not in the repository. originalSha256 is the hash of the operator's file; publishedSha256 is the hash of the committed file. Unredacted files have equal hashes.",
+ "consequences": [
+  "RAW_SEAL.json files are published unchanged: they hold the sha256 of the ORIGINAL raw Kane output (stdout, stderr, args). Redacted raw files therefore no longer match their seal; the seal is checked against originalSha256 here instead (rawSeals[].matchesOriginal).",
+  "The external execution ledger (external-record/execution-ledger.ndjson) and PREREGISTRATION.json contain no identifiers and are published byte for byte, so the hash chain and its anchors verify on the published copy (p7-exec.ts verify-record). The console logs lose only the operator's absolute folder path.",
+  "kane-ledger.ndjson and meta.json lose only absolute balances; \"used\" (balance delta) and Kane's reported credits are kept, so cost accounting is unaffected.",
+  "Integrity of the published copy is reproduced by: every unredacted file at its original hash, plus the redacted files mapped to their original hashes in this record. See docs/gw2/PHASE_7_REPORT.md section 9."
+ ],
+ "rules": [
+  {
+   "id": "kane-session-id",
+   "reason": "Kane account-side recording session identifier; not needed to interpret the result."
+  },
+  {
+   "id": "process-id",
+   "reason": "Local operating-system process id; no analytical value."
+  },
+  {
+   "id": "repo-absolute-path",
+   "reason": "Absolute local path of the checkout; replaced by a repository-relative marker."
+  },
+  {
+   "id": "temp-profile-path",
+   "reason": "Absolute local temporary path."
+  },
+  {
+   "id": "tool-install-path",
+   "reason": "Absolute local tool installation path."
+  },
+  {
+   "id": "browser-install-path",
+   "reason": "Absolute local browser path."
+  },
+  {
+   "id": "internal-message-id",
+   "reason": "Internal project/thread identifier; the authorization itself and its time stay."
+  },
+  {
+   "id": "account-login-metadata",
+   "reason": "Unneeded account metadata (environment, auth method, token status); only \"authenticated\" matters for the experiment."
+  },
+  {
+   "id": "absolute-credit-balance",
+   "reason": "Absolute account balance (JSON field). Consumption (\"used\", credits_consumed) is kept."
+  },
+  {
+   "id": "absolute-credit-balance-text",
+   "reason": "Absolute account balance inside captured CLI text."
+  },
+  {
+   "id": "absolute-credit-balance-console",
+   "reason": "Absolute balances in the manual script's console summary; the USED figure on the same line is kept."
+  },
+  {
+   "id": "email-address",
+   "reason": "Account email address; not needed to interpret the result."
+  },
+  {
+   "id": "user-profile-path",
+   "reason": "Local user profile path (contains the account user name)."
+  },
+  {
+   "id": "kane-local-session-id",
+   "reason": "Kane local session / evidence-pack identifiers; not needed to interpret the result."
+  },
+  {
+   "id": "kane-test-manager-url",
+   "reason": "Account-side project and test-case identifiers of the Kane service."
+  },
+  {
+   "id": "kane-test-url-whole-value",
+   "reason": "Whole Kane test URL value, including the share path and share identifier (added in pass 3, scripts/gw1-redact-url.ts)."
+  },
+  {
+   "id": "gw-repo-absolute-path",
+   "reason": "Absolute local path of the operator's folders (repository, blind workspace)."
+  }
+ ],
+ "notRedacted": [
+  "Operator first name in approvals and authorizations (as in GW1 approval.json).",
+  "Loopback URLs (http://127.0.0.1:<ephemeral port>/index.html) of the local evidence server; ephemeral, no account information.",
+  "Credit consumption per session (balance delta and Kane-reported), steps, timings, run ids, GW2 session ids (content hashes, not Kane identifiers)."
+ ],
+ "metering": [
+  {
+   "runId": "GW2-P7-pilot-3",
+   "session": "1e26529c62afc36e",
+   "balanceDeltaUsed": 51.719,
+   "kaneCreditsReported": 51.1283675,
+   "differenceCredits": 0.5906,
+   "steps": 45,
+   "ms": 196430
+  },
+  {
+   "runId": "GW2-P7-pilot-1",
+   "session": "e95f5bc28e46532c",
+   "balanceDeltaUsed": 31.844,
+   "kaneCreditsReported": 29.680727500000003,
+   "differenceCredits": 2.1633,
+   "steps": 21,
+   "ms": 142463
+  },
+  {
+   "runId": "GW2-P7-pilot-2",
+   "session": "f6003f7e3d5f8469",
+   "balanceDeltaUsed": 48.48,
+   "kaneCreditsReported": 37.42277,
+   "differenceCredits": 11.0572,
+   "steps": 17,
+   "ms": 147677
+  }
+ ],
+ "rawSeals": [
+  {
+   "file": "evidence/gw2/p7-pilot/exp/kane-runs/1e26529c62afc36e/RAW_SEAL.json",
+   "seal": {
+    "schema": "gamewatch/gw2-raw-seal@1",
+    "files": {
+     "args.json": "a22a7c57d6f04bc2e6a922865b25f6d766e6aeb952b1663115819c7650e502b0",
+     "stdout.ndjson": "ad61faad5b9df393a49317b041f478ff66c77d9e6b55a2c4fa53280530085579",
+     "stderr.txt": "b028599a85abb55f5a2ee07824a0f2331b99e0957cbfbbedda973ca1d2a73228",
+     "meta.json": "82ed7a5c7674b36c49614f0189acdcf15e280e640ed3485035c7c9169ded1dc7"
+    },
+    "note": "sha256 of the raw, unredacted files as written when the process ended; a published redacted copy will not match and is accompanied by a redaction record"
+   },
+   "matchesOriginal": {
+    "args.json": true,
+    "stdout.ndjson": true,
+    "stderr.txt": true,
+    "meta.json": true
+   }
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/kane-runs/e95f5bc28e46532c/RAW_SEAL.json",
+   "seal": {
+    "schema": "gamewatch/gw2-raw-seal@1",
+    "files": {
+     "args.json": "530721c12182739818be1946cb47a153f22c872c84d05d8df70f56b46e54d654",
+     "stdout.ndjson": "e0c909c8894a5a7281510ebb23fa71d002ce9116a80e1d96931bc22b0e204889",
+     "stderr.txt": "02fba7dc30348a0b49e6b36b6fd5a81610ef83d55d003f2618b5e708a3d629e1",
+     "meta.json": "b3b0f4b7460010d93c18393a965b63ee1995be67cdb11fb5d72056ee50336992"
+    },
+    "note": "sha256 of the raw, unredacted files as written when the process ended; a published redacted copy will not match and is accompanied by a redaction record"
+   },
+   "matchesOriginal": {
+    "args.json": true,
+    "stdout.ndjson": true,
+    "stderr.txt": true,
+    "meta.json": true
+   }
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/kane-runs/f6003f7e3d5f8469/RAW_SEAL.json",
+   "seal": {
+    "schema": "gamewatch/gw2-raw-seal@1",
+    "files": {
+     "args.json": "99b71ffc65433dfa58e5c1564f3d4c898811bb15d4114dd244ba827942b85dad",
+     "stdout.ndjson": "7b60095733939322c5d0f1b295624498039e52328bb56bae4aed531fac6868d6",
+     "stderr.txt": "8f1ab8e8ea8dfc0068ab484932091384868afac06c053fc8667f8ef01ad2a5e7",
+     "meta.json": "7264b777862ca30ff06aadf01f288f644eef58e378e841a2fdc8d3a1f5160240"
+    },
+    "note": "sha256 of the raw, unredacted files as written when the process ended; a published redacted copy will not match and is accompanied by a redaction record"
+   },
+   "matchesOriginal": {
+    "args.json": true,
+    "stdout.ndjson": true,
+    "stderr.txt": true,
+    "meta.json": true
+   }
+  }
+ ],
+ "files": [
+  {
+   "file": "evidence/gw2/p7-pilot/exp/INVESTIGATORS.json",
+   "source": "repo-pilot/p7-pilot/exp/INVESTIGATORS.json",
+   "originalSha256": "81fc10c12eb9af4ffe3ff36f2126d7c66344c5afed942eb858d717371f842da2",
+   "publishedSha256": "bb4c607f1194b835816a8ff677e8d86d3e60c00ae73ff1d72d81d5cff3abbf26",
+   "redacted": true,
+   "rulesApplied": {
+    "absolute-credit-balance": 6
+   }
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/LEAK_CHECK.json",
+   "source": "repo-pilot/p7-pilot/exp/LEAK_CHECK.json",
+   "originalSha256": "239f7c4a59a17c3002ca4db2d64a911d80742d831935f936cfe41831603046d6",
+   "publishedSha256": "239f7c4a59a17c3002ca4db2d64a911d80742d831935f936cfe41831603046d6",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/P7_PILOT_REPORT.json",
+   "source": "repo-pilot/p7-pilot/exp/P7_PILOT_REPORT.json",
+   "originalSha256": "6a4a6200f1822c417c359eef5409a726a75a23bce1fd28a9abbc9ae990b1e6bf",
+   "publishedSha256": "6a4a6200f1822c417c359eef5409a726a75a23bce1fd28a9abbc9ae990b1e6bf",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/P7_PILOT_REPORT.md",
+   "source": "repo-pilot/p7-pilot/exp/P7_PILOT_REPORT.md",
+   "originalSha256": "d777002d7396364205d589ae5b96d8895a86951e76ff833f9257967b0fac5a2a",
+   "publishedSha256": "d777002d7396364205d589ae5b96d8895a86951e76ff833f9257967b0fac5a2a",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/SESSIONS.json",
+   "source": "repo-pilot/p7-pilot/exp/SESSIONS.json",
+   "originalSha256": "78077023045e08cff670f61309f5cf52e43168a8dabb164432448ebeb3bd24d6",
+   "publishedSha256": "78077023045e08cff670f61309f5cf52e43168a8dabb164432448ebeb3bd24d6",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/approvals/GW2-P7-pilot-1.json",
+   "source": "repo-pilot/p7-pilot/exp/approvals/GW2-P7-pilot-1.json",
+   "originalSha256": "f9ffe56dd17a22c1ec1f2939b24e97186182e11c7e7dc35e4f58b7051b5adafc",
+   "publishedSha256": "f9ffe56dd17a22c1ec1f2939b24e97186182e11c7e7dc35e4f58b7051b5adafc",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/approvals/GW2-P7-pilot-2.json",
+   "source": "repo-pilot/p7-pilot/exp/approvals/GW2-P7-pilot-2.json",
+   "originalSha256": "7f9d3f53b04f0d402e0d76038f6aeb2d6fecdbc04fc46b77d9e2cc0a56383bee",
+   "publishedSha256": "7f9d3f53b04f0d402e0d76038f6aeb2d6fecdbc04fc46b77d9e2cc0a56383bee",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/approvals/GW2-P7-pilot-3.json",
+   "source": "repo-pilot/p7-pilot/exp/approvals/GW2-P7-pilot-3.json",
+   "originalSha256": "e159bc6879cf585a278bb7dc1fc0f81ad7f01e4d78383d0575148025764636b5",
+   "publishedSha256": "e159bc6879cf585a278bb7dc1fc0f81ad7f01e4d78383d0575148025764636b5",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/evaluation-ledger.ndjson",
+   "source": "repo-pilot/p7-pilot/exp/evaluation-ledger.ndjson",
+   "originalSha256": "8bd7066525fab75900921eae23da2bad2e6338f2407df76c1f939d50a8f04244",
+   "publishedSha256": "8bd7066525fab75900921eae23da2bad2e6338f2407df76c1f939d50a8f04244",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/evaluations/discrimination-3.json",
+   "source": "repo-pilot/p7-pilot/exp/evaluations/discrimination-3.json",
+   "originalSha256": "014081855e2f580fbe30b76ed9fdab2af32b3858c75aa3bb1f2b065a7d37d391",
+   "publishedSha256": "014081855e2f580fbe30b76ed9fdab2af32b3858c75aa3bb1f2b065a7d37d391",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/evaluations/heldout-2.json",
+   "source": "repo-pilot/p7-pilot/exp/evaluations/heldout-2.json",
+   "originalSha256": "54a863050989d69eed614043e8128c4f6be6b1a4d4c19a5f3a5ed9e52b7a6c8a",
+   "publishedSha256": "54a863050989d69eed614043e8128c4f6be6b1a4d4c19a5f3a5ed9e52b7a6c8a",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/evaluations/three-way-1.json",
+   "source": "repo-pilot/p7-pilot/exp/evaluations/three-way-1.json",
+   "originalSha256": "fa26fc18bf3e39306ae952bb5772cef3286b0c63c82c9ea71d50893aa010e9fc",
+   "publishedSha256": "fa26fc18bf3e39306ae952bb5772cef3286b0c63c82c9ea71d50893aa010e9fc",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/hypotheses/FREEZE.json",
+   "source": "repo-pilot/p7-pilot/exp/hypotheses/FREEZE.json",
+   "originalSha256": "464ed8c7fecc072797dbdf21715756c3c25c8032e1b7bbb64eddef94de55c1d9",
+   "publishedSha256": "464ed8c7fecc072797dbdf21715756c3c25c8032e1b7bbb64eddef94de55c1d9",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/hypotheses/REPRESENTATIONS.json",
+   "source": "repo-pilot/p7-pilot/exp/hypotheses/REPRESENTATIONS.json",
+   "originalSha256": "2dbaa1e3606ca97d59a4464756faf64f58ffa291b1f2257c9520974284cc5970",
+   "publishedSha256": "2dbaa1e3606ca97d59a4464756faf64f58ffa291b1f2257c9520974284cc5970",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/imports/1e26529c62afc36e.json",
+   "source": "repo-pilot/p7-pilot/exp/imports/1e26529c62afc36e.json",
+   "originalSha256": "7eedb702f09e2d98c1da90c8b75b89f7ebac80fb8809a36723a35826bb02cbc4",
+   "publishedSha256": "7eedb702f09e2d98c1da90c8b75b89f7ebac80fb8809a36723a35826bb02cbc4",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/imports/e95f5bc28e46532c.json",
+   "source": "repo-pilot/p7-pilot/exp/imports/e95f5bc28e46532c.json",
+   "originalSha256": "b2eee66de5c49159e16307c12221132d0539fea17604178cfd6a0cf8d509d1a4",
+   "publishedSha256": "b2eee66de5c49159e16307c12221132d0539fea17604178cfd6a0cf8d509d1a4",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/imports/f6003f7e3d5f8469.json",
+   "source": "repo-pilot/p7-pilot/exp/imports/f6003f7e3d5f8469.json",
+   "originalSha256": "4595ae9b7c53f612f0a4013f9bcd729f98655e1db1c2c4590cb1812eff60df50",
+   "publishedSha256": "4595ae9b7c53f612f0a4013f9bcd729f98655e1db1c2c4590cb1812eff60df50",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/judgments.ndjson",
+   "source": "repo-pilot/p7-pilot/exp/judgments.ndjson",
+   "originalSha256": "7dfc5cacaa7f1fb47494579b1954720c0baff26438d4078c169269dd5c841b23",
+   "publishedSha256": "7dfc5cacaa7f1fb47494579b1954720c0baff26438d4078c169269dd5c841b23",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/kane-ledger.ndjson",
+   "source": "repo-pilot/p7-pilot/exp/kane-ledger.ndjson",
+   "originalSha256": "463322e8837e25e8c07290362f1fc334f3a42867493d1741c269347af763d399",
+   "publishedSha256": "387bc14f2200852bdd3753b317f37776100afcc3cd0b52bffc0bf00a1005b34b",
+   "redacted": true,
+   "rulesApplied": {
+    "absolute-credit-balance": 9
+   }
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/kane-runs/1e26529c62afc36e/RAW_SEAL.json",
+   "source": "repo-pilot/p7-pilot/exp/kane-runs/1e26529c62afc36e/RAW_SEAL.json",
+   "originalSha256": "01199671a04612e4f9d85b56baf6435c851397f9da64dc837051583a9925ccc5",
+   "publishedSha256": "01199671a04612e4f9d85b56baf6435c851397f9da64dc837051583a9925ccc5",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/kane-runs/1e26529c62afc36e/args.json",
+   "source": "repo-pilot/p7-pilot/exp/kane-runs/1e26529c62afc36e/args.json",
+   "originalSha256": "a22a7c57d6f04bc2e6a922865b25f6d766e6aeb952b1663115819c7650e502b0",
+   "publishedSha256": "a22a7c57d6f04bc2e6a922865b25f6d766e6aeb952b1663115819c7650e502b0",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/kane-runs/1e26529c62afc36e/meta.json",
+   "source": "repo-pilot/p7-pilot/exp/kane-runs/1e26529c62afc36e/meta.json",
+   "originalSha256": "82ed7a5c7674b36c49614f0189acdcf15e280e640ed3485035c7c9169ded1dc7",
+   "publishedSha256": "cdb2d783f225a015c9b176af6f6cf7c56b7682c77262377b66d274265b7e4817",
+   "redacted": true,
+   "rulesApplied": {
+    "absolute-credit-balance": 2
+   }
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/kane-runs/1e26529c62afc36e/stderr.txt",
+   "source": "repo-pilot/p7-pilot/exp/kane-runs/1e26529c62afc36e/stderr.txt",
+   "originalSha256": "b028599a85abb55f5a2ee07824a0f2331b99e0957cbfbbedda973ca1d2a73228",
+   "publishedSha256": "56b70a5904d12e52f0819f76836ea18f8bc0aec8e685ca740a8dde6d6246ccde",
+   "redacted": true,
+   "rulesApplied": {
+    "user-profile-path": 1,
+    "kane-local-session-id": 2
+   }
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/kane-runs/1e26529c62afc36e/stdout.ndjson",
+   "source": "repo-pilot/p7-pilot/exp/kane-runs/1e26529c62afc36e/stdout.ndjson",
+   "originalSha256": "ad61faad5b9df393a49317b041f478ff66c77d9e6b55a2c4fa53280530085579",
+   "publishedSha256": "fdd9418a2fbc714882821557f1c788d77c2acfbd06f4e52f3a6227e6041d641a",
+   "redacted": true,
+   "rulesApplied": {
+    "kane-session-id": 1,
+    "process-id": 1,
+    "user-profile-path": 3,
+    "kane-local-session-id": 4,
+    "kane-test-manager-url": 1,
+    "kane-test-url-whole-value": 1
+   }
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/kane-runs/e95f5bc28e46532c/RAW_SEAL.json",
+   "source": "repo-pilot/p7-pilot/exp/kane-runs/e95f5bc28e46532c/RAW_SEAL.json",
+   "originalSha256": "60419742ff3928fd9081d3101e0aa7e150fda5298a30bcaef73a698809c4410e",
+   "publishedSha256": "60419742ff3928fd9081d3101e0aa7e150fda5298a30bcaef73a698809c4410e",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/kane-runs/e95f5bc28e46532c/args.json",
+   "source": "repo-pilot/p7-pilot/exp/kane-runs/e95f5bc28e46532c/args.json",
+   "originalSha256": "530721c12182739818be1946cb47a153f22c872c84d05d8df70f56b46e54d654",
+   "publishedSha256": "530721c12182739818be1946cb47a153f22c872c84d05d8df70f56b46e54d654",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/kane-runs/e95f5bc28e46532c/meta.json",
+   "source": "repo-pilot/p7-pilot/exp/kane-runs/e95f5bc28e46532c/meta.json",
+   "originalSha256": "b3b0f4b7460010d93c18393a965b63ee1995be67cdb11fb5d72056ee50336992",
+   "publishedSha256": "b7b913817b910f3b0cfc962cee0d53919eb267ae0a2adc8780ff27d7d5532948",
+   "redacted": true,
+   "rulesApplied": {
+    "absolute-credit-balance": 2
+   }
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/kane-runs/e95f5bc28e46532c/stderr.txt",
+   "source": "repo-pilot/p7-pilot/exp/kane-runs/e95f5bc28e46532c/stderr.txt",
+   "originalSha256": "02fba7dc30348a0b49e6b36b6fd5a81610ef83d55d003f2618b5e708a3d629e1",
+   "publishedSha256": "56b70a5904d12e52f0819f76836ea18f8bc0aec8e685ca740a8dde6d6246ccde",
+   "redacted": true,
+   "rulesApplied": {
+    "user-profile-path": 1,
+    "kane-local-session-id": 2
+   }
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/kane-runs/e95f5bc28e46532c/stdout.ndjson",
+   "source": "repo-pilot/p7-pilot/exp/kane-runs/e95f5bc28e46532c/stdout.ndjson",
+   "originalSha256": "e0c909c8894a5a7281510ebb23fa71d002ce9116a80e1d96931bc22b0e204889",
+   "publishedSha256": "6de59836d2a67a1bd4f80b43128b9b211719b1c2f5030a73846b4f5a8167d170",
+   "redacted": true,
+   "rulesApplied": {
+    "kane-session-id": 1,
+    "process-id": 1,
+    "user-profile-path": 3,
+    "kane-local-session-id": 4,
+    "kane-test-manager-url": 1,
+    "kane-test-url-whole-value": 1
+   }
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/kane-runs/f6003f7e3d5f8469/RAW_SEAL.json",
+   "source": "repo-pilot/p7-pilot/exp/kane-runs/f6003f7e3d5f8469/RAW_SEAL.json",
+   "originalSha256": "923c8acb7261fc83a9b4297feae423f067d035ca06725d821ec5d6ada25dbe12",
+   "publishedSha256": "923c8acb7261fc83a9b4297feae423f067d035ca06725d821ec5d6ada25dbe12",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/kane-runs/f6003f7e3d5f8469/args.json",
+   "source": "repo-pilot/p7-pilot/exp/kane-runs/f6003f7e3d5f8469/args.json",
+   "originalSha256": "99b71ffc65433dfa58e5c1564f3d4c898811bb15d4114dd244ba827942b85dad",
+   "publishedSha256": "99b71ffc65433dfa58e5c1564f3d4c898811bb15d4114dd244ba827942b85dad",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/kane-runs/f6003f7e3d5f8469/meta.json",
+   "source": "repo-pilot/p7-pilot/exp/kane-runs/f6003f7e3d5f8469/meta.json",
+   "originalSha256": "7264b777862ca30ff06aadf01f288f644eef58e378e841a2fdc8d3a1f5160240",
+   "publishedSha256": "8e4508b812730f185ad433924dc77ab4b27136471b027b86a37be3c12813aff3",
+   "redacted": true,
+   "rulesApplied": {
+    "absolute-credit-balance": 2
+   }
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/kane-runs/f6003f7e3d5f8469/stderr.txt",
+   "source": "repo-pilot/p7-pilot/exp/kane-runs/f6003f7e3d5f8469/stderr.txt",
+   "originalSha256": "8f1ab8e8ea8dfc0068ab484932091384868afac06c053fc8667f8ef01ad2a5e7",
+   "publishedSha256": "56b70a5904d12e52f0819f76836ea18f8bc0aec8e685ca740a8dde6d6246ccde",
+   "redacted": true,
+   "rulesApplied": {
+    "user-profile-path": 1,
+    "kane-local-session-id": 2
+   }
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/kane-runs/f6003f7e3d5f8469/stdout.ndjson",
+   "source": "repo-pilot/p7-pilot/exp/kane-runs/f6003f7e3d5f8469/stdout.ndjson",
+   "originalSha256": "7b60095733939322c5d0f1b295624498039e52328bb56bae4aed531fac6868d6",
+   "publishedSha256": "fd878774688402dbbeee70bc16490bf867753084d188ae1d8f63a935ff11bdec",
+   "redacted": true,
+   "rulesApplied": {
+    "kane-session-id": 1,
+    "process-id": 1,
+    "user-profile-path": 3,
+    "kane-local-session-id": 4,
+    "kane-test-manager-url": 1,
+    "kane-test-url-whole-value": 1
+   }
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/partitions/INPUT_BOUNDARY.json",
+   "source": "repo-pilot/p7-pilot/exp/partitions/INPUT_BOUNDARY.json",
+   "originalSha256": "aafcaf5dbc10ecef59bdb268a4ecc665c130527210c860442a6eaf0c02412500",
+   "publishedSha256": "aafcaf5dbc10ecef59bdb268a4ecc665c130527210c860442a6eaf0c02412500",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/partitions/PARTITION.json",
+   "source": "repo-pilot/p7-pilot/exp/partitions/PARTITION.json",
+   "originalSha256": "4aedb833d0dab9cf1a8ac586df888cbdb9012ffdaaca95cc2360caa0fb52c04e",
+   "publishedSha256": "4aedb833d0dab9cf1a8ac586df888cbdb9012ffdaaca95cc2360caa0fb52c04e",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/partitions/discovery/MANIFEST.json",
+   "source": "repo-pilot/p7-pilot/exp/partitions/discovery/MANIFEST.json",
+   "originalSha256": "178f0edb6c06d916c252bbb53a12c5496ece8b29eece8cf54247541ef826fd90",
+   "publishedSha256": "178f0edb6c06d916c252bbb53a12c5496ece8b29eece8cf54247541ef826fd90",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/partitions/discovery/observations.json",
+   "source": "repo-pilot/p7-pilot/exp/partitions/discovery/observations.json",
+   "originalSha256": "3c1485b01c0884ebf9529daebbacf00ee89ec9cfb9816a513f18f0012bbc8f12",
+   "publishedSha256": "3c1485b01c0884ebf9529daebbacf00ee89ec9cfb9816a513f18f0012bbc8f12",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/partitions/discovery/site/case-C-0662fc.html",
+   "source": "repo-pilot/p7-pilot/exp/partitions/discovery/site/case-C-0662fc.html",
+   "originalSha256": "b609070d6b92ac7e41ff7fb44afb748d2746810c7c08dc0345f4ddbb1bf026cc",
+   "publishedSha256": "b609070d6b92ac7e41ff7fb44afb748d2746810c7c08dc0345f4ddbb1bf026cc",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/partitions/discovery/site/case-C-0c6c31.html",
+   "source": "repo-pilot/p7-pilot/exp/partitions/discovery/site/case-C-0c6c31.html",
+   "originalSha256": "46caf247e4c6d7ea97182b6713570a9f935660d0e90a2faf147d91a18a6ba884",
+   "publishedSha256": "46caf247e4c6d7ea97182b6713570a9f935660d0e90a2faf147d91a18a6ba884",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/partitions/discovery/site/case-C-16e554.html",
+   "source": "repo-pilot/p7-pilot/exp/partitions/discovery/site/case-C-16e554.html",
+   "originalSha256": "ed1b2fbedf3bb3d6b60f89fa318ae21182efbb8269318c718ac93e14a1dc38a5",
+   "publishedSha256": "ed1b2fbedf3bb3d6b60f89fa318ae21182efbb8269318c718ac93e14a1dc38a5",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/partitions/discovery/site/case-C-18b1e0.html",
+   "source": "repo-pilot/p7-pilot/exp/partitions/discovery/site/case-C-18b1e0.html",
+   "originalSha256": "39ab6873b158bb054397200c5e2f65b62574648cbe995ad943625cc12ebe06ba",
+   "publishedSha256": "39ab6873b158bb054397200c5e2f65b62574648cbe995ad943625cc12ebe06ba",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/partitions/discovery/site/case-C-2b140d.html",
+   "source": "repo-pilot/p7-pilot/exp/partitions/discovery/site/case-C-2b140d.html",
+   "originalSha256": "94d140bdbf01466fba1f6cbec0c542c1050b54e8cadd3a7ba5fed6f7b4d9409b",
+   "publishedSha256": "94d140bdbf01466fba1f6cbec0c542c1050b54e8cadd3a7ba5fed6f7b4d9409b",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/partitions/discovery/site/case-C-2c5e64.html",
+   "source": "repo-pilot/p7-pilot/exp/partitions/discovery/site/case-C-2c5e64.html",
+   "originalSha256": "52c805b71e373141633d9c8b71c8ddfb53542d66c9c1283089830f2e7f4aab38",
+   "publishedSha256": "52c805b71e373141633d9c8b71c8ddfb53542d66c9c1283089830f2e7f4aab38",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/partitions/discovery/site/case-C-3ae320.html",
+   "source": "repo-pilot/p7-pilot/exp/partitions/discovery/site/case-C-3ae320.html",
+   "originalSha256": "0678f683f1ce3f9df814417253ca020df67a82906f616355669187b4c3ebb2aa",
+   "publishedSha256": "0678f683f1ce3f9df814417253ca020df67a82906f616355669187b4c3ebb2aa",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/partitions/discovery/site/case-C-524a2f.html",
+   "source": "repo-pilot/p7-pilot/exp/partitions/discovery/site/case-C-524a2f.html",
+   "originalSha256": "e54096561cb364474ee7cb3bc6b0b5fc12688b4314d1dd40c39834509a820df2",
+   "publishedSha256": "e54096561cb364474ee7cb3bc6b0b5fc12688b4314d1dd40c39834509a820df2",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/partitions/discovery/site/case-C-58ba18.html",
+   "source": "repo-pilot/p7-pilot/exp/partitions/discovery/site/case-C-58ba18.html",
+   "originalSha256": "aa0a40ecdd42b394eff9779a94a8c03d292e4bf25c894b6290977d9d75df866c",
+   "publishedSha256": "aa0a40ecdd42b394eff9779a94a8c03d292e4bf25c894b6290977d9d75df866c",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/partitions/discovery/site/case-C-5ded66.html",
+   "source": "repo-pilot/p7-pilot/exp/partitions/discovery/site/case-C-5ded66.html",
+   "originalSha256": "cafb67cf7ad3cb852b62971910448a0816151c12800437db85f087047d4369e9",
+   "publishedSha256": "cafb67cf7ad3cb852b62971910448a0816151c12800437db85f087047d4369e9",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/partitions/discovery/site/case-C-5f74ce.html",
+   "source": "repo-pilot/p7-pilot/exp/partitions/discovery/site/case-C-5f74ce.html",
+   "originalSha256": "b34c03ba77f41ec0fc80affde011dbbab3e7841cdb987411f3000079174eb0ca",
+   "publishedSha256": "b34c03ba77f41ec0fc80affde011dbbab3e7841cdb987411f3000079174eb0ca",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/partitions/discovery/site/case-C-61d833.html",
+   "source": "repo-pilot/p7-pilot/exp/partitions/discovery/site/case-C-61d833.html",
+   "originalSha256": "168028e4b2c1a3bb5bfaaf747ba1995e12ac0b2d3151f71b741ef47754447ba3",
+   "publishedSha256": "168028e4b2c1a3bb5bfaaf747ba1995e12ac0b2d3151f71b741ef47754447ba3",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/partitions/discovery/site/case-C-6e5412.html",
+   "source": "repo-pilot/p7-pilot/exp/partitions/discovery/site/case-C-6e5412.html",
+   "originalSha256": "93f366772a8d6ca286c4e56c52a39de1d5565096917430982761888d8495c07f",
+   "publishedSha256": "93f366772a8d6ca286c4e56c52a39de1d5565096917430982761888d8495c07f",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/partitions/discovery/site/case-C-83f697.html",
+   "source": "repo-pilot/p7-pilot/exp/partitions/discovery/site/case-C-83f697.html",
+   "originalSha256": "caa0c3c1955c688d89aa0dfe2852a7824092a264a32265999ffc89914cd5b4a0",
+   "publishedSha256": "caa0c3c1955c688d89aa0dfe2852a7824092a264a32265999ffc89914cd5b4a0",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/partitions/discovery/site/case-C-8ad109.html",
+   "source": "repo-pilot/p7-pilot/exp/partitions/discovery/site/case-C-8ad109.html",
+   "originalSha256": "29de124caeadce26b938894edc76ca22f50d788ca302c615ea79d99f2d509257",
+   "publishedSha256": "29de124caeadce26b938894edc76ca22f50d788ca302c615ea79d99f2d509257",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/partitions/discovery/site/case-C-8bd6ce.html",
+   "source": "repo-pilot/p7-pilot/exp/partitions/discovery/site/case-C-8bd6ce.html",
+   "originalSha256": "7ccc7bf8c8b85da49e27f4ca08bcf0e53a19325b3983c56cde0f7661fc948ca9",
+   "publishedSha256": "7ccc7bf8c8b85da49e27f4ca08bcf0e53a19325b3983c56cde0f7661fc948ca9",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/partitions/discovery/site/case-C-935403.html",
+   "source": "repo-pilot/p7-pilot/exp/partitions/discovery/site/case-C-935403.html",
+   "originalSha256": "d0e457e3b27238c51ede59eecefec6a8df860b3487fd288b55f0a83c44204020",
+   "publishedSha256": "d0e457e3b27238c51ede59eecefec6a8df860b3487fd288b55f0a83c44204020",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/partitions/discovery/site/case-C-99fa08.html",
+   "source": "repo-pilot/p7-pilot/exp/partitions/discovery/site/case-C-99fa08.html",
+   "originalSha256": "2b7a55e631de2ba9e459a57c6069338cf84998466b7ed956d4708f170656cf4b",
+   "publishedSha256": "2b7a55e631de2ba9e459a57c6069338cf84998466b7ed956d4708f170656cf4b",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/partitions/discovery/site/case-C-d00475.html",
+   "source": "repo-pilot/p7-pilot/exp/partitions/discovery/site/case-C-d00475.html",
+   "originalSha256": "6710d2d4c00e8370235fb721d45f2deeb1034840f5461b22d754f5088548d4a9",
+   "publishedSha256": "6710d2d4c00e8370235fb721d45f2deeb1034840f5461b22d754f5088548d4a9",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/partitions/discovery/site/case-C-d67dbb.html",
+   "source": "repo-pilot/p7-pilot/exp/partitions/discovery/site/case-C-d67dbb.html",
+   "originalSha256": "015519a0269d378bcaf32df6d4565eeb43587e1254e7821448df2e0c95ba83e1",
+   "publishedSha256": "015519a0269d378bcaf32df6d4565eeb43587e1254e7821448df2e0c95ba83e1",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/partitions/discovery/site/case-C-d749aa.html",
+   "source": "repo-pilot/p7-pilot/exp/partitions/discovery/site/case-C-d749aa.html",
+   "originalSha256": "e1ede11c12dbc326ceb1c1d40d9674e4eaaa401cbd40b85b4898eea45b0f58bb",
+   "publishedSha256": "e1ede11c12dbc326ceb1c1d40d9674e4eaaa401cbd40b85b4898eea45b0f58bb",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/partitions/discovery/site/case-C-df90c3.html",
+   "source": "repo-pilot/p7-pilot/exp/partitions/discovery/site/case-C-df90c3.html",
+   "originalSha256": "f366b1a0d0dace79e3eedf205607cb04c16409e31d0efdd98e50086fd0f569ce",
+   "publishedSha256": "f366b1a0d0dace79e3eedf205607cb04c16409e31d0efdd98e50086fd0f569ce",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/partitions/discovery/site/case-C-e2d2d5.html",
+   "source": "repo-pilot/p7-pilot/exp/partitions/discovery/site/case-C-e2d2d5.html",
+   "originalSha256": "1ef79e63f8e261a157606d4f79bc8155281b1efc93bdb73ecb513a46ff534af7",
+   "publishedSha256": "1ef79e63f8e261a157606d4f79bc8155281b1efc93bdb73ecb513a46ff534af7",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/partitions/discovery/site/case-C-eb2d26.html",
+   "source": "repo-pilot/p7-pilot/exp/partitions/discovery/site/case-C-eb2d26.html",
+   "originalSha256": "29613bb800b91d5af55580aeb104cd61978d6a9be958ee4f8aaa695c33161a80",
+   "publishedSha256": "29613bb800b91d5af55580aeb104cd61978d6a9be958ee4f8aaa695c33161a80",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/partitions/discovery/site/case-C-ec8037.html",
+   "source": "repo-pilot/p7-pilot/exp/partitions/discovery/site/case-C-ec8037.html",
+   "originalSha256": "72575093060b55a8b691cac798513b714a956f61b7610a9091667b4ed47f8c21",
+   "publishedSha256": "72575093060b55a8b691cac798513b714a956f61b7610a9091667b4ed47f8c21",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/partitions/discovery/site/case-C-f72ff3.html",
+   "source": "repo-pilot/p7-pilot/exp/partitions/discovery/site/case-C-f72ff3.html",
+   "originalSha256": "bc3a4977a8c1afb30682f0269e0dd332d94c1c4b25af2b21e02bfa11101c692d",
+   "publishedSha256": "bc3a4977a8c1afb30682f0269e0dd332d94c1c4b25af2b21e02bfa11101c692d",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/partitions/discovery/site/case-C-fa0ede.html",
+   "source": "repo-pilot/p7-pilot/exp/partitions/discovery/site/case-C-fa0ede.html",
+   "originalSha256": "3f8fc74f46874070d3f27b865b6d8a234b7dd72e10b735be6be845e78f908937",
+   "publishedSha256": "3f8fc74f46874070d3f27b865b6d8a234b7dd72e10b735be6be845e78f908937",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/partitions/discovery/site/case-C-fcefc3.html",
+   "source": "repo-pilot/p7-pilot/exp/partitions/discovery/site/case-C-fcefc3.html",
+   "originalSha256": "72b10781bdfe1db8171e7512c57a9d26236f9c80d8fece08200e33b93a001371",
+   "publishedSha256": "72b10781bdfe1db8171e7512c57a9d26236f9c80d8fece08200e33b93a001371",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/partitions/discovery/site/hypothesis.html",
+   "source": "repo-pilot/p7-pilot/exp/partitions/discovery/site/hypothesis.html",
+   "originalSha256": "c752c06515056e6314119b0f386d6b04b500fe3c28fb258935e4429543093fd4",
+   "publishedSha256": "c752c06515056e6314119b0f386d6b04b500fe3c28fb258935e4429543093fd4",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/partitions/discovery/site/index.html",
+   "source": "repo-pilot/p7-pilot/exp/partitions/discovery/site/index.html",
+   "originalSha256": "b0ce9e455705ef45cefe25f7f614b219efba338ac09ddc19ab0f787d1eccdcee",
+   "publishedSha256": "b0ce9e455705ef45cefe25f7f614b219efba338ac09ddc19ab0f787d1eccdcee",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/partitions/discovery/site/match-M-07c411.html",
+   "source": "repo-pilot/p7-pilot/exp/partitions/discovery/site/match-M-07c411.html",
+   "originalSha256": "43515e27bb295d904dc431a539d6d30854e9801e13f94b859a4d47df34a466dc",
+   "publishedSha256": "43515e27bb295d904dc431a539d6d30854e9801e13f94b859a4d47df34a466dc",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/partitions/discovery/site/match-M-0cf43a.html",
+   "source": "repo-pilot/p7-pilot/exp/partitions/discovery/site/match-M-0cf43a.html",
+   "originalSha256": "f2203b8a9002076273364a99d86c04473cbfbe47b24572c9ca04ead9efef1277",
+   "publishedSha256": "f2203b8a9002076273364a99d86c04473cbfbe47b24572c9ca04ead9efef1277",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/partitions/discovery/site/match-M-14ca70.html",
+   "source": "repo-pilot/p7-pilot/exp/partitions/discovery/site/match-M-14ca70.html",
+   "originalSha256": "e8811fac637644794eafa109462d938f941b3edb1ef4751e98201f741cec2750",
+   "publishedSha256": "e8811fac637644794eafa109462d938f941b3edb1ef4751e98201f741cec2750",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/partitions/discovery/site/match-M-22e2f2.html",
+   "source": "repo-pilot/p7-pilot/exp/partitions/discovery/site/match-M-22e2f2.html",
+   "originalSha256": "ecc62ddf1a4545cbf37c240d2f456e78751fa53b87437076d03744412497042c",
+   "publishedSha256": "ecc62ddf1a4545cbf37c240d2f456e78751fa53b87437076d03744412497042c",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/partitions/discovery/site/match-M-237a07.html",
+   "source": "repo-pilot/p7-pilot/exp/partitions/discovery/site/match-M-237a07.html",
+   "originalSha256": "020367db88cb4c909fb5af127a81bfeb08fb4863a8031a0b754ed04499739c7e",
+   "publishedSha256": "020367db88cb4c909fb5af127a81bfeb08fb4863a8031a0b754ed04499739c7e",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/partitions/discovery/site/match-M-35514b.html",
+   "source": "repo-pilot/p7-pilot/exp/partitions/discovery/site/match-M-35514b.html",
+   "originalSha256": "bc290460c81a29e63681ea7fcc804a4f08182cc3acc325223059f4c0fa128ec6",
+   "publishedSha256": "bc290460c81a29e63681ea7fcc804a4f08182cc3acc325223059f4c0fa128ec6",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/partitions/discovery/site/match-M-3911a5.html",
+   "source": "repo-pilot/p7-pilot/exp/partitions/discovery/site/match-M-3911a5.html",
+   "originalSha256": "46e39d72ef1378fb1dff4fcb2d159a178fdb9ca58dc7bb0b1f9defc06641993a",
+   "publishedSha256": "46e39d72ef1378fb1dff4fcb2d159a178fdb9ca58dc7bb0b1f9defc06641993a",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/partitions/discovery/site/match-M-3fc50b.html",
+   "source": "repo-pilot/p7-pilot/exp/partitions/discovery/site/match-M-3fc50b.html",
+   "originalSha256": "f00ffb64351b7041d3bc8f246ddc952a5e8c550de46c9011227ea65e1a817287",
+   "publishedSha256": "f00ffb64351b7041d3bc8f246ddc952a5e8c550de46c9011227ea65e1a817287",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/partitions/discovery/site/match-M-6549b2.html",
+   "source": "repo-pilot/p7-pilot/exp/partitions/discovery/site/match-M-6549b2.html",
+   "originalSha256": "17d1e23cc24f21b926e702387f5d5a682db3f7ca16cf774911f343167335f4ec",
+   "publishedSha256": "17d1e23cc24f21b926e702387f5d5a682db3f7ca16cf774911f343167335f4ec",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/partitions/discovery/site/match-M-66ba88.html",
+   "source": "repo-pilot/p7-pilot/exp/partitions/discovery/site/match-M-66ba88.html",
+   "originalSha256": "778515e13aeab03456dd9ae2a953c8a29dc4415a9b63902a3a60f04424fe6252",
+   "publishedSha256": "778515e13aeab03456dd9ae2a953c8a29dc4415a9b63902a3a60f04424fe6252",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/partitions/discovery/site/match-M-66da39.html",
+   "source": "repo-pilot/p7-pilot/exp/partitions/discovery/site/match-M-66da39.html",
+   "originalSha256": "f66835775bfe224f0bad00117d0c6fe5f0aff0c470753f9635c1fb95763aa12d",
+   "publishedSha256": "f66835775bfe224f0bad00117d0c6fe5f0aff0c470753f9635c1fb95763aa12d",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/partitions/discovery/site/match-M-675b46.html",
+   "source": "repo-pilot/p7-pilot/exp/partitions/discovery/site/match-M-675b46.html",
+   "originalSha256": "fd6a1f9e6d14343245a1e4f8709632628449a96c6bd4f2432803afd3cac5e686",
+   "publishedSha256": "fd6a1f9e6d14343245a1e4f8709632628449a96c6bd4f2432803afd3cac5e686",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/partitions/discovery/site/match-M-69a4f7.html",
+   "source": "repo-pilot/p7-pilot/exp/partitions/discovery/site/match-M-69a4f7.html",
+   "originalSha256": "9fa3e7f5b0d92910cf11eee9c99ee2e975596942fa5ae28d0db896af7e72dd6b",
+   "publishedSha256": "9fa3e7f5b0d92910cf11eee9c99ee2e975596942fa5ae28d0db896af7e72dd6b",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/partitions/discovery/site/match-M-7c1ddf.html",
+   "source": "repo-pilot/p7-pilot/exp/partitions/discovery/site/match-M-7c1ddf.html",
+   "originalSha256": "732d181284fd8e0e50c964c580773a1862c847fef52ebe7198d30022d6258d6e",
+   "publishedSha256": "732d181284fd8e0e50c964c580773a1862c847fef52ebe7198d30022d6258d6e",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/partitions/discovery/site/match-M-824911.html",
+   "source": "repo-pilot/p7-pilot/exp/partitions/discovery/site/match-M-824911.html",
+   "originalSha256": "62ecd6a610b09be0d0c0a5db33bbd2b9317081ab29eeb593b1cba98fc0b3e090",
+   "publishedSha256": "62ecd6a610b09be0d0c0a5db33bbd2b9317081ab29eeb593b1cba98fc0b3e090",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/partitions/discovery/site/match-M-8f699d.html",
+   "source": "repo-pilot/p7-pilot/exp/partitions/discovery/site/match-M-8f699d.html",
+   "originalSha256": "39aff9fc818f9a2524d358356d4daf511bafc0563aa42327833808e2dd06b883",
+   "publishedSha256": "39aff9fc818f9a2524d358356d4daf511bafc0563aa42327833808e2dd06b883",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/partitions/discovery/site/match-M-965ff6.html",
+   "source": "repo-pilot/p7-pilot/exp/partitions/discovery/site/match-M-965ff6.html",
+   "originalSha256": "d873fabac4c4bd1f9c23882e2d2cb0fc1d928180cc02a9c7a44365fcefefb703",
+   "publishedSha256": "d873fabac4c4bd1f9c23882e2d2cb0fc1d928180cc02a9c7a44365fcefefb703",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/partitions/discovery/site/match-M-a1ce78.html",
+   "source": "repo-pilot/p7-pilot/exp/partitions/discovery/site/match-M-a1ce78.html",
+   "originalSha256": "09863967db21887f033f62fd5a05624d29796f3b6b9163f0dbd84a0764bef645",
+   "publishedSha256": "09863967db21887f033f62fd5a05624d29796f3b6b9163f0dbd84a0764bef645",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/partitions/discovery/site/match-M-a9a39f.html",
+   "source": "repo-pilot/p7-pilot/exp/partitions/discovery/site/match-M-a9a39f.html",
+   "originalSha256": "8db31aae6ae9172f0d011055237387f3e2d8497f9d4400eeadabd52f34c6bfa1",
+   "publishedSha256": "8db31aae6ae9172f0d011055237387f3e2d8497f9d4400eeadabd52f34c6bfa1",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/partitions/discovery/site/match-M-b2ab30.html",
+   "source": "repo-pilot/p7-pilot/exp/partitions/discovery/site/match-M-b2ab30.html",
+   "originalSha256": "a3df5f29ca5ed16fd892012687be02803b8d7ce4570b480e5d500cfa26016b97",
+   "publishedSha256": "a3df5f29ca5ed16fd892012687be02803b8d7ce4570b480e5d500cfa26016b97",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/partitions/discovery/site/match-M-c44a2c.html",
+   "source": "repo-pilot/p7-pilot/exp/partitions/discovery/site/match-M-c44a2c.html",
+   "originalSha256": "2b2257ad1643a200c2ce0e70290f4682b3a2cdc168ca93265a5d20db55b1310c",
+   "publishedSha256": "2b2257ad1643a200c2ce0e70290f4682b3a2cdc168ca93265a5d20db55b1310c",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/partitions/discovery/site/match-M-d59154.html",
+   "source": "repo-pilot/p7-pilot/exp/partitions/discovery/site/match-M-d59154.html",
+   "originalSha256": "b8557d7dbb704e84bf2255f3d2cddaa5895534e0df832e33cc892a5652598c97",
+   "publishedSha256": "b8557d7dbb704e84bf2255f3d2cddaa5895534e0df832e33cc892a5652598c97",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/partitions/discovery/site/match-M-db3fa7.html",
+   "source": "repo-pilot/p7-pilot/exp/partitions/discovery/site/match-M-db3fa7.html",
+   "originalSha256": "b57e5f0e99d002d01a8a8262a7a850cdaf3f7f5413d6cd701e881ad246457f90",
+   "publishedSha256": "b57e5f0e99d002d01a8a8262a7a850cdaf3f7f5413d6cd701e881ad246457f90",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/partitions/discovery/site/match-M-e38d3b.html",
+   "source": "repo-pilot/p7-pilot/exp/partitions/discovery/site/match-M-e38d3b.html",
+   "originalSha256": "cfe7db2d64e669b47b40bd477384374bf848eaa12a55dd0f39a51b8a5be3625e",
+   "publishedSha256": "cfe7db2d64e669b47b40bd477384374bf848eaa12a55dd0f39a51b8a5be3625e",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/partitions/discovery/site/match-M-e4df6d.html",
+   "source": "repo-pilot/p7-pilot/exp/partitions/discovery/site/match-M-e4df6d.html",
+   "originalSha256": "4eadb10b127fedbab96de353569d4d8a709c0dd01b83f372ba358ed064d38106",
+   "publishedSha256": "4eadb10b127fedbab96de353569d4d8a709c0dd01b83f372ba358ed064d38106",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/partitions/discovery/site/match-M-e703ae.html",
+   "source": "repo-pilot/p7-pilot/exp/partitions/discovery/site/match-M-e703ae.html",
+   "originalSha256": "bad9daba4fd10294815b5e8cf376f70a11748d20bebd371b1b178d67e7bf48bc",
+   "publishedSha256": "bad9daba4fd10294815b5e8cf376f70a11748d20bebd371b1b178d67e7bf48bc",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/partitions/discovery/site/match-M-f28e1b.html",
+   "source": "repo-pilot/p7-pilot/exp/partitions/discovery/site/match-M-f28e1b.html",
+   "originalSha256": "159ff3805ecca71bf6306e7cc8fed7d73c502469efa1e51abe09097e393758c1",
+   "publishedSha256": "159ff3805ecca71bf6306e7cc8fed7d73c502469efa1e51abe09097e393758c1",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/partitions/discovery/site/match-M-f400ab.html",
+   "source": "repo-pilot/p7-pilot/exp/partitions/discovery/site/match-M-f400ab.html",
+   "originalSha256": "75798ed9d6583a6c4863c3a17472e12bd92c6eef4b125e8c5df8e64109db9dd9",
+   "publishedSha256": "75798ed9d6583a6c4863c3a17472e12bd92c6eef4b125e8c5df8e64109db9dd9",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/partitions/discovery/site/match-M-f69bfa.html",
+   "source": "repo-pilot/p7-pilot/exp/partitions/discovery/site/match-M-f69bfa.html",
+   "originalSha256": "845813d8fa7ed13e9966c97a68da9e2bf5f7dc2bfc4d6a6fe235cf5008cd996b",
+   "publishedSha256": "845813d8fa7ed13e9966c97a68da9e2bf5f7dc2bfc4d6a6fe235cf5008cd996b",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/partitions/discovery/site/match-M-f72fed.html",
+   "source": "repo-pilot/p7-pilot/exp/partitions/discovery/site/match-M-f72fed.html",
+   "originalSha256": "2ad69ca536019ec37262f22b474d289a2053177e58bd5639b596873ef5bc3ab6",
+   "publishedSha256": "2ad69ca536019ec37262f22b474d289a2053177e58bd5639b596873ef5bc3ab6",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/partitions/discovery/site/match-M-f87946.html",
+   "source": "repo-pilot/p7-pilot/exp/partitions/discovery/site/match-M-f87946.html",
+   "originalSha256": "6d9d85c9f5d8d5a97d2e8beae0160e13c24920d9f82dd34dd79c2a08cc760071",
+   "publishedSha256": "6d9d85c9f5d8d5a97d2e8beae0160e13c24920d9f82dd34dd79c2a08cc760071",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/partitions/discovery/site/match-M-feb9c9.html",
+   "source": "repo-pilot/p7-pilot/exp/partitions/discovery/site/match-M-feb9c9.html",
+   "originalSha256": "a183f37f17fd2e333043259d3367ee340667d5bc4f9b6a5a826a4412367f1caa",
+   "publishedSha256": "a183f37f17fd2e333043259d3367ee340667d5bc4f9b6a5a826a4412367f1caa",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/partitions/discovery/site/report.html",
+   "source": "repo-pilot/p7-pilot/exp/partitions/discovery/site/report.html",
+   "originalSha256": "06562464653e5dee2b9b4986f68e90e2cf8bc77ce2a7659f2c9820925034e4ff",
+   "publishedSha256": "06562464653e5dee2b9b4986f68e90e2cf8bc77ce2a7659f2c9820925034e4ff",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/partitions/eval/MANIFEST.json",
+   "source": "repo-pilot/p7-pilot/exp/partitions/eval/MANIFEST.json",
+   "originalSha256": "cfcd3b9458a64e65939f73f5894b4648ceb7db8e720681341493337b0930e848",
+   "publishedSha256": "cfcd3b9458a64e65939f73f5894b4648ceb7db8e720681341493337b0930e848",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/partitions/eval/eval.json",
+   "source": "repo-pilot/p7-pilot/exp/partitions/eval/eval.json",
+   "originalSha256": "c1ddc397ee845d2f8ab2f3dce5fe1b4f6e96f4b9c1174e23e0f246c378c30dc1",
+   "publishedSha256": "c1ddc397ee845d2f8ab2f3dce5fe1b4f6e96f4b9c1174e23e0f246c378c30dc1",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/partitions/heldout/MANIFEST.json",
+   "source": "repo-pilot/p7-pilot/exp/partitions/heldout/MANIFEST.json",
+   "originalSha256": "8d3f89025024c08223201b39b2c022915360e393cf29caf1fe03097880dae3e6",
+   "publishedSha256": "8d3f89025024c08223201b39b2c022915360e393cf29caf1fe03097880dae3e6",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/partitions/heldout/observations.json",
+   "source": "repo-pilot/p7-pilot/exp/partitions/heldout/observations.json",
+   "originalSha256": "4ab110f76092f6a9b9c211f3671d8f7c03c8eefb3a51ed9cb5d37bac526e5039",
+   "publishedSha256": "4ab110f76092f6a9b9c211f3671d8f7c03c8eefb3a51ed9cb5d37bac526e5039",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/partitions/spec/MANIFEST.json",
+   "source": "repo-pilot/p7-pilot/exp/partitions/spec/MANIFEST.json",
+   "originalSha256": "b4c22bb3ffce8fd1f349fd5ec355cf04fc6cbcf3b27401105617d51dfd313155",
+   "publishedSha256": "b4c22bb3ffce8fd1f349fd5ec355cf04fc6cbcf3b27401105617d51dfd313155",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/partitions/spec/spec.json",
+   "source": "repo-pilot/p7-pilot/exp/partitions/spec/spec.json",
+   "originalSha256": "91dec5122d51066ca36dc609808905391fbe91217aed0468454f3967cfdee23a",
+   "publishedSha256": "91dec5122d51066ca36dc609808905391fbe91217aed0468454f3967cfdee23a",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/sessions/1e26529c62afc36e/CLOSED.json",
+   "source": "repo-pilot/p7-pilot/exp/sessions/1e26529c62afc36e/CLOSED.json",
+   "originalSha256": "ab21a08bd3fac0124b5c5debc667eb8735cff7e327af08ecf42fdb9f28f86933",
+   "publishedSha256": "ab21a08bd3fac0124b5c5debc667eb8735cff7e327af08ecf42fdb9f28f86933",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/sessions/1e26529c62afc36e/access.ndjson",
+   "source": "repo-pilot/p7-pilot/exp/sessions/1e26529c62afc36e/access.ndjson",
+   "originalSha256": "63eecf01f661b79368f645e1e068ae93832562afd09df5cb423a8575c1ae56d1",
+   "publishedSha256": "63eecf01f661b79368f645e1e068ae93832562afd09df5cb423a8575c1ae56d1",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/sessions/1e26529c62afc36e/hypotheses.ndjson",
+   "source": "repo-pilot/p7-pilot/exp/sessions/1e26529c62afc36e/hypotheses.ndjson",
+   "originalSha256": "b5aa293828f6f7292aed796ad5be668e41227c660577d15cc28f95b45505d8e2",
+   "publishedSha256": "b5aa293828f6f7292aed796ad5be668e41227c660577d15cc28f95b45505d8e2",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/sessions/1e26529c62afc36e/session.json",
+   "source": "repo-pilot/p7-pilot/exp/sessions/1e26529c62afc36e/session.json",
+   "originalSha256": "bef32a037343afab6901ab76e2de4dcc1d80c9299686ef3dd51891b6d9b519a1",
+   "publishedSha256": "bef32a037343afab6901ab76e2de4dcc1d80c9299686ef3dd51891b6d9b519a1",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/sessions/e95f5bc28e46532c/CLOSED.json",
+   "source": "repo-pilot/p7-pilot/exp/sessions/e95f5bc28e46532c/CLOSED.json",
+   "originalSha256": "905b4dc4c169533facbaef82335cda284577fdd33e89783bd2cb7590f92789bc",
+   "publishedSha256": "905b4dc4c169533facbaef82335cda284577fdd33e89783bd2cb7590f92789bc",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/sessions/e95f5bc28e46532c/access.ndjson",
+   "source": "repo-pilot/p7-pilot/exp/sessions/e95f5bc28e46532c/access.ndjson",
+   "originalSha256": "60f9d44d96089bf215eec09245928195fe5a79843cb26ddf7963753572c64481",
+   "publishedSha256": "60f9d44d96089bf215eec09245928195fe5a79843cb26ddf7963753572c64481",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/sessions/e95f5bc28e46532c/hypotheses.ndjson",
+   "source": "repo-pilot/p7-pilot/exp/sessions/e95f5bc28e46532c/hypotheses.ndjson",
+   "originalSha256": "75dcea2cfe537ebd6faa33dc5e38d9f332bd7b7dc59078d18753dac0467d114f",
+   "publishedSha256": "75dcea2cfe537ebd6faa33dc5e38d9f332bd7b7dc59078d18753dac0467d114f",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/sessions/e95f5bc28e46532c/session.json",
+   "source": "repo-pilot/p7-pilot/exp/sessions/e95f5bc28e46532c/session.json",
+   "originalSha256": "d602ee957b0f2b60be10ef961f12148aac006d35aab6ae4bb07e061ad3dcc169",
+   "publishedSha256": "d602ee957b0f2b60be10ef961f12148aac006d35aab6ae4bb07e061ad3dcc169",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/sessions/f6003f7e3d5f8469/CLOSED.json",
+   "source": "repo-pilot/p7-pilot/exp/sessions/f6003f7e3d5f8469/CLOSED.json",
+   "originalSha256": "1aa97c63f31b43b8e33a4017e4e017daa81ee00bfa2e08ced9e0e835ad542b16",
+   "publishedSha256": "1aa97c63f31b43b8e33a4017e4e017daa81ee00bfa2e08ced9e0e835ad542b16",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/sessions/f6003f7e3d5f8469/access.ndjson",
+   "source": "repo-pilot/p7-pilot/exp/sessions/f6003f7e3d5f8469/access.ndjson",
+   "originalSha256": "35673a240cfcddf1973d12ad59e6920bba3acfcbc1f667f5ccb7b44d65682a8a",
+   "publishedSha256": "35673a240cfcddf1973d12ad59e6920bba3acfcbc1f667f5ccb7b44d65682a8a",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/sessions/f6003f7e3d5f8469/hypotheses.ndjson",
+   "source": "repo-pilot/p7-pilot/exp/sessions/f6003f7e3d5f8469/hypotheses.ndjson",
+   "originalSha256": "1140753fb008bb03696af0dceb65f5d48035766e4b99cfcf974b30ef207368e1",
+   "publishedSha256": "1140753fb008bb03696af0dceb65f5d48035766e4b99cfcf974b30ef207368e1",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/exp/sessions/f6003f7e3d5f8469/session.json",
+   "source": "repo-pilot/p7-pilot/exp/sessions/f6003f7e3d5f8469/session.json",
+   "originalSha256": "6e228953fbcfe2605b538153103e888526ec58c7976d8ca6f10d58f694d2669d",
+   "publishedSha256": "6e228953fbcfe2605b538153103e888526ec58c7976d8ca6f10d58f694d2669d",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/skillflow/authorizations/kane-paid-1",
+   "source": "repo-pilot/p7-pilot/skillflow/authorizations/kane-paid-1",
+   "originalSha256": "3da16826141264942fbb80c633c2ba4124947eb300153c0fba60bf6ab96e7e4f",
+   "publishedSha256": "3da16826141264942fbb80c633c2ba4124947eb300153c0fba60bf6ab96e7e4f",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/skillflow/authorizations/kane-paid-2",
+   "source": "repo-pilot/p7-pilot/skillflow/authorizations/kane-paid-2",
+   "originalSha256": "9f10099dd90da80a615ba6c1d7f361520b006eed3385a8104f69f989a63d1ae9",
+   "publishedSha256": "9f10099dd90da80a615ba6c1d7f361520b006eed3385a8104f69f989a63d1ae9",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/skillflow/authorizations/kane-paid-3",
+   "source": "repo-pilot/p7-pilot/skillflow/authorizations/kane-paid-3",
+   "originalSha256": "0f2337f018fa09cc9b93042207ccf408d3ea0913e9a2eeb5870b7efc2dc9d86e",
+   "publishedSha256": "0f2337f018fa09cc9b93042207ccf408d3ea0913e9a2eeb5870b7efc2dc9d86e",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/skillflow/context/closure.md",
+   "source": "repo-pilot/p7-pilot/skillflow/context/closure.md",
+   "originalSha256": "f2e740596953afa1740a7c24c917df83120f5ee2378bbf6660a6a8f699a8bfcf",
+   "publishedSha256": "f2e740596953afa1740a7c24c917df83120f5ee2378bbf6660a6a8f699a8bfcf",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/skillflow/context/discriminate.md",
+   "source": "repo-pilot/p7-pilot/skillflow/context/discriminate.md",
+   "originalSha256": "aca60a6a573192e1ccf6ed373548bcb30ab88c6613c34df1a12eac5ee19e5a19",
+   "publishedSha256": "aca60a6a573192e1ccf6ed373548bcb30ab88c6613c34df1a12eac5ee19e5a19",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/skillflow/context/freeze.md",
+   "source": "repo-pilot/p7-pilot/skillflow/context/freeze.md",
+   "originalSha256": "79fa4313ba16edd290bba96a124845042bd9af8bb0f80409caae3ce1a2fbd6bd",
+   "publishedSha256": "79fa4313ba16edd290bba96a124845042bd9af8bb0f80409caae3ce1a2fbd6bd",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/skillflow/context/heldout.md",
+   "source": "repo-pilot/p7-pilot/skillflow/context/heldout.md",
+   "originalSha256": "dc857f452b401a19579717827ed1330640528f32149128a1ef423f7de8bbfcd3",
+   "publishedSha256": "dc857f452b401a19579717827ed1330640528f32149128a1ef423f7de8bbfcd3",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/skillflow/context/import.md",
+   "source": "repo-pilot/p7-pilot/skillflow/context/import.md",
+   "originalSha256": "0c544b6cddbbc04346918a312b75e554b2f84d271fdfb40173a957a3aa748031",
+   "publishedSha256": "0c544b6cddbbc04346918a312b75e554b2f84d271fdfb40173a957a3aa748031",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/skillflow/context/integrity.md",
+   "source": "repo-pilot/p7-pilot/skillflow/context/integrity.md",
+   "originalSha256": "6f926be030c443e047ca380b6182458a354a9aa1314b3c88d13258855a51e76b",
+   "publishedSha256": "6f926be030c443e047ca380b6182458a354a9aa1314b3c88d13258855a51e76b",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/skillflow/context/investigate-1.md",
+   "source": "repo-pilot/p7-pilot/skillflow/context/investigate-1.md",
+   "originalSha256": "e045ad6d58b318f00d20a9dbef6e0e302d615335b2c2743440da686bc329dfd1",
+   "publishedSha256": "e045ad6d58b318f00d20a9dbef6e0e302d615335b2c2743440da686bc329dfd1",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/skillflow/context/investigate-2.md",
+   "source": "repo-pilot/p7-pilot/skillflow/context/investigate-2.md",
+   "originalSha256": "80c5a6b0f9a33c27620f3827cae8c5e483ab48a776bd231265798e31bb45fe0f",
+   "publishedSha256": "80c5a6b0f9a33c27620f3827cae8c5e483ab48a776bd231265798e31bb45fe0f",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/skillflow/context/investigate-3.md",
+   "source": "repo-pilot/p7-pilot/skillflow/context/investigate-3.md",
+   "originalSha256": "d01d05ff2510cbe9f975f5b0a7445a9f5e20ac8d3080194024774253b8166e4b",
+   "publishedSha256": "d01d05ff2510cbe9f975f5b0a7445a9f5e20ac8d3080194024774253b8166e4b",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/skillflow/context/partition.md",
+   "source": "repo-pilot/p7-pilot/skillflow/context/partition.md",
+   "originalSha256": "8eb7ba170d37a6e2fba4019b91b436dc921c03b429d847ab0914aa6c27695220",
+   "publishedSha256": "8eb7ba170d37a6e2fba4019b91b436dc921c03b429d847ab0914aa6c27695220",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/skillflow/context/preregister.md",
+   "source": "repo-pilot/p7-pilot/skillflow/context/preregister.md",
+   "originalSha256": "e8f1cef71af423fb4739214271fb96b43725e31bb5113d04efd21533c09f1b1b",
+   "publishedSha256": "e8f1cef71af423fb4739214271fb96b43725e31bb5113d04efd21533c09f1b1b",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/skillflow/context/procedures.md",
+   "source": "repo-pilot/p7-pilot/skillflow/context/procedures.md",
+   "originalSha256": "d6746e2eacef3e25368bf1a00a0964abe57943e6d08575cd85c7fa9fe5455570",
+   "publishedSha256": "d6746e2eacef3e25368bf1a00a0964abe57943e6d08575cd85c7fa9fe5455570",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/skillflow/context/report.md",
+   "source": "repo-pilot/p7-pilot/skillflow/context/report.md",
+   "originalSha256": "24f8230d1128247d9830ede9121899734cff2beded5fab41d88a3ecb92b3ce6e",
+   "publishedSha256": "24f8230d1128247d9830ede9121899734cff2beded5fab41d88a3ecb92b3ce6e",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/skillflow/context/representations.md",
+   "source": "repo-pilot/p7-pilot/skillflow/context/representations.md",
+   "originalSha256": "f63533ae3fda1df757a5c21cf9a5596f54f10aed656b0e94a3459c27982b0b1b",
+   "publishedSha256": "f63533ae3fda1df757a5c21cf9a5596f54f10aed656b0e94a3459c27982b0b1b",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/skillflow/context/session-plan.md",
+   "source": "repo-pilot/p7-pilot/skillflow/context/session-plan.md",
+   "originalSha256": "3b7c09864fb34a0fa7b75771e423b5ee7e8dda89ae16fd7141b73b4e50db5321",
+   "publishedSha256": "3b7c09864fb34a0fa7b75771e423b5ee7e8dda89ae16fd7141b73b4e50db5321",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/skillflow/context/three-way.md",
+   "source": "repo-pilot/p7-pilot/skillflow/context/three-way.md",
+   "originalSha256": "9b5018848f8585ae200eb0223e8e8514033df6f5c0eb576d1134daae6540c903",
+   "publishedSha256": "9b5018848f8585ae200eb0223e8e8514033df6f5c0eb576d1134daae6540c903",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/skillflow/log.ndjson",
+   "source": "repo-pilot/p7-pilot/skillflow/log.ndjson",
+   "originalSha256": "640bbe3f81d19e820f423392d9d4588a5b2be82e0f5537efb2dc70b3b6bc37da",
+   "publishedSha256": "067656efe828e24d6ea29dec2f2f5343e2f4a23942a505be2062d15dd5087331",
+   "redacted": true,
+   "rulesApplied": {
+    "gw-repo-absolute-path": 46
+   }
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/skillflow/runs/001-procedures/stderr.txt",
+   "source": "repo-pilot/p7-pilot/skillflow/runs/001-procedures/stderr.txt",
+   "originalSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "publishedSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/skillflow/runs/001-procedures/stdout.txt",
+   "source": "repo-pilot/p7-pilot/skillflow/runs/001-procedures/stdout.txt",
+   "originalSha256": "a7e345fa807b9ef311906295eddc60eeeea9ab95da01c28c43745e4d4e86a727",
+   "publishedSha256": "a7e345fa807b9ef311906295eddc60eeeea9ab95da01c28c43745e4d4e86a727",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/skillflow/runs/002-partition/stderr.txt",
+   "source": "repo-pilot/p7-pilot/skillflow/runs/002-partition/stderr.txt",
+   "originalSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "publishedSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/skillflow/runs/002-partition/stdout.txt",
+   "source": "repo-pilot/p7-pilot/skillflow/runs/002-partition/stdout.txt",
+   "originalSha256": "adc7f31751a9933be34e37b84956ae6a91460f8746f6831be0a496659ad53b6e",
+   "publishedSha256": "adc7f31751a9933be34e37b84956ae6a91460f8746f6831be0a496659ad53b6e",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/skillflow/runs/003-session-plan/stderr.txt",
+   "source": "repo-pilot/p7-pilot/skillflow/runs/003-session-plan/stderr.txt",
+   "originalSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "publishedSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/skillflow/runs/003-session-plan/stdout.txt",
+   "source": "repo-pilot/p7-pilot/skillflow/runs/003-session-plan/stdout.txt",
+   "originalSha256": "bdfec8bd337c0358dadff1f28bb02c39d8def8d4dc2663ff2a75bd5193c32485",
+   "publishedSha256": "bdfec8bd337c0358dadff1f28bb02c39d8def8d4dc2663ff2a75bd5193c32485",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/skillflow/runs/004-preregister/stderr.txt",
+   "source": "repo-pilot/p7-pilot/skillflow/runs/004-preregister/stderr.txt",
+   "originalSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "publishedSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/skillflow/runs/004-preregister/stdout.txt",
+   "source": "repo-pilot/p7-pilot/skillflow/runs/004-preregister/stdout.txt",
+   "originalSha256": "c4a05f7e6afd095e67513d5c8e869fd149315274c9bc7182707236a9e21ecbb2",
+   "publishedSha256": "c4a05f7e6afd095e67513d5c8e869fd149315274c9bc7182707236a9e21ecbb2",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/skillflow/runs/005-investigate-1/stderr.txt",
+   "source": "repo-pilot/p7-pilot/skillflow/runs/005-investigate-1/stderr.txt",
+   "originalSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "publishedSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/skillflow/runs/005-investigate-1/stdout.txt",
+   "source": "repo-pilot/p7-pilot/skillflow/runs/005-investigate-1/stdout.txt",
+   "originalSha256": "35ab8c298fb963f49831aa22673a9049f0c108590c86ec63f97b4ae472790913",
+   "publishedSha256": "46268b18029b6e21255c78f5ed356e1c0a00ab4879d19dd4a6714ba312aa1c0d",
+   "redacted": true,
+   "rulesApplied": {
+    "absolute-credit-balance": 2
+   }
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/skillflow/runs/006-investigate-2/stderr.txt",
+   "source": "repo-pilot/p7-pilot/skillflow/runs/006-investigate-2/stderr.txt",
+   "originalSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "publishedSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/skillflow/runs/006-investigate-2/stdout.txt",
+   "source": "repo-pilot/p7-pilot/skillflow/runs/006-investigate-2/stdout.txt",
+   "originalSha256": "689777f0c595763412d0d5323e90141d0af207af84c58c5c55f2f87e26c41b40",
+   "publishedSha256": "540d32ef39f24186884e6ad19c1d1d445f582e4df9b2f354d896a0b726fec4ab",
+   "redacted": true,
+   "rulesApplied": {
+    "absolute-credit-balance": 2
+   }
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/skillflow/runs/007-investigate-3/stderr.txt",
+   "source": "repo-pilot/p7-pilot/skillflow/runs/007-investigate-3/stderr.txt",
+   "originalSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "publishedSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/skillflow/runs/007-investigate-3/stdout.txt",
+   "source": "repo-pilot/p7-pilot/skillflow/runs/007-investigate-3/stdout.txt",
+   "originalSha256": "de0b34d0f792e1db0209663e7c0fe59cab521a57ad1725dbd51a443a8a558e42",
+   "publishedSha256": "45ac6f3e52f5a02df2ed5d19baee0fd127bced2e6d1481d328f98a3cc9020355",
+   "redacted": true,
+   "rulesApplied": {
+    "absolute-credit-balance": 2
+   }
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/skillflow/runs/008-closure/stderr.txt",
+   "source": "repo-pilot/p7-pilot/skillflow/runs/008-closure/stderr.txt",
+   "originalSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "publishedSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/skillflow/runs/008-closure/stdout.txt",
+   "source": "repo-pilot/p7-pilot/skillflow/runs/008-closure/stdout.txt",
+   "originalSha256": "61c2222c954621cde0d102ee9a05eac87104cdfea4c06dd942e853620b779d1e",
+   "publishedSha256": "61c2222c954621cde0d102ee9a05eac87104cdfea4c06dd942e853620b779d1e",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/skillflow/runs/009-import/stderr.txt",
+   "source": "repo-pilot/p7-pilot/skillflow/runs/009-import/stderr.txt",
+   "originalSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "publishedSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/skillflow/runs/009-import/stdout.txt",
+   "source": "repo-pilot/p7-pilot/skillflow/runs/009-import/stdout.txt",
+   "originalSha256": "a05f2b6b51c901652146bd16eb255a95c183a2a7a1d79fdaffaa06abd0216edc",
+   "publishedSha256": "a05f2b6b51c901652146bd16eb255a95c183a2a7a1d79fdaffaa06abd0216edc",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/skillflow/runs/010-freeze/stderr.txt",
+   "source": "repo-pilot/p7-pilot/skillflow/runs/010-freeze/stderr.txt",
+   "originalSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "publishedSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/skillflow/runs/010-freeze/stdout.txt",
+   "source": "repo-pilot/p7-pilot/skillflow/runs/010-freeze/stdout.txt",
+   "originalSha256": "0c9b77e11acdfd86f93ddaa1dd95099eda32b0aac9fc617d4d79d87a16d5f5d6",
+   "publishedSha256": "0c9b77e11acdfd86f93ddaa1dd95099eda32b0aac9fc617d4d79d87a16d5f5d6",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/skillflow/runs/011-representations/stderr.txt",
+   "source": "repo-pilot/p7-pilot/skillflow/runs/011-representations/stderr.txt",
+   "originalSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "publishedSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/skillflow/runs/011-representations/stdout.txt",
+   "source": "repo-pilot/p7-pilot/skillflow/runs/011-representations/stdout.txt",
+   "originalSha256": "2f9fa38b6cfcd95cc66f5e7d39db3261567ad06ee54205e5ab979408cbb22b6c",
+   "publishedSha256": "2f9fa38b6cfcd95cc66f5e7d39db3261567ad06ee54205e5ab979408cbb22b6c",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/skillflow/runs/012-three-way/stderr.txt",
+   "source": "repo-pilot/p7-pilot/skillflow/runs/012-three-way/stderr.txt",
+   "originalSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "publishedSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/skillflow/runs/012-three-way/stdout.txt",
+   "source": "repo-pilot/p7-pilot/skillflow/runs/012-three-way/stdout.txt",
+   "originalSha256": "39aa1d01acc677a4da8c74839769feab6ade69b7403e6735f3fe4b0e75fa38ec",
+   "publishedSha256": "39aa1d01acc677a4da8c74839769feab6ade69b7403e6735f3fe4b0e75fa38ec",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/skillflow/runs/013-heldout/stderr.txt",
+   "source": "repo-pilot/p7-pilot/skillflow/runs/013-heldout/stderr.txt",
+   "originalSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "publishedSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/skillflow/runs/013-heldout/stdout.txt",
+   "source": "repo-pilot/p7-pilot/skillflow/runs/013-heldout/stdout.txt",
+   "originalSha256": "18116092c933b558c236ee8a290f823d3540dfac93278133c1eb03c136f2594e",
+   "publishedSha256": "18116092c933b558c236ee8a290f823d3540dfac93278133c1eb03c136f2594e",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/skillflow/runs/014-discriminate/stderr.txt",
+   "source": "repo-pilot/p7-pilot/skillflow/runs/014-discriminate/stderr.txt",
+   "originalSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "publishedSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/skillflow/runs/014-discriminate/stdout.txt",
+   "source": "repo-pilot/p7-pilot/skillflow/runs/014-discriminate/stdout.txt",
+   "originalSha256": "67c2cdd783914ce77a5e7f7dd532183d804fec8ffed5d9e21a08ba07b1545348",
+   "publishedSha256": "67c2cdd783914ce77a5e7f7dd532183d804fec8ffed5d9e21a08ba07b1545348",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/skillflow/runs/015-report/stderr.txt",
+   "source": "repo-pilot/p7-pilot/skillflow/runs/015-report/stderr.txt",
+   "originalSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "publishedSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/skillflow/runs/015-report/stdout.txt",
+   "source": "repo-pilot/p7-pilot/skillflow/runs/015-report/stdout.txt",
+   "originalSha256": "c0fc26f8da36daad197d2117e4bb08a30624162299f59eceeb98cd50cd7b177e",
+   "publishedSha256": "c0fc26f8da36daad197d2117e4bb08a30624162299f59eceeb98cd50cd7b177e",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/skillflow/runs/016-integrity/stderr.txt",
+   "source": "repo-pilot/p7-pilot/skillflow/runs/016-integrity/stderr.txt",
+   "originalSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "publishedSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/skillflow/runs/016-integrity/stdout.txt",
+   "source": "repo-pilot/p7-pilot/skillflow/runs/016-integrity/stdout.txt",
+   "originalSha256": "0e4a4d5d4c40637758bb4f8f8314b72e490541d940c6719edb1431ed412d448c",
+   "publishedSha256": "0e4a4d5d4c40637758bb4f8f8314b72e490541d940c6719edb1431ed412d448c",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/skillflow/state.json",
+   "source": "repo-pilot/p7-pilot/skillflow/state.json",
+   "originalSha256": "ce61a062ccb70019499b808ddfc6cd5b7db307cc2eec5793ae45222625f334f5",
+   "publishedSha256": "de4f3f6ba0e83ab0b5d829cb6609d8de3e8895dd2b6a341e4c2dee174ae8a8a9",
+   "redacted": true,
+   "rulesApplied": {
+    "gw-repo-absolute-path": 3
+   }
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/verdicts/01-procedures.json",
+   "source": "repo-pilot/p7-pilot/verdicts/01-procedures.json",
+   "originalSha256": "bf9f0dabf91107d274402a554d5d1133cc03ad4ebe43868969b2b12c4f500be6",
+   "publishedSha256": "bf9f0dabf91107d274402a554d5d1133cc03ad4ebe43868969b2b12c4f500be6",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/verdicts/02-partition.json",
+   "source": "repo-pilot/p7-pilot/verdicts/02-partition.json",
+   "originalSha256": "506d998356c305b6a3767bef524798549d8c46943cbe15c79075157f1e85c97a",
+   "publishedSha256": "506d998356c305b6a3767bef524798549d8c46943cbe15c79075157f1e85c97a",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/verdicts/03-session-plan.json",
+   "source": "repo-pilot/p7-pilot/verdicts/03-session-plan.json",
+   "originalSha256": "d0d29b844b104c71d54243ffcf40bdd467f938289e22223d38d5013e635c5b53",
+   "publishedSha256": "d0d29b844b104c71d54243ffcf40bdd467f938289e22223d38d5013e635c5b53",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/verdicts/03b-preregister.json",
+   "source": "repo-pilot/p7-pilot/verdicts/03b-preregister.json",
+   "originalSha256": "744fe121fbcb6b77d347c652faa485cce7b0887a8b7096b07e1fd7fe13940056",
+   "publishedSha256": "744fe121fbcb6b77d347c652faa485cce7b0887a8b7096b07e1fd7fe13940056",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/verdicts/05-closure.json",
+   "source": "repo-pilot/p7-pilot/verdicts/05-closure.json",
+   "originalSha256": "bcc45e3d56716b22d2ead7e406e0973e3d35fc51038ad1fc137eafb3981fd4ea",
+   "publishedSha256": "bcc45e3d56716b22d2ead7e406e0973e3d35fc51038ad1fc137eafb3981fd4ea",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/verdicts/06-import.json",
+   "source": "repo-pilot/p7-pilot/verdicts/06-import.json",
+   "originalSha256": "52fc72c3a1b2cdfddfa16f1dde495f48c390ac0398735b917a4d81d3fecd3465",
+   "publishedSha256": "52fc72c3a1b2cdfddfa16f1dde495f48c390ac0398735b917a4d81d3fecd3465",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/verdicts/07-freeze.json",
+   "source": "repo-pilot/p7-pilot/verdicts/07-freeze.json",
+   "originalSha256": "47174db306d4c7cbd6923645ac10336780145eff9330f44f99126abaf84620ae",
+   "publishedSha256": "47174db306d4c7cbd6923645ac10336780145eff9330f44f99126abaf84620ae",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/verdicts/08-representations.json",
+   "source": "repo-pilot/p7-pilot/verdicts/08-representations.json",
+   "originalSha256": "bfb2172fb8048e41f5853b8fc1f6e0969745bc603fe2c56c1c4e3597349d2395",
+   "publishedSha256": "bfb2172fb8048e41f5853b8fc1f6e0969745bc603fe2c56c1c4e3597349d2395",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/verdicts/09-three-way.json",
+   "source": "repo-pilot/p7-pilot/verdicts/09-three-way.json",
+   "originalSha256": "dad6744c1eed7d01724d286d23c8cb0785a0ed425958ce8d8d40cc35d8731be1",
+   "publishedSha256": "dad6744c1eed7d01724d286d23c8cb0785a0ed425958ce8d8d40cc35d8731be1",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/verdicts/10-heldout.json",
+   "source": "repo-pilot/p7-pilot/verdicts/10-heldout.json",
+   "originalSha256": "30cff28744644d3db4edd34441514c3f738423900583b77025e81dd7d9041cc4",
+   "publishedSha256": "30cff28744644d3db4edd34441514c3f738423900583b77025e81dd7d9041cc4",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/verdicts/11-discriminate.json",
+   "source": "repo-pilot/p7-pilot/verdicts/11-discriminate.json",
+   "originalSha256": "05e3200e97247eed35f839e5d4550a1ebba2e69ac75c6b88b5dea7ceb57cd08a",
+   "publishedSha256": "05e3200e97247eed35f839e5d4550a1ebba2e69ac75c6b88b5dea7ceb57cd08a",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/verdicts/12-report.json",
+   "source": "repo-pilot/p7-pilot/verdicts/12-report.json",
+   "originalSha256": "6ab9108019b48ac05ba9210df94f48d203792d1e67aa3ef0893313286fe424a9",
+   "publishedSha256": "6ab9108019b48ac05ba9210df94f48d203792d1e67aa3ef0893313286fe424a9",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/verdicts/13-integrity.json",
+   "source": "repo-pilot/p7-pilot/verdicts/13-integrity.json",
+   "originalSha256": "2d11911af7469b2c6065edd3afab29983c26b759b36c32845c2b64c0267baec1",
+   "publishedSha256": "2d11911af7469b2c6065edd3afab29983c26b759b36c32845c2b64c0267baec1",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/external-record/PREREGISTRATION.json",
+   "source": "external-record/PREREGISTRATION.json",
+   "originalSha256": "8b8e506da66c8973ef47b61c0e8c6dce93977746b51726bf28a47bd2973f6f53",
+   "publishedSha256": "8b8e506da66c8973ef47b61c0e8c6dce93977746b51726bf28a47bd2973f6f53",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/external-record/console-session-1.log",
+   "source": "external-record/console-session-1.log",
+   "originalSha256": "7f3c4f9ed19e8e752f248dd19449f4db6ef18c53fb952b2f13545be234d52d06",
+   "publishedSha256": "815d8102a10b459f607c6b7f8d53e610973b6385442e1c3d253e436e8849688e",
+   "redacted": true,
+   "rulesApplied": {
+    "gw-repo-absolute-path": 1
+   }
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/external-record/console-session-2.log",
+   "source": "external-record/console-session-2.log",
+   "originalSha256": "4b9ac60d5818ced667819dfd0dd1d9c3186377d6ec360a2e62c261000c92682a",
+   "publishedSha256": "51f9cae683ca69974b63253cd19dbd8ea844576624c8b11a8a8255650bbc85d2",
+   "redacted": true,
+   "rulesApplied": {
+    "gw-repo-absolute-path": 1
+   }
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/external-record/console-session-3.log",
+   "source": "external-record/console-session-3.log",
+   "originalSha256": "41d4e873789bc44f254237c50a9ef182afe6fa23617d8f0253e48c0803c9cb74",
+   "publishedSha256": "f809123f4008470ce402268361801960e10bd5a799cc7e758691fca2339bdee0",
+   "redacted": true,
+   "rulesApplied": {
+    "gw-repo-absolute-path": 1
+   }
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/external-record/execution-ledger.ndjson",
+   "source": "external-record/execution-ledger.ndjson",
+   "originalSha256": "993b1e43fdc62955b90b9296584cd040cfed0e7d537ad7d1434d62c2701c0c68",
+   "publishedSha256": "993b1e43fdc62955b90b9296584cd040cfed0e7d537ad7d1434d62c2701c0c68",
+   "redacted": false
+  },
+  {
+   "file": "evidence/gw2/p7-pilot/external-record/PACK.json",
+   "source": "PACK.json",
+   "originalSha256": "1ce0f5e93bdc16c162189f04052f5b0443dd446c740f2efb683e0642a3ebfd7a",
+   "publishedSha256": "1ce0f5e93bdc16c162189f04052f5b0443dd446c740f2efb683e0642a3ebfd7a",
+   "redacted": false
+  }
+ ],
+ "remainingForManualReview": []
+}

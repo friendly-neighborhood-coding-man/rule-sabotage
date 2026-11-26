@@ -53,7 +53,7 @@ export async function runP3Demo(expDir: string, opts: { freezeAt?: string } = {}
   return { session: s.session, dir: s.dir, imported, freeze };
 }
 
-if (process.argv[1]?.endsWith('gw2/p3-demo.ts')) {
+if (process.argv[1]?.replace(/\\/g, "/").endsWith('gw2/p3-demo.ts')) {
   const exp = process.argv[2];
   if (!exp) { console.error('usage: p3-demo.ts <expDir>'); process.exit(2); }
   const r = await runP3Demo(exp);

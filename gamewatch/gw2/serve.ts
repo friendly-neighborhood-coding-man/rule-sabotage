@@ -154,7 +154,7 @@ export async function startGw2Server(o: Gw2ServerOptions): Promise<Gw2Server> {
   });
 }
 
-if (process.argv[1]?.endsWith('gw2/serve.ts')) {
+if (process.argv[1]?.replace(/\\/g, "/").endsWith('gw2/serve.ts')) {
   const arg = (k: string, d?: string) => { const i = process.argv.indexOf(k); return i > 0 ? process.argv[i + 1] : d; };
   const exp = arg('--exp');
   if (!exp) { console.error('usage: serve.ts --exp <id> [--out dir] [--site dir] [--port n] [--label l] [--no-access-log]'); process.exit(2); }

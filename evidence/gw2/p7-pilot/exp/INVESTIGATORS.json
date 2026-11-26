@@ -1,0 +1,153 @@
+{
+ "schema": "gamewatch/gw2-investigators@2",
+ "note": "operator record, operational fields only (D108); outside the agent input boundary",
+ "sessions": [
+  {
+   "session": "e95f5bc28e46532c",
+   "profile": "kane",
+   "route": "real",
+   "runId": "GW2-P7-pilot-1",
+   "cli": "kane-cli",
+   "version": "0.10.4",
+   "argv": [
+    "run",
+    "You are investigating a two-player board game whose rules are not shown. Open the page at the given URL. It shows observations of builds of the game: scripted playtests (each step shows the state before and after and every event the game reported) and games between two computer players. Infer which rules the game appears to follow, and where builds behave differently. Open case and match pages as needed. For each rule you infer, open hypothesis.html and submit one form: a plain statement, your confidence, the case or match ids you relied on, and, if you can, the optional structured representation described on that page. You may submit competing hypotheses, and you may abstain on questions you cannot settle. Report only what the observations support. Submit at most 8 forms.",
+    "--url",
+    "http://127.0.0.1:63995/index.html",
+    "--agent",
+    "--headless",
+    "--max-steps",
+    "80",
+    "--timeout",
+    "2700"
+   ],
+   "status": "completed",
+   "stopReasons": [],
+   "exitCode": 0,
+   "timedOut": false,
+   "ms": 142463,
+   "runEnd": {
+    "present": true,
+    "valid": true,
+    "status": "passed",
+    "reasonCode": "success.complete",
+    "resultCode": 100
+   },
+   "steps": 21,
+   "kaneCreditsReported": 29.680727500000003,
+   "spend": {
+    "before": "<redacted:balance>",
+    "after": "<redacted:balance>",
+    "used": 31.844,
+    "estimate": 248,
+    "ceiling": 300,
+    "outcome": "WITHIN_CEILING",
+    "timedOut": false,
+    "exitCode": 0,
+    "error": null,
+    "capKind": "local-estimate-not-enforced"
+   },
+   "cumulativeUsed": 31.844,
+   "rawSealSha256": "60419742ff3928fd9081d3101e0aa7e150fda5298a30bcaef73a698809c4410e",
+   "stdoutSha256": "e0c909c8894a5a7281510ebb23fa71d002ce9116a80e1d96931bc22b0e204889"
+  },
+  {
+   "session": "f6003f7e3d5f8469",
+   "profile": "kane",
+   "route": "real",
+   "runId": "GW2-P7-pilot-2",
+   "cli": "kane-cli",
+   "version": "0.10.4",
+   "argv": [
+    "run",
+    "You are investigating a two-player board game whose rules are not shown. Open the page at the given URL. It shows observations of builds of the game: scripted playtests (each step shows the state before and after and every event the game reported) and games between two computer players. Infer which rules the game appears to follow, and where builds behave differently. Open case and match pages as needed. For each rule you infer, open hypothesis.html and submit one form: a plain statement, your confidence, the case or match ids you relied on, and, if you can, the optional structured representation described on that page. You may submit competing hypotheses, and you may abstain on questions you cannot settle. Report only what the observations support. Submit at most 8 forms.",
+    "--url",
+    "http://127.0.0.1:57102/index.html",
+    "--agent",
+    "--headless",
+    "--max-steps",
+    "80",
+    "--timeout",
+    "2700"
+   ],
+   "status": "completed",
+   "stopReasons": [],
+   "exitCode": 0,
+   "timedOut": false,
+   "ms": 147677,
+   "runEnd": {
+    "present": true,
+    "valid": true,
+    "status": "passed",
+    "reasonCode": "success.complete",
+    "resultCode": 100
+   },
+   "steps": 17,
+   "kaneCreditsReported": 37.42277,
+   "spend": {
+    "before": "<redacted:balance>",
+    "after": "<redacted:balance>",
+    "used": 48.48,
+    "estimate": 248,
+    "ceiling": 300,
+    "outcome": "WITHIN_CEILING",
+    "timedOut": false,
+    "exitCode": 0,
+    "error": null,
+    "capKind": "local-estimate-not-enforced"
+   },
+   "cumulativeUsed": 80.324,
+   "rawSealSha256": "923c8acb7261fc83a9b4297feae423f067d035ca06725d821ec5d6ada25dbe12",
+   "stdoutSha256": "7b60095733939322c5d0f1b295624498039e52328bb56bae4aed531fac6868d6"
+  },
+  {
+   "session": "1e26529c62afc36e",
+   "profile": "kane",
+   "route": "real",
+   "runId": "GW2-P7-pilot-3",
+   "cli": "kane-cli",
+   "version": "0.10.4",
+   "argv": [
+    "run",
+    "You are investigating a two-player board game whose rules are not shown. Open the page at the given URL. It shows observations of builds of the game: scripted playtests (each step shows the state before and after and every event the game reported) and games between two computer players. Infer which rules the game appears to follow, and where builds behave differently. Open case and match pages as needed. For each rule you infer, open hypothesis.html and submit one form: a plain statement, your confidence, the case or match ids you relied on, and, if you can, the optional structured representation described on that page. You may submit competing hypotheses, and you may abstain on questions you cannot settle. Report only what the observations support. Submit at most 8 forms.",
+    "--url",
+    "http://127.0.0.1:61248/index.html",
+    "--agent",
+    "--headless",
+    "--max-steps",
+    "80",
+    "--timeout",
+    "2700"
+   ],
+   "status": "completed",
+   "stopReasons": [],
+   "exitCode": 0,
+   "timedOut": false,
+   "ms": 196430,
+   "runEnd": {
+    "present": true,
+    "valid": true,
+    "status": "passed",
+    "reasonCode": "success.complete",
+    "resultCode": 100
+   },
+   "steps": 45,
+   "kaneCreditsReported": 51.1283675,
+   "spend": {
+    "before": "<redacted:balance>",
+    "after": "<redacted:balance>",
+    "used": 51.719,
+    "estimate": 248,
+    "ceiling": 300,
+    "outcome": "WITHIN_CEILING",
+    "timedOut": false,
+    "exitCode": 0,
+    "error": null,
+    "capKind": "local-estimate-not-enforced"
+   },
+   "cumulativeUsed": 132.043,
+   "rawSealSha256": "01199671a04612e4f9d85b56baf6435c851397f9da64dc837051583a9925ccc5",
+   "stdoutSha256": "ad61faad5b9df393a49317b041f478ff66c77d9e6b55a2c4fa53280530085579"
+  }
+ ]
+}

@@ -78,7 +78,7 @@ export async function runP4Demo(expDir: string, o: { at?: string } = {}) {
   return { session: s.session, freeze, evaluation };
 }
 
-if (process.argv[1]?.endsWith('gw2/p4-demo.ts')) {
+if (process.argv[1]?.replace(/\\/g, "/").endsWith('gw2/p4-demo.ts')) {
   const exp = process.argv[2], i = process.argv.indexOf('--at');
   if (!exp) { console.error('usage: p4-demo.ts <expDir> [--at ISO]'); process.exit(2); }
   const r = await runP4Demo(exp, { at: i > 0 ? process.argv[i + 1] : undefined });

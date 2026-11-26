@@ -1,0 +1,8 @@
+{
+ "step": "procedures",
+ "ok": true,
+ "generation": "p7-generation-1",
+ "partition": "p7-partition-1",
+ "bundleSha256": "368d61699f961b77fbea86913890af5daf747c865be3d2457ae54d21ebca7bfe",
+ "problems": []
+}

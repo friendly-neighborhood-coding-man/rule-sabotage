@@ -1,0 +1,49 @@
+{
+ "schema": "gamewatch/gw2-p7-preregistration@1",
+ "at": "2026-11-25T19:31:47.668Z",
+ "exp": "evidence/gw2/p7-pilot/exp",
+ "files": {
+  "docs/gw2/P7_PREREGISTRATION.md": "a871dc6792d430ff5746674340fcf3aed7617a2bdd4d5d0beebe730c230f5b0d",
+  "docs/gw2/P7_OPERATOR_CHECKLIST.md": "ae9528c9b04ee4c1f73b37287841e3c2db0538f7677203800629c54face3fcaa",
+  "gamewatch/gw2/book-p7.json": "413df985289d3908adea4ddbd0a96396122085ed4f84f12edb49d04f734f111a",
+  "gamewatch/gw2/p7-plan.ts": "4a815d4cd1d600ff0f64121e3f16432b76bac808254be33f5951ddee1390f3e5",
+  "gamewatch/gw2/kane-boundary.ts": "a5715b50b7a5532bba5f1ad6e526d58aa7712594e090cbe59f311a5b257b9f01",
+  "gamewatch/gw2/p7-exec.ts": "02e73501ba8384c06d46ab3b7cab2a9b116d12c20416dee619022a9b0d106376",
+  "server/balance/v4/kanebudget.ts": "c5ba846ba332bc96ecbe87090d61595f5905c406b78e3e5dfd04aa9ece38c76a",
+  "evidence/gw2/procedures/generation-p7-1.json": "c08a58cc775e3195a032f8ded6d972a5d28e7913608b205a0fa6efd67e637199",
+  "evidence/gw2/procedures/partition-p7-1.json": "f676850665a80ae1e2f3b1119d45116cf14dd3a7d8a32f63af69c16f920c136f",
+  "evidence/gw2/p7-evidence/generated/bundle.json": "368d61699f961b77fbea86913890af5daf747c865be3d2457ae54d21ebca7bfe",
+  "exp:partitions/PARTITION.json": "4aedb833d0dab9cf1a8ac586df888cbdb9012ffdaaca95cc2360caa0fb52c04e",
+  "exp:SESSIONS.json": "78077023045e08cff670f61309f5cf52e43168a8dabb164432448ebeb3bd24d6",
+  "exp:LEAK_CHECK.json": "239f7c4a59a17c3002ca4db2d64a911d80742d831935f936cfe41831603046d6"
+ },
+ "plan": {
+  "sessions": 3,
+  "runIds": [
+   "GW2-P7-pilot-1",
+   "GW2-P7-pilot-2",
+   "GW2-P7-pilot-3"
+  ],
+  "callsPerSession": 1,
+  "retries": 0,
+  "followUps": 0,
+  "parallel": false,
+  "cli": "kane-cli",
+  "cliVersion": "0.10.4",
+  "maxSteps": 80,
+  "timeoutS": 2700,
+  "killAfterS": 2730,
+  "objectiveSha256": "8d9f503e8f44d0fa5f9ce5bcf0e8f3dfedc01381589027733dc5199942ebbfdf",
+  "perCallCeilingCredits": 300,
+  "gateMinimumBalance": 450,
+  "researchThresholdCredits": 4000,
+  "maxResearchCalls": 23,
+  "authorizedNow": 3
+ },
+ "status": {
+  "evidence": "unopened",
+  "encoding2": "provisional, exploratory only (U2, D94)",
+  "externalTranslation": "none (U3, D95)"
+ },
+ "guarantee": "Operator-controlled copy outside the repository and outside the agent input boundary (Q14, D39). No signature or timestamping service: it detects later edits of the frozen files only as far as the operator controls this directory."
+}

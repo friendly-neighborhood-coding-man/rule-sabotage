@@ -167,7 +167,11 @@ export function kaneExecution(n: NodeInput, root = ROOT): ExecutionProvenance {
   } else limitations.push(`note↔args nonce link unavailable (${typeof note.nonce !== 'string' ? 'note' : 'args.json'} records no nonce)`);
   const argv = Array.isArray(args.args) ? args.args as unknown[] : [], url = argv[argv.indexOf('--url') + 1];
   const testUrl = end?.test_url;
-  if (typeof testUrl === 'string' && !REDACTED.test(testUrl) && typeof url === 'string') {
+  // kane-cli 0.10.4 reports its own test-manager link as test_url (GW1 raw stdout); only a loopback test_url names the
+  // served page and can be compared with --url. A Kane link is a stated limitation, not a mismatch (P7 preflight, D104).
+  const kaneLink = typeof testUrl === 'string' && !REDACTED.test(testUrl) && !/^https?:\/\/(127\.0\.0\.1|localhost)(:\d+)?\//.test(testUrl);
+  if (kaneLink) limitations.push('run_end test_url is kane-cli\'s own run link, not the served --url; stdout↔args linkage rests on the run directory, the nonce and time order');
+  else if (typeof testUrl === 'string' && !REDACTED.test(testUrl) && typeof url === 'string') {
     if (testUrl !== url) failures.push(`run_end test_url ${testUrl} differs from args --url ${url}`); else established.push('run_end test_url = args --url');
   } else limitations.push(`stdout↔args shared identifier unavailable (${typeof testUrl === 'string' && REDACTED.test(testUrl) ? 'run_end test_url is redacted in the stored copy' : 'no test_url/--url pair'}); stdout↔args linkage rests on the run directory and time order`);
   const t = (x: unknown) => typeof x === 'string' && !Number.isNaN(Date.parse(x)) ? Date.parse(x) : null;
@@ -418,7 +422,7 @@ export function view(file: string) {
   };
 }
 
-if (process.argv[1]?.endsWith('gw2/judgments.ts')) {
+if (process.argv[1]?.replace(/\\/g, "/").endsWith('gw2/judgments.ts')) {
   const [cmd, file, ...rest] = process.argv.slice(2);
   if (!cmd || !file) { console.error('usage: judgments.ts verify|head|append <judgments.ndjson> [...]'); process.exit(2); }
   try {

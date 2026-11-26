@@ -125,17 +125,17 @@ test('AC-P6.4 the vendored runner is unchanged and its verifier passes', () => {
   else assert.fail(`git diff could not run: ${g.stderr}`);
 });
 
-test('P7 book (prepared, not authorized): stops before the first real session without authorization, and the gate refuses with it', () => {
+test('P7 book: pre-registers into the external record, then stops before the first real session without authorization, and the disabled gate refuses with it', () => {
   const BOOK7 = join(ROOT, 'gamewatch/gw2/book-p7.json');
-  assert.equal(spawnSync(PY, [RUNNER, 'validate', BOOK7], { encoding: 'utf8' }).stdout.trim(), 'ok: 15 tasks');
+  assert.equal(spawnSync(PY, [RUNNER, 'validate', BOOK7], { encoding: 'utf8' }).stdout.trim(), 'ok: 16 tasks');
   const d = mkdtempSync(join(tmpdir(), 'gw2-p7book-'));
   try {
     const go = (sub: string, auth: boolean) => {
       const state = join(d, sub, 'state');
       if (auth) { mkdirSync(join(state, 'authorizations'), { recursive: true }); writeFileSync(join(state, 'authorizations', 'kane-paid-1'), 'TEST: runner authorization only; the paid-call gate stays disabled\n'); }
       const env = { ...process.env } as Record<string, string | undefined>; delete env.SKILLFLOW_AUTH_KANE_PAID_1; delete env.KANE_PAID_RUN_AUTH;
-      const v = ['out=' + join(d, sub, 'out'), 'exp=' + join(d, sub, 'exp'), 'generation=evidence/gw2/procedures/generation-p5-1.json', 'partition=evidence/gw2/procedures/partition-p5-1.json',
-        'bundle=evidence/gw2/p5-experiment/generated/bundle.json', 'sessions=3', 'profiles=kane', 'run1=P7-test-1', 'run2=P7-test-2', 'run3=P7-test-3', 'at=' + AT].flatMap(x => ['--var', x]);
+      const v = ['out=' + join(d, sub, 'out'), 'exp=' + join(d, sub, 'exp'), 'generation=evidence/gw2/procedures/generation-p7-1.json', 'partition=evidence/gw2/procedures/partition-p7-1.json',
+        'bundle=evidence/gw2/p7-evidence/generated/bundle.json', 'sessions=3', 'profiles=kane', 'run1=P7-test-1', 'run2=P7-test-2', 'run3=P7-test-3', 'record=' + join(d, sub, 'external-record'), 'at=' + AT].flatMap(x => ['--var', x]);
       const r = spawnSync(PY, [RUNNER, 'run', BOOK7, '--state', state, '--workdir', ROOT, ...v], { encoding: 'utf8', env: env as NodeJS.ProcessEnv, timeout: 300_000 });
       return { code: r.status, state: JSON.parse(readFileSync(join(state, 'state.json'), 'utf8')) };
     };
@@ -146,6 +146,7 @@ test('P7 book (prepared, not authorized): stops before the first real session wi
     assert.ok(!existsSync(join(d, 'auth', 'exp', 'sessions')), 'refused before any server or process');
     const ledger = readFileSync(join(d, 'auth', 'exp', 'kane-ledger.ndjson'), 'utf8');
     assert.match(ledger, /"event":"refused"/); assert.doesNotMatch(ledger, /call-start/);
+    assert.ok(existsSync(join(d, 'auth', 'external-record', 'PREREGISTRATION.json')), 'the pre-registration is frozen before the first call');
   } finally { rmSync(d, { recursive: true, force: true }); }
 });
 

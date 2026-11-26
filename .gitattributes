@@ -1,3 +1,7 @@
+# Line endings (GW2 P7 Windows compatibility, D110): the repository stores LF. Text is checked out with LF on every
+# platform, so canonical NDJSON, fixtures, hashes and anchors are byte-identical on Windows. Evidence is never converted.
+* text=auto eol=lf
+evidence/** -text
 evidence/balance/** -text
 balance/journal.ndjson -text
 balance/v2/journal.ndjson -text

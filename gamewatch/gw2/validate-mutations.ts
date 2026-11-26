@@ -95,7 +95,7 @@ export async function validateMutations(procFile: string, generatedDir: string, 
   return report;
 }
 
-if (process.argv[1]?.endsWith('gw2/validate-mutations.ts')) {
+if (process.argv[1]?.replace(/\\/g, "/").endsWith('gw2/validate-mutations.ts')) {
   const [proc, gen, out] = process.argv.slice(2);
   if (!proc || !gen || !out) { console.error('usage: validate-mutations.ts <procedure.json> <generatedDir> <out.json>'); process.exit(2); }
   const r = await validateMutations(proc, gen, out);
