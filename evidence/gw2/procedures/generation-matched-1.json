@@ -1,0 +1,138 @@
+{
+ "schema": "gamewatch/gw2-generation-procedure@1",
+ "id": "matched-generation-1",
+ "frozenAt": "2026-11-26T07:39:59.000Z",
+ "purpose": "GW2 matched comparison (control vs hypothesis-feedback treatment, D136-D145): fresh deterministic engine observations on the two QA evidence builds (QX-41, QX-73, unchanged), the same scripts as p7-generation-1, and AI-vs-AI matches on 12 new seeds. One bundle, partitioned once, serves every session of both arms byte-identically.",
+ "code": [
+  {
+   "path": "gamewatch/gw2/generate.ts",
+   "sha256": "25f1c1654fcd5788971e5c5ed8fa3bb5ed1b9c4746eb36ea7d5c0bcf79c13c9a"
+  },
+  {
+   "path": "gamewatch/gw2/scenarios-p5.ts",
+   "sha256": "a0c37e72e681f1bad0a920bd862ce00831f34448b28913feb7fef83838def8e9"
+  },
+  {
+   "path": "gamewatch/scenarios.ts",
+   "sha256": "11c281ce9421b3348d2e6de9831a025cbb16a45de2b12f2ade39d1e65cdc5f40"
+  },
+  {
+   "path": "gamewatch/adapters/rule-sabotage.ts",
+   "sha256": "93dcae614be429836c0b808021b139c3733386066ece20071628a48c149b7337"
+  },
+  {
+   "path": "gamewatch/builds.ts",
+   "sha256": "6eb1f5339d8c741e84648efe0503a6ffde21724cd359196cb13e125c7e63b1e8"
+  },
+  {
+   "path": "gamewatch/rules-doc.ts",
+   "sha256": "0bf775019d874ef6ee2dc6915c5a0e4a94d4d5eb599579f0307f7cd8eddd955b"
+  },
+  {
+   "path": "gamewatch/evidence.ts",
+   "sha256": "d08659d81e5ba26b4db0e021fe807ccd32f33d9c1d5bc43cbfa05530880e34c7"
+  },
+  {
+   "path": "server/weights.ts",
+   "sha256": "24ad2b10c0f6202bf223286d60573f0345d4bdb399140d0bceda570b8ce36b89"
+  },
+  {
+   "path": "gamewatch/gw2/generate-p7.ts",
+   "sha256": "5f9b7d8bdff23bce3f799b981747c9523b6df4d6720aca16bf500510b00162ef"
+  },
+  {
+   "path": "gamewatch/gw2/scenarios-p7.ts",
+   "sha256": "f7d27d8954e82e75c326b25e73d6b8a949be93f658d5c31050c347ac4440e886"
+  }
+ ],
+ "mutations": {
+  "path": "gamewatch/private/mutations.json",
+  "sha256": "389863b0dd57bfbdcd9ede5547363e4d1a32d6ba28e9c50a3bf2b92eae2871d5"
+ },
+ "buildHashes": {
+  "QX-41": {
+   "tree": "18216371b47d23e7d465fc28136cafd4376ef1fc699bbe659204ee8d2c2eda97",
+   "engine.ts": "3a98317aa576f87ba4a9a3a817d374662dc900098357cfed5ff421e7314723e2",
+   "turn.ts": "ce30227b8dcbcfb00cff68963c164fb219c021010edf8913b22e96271f4d5a75"
+  },
+  "QX-73": {
+   "tree": "8907a40487c9ea18ac7ce12ce83a6fa2944a36c463082cc675c823c4f643c3db",
+   "engine.ts": "d577ef580846c001eca4245a479b9e20c1a33c55dfc75c38597caeed7cbb47c0",
+   "turn.ts": "ce30227b8dcbcfb00cff68963c164fb219c021010edf8913b22e96271f4d5a75"
+  }
+ },
+ "runs": {
+  "experiment": {
+   "builds": [
+    {
+     "label": "QX-41",
+     "from": "evidence",
+     "key": "QX-41"
+    },
+    {
+     "label": "QX-73",
+     "from": "evidence",
+     "key": "QX-73"
+    }
+   ],
+   "scripts": [
+    "shield-human",
+    "shield-ai",
+    "shove-chain-human",
+    "shove-chain-ai",
+    "walk-twice",
+    "freeze-human",
+    "freeze-ai",
+    "shove-human",
+    "shove-ai",
+    "adjacent-placement",
+    "teleport-human",
+    "send-home-human",
+    "send-home-ai",
+    "placement-human",
+    "placement-ai",
+    "multicell-human",
+    "multicell-ai",
+    "matrix-haste",
+    "matrix-freeze",
+    "matrix-home",
+    "matrix-shield-v1",
+    "matrix-shield-v2"
+   ],
+   "matches": {
+    "seeds": [
+     98401,
+     98402,
+     98403,
+     98404,
+     98405,
+     98406,
+     98407,
+     98408,
+     98409,
+     98410,
+     98411,
+     98412
+    ],
+    "firstMovers": [
+     "human",
+     "ai"
+    ],
+    "policy": "softmax-v2"
+   },
+   "idSalt": "gw2-matched-experiment-1"
+  }
+ },
+ "selection": [
+  "Every listed script is run once on every listed build of the run (scripts are deterministic: the build engine and referee decide every outcome).",
+  "Every seed x first mover x build of the run is played once with the listed policy in both seats.",
+  "All outputs are kept in the order defined by their anonymous ids; nothing is filtered, selected, re-run or regenerated. The run refuses an existing output directory.",
+  "No agent output, hypothesis or evaluation result is an input of generation or of the partition procedure."
+ ],
+ "notes": [
+  "Seeds 98401-98412 are disjoint from GW1 (97001-97008), P5 (98001-98006) and P7 (98201-98212). Scripted cases are deterministic, so the scripts replay earlier cases under new ids; the novelty is in the matches.",
+  "Generated through gamewatch/gw2/generate-p7.ts (the unchanged P5 generator with the P7 scripts registered). No new script and no generator change.",
+  "Frozen in its own commit before any matched-comparison observation was generated; no agent output, hypothesis or evaluation result is an input.",
+  "Contamination (T25): B1-B3 are publicly documented in this repository and P7 results are published; new seeds do not remove prior knowledge of the defects. The same holds for both arms."
+ ]
+}
