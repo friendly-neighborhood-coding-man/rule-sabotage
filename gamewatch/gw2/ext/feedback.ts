@@ -15,7 +15,7 @@ import { agentFeedbackCore, agentInputs, renderAgentFeedback, type AgentFeedback
 import { anchoredPrereg, defaultRecord } from './anchored.ts';
 import { AccessRefused } from './errors.ts';
 
-export const AGENT_FEEDBACK_ENABLED = true;
+export const AGENT_FEEDBACK_ENABLED = false;
 /** D138: an authorization names exactly one run: run id, (logical) session, arm, phase and the pre-registration hash. */
 export type Authorization = { runId: string; session: string; arm: string; phase: number; preregSha256: string; operatorAuthorization: string };
 export const FEEDBACK_PHASE = 2;
