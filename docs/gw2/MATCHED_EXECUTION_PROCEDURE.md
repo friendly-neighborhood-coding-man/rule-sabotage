@@ -1,19 +1,17 @@
-# GW2 matched comparison: execution procedure (DRAFT for execution review; NOT authorized, NOT executed)
+# GW2 matched comparison: execution procedure (FINAL PREFLIGHT DRAFT; NOT authorized, NOT executed)
 
-This is the operator procedure for the matched comparison in [`MATCHED_PREREGISTRATION_DRAFT.md`](MATCHED_PREREGISTRATION_DRAFT.md) (D136–D145). Nothing here has run against Kane. While both gates stay closed, every paid step is refused before any server or process starts:
+This is the operator procedure for the matched comparison in [`MATCHED_PREREGISTRATION_DRAFT.md`](MATCHED_PREREGISTRATION_DRAFT.md) (D136–D153). Nothing here has run against Kane. While both gates stay closed, every paid step is refused before any server or process starts:
 * `PAID_RESEARCH_EXECUTION = 'disabled'`, with a scope that names only the P7 pilot ids;
 * `AGENT_FEEDBACK_ENABLED = false`.
 
-The whole pipeline has been exercised with test doubles (`tests/gw2-matched.test.ts`).
-
-All commands are run from the repository root with Node ≥ 22.10. `M` stands for `node --experimental-strip-types --no-warnings gamewatch/gw2/matched/cli.ts`.
+The operator runs the experiment on Windows with **`gw2-matched-run.ps1`**, which follows the same pattern as the P7 script. It is kept **outside the repository**, so editing it cannot change the tree it checks. The script is delivered in the project files (`gw2/matched/gw2-matched-run.ps1`). `N` below stands for `node --experimental-strip-types --no-warnings gamewatch/gw2/matched/cli.ts`.
 
 ## A. Limits
 
 | Item | Value |
 |---|---|
 | Sessions | 10 (M01–M10): 5 control and 5 treatment, balanced blocks of two, seed 20261126 |
-| Calls | 20 in total, exactly 2 per session (`GW2-Mnn-P1`, `GW2-Mnn-P2`). **One call per invocation**, strictly in schedule order. No retries, nothing in parallel |
+| Calls | 20 in total, exactly 2 per session (`GW2-Mnn-P1`, `GW2-Mnn-P2`). **One call per approval and per invocation**, strictly in schedule order. No retries, nothing in parallel |
 | Phase 1 | `--max-steps 80 --timeout 2700`, ceiling 300 credits (estimate 248) |
 | Phase 2 | `--max-steps 40 --timeout 1350`, ceiling 150 credits (estimate 124) |
 | Research threshold | 4,000 credits cumulative, P7's 132.043 included. A call does not start if cumulative + its ceiling would exceed 4,000 |
@@ -21,85 +19,89 @@ All commands are run from the repository root with Node ≥ 22.10. `M` stands fo
 | Accounting | Balance delta per call (`before − after`), recorded in the external ledger |
 | Credit purchases | None |
 
-## B. Permissions and reviewed commits (operator; none exist yet)
+## B. Two commits and three directories
 
-1. **Written authorization** of the matched comparison: its text and the operator's name.
-2. **The paid-call gate commit**, on its own:
-   * `PAID_RESEARCH_EXECUTION = 'per-run-approval'`;
-   * `PAID_RESEARCH_SCOPE = /^GW2-M(0[1-9]|10)-P[12]$/`.
-   `'disabled'` is restored in a separate commit afterwards.
-3. **The agent-feedback commit**, on its own: `AGENT_FEEDBACK_ENABLED = true`. It is restored to `false` afterwards. Feedback is still served only to runs that the anchored pre-registration lists (`GW2-M02-P2`, `GW2-M03-P2`, `GW2-M06-P2`, `GW2-M08-P2`, `GW2-M10-P2`), and only with an authorization that matches exactly.
-4. **An external record directory and a run directory**, both outside the repository.
-   * `cli.ts` refuses paths inside the repository (`recordDir`).
-   * The record holds the hash-chained ledger and the anchors.
-   * The run directory holds the per-session graphs, freezes, raw output and sites.
+| | What it is | Checked by |
+|---|---|---|
+| **Reviewed commit** | Both gates closed. The commit approved at final review | The full regression suite runs here unchanged: `npm run test:gw2`, `npm run gw2:verify`, `python gamewatch/vendor/verify.py`. This includes every historical "the gate is disabled" assertion |
+| **Candidate commit** | The reviewed commit plus exactly three line changes: `PAID_RESEARCH_EXECUTION = 'per-run-approval'`, `PAID_RESEARCH_SCOPE = /^GW2-M(0[1-9]\|10)-P[12]$/` and `AGENT_FEEDBACK_ENABLED = true` | `N candidate-check --reviewed <sha>`. It refuses any other changed file or line. The historical tests are not edited to pass on the candidate. The paid calls run only here |
 
-## C. Before the first call
+| Directory | Proposed | Notes |
+|---|---|---|
+| Candidate worktree | `D:\Rule_Sabotage\gw2-matched-live` | A fresh detached worktree at the candidate commit |
+| Reviewed worktree | `D:\Rule_Sabotage\gw2-matched-reviewed` | A fresh detached worktree at the reviewed commit |
+| External record | `D:\Rule_Sabotage\gw2-matched-record` | The hash-chained ledger, the pre-registration and the console logs. Outside both worktrees |
+| Run artifacts | `D:\Rule_Sabotage\gw2-matched-run` | Per-session graphs, freezes, raw output, server sessions, phase-2 sites, approvals and authorizations. Outside both worktrees |
 
-1. Check the tree:
-   * HEAD is the reviewed commit and the tree is clean;
-   * `npm run gw2:verify`, `python3 gamewatch/vendor/verify.py` and `npm run test:gw2` pass;
-   * `kane-cli --version` is the pinned version.
-2. Run `M plan` and compare it with `evidence/gw2/matched-plan/PLAN.draft.json`. The two may differ only in the code-hash fields changed by the two gate commits.
-3. Run `M preregister --record <rec>`. This step:
-   * writes the pre-registration into the record as the first ledger entry;
-   * binds the sha256 of every `matched-evidence-2` partition manifest, of the pre-registration draft, of the matched and feedback code, and of the schedule;
-   * refuses if the record already holds a pre-registration.
-4. Write the five feedback authorizations, `<run>/authorizations/GW2-Mnn-P2.json`, for the treatment sessions only. Each one is:
-   ```json
-   { "runId": "GW2-M02-P2", "session": "M02", "arm": "treatment", "phase": 2,
-     "preregSha256": "<sha256 printed by preregister>", "operatorAuthorization": "<the written authorization text>" }
-   ```
-   A missing, mismatched or control-arm authorization stops the pipeline before the phase-2 site is built.
+The script never deletes or overwrites an existing directory or file. A run directory that is not empty while the record has no ledger stops the script.
 
-## D. Each call, strictly one after another (20 times)
+## C. The non-paid dry run (first)
 
-1. Run `M next --record <rec>`. It prints the next run id, its session, arm and phase, and it starts nothing. It refuses in two cases:
-   * after a stop;
-   * when a started call has no `call-end`. Report that case and do not continue.
-2. Check the live state:
-   * `kane-cli balance` is at least 1.5 × the phase ceiling (450 for phase 1, 225 for phase 2);
-   * the cumulative spend in the ledger is below the threshold rule.
-3. Write the approval `<run>/approvals/<runId>.json` immediately before the call:
-   ```json
-   { "runId": "<runId>", "approvedBy": "<operator>", "approvedAt": "<now, ISO>", "maxCalls": 1,
-     "maxSteps": 80, "ceilingCredits": 300, "acknowledgesNoHardCap": true }
-   ```
-   For phase 2, use `maxSteps` 40 and `ceilingCredits` 150. At most one unrun approval exists at any moment.
-4. Run `KANE_PAID_RUN_AUTH=<runId> M run --record <rec> --run <run>`, then unset the variable. The invocation runs exactly one call:
-   * It checks the pre-registration again, then the budget preflight, then the unchanged paid-call gate.
-   * It refuses a served site that holds operator content.
-   * The call itself: `call-start`, the GW2 review server, one kane-cli call, then the server closes.
-   * The raw output is sealed: args, stdout, stderr and meta, with `raw-seal` anchored.
-   * Every stored form is imported verbatim into the session's own graph, and the freeze is anchored (`freeze-1` or `freeze-2`).
-   * After phase 1, the phase-2 site is built from that session's authenticated Freeze-1 only, and `revision-page` is anchored. Control gets the fixed "No observation list" sentence. Treatment gets the capped discovery feedback through the runtime path.
-5. Look only at the operational output: status, reasons, credits used and the submission count. Do not open Kane's summary, its submissions, the revision pages or raw stdout until every call is frozen.
+Run `pwsh -File gw2-matched-run.ps1 -Operator "<name>" -DryRun`. It needs only the reviewed worktree, makes no Kane call and touches no gate. It:
+1. runs the disabled-gate regression suite at the reviewed commit;
+2. runs `gamewatch/gw2/matched/dry-run.ts` into a new `D:\Rule_Sabotage\gw2-matched-dryrun-<time>` directory. That covers the complete pipeline on **generation 1 only** (the development dataset), with 20 test-double calls through the real review server, test-only treatment feedback, every integrity check, and the single evaluation of that dry-run record;
+3. writes `dry-run.json` there to upload.
 
-## E. Stop rules (nothing is ever re-run)
+## D. The experiment (after final approval and the candidate commit)
 
-* The gate, the budget preflight or the authorization refuses. The ledger records `call-refused` and `experiment-stopped`.
-* A call ends with `CEILING_EXCEEDED` or `SPEND_UNKNOWN`, or the cumulative spend reaches 4,000. The call is imported and frozen first, then `experiment-stopped` is recorded and no further call starts.
-* Any verification failure: the pre-registration, a manifest, a blind-site check, a raw seal, a freeze or an anchor.
-* A call that times out, exits non-zero or has no valid `run_end` does **not** stop the experiment. It is marked inconclusive and frozen with whatever was submitted, and the session continues to phase 2, the same in both arms. The session is reported as incomplete, and its block leaves the block comparison.
+Run `pwsh -File gw2-matched-run.ps1 -Operator "<name>" -AuthorizationText "<the written authorization>"`.
 
-## F. After the last call (or after a stop)
+1. **Checks, no change yet.**
+   * The tools are present: `git`, `node` ≥ 22.10, `npm`, `python` and `kane-cli`, and `kane-cli --version` is exactly 0.10.4.
+   * `KANE_PAID_RUN_AUTH` and `KANE_CLI` are not set.
+   * Both worktrees are at their fixed heads, clean, and without CRLF conversions.
+   * The record and run directories are outside both worktrees.
+2. **Regression and candidate checks.** The regression suite runs at the reviewed commit once per reviewed head (a marker in the record). `N candidate-check` runs at the candidate, then `gw2:verify` and the vendored-runner check.
+3. **Pre-registration, once.** `N preregister --record <rec> --reviewed <sha> --commit <candidate>` binds:
+   * the experiment evidence manifests;
+   * the complete execution dependency set;
+   * both commits;
+   * the schedule.
 
-1. Run `M evaluate --record <rec> --run <run>` once. It refuses to open the held-out evidence in three cases:
-   * a declared call is unfrozen, unless the experiment stopped and every started call is frozen;
-   * the pre-registration changed;
-   * there was an earlier opening.
-   The opening is recorded once (`gate-opened`). `EVALUATION.json` is written with `wx`, and its sha256 is anchored (`evaluated`).
-2. Restore `'disabled'` and `AGENT_FEEDBACK_ENABLED = false` in separate commits.
-3. Redact user paths, Kane session ids and links in the copy that goes to the repository, with a redaction record. The raw files stay on the operator's machine.
+   `N verify` must pass, and it must name the same two commits as the script.
+4. **Feedback authorizations.** The script writes the five treatment authorizations, `<run>/authorizations/GW2-Mnn-P2.json`. Each holds {runId, session, arm treatment, phase 2, preregSha256, the written authorization}. They are written once and never overwritten.
+5. **Each call, one after another.**
+   * `N next` names the next call. It refuses after a stop, after an incomplete sealing transaction and on any integrity problem.
+   * The script shows the operational status only.
+   * It checks the cumulative spend against the threshold, and the balance against 1.5 × the phase ceiling.
+   * The operator types `RUN <runId>`.
+   * The script writes that call's approval and sets `KANE_PAID_RUN_AUTH` for this process only. It runs `N run` once, which is exactly one call, then unsets the variable.
+   * Then it checks the operational status again and runs `N verify`.
+6. **After the last call.** `N verify` runs again. The held-out evidence opens only when the operator types `EVALUATE`; that runs `N evaluate` once. The run and record are then packed into one zip to upload. Raw files stay on the machine, and the repository copy is redacted before commit.
+
+## E. What one `N run` does (one sealing transaction)
+
+1. It re-checks the pre-registration (files, manifests, schedule, dependency set and HEAD), and calls `nextCall`, which runs the integrity checks.
+2. It runs the budget preflight and the unchanged paid-call gate preflight. A refusal records `call-refused` and `experiment-stopped`.
+3. It checks the site it is about to serve:
+   * phase 1: every discovery site file against the pre-registered discovery manifest;
+   * phase 2: the site against its anchored construction record, already checked by the integrity step;
+   * both phases: the blind-site guard.
+4. It records `call-start`, serves the site, makes one kane-cli call and closes the server. It then writes the raw args (CLI, version, argv, start time, run nonce), stdout and stderr.
+5. It records `call-end` with run_end presence **and validity**. Then `raw-seal`, then `server-closed`, which holds the closure seal, the journal hash, the journal status and the served site.
+6. It imports the forms. They are attributed to `kane-cli` only when the execution provenance holds; otherwise they get a neutral agent author with the reasons. Then it records `freeze-<phase>`, with submission verification and call validity recorded separately.
+7. After phase 1 it builds the phase-2 site from the session's own Freeze-1 and records `revision-page` with every site file's sha256.
+8. If any step after `call-start` fails, it records `call-failed` with the stage and `experiment-stopped`. Nothing is retried.
+
+## F. Stop rules (nothing is ever re-run)
+
+* The gate, the budget preflight, the site check or an authorization refuses.
+* A call ends with `CEILING_EXCEEDED` or `SPEND_UNKNOWN`, or the cumulative spend reaches 4,000. The call is imported and frozen first.
+* Any integrity problem: the pre-registration, a manifest, a raw seal, a session closure, an access journal, a freeze, a graph anchor, a phase-2 site, or an incomplete transaction.
+* Any recorded `call-failed`.
+* A call that times out, exits non-zero or has no valid run_end does **not** stop the experiment. It is marked inconclusive and frozen with whatever was submitted, and the session continues to phase 2, the same in both arms. The session is reported as incomplete, and its block leaves the block comparison.
 
 ## G. What to report
 
-Report per session, never pooled and never combined into one score:
-* held-out accuracy and coverage, Freeze-1 vs final, and the paired change;
-* corrections, harmful revisions, unchanged and not comparable;
-* actions (kept, revised, withdrawn, conflicting, additions);
-* abstentions and withdrawals;
-* representation availability per phase;
+Report per session, never pooled and never combined into one score (pre-registration §9):
+* held-out accuracy and coverage, with their paired changes;
+* revision effects on prediction targets, and the accuracy-only effects;
+* corrections on common targets, newly incorrect predictions, and coverage contraction and expansion;
+* the attribution of each accuracy change, where narrowing only is never called self-correction;
+* discovery fit;
+* C readings;
+* counterexample classes;
+* actions, abstentions and withdrawals, and representation availability and loss;
 * credits, steps and time per call.
 
-Also report the per-arm lists and treatment − control within complete blocks. Five sessions per arm is a case comparison: no significance claim, and no claim that GW2 improves agent performance unless the pre-registered block comparison supports it. P7 is historical, not a control. Add the T25 contamination caveat, which applies to both arms.
+Also give the per-arm lists and treatment − control within complete blocks. There is no significance claim, and no claim that GW2 improves agent performance unless the pre-registered block comparison supports it. P7 is historical, not a control. Include the T25 contamination caveat, which applies to both arms.

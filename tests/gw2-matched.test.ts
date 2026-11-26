@@ -5,19 +5,23 @@
  */
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync, writeFileSync, mkdtempSync, rmSync, readdirSync, existsSync, appendFileSync } from 'node:fs';
+import { readFileSync, writeFileSync, mkdtempSync, rmSync, readdirSync, existsSync, appendFileSync, mkdirSync, cpSync } from 'node:fs';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import { createHash } from 'node:crypto';
 import { MATCHED, estimate } from '../gamewatch/gw2/matched/params.ts';
 import { schedule, feedbackRuns } from '../gamewatch/gw2/matched/schedule.ts';
-import { preregisterMatched, verifyMatchedPrereg, matchedPlan } from '../gamewatch/gw2/matched/prereg.ts';
-import { runMatched, budgetPreflight, cumulative, nextCall } from '../gamewatch/gw2/matched/pipeline.ts';
-import { doubleRunner, type Profile } from '../gamewatch/gw2/matched/doubles.ts';
+import { preregisterMatched, verifyMatchedPrereg, matchedPlan, dependencySet, headCommit, MATCHED_DOCS } from '../gamewatch/gw2/matched/prereg.ts';
+import { runMatched, budgetPreflight, cumulative, nextCall, callComplete } from '../gamewatch/gw2/matched/pipeline.ts';
+import { doubleRunner, DRY_RUN_PROFILES, driveSite, doubleStdout, LAWS, type Profile } from '../gamewatch/gw2/matched/doubles.ts';
+import { executionProblems, discoverySiteProblems } from '../gamewatch/gw2/matched/integrity.ts';
+import { candidateProblems, candidateText, checkCandidate, GATE_FILE, FEEDBACK_FILE } from '../gamewatch/gw2/matched/candidate.ts';
+import { dryRun } from '../gamewatch/gw2/matched/dry-run.ts';
+import { esc } from '../gamewatch/gw2/ext/html.ts';
 import { sessionFeedbackForTest } from '../gamewatch/gw2/matched/feedback-testonly.ts';
 import { activateSessionFeedback, constructSessionFeedback } from '../gamewatch/gw2/matched/feedback.ts';
-import { loadFrozen, graphOf, sessionDir } from '../gamewatch/gw2/matched/sessions.ts';
-import { evaluateMatched } from '../gamewatch/gw2/matched/evaluate.ts';
+import { loadFrozen, graphOf, sessionDir, importPhase } from '../gamewatch/gw2/matched/sessions.ts';
+import { evaluateMatched, sessionOutcomes } from '../gamewatch/gw2/matched/evaluate.ts';
 import { kaneRunner } from '../gamewatch/gw2/matched/kane-runner.ts';
 import { NO_FEEDBACK } from '../gamewatch/gw2/matched/revision-page.ts';
 import { selectFeedback, renderFeedbackSection, FEEDBACK_CAP } from '../gamewatch/gw2/ext/feedback-core.ts';
@@ -35,7 +39,7 @@ const spec = JSON.parse(readFileSync(join(DEV, 'partitions/spec/spec.json'), 'ut
 const ruleTexts: string[] = spec.game.rules.map((r: any) => r.text);
 const heldout = JSON.parse(readFileSync(join(DEV, 'partitions/heldout/observations.json'), 'utf8'));
 const heldoutUnits: string[] = [...heldout.cases.map((c: any) => c.caseId), ...heldout.matches.map((m: any) => m.matchId)];
-const PROFILES: Record<string, Profile> = { M01: 'reviser', M02: 'reviser', M03: 'conflicted', M04: 'keeper', M05: 'freetext', M06: 'early', M07: 'harmful', M08: 'reviser', M09: 'keeper', M10: 'reviser' };
+const PROFILES: Record<string, Profile> = DRY_RUN_PROFILES; // M09 'narrower' (was 'keeper' before the final preflight; M04 still keeps)
 const ledger = (rec: string) => readExecLedger(rec).entries as any[];
 
 function setup() {
@@ -104,7 +108,7 @@ test('phase 2: same shell in both arms; treatment gets only capped discovery fee
   const page = (runId: string) => full.seen[runId].revision!;
   const ctl = page('GW2-M01-P2'), trt = page('GW2-M02-P2'); // both "reviser"
   assert.match(ctl, new RegExp(NO_FEEDBACK)); assert.ok(!trt.includes(NO_FEEDBACK));
-  const shell = (h: string) => h.replace(/<h2>Observations that differ from your structured hypotheses<\/h2>[\s\S]*?<h2>What you can do<\/h2>/, '§');
+  const shell = (h: string) => h.replace(/<h2>Observations that differ from the structured hypotheses<\/h2>[\s\S]*?<h2>What you can do<\/h2>/, '§');
   assert.equal(shell(ctl), shell(trt), 'identical apart from the feedback section');
   for (const s of schedule()) {
     const p = page(s.runs[2]);
@@ -162,15 +166,35 @@ test('single evaluation: refused before freezing is complete, opened once, sessi
   assert.equal(ledger(full.rec).filter(x => x.event === 'gate-opened').length, 1);
   const by = (x: string) => e.sessions.find(s => s.session === x)!;
   assert.deepEqual(by('M01').actions, { kept: 1, revised: 1, withdrawn: 1, conflicting: 0, additions: 0 });
-  assert.equal(by('M01').revisionEffects.corrections, 1);
-  assert.equal(by('M03').actions.conflicting, 1); assert.equal(by('M03').revisionEffects.corrections + by('M03').revisionEffects.harmful, 0, 'conflicting revisions are not scored');
-  assert.equal(by('M07').revisionEffects.harmful, 1);
+  assert.equal(by('M01').revisionEffectsByAccuracy.corrections, 1, 'the original accuracy-based measure is kept');
+  assert.equal(by('M01').revisionEffects.mixed, 1, 'target-based: corrections on common targets AND newly incorrect predictions');
+  assert.ok(by('M01').targets.heldout.common.corrected > 0 && by('M01').targets.heldout.common.becameIncorrect > 0);
+  assert.equal(by('M03').actions.conflicting, 1);
+  for (const k of ['corrections', 'mixed', 'harmful', 'narrowingOnly', 'unchanged'] as const) assert.equal(by('M03').revisionEffects[k], 0, 'conflicting revisions are not scored');
+  assert.equal(by('M03').revisionEffectsByAccuracy.corrections + by('M03').revisionEffectsByAccuracy.harmful, 0);
+  assert.equal(by('M07').revisionEffectsByAccuracy.harmful, 1);
+  assert.ok(by('M07').targets.heldout.common.becameIncorrect > by('M07').targets.heldout.common.corrected, 'the worse law makes more common targets incorrect than it corrects');
   assert.deepEqual(by('M05').representationAvailability.phase1, { hypotheses: 2, withStructuredRepresentation: 0 });
   assert.equal(by('M05').heldout.initial.accuracy, null, 'free text: nothing machine-evaluable, not a zero');
   assert.equal(by('M01').abstentions.phase1, 1); assert.equal(by('M01').abstentions.withdrawalsPhase2, 1);
   assert.equal(by('M06').complete, false);
   assert.deepEqual(e.blocks.map(b => b.complete), [true, true, false, true, true], 'an incomplete session leaves its block out of the comparison');
   assert.match(e.unit, /not replications/);
+  // narrowing: accuracy rises only because predictions were dropped; never reported as self-correction
+  const n = by('M09');
+  assert.ok(n.heldout.change.accuracy! > 0 && n.heldout.change.coverage! < 0, 'accuracy up, coverage down');
+  assert.equal(n.targets.heldout.common.corrected, 0); assert.ok(n.targets.heldout.situations.contraction > 0);
+  assert.match(n.targets.attribution, /^narrowing only: .*not self-correction/);
+  assert.equal(n.revisionEffects.narrowingOnly, 1); assert.equal(n.revisionEffects.corrections, 0);
+  // the other promised measures are present, separately
+  for (const x of e.sessions) {
+    assert.ok('initial' in x.discoveryFit && 'final' in x.discoveryFit && 'targets' in x.discoveryFit);
+    assert.ok(x.cReadings && 'discovery' in x.cReadings.initial.byPartition && 'heldout' in x.cReadings.final.byPartition);
+    assert.ok(typeof x.counterexamples.final.total === 'number' && 'novelty' in x.counterexamples.final);
+    assert.ok(Array.isArray(x.withdrawals) && Array.isArray(x.abstentionsPhase1) && Array.isArray(x.representationLoss));
+  }
+  assert.deepEqual(by('M01').withdrawals, ['H-2']); assert.deepEqual(by('M01').abstentionsPhase1, ['H-3']);
+  assert.equal(e.encoding.file, MATCHED.encoding);
   assert.ok(e.arms.every(a => a.sessions === 5 && a.accuracyChange.length === 5));
 });
 
@@ -205,9 +229,9 @@ test('one call per invocation: resumable from the ledger, each run id started on
   try {
     const { runner } = doubleRunner(x => PROFILES[x]), opts = { evidence: DEV, run: s.run, rec: s.rec, runner, feedback: { kind: 'test-only' as const, build: sessionFeedbackForTest }, maxCalls: 1 };
     const order: string[] = [];
-    for (let i = 0; i < 20; i++) { const n = nextCall(s.rec)!; order.push(n.runId); const r = await runMatched(opts); assert.equal(r.sessions.flatMap(x => x.phases).length, 1); }
+    for (let i = 0; i < 20; i++) { const n = nextCall(s.run, s.rec)!; order.push(n.runId); const r = await runMatched(opts); assert.equal(r.sessions.flatMap(x => x.phases).length, 1); }
     assert.deepEqual(order, schedule().flatMap(x => [x.runs[1], x.runs[2]]), 'strict schedule order');
-    assert.equal(nextCall(s.rec), null);
+    assert.equal(nextCall(s.run, s.rec), null);
     const again = await runMatched(opts); assert.equal(again.sessions.length, 0, 'nothing is repeated');
     const starts = ledger(s.rec).filter(e => e.event === 'call-start').map(e => e.data.runId);
     assert.equal(starts.length, 20); assert.equal(new Set(starts).size, 20);
@@ -219,11 +243,11 @@ test('one call per invocation: resumable from the ledger, each run id started on
   const t = setup();
   try {
     appendCheckpoint(t.rec, 'call-start', { runId: 'GW2-M01-P1', session: 'M01', phase: 1 });
-    assert.throws(() => nextCall(t.rec), /never repeated/);
+    assert.throws(() => nextCall(t.run, t.rec), /never repeated/);
     const { runner } = doubleRunner(() => 'reviser');
     await assert.rejects(runMatched({ evidence: DEV, run: t.run, rec: t.rec, runner, feedback: { kind: 'test-only', build: sessionFeedbackForTest } }), /never repeated/);
     appendCheckpoint(t.rec, 'experiment-stopped', { reason: 'test' });
-    assert.throws(() => nextCall(t.rec), /stopped/);
+    assert.throws(() => nextCall(t.run, t.rec), /stopped/);
   } finally { t.done(); }
 });
 
@@ -281,4 +305,208 @@ test('dashboard V2: invariance label corrected; committed bytes equal the render
   assert.ok(!/<td>cross-build invariance<\/td>/.test(u));
   assert.match(readFileSync(join(ROOT, 'evidence/gw2/ext-v1/p7-operator/unmatched-actions.html'), 'utf8'), /<td>cross-build invariance<\/td>/, 'V1 kept as committed');
   assert.throws(() => safeDashboardDirV2(join(ROOT, 'evidence/gw2/ext-v1/x')), /refusing/);
+});
+
+// ---------------------------------------------------------------- final execution preflight (D146-D153)
+
+const slot = (session: string) => schedule().find(x => x.session === session)!;
+/** A mocked process transport for kane-cli: version, balance and "run" (which drives the served site over HTTP). */
+function mockTransport(profile: Profile, o: { balance?: number; used?: number; early?: boolean } = {}) {
+  let balance = o.balance ?? 2000; const calls: string[][] = [];
+  const transport = async (argv: string[]) => {
+    calls.push(argv);
+    if (argv[0] === '--version') return { code: 0, stdout: '0.10.4\n', stderr: '', timedOut: false };
+    if (argv[0] === 'balance') return { code: 0, stdout: `Available credits: ${balance}\n`, stderr: '', timedOut: false };
+    if (argv[0] === 'run') {
+      const url = argv[argv.indexOf('--url') + 1], phase = argv[argv.indexOf('--max-steps') + 1] === '80' ? 1 : 2;
+      const d = await driveSite(url.replace(/\/index\.html$/, ''), profile, phase as 1 | 2);
+      balance = Math.round((balance - (o.used ?? 50)) * 1000) / 1000;
+      return o.early ? { code: null, stdout: doubleStdout(true, 1, 0, '0.10.4'), stderr: '', timedOut: true } : { code: 0, stdout: doubleStdout(false, d.forms.length + 3, o.used ?? 50, '0.10.4'), stderr: '', timedOut: false };
+    }
+    return { code: 1, stdout: '', stderr: 'unexpected argv', timedOut: false };
+  };
+  return { transport, calls };
+}
+function approve(run: string, runId: string, phase: 1 | 2) {
+  mkdirSync(join(run, 'approvals'), { recursive: true });
+  writeFileSync(join(run, 'approvals', `${runId}.json`), JSON.stringify({ runId, approvedBy: 'test', approvedAt: '2026-11-26T00:00:00.000Z', maxCalls: 1, maxSteps: MATCHED.phases[phase].maxSteps, ceilingCredits: MATCHED.phases[phase].ceilingCredits, acknowledgesNoHardCap: true }));
+}
+async function withRunAuth<T>(runId: string, f: () => Promise<T>) { const prev = process.env.KANE_PAID_RUN_AUTH; process.env.KANE_PAID_RUN_AUTH = runId; try { return await f(); } finally { if (prev === undefined) delete process.env.KANE_PAID_RUN_AUTH; else process.env.KANE_PAID_RUN_AUTH = prev; } }
+
+test('real-runner boundary (mocked transport): Kane provenance from the sealed raw files, never a test double; validity kept separate', async () => {
+  const s = setup();
+  try {
+    const { transport, calls } = mockTransport('reviser');
+    const runner = kaneRunner(s.run, { mode: 'per-run-approval', scope: /^GW2-M(0[1-9]|10)-P[12]$/, transport }); // test seams only: the committed gate stays 'disabled'
+    assert.equal(runner.gateMode, 'per-run-approval'); assert.equal(kaneRunner(s.run).gateMode, 'disabled');
+    const feedback = { kind: 'runtime' as const, authorizationFor: () => { throw new Error('control arm: never asked'); } };
+    for (const phase of [1, 2] as const) {
+      const runId = slot('M01').runs[phase]; approve(s.run, runId, phase);
+      await withRunAuth(runId, () => runMatched({ evidence: DEV, run: s.run, rec: s.rec, runner, feedback, sessions: [slot('M01')], maxCalls: 1 }));
+    }
+    assert.ok(calls.some(a => a[0] === 'run' && a.includes('--headless')), 'the real argv went through the transport');
+    const nodes = graphOf(s.run, 'M01'), lines = readFileSync(nodes, 'utf8').split('\n').filter(Boolean).map(l => JSON.parse(l).node);
+    assert.ok(lines.length >= 5);
+    for (const n of lines) {
+      assert.deepEqual([n.author.kind, n.author.id, n.author.version], ['agent', 'kane-cli', '0.10.4'], 'a real Kane submission is attributed to kane-cli');
+      const raw = join(sessionDir(s.run, 'M01'), `raw-${n.body.phase}`);
+      assert.equal(n.provenance.kaneStdout.sha256, sha(readFileSync(join(raw, 'stdout.ndjson')))); assert.equal(n.provenance.kaneArgs.sha256, sha(readFileSync(join(raw, 'args.json'))));
+      assert.equal(JSON.parse(readFileSync(join(raw, 'RAW_SEAL.json'), 'utf8')).files['stdout.ndjson'], n.provenance.kaneStdout.sha256, 'provenance names the sealed stdout');
+    }
+    const f1 = JSON.parse(readFileSync(join(sessionDir(s.run, 'M01'), 'FREEZE-1.json'), 'utf8'));
+    assert.deepEqual(Object.keys(f1.validity).sort(), ['call', 'submissionVerification']);
+    assert.equal(f1.validity.submissionVerification.verified, 3); assert.equal(f1.validity.call.status, 'completed');
+    assert.ok(f1.submissions.every((x: any) => x.author === 'agent:kane-cli' && x.nonceValid === true));
+    assert.deepEqual(executionProblems(s.run, s.rec), []);
+    // the treatment arm needs the runtime feedback path, which refuses while AGENT_FEEDBACK_ENABLED is false: recorded, never retried
+    const runId = slot('M02').runs[1]; approve(s.run, runId, 1);
+    await assert.rejects(withRunAuth(runId, () => runMatched({ evidence: DEV, run: s.run, rec: s.rec, runner, feedback: { kind: 'runtime', authorizationFor: () => ({ runId: 'GW2-M02-P2', session: 'M02', arm: 'treatment', phase: 2, preregSha256: 'x', operatorAuthorization: 'x' }) }, sessions: [slot('M02')], maxCalls: 1 })), /failed at revision-page \(recorded; not retried\)/);
+    const L = ledger(s.rec);
+    assert.equal(L.filter(e => e.event === 'call-failed').length, 1); assert.equal(L.find(e => e.event === 'call-failed').data.stage, 'revision-page');
+    assert.ok(L.some(e => e.event === 'experiment-stopped')); assert.throws(() => nextCall(s.run, s.rec), /stopped/);
+    assert.ok(existsSync(join(sessionDir(s.run, 'M02'), 'FREEZE-1.json')), 'the call was still imported and frozen before the failure');
+  } finally { s.done(); }
+  // a session served for a Kane call is never imported as a test double, and Kane provenance never labels a double's session
+  const t = setup();
+  try {
+    const { runner } = doubleRunner(() => 'keeper');
+    await runMatched({ evidence: DEV, run: t.run, rec: t.rec, runner, feedback: { kind: 'test-only', build: sessionFeedbackForTest }, sessions: [slot('M01')], maxCalls: 1 });
+    const dir = join(sessionDir(t.run, 'M01'), 'phase-1', 'sessions'), sess = join(dir, readdirSync(dir)[0]), raw = join(sessionDir(t.run, 'M01'), 'raw-1');
+    assert.throws(() => importPhase(t.run, t.rec, slot('M01'), 1, sess, { kane: { stdout: join(raw, 'stdout.ndjson'), args: join(raw, 'args.json'), version: '0.10.4' } }), /did not serve a Kane call/);
+    const meta = JSON.parse(readFileSync(join(sess, 'session.json'), 'utf8'));
+    assert.equal(meta.label, 'test-double');
+    assert.ok(readFileSync(graphOf(t.run, 'M01'), 'utf8').split('\n').filter(Boolean).every(l => JSON.parse(l).node.author.kind === 'test-double'));
+  } finally { t.done(); }
+});
+
+test('a Kane call that ends without run_end: forms imported and frozen under a neutral agent author with the reasons (never Kane-labelled, never a double)', async () => {
+  const s = setup();
+  try {
+    const { transport } = mockTransport('reviser', { early: true });
+    const runner = kaneRunner(s.run, { mode: 'per-run-approval', scope: null, transport });
+    const runId = slot('M01').runs[1]; approve(s.run, runId, 1);
+    await withRunAuth(runId, () => runMatched({ evidence: DEV, run: s.run, rec: s.rec, runner, feedback: { kind: 'runtime', authorizationFor: () => { throw new Error('x'); } }, sessions: [slot('M01')], maxCalls: 1 }));
+    const nodes = readFileSync(graphOf(s.run, 'M01'), 'utf8').split('\n').filter(Boolean).map(l => JSON.parse(l).node);
+    assert.ok(nodes.length > 0);
+    for (const n of nodes) { assert.equal(n.author.kind, 'agent'); assert.equal(n.author.id, 'agent-call-without-execution-provenance'); assert.equal(n.provenance, undefined); }
+    assert.match(nodes[0].body.executionProvenance.failures.join(), /no run_end/);
+    const f1 = JSON.parse(readFileSync(join(sessionDir(s.run, 'M01'), 'FREEZE-1.json'), 'utf8'));
+    assert.equal(f1.validity.call.status, 'inconclusive'); assert.equal(f1.validity.submissionVerification.verified, 3, 'the forms are verified submissions even though the call is not valid');
+    assert.deepEqual(executionProblems(s.run, s.rec), []);
+  } finally { s.done(); }
+});
+
+test('completion needs a VALID run_end; an invalid one makes the call and its session incomplete', async () => {
+  assert.equal(callComplete({ exitCode: 0, timedOut: false, runEndValid: true }), true);
+  assert.equal(callComplete({ exitCode: 0, timedOut: false, runEndValid: false }), false);
+  assert.equal(callComplete({ exitCode: 0, timedOut: false }), false);
+  const s = setup();
+  try {
+    const { runner: base } = doubleRunner(x => PROFILES[x]);
+    const runner = { ...base, run: async (r: any) => { const x = await base.run(r); return r.runId === 'GW2-M02-P2' ? { ...x, stdout: x.stdout.replace('"status":"passed"', '"status":"weird"') } : x; } };
+    await runMatched({ evidence: DEV, run: s.run, rec: s.rec, runner, feedback: { kind: 'test-only', build: sessionFeedbackForTest } });
+    const end = ledger(s.rec).find(e => e.event === 'call-end' && e.data.runId === 'GW2-M02-P2').data;
+    assert.deepEqual([end.runEndPresent, end.runEndValid, end.complete], [true, false, false]);
+    const e = evaluateMatched(DEV, s.run, s.rec);
+    assert.equal(e.sessions.find(x => x.session === 'M02')!.complete, false, 'present but invalid is not complete');
+    assert.equal(e.blocks.find(b => b.block === 1)!.complete, false);
+  } finally { s.done(); }
+});
+
+test('integrity: tampered raw output, journal, phase-2 site or graph, and an incomplete transaction, each refuse the next call', async () => {
+  const fresh = async () => { const s = setup(), { runner } = doubleRunner(x => PROFILES[x]); await runMatched({ evidence: DEV, run: s.run, rec: s.rec, runner, feedback: { kind: 'test-only', build: sessionFeedbackForTest }, sessions: [slot('M02')], maxCalls: 1 }); assert.deepEqual(executionProblems(s.run, s.rec), []); return s; };
+  const cases: [string, (s: ReturnType<typeof setup>) => void, RegExp][] = [
+    ['raw stdout', s => appendFileSync(join(sessionDir(s.run, 'M02'), 'raw-1', 'stdout.ndjson'), '{}\n'), /raw: stdout\.ndjson differs from its raw seal/],
+    ['access journal', s => { const d = join(sessionDir(s.run, 'M02'), 'phase-1', 'sessions'); appendFileSync(join(d, readdirSync(d)[0], 'access.ndjson'), '{}\n'); }, /access journal differs|server session seal-violated/],
+    ['phase-2 site', s => appendFileSync(join(sessionDir(s.run, 'M02'), 'site-2', 'revision.html'), '<p>extra</p>'), /phase-2 site: revision\.html differs from its record/],
+    ['phase-2 site extra file', s => writeFileSync(join(sessionDir(s.run, 'M02'), 'site-2', 'extra.html'), 'x'), /extra\.html is not in its record/],
+    ['graph', s => { const g = graphOf(s.run, 'M02'), t = readFileSync(g, 'utf8'); writeFileSync(g, t.replace('Every turn grants three actions.', 'Every turn grants four actions.')); }, /graph|prefix|differs/],
+    ['incomplete transaction', s => { appendCheckpoint(s.rec, 'call-start', { runId: 'GW2-M02-P2', session: 'M02', phase: 2 }); appendCheckpoint(s.rec, 'call-end', { runId: 'GW2-M02-P2', session: 'M02', phase: 2, used: 1 }); }, /incomplete sealing transaction \(missing raw-seal, server-closed, freeze-2\)/],
+  ];
+  for (const [what, tamper, why] of cases) {
+    const s = await fresh();
+    try {
+      tamper(s);
+      assert.throws(() => nextCall(s.run, s.rec), why, what);
+      const { runner } = doubleRunner(x => PROFILES[x]);
+      await assert.rejects(runMatched({ evidence: DEV, run: s.run, rec: s.rec, runner, feedback: { kind: 'test-only', build: sessionFeedbackForTest }, sessions: [slot('M02')] }), /integrity check failed|never repeated/, `${what}: no further call`);
+      assert.equal(ledger(s.rec).filter(e => e.event === 'call-start').length, what === 'incomplete transaction' ? 2 : 1, `${what}: nothing started`);
+    } finally { s.done(); }
+  }
+});
+
+test('the discovery site is verified against the pre-registered manifest before serving; a changed file stops the experiment', async () => {
+  const d = mkdtempSync(join(tmpdir(), 'gw2-matched-ev-')), ev = join(d, 'evidence'), rec = join(d, 'record'), run = join(d, 'run');
+  try {
+    cpSync(DEV, ev, { recursive: true }); preregisterMatched(ev, rec);
+    assert.deepEqual(discoverySiteProblems(ev, verifyMatchedPrereg(ev, rec).manifests.discovery), []);
+    const site = join(ev, 'partitions/discovery/site'), page = readdirSync(site).find(f => f.startsWith('case-'))!;
+    appendFileSync(join(site, page), '<!-- changed -->');
+    const { runner } = doubleRunner(() => 'keeper');
+    await assert.rejects(runMatched({ evidence: ev, run, rec, runner, feedback: { kind: 'test-only', build: sessionFeedbackForTest }, sessions: [slot('M01')] }), new RegExp(`discovery site: ${page} differs from its record`));
+    const L = ledger(rec);
+    assert.ok(!L.some(e => e.event === 'call-start'), 'nothing was served'); assert.ok(L.some(e => e.event === 'call-refused') && L.some(e => e.event === 'experiment-stopped'));
+  } finally { rmSync(d, { recursive: true, force: true }); }
+});
+
+test('fair revision opportunity: both arms get the complete frozen phase-1 submissions; the phase-2 objective assumes no memory', () => {
+  const ctl = full.seen['GW2-M01-P2'].revision!, trt = full.seen['GW2-M02-P2'].revision!;
+  for (const p of [ctl, trt]) {
+    for (const x of ['Every turn grants three actions.', 'Effects fire when entered.', 'shield behaviour', '<dd>medium</dd>', '<dd>C-000000</dd>', 'submitted, checkable (1 of 1 clause valid)', 'none submitted (not machine-checkable)', 'Abstention scope', 'This is a new, separate call'])
+      assert.ok(p.includes(x), `revision page lists ${x}`);
+    assert.ok(p.includes(esc(LAWS.three)), 'the full submitted representation, verbatim');
+  }
+  assert.match(MATCHED.phases[2].objective, /no memory of the earlier call/); assert.doesNotMatch(MATCHED.phases[2].objective, /continuing the same investigation/);
+  assert.match(MATCHED.phases[2].objective, /revision\.html/);
+  for (const t of ruleTexts) assert.ok(!MATCHED.phases[2].objective.includes(t));
+});
+
+test('representation loss is recorded per original and counted as harmful', async () => {
+  const s = setup();
+  try {
+    const { runner } = doubleRunner(() => 'dropper');
+    await runMatched({ evidence: DEV, run: s.run, rec: s.rec, runner, feedback: { kind: 'test-only', build: sessionFeedbackForTest }, sessions: [slot('M01')] });
+    const o = sessionOutcomes(loadFrozen(s.run, s.rec, 'M01', 1), loadFrozen(s.run, s.rec, 'M01', 2), { discovery: [], heldout: [] });
+    assert.deepEqual(o.representationLoss, ['H-1']); assert.equal(o.revisionEffects.representationLost, 1); assert.equal(o.revisionEffects.harmful, 1);
+    assert.deepEqual(o.representationAvailability.phase2, { hypotheses: 1, withStructuredRepresentation: 0 });
+  } finally { s.done(); }
+});
+
+test('pre-registration binds the complete execution dependency set and the exact commit', () => {
+  const deps = dependencySet();
+  for (const f of ['server/balance/v4/kanebudget.ts', 'server/kane.ts', 'scripts/kane-single-call.ts', 'gamewatch/gw2/matched/kane-runner.ts', 'gamewatch/gw2/matched/integrity.ts', 'gamewatch/gw2/matched/candidate.ts', 'gamewatch/gw2/serve.ts', 'gamewatch/gw2/journal.ts', 'gamewatch/gw2/ext/feedback.ts'])
+    assert.ok(deps.includes(f), `${f} is an execution dependency`);
+  for (const f of ['gamewatch/gw2/matched/doubles.ts', 'gamewatch/gw2/matched/feedback-testonly.ts', 'gamewatch/gw2/matched/dry-run.ts']) assert.ok(!deps.includes(f), `${f} is not reachable from the operator CLI`);
+  const s = setup();
+  try {
+    const p = JSON.parse(readFileSync(join(s.rec, 'PREREGISTRATION.json'), 'utf8'));
+    for (const f of [...deps, ...MATCHED_DOCS]) assert.ok(f in p.files, `${f} bound`);
+    assert.equal(p.commit.head, headCommit()); assert.match(p.commit.head, /^[0-9a-f]{40}$/);
+    assert.throws(() => preregisterMatched(DEV, join(s.d, 'other'), { expectCommit: '0'.repeat(40) }), /HEAD is/);
+  } finally { s.done(); }
+});
+
+test('enabled-candidate check: only the three gate lines may differ from the reviewed commit; historical tests are untouched', () => {
+  const read = (f: string) => readFileSync(join(ROOT, f), 'utf8');
+  const reviewed = (f: string) => read(f), cand = (f: string) => candidateText(f, read(f));
+  assert.deepEqual(candidateProblems([GATE_FILE, FEEDBACK_FILE], (rev, f) => rev === 'reviewed' ? reviewed(f) : cand(f)), []);
+  assert.match(cand(GATE_FILE), /= 'per-run-approval';/); assert.match(cand(GATE_FILE), /\^GW2-M\(0\[1-9\]\|10\)-P\[12\]\$/); assert.match(cand(FEEDBACK_FILE), /AGENT_FEEDBACK_ENABLED = true;/);
+  assert.match(candidateProblems([GATE_FILE, FEEDBACK_FILE, 'gamewatch/gw2/matched/pipeline.ts'], (rev, f) => rev === 'reviewed' ? reviewed(f) : cand(f)).join(), /exactly/);
+  assert.match(candidateProblems([GATE_FILE, FEEDBACK_FILE], (rev, f) => rev === 'reviewed' ? reviewed(f) : cand(f) + '\n// more').join(), /more than the gate lines/);
+  assert.match(candidateProblems([GATE_FILE, FEEDBACK_FILE], (rev, f) => rev === 'reviewed' ? cand(f) : cand(f)).join(), /does not hold exactly one line/, 'the reviewed commit must be the disabled one');
+  const r = checkCandidate('HEAD');
+  assert.equal(r.ok, false, 'this commit is the reviewed (disabled) state, not a candidate'); assert.match(r.problems.join(), /must change exactly/);
+  assert.equal(PAID_RESEARCH_EXECUTION, 'disabled'); assert.equal(AGENT_FEEDBACK_ENABLED, false);
+});
+
+test('non-paid dry run: generation 1 only, 20 double calls, clean integrity, single evaluation; refuses an existing record', async () => {
+  const d = mkdtempSync(join(tmpdir(), 'gw2-matched-dry-'));
+  try {
+    const r = await dryRun(join(d, 'record'), join(d, 'run'));
+    assert.equal(r.evidence, MATCHED.devEvidence); assert.equal(r.calls, 20); assert.deepEqual(r.integrityProblems, []);
+    assert.equal(r.evaluation.sessions.length, 10); assert.ok(r.ops.calls.every((c: any) => c.frozen));
+    const p = JSON.parse(readFileSync(join(d, 'record', 'PREREGISTRATION.json'), 'utf8'));
+    assert.equal(p.plan.evidence.dir, MATCHED.devEvidence);
+    await assert.rejects(dryRun(join(d, 'record'), join(d, 'run')), /new record/);
+  } finally { rmSync(d, { recursive: true, force: true }); }
 });

@@ -13,13 +13,18 @@
  *   overspend    phase 1 reports a balance delta above the ceiling (CEILING_EXCEEDED)
  *   unknown      phase 1 balance unreadable afterwards (SPEND_UNKNOWN)
  *   harmful      good law H-1; revises it to a worse one and drops the representation of H-2's revision
+ *   dropper      good law H-1; revises it with free text only (the structured representation is lost)
+ *   narrower     wrong law H-1; revises it to the same law restricted to fewer situations (accuracy can rise by narrowing)
+ * DRY_RUN_PROFILES assigns one profile per scheduled session for the non-paid dry run (cli.ts dry-run, generation 1).
  */
 import { HYPOTHESIS_SCHEMA } from '../hypothesis.ts';
 import { spendOf, type Runner, type CallRequest, type CallResult } from './pipeline.ts';
 
-export type Profile = 'reviser' | 'keeper' | 'conflicted' | 'freetext' | 'early' | 'overspend' | 'unknown' | 'harmful';
+export type Profile = 'reviser' | 'keeper' | 'conflicted' | 'freetext' | 'early' | 'overspend' | 'unknown' | 'harmful' | 'narrower' | 'dropper';
 const law = (equals: unknown, when?: unknown) => JSON.stringify({ schema: HYPOTHESIS_SCHEMA, clauses: [{ form: 'law', situation: 'turn-start', ...(when ? { when } : {}), expect: [{ field: 'actionsGranted', equals }] }] });
-export const LAWS = { three: law({ op: 'const', value: 3 }), pieces: law({ op: 'field', name: 'piecesOnBoard' }), two: law({ op: 'const', value: 2 }) };
+export const LAWS = { three: law({ op: 'const', value: 3 }), pieces: law({ op: 'field', name: 'piecesOnBoard' }), two: law({ op: 'const', value: 2 }),
+  threeWhenThreePieces: law({ op: 'const', value: 3 }, { op: 'eq', args: [{ op: 'field', name: 'piecesOnBoard' }, { op: 'const', value: 3 }] }) };
+export const DRY_RUN_PROFILES: Record<string, Profile> = { M01: 'reviser', M02: 'reviser', M03: 'conflicted', M04: 'keeper', M05: 'freetext', M06: 'early', M07: 'harmful', M08: 'reviser', M09: 'narrower', M10: 'reviser' };
 
 type Form = Record<string, string>;
 const H = (statement: string, representation?: string, extra: Form = {}): Form => ({ statement, confidence: 'medium', evidence: 'C-000000', ...(representation ? { representation } : {}), ...extra });
@@ -27,7 +32,7 @@ const A = (scope: string, extra: Form = {}): Form => ({ abstain: 'yes', abstainS
 
 export function formsFor(profile: Profile, phase: 1 | 2): Form[] {
   if (phase === 1) switch (profile) {
-    case 'keeper': return [H('A player gets one action per piece on the board.', LAWS.pieces)];
+    case 'keeper': case 'dropper': return [H('A player gets one action per piece on the board.', LAWS.pieces)];
     case 'freetext': return [H('Moves seem limited each turn.'), H('Effects fire when entered.')];
     case 'early': return [H('Every turn grants three actions.', LAWS.three)];
     case 'harmful': return [H('A player gets one action per piece on the board.', LAWS.pieces), H('Effects fire when entered.')];
@@ -38,6 +43,8 @@ export function formsFor(profile: Profile, phase: 1 | 2): Form[] {
     case 'conflicted': return [H('Two actions per turn.', LAWS.two, { revises: 'H-1' }), H('One action per piece.', LAWS.pieces, { revises: 'H-1' })];
     case 'freetext': return [H('Moves are limited by the number of pieces.', undefined, { revises: 'H-1' })];
     case 'harmful': return [H('Every turn grants three actions.', LAWS.three, { revises: 'H-1' })];
+    case 'dropper': return [H('Actions depend on the pieces somehow.', undefined, { revises: 'H-1' })];
+    case 'narrower': return [H('With three pieces on the board a turn grants three actions.', LAWS.threeWhenThreePieces, { revises: 'H-1' })];
     default: return [];
   }
 }
@@ -47,6 +54,27 @@ async function http(url: string, body?: string) {
   return { status: r.status, text: await r.text() };
 }
 
+/** Drive one served site as an investigator would (index, hypothesis form and nonce, revision page in phase 2, forms). */
+export async function driveSite(base: string, profile: Profile, phase: 1 | 2) {
+  const pages: string[] = [];
+  const index = await http(`${base}/index.html`); pages.push('index.html');
+  const form = await http(`${base}/hypothesis.html`); pages.push('hypothesis.html');
+  const nonce = /name="nonce" value="([0-9a-f]+)"/.exec(form.text)?.[1] ?? '';
+  let revision: string | null = null;
+  if (phase === 2) { revision = (await http(`${base}/revision.html`)).text; pages.push('revision.html'); }
+  let forms = formsFor(profile, phase);
+  const early = profile === 'early' && phase === 1;
+  if (early) forms = forms.slice(0, 1);
+  for (const f of forms.slice(0, 8)) await http(`${base}/hypothesis`, new URLSearchParams({ ...f, nonce }).toString());
+  if (index.status !== 200) throw new Error('index.html not served');
+  return { pages, revision, forms, early };
+}
+export const doubleStdout = (early: boolean, steps: number, used: number, version = 'test-double') => {
+  const lines = [JSON.stringify({ type: 'stream_start', cli_version: version }), JSON.stringify({ type: 'step', step: 1 })];
+  if (!early) lines.push(JSON.stringify({ type: 'run_end', status: 'passed', steps, credits_consumed: used }));
+  return lines.join('\n') + '\n';
+};
+
 /** A runner whose sessions follow `profileOf(session)`. `seen` records the pages each call read (for tests). */
 export function doubleRunner(profileOf: (session: string) => Profile, o: { balance?: number; usedPerCall?: number } = {}) {
   let balance = o.balance ?? 2000;
@@ -54,25 +82,14 @@ export function doubleRunner(profileOf: (session: string) => Profile, o: { balan
   const runner: Runner = {
     kind: 'test-double',
     async run(r: CallRequest): Promise<CallResult> {
-      const profile = profileOf(r.session), base = `http://127.0.0.1:${r.port}`, pages: string[] = [];
-      const index = await http(`${base}/index.html`); pages.push('index.html');
-      const form = await http(`${base}/hypothesis.html`); pages.push('hypothesis.html');
-      const nonce = /name="nonce" value="([0-9a-f]+)"/.exec(form.text)?.[1] ?? '';
-      let revision: string | null = null;
-      if (r.phase === 2) { revision = (await http(`${base}/revision.html`)).text; pages.push('revision.html'); }
-      seen[r.runId] = { revision, pages };
-      let forms = formsFor(profile, r.phase);
-      const early = profile === 'early' && r.phase === 1;
-      if (early) forms = forms.slice(0, 1);
-      for (const f of forms.slice(0, 8)) await http(`${base}/hypothesis`, new URLSearchParams({ ...f, nonce }).toString());
+      const profile = profileOf(r.session);
+      const d = await driveSite(`http://127.0.0.1:${r.port}`, profile, r.phase);
+      seen[r.runId] = { revision: d.revision, pages: d.pages };
       const before = balance;
       const used = profile === 'overspend' && r.phase === 1 ? r.ceilingCredits + 100 : (o.usedPerCall ?? 40);
       balance = Math.round((balance - used) * 1000) / 1000;
       const after = profile === 'unknown' && r.phase === 1 ? null : balance;
-      const lines = [JSON.stringify({ type: 'stream_start', cli_version: 'test-double' }), JSON.stringify({ type: 'step', step: 1 })];
-      if (!early) lines.push(JSON.stringify({ type: 'run_end', status: 'passed', steps: forms.length + 3, credits_consumed: used }));
-      if (index.status !== 200) throw new Error('index.html not served');
-      return { exitCode: early ? null : 0, timedOut: early, stdout: lines.join('\n') + '\n', stderr: '', spend: spendOf(before, after, r.ceilingCredits), args: { double: profile } };
+      return { exitCode: d.early ? null : 0, timedOut: d.early, stdout: doubleStdout(d.early, d.forms.length + 3, used), stderr: '', spend: spendOf(before, after, r.ceilingCredits), args: { double: profile } };
     },
   };
   return { runner, seen };

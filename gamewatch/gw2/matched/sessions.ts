@@ -16,7 +16,7 @@ import { readFileSync, writeFileSync, existsSync, mkdtempSync, rmSync } from 'no
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import { createHash } from 'node:crypto';
-import { append, verify as verifyGraph, fileSha256, sha256, type NodeInput, type Node, type Author } from '../judgments.ts';
+import { append, verify as verifyGraph, fileSha256, sha256, kaneExecution, type NodeInput, type Node, type Author } from '../judgments.ts';
 import { loadSession } from '../session.ts';
 import { sessionClosure } from '../session-close.ts';
 import { readExecLedger, appendCheckpoint } from '../p7-exec.ts';
@@ -34,13 +34,18 @@ export const graphOf = (run: string, session: string) => join(sessionDir(run, se
 const refPath = (f: string) => repoRelative(f) ?? f;
 
 export type Slot = { session: string; arm: Arm; runs: Record<Phase, string> };
+/** kane: the SEALED raw stdout and args files of this call and the CLI version the gate verified. Required for a real
+ * Kane call (the pipeline passes it whenever the runner is the Kane runner); without it the author is the test double. */
 export type ImportOpts = { kane?: { stdout: string; args: string; version: string } };
 
 /** Import the stored forms of one closed server session (one phase of one logical session). Returns the new node ids. */
 export function importPhase(run: string, rec: string, slot: Slot, phase: Phase, serverSessionDir: string, o: ImportOpts = {}) {
   const closure = sessionClosure(serverSessionDir);
   if (closure.status !== 'closed') throw new AccessRefused(`server session ${serverSessionDir} is not closed (${closure.status})`);
+  if (o.kane && (!o.kane.version || !existsSync(o.kane.stdout) || !existsSync(o.kane.args))) throw new AccessRefused('Kane provenance needs the sealed stdout, the sealed args and the CLI version');
   const s = loadSession(serverSessionDir), meta = s.meta as Record<string, any>, graph = graphOf(run, slot.session);
+  if (meta.label === 'kane' && !o.kane) throw new AccessRefused('this server session served a Kane call: its submissions need the Kane provenance and are never attributed to a test double');
+  if (meta.label !== 'kane' && o.kane) throw new AccessRefused('Kane provenance given for a session that did not serve a Kane call');
   const hypF = join(serverSessionDir, String(meta.hypotheses ?? 'hypotheses.ndjson'));
   const frozen1 = phase === 2 ? loadFrozen(run, rec, slot.session, 1) : null;
   const byRef = new Map((frozen1?.submissions ?? []).map(x => [x.ref, x.id]));
@@ -61,14 +66,25 @@ export function importPhase(run: string, rec: string, slot: Slot, phase: Phase, 
         ...(typeof n.representation === 'string' && n.representation.trim() ? { submittedRepresentation: n.representation } : {}),
         ...(phase === 2 && revisesRef ? { revision: { of, ref: revisesRef, action: withdraw ? 'withdraw' : 'revise', resolved: !!of } } : {}) },
     };
+    // Kane attribution only where the execution provenance holds (completed run with run_end, matching CLI version,
+    // args and nonce in one sealed run directory). A Kane call whose output does not establish it (e.g. it ended early
+    // without run_end) is imported under a neutral agent author with the reasons: never Kane-labelled without proof,
+    // and never a test double.
+    let unverifiedKane: string[] | null = null;
+    if (valid && o.kane) {
+      const ex = kaneExecution(node);
+      if (ex.failures.length) { unverifiedKane = ex.failures; node.author = { kind: 'agent', id: 'agent-call-without-execution-provenance', version: o.kane.version || 'unknown' }; delete (node as any).provenance;
+        (node.body as any).executionProvenance = { runner: 'kane', established: false, failures: ex.failures, stdout: { path: refPath(o.kane.stdout), sha256: fileSha256(o.kane.stdout) } }; }
+    }
+    const nodeAuthor = node.author, nodeProv = (node as any).provenance ? { provenance: (node as any).provenance } : {};
     const id = append(graph, node).id; ids.push(id);
     const raw = (node.body as any).submittedRepresentation;
     if (!withdraw && typeof raw === 'string') {
       let representation: unknown = null, parseError: string | null = null;
       try { representation = JSON.parse(raw); } catch (e) { parseError = (e as Error).message; }
-      ids.push(append(graph, { kind: 'representation', parents: [{ id, relation: 'represents' }], author, ...prov, origin: 'live', at: String(n.at), evidenceRefs: [ref],
+      ids.push(append(graph, { kind: 'representation', parents: [{ id, relation: 'represents' }], author: nodeAuthor, ...nodeProv, origin: 'live', at: String(n.at), evidenceRefs: [ref],
         reason: 'structured representation submitted with the form; extracted verbatim, not repaired',
-        body: { origin: 'submitter', representation, ...(parseError ? { parseError } : {}), rawSha256: sha256(raw), fidelity: { declared: 'faithful' }, session: slot.session, phase, ...(o.kane && valid ? { verbatim: h.line } : {}) } }).id);
+        body: { origin: 'submitter', representation, ...(parseError ? { parseError } : {}), rawSha256: sha256(raw), fidelity: { declared: 'faithful' }, session: slot.session, phase, ...(o.kane && valid && !unverifiedKane ? { verbatim: h.line } : {}) } }).id);
     }
   }
   return ids;
@@ -88,9 +104,15 @@ export function freezeSession(run: string, rec: string, slot: Slot, phase: Phase
   if (!v.ok) throw new AccessRefused(`${slot.session} graph fails verification: ${v.problems[0]?.problem}`);
   const subs = (v.nodes as Node[]).filter(n => (n.kind === 'hypothesis' || n.kind === 'abstention') && (n.body as any).phase === phase).map(n => ({
     id: n.id, kind: n.kind, ref: String((n.body as any).ref), phaseRef: String((n.body as any).phaseRef), revision: (n.body as any).revision ?? null,
+    nonceValid: (n.body as any).nonceValid === true, author: `${n.author.kind}:${n.author.id}`,
     representations: (v.nodes as Node[]).filter(r => r.kind === 'representation' && r.parents[0]?.id === n.id).map(r => r.id) }));
   const body = { schema: FREEZE_SCHEMA, session: slot.session, arm: slot.arm, phase, runId: slot.runs[phase], callStatus: o.status ?? null, callReasons: o.reasons ?? [],
-    graphHead: v.head, submissions: subs, ...(prior ? { freeze1Sha256: prior.freezeSha256, freeze1GraphHead: prior.freeze.graphHead } : {}), at: o.at ?? new Date().toISOString() };
+    graphHead: v.head, submissions: subs,
+    // two separate questions, never merged (final preflight, item 1): was each form verifiably submitted by this session's
+    // server (nonce and session matched)? and did the call itself complete validly (exit, timeout, valid run_end, spend)?
+    validity: { submissionVerification: { verified: subs.filter(x => x.nonceValid).length, unverified: subs.filter(x => !x.nonceValid).length, basis: 'form nonce and server session' },
+      call: { status: o.status ?? null, reasons: o.reasons ?? [], basis: 'exit code, timeout, run_end validity and spend (p7-exec.ts sessionOutcome)' } },
+    ...(prior ? { freeze1Sha256: prior.freezeSha256, freeze1GraphHead: prior.freeze.graphHead } : {}), at: o.at ?? new Date().toISOString() };
   writeFileSync(f, JSON.stringify(body, null, 1) + '\n', { flag: 'wx' });
   const freezeSha256 = fsha(f);
   appendCheckpoint(rec, `freeze-${phase}`, { session: slot.session, arm: slot.arm, phase, runId: slot.runs[phase], freezeSha256, graph: v.head, submissions: subs.length }, body.at);

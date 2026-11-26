@@ -1,10 +1,10 @@
-# GW2 matched comparison: pre-registration (COMPLETED DRAFT, for execution review; NOT authorized, NOT executed)
+# GW2 matched comparison: pre-registration (COMPLETED DRAFT, final preflight; NOT authorized, NOT executed)
 
-**Status: draft for operator review.** Parameters are those the operator set on 2026-11-26 07:38 UTC (GW2_EXTENSION_V1_APPROVED). Nothing in this document has run. Both gates are closed:
+**Status: draft for final review.** Parameters are those the operator set on 2026-11-26 07:38 UTC (GW2_EXTENSION_V1_APPROVED). The design was conditionally approved at 08:31 UTC (GW2_MATCHED_EXPERIMENT_CONDITIONALLY_APPROVED); this revision applies that review's execution blockers (D146–D153). Nothing in this document has run. Both gates are closed:
 * the paid-call gate is `PAID_RESEARCH_EXECUTION = 'disabled'`, and its scope names only the P7 pilot ids;
 * agent feedback is `AGENT_FEEDBACK_ENABLED = false`.
 
-The machine-readable plan is generated from the code (`node --experimental-strip-types --no-warnings gamewatch/gw2/matched/cli.ts plan`). A copy for review is in `evidence/gw2/matched-plan/PLAN.draft.json`. At execution, `cli.ts preregister` writes it, together with the sha256 of this file and of the code, into the operator's external record as the first ledger entry. Decisions D136–D145.
+The machine-readable plan is generated from the code (`node --experimental-strip-types --no-warnings gamewatch/gw2/matched/cli.ts plan`). A copy for review is in `evidence/gw2/matched-plan/PLAN.draft.json`. At execution, `cli.ts preregister` writes it, together with the sha256 of this file and of the code, into the operator's external record as the first ledger entry. It binds the sha256 of this file, the procedure, the spec encoding, `package.json` and the **complete execution dependency set** (every module reachable by static import from `matched/cli.ts`, computed, 61 files), plus the **exact commit** run (git HEAD) and the reviewed disabled-gate commit it derives from. Every call and the evaluation re-check all of it, including that HEAD is unchanged. Decisions D136–D153.
 
 ## 1. Question
 When a Kane session is shown, deterministically, which recorded discovery observations contradict its own structured hypotheses, does it revise them toward the builds' actual behaviour? The comparison is with matched sessions that get the same revision opportunity without that list.
@@ -59,6 +59,12 @@ Feedback runs listed in the pre-registration (`plan.agentFeedback.runs`): GW2-M0
 4. **Phase 2.** A call with objective phase 2, 40 steps and 1350 s, with at most 8 forms. Revisions and withdrawals name an earlier H-number. They become new nodes that link to the original with `refines`. Originals are never edited.
 5. **Freeze-2.** It is anchored, and it names Freeze-1's sha256.
 
+**Revision page (both arms, identical shell).** A separate Kane call is not assumed to remember the first. `revision.html` lists every frozen phase-1 form in full: H-number, kind, verbatim statement, confidence, cited evidence, the full submitted structured representation (verbatim) and its availability (checkable / not parseable / not representable / none), and each abstention with its scope, with a count of hypotheses, checkable representations and abstentions. The phase-2 objective (`OBJECTIVE_PHASE_2_MATCHED`) says that this is a new, separate call with no memory of the earlier one. The V1 draft objective ("continuing the same investigation") is kept unchanged as history and is not used. The only difference between arms remains the feedback section.
+
+**Provenance and validity.** A real Kane call's forms are attributed to `kane-cli` (version from the gate's CLI probe) only when the sealed raw stdout, the sealed args (CLI, version, argv, run nonce) and the stored note establish the execution provenance. A Kane call that does not establish it, for example one that ended without run_end, is imported under a neutral agent author with the reasons, never Kane-labelled and never a test double. Each freeze records two separate questions: **submission verification** (form nonce and server session matched) and **call validity** (exit, timeout, run_end validity, spend).
+
+**Sealing transaction and integrity.** Each call is one transaction in the external ledger: call-start → call-end → raw-seal → server-closed → freeze → (phase 1) revision-page. Before every call and before the evaluation, the actual files are re-verified against their anchors: raw seal, server-session closure seal, access journal (its hash, hash chain and the site it recorded serving), freeze files, graph heads and the phase-2 site against its construction record. The discovery site is verified file by file against the pre-registered discovery manifest before every phase-1 call. An incomplete transaction or any integrity problem refuses every further call. A failing step is recorded (`call-failed`, then `experiment-stopped`) and never retried.
+
 ## 6. Budget (operational thresholds, not provider-enforced caps)
 * **Ceilings.** Phase 1: 300 credits per call. Phase 2: 150 credits per call. The existing preflight estimate (steps × 3.1) is 248 and 124, both within the ceilings.
 * **Accounting.** By balance delta. The cumulative research total includes P7 (132.043). The stopping threshold is **4,000** credits.
@@ -67,7 +73,7 @@ Feedback runs listed in the pre-registration (`plan.agentFeedback.runs`): GW2-M0
 * **Never.** No retries, no parallel paid calls, no credit purchases. Every call also passes the unchanged per-run paid-call gate: an approval file, `KANE_PAID_RUN_AUTH`, the pinned real CLI, a balance of at least 1.5 × the ceiling, and an operator clear after any exceedance.
 
 ## 7. Early termination, missing representations, withdrawals, conflicts
-* **Early termination.** A timeout, a non-zero exit or no valid run_end marks the call inconclusive. Its forms are imported and frozen, and the session continues to phase 2, the same in both arms. The session is marked incomplete, and its block leaves the block comparison.
+* **Early termination.** A timeout, a non-zero exit or a run_end that is missing **or not valid** (status other than passed/failed) marks the call inconclusive. A session is complete only if both calls exited 0, did not time out and have a valid run_end. Its forms are imported and frozen, and the session continues to phase 2, the same in both arms. The session is marked incomplete, and its block leaves the block comparison.
 * **Missing representations.** These hypotheses are kept and reported as not machine-evaluable. Their accuracy is "not available", never zero.
 * **Withdrawals.** A phase-2 abstention that names an original removes that original from the final set. The original stays in the graph.
 * **Conflicting revisions.** Two or more phase-2 forms for one original: the original stays in the final set unchanged. The conflicting forms are listed and are not scored as corrections or harms.
@@ -78,13 +84,20 @@ Feedback runs listed in the pre-registration (`plan.agentFeedback.runs`): GW2-M0
 * the pre-registration still holds;
 * there has been no earlier opening;
 * every declared session has Freeze-1 and Freeze-2, or the experiment stopped and every started call is frozen.
+* every completed transaction passes the integrity checks of §5 (raw seals, session closures, access journals, freezes, graph anchors, phase-2 sites).
 
 The opening is recorded once in the external ledger, and a second opening is refused.
 
 ## 9. Measures (session level, reported separately, never combined)
 The unit is the session. Outcome checks within a session are correlated, and they are not experimental replications.
 * Held-out accuracy (matching / (matching + contradicting) over represented clauses) and coverage (held-out situations predicted / all held-out situations), Freeze-1 vs final, with the paired change per session.
-* Corrections (a revision more accurate than its original), harmful revisions (less accurate, or a representation lost), unchanged, and not comparable.
+* Revision effects on **prediction targets** (situation, outcome field with a recorded held-out outcome), per original: correction (corrected common targets, nothing newly incorrect), mixed, harmful (newly incorrect only, or the structured representation lost), narrowing only (predictions dropped, none corrected), unchanged, not comparable. The accuracy-only reading (a revision more or less accurate than its original) is kept and reported separately.
+* Target-level changes, initial vs final and per pair: corrections on **common** targets; common targets that became incorrect; **newly introduced** predictions (matching / incorrect); **dropped** predictions; coverage **contraction and expansion** in situations.
+* An attribution of every accuracy change. **An accuracy increase that comes only from narrower coverage, with no correction on a common target, is labelled "narrowing only" and is never reported as self-correction.**
+* Discovery fit (the same score on the discovery partition), initial vs final.
+* C readings (three-way: hypothesis–observation, hypothesis–spec, observation–spec; `verify.ts threeWay` with the pre-registered encoding `rule-sabotage-v6.1.json`), per partition, initial vs final, including "accurate description of a defect".
+* Counterexample classes of held-out contradictions: novelty of the situation's inputs against the applicable discovery situations of the same build (novel individual value / novel combination / observed combination), and whether discovery already held a counterexample of that clause.
+* Withdrawals, phase-1 abstentions and losses of machine-evaluable representations, listed per original.
 * Actions on originals: kept, revised, withdrawn, conflicting, and additions.
 * Abstentions in phase 1 and withdrawals in phase 2.
 * Representation availability in phase 1 and phase 2.
@@ -95,6 +108,6 @@ P7 (`evidence/gw2/p7-pilot`) stays historical evidence. It is not a control and 
 
 ## 11. Open before freezing
 * The operator's written authorization text.
-* The external record location.
-* The scoped gate commit (mode `per-run-approval`, scope `^GW2-M(0[1-9]|10)-P[12]$`).
-* The reviewed commit enabling agent feedback for the five listed runs.
+* The external record and run locations (proposed: `D:\Rule_Sabotage\gw2-matched-record`, `D:\Rule_Sabotage\gw2-matched-run`).
+* The reviewed commit (both gates closed; the full regression suite passes there).
+* The candidate commit: the reviewed commit plus exactly three line changes, checked by `cli.ts candidate-check`: `PAID_RESEARCH_EXECUTION = 'per-run-approval'`, `PAID_RESEARCH_SCOPE = /^GW2-M(0[1-9]|10)-P[12]$/` and `AGENT_FEEDBACK_ENABLED = true`.
