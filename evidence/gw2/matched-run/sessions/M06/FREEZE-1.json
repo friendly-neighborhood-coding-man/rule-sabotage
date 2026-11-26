@@ -1,0 +1,52 @@
+{
+ "schema": "gamewatch/gw2-matched-session-freeze@1",
+ "session": "M06",
+ "arm": "treatment",
+ "phase": 1,
+ "runId": "GW2-M06-P1",
+ "callStatus": "completed",
+ "callReasons": [],
+ "graphHead": {
+  "count": 4,
+  "lastLineSha256": "72d48f2060bd32573f4008d4cc546cae1ddd3835b38e85f81c77a88a429daa95"
+ },
+ "submissions": [
+  {
+   "id": "3e7af2d0868f598b1897f6622a49627f1480549f041aa9a5a5e5e580c4438c58",
+   "kind": "hypothesis",
+   "ref": "H-1",
+   "phaseRef": "P1:H-1",
+   "revision": null,
+   "nonceValid": true,
+   "author": "agent:kane-cli",
+   "representations": [
+    "4b730ce855007ee812bda5dcd113c98a30438e990d995137edefbdbe468a6e49"
+   ]
+  },
+  {
+   "id": "ec7c8b2bc6da3912992305fa478a93578b382a04e41a2d049f77efca08da603c",
+   "kind": "hypothesis",
+   "ref": "H-2",
+   "phaseRef": "P1:H-2",
+   "revision": null,
+   "nonceValid": true,
+   "author": "agent:kane-cli",
+   "representations": [
+    "90470e22e591100d2c7029384c34a0037bebf6123e3e5414d07263132b4eb4f2"
+   ]
+  }
+ ],
+ "validity": {
+  "submissionVerification": {
+   "verified": 2,
+   "unverified": 0,
+   "basis": "form nonce and server session"
+  },
+  "call": {
+   "status": "completed",
+   "reasons": [],
+   "basis": "exit code, timeout, run_end validity and spend (p7-exec.ts sessionOutcome)"
+  }
+ },
+ "at": "2026-11-26T16:19:47.354Z"
+}

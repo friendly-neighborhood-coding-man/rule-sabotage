@@ -1,0 +1,28 @@
+{
+ "runId": "GW2-M04-P1",
+ "session": "M04",
+ "arm": "control",
+ "phase": 1,
+ "serverSession": "1cb70fbc0e715002",
+ "status": "completed",
+ "reasons": [],
+ "spend": {
+  "used": 64.882,
+  "before": "<redacted:balance>",
+  "after": "<redacted:balance>",
+  "outcome": "WITHIN_CEILING"
+ },
+ "facts": {
+  "runEnd": {
+   "present": true,
+   "valid": true,
+   "status": "passed",
+   "reasonCode": "success.complete",
+   "resultCode": 100
+  },
+  "steps": 38,
+  "kaneCreditsReported": 64.25593500000001,
+  "kaneDurationS": 200.1,
+  "cliVersion": "0.10.4"
+ }
+}

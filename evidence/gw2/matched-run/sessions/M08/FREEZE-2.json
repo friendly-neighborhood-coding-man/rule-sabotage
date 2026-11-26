@@ -1,0 +1,48 @@
+{
+ "schema": "gamewatch/gw2-matched-session-freeze@1",
+ "session": "M08",
+ "arm": "treatment",
+ "phase": 2,
+ "runId": "GW2-M08-P2",
+ "callStatus": "completed",
+ "callReasons": [],
+ "graphHead": {
+  "count": 5,
+  "lastLineSha256": "b52224ecb8bb94790195adf700d8fab1e9860772fdfde557143a36c68c7bd531"
+ },
+ "submissions": [
+  {
+   "id": "2dab5534d714b3a1085f55b25f146897e8b18b82b1fa084a212651f9d99a5e1e",
+   "kind": "abstention",
+   "ref": "H-1",
+   "phaseRef": "P2:H-1",
+   "revision": {
+    "action": "withdraw",
+    "of": "60e4fbf023bc582f7c4ea612a78dc0bf8c4578bc4b0bac257161ea50366ce4a2",
+    "ref": "H-1",
+    "resolved": true
+   },
+   "nonceValid": true,
+   "author": "agent:kane-cli",
+   "representations": []
+  }
+ ],
+ "validity": {
+  "submissionVerification": {
+   "verified": 1,
+   "unverified": 0,
+   "basis": "form nonce and server session"
+  },
+  "call": {
+   "status": "completed",
+   "reasons": [],
+   "basis": "exit code, timeout, run_end validity and spend (p7-exec.ts sessionOutcome)"
+  }
+ },
+ "freeze1Sha256": "216f1e999afcae06a7313d3fa0e54b7b466c43bf7c3b18a67eb52afc5069da78",
+ "freeze1GraphHead": {
+  "count": 4,
+  "lastLineSha256": "8dd68cb6c33c8c3998c41c6e84a2deaf08a1a26910c2a3114d4a10c80ffa0783"
+ },
+ "at": "2026-11-26T16:47:25.631Z"
+}

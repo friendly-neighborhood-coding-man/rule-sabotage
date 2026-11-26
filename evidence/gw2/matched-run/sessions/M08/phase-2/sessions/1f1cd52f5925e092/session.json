@@ -1,0 +1,17 @@
+{
+ "schema": "gamewatch/gw2-session@1",
+ "exp": "GW2-M08-P2",
+ "session": "1f1cd52f5925e092",
+ "logging": "on",
+ "accessSchema": "gamewatch/gw2-access@1",
+ "journal": "access.ndjson",
+ "notes": "notes.ndjson",
+ "hypotheses": "hypotheses.ndjson",
+ "label": "kane",
+ "nonceSha256": "2c283785235f980be2113a7ae9e4cb19e8a12ff67f3dcb38897fd3746cb600ac",
+ "server": {
+  "name": "gamewatch/gw2/serve.ts",
+  "version": "1"
+ },
+ "startedAt": "2026-11-26T16:45:33.526Z"
+}

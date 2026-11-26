@@ -1,0 +1,29 @@
+{
+ "schema": "gamewatch/gw2-session-close@1",
+ "exp": "GW2-M10-P1",
+ "session": "047b9a5140c032f0",
+ "closure": "server-close",
+ "closedBy": "gamewatch/gw2/serve.ts@1",
+ "closedAt": "2026-11-26T17:18:11.927Z",
+ "logging": "on",
+ "journal": {
+  "status": "valid",
+  "sessionEnd": true
+ },
+ "outputs": {
+  "session.json": {
+   "sha256": "45b609849248090cc1951a153998344b5d3692d14b6551482d8fe315c7d2faa4",
+   "lines": 17
+  },
+  "access.ndjson": {
+   "sha256": "25b323bd941da4a8db3cce3b826c28960e63b1f757f95bb3cba5ebb385c6d621",
+   "lines": 14
+  },
+  "notes.ndjson": null,
+  "hypotheses.ndjson": {
+   "sha256": "8ed1ff91dcae00325db51fa7a61fd2f3053901b4ebee39f038620d2d1f1660eb",
+   "lines": 3
+  }
+ },
+ "statement": "Session closed. The listed outputs are sealed by hash; any later change, addition or removal is reported as a seal violation. Closing a session does not change its experimental validity."
+}

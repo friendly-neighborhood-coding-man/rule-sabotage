@@ -1,0 +1,21 @@
+{
+ "sessions": [
+  {
+   "session": "M08",
+   "arm": "treatment",
+   "block": 4,
+   "phases": [
+    {
+     "phase": 1,
+     "runId": "GW2-M08-P1",
+     "status": "completed",
+     "reasons": [],
+     "used": 31.994,
+     "submissions": 2
+    }
+   ]
+  }
+ ],
+ "stopped": null,
+ "cumulative": 723.455
+}

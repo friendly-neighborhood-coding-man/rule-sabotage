@@ -1,0 +1,64 @@
+{
+ "schema": "gamewatch/gw2-matched-session-freeze@1",
+ "session": "M02",
+ "arm": "treatment",
+ "phase": 1,
+ "runId": "GW2-M02-P1",
+ "callStatus": "completed",
+ "callReasons": [],
+ "graphHead": {
+  "count": 6,
+  "lastLineSha256": "6ed06b8e3f1dcadc3fe59c19069475bae7376d37906781d5504ceaec39146e0a"
+ },
+ "submissions": [
+  {
+   "id": "829339e6143ce06b757b8e06040bf1b2117b09db1d1d968a423648d67536ebde",
+   "kind": "hypothesis",
+   "ref": "H-1",
+   "phaseRef": "P1:H-1",
+   "revision": null,
+   "nonceValid": true,
+   "author": "agent:kane-cli",
+   "representations": [
+    "ad11e5df3fc4152720d3ab88489f163f2f7ac57e10d1160d5ed24d518d40219a"
+   ]
+  },
+  {
+   "id": "4dfbbf3f7269da2c1565e9660d0dd587295640f721f5586560afbd279fd0608f",
+   "kind": "hypothesis",
+   "ref": "H-2",
+   "phaseRef": "P1:H-2",
+   "revision": null,
+   "nonceValid": true,
+   "author": "agent:kane-cli",
+   "representations": [
+    "adecc6acb81c340b56ae5edbe4181dd982cf96da304068f119604a724b8e8615"
+   ]
+  },
+  {
+   "id": "6e6cc35bf0442a788642a1a290fc3fd675207c0a963b7b9a32e9355501d59fb5",
+   "kind": "hypothesis",
+   "ref": "H-3",
+   "phaseRef": "P1:H-3",
+   "revision": null,
+   "nonceValid": true,
+   "author": "agent:kane-cli",
+   "representations": [
+    "b452bda18fc35c0954be54c1839233d7346c81c5ac56f063cc94227326ec4f72"
+   ]
+  }
+ ],
+ "validity": {
+  "submissionVerification": {
+   "verified": 3,
+   "unverified": 0,
+   "basis": "form nonce and server session"
+  },
+  "call": {
+   "status": "completed",
+   "reasons": [],
+   "basis": "exit code, timeout, run_end validity and spend (p7-exec.ts sessionOutcome)"
+  }
+ },
+ "at": "2026-11-26T15:40:20.144Z"
+}

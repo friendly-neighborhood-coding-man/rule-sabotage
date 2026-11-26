@@ -1,0 +1,28 @@
+{
+ "runId": "GW2-M06-P2",
+ "session": "M06",
+ "arm": "treatment",
+ "phase": 2,
+ "serverSession": "e316886b86136c09",
+ "status": "completed",
+ "reasons": [],
+ "spend": {
+  "used": 25.953,
+  "before": "<redacted:balance>",
+  "after": "<redacted:balance>",
+  "outcome": "WITHIN_CEILING"
+ },
+ "facts": {
+  "runEnd": {
+   "present": true,
+   "valid": true,
+   "status": "passed",
+   "reasonCode": "success.complete",
+   "resultCode": 100
+  },
+  "steps": 16,
+  "kaneCreditsReported": 19.495792499999997,
+  "kaneDurationS": 87.7,
+  "cliVersion": "0.10.4"
+ }
+}

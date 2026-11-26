@@ -1,0 +1,32 @@
+{
+ "schema": "gamewatch/gw2-matched-session-freeze@1",
+ "session": "M07",
+ "arm": "control",
+ "phase": 2,
+ "runId": "GW2-M07-P2",
+ "callStatus": "completed",
+ "callReasons": [],
+ "graphHead": {
+  "count": 2,
+  "lastLineSha256": "25b2d4f90a579b19ec55f4b5033b83e9d67268abcabae23adc8ce9a0de4108de"
+ },
+ "submissions": [],
+ "validity": {
+  "submissionVerification": {
+   "verified": 0,
+   "unverified": 0,
+   "basis": "form nonce and server session"
+  },
+  "call": {
+   "status": "completed",
+   "reasons": [],
+   "basis": "exit code, timeout, run_end validity and spend (p7-exec.ts sessionOutcome)"
+  }
+ },
+ "freeze1Sha256": "f3e60bac1429f846f8d9e52a7b16a15a8302485311db39d55c7824ac93e64437",
+ "freeze1GraphHead": {
+  "count": 2,
+  "lastLineSha256": "25b2d4f90a579b19ec55f4b5033b83e9d67268abcabae23adc8ce9a0de4108de"
+ },
+ "at": "2026-11-26T16:33:51.243Z"
+}
