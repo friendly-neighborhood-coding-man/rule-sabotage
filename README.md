@@ -1,12 +1,24 @@
 # Rule Sabotage
 
-> **Hackathon submission: GameWatch**, a Kane-powered game QA SkillBook, with Rule Sabotage as its demonstration game.
-> Result of the blind experiment (GW1): one Kane call detected 2 of 3 planted defects; one coding-agent repair attempt
-> fixed all 3 (it found the third itself), verified independently after the output was frozen.
-> Start at [`docs/SUBMISSION.md`](docs/SUBMISSION.md), [`gamewatch/README.md`](gamewatch/README.md) (quick start) and
-> [`docs/GW1_FINAL_REPORT.md`](docs/GW1_FINAL_REPORT.md) (results and limitations). GameWatch runs on **SkillFlow**, a
-> separate MIT-licensed runner (https://github.com/friendly-neighborhood-coding-man/skillflow), vendored unmodified at a
-> pinned commit in `gamewatch/vendor/skillflow/` (no download needed). The playable game is the clean V6.1 baseline.
+> **Hackathon submission: GameWatch. Kane discovers. GameWatch verifies. Together, they close the trust gap.**
+> Kane explores the game on its own and reports anomalies and hypotheses about its hidden rules. GameWatch is a
+> complementary verification layer: it checks every finding against recorded evidence, seals each step in a
+> hash-chained ledger, and separates genuine corrections from misleading improvements.
+> * **GW1:** one Kane call detected 2 of 3 planted defects. One blind coding-agent repair fixed all 3 (it found the
+>   third itself), and the fixes were verified independently after the output was frozen.
+> * **GW2 (pre-registered, 20 Kane calls):** in session M08, accuracy rose from 31.78% to 81.25% while coverage fell from
+>   12.32% to 1.00%, with zero genuine corrections. GameWatch identified a hypothesis withdrawal, not self-correction.
+>   Both treatment sessions that received contradiction feedback revised or withdrew a hypothesis, and no control
+>   session did. This is observed behavioural adaptation, not improved reasoning.
+> * **Disclosed limitations:** schema-invalid representations in 6 of 10 sessions, missing submissions in 8 of 10
+>   revision calls, and 5 sessions per arm.
+>
+> Start at [`docs/SUBMISSION.md`](docs/SUBMISSION.md). The verified report is
+> [`docs/gw2/MATCHED_RESULTS_REPORT.md`](docs/gw2/MATCHED_RESULTS_REPORT.md) and the public evidence is
+> [`evidence/gw2/matched-run/`](evidence/gw2/matched-run/). See also [`docs/GW1_FINAL_REPORT.md`](docs/GW1_FINAL_REPORT.md)
+> and [`gamewatch/README.md`](gamewatch/README.md) (quick start).
+> GameWatch runs on **SkillFlow** (https://github.com/friendly-neighborhood-coding-man/skillflow, MIT), vendored
+> unmodified at a pinned commit. The playable game is the clean V6.1 baseline.
 
 **Write effects in plain English (or Korean), scatter them over the board, then survive your own inventions.**
 
