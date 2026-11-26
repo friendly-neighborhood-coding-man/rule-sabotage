@@ -4,8 +4,10 @@
  *
  * A call is one sealing transaction, recorded in the external ledger in this order:
  *   call-start → call-end → raw-seal → server-closed → freeze-<phase> → (phase 1 only) revision-page
- * A transaction that is missing a later step (a crash, a failed step) is INCOMPLETE: no further call may start. A step that
- * fails is recorded explicitly ("call-failed", then "experiment-stopped"), never retried.
+ * A transaction that is missing a later step without a recorded failure (a crash) is INCOMPLETE: no further call may
+ * start. A step that fails is recorded explicitly ("call-failed", then "experiment-stopped"), never retried. A failed
+ * transaction must be a clean prefix (no gap, nothing recorded after the failure), and every step it did record is
+ * verified exactly like a completed one: a failure never exempts a raw seal, a closure, a journal or a freeze.
  *
  * For every completed transaction the actual files are re-verified against their anchors:
  *   - raw seal: RAW_SEAL.json hash equals the ledger, and every raw file equals the seal;
@@ -46,32 +48,46 @@ export function executionProblems(run: string, rec: string): string[] {
   const L = R.entries as any[], stopped = L.some(e => e.event === 'experiment-stopped');
   for (const start of L.filter(e => e.event === 'call-start')) {
     const { runId, session, phase } = start.data, of = (ev: string) => L.filter(e => e.event === ev && e.data.runId === runId);
-    if (L.some(e => e.event === 'call-failed' && e.data.runId === runId)) { if (!stopped) p.push(`${runId} failed but the experiment is not marked stopped`); continue; }
+    const failed = of('call-failed');
     const end = of('call-end'), seal = of('raw-seal'), closed = of('server-closed');
     const fz = L.filter(e => e.event === `freeze-${phase}` && e.data.session === session);
-    const missing = [end.length !== 1 && 'call-end', seal.length !== 1 && 'raw-seal', closed.length !== 1 && 'server-closed', fz.length !== 1 && `freeze-${phase}`].filter(Boolean);
-    if (missing.length) { p.push(`${runId}: incomplete sealing transaction (missing ${missing.join(', ')}); no further call may start`); continue; }
-    const raw = join(sessionDir(run, session), `raw-${phase}`), rs = verifyRawSeal(raw);
-    if (!rs.ok) p.push(`${runId} raw: ${rs.problems.join('; ')}`);
-    else if (rs.sealSha256 !== seal[0].data.rawSealSha256) p.push(`${runId} RAW_SEAL.json differs from its anchor`);
-    const c = closed[0].data, dir = join(run, c.dir), cl = sessionClosure(dir);
-    if (cl.status !== 'closed') p.push(`${runId} server session ${cl.status}: ${cl.problems.join('; ')}`);
-    else if (cl.sealSha256 !== c.closureSealSha256) p.push(`${runId} server session seal differs from its anchor`);
-    const jf = join(dir, 'access.ndjson');
-    if (!existsSync(jf) || fsha(jf) !== c.journalSha256) p.push(`${runId} access journal differs from its anchor`);
-    else {
-      const meta = JSON.parse(readFileSync(join(dir, 'session.json'), 'utf8')), j = readJournal(jf, { logging: 'on', session: meta.session });
-      if (j.status !== c.journalStatus) p.push(`${runId} access journal now reads ${j.status}, anchored ${c.journalStatus}`);
-      const served = (j.lines.find((l: any) => l.type === 'session-start') as any)?.site?.files ?? null;
-      if (JSON.stringify(served) !== JSON.stringify(c.servedSite)) p.push(`${runId} the site recorded in the journal differs from the anchored served site`);
+    const rp = phase === 1 ? L.filter(e => e.event === 'revision-page' && e.data.session === session) : [];
+    const steps: [string, any[]][] = [['call-end', end], ['raw-seal', seal], ['server-closed', closed], [`freeze-${phase}`, fz], ...(phase === 1 ? [['revision-page', rp] as [string, any[]]] : [])];
+    for (const [k, v] of steps) if (v.length > 1) p.push(`${runId}: ${k} recorded ${v.length} times`);
+    if (failed.length > 1) p.push(`${runId}: call-failed recorded ${failed.length} times`);
+    if (failed.length) {
+      // a failed transaction (final preflight follow-up): it must be a clean prefix of the transaction, stopped, with no
+      // step recorded after the failure; every step it DID record is verified like any other (nothing is skipped)
+      const fseq = failed[0].seq;
+      if (!L.some(e => e.event === 'experiment-stopped' && e.seq > fseq)) p.push(`${runId} failed but the experiment is not marked stopped after the failure`);
+      const recorded = steps.map(([k, v]) => [k, v.length > 0, v[0]?.seq] as const);
+      const firstMissing = recorded.findIndex(([, has]) => !has);
+      if (firstMissing >= 0 && recorded.slice(firstMissing).some(([, has]) => has)) p.push(`${runId} failed with a gap in its transaction (steps recorded after a missing one)`);
+      for (const [k, has, seq] of recorded) if (has && seq! > fseq) p.push(`${runId}: ${k} was recorded after the call failed`);
+    } else {
+      const missing = steps.filter(([k, v]) => v.length !== 1 && !(k === 'revision-page' && L.some(e => e.event === 'experiment-stopped' && (e.data.after === runId || String(e.data.reason ?? '').startsWith(runId))))).map(([k]) => k);
+      if (missing.length) { p.push(`${runId}: incomplete sealing transaction (missing ${missing.join(', ')}); no further call may start`); continue; }
     }
-    try { loadFrozen(run, rec, session, phase); } catch (e) { p.push(`${runId} ${(e as Error).message}`); }
-    if (phase === 1) {
-      const rp = L.filter(e => e.event === 'revision-page' && e.data.session === session);
-      const stoppedHere = L.some(e => e.event === 'experiment-stopped' && (e.data.after === runId || String(e.data.reason ?? '').startsWith(runId)));
-      if (rp.length !== 1) { if (!stoppedHere) p.push(`${runId}: incomplete sealing transaction (missing revision-page); no further call may start`); }
-      else p.push(...siteProblems(join(sessionDir(run, session), 'site-2'), rp[0].data.siteFiles, `${session} phase-2 site`));
+    if (seal.length) {
+      const raw = join(sessionDir(run, session), `raw-${phase}`), rs = verifyRawSeal(raw);
+      if (!rs.ok) p.push(`${runId} raw: ${rs.problems.join('; ')}`);
+      else if (rs.sealSha256 !== seal[0].data.rawSealSha256) p.push(`${runId} RAW_SEAL.json differs from its anchor`);
     }
+    if (closed.length) {
+      const c = closed[0].data, dir = join(run, c.dir), cl = sessionClosure(dir);
+      if (cl.status !== 'closed') p.push(`${runId} server session ${cl.status}: ${cl.problems.join('; ')}`);
+      else if (cl.sealSha256 !== c.closureSealSha256) p.push(`${runId} server session seal differs from its anchor`);
+      const jf = join(dir, 'access.ndjson');
+      if (!existsSync(jf) || fsha(jf) !== c.journalSha256) p.push(`${runId} access journal differs from its anchor`);
+      else {
+        const meta = JSON.parse(readFileSync(join(dir, 'session.json'), 'utf8')), j = readJournal(jf, { logging: 'on', session: meta.session });
+        if (j.status !== c.journalStatus) p.push(`${runId} access journal now reads ${j.status}, anchored ${c.journalStatus}`);
+        const served = (j.lines.find((l: any) => l.type === 'session-start') as any)?.site?.files ?? null;
+        if (JSON.stringify(served) !== JSON.stringify(c.servedSite)) p.push(`${runId} the site recorded in the journal differs from the anchored served site`);
+      }
+    }
+    if (fz.length) { try { loadFrozen(run, rec, session, phase); } catch (e) { p.push(`${runId} ${(e as Error).message}`); } }
+    if (rp.length === 1) p.push(...siteProblems(join(sessionDir(run, session), 'site-2'), rp[0].data.siteFiles, `${session} phase-2 site`));
   }
   // each session graph: the latest anchored head still holds byte for byte
   const heads = new Map<string, any>();

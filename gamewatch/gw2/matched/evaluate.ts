@@ -24,6 +24,9 @@
  *   - counterexample classes of held-out contradictions (p8-corrections.ts novelty against the applicable discovery
  *     situations of the same build; and whether discovery already held a counterexample of that clause);
  *   - withdrawals, abstentions and loss of machine-evaluable representations listed per original.
+ * A call that failed after call-start (recorded "call-failed", experiment stopped) is listed in failedCalls; its session is
+ * incomplete. If its phase-1 call was never frozen the session has no outcomes; if only phase 2 failed before its
+ * freeze, the session is evaluated on Freeze-1 alone (final = initial) and marked incomplete. Nothing is imputed.
  * Rules fixed in advance: a withdrawn original leaves the final set; a conflicting original stays in the final set
  * unchanged and its conflicting revisions are listed, not scored as corrections or harms; a phase-2 form naming no
  * frozen original is an addition to the final set. Arm comparisons are differences of session-level values within
@@ -191,7 +194,9 @@ export function evaluateMatched(evidence: string, run: string, rec: string, o: {
   const sched = schedule(), problems: string[] = [];
   for (const s of sched) for (const p of [1, 2]) {
     const started = L.some(e => e.event === 'call-start' && e.data.session === s.session && e.data.phase === p);
-    if (started && !frozen(s.session, p)) problems.push(`${s.session} phase ${p} started but is not frozen`);
+    const failedHere = L.some(e => e.event === 'call-failed' && e.data.session === s.session && e.data.phase === p);
+    // a started call is frozen, or (after a stop) its failure is recorded; a recorded failure is reported, never hidden
+    if (started && !frozen(s.session, p) && !(stopped && failedHere)) problems.push(`${s.session} phase ${p} started but is not frozen`);
     if (!stopped && !frozen(s.session, p)) problems.push(`${s.session} phase ${p} is not frozen`);
   }
   problems.push(...executionProblems(run, rec).filter(x => !(stopped && /incomplete sealing transaction \(missing revision-page\)/.test(x))));
@@ -224,7 +229,8 @@ export function evaluateMatched(evidence: string, run: string, rec: string, o: {
       correctedOnCommonTargets: d(x => x.targets.heldout.common.corrected), newlyIncorrectPredictions: d(x => x.targets.heldout.common.becameIncorrect + x.targets.heldout.added.incorrect),
       coverageContraction: d(x => x.targets.heldout.situations.contraction), coverageExpansion: d(x => x.targets.heldout.situations.expansion), discoveryFitChange: d(x => x.discoveryFit.change) } };
   });
-  const body = { schema: EVALUATION_SCHEMA, preregSha256: pre.preregSha256, openedAt: at, stopped, encoding: { file: MATCHED.encoding, sha256: enc.sha256, authoritative: enc.authoritative }, unit: 'session (outcome checks within a session are correlated and are not replications)', sessions, arms, blocks,
+  const failedCalls = L.filter(e => e.event === 'call-failed').map(e => ({ runId: e.data.runId, session: e.data.session, phase: e.data.phase, stage: e.data.stage, error: e.data.error, frozen: frozen(e.data.session, e.data.phase) }));
+  const body = { schema: EVALUATION_SCHEMA, preregSha256: pre.preregSha256, openedAt: at, stopped, failedCalls, encoding: { file: MATCHED.encoding, sha256: enc.sha256, authoritative: enc.authoritative }, unit: 'session (outcome checks within a session are correlated and are not replications)', sessions, arms, blocks,
     claims: 'descriptive only; no improvement claim unless the pre-registered block comparison supports it' };
   const out = join(run, 'EVALUATION.json'); if (existsSync(out)) throw new AccessRefused('EVALUATION.json exists');
   writeFileSync(out, JSON.stringify(body, null, 1) + '\n', { flag: 'wx' });

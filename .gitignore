@@ -17,3 +17,8 @@ playtest-data/
 server/v6-build-*/
 evidence/gamewatch/raw/
 .gw-run/
+
+# Published, redacted P7 console logs (hashes in evidence/gw2/p7-pilot/REDACTION_RECORD.json); only these three
+!/evidence/gw2/p7-pilot/external-record/console-session-1.log
+!/evidence/gw2/p7-pilot/external-record/console-session-2.log
+!/evidence/gw2/p7-pilot/external-record/console-session-3.log

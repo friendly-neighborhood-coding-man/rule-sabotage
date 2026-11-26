@@ -83,8 +83,8 @@ Feedback runs listed in the pre-registration (`plan.agentFeedback.runs`): GW2-M0
 `cli.ts evaluate` runs only if:
 * the pre-registration still holds;
 * there has been no earlier opening;
-* every declared session has Freeze-1 and Freeze-2, or the experiment stopped and every started call is frozen.
-* every completed transaction passes the integrity checks of §5 (raw seals, session closures, access journals, freezes, graph anchors, phase-2 sites).
+* every declared session has Freeze-1 and Freeze-2, or the experiment stopped and every started call is either frozen or has its failure recorded (`call-failed`). A failed call is listed in the evaluation (`failedCalls`) and its session is incomplete: without a Freeze-1 it has no outcomes; with Freeze-1 but no Freeze-2 it is evaluated on Freeze-1 alone. Nothing is imputed.
+* every transaction, completed or failed, passes the integrity checks of §5 (a failed one must be a clean, stopped prefix, and every step it recorded is verified) (raw seals, session closures, access journals, freezes, graph anchors, phase-2 sites).
 
 The opening is recorded once in the external ledger, and a second opening is refused.
 

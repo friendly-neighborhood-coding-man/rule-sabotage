@@ -365,6 +365,15 @@ test('real-runner boundary (mocked transport): Kane provenance from the sealed r
     assert.equal(L.filter(e => e.event === 'call-failed').length, 1); assert.equal(L.find(e => e.event === 'call-failed').data.stage, 'revision-page');
     assert.ok(L.some(e => e.event === 'experiment-stopped')); assert.throws(() => nextCall(s.run, s.rec), /stopped/);
     assert.ok(existsSync(join(sessionDir(s.run, 'M02'), 'FREEZE-1.json')), 'the call was still imported and frozen before the failure');
+    // a failed transaction is still verified step by step (the failure exempts nothing) and the evaluation lists it
+    assert.deepEqual(executionProblems(s.run, s.rec), [], 'the recorded steps of the failed call verify');
+    appendFileSync(join(sessionDir(s.run, 'M02'), 'raw-1', 'stderr.txt'), 'x');
+    assert.match(executionProblems(s.run, s.rec).join(), /GW2-M02-P1 raw: stderr\.txt differs from its raw seal/);
+    assert.throws(() => evaluateMatched(DEV, s.run, s.rec), /stays closed: .*GW2-M02-P1 raw/);
+    writeFileSync(join(sessionDir(s.run, 'M02'), 'raw-1', 'stderr.txt'), readFileSync(join(sessionDir(s.run, 'M02'), 'raw-1', 'stderr.txt'), 'utf8').slice(0, -1));
+    const ev = evaluateMatched(DEV, s.run, s.rec);
+    assert.deepEqual(ev.failedCalls.map(x => [x.runId, x.stage, x.frozen]), [['GW2-M02-P1', 'revision-page', true]]);
+    assert.equal(ev.sessions.find(x => x.session === 'M02')!.complete, false); assert.equal(ev.sessions.find(x => x.session === 'M01')!.complete, true);
   } finally { s.done(); }
   // a session served for a Kane call is never imported as a test double, and Kane provenance never labels a double's session
   const t = setup();
@@ -509,4 +518,19 @@ test('non-paid dry run: generation 1 only, 20 double calls, clean integrity, sin
     assert.equal(p.plan.evidence.dir, MATCHED.devEvidence);
     await assert.rejects(dryRun(join(d, 'record'), join(d, 'run')), /new record/);
   } finally { rmSync(d, { recursive: true, force: true }); }
+});
+
+test('a failed transaction must be a clean, stopped prefix: steps after the failure or a missing stop are integrity problems', async () => {
+  const s = setup();
+  try {
+    const { runner } = doubleRunner(x => PROFILES[x]);
+    await runMatched({ evidence: DEV, run: s.run, rec: s.rec, runner, feedback: { kind: 'test-only', build: sessionFeedbackForTest }, sessions: [slot('M01')], maxCalls: 1 });
+    appendCheckpoint(s.rec, 'call-start', { runId: 'GW2-M01-P2', session: 'M01', phase: 2 });
+    appendCheckpoint(s.rec, 'call-failed', { runId: 'GW2-M01-P2', session: 'M01', phase: 2, stage: 'serve', error: 'test' });
+    assert.match(executionProblems(s.run, s.rec).join(), /not marked stopped after the failure/);
+    appendCheckpoint(s.rec, 'experiment-stopped', { reason: 'GW2-M01-P2 failed at serve: test' });
+    assert.deepEqual(executionProblems(s.run, s.rec), []);
+    appendCheckpoint(s.rec, 'raw-seal', { runId: 'GW2-M01-P2', rawSealSha256: 'x', files: {} });
+    assert.match(executionProblems(s.run, s.rec).join(), /gap in its transaction|recorded after the call failed/);
+  } finally { s.done(); }
 });

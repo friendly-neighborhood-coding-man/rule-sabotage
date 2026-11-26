@@ -88,7 +88,7 @@ Run `pwsh -File gw2-matched-run.ps1 -Operator "<name>" -AuthorizationText "<the 
 * The gate, the budget preflight, the site check or an authorization refuses.
 * A call ends with `CEILING_EXCEEDED` or `SPEND_UNKNOWN`, or the cumulative spend reaches 4,000. The call is imported and frozen first.
 * Any integrity problem: the pre-registration, a manifest, a raw seal, a session closure, an access journal, a freeze, a graph anchor, a phase-2 site, or an incomplete transaction.
-* Any recorded `call-failed`.
+* Any recorded `call-failed`. The failed transaction is still verified step by step (raw seal, closure, journal, freeze, whatever it recorded) and must end in `experiment-stopped`. The evaluation can then run once: it lists the failed calls and marks their sessions incomplete.
 * A call that times out, exits non-zero or has no valid run_end does **not** stop the experiment. It is marked inconclusive and frozen with whatever was submitted, and the session continues to phase 2, the same in both arms. The session is reported as incomplete, and its block leaves the block comparison.
 
 ## G. What to report
