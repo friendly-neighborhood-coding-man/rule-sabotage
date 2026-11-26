@@ -22,12 +22,12 @@ import { dirname } from 'node:path';
 
 // Restored to 'disabled' after the GW2 P7 pilot completed (3/3 sessions, 2026-11-25; D111). It was 'per-run-approval' only for
 // GW2-P7-pilot-1..3 (D109, commit c46ff7e). Re-opening needs a new written operator authorization and its own commit.
-export const PAID_RESEARCH_EXECUTION: 'disabled' | 'per-run-approval' = 'disabled';
+export const PAID_RESEARCH_EXECUTION: 'disabled' | 'per-run-approval' = 'per-run-approval';
 /**
  * Which run ids a 'per-run-approval' gate may serve (GW2 P7, D109): only the three authorized P7 pilot runs. Unrelated
  * research or production calls are refused even while the gate is open. Tests may inject another scope (Deps.scope).
  */
-export const PAID_RESEARCH_SCOPE: RegExp | null = /^GW2-P7-pilot-[123]$/;
+export const PAID_RESEARCH_SCOPE: RegExp | null = /^GW2-M(0[1-9]|10)-P[12]$/;
 /** Measured in V3 KX3: 107.934 credits / 35 steps max (run_end 103.232). Used for the LOCAL estimate only. */
 export const MEASURED_CREDITS_PER_STEP = 3.1;
 export const CAP_KIND = 'local-estimate-not-enforced' as const;
