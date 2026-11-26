@@ -1,0 +1,157 @@
+{
+ "skillflow": "0.1.0",
+ "book": "<operator>/gw2-p7-run\\gamewatch\\gw2\\book-p7.json",
+ "book_sha256": "413df985289d3908adea4ddbd0a96396122085ed4f84f12edb49d04f734f111a",
+ "workdir": "<operator>/gw2-p7-run",
+ "vars": {
+  "out": "evidence/gw2/p7-pilot/verdicts",
+  "exp": "evidence/gw2/p7-pilot/exp",
+  "generation": "evidence/gw2/procedures/generation-p7-1.json",
+  "partition": "evidence/gw2/procedures/partition-p7-1.json",
+  "bundle": "evidence/gw2/p7-evidence/generated/bundle.json",
+  "sessions": "3",
+  "profiles": "kane",
+  "run1": "GW2-P7-pilot-1",
+  "run2": "GW2-P7-pilot-2",
+  "run3": "GW2-P7-pilot-3",
+  "record": "<operator>/gw2-p7-record",
+  "at": "now"
+ },
+ "current": "integrity",
+ "status": "done",
+ "steps": 16,
+ "backtracks": 0,
+ "attempts": {
+  "procedures": 1,
+  "partition": 1,
+  "session-plan": 1,
+  "preregister": 1,
+  "investigate-1": 1,
+  "investigate-2": 1,
+  "investigate-3": 1,
+  "closure": 1,
+  "import": 1,
+  "freeze": 1,
+  "representations": 1,
+  "three-way": 1,
+  "heldout": 1,
+  "discriminate": 1,
+  "report": 1,
+  "integrity": 1
+ },
+ "history": [
+  {
+   "task": "procedures",
+   "attempt": 1,
+   "exit": 0,
+   "accepted": true,
+   "next": "partition"
+  },
+  {
+   "task": "partition",
+   "attempt": 1,
+   "exit": 0,
+   "accepted": true,
+   "next": "session-plan"
+  },
+  {
+   "task": "session-plan",
+   "attempt": 1,
+   "exit": 0,
+   "accepted": true,
+   "next": "preregister"
+  },
+  {
+   "task": "preregister",
+   "attempt": 1,
+   "exit": 0,
+   "accepted": true,
+   "next": "investigate-1"
+  },
+  {
+   "task": "investigate-1",
+   "attempt": 1,
+   "exit": 0,
+   "accepted": true,
+   "next": "investigate-2"
+  },
+  {
+   "task": "investigate-2",
+   "attempt": 1,
+   "exit": 0,
+   "accepted": true,
+   "next": "investigate-3"
+  },
+  {
+   "task": "investigate-3",
+   "attempt": 1,
+   "exit": 0,
+   "accepted": true,
+   "next": "closure"
+  },
+  {
+   "task": "closure",
+   "attempt": 1,
+   "exit": 0,
+   "accepted": true,
+   "next": "import"
+  },
+  {
+   "task": "import",
+   "attempt": 1,
+   "exit": 0,
+   "accepted": true,
+   "next": "freeze"
+  },
+  {
+   "task": "freeze",
+   "attempt": 1,
+   "exit": 0,
+   "accepted": true,
+   "next": "representations"
+  },
+  {
+   "task": "representations",
+   "attempt": 1,
+   "exit": 0,
+   "accepted": true,
+   "next": "three-way"
+  },
+  {
+   "task": "three-way",
+   "attempt": 1,
+   "exit": 0,
+   "accepted": true,
+   "next": "heldout"
+  },
+  {
+   "task": "heldout",
+   "attempt": 1,
+   "exit": 0,
+   "accepted": true,
+   "next": "discriminate"
+  },
+  {
+   "task": "discriminate",
+   "attempt": 1,
+   "exit": 0,
+   "accepted": true,
+   "next": "report"
+  },
+  {
+   "task": "report",
+   "attempt": 1,
+   "exit": 0,
+   "accepted": true,
+   "next": "integrity"
+  },
+  {
+   "task": "integrity",
+   "attempt": 1,
+   "exit": 0,
+   "accepted": true,
+   "next": "@done"
+  }
+ ],
+ "started": "2026-11-25T19:31:42+00:00"
+}

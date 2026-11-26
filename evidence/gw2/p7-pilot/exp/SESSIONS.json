@@ -1,0 +1,5 @@
+{
+ "schema": "gamewatch/gw2-session-plan@1",
+ "expectedSessions": 3,
+ "note": "P6: one test-double session per investigator profile (kane)"
+}

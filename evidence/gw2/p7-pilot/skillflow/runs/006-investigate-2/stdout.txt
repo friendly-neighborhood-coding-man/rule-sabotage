@@ -1,0 +1,21 @@
+{
+ "session": "f6003f7e3d5f8469",
+ "status": "completed",
+ "stop": false,
+ "reasons": [],
+ "spend": {
+  "before": "<redacted:balance>",
+  "after": "<redacted:balance>",
+  "used": 48.48,
+  "estimate": 248,
+  "ceiling": 300,
+  "outcome": "WITHIN_CEILING",
+  "timedOut": false,
+  "exitCode": 0,
+  "error": null,
+  "capKind": "local-estimate-not-enforced"
+ },
+ "exitCode": 0,
+ "timedOut": false,
+ "rawSealSha256": "923c8acb7261fc83a9b4297feae423f067d035ca06725d821ec5d6ada25dbe12"
+}

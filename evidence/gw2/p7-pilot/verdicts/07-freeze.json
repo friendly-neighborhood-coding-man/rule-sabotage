@@ -1,0 +1,10 @@
+{
+ "step": "freeze",
+ "ok": true,
+ "counts": {
+  "hypotheses": 8,
+  "abstentions": 0,
+  "nodes": 8
+ },
+ "freezeSha256": "464ed8c7fecc072797dbdf21715756c3c25c8032e1b7bbb64eddef94de55c1d9"
+}

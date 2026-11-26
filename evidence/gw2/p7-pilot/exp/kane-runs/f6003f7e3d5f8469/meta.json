@@ -1,0 +1,37 @@
+{
+ "runId": "GW2-P7-pilot-2",
+ "session": "f6003f7e3d5f8469",
+ "route": "real",
+ "maxSteps": 80,
+ "timeoutS": 2700,
+ "killAfterS": 2730,
+ "exitCode": 0,
+ "timedOut": false,
+ "ms": 147677,
+ "cliVersion": "0.10.4",
+ "runEnd": {
+  "present": true,
+  "valid": true,
+  "status": "passed",
+  "reasonCode": "success.complete",
+  "resultCode": 100
+ },
+ "steps": 17,
+ "kaneCreditsReported": 37.42277,
+ "kaneDurationS": 110.8,
+ "spend": {
+  "before": "<redacted:balance>",
+  "after": "<redacted:balance>",
+  "used": 48.48,
+  "estimate": 248,
+  "ceiling": 300,
+  "outcome": "WITHIN_CEILING",
+  "timedOut": false,
+  "exitCode": 0,
+  "error": null,
+  "capKind": "local-estimate-not-enforced"
+ },
+ "cumulativeUsed": 80.324,
+ "status": "completed",
+ "stopReasons": []
+}

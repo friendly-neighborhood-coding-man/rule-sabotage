@@ -1,0 +1,310 @@
+{
+ "schema": "gamewatch/gw2-p6-report@1",
+ "at": "2026-11-25T20:05:15.880Z",
+ "exp": "evidence/gw2/p7-pilot/exp",
+ "label": "Real Kane sessions (exploratory capability and feasibility study; not an architecture comparison, no claim of improvement).",
+ "dataset": "P7 evidence (p7-generation-1, p7-partition-1)",
+ "profiles": [
+  {
+   "session": "e95f5bc28e46532c",
+   "profile": "kane",
+   "label": "REAL KANE SESSION (kane-cli): exploratory capability and feasibility pilot, not an architecture comparison",
+   "submissions": {
+    "hypotheses": 2,
+    "abstentions": 0,
+    "primary": 2,
+    "excludedFromPrimary": 0
+   },
+   "representations": {
+    "sealed": 0,
+    "hypothesesWithout": 2
+   },
+   "coverage": {
+    "k": 0,
+    "n": 914,
+    "rate": 0,
+    "wilson95": [
+     0,
+     0.004
+    ],
+    "unit": "held-out situations with at least one prediction ÷ held-out situations (assertions made ÷ opportunities)"
+   },
+   "accuracy": {
+    "k": 0,
+    "n": 0,
+    "rate": null,
+    "wilson95": null,
+    "unit": "held-out outcome checks matching ÷ checks with a recorded outcome (over assertions made; descriptive)"
+   },
+   "incorrectAssertions": {
+    "contradictingChecks": 0,
+    "unit": "held-out outcome checks contradicted by the recorded outcome (count, not netted against anything)"
+   },
+   "detection": {
+    "k": 0,
+    "n": 4,
+    "rate": 0,
+    "wilson95": [
+     0,
+     0.49
+    ],
+    "detected": [],
+    "unit": "held-out (rule, build) spec deviations with an accurate description of a defect ÷ deviations present; abstention counts as not detected"
+   },
+   "citations": {
+    "cited": 3,
+    "citedWithoutAccess": 0,
+    "pagesServed": 2,
+    "unit": "evidence ids cited in submissions; cited before the server journal records that page served to this session"
+   }
+  },
+  {
+   "session": "f6003f7e3d5f8469",
+   "profile": "kane",
+   "label": "REAL KANE SESSION (kane-cli): exploratory capability and feasibility pilot, not an architecture comparison",
+   "submissions": {
+    "hypotheses": 2,
+    "abstentions": 0,
+    "primary": 2,
+    "excludedFromPrimary": 0
+   },
+   "representations": {
+    "sealed": 0,
+    "hypothesesWithout": 2
+   },
+   "coverage": {
+    "k": 0,
+    "n": 914,
+    "rate": 0,
+    "wilson95": [
+     0,
+     0.004
+    ],
+    "unit": "held-out situations with at least one prediction ÷ held-out situations (assertions made ÷ opportunities)"
+   },
+   "accuracy": {
+    "k": 0,
+    "n": 0,
+    "rate": null,
+    "wilson95": null,
+    "unit": "held-out outcome checks matching ÷ checks with a recorded outcome (over assertions made; descriptive)"
+   },
+   "incorrectAssertions": {
+    "contradictingChecks": 0,
+    "unit": "held-out outcome checks contradicted by the recorded outcome (count, not netted against anything)"
+   },
+   "detection": {
+    "k": 0,
+    "n": 4,
+    "rate": 0,
+    "wilson95": [
+     0,
+     0.49
+    ],
+    "detected": [],
+    "unit": "held-out (rule, build) spec deviations with an accurate description of a defect ÷ deviations present; abstention counts as not detected"
+   },
+   "citations": {
+    "cited": 4,
+    "citedWithoutAccess": 0,
+    "pagesServed": 2,
+    "unit": "evidence ids cited in submissions; cited before the server journal records that page served to this session"
+   }
+  },
+  {
+   "session": "1e26529c62afc36e",
+   "profile": "kane",
+   "label": "REAL KANE SESSION (kane-cli): exploratory capability and feasibility pilot, not an architecture comparison",
+   "submissions": {
+    "hypotheses": 4,
+    "abstentions": 0,
+    "primary": 4,
+    "excludedFromPrimary": 0
+   },
+   "representations": {
+    "sealed": 3,
+    "hypothesesWithout": 1
+   },
+   "coverage": {
+    "k": 384,
+    "n": 914,
+    "rate": 0.42,
+    "wilson95": [
+     0.389,
+     0.452
+    ],
+    "unit": "held-out situations with at least one prediction ÷ held-out situations (assertions made ÷ opportunities)"
+   },
+   "accuracy": {
+    "k": 194,
+    "n": 384,
+    "rate": 0.505,
+    "wilson95": [
+     0.455,
+     0.555
+    ],
+    "unit": "held-out outcome checks matching ÷ checks with a recorded outcome (over assertions made; descriptive)"
+   },
+   "incorrectAssertions": {
+    "contradictingChecks": 190,
+    "unit": "held-out outcome checks contradicted by the recorded outcome (count, not netted against anything)"
+   },
+   "detection": {
+    "k": 0,
+    "n": 4,
+    "rate": 0,
+    "wilson95": [
+     0,
+     0.49
+    ],
+    "detected": [],
+    "unit": "held-out (rule, build) spec deviations with an accurate description of a defect ÷ deviations present; abstention counts as not detected"
+   },
+   "citations": {
+    "cited": 5,
+    "citedWithoutAccess": 0,
+    "pagesServed": 3,
+    "unit": "evidence ids cited in submissions; cited before the server journal records that page served to this session"
+   }
+  }
+ ],
+ "abstentionCheck": null,
+ "rule": "Dimensions are reported side by side and never combined; no ranking by a single column is reported. Detection counts abstention as not detected; error counts are over assertions made.",
+ "sources": {
+  "heldout": {
+   "id": "gamewatch/gw2/heldout.ts",
+   "version": "2"
+  },
+  "threeWay": {
+   "id": "gamewatch/gw2/verify.ts",
+   "version": "2.1"
+  },
+  "seal": "2dbaa1e3606ca97d59a4464756faf64f58ffa291b1f2257c9520974284cc5970",
+  "freeze": "464ed8c7fecc072797dbdf21715756c3c25c8032e1b7bbb64eddef94de55c1d9"
+ },
+ "execution": [
+  {
+   "session": "e95f5bc28e46532c",
+   "runId": "GW2-P7-pilot-1",
+   "label": "REAL KANE SESSION (kane-cli): exploratory capability and feasibility pilot, not an architecture comparison",
+   "status": "completed",
+   "stopReasons": [],
+   "exitCode": 0,
+   "timedOut": false,
+   "elapsedMs": 142463,
+   "steps": 21,
+   "runEnd": {
+    "present": true,
+    "valid": true,
+    "status": "passed",
+    "reasonCode": "success.complete",
+    "resultCode": 100
+   },
+   "creditsByBalanceDelta": 31.844,
+   "ceilingOutcome": "WITHIN_CEILING",
+   "kaneCreditsReported": 29.680727500000003,
+   "rawSealSha256": "60419742ff3928fd9081d3101e0aa7e150fda5298a30bcaef73a698809c4410e"
+  },
+  {
+   "session": "f6003f7e3d5f8469",
+   "runId": "GW2-P7-pilot-2",
+   "label": "REAL KANE SESSION (kane-cli): exploratory capability and feasibility pilot, not an architecture comparison",
+   "status": "completed",
+   "stopReasons": [],
+   "exitCode": 0,
+   "timedOut": false,
+   "elapsedMs": 147677,
+   "steps": 17,
+   "runEnd": {
+    "present": true,
+    "valid": true,
+    "status": "passed",
+    "reasonCode": "success.complete",
+    "resultCode": 100
+   },
+   "creditsByBalanceDelta": 48.48,
+   "ceilingOutcome": "WITHIN_CEILING",
+   "kaneCreditsReported": 37.42277,
+   "rawSealSha256": "923c8acb7261fc83a9b4297feae423f067d035ca06725d821ec5d6ada25dbe12"
+  },
+  {
+   "session": "1e26529c62afc36e",
+   "runId": "GW2-P7-pilot-3",
+   "label": "REAL KANE SESSION (kane-cli): exploratory capability and feasibility pilot, not an architecture comparison",
+   "status": "completed",
+   "stopReasons": [],
+   "exitCode": 0,
+   "timedOut": false,
+   "elapsedMs": 196430,
+   "steps": 45,
+   "runEnd": {
+    "present": true,
+    "valid": true,
+    "status": "passed",
+    "reasonCode": "success.complete",
+    "resultCode": 100
+   },
+   "creditsByBalanceDelta": 51.719,
+   "ceilingOutcome": "WITHIN_CEILING",
+   "kaneCreditsReported": 51.1283675,
+   "rawSealSha256": "01199671a04612e4f9d85b56baf6435c851397f9da64dc837051583a9925ccc5"
+  }
+ ],
+ "submissions": [
+  {
+   "session": "e95f5bc28e46532c",
+   "entries": [
+    {
+     "id": "75fc5ba8aabba4c046d2653f24a8e9942a1fbf320ed55fe27d586eb839c2405c",
+     "kind": "hypothesis",
+     "verbatim": "{\"at\":\"2026-11-25T19:38:41.117Z\",\"source\":\"kane\",\"nonceValid\":true,\"session\":\"e95f5bc28e46532c\",\"ref\":\"H-1\",\"statement\":\"The number of actions granted at the start of every turn differs by build: build-06b9 grants 3 actions, while build-3caf grants 4.\",\"trigger\":\"At turn start\",\"condition\":\"The build is build-06b9 or build-3caf\",\"effect\":\"build-06b9 reports actionsGranted=3; build-3caf reports actionsGranted=4.\",\"representation\":\"\",\"confidence\":\"high\",\"competingWith\":\"\",\"evidence\":\"C-0662fc step 0 (build-3caf, actionsGranted=4); C-0c6c31 step 0 (build-06b9, actionsGranted=3).\",\"abstainScope\":\"\",\"nonce\":\"615f93bf662054df\"}"
+    },
+    {
+     "id": "d5764b4cd7a207e3dc223a1c7e86716d9d78f748919b0bae39181326f0039cf6",
+     "kind": "hypothesis",
+     "verbatim": "{\"at\":\"2026-11-25T19:39:01.830Z\",\"source\":\"kane\",\"nonceValid\":true,\"session\":\"e95f5bc28e46532c\",\"ref\":\"H-2\",\"statement\":\"On build-06b9, a piece that enters a square with an opponent's Freeze effect becomes frozen for two turns; an attempted move while frozen is refused.\",\"trigger\":\"A piece enters a square bearing a Freeze effect\",\"condition\":\"The effect is owned by the opposing side\",\"effect\":\"The engine reports status=freeze with frozen:2, and refuses a move by that piece on its next turn.\",\"representation\":\"\",\"confidence\":\"high\",\"competingWith\":\"\",\"evidence\":\"C-0c6c31 steps 7 and 11: a3 enters J7, receives freeze/frozen:2, then move J7 left is refused.\",\"abstainScope\":\"\",\"nonce\":\"615f93bf662054df\"}"
+    }
+   ]
+  },
+  {
+   "session": "f6003f7e3d5f8469",
+   "entries": [
+    {
+     "id": "85546c64b5f6807f5ea77aa65da4fd4fe5c59e5d38f244489f3635a06c050abd",
+     "kind": "hypothesis",
+     "verbatim": "{\"at\":\"2026-11-25T19:49:07.617Z\",\"source\":\"kane\",\"nonceValid\":true,\"session\":\"f6003f7e3d5f8469\",\"ref\":\"H-1\",\"statement\":\"Landing on a Freeze effect square freezes the entering piece for the turn, so a later move with that piece is refused.\",\"trigger\":\"\",\"condition\":\"\",\"effect\":\"\",\"representation\":\"\",\"confidence\":\"high\",\"competingWith\":\"\",\"evidence\":\"C-0662fc: Freeze fires on AI piece at J7, then move J7 left is refused; C-0c6c31: Freeze firing and frozen status at step 7.\",\"abstainScope\":\"\",\"nonce\":\"01796200696f37ef\"}"
+    },
+    {
+     "id": "121eb862a0cb8eccca580f730d524d595d24c56030440eaba4e04c5b5b62ffae",
+     "kind": "hypothesis",
+     "verbatim": "{\"at\":\"2026-11-25T19:49:24.821Z\",\"source\":\"kane\",\"nonceValid\":true,\"session\":\"f6003f7e3d5f8469\",\"ref\":\"H-2\",\"statement\":\"The two observed builds differ in the initial Human turn for script S-2992: build-06b9 grants 3 actions, while build-3caf grants 4.\",\"trigger\":\"\",\"condition\":\"\",\"effect\":\"\",\"representation\":\"\",\"confidence\":\"high\",\"competingWith\":\"\",\"evidence\":\"C-0c6c31 (build-06b9), step 0: Human actionsGranted=3; C-0662fc (build-3caf), step 0: Human actionsGranted=4; both script S-2992.\",\"abstainScope\":\"\",\"nonce\":\"01796200696f37ef\"}"
+    }
+   ]
+  },
+  {
+   "session": "1e26529c62afc36e",
+   "entries": [
+    {
+     "id": "db633e8d0d2cb6474bb4fa4a4d22a352bd695cd89e47b577a713af5d9feb73e7",
+     "kind": "hypothesis",
+     "verbatim": "{\"at\":\"2026-11-25T20:03:18.041Z\",\"source\":\"kane\",\"nonceValid\":true,\"session\":\"1e26529c62afc36e\",\"ref\":\"H-1\",\"statement\":\"In build-06b9, each observed turn start grants exactly 3 actions.\",\"trigger\":\"At a turn start in build-06b9.\",\"condition\":\"The observed turn-start record is from build-06b9.\",\"effect\":\"actionsGranted is 3.\",\"representation\":\"{\\\"schema\\\":\\\"gamewatch/gw2-hypothesis@1\\\",\\\"clauses\\\":[{\\\"form\\\":\\\"law\\\",\\\"situation\\\":\\\"turn-start\\\",\\\"when\\\":{\\\"op\\\":\\\"eq\\\",\\\"args\\\":[{\\\"op\\\":\\\"field\\\",\\\"name\\\":\\\"build\\\"},{\\\"op\\\":\\\"const\\\",\\\"value\\\":\\\"build-06b9\\\"}]},\\\"expect\\\":[{\\\"field\\\":\\\"actionsGranted\\\",\\\"equals\\\":{\\\"op\\\":\\\"const\\\",\\\"value\\\":3}}]}]}\",\"confidence\":\"high\",\"competingWith\":\"\",\"evidence\":\"C-0c6c31 steps 0, 4, 8, 11, 14, 17, 20; M-22e2f2 turns 1-7.\",\"abstainScope\":\"\",\"nonce\":\"eff917032b3c1c4e\"}"
+    },
+    {
+     "id": "eda7ae35ab80b1d447b50ff6df7e5af20870766e549b8f02e8337283b000ecb0",
+     "kind": "hypothesis",
+     "verbatim": "{\"at\":\"2026-11-25T20:03:41.674Z\",\"source\":\"kane\",\"nonceValid\":true,\"session\":\"1e26529c62afc36e\",\"ref\":\"H-2\",\"statement\":\"In build-06b9, entering a Freeze effect square fires the effect and freezes the entering piece; the frozen piece's attempted move on its next turn is refused.\",\"trigger\":\"A piece enters a square bearing Freeze in build-06b9.\",\"condition\":\"The effect is Freeze.\",\"effect\":\"The engine reports effect-fired and freeze status; a move by that piece on its next turn is refused as frozen.\",\"representation\":\"{\\\"schema\\\":\\\"gamewatch/gw2-hypothesis@1\\\",\\\"clauses\\\":[{\\\"form\\\":\\\"law\\\",\\\"situation\\\":\\\"effect-entry\\\",\\\"when\\\":{\\\"op\\\":\\\"eq\\\",\\\"args\\\":[{\\\"op\\\":\\\"field\\\",\\\"name\\\":\\\"effect\\\"},{\\\"op\\\":\\\"const\\\",\\\"value\\\":\\\"Freeze\\\"}]},\\\"expect\\\":[{\\\"field\\\":\\\"fired\\\",\\\"equals\\\":{\\\"op\\\":\\\"const\\\",\\\"value\\\":true}}]}]}\",\"confidence\":\"medium\",\"competingWith\":\"\",\"evidence\":\"C-0c6c31 steps 7 and 11 (entry and later refused move).\",\"abstainScope\":\"\",\"nonce\":\"eff917032b3c1c4e\"}"
+    },
+    {
+     "id": "0328618b50e233ed45b8ff20323d876b801230848fb7f5a0f6a30209a1f4768b",
+     "kind": "hypothesis",
+     "verbatim": "{\"at\":\"2026-11-25T20:04:05.025Z\",\"source\":\"kane\",\"nonceValid\":true,\"session\":\"1e26529c62afc36e\",\"ref\":\"H-3\",\"statement\":\"In the observed build-06b9 computer match, entering a Teleport square fired Teleport, forced the piece to B9, and the subsequent move to A9 scored that piece.\",\"trigger\":\"A piece enters a Teleport square in the observed match.\",\"condition\":\"The effect is Teleport on K3.\",\"effect\":\"The event log reports Teleport firing, a forced move from K3 to B9, then a score when the piece moves from B9 to A9.\",\"representation\":\"{\\\"schema\\\":\\\"gamewatch/gw2-hypothesis@1\\\",\\\"clauses\\\":[{\\\"form\\\":\\\"law\\\",\\\"situation\\\":\\\"effect-entry\\\",\\\"when\\\":{\\\"op\\\":\\\"eq\\\",\\\"args\\\":[{\\\"op\\\":\\\"field\\\",\\\"name\\\":\\\"effect\\\"},{\\\"op\\\":\\\"const\\\",\\\"value\\\":\\\"Teleport\\\"}]},\\\"expect\\\":[{\\\"field\\\":\\\"fired\\\",\\\"equals\\\":{\\\"op\\\":\\\"const\\\",\\\"value\\\":true}}]}]}\",\"confidence\":\"medium\",\"competingWith\":\"\",\"evidence\":\"M-22e2f2 turn 1.\",\"abstainScope\":\"\",\"nonce\":\"eff917032b3c1c4e\"}"
+    },
+    {
+     "id": "e375ab7521d5e9eee3139ed93d07d8d0153cba898bcb8564f35303a7d2b846af",
+     "kind": "hypothesis",
+     "verbatim": "{\"at\":\"2026-11-25T20:04:34.419Z\",\"source\":\"kane\",\"nonceValid\":true,\"session\":\"1e26529c62afc36e\",\"ref\":\"H-4\",\"statement\":\"The observed match ended when AI got all 3 of its pieces across; getting all 3 pieces across appears to be the win condition.\",\"trigger\":\"A side gets pieces across to the far edge.\",\"condition\":\"The side has all 3 pieces across.\",\"effect\":\"That side is reported as the match result winner.\",\"representation\":\"\",\"confidence\":\"medium\",\"competingWith\":\"\",\"evidence\":\"M-22e2f2 result after 53 turns.\",\"abstainScope\":\"\",\"nonce\":\"eff917032b3c1c4e\"}"
+    }
+   ]
+  }
+ ]
+}
