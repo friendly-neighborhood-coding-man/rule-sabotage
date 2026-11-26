@@ -13,6 +13,7 @@
 > * **Disclosed limitations:** schema-invalid representations in 6 of 10 sessions, missing submissions in 8 of 10
 >   revision calls, and 5 sessions per arm.
 >
+> **Try it in one command, with no paid calls:** [Quick Demo](#quick-demo--one-command-zero-paid-calls).
 > Start at [`docs/SUBMISSION.md`](docs/SUBMISSION.md). The verified report is
 > [`docs/gw2/MATCHED_RESULTS_REPORT.md`](docs/gw2/MATCHED_RESULTS_REPORT.md) and the public evidence is
 > [`evidence/gw2/matched-run/`](evidence/gw2/matched-run/). See also [`docs/GW1_FINAL_REPORT.md`](docs/GW1_FINAL_REPORT.md)
@@ -150,3 +151,19 @@ shadow-mode infrastructure that is prepared but never runs Kane.
 V6.3 (`docs/V6_3_BUDGETED_AI_AND_PILOT.md`, `docs/KANE_SINGLE_CALL_PREFLIGHT.md`): pilot defaults (V6.1 + the `-ra@1`
 opponents), an 8-second latency-bounded prototype (`-ra-b@1`, not promoted), and a reviewable single-call Kane shadow
 experiment that is prepared and gated, not run.
+
+## Quick Demo — One Command, Zero Paid Calls
+
+**Requirements:** Git and Node.js 22.10+. No `npm install`, API keys, Kane account or paid calls are needed.
+
+```
+git clone --branch claude/gw2-matched-results --single-branch https://github.com/friendly-neighborhood-coding-man/rule-sabotage.git && cd rule-sabotage && npm run gamewatch:serve -- --notes demo-notes.ndjson --label human
+```
+
+Then open http://127.0.0.1:3210/.
+
+**What this is: the interactive evidence-site demo.** It is the same anonymous evidence site Kane explores: scripted playtests, AI-vs-AI matches and the findings form. You browse it as a human reviewer, and anything you submit is written to `demo-notes.ndjson` in the clone. Stop the server with Ctrl+C.
+
+**What it is not: a full experimental reproduction.** It makes no Kane call and does not re-run GW1 or GW2. To check the recorded experiments without paid calls:
+* [`docs/DEMO.md`](docs/DEMO.md) verifies the GW1 freeze and recomputes its evaluation;
+* [`docs/gw2/MATCHED_RESULTS_REPORT.md`](docs/gw2/MATCHED_RESULTS_REPORT.md) is the independently verified GW2 report, with the redacted evidence in [`evidence/gw2/matched-run/`](evidence/gw2/matched-run/).
